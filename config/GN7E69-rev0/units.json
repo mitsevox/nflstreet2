@@ -28299,51 +28299,51 @@
         "functions": [
           {
             "function": "VoxEvent_GetSentenceParmMask",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFA14-0x801AFA70"
+            "evidence": "evidence.tsv source-form 0x801AFA14-0x801AFA70"
           },
           {
             "function": "iSPCH_GetPhraseBank",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFD04-0x801AFDFC"
+            "evidence": "evidence.tsv source-form 0x801AFD04-0x801AFDFC"
           },
           {
             "function": "iSPCH_SampleExists",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801AFEE8-0x801AFF74"
+            "evidence": "evidence.tsv source-form 0x801AFEE8-0x801AFF74"
           },
           {
             "function": "iSPCH_ChooseSamples",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0050-0x801B01E8"
+            "evidence": "evidence.tsv source-form 0x801B0050-0x801B01E8"
           },
           {
             "function": "iSPCH_SentenceLength",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0208-0x801B029C"
+            "evidence": "evidence.tsv source-form 0x801B0208-0x801B029C"
           },
           {
             "function": "iSPCH_ShortRuleStatus",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0474-0x801B04D4"
+            "evidence": "evidence.tsv source-form 0x801B0474-0x801B04D4"
           },
           {
             "function": "iSPCH_TestMatchParms",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B05E4-0x801B07A0"
+            "evidence": "evidence.tsv source-form 0x801B05E4-0x801B07A0"
           },
           {
             "function": "iSPCH_RandomizeSentencePicks",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B08DC-0x801B0974"
+            "evidence": "evidence.tsv source-form 0x801B08DC-0x801B0974"
           },
           {
             "function": "iSPCH_IterateChoice",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0974-0x801B0A18"
+            "evidence": "evidence.tsv source-form 0x801B0974-0x801B0A18"
           },
           {
             "function": "iSPCH_ConstantRuleSet",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0D5C-0x801B0EA4"
+            "evidence": "evidence.tsv source-form 0x801B0D5C-0x801B0EA4"
           },
           {
             "function": "iSPCH_MakeSampleRequests",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B0EA4-0x801B10AC"
+            "evidence": "evidence.tsv source-form 0x801B0EA4-0x801B10AC"
           },
           {
             "function": "iSPCH_EACrandom",
-            "evidence": "evidence.tsv HOLDOUT source-form 0x801B1934-0x801B1A3C"
+            "evidence": "evidence.tsv source-form 0x801B1934-0x801B1A3C"
           }
         ],
         "evidence": "PR1447 merge notes list all12 full measured partials; existing owner holdouts ruling2026-11-20. Entire native data sections kept."
