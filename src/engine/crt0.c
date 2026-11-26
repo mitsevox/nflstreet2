@@ -55,7 +55,7 @@ asm(
 "    lwz     3,0xc(6)\n"
 "    cmplwi  3,2\n"
 "    blt     .L_no_debugger\n"
-"    bl      fn_801AA81C\n"
+"    bl      SNDebugInit\n"
 "    li      29,1\n"
 ".L_no_debugger:\n"
 "    bl      __init_args\n"
