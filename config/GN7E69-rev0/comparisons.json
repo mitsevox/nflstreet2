@@ -29118,8 +29118,14 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B7808",
-          "end": "0x802B7828"
+          "start": "0x802B77C8",
+          "end": "0x802B78A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFB3C",
+          "end": "0x802FFC90"
         }
       ],
       "functions": [
@@ -29169,9 +29175,19 @@
           "end": "0x802675E8"
         },
         {
+          "symbol": "SNDAEMSI_updaterandomweighted",
+          "start": "0x802675E8",
+          "end": "0x8026769C"
+        },
+        {
           "symbol": "fn_8026769C",
           "start": "0x8026769C",
           "end": "0x80267710"
+        },
+        {
+          "symbol": "SNDAEMSI_updatedelaytrig",
+          "start": "0x80267710",
+          "end": "0x802677B4"
         },
         {
           "symbol": "fn_802677B4",
@@ -29187,6 +29203,21 @@
           "symbol": "SNDAEMSI_envelopeprogramsegment",
           "start": "0x80267858",
           "end": "0x80267894"
+        },
+        {
+          "symbol": "SNDAEMSI_updateenvelope",
+          "start": "0x80267894",
+          "end": "0x80267A1C"
+        },
+        {
+          "symbol": "SNDAEMSI_updatetable",
+          "start": "0x80267A1C",
+          "end": "0x80267C70"
+        },
+        {
+          "symbol": "SNDAEMSI_updatedelayline",
+          "start": "0x80267C70",
+          "end": "0x80267D84"
         },
         {
           "symbol": "fn_80267D84",
@@ -29274,9 +29305,19 @@
           "end": "0x80268188"
         },
         {
+          "symbol": "SNDAEMSI_bankvol",
+          "start": "0x80268188",
+          "end": "0x80268270"
+        },
+        {
           "symbol": "fn_80268270",
           "start": "0x80268270",
           "end": "0x802682B0"
+        },
+        {
+          "symbol": "SNDAEMSI_bankfxwet0",
+          "start": "0x802682B0",
+          "end": "0x80268354"
         },
         {
           "symbol": "fn_80268354",
@@ -29364,6 +29405,26 @@
           "end": "0x802687AC"
         },
         {
+          "symbol": "SNDAEMSI_playerupdatebank",
+          "start": "0x802687AC",
+          "end": "0x8026898C"
+        },
+        {
+          "symbol": "SNDAEMSI_updateplayer",
+          "start": "0x8026898C",
+          "end": "0x80268B88"
+        },
+        {
+          "symbol": "SNDAEMSI_updateoscillator",
+          "start": "0x80268B88",
+          "end": "0x80268DA8"
+        },
+        {
+          "symbol": "SNDAEMSI_updateramp",
+          "start": "0x80268DA8",
+          "end": "0x80268F54"
+        },
+        {
           "symbol": "fn_80268F54",
           "start": "0x80268F54",
           "end": "0x80268FA0"
@@ -29407,6 +29468,11 @@
           "symbol": "SNDAEMSI_restore",
           "start": "0x80269260",
           "end": "0x802692B8"
+        },
+        {
+          "symbol": "SNDAEMSI_createmodulebankhandle",
+          "start": "0x80269484",
+          "end": "0x802694AC"
         }
       ]
     },

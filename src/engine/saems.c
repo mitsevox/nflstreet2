@@ -3,12 +3,8 @@
    and player modules), the per-voice bank and play-option setters they feed, the bank players,
    the Csis class callbacks that create module instances, and the module bank registry. */
 
-#include "engine/sndaems.h"
-#include "engine/sndvoice.h"
-
-namespace Snd {
-extern float gVariableTimerPeriod;
-}
+#include "engine/sndbank.h"
+#include "engine/sndaems_state.h"
 
 extern "C" {
 
@@ -104,21 +100,6 @@ typedef struct Object_80267DB4 {
     int mUnknownC[1];
 } Object_80267DB4;
 
-typedef struct Object_80268480 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1[3];
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    short mUnknown8;
-    unsigned char mUnknownA[2];
-    unsigned short mUnknownC;
-    short mUnknownE;
-    unsigned char mUnknown10[4];
-    unsigned short mUnknown14;
-    unsigned short mUnknown16;
-} Object_80268480;
-
 typedef struct Entry_802686CC {
     unsigned char mType;
     unsigned char mUnknown1[3];
@@ -184,37 +165,36 @@ typedef struct Object_80269048 {
     int mUnknown1C[1];
 } Object_80269048;
 
-extern void (*lbl_802FFB6C[])(Object_80268480 *params, int value);
-extern int fn_801B9410(void *p, int *values);
-extern int fn_801B9B30(void *p, int *value);
-extern int SNDBANK_play(int a, int b, Object_80268480 *params);
-extern void SNDplaysetdef(Object_80268480 *params);
-extern unsigned int iSNDrandom(void);
-extern int SNDpitchmult(int handle, int value);
-extern int SNDstop(int handle);
-extern int SNDvol(int handle, int value);
-extern int SNDPLATFORM_setpitch(int index);
-extern int SNDPLATFORM_timemult(int voice, int value);
-extern void SndHalSetDry(int voice);
-extern void SndHalSetPan(int index);
-extern void SNDPLATFORM_lowpass(int voice, int value);
-extern void SNDPLATFORM_highpass(int voice, int value);
-extern void fn_80268188(int handle, int value);
+typedef void (*SndAemsBankSetter_t)(int voice, int value);
+typedef void (*SndAemsOptSetter_t)(SndPlayOpts_t *opts, int value);
+typedef int (*SndAemsUpdateFn_t)(void *state);
 
-/* An envelope module's state: the current segment +0x3, the level +0x4 and step +0x8 it drives,
-   the start level +0xC and the segments' (time, level) pairs from +0x18. */
+extern SndAemsBankSetter_t playerinterfacefn[12];
+extern SndAemsOptSetter_t SNDAEMSoptfn[12];
+extern int fn_801B9B30(void *p, int *value);
+extern int SNDvol(int handle, int value);
+extern float lbl_80300028;
+void SNDAEMSI_bankvol(int voice, int value);
+
+/* An envelope module's state: the offset of its gate input word, the last gate value, the current
+   segment, the time left and per-tick step of that segment, the output level, the segment count,
+   the sustain segment, the start level and the segments' (time, level) pairs from +0x18. */
 typedef struct EnvelopeSegment_80267858 {
     float mTime;
     float mLevel;
 } EnvelopeSegment_80267858;
 
 typedef struct EnvelopeState_80267858 {
-    unsigned char mUnknown0[3];
+    unsigned short mInputOffset;
+    signed char mLastInput;
     unsigned char mSegment;
     float mTime;
     float mStep;
-    float mStart;
-    unsigned char mUnknown10[8];
+    float mLevel;
+    unsigned char mNumSegments;
+    unsigned char unk_0x11;
+    short mSustainSegment;
+    float mStartLevel;
     EnvelopeSegment_80267858 mSegments[1];
 } EnvelopeState_80267858;
 
@@ -392,6 +372,40 @@ int fn_802674DC(Object_802674DC *p)
     return p->mUnknownC;
 }
 
+/* A weighted random module's state: the weight table, the output base, the choice count, the
+   output and the trigger input. */
+typedef struct RandomWeightTable_t {
+    unsigned char unk_0x0[16];
+    signed char mWeights[1];
+} RandomWeightTable_t;
+
+typedef struct RandomWeightedState_t {
+    RandomWeightTable_t *mpTable;
+    int mBase;
+    int mCount;
+    int mValue;
+    int mTrigger;
+} RandomWeightedState_t;
+
+int SNDAEMSI_updaterandomweighted(RandomWeightedState_t *p)
+{
+    if (p->mTrigger != 0) {
+        unsigned int roll = iSNDrandom() % 100;
+        RandomWeightTable_t *table = p->mpTable;
+        unsigned int sum;
+        int i;
+
+        for (i = 0, sum = 0; i < p->mCount; i++) {
+            sum += table->mWeights[i];
+            if (sum > roll) {
+                p->mValue = i + p->mBase;
+                break;
+            }
+        }
+    }
+    return p->mValue;
+}
+
 int fn_8026769C(Object_8026769C *p)
 {
     if (p->mUnknown14 >= p->mUnknown0 && p->mUnknown14 <= p->mUnknown4) {
@@ -404,6 +418,31 @@ int fn_8026769C(Object_8026769C *p)
         p->mUnknown10 = 0;
     }
     p->mUnknown11 = 0;
+    return 0;
+}
+
+/* A delay trigger's state: the running time, the output, the trigger input and the delay. */
+typedef struct DelayTrigState_t {
+    float mTime;
+    unsigned char mOutput;
+    unsigned char unk_0x5[3];
+    int mTrigger;
+    int mDelay;
+} DelayTrigState_t;
+
+int SNDAEMSI_updatedelaytrig(DelayTrigState_t *p)
+{
+    if (p->mTrigger != 0)
+        p->mTime = 0.0f;
+    if (!(p->mTime < 0.0f)) {
+        if (!(p->mTime < (float)p->mDelay)) {
+            p->mOutput = 1;
+            p->mTime = -1.0f;
+            return 1;
+        }
+        p->mTime += Snd::gVariableTimerPeriod;
+    }
+    p->mOutput = 0;
     return 0;
 }
 
@@ -435,7 +474,155 @@ int fn_80267814(Object_80267814 *p)
 void SNDAEMSI_envelopeprogramsegment(EnvelopeState_80267858 *p)
 {
     p->mTime = p->mSegments[p->mSegment].mTime;
-    p->mStep = Snd::gVariableTimerPeriod * ((p->mSegments[p->mSegment].mLevel - p->mStart) / p->mTime);
+    p->mStep = Snd::gVariableTimerPeriod * ((p->mSegments[p->mSegment].mLevel - p->mLevel) / p->mTime);
+}
+
+int SNDAEMSI_updateenvelope(EnvelopeState_80267858 *p)
+{
+    int *input = (int *)((char *)p + p->mInputOffset);
+
+    if (*input == 1 && p->mLastInput == 0) {
+        p->mSegment = 0;
+        p->mLevel = p->mStartLevel;
+        SNDAEMSI_envelopeprogramsegment(p);
+    } else if (*input == 3 && (unsigned char)p->mLastInput != 3 && p->mSegment < p->mSustainSegment) {
+        p->mSegment = p->mSustainSegment;
+        SNDAEMSI_envelopeprogramsegment(p);
+    } else if ((*input == 1 || *input == 3) && p->mSegment < p->mNumSegments) {
+        p->mTime -= Snd::gVariableTimerPeriod;
+        if (!(p->mTime > 0.0f)) {
+            p->mLevel = p->mSegments[p->mSegment].mLevel;
+            p->mSegment++;
+            if (p->mSegment < p->mNumSegments)
+                SNDAEMSI_envelopeprogramsegment(p);
+            else
+                p->mLevel = 0.0f;
+        } else {
+            p->mLevel += p->mStep;
+        }
+    } else if (*input != 2) {
+        p->mLevel = 0.0f;
+    }
+    p->mLastInput = *input;
+    return (int)(!(p->mLevel < 0.0f) ? p->mLevel + 0.5f : p->mLevel - 0.5f);
+}
+
+/* A lookup table module: the table (entry type, entry count, input range, index scale and the
+   entries), the last input, the output and the input. */
+typedef struct TableData_t {
+    unsigned char mType;
+    unsigned char unk_0x1;
+    unsigned short mCount;
+    int mMin;
+    int mMax;
+    float mScale;
+    union {
+        signed char mBytes[1];
+        short mShorts[1];
+        int mInts[1];
+    } mEntries;
+} TableData_t;
+
+typedef struct TableState_t {
+    TableData_t *mpTable;
+    int mLastInput;
+    int mOutput;
+    int mInput;
+} TableState_t;
+
+int SNDAEMSI_updatetable(TableState_t *p)
+{
+    int input = p->mInput;
+
+    if (input != p->mLastInput) {
+        TableData_t *t = p->mpTable;
+        int index;
+        int min;
+        int max;
+
+        p->mLastInput = input;
+        min = t->mMin;
+        max = t->mMax;
+        if (input < min)
+            index = min;
+        else if (input > max)
+            index = max;
+        else
+            index = input;
+        index -= t->mMin;
+        if (t->mScale == 1.0f) {
+            if (t->mType == 2)
+                p->mOutput = t->mEntries.mShorts[index];
+            else if (t->mType == 1)
+                p->mOutput = t->mEntries.mBytes[index];
+            else
+                p->mOutput = t->mEntries.mInts[index];
+        } else {
+            float pos = (float)index * t->mScale;
+            float start = pos - 0.5f;
+            int first = (int)(!(start < 0.0f) ? start + 0.5f : start - 0.5f);
+            int next = first + 1;
+            float a;
+            float b;
+            float value;
+
+            pos -= (float)first;
+            if (next >= t->mCount)
+                next = t->mCount - 1;
+            if (t->mType == 2) {
+                a = t->mEntries.mShorts[first];
+                b = t->mEntries.mShorts[next];
+            } else if (t->mType == 1) {
+                a = t->mEntries.mBytes[first];
+                b = t->mEntries.mBytes[next];
+            } else {
+                a = t->mEntries.mInts[first];
+                b = t->mEntries.mInts[next];
+            }
+            value = pos * (b - a) + a;
+            index = (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+            p->mOutput = index;
+        }
+    }
+    return p->mOutput;
+}
+
+/* A delay line: the offset of its (value, delay) inputs, the buffer length, the write and read
+   cursors, the last delay and the buffer. */
+typedef struct DelayLineState_t {
+    unsigned short mInputOffset;
+    unsigned short mLength;
+    unsigned short mWrite;
+    unsigned short mRead;
+    int mLastDelay;
+    int mBuffer[1];
+} DelayLineState_t;
+
+int SNDAEMSI_updatedelayline(DelayLineState_t *p)
+{
+    int *input = (int *)((char *)p + p->mInputOffset);
+    int value;
+
+    if (input[1] != p->mLastDelay) {
+        int ticks;
+
+        p->mLastDelay = input[1];
+        if (input[1] < 0)
+            input[1] = 0;
+        ticks = (int)((float)input[1] / Snd::gVariableTimerPeriod + 0.5f);
+        if (ticks >= p->mLength)
+            ticks = p->mLength - 1;
+        p->mWrite = p->mRead + ticks;
+    }
+    if (p->mWrite >= p->mLength)
+        p->mWrite -= p->mLength;
+    if (p->mRead >= p->mLength)
+        p->mRead = 0;
+    p->mBuffer[p->mWrite] = input[0];
+    value = p->mBuffer[p->mRead];
+    p->mWrite++;
+    p->mRead++;
+    return value;
 }
 
 int fn_80267D84(Args_80267D84 *p)
@@ -565,7 +752,7 @@ void fn_802680D0(void)
 {
 }
 
-int fn_802680D4(int voice, int value)
+void fn_802680D4(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -573,28 +760,67 @@ int fn_802680D4(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    lbl_803A6C24.mUnknown1CC[voice].mUnknown8E = value;
-    return SNDPLATFORM_setpitch(voice);
+    lbl_803A6C24.m1CC[voice].m8E = value;
+    SNDPLATFORM_setpitch(voice);
 }
 
-int fn_80268130(int voice, int value)
+void fn_80268130(int voice, int value)
 {
     if (value > 8192)
         value = 8192;
     else if (value < 2048)
         value = 2048;
-    lbl_803A6C24.mUnknown1CC[voice].mUnknown6E = value;
-    return SNDPLATFORM_timemult(voice, value);
+    lbl_803A6C24.m1CC[voice].m6E = value;
+    SNDPLATFORM_timemult(voice, value);
+}
+
+void SNDAEMSI_bankvol(int voice, int value)
+{
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
+    int clamped;
+    int i;
+
+    if (value < 0)
+        clamped = 0;
+    else if (value > 32767)
+        clamped = 32767;
+    else
+        clamped = value;
+    v->m38 = (float)clamped * (1.0f / 32767.0f);
+    v->m48 = v->m38 * lbl_80300028;
+    for (i = 0; i < v->m23; i++) {
+        int index = v->m4[i];
+        Record_803A6DF0 *sub = &lbl_803A6C24.m1CC[index];
+
+        sub->m38 = v->m38;
+        sub->m48 = v->m48;
+        SndHalSetVol(index);
+    }
 }
 
 void fn_80268270(int voice, int value)
 {
-    Voice_803A6C24 *v = &lbl_803A6C24.mUnknown1CC[voice];
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
 
-    if (v->mUnknown23 == 1) {
-        v->mUnknown1C = value;
+    if (v->m23 == 1) {
+        v->m1C = value;
         SndHalSetPan(voice);
     }
+}
+
+void SNDAEMSI_bankfxwet0(int voice, int value)
+{
+    int clamped;
+
+    if (value < 0)
+        clamped = 0;
+    else if (value > 32767)
+        clamped = 32767;
+    else
+        clamped = value;
+    lbl_803A6C24.m1CC[voice].m60 = clamped >> 8;
+    *lbl_803A6C24.m1CC[voice].m64 = (float)(signed char)lbl_803A6C24.m1CC[voice].m60 * (1.0f / 127.0f);
+    SNDPLATFORM_setfxlevel(voice, 0);
 }
 
 void fn_80268354(int voice, int value)
@@ -621,7 +847,7 @@ void fn_8026839C(int voice, int value)
 
 void fn_802683E4(int voice, int value)
 {
-    Voice_803A6C24 *v = &lbl_803A6C24.mUnknown1CC[voice];
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
     int clamped;
     int i;
 
@@ -632,14 +858,14 @@ void fn_802683E4(int voice, int value)
     else
         clamped = value;
     value = clamped >> 8;
-    for (i = 0; i < v->mUnknown23; i++) {
-        int index = v->mUnknown4[i];
-        lbl_803A6C24.mUnknown1CC[index].mUnknown5F = value;
+    for (i = 0; i < v->m23; i++) {
+        int index = v->m4[i];
+        lbl_803A6C24.m1CC[index].m5F = value;
         SndHalSetDry(index);
     }
 }
 
-void fn_80268480(Object_80268480 *p, int value)
+void fn_80268480(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -647,19 +873,19 @@ void fn_80268480(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknownC = value;
+    p->mC = value;
 }
 
-void fn_802684B0(Object_80268480 *p, int value)
+void fn_802684B0(SndPlayOpts_t *p, int value)
 {
     if (value > 8192)
         value = 8192;
     else if (value < 2048)
         value = 2048;
-    p->mUnknownE = value;
+    p->mE = value;
 }
 
-void fn_802684D4(Object_80268480 *p, int value)
+void fn_802684D4(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -669,15 +895,15 @@ void fn_802684D4(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown0 = clamped >> 8;
+    p->m0 = clamped >> 8;
 }
 
-void fn_802684FC(Object_80268480 *p, int value)
+void fn_802684FC(SndPlayOpts_t *p, int value)
 {
-    p->mUnknown8 = value;
+    p->m8 = value;
 }
 
-void fn_80268504(Object_80268480 *p, int value)
+void fn_80268504(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -687,10 +913,10 @@ void fn_80268504(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown5 = clamped >> 8;
+    p->m5 = clamped >> 8;
 }
 
-void fn_8026852C(Object_80268480 *p, int value)
+void fn_8026852C(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -698,10 +924,10 @@ void fn_8026852C(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknown14 = value;
+    p->m14 = value;
 }
 
-void fn_8026855C(Object_80268480 *p, int value)
+void fn_8026855C(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -709,10 +935,10 @@ void fn_8026855C(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknown16 = value;
+    p->m16 = value;
 }
 
-void fn_8026858C(Object_80268480 *p, int value)
+void fn_8026858C(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -722,7 +948,7 @@ void fn_8026858C(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown4 = clamped >> 8;
+    p->m4 = clamped >> 8;
 }
 
 void fn_802685B4(void)
@@ -731,16 +957,16 @@ void fn_802685B4(void)
 
 Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
 {
-    Object_80268480 params;
+    SndPlayOpts_t params;
     Result_802685B8 result;
     Entry_802686CC *e;
     int i;
 
     SNDplaysetdef(&params);
-    params.mUnknown5 = 0;
+    params.m5 = 0;
     e = p->mEntries;
     for (i = 0; i < p->mUnknownE; i++, e++) {
-        lbl_802FFB6C[e->mType](&params, e->mUnknown8);
+        SNDAEMSoptfn[e->mType](&params, e->mUnknown8);
         e->mUnknown4 = e->mUnknown8;
     }
     result.mUnknown0 = SNDBANK_play(p->mUnknown0->mUnknown40, q[1], &params);
@@ -781,7 +1007,7 @@ void fn_802686CC(Object_802686CC *p)
             }
         }
         fn_802680D4(handle, a);
-        fn_80268188(handle, b);
+        SNDAEMSI_bankvol(handle, b);
     }
 }
 
@@ -796,6 +1022,231 @@ int SNDAEMSI_playerresetoutputs(PlayerState_80268774 *p)
         outputs[output].mUnknown0 = 0;
     }
     return 0;
+}
+
+/* A bank player's inputs (type, last and current value, 12 bytes each, from +0x1C) and, after
+   them, its two outputs: the time left and the play position, in milliseconds. */
+typedef struct PlayerInput_t {
+    unsigned char mType;
+    unsigned char unk_0x1[3];
+    int mLast;
+    int mValue;
+} PlayerInput_t;
+
+typedef struct PlayerTimes_t {
+    int mRemaining;
+    int mPosition;
+} PlayerTimes_t;
+
+typedef struct PlayerSample_t {
+    signed char mType;
+    unsigned char unk_0x1[3];
+    int mPatch;
+    int unk_0x8;
+} PlayerSample_t;
+
+typedef struct PlayerSampleList_t {
+    int mCount;
+    PlayerSample_t mSamples[1];
+} PlayerSampleList_t;
+
+typedef struct PlayerHandle_t {
+    int mHandle;
+} PlayerHandle_t;
+
+typedef struct PlayerState_t {
+    void *mpOwner;
+    PlayerSampleList_t *mpSamples;
+    PlayerHandle_t mHandle;
+    signed char mMode : 8;
+    signed char mPrevMode : 8;
+    unsigned char mNumInputs : 8;
+    unsigned char mPlaying : 8;
+    signed char mType;
+    unsigned char unk_0x11[3];
+    int mSample;
+    int mModeInput;
+    PlayerInput_t mInputs[1];
+} PlayerState_t;
+
+typedef PlayerHandle_t (*SndAemsPlayFn_t)(...);
+typedef int (*SndAemsPlayerFn_t)(PlayerState_t *p);
+typedef int (*SndAemsPauseFn_t)(PlayerHandle_t handle);
+
+extern SndAemsPlayFn_t SNDAEMSplayerplayfn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerstopfn[4];
+extern SndAemsPauseFn_t SNDAEMSplayerpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4];
+
+int SNDAEMSI_playerupdatebank(PlayerState_t *p)
+{
+    int i;
+    PlayerInput_t *input = p->mInputs;
+    int voice = SNDVOICEI_get(p->mHandle.mHandle);
+
+    if (voice < 0)
+        return SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+    for (i = 0; i < p->mNumInputs; i++) {
+        if (input->mValue != input->mLast) {
+            playerinterfacefn[input->mType](voice, input->mValue);
+            input->mLast = input->mValue;
+        }
+        input++;
+    }
+    if (p->mPlaying != 0) {
+        Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
+        float msPerFrame = 1000.0f / (float)v->m20;
+        int frame = SNDPLATFORM_getcurframe(voice);
+        float ms = (float)frame * msPerFrame;
+        int value;
+
+        value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+        ((PlayerTimes_t *)input)->mPosition = value;
+        if (v->m18 <= 0) {
+            ms = (float)((unsigned int)v->m14 - frame) * msPerFrame;
+            value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+        } else {
+            value = 0;
+        }
+        ((PlayerTimes_t *)input)->mRemaining = value;
+    }
+    return 1;
+}
+
+int SNDAEMSI_updateplayer(PlayerState_t *p)
+{
+    int input = p->mModeInput;
+    int mode;
+
+    if (input < 0)
+        mode = 0;
+    else if (input > 2)
+        mode = 2;
+    else
+        mode = input;
+    if (mode != p->mMode) {
+        if (mode == 0) {
+            if (p->mType >= 0) {
+                SNDAEMSplayerstopfn[p->mType](p);
+                SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+            }
+        } else if (mode == 1) {
+            if (p->mType >= 0) {
+                SNDAEMSplayerunpausefn[p->mType](p);
+            } else if (!(p->mMode == 2 && p->mPrevMode == 1)) {
+                int index = p->mSample;
+                PlayerSampleList_t *list = p->mpSamples;
+                int count = list->mCount;
+
+                if (index >= count)
+                    index = count - 1;
+                else if (index < 0)
+                    index = 0;
+                p->mType = list->mSamples[index].mType;
+                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &list->mSamples[index]);
+                if (p->mHandle.mHandle < 0)
+                    SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+            }
+        } else {
+            if (p->mType >= 0)
+                SNDAEMSplayerpausefn[p->mType](p->mHandle);
+        }
+        p->mPrevMode = p->mMode;
+        p->mMode = mode;
+    }
+    if (mode == 1 && p->mType >= 0)
+        mode = SNDAEMSplayerupdatefn[p->mType](p);
+    if (p->mType < 0)
+        mode = 0;
+    return mode;
+}
+
+/* An oscillator: the waveform (0 sine, 1 square, 2 saw, else triangle), the phase in cycles,
+   the period and the amplitude. */
+typedef struct OscillatorState_t {
+    unsigned char mWaveform;
+    unsigned char unk_0x1[3];
+    float mPhase;
+    int mPeriod;
+    int mAmplitude;
+} OscillatorState_t;
+
+int SNDAEMSI_updateoscillator(OscillatorState_t *p)
+{
+    float step;
+    float amplitude;
+    float value;
+
+    if (p->mPeriod <= 0)
+        return 0;
+    step = Snd::gVariableTimerPeriod / (float)p->mPeriod;
+    amplitude = (float)p->mAmplitude;
+    if (!(p->mPhase < 1.0f)) {
+        do {
+            p->mPhase -= 1.0f;
+        } while (p->mPhase >= 1.0f);
+    }
+    if (p->mWaveform == 0) {
+        float angle = p->mPhase * 1024.0f;
+
+        value = (float)iSNDsin((int)(!(angle < 0.0f) ? angle + 0.5f : angle - 0.5f)) * (1.0f / 65536.0f) * amplitude;
+    } else if (p->mWaveform == 1) {
+        if (!(p->mPhase < 0.5f))
+            value = amplitude;
+        else
+            value = 0.0f;
+    } else {
+        float shape;
+
+        if (p->mWaveform == 2)
+            shape = p->mPhase;
+        else if (!(p->mPhase >= 0.5f))
+            shape = p->mPhase * 2.0f;
+        else
+            shape = (1.0f - p->mPhase) * 2.0f;
+        value = shape * amplitude;
+    }
+    p->mPhase += step;
+    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+}
+
+/* A ramp: the current value, the per-tick rate, the target and time it was set up for, the ramp
+   time, the rate multiplier and the target input. */
+typedef struct RampState_t {
+    float mValue;
+    float mRate;
+    int mLastTarget;
+    int mLastTime;
+    int mTime;
+    int mScale;
+    int mTarget;
+} RampState_t;
+
+int SNDAEMSI_updateramp(RampState_t *p)
+{
+    float target = (float)p->mTarget;
+
+    if (target == p->mValue)
+        return p->mTarget;
+    if (p->mTarget != p->mLastTarget || p->mTime != p->mLastTime) {
+        p->mLastTarget = p->mTarget;
+        p->mLastTime = p->mTime;
+        if (p->mTime <= 0) {
+            p->mValue = target;
+            return p->mTarget;
+        }
+        p->mRate = (target - p->mValue) * Snd::gVariableTimerPeriod / (float)p->mTime * (1.0f / 4096.0f);
+    }
+    p->mValue = p->mRate * (float)p->mScale + p->mValue;
+    if (!(p->mRate < 0.0f)) {
+        if (!(p->mValue <= (float)p->mTarget))
+            p->mValue = (float)p->mTarget;
+    } else {
+        if (!(p->mValue >= (float)p->mTarget))
+            p->mValue = (float)p->mTarget;
+    }
+    return (int)(!(p->mValue < 0.0f) ? p->mValue + 0.5f : p->mValue - 0.5f);
 }
 
 int fn_80268F54(Object_80268F54 *p)
@@ -863,11 +1314,61 @@ void fn_80269048(int *values, Object_80269048 *p)
     p->mUnknown19 = 1;
 }
 
+int fn_80266EC0(void *state);
+int fn_802671D0(void *state);
+
+SndAemsBankSetter_t playerinterfacefn[12] = {
+    fn_802680D4, fn_80268130, SNDAEMSI_bankvol, fn_80268270,
+    (SndAemsBankSetter_t)fn_802680D0, SNDAEMSI_bankfxwet0, fn_80268354, fn_8026839C,
+    fn_802683E4, (SndAemsBankSetter_t)fn_802680D0, (SndAemsBankSetter_t)fn_802680D0,
+    (SndAemsBankSetter_t)fn_802680D0,
+};
+
+SndAemsOptSetter_t SNDAEMSoptfn[12] = {
+    fn_80268480, fn_802684B0, fn_802684D4, fn_802684FC,
+    (SndAemsOptSetter_t)fn_802685B4, fn_80268504, fn_8026852C, fn_8026855C,
+    fn_8026858C, (SndAemsOptSetter_t)fn_802685B4, (SndAemsOptSetter_t)fn_802685B4,
+    (SndAemsOptSetter_t)fn_802685B4,
+};
+
+SndAemsPlayFn_t SNDAEMSplayerplayfn[4] = { (SndAemsPlayFn_t)fn_802685B8 };
+SndAemsPlayerFn_t SNDAEMSplayerstopfn[4] = { (SndAemsPlayerFn_t)fn_80268668 };
+SndAemsPauseFn_t SNDAEMSplayerpausefn[4] = { (SndAemsPauseFn_t)fn_8026868C };
+SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4] = { (SndAemsPlayerFn_t)fn_802686CC };
+SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerupdatebank };
+
+SndAemsUpdateFn_t sndaemsfuncs[40] = {
+    (SndAemsUpdateFn_t)fn_80266E88, (SndAemsUpdateFn_t)fn_80266E9C, (SndAemsUpdateFn_t)fn_80266EA4,
+    (SndAemsUpdateFn_t)fn_80266EAC, fn_80266EC0, (SndAemsUpdateFn_t)fn_80267114,
+    (SndAemsUpdateFn_t)fn_80267404, (SndAemsUpdateFn_t)fn_80267480, (SndAemsUpdateFn_t)fn_802674DC,
+    (SndAemsUpdateFn_t)SNDAEMSI_updaterandomweighted, (SndAemsUpdateFn_t)fn_8026769C,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatedelaytrig, (SndAemsUpdateFn_t)fn_802677B4,
+    (SndAemsUpdateFn_t)fn_80267814, (SndAemsUpdateFn_t)SNDAEMSI_updateenvelope, (SndAemsUpdateFn_t)SNDAEMSI_updatetable, (SndAemsUpdateFn_t)SNDAEMSI_updatedelayline,
+    (SndAemsUpdateFn_t)fn_80267D84, (SndAemsUpdateFn_t)fn_80267DB4, (SndAemsUpdateFn_t)fn_80267E04,
+    (SndAemsUpdateFn_t)fn_80267E64, (SndAemsUpdateFn_t)SNDAEMSI_updatescale,
+    (SndAemsUpdateFn_t)fn_8026801C, (SndAemsUpdateFn_t)fn_80268068, (SndAemsUpdateFn_t)fn_80268078,
+    (SndAemsUpdateFn_t)fn_80268088, (SndAemsUpdateFn_t)fn_802680A8, (SndAemsUpdateFn_t)SNDAEMSI_updateplayer, (SndAemsUpdateFn_t)SNDAEMSI_updateoscillator,
+    (SndAemsUpdateFn_t)SNDAEMSI_updateramp, (SndAemsUpdateFn_t)fn_80268F54, (SndAemsUpdateFn_t)fn_80268FA0,
+    (SndAemsUpdateFn_t)fn_80268FC4, (SndAemsUpdateFn_t)fn_80267E48, (SndAemsUpdateFn_t)fn_80267EA8,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatescale2, (SndAemsUpdateFn_t)fn_80268058,
+    (SndAemsUpdateFn_t)fn_80268FE8, fn_802671D0, (SndAemsUpdateFn_t)fn_8026739C,
+};
+
 void SNDAEMSI_restore(void)
 {
     SNDSYS_entercritical();
     while (lbl_803A6BD0 != 0)
         fn_802692B8(((ModuleBank_80269260 *)((char *)lbl_803A6BD0 - 20))->mHandle);
     SNDSYS_leavecritical();
+}
+
+int SNDAEMSI_createmodulebankhandle(void)
+{
+    static int modulebankhandle = 0;
+
+    modulebankhandle++;
+    if (modulebankhandle < 0)
+        modulebankhandle = 1;
+    return modulebankhandle;
 }
 }
