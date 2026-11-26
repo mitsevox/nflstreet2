@@ -17,12 +17,13 @@ void SstlRebuildForTeam(int teamId)
     int count = 0;
     int value = 9;
     int lglt;
+    int i;
 
     DbFileTblLoad(0, 0x43544E52);
     TDbCompilePerformOp(0, "select count(*) into \x82 from 'CTNR'\n", &count);
     int *pOrder = (int *)fn_801D2B7C(count * 4, 0, 0);
     int *pRow = pOrder;
-    for (int i = 0; i < count; ++i, ++pRow) {
+    for (i = 0; i < count; ++i, ++pRow) {
         *pRow = i;
     }
     for (int i = 0; i < count * 8; i++) {
@@ -36,7 +37,7 @@ void SstlRebuildForTeam(int teamId)
     int handle = DbUserGetDb(DbUserGetCurrent());
     TDbCompilePerformOp(0, "use \x8c select 'LGLT' into \x82 from 'METS' where 'DIGT' = \x82\n", handle, &value, teamId);
     int last = count - 1;
-    for (int i = 0; i < count && last >= 0; i++) {
+    for (i = 0; i < count && last >= 0; i++) {
         if (pOrder[i] == value) {
             int temp = pOrder[last];
             pOrder[last] = pOrder[i];

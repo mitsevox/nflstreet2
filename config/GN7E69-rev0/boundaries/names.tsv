@@ -926,6 +926,11 @@ address	size	sibling_name	how	sibling_file	unit
 0x801DB7D4	4	yuvrenderrestore	name	render.c	render.c
 0x801DB7D8	96	yuvrenderinit	name	render.c	render.c
 0x801DB838	100	yuvrenderDoubleYLines	name	render.c	render.c
+0x801DB900	1460	YUV_convert	name	yuvconv.c	yuvconv.c
+0x801DC1C4	616	yuvtoRGB32_C	name	yuvconv.c	yuvconv.c
+0x801DC42C	344	yuvtoA32_C	name	yuvconv.c	yuvconv.c
+0x801DC584	744	yuvtoRGBA32_C	name	yuvconv.c	yuvconv.c
+0x801DC86C	348	YUV_convert_RGBA	name	yuvconv.c	yuvconv.c
 0x801DC9C8	24	VP6_CODEC_is_head_chunk_for_codec__4RCMPUi	size	rcmp_vp6_codec_chunk_types.cpp	-
 0x801DC9E0	48	VP6_CODEC_is_chunk_for_codec__4RCMPUi	size	rcmp_vp6_codec_chunk_types.cpp	-
 0x801DCA10	52	_ObjDefaultInsertFunc	name	object.c	object.c

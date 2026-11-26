@@ -30,7 +30,7 @@ void STREAM_destroy(struct StreamTap_801F5DA4 *h);
 struct StreamTap_801F5DA4 *STREAM_taphandle(struct StreamTap_801F5DA4 *h, int tap);
 int STREAM_queuefile(struct StreamTap_801F5DA4 *h, SndFileDesc_t *pFile, int offset,
                 unsigned int endMarker);
-int fn_801DC86C(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
+int YUV_convert_RGBA(Uint8 *pY, Uint8 *pU, Uint8 *pV, Int32 a, Int32 b, Int32 c, void *pDst,
                  Int32 Stride, Int32 d);
 
 void LLUIGFmvProcess(UIGLibrary_t *pObject, LLUIGFmvMovie_t *pMovie)
@@ -54,7 +54,7 @@ void LLUIGFmvDecompressFrame(LLUIGFmvStream_t *pSub, Int32 a)
 
     if (pSub->pFrame != NULL) {
         MovieRcmpGetDataFromFrame(pSub->pFrame, &pY, &pU, &pV);
-        fn_801DC86C(pY, pU, pV, pSub->unk_30, pSub->unk_30, pSub->unk_34, pSub->unk_1C,
+        YUV_convert_RGBA(pY, pU, pV, pSub->unk_30, pSub->unk_30, pSub->unk_34, pSub->unk_1C,
                     pSub->unk_00 * 4, a);
         MovieRcmpReleaseFrame(&pSub->Info, pSub->pFrame);
         pSub->pFrame = NULL;

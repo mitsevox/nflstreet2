@@ -69,7 +69,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	-	0x801DA4B8	0x801DA52C	open	-	-	rcmp_mad_codec.cpp	maddec.cpp
 .text	0x801DB058	0x801DB058	0x801DB058	alignment	8	1	maddec.cpp	maddeca.cpp
 .text	-	0x801DB21C	0x801DB7D4	open	-	-	maddeca.cpp	render.c
-.text	-	0x801DB89C	0x801DCA10	open	-	-	render.c	object.c
+.text	0x801DB900	0x801DB900	0x801DB900	data	0	2	render.c	yuvconv.c
+.text	-	0x801DC9C8	0x801DCA10	open	-	-	yuvconv.c	object.c
 .text	-	0x801DD474	0x801DD498	open	-	-	object.c	particleLib.c
 .text	0x801DFE0C	0x801DFE0C	0x801DFE0C	alignment	0	3	particleLib.c	psysEmitter.c
 .text	0x801E01FC	0x801E01FC	0x801E01FC	alignment	0	0	psysEmitter.c	psysCollision.c

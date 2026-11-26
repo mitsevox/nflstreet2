@@ -7,8 +7,8 @@
 extern void GlibSwapBuffers(void);
 extern int GlibGetFrame(void);
 extern int GlibGetFrameBufferAddr(int a);
-extern void fn_801DB900(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
-extern void fn_801DBEB4(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
+extern void YUV_convert(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
+extern void YUV_convert_noscale(unsigned char **ppPlanes, int x, int y, int pitch, int width, int height, int frameBuffer);
 
 /* Where and how the movie is drawn, set by yuvrenderinit. */
 static int paintindex;
@@ -43,7 +43,7 @@ void yuvrenderDoubleYLines(unsigned char **ppPlanes)
     GlibSwapBuffers();
     pitch = (GlibGetScreenWidth() + 15) & 0xFFF0;
     frameBuffer = GlibGetFrameBufferAddr((unsigned char)GlibGetFrame());
-    fn_801DB900(ppPlanes, screenx, screeny, pitch, videowidth, videoheight, frameBuffer);
+    YUV_convert(ppPlanes, screenx, screeny, pitch, videowidth, videoheight, frameBuffer);
 }
 
 void yuvrenderVP6YLines(unsigned char **ppPlanes)
@@ -54,5 +54,5 @@ void yuvrenderVP6YLines(unsigned char **ppPlanes)
     GlibSwapBuffers();
     pitch = (GlibGetScreenWidth() + 15) & 0xFFF0;
     frameBuffer = GlibGetFrameBufferAddr((unsigned char)GlibGetFrame());
-    fn_801DBEB4(ppPlanes, screenx, screeny, pitch, videowidth, videoheight, frameBuffer);
+    YUV_convert_noscale(ppPlanes, screenx, screeny, pitch, videowidth, videoheight, frameBuffer);
 }

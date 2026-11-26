@@ -21,7 +21,7 @@ int g_nBaseOffset = 0;
 u8 g_nEmuState = 0;
 u8 g_nLidState = 0;
 
-extern int lbl_802C2A5C;
+extern int SN_DSI;
 
 extern void DSIExcHandler(__OSException exception, OSContext *context);
 
@@ -131,7 +131,7 @@ asm(
     "\tlwz 3,12(4)\n"
     "\tlwz 5,20(4)\n"
     "\tlwz 4,16(4)\n"
-    "\tb fn_801ABF48\n"
+    "\tb DSIentry\n"
     ".size DSIExcHandler,.-DSIExcHandler\n"
     "\n"
 #ifndef DECOMP_COMPARE
@@ -219,7 +219,7 @@ void SNDVDEmuInit(int id)
 {
     if (id == -0x8000) {
         g_hDVD = id;
-        lbl_802C2A5C = 0;
+        SN_DSI = 0;
     }
 }
 

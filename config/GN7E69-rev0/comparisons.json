@@ -11352,7 +11352,7 @@
           "end": "0x80080138"
         },
         {
-          "symbol": "fn_80080138",
+          "symbol": "PlayerRecordCopyTeam",
           "start": "0x80080138",
           "end": "0x8008040C"
         },
@@ -21683,82 +21683,6 @@
       ]
     },
     {
-      "source": "src/game/cu_80132630.cpp",
-      "profile": "game_cpp",
-      "evidence": "Target32-body laneC explicit code/data/layout records, provisional source grouping; complete comparisons remain unlinked. fn_80132630 and its literals 0x8029FC18-0x8029FC28 moved to the linked src/game/OptionRun.cpp (evidence.tsv unit row 0x8013141C-0x801327F4); this grouping now starts at 0x801327F4. fn_801344A0-fn_80134C20, their .rodata 0x8029FD38-0x8029FD88 and the .data table 0x802DB0F4-0x802DB1D4 moved to src/game/QbPass.cpp (evidence.tsv unit row 0x801344A0-0x801360D4); this grouping now ends at 0x801344A0.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801327F4",
-          "end": "0x801344A0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029FC28",
-          "end": "0x8029FD38"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801327F4",
-          "start": "0x801327F4",
-          "end": "0x80132A4C"
-        },
-        {
-          "symbol": "fn_80132A4C",
-          "start": "0x80132A4C",
-          "end": "0x80132C84"
-        },
-        {
-          "symbol": "fn_80132C84",
-          "start": "0x80132C84",
-          "end": "0x80133044"
-        },
-        {
-          "symbol": "fn_80133044",
-          "start": "0x80133044",
-          "end": "0x80133920"
-        },
-        {
-          "symbol": "fn_80133920",
-          "start": "0x80133920",
-          "end": "0x801339E4"
-        },
-        {
-          "symbol": "PlyrSteerAroundBlocker",
-          "start": "0x801339E4",
-          "end": "0x80133BB4"
-        },
-        {
-          "symbol": "fn_80133BB4",
-          "start": "0x80133BB4",
-          "end": "0x80133C50"
-        },
-        {
-          "symbol": "fn_80133C50",
-          "start": "0x80133C50",
-          "end": "0x80133EE8"
-        },
-        {
-          "symbol": "fn_80133EE8",
-          "start": "0x80133EE8",
-          "end": "0x80134370"
-        },
-        {
-          "symbol": "fn_80134370",
-          "start": "0x80134370",
-          "end": "0x801343AC"
-        },
-        {
-          "symbol": "fn_801343AC",
-          "start": "0x801343AC",
-          "end": "0x801344A0"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_80164B78.cpp",
       "profile": "game_cpp",
       "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; complete scratch target context retained without native storage definitions, unrepresented and uncredited, no padding.",
@@ -25341,7 +25265,7 @@
     {
       "source": "src/game/StoryTeamList.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional comparison slice 0x8018EF6C-0x8018F1F0 and the SstlRebuildForTeam function, name and source-form rows. The ordinary index-fill loop improves the pinned-profile comparison from 90.31677% to 91.72050%, with 39 differing aligned instruction words out of 161. All 272 query bytes at 0x802AB254-0x802AB364 remain byte-identical. The neighboring slices probably share an original file; the original executable bytes stay linked.",
+      "evidence": "evidence.tsv provisional comparison slice 0x8018EF6C-0x8018F1F0 and the SstlRebuildForTeam function, name and source-form rows. The ordinary index-fill loop improved the pinned-profile comparison from 90.31677% to 91.72050%, and one function-scope loop counter shared by the fill and swap loops to 92.39751%. All 272 query bytes at 0x802AB254-0x802AB364 remain byte-identical. The neighboring slices probably share an original file; the original executable bytes stay linked.",
       "sections": [
         {
           "section": ".text",
@@ -25361,226 +25285,6 @@
           "symbol": "SstlRebuildForTeam",
           "start": "0x8018EF6C",
           "end": "0x8018F1F0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/ppcdown.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x801AA640-0x801AC6B0 (src/engine/ppcdown.c), linker rows 0x801AA634-0x801AA640 and 0x801AC6A8-0x801AC6B0, assembly and compiler rows 0x801AA640-0x801AC6B0, and the function rows for each registered extent. Only functions whose function rows have exact start and end edges are registered; 0x801AA81C, 0x801AAA6C, 0x801ABD9C, 0x801ABF30, 0x801ABFBC and 0x801AC074 (an end or start resting on layout, with no reference to the start of 0x801AAA6C, 0x801ABF30 or 0x801AC074) stay in the asm source without a comparison entry. Hand-written libsn runtime as top-level asm; the .text placement includes the section end padding 0x801AC6A8-0x801AC6B0. Comparison-only; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AA640",
-          "end": "0x801AC6B0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801AA640",
-          "start": "0x801AA640",
-          "end": "0x801AA6B8"
-        },
-        {
-          "symbol": "fn_801AA6B8",
-          "start": "0x801AA6B8",
-          "end": "0x801AA6C8"
-        },
-        {
-          "symbol": "fn_801AA6C8",
-          "start": "0x801AA6C8",
-          "end": "0x801AA7B8"
-        },
-        {
-          "symbol": "EnableMetroTRKInterrupts",
-          "start": "0x801AA7B8",
-          "end": "0x801AA81C"
-        },
-        {
-          "symbol": "fn_801AAA80",
-          "start": "0x801AAA80",
-          "end": "0x801AAB6C"
-        },
-        {
-          "symbol": "fn_801AAB6C",
-          "start": "0x801AAB6C",
-          "end": "0x801AAB94"
-        },
-        {
-          "symbol": "fn_801AAB94",
-          "start": "0x801AAB94",
-          "end": "0x801AAB98"
-        },
-        {
-          "symbol": "fn_801AAB98",
-          "start": "0x801AAB98",
-          "end": "0x801AABD8"
-        },
-        {
-          "symbol": "fn_801AABD8",
-          "start": "0x801AABD8",
-          "end": "0x801AAC18"
-        },
-        {
-          "symbol": "fn_801AAC18",
-          "start": "0x801AAC18",
-          "end": "0x801AAC68"
-        },
-        {
-          "symbol": "fn_801AAC68",
-          "start": "0x801AAC68",
-          "end": "0x801AAD04"
-        },
-        {
-          "symbol": "fn_801AAD04",
-          "start": "0x801AAD04",
-          "end": "0x801AADF4"
-        },
-        {
-          "symbol": "fn_801AADF4",
-          "start": "0x801AADF4",
-          "end": "0x801AAE3C"
-        },
-        {
-          "symbol": "fn_801AAE3C",
-          "start": "0x801AAE3C",
-          "end": "0x801AAEDC"
-        },
-        {
-          "symbol": "fn_801AAEDC",
-          "start": "0x801AAEDC",
-          "end": "0x801AB004"
-        },
-        {
-          "symbol": "fn_801AB004",
-          "start": "0x801AB004",
-          "end": "0x801AB020"
-        },
-        {
-          "symbol": "fn_801AB020",
-          "start": "0x801AB020",
-          "end": "0x801AB034"
-        },
-        {
-          "symbol": "fn_801AB034",
-          "start": "0x801AB034",
-          "end": "0x801AB05C"
-        },
-        {
-          "symbol": "fn_801AB05C",
-          "start": "0x801AB05C",
-          "end": "0x801AB074"
-        },
-        {
-          "symbol": "fn_801AB074",
-          "start": "0x801AB074",
-          "end": "0x801AB088"
-        },
-        {
-          "symbol": "fn_801AB088",
-          "start": "0x801AB088",
-          "end": "0x801AB14C"
-        },
-        {
-          "symbol": "fn_801AB14C",
-          "start": "0x801AB14C",
-          "end": "0x801AB1A4"
-        },
-        {
-          "symbol": "fn_801AB1A4",
-          "start": "0x801AB1A4",
-          "end": "0x801AB1D4"
-        },
-        {
-          "symbol": "fn_801AB1D4",
-          "start": "0x801AB1D4",
-          "end": "0x801AB2AC"
-        },
-        {
-          "symbol": "fn_801AB2AC",
-          "start": "0x801AB2AC",
-          "end": "0x801AB35C"
-        },
-        {
-          "symbol": "fn_801AB35C",
-          "start": "0x801AB35C",
-          "end": "0x801AB388"
-        },
-        {
-          "symbol": "fn_801AB388",
-          "start": "0x801AB388",
-          "end": "0x801AB3EC"
-        },
-        {
-          "symbol": "fn_801AB3EC",
-          "start": "0x801AB3EC",
-          "end": "0x801AB430"
-        },
-        {
-          "symbol": "fn_801AB430",
-          "start": "0x801AB430",
-          "end": "0x801AB5F0"
-        },
-        {
-          "symbol": "fn_801AB5F0",
-          "start": "0x801AB5F0",
-          "end": "0x801AB7B0"
-        },
-        {
-          "symbol": "fn_801AB7B0",
-          "start": "0x801AB7B0",
-          "end": "0x801AB9C4"
-        },
-        {
-          "symbol": "fn_801AB9C4",
-          "start": "0x801AB9C4",
-          "end": "0x801ABA18"
-        },
-        {
-          "symbol": "fn_801ABA18",
-          "start": "0x801ABA18",
-          "end": "0x801ABAC8"
-        },
-        {
-          "symbol": "fn_801ABAC8",
-          "start": "0x801ABAC8",
-          "end": "0x801ABB9C"
-        },
-        {
-          "symbol": "fn_801ABB9C",
-          "start": "0x801ABB9C",
-          "end": "0x801ABD9C"
-        },
-        {
-          "symbol": "fn_801ABF48",
-          "start": "0x801ABF48",
-          "end": "0x801ABF64"
-        },
-        {
-          "symbol": "fn_801ABF64",
-          "start": "0x801ABF64",
-          "end": "0x801ABFBC"
-        },
-        {
-          "symbol": "fn_801AC084",
-          "start": "0x801AC084",
-          "end": "0x801AC1AC"
-        },
-        {
-          "symbol": "fn_801AC1AC",
-          "start": "0x801AC1AC",
-          "end": "0x801AC2D8"
-        },
-        {
-          "symbol": "fn_801AC2D8",
-          "start": "0x801AC2D8",
-          "end": "0x801AC310"
-        },
-        {
-          "symbol": "fn_801AC310",
-          "start": "0x801AC310",
-          "end": "0x801AC6A8"
         }
       ]
     },
@@ -33183,6 +32887,57 @@
           "symbol": "_UIGCurveBuildOffset",
           "start": "0x8022306C",
           "end": "0x80223224"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/yuvconv.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801DB900-0x801DC9C8, function and name rows of the six yuvconv functions, the luty/lutcb/lutcr data rows and the engine_c compiler row. YUV_convert_RGBA is exact; yuvtoRGBA32_C, yuvtoRGB32_C and yuvtoA32_C differ only in the scheduling of the first luty lookup (hoisted above the chroma struct copies) and the registers that follow; YUV_convert and YUV_convert_noscale keep more values live in the target (x and y spilled, line address recomputed per pass).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DB900",
+          "end": "0x801DC9C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7CA0",
+          "end": "0x802F94A0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "YUV_convert",
+          "start": "0x801DB900",
+          "end": "0x801DBEB4"
+        },
+        {
+          "symbol": "YUV_convert_noscale",
+          "start": "0x801DBEB4",
+          "end": "0x801DC1C4"
+        },
+        {
+          "symbol": "yuvtoRGB32_C",
+          "start": "0x801DC1C4",
+          "end": "0x801DC42C"
+        },
+        {
+          "symbol": "yuvtoA32_C",
+          "start": "0x801DC42C",
+          "end": "0x801DC584"
+        },
+        {
+          "symbol": "yuvtoRGBA32_C",
+          "start": "0x801DC584",
+          "end": "0x801DC86C"
+        },
+        {
+          "symbol": "YUV_convert_RGBA",
+          "start": "0x801DC86C",
+          "end": "0x801DC9C8"
         }
       ]
     }

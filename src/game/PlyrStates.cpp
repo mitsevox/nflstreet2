@@ -577,10 +577,10 @@ void CarrierRunExit(void);
 void CarrierRunUpdate(void);
 void CarrierRunNotify(void);
 void CarrierRunInput(void);
-void fn_80133C50(void);
-void fn_80133EE8(void);
-void fn_80134370(void);
-void fn_801343AC(void);
+void PassBlockEnter(void);
+void PassBlockUpdate(void);
+void PassBlockExit(void);
+void PassBlockInput(void);
 
 PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
@@ -614,7 +614,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)fn_80133C50, (void *)fn_80134370, (void *)fn_80133EE8, (void *)fn_801343AC, (void *)fn_800F0908, 0}},
+    {{(void *)PassBlockEnter, (void *)PassBlockExit, (void *)PassBlockUpdate, (void *)PassBlockInput, (void *)fn_800F0908, 0}},
     {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F23EC, (void *)fn_800F0900, (void *)fn_800F24D8, (void *)fn_800F268C, (void *)fn_800F0908, 0}},

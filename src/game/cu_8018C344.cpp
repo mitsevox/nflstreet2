@@ -42,10 +42,9 @@ void fn_8018C48C(int handle)
         int status = TDbCompilePerformOp(0, "use \x8c declare \x8a cursor for select 'DIGT' from 'MAET' where 'PYTT' = \x82 or 'PYTT' = \x82\n", handle, &cursor, 6, 5);
         while (status == 0) {
             status = TDbCompilePerformOp(0, "fetch from \x8a 'DIGT' into \x85\n", &cursor, &team);
-            if (status != 0) {
-                break;
+            if (status == 0) {
+                status = TDbCompilePerformOp(0, "use \x8c delete from 'YALP' where 'DIGT' = \x82\n", handle, team);
             }
-            status = TDbCompilePerformOp(0, "use \x8c delete from 'YALP' where 'DIGT' = \x82\n", handle, team);
         }
         if (QUERY_STATUS_ACCEPTED(status) == true) {
             if (cursor.mUnknown0) {

@@ -9,7 +9,7 @@ extern int lbl_802D68D0[];
 extern int lbl_802D6950[];
 extern int lbl_802D6990[];
 int TDbTblDefaultDbGet(void);
-int _TDbQrySelect(int, void *, void *, void *, void *, int *, void *);
+int _TDbQrySelect(int, DbTableRef *, DbExpression *, void *, int *, DbQueryResult *);
 int TDbQryDestroy(int);
 int DbFileTblLoad(int, int);
 int DbFileTblDestroy(int, int);
@@ -51,15 +51,20 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     unsigned short filled = 0;
     while (result == 0 && filled < *count) {
         result = TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
-        if (result != 0) break;
-        if (row > previous + 1) {
-            next = previous + 1;
-            while (result == 0 && next < row && filled < *count && next <= 0x7F14) {
-                out[filled++] = next++;
+        if (result == 0) {
+            if (row > previous + 1) {
+                next = previous + 1;
+                for (;;) {
+                    if (result != 0 || next >= row || filled >= *count || next > 0x7F14) goto gap_done;
+                    out[filled] = next;
+                    filled++;
+                    next++;
+                }
+            gap_done:;
             }
+            if (next > row) high = next; else high = row;
+            previous = row;
         }
-        high = next > row ? next : row;
-        previous = row;
     }
     int valid = 0;
     if (result == 0 || result == 23 || result == 21 || result == 20) valid = 1;
@@ -68,8 +73,14 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
         else result = 0;
     } else if (cursor.mUnknown0 != 0) TDbSQLDestroyCursor(&cursor);
     if (result == 0 && filled < *count) {
-        next = high == 0x7FFF ? 0 : high + 1;
-        while (filled < *count && next <= 0x7F14) out[filled++] = next++;
+        if (high == 0x7FFF) next = 0; else next = high + 1;
+        for (;;) {
+            if (filled >= *count || next > 0x7F14) goto fill_done;
+            out[filled] = next;
+            filled++;
+            next++;
+        }
+    fill_done:;
     }
     *count = filled;
     return result;
@@ -185,7 +196,7 @@ extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *col
     TDbQrySetFirstRow(handle, tables, 0, columns, &result, 0);
 }
 
-extern "C" void fn_80080138(int selector, int index, int mode)
+extern "C" void PlayerRecordCopyTeam(int selector, int index, int mode)
 {
     if (index == -1 && mode == 0) return;
     int cursor = 0;
@@ -194,40 +205,43 @@ extern "C" void fn_80080138(int selector, int index, int mode)
     if (mode) {
         from = 0x52475250;
         if (index == -1) {
-            destination = 0x54415453;
-            DbFileTblLoad(destination, from);
+            source = 0x54415453;
+            DbFileTblLoad(source, from);
             created = 1;
-        } else destination = DbUserGetDb(DbUserGetId(index));
-        source = 0x54415453;
+        } else source = DbUserGetDb(DbUserGetId(index));
+        destination = 0x54415453;
         to = 0x59414C50;
     } else {
-        source = DbUserGetDb(DbUserGetId(index));
-        destination = 0x54415453;
+        destination = DbUserGetDb(DbUserGetId(index));
+        source = 0x54415453;
         from = 0x59414C50;
         to = 0x52475250;
     }
     DbTableRef tables[2];
-    DbExpression node;
     DbColumnValue columns[24];
+    DbExpression node;
     for (int i = 0; i < 22; ++i) columns[i].Set(from, lbl_802D68D0[i], 0);
-    columns[22].Set(from, 0x44494750, 0);
+    columns[22].Set(from, 0x44494750);
+    columns[22].mValue = 0;
     columns[23].SetEnd();
     if (selector == 0x3FF) tables[0].Set(from);
     else {
-        node.Set((static_cast<unsigned long long>(static_cast<unsigned int>(from)) << 32) | 0x44494754, 0x10003, selector);
-        tables[0].mTag = from;
-        tables[0].mUnknown4 = 2;
-        tables[0].mFilter = &node;
+        unsigned long long column = 0x44494754;
+        node.Set((static_cast<unsigned long long>(static_cast<unsigned int>(from)) << 32) | column, 0x10003, selector);
+        tables[0].Set(from, 2, &node);
     }
     tables[1].Set(-1);
-    char unknown[16];
-    int result = _TDbQrySelect(source, tables, 0, 0, 0, &cursor, unknown);
+    DbQueryResult status;
+    int result = _TDbQrySelect(source, tables, 0, 0, &cursor, &status);
+    if (result != 0) {
+        if (result == 23) goto done;
+    }
     if (result != 23) {
         if (TDbQryRetrieve(cursor, 1, 0, columns) == 0) {
             do {
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = to;
-                columns[22].mTableTag = -1;
                 columns[22].mColumnTag = -1;
+                columns[22].mTableTag = -1;
                 fn_80080084(columns[22].mValue, destination, to, columns);
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = from;
                 columns[22].mColumnTag = 0x44494750;
@@ -235,6 +249,7 @@ extern "C" void fn_80080138(int selector, int index, int mode)
             } while (TDbQryRetrieve(cursor, 0, 1, columns) == 0);
         }
     }
+done:
     TDbQryDestroy(cursor);
     if (created) DbFileTblDestroy(0x54415453, from);
 }
@@ -275,7 +290,8 @@ extern "C" void fn_8008056C(Object_8008044C *p)
 
 extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, int mode)
 {
-    unsigned short result = 0;
+    DbQueryResult result;
+    result.mCount = 0;
     if (static_cast<unsigned int>(b) > 15) b = a;
     if (static_cast<unsigned int>(c) > 15) c = a;
     switch (mode) {
@@ -310,7 +326,7 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
             TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, 1);
         break;
     }
-    return result;
+    return result.mCount;
 }
 extern "C" void fn_8008079C(int which)
 {
