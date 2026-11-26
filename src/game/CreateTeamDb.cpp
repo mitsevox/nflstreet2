@@ -26,7 +26,7 @@ int TDbTblFindUnusedId(int, int *);
 int TDbTblDestroy(int, int);
 void TDbInsertRow(int, int, DbColumnValue *, int *, int);
 int TDbTblGetCount(int, int, DbFilter *, unsigned short *);
-int fn_8022C628(int, int, int *, unsigned short *);
+int DbFindUnusedTeamIds(int, int, int *, unsigned short *);
 int fn_80229AA4(int, int, int *, unsigned short *);
 int MemCardFilesNeedsSave(int, int);
 void MemCardFilesStoreChecksum(int, int);
@@ -203,7 +203,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
     int table = -1;
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_8022C628(destination, 0x4D414554, &team, &teamCount);
+    DbFindUnusedTeamIds(destination, 0x4D414554, &team, &teamCount);
     TDbTblFindUnusedId(destination, &table);
     TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
     TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
@@ -281,7 +281,7 @@ int CreateTeamInsertNew()
     DbColumnValue list[17];
     unsigned short count = 1;
     int team;
-    fn_8022C628(0x54415453, 0x4D414554, &team, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
         list[i].Set(0x4D414554, _CreateTeamDb_aTeamTags[i]);
         list[i].mValue = _CreateTeamDb_aDefaultValues[i];

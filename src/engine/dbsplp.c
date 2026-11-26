@@ -6,7 +6,7 @@
 #include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 
-typedef struct Record_8022A304 {
+typedef struct DbSplpEntry_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -18,26 +18,26 @@ typedef struct Record_8022A304 {
     unsigned short mUnknown12;
     unsigned short mUnknown14;
     char mUnknown16[2];
-} Record_8022A304;
+} DbSplpEntry_t;
 
-static Record_8022A304 lbl_802FA180[21] = {
+static DbSplpEntry_t _DbSplp_aSplp[21] = {
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
 };
 
-static Record_8022A304 lbl_802FA378[17] = {
+static DbSplpEntry_t _DbSplp_aSprd[17] = {
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
     {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7}, {31, 15, 7},
 };
 
-static Record_8022A304 lbl_802FA510[10] = {
+static DbSplpEntry_t _DbSplp_aGsop[10] = {
     {31, 31, 7}, {31, 31, 7}, {31, 31, 7}, {31, 31, 7}, {31, 31, 7},
     {31, 31, 7}, {31, 31, 7}, {31, 31, 7}, {31, 31, 7}, {31, 31, 7},
 };
 
-int fn_80229E88(void)
+int DbSplpModuleInit(void)
 {
     struct QueryCursor cursor;
     unsigned char b0;
@@ -61,15 +61,15 @@ int fn_80229E88(void)
         err = TDbCompilePerformOp(0, "fetch from \x8a 'SOPP' into \x82 and 'PRDP' into \x82 and 'RGPP' into \x82 and 'IROP' into \x82 and 'MIPP' into \x80 and 'RIPP' into \x80 and 'AIPP' into \x80 and 'FDPP' into \x81 and 'GSPP' into \x81 and 'SPPP' into \x81\n",
                                   &cursor, &index, &a0, &a1, &a2, &b0, &b1, &b2, &h0, &h1, &h2);
         if (err == 0 && index <= 20) {
-            lbl_802FA180[index].mUnknown0 = a0;
-            lbl_802FA180[index].mUnknown4 = a1;
-            lbl_802FA180[index].mUnknown8 = a2;
-            lbl_802FA180[index].mUnknownC = b0;
-            lbl_802FA180[index].mUnknownD = b1;
-            lbl_802FA180[index].mUnknownE = b2;
-            lbl_802FA180[index].mUnknown10 = h0;
-            lbl_802FA180[index].mUnknown12 = h1;
-            lbl_802FA180[index].mUnknown14 = h2;
+            _DbSplp_aSplp[index].mUnknown0 = a0;
+            _DbSplp_aSplp[index].mUnknown4 = a1;
+            _DbSplp_aSplp[index].mUnknown8 = a2;
+            _DbSplp_aSplp[index].mUnknownC = b0;
+            _DbSplp_aSplp[index].mUnknownD = b1;
+            _DbSplp_aSplp[index].mUnknownE = b2;
+            _DbSplp_aSplp[index].mUnknown10 = h0;
+            _DbSplp_aSplp[index].mUnknown12 = h1;
+            _DbSplp_aSplp[index].mUnknown14 = h2;
         }
     }
     if (QUERY_STATUS_ACCEPTED(err) == 1) {
@@ -91,15 +91,15 @@ int fn_80229E88(void)
             err = TDbCompilePerformOp(0, "fetch from \x8a 'PRDP' into \x82 and 'SOPP' into \x82 and 'RGPP' into \x82 and 'IROP' into \x82 and 'MIPP' into \x80 and 'RIPP' into \x80 and 'AIPP' into \x80 and 'FDPP' into \x81 and 'GSPP' into \x81 and 'SPPP' into \x81\n",
                                       &cursor, &index, &a0, &a1, &a2, &b0, &b1, &b2, &h0, &h1, &h2);
             if (err == 0 && index <= 16) {
-                lbl_802FA378[index].mUnknown0 = a0;
-                lbl_802FA378[index].mUnknown4 = a1;
-                lbl_802FA378[index].mUnknown8 = a2;
-                lbl_802FA378[index].mUnknownC = b0;
-                lbl_802FA378[index].mUnknownD = b1;
-                lbl_802FA378[index].mUnknownE = b2;
-                lbl_802FA378[index].mUnknown10 = h0;
-                lbl_802FA378[index].mUnknown12 = h1;
-                lbl_802FA378[index].mUnknown14 = h2;
+                _DbSplp_aSprd[index].mUnknown0 = a0;
+                _DbSplp_aSprd[index].mUnknown4 = a1;
+                _DbSplp_aSprd[index].mUnknown8 = a2;
+                _DbSplp_aSprd[index].mUnknownC = b0;
+                _DbSplp_aSprd[index].mUnknownD = b1;
+                _DbSplp_aSprd[index].mUnknownE = b2;
+                _DbSplp_aSprd[index].mUnknown10 = h0;
+                _DbSplp_aSprd[index].mUnknown12 = h1;
+                _DbSplp_aSprd[index].mUnknown14 = h2;
             }
         }
     }
@@ -122,15 +122,15 @@ int fn_80229E88(void)
             err = TDbCompilePerformOp(0, "fetch from \x8a 'RGPP' into \x82 and 'SOPP' into \x82 and 'PRDP' into \x82 and 'IROP' into \x82 and 'MIPP' into \x80 and 'RIPP' into \x80 and 'AIPP' into \x80 and 'FDPP' into \x81 and 'GSPP' into \x81 and 'SPPP' into \x81\n",
                                       &cursor, &index, &a0, &a1, &a2, &b0, &b1, &b2, &h0, &h1, &h2);
             if (err == 0 && index <= 9) {
-                lbl_802FA510[index].mUnknown0 = a0;
-                lbl_802FA510[index].mUnknown4 = a1;
-                lbl_802FA510[index].mUnknown8 = a2;
-                lbl_802FA510[index].mUnknownC = b0;
-                lbl_802FA510[index].mUnknownD = b1;
-                lbl_802FA510[index].mUnknownE = b2;
-                lbl_802FA510[index].mUnknown10 = h0;
-                lbl_802FA510[index].mUnknown12 = h1;
-                lbl_802FA510[index].mUnknown14 = h2;
+                _DbSplp_aGsop[index].mUnknown0 = a0;
+                _DbSplp_aGsop[index].mUnknown4 = a1;
+                _DbSplp_aGsop[index].mUnknown8 = a2;
+                _DbSplp_aGsop[index].mUnknownC = b0;
+                _DbSplp_aGsop[index].mUnknownD = b1;
+                _DbSplp_aGsop[index].mUnknownE = b2;
+                _DbSplp_aGsop[index].mUnknown10 = h0;
+                _DbSplp_aGsop[index].mUnknown12 = h1;
+                _DbSplp_aGsop[index].mUnknown14 = h2;
             }
         }
     }
@@ -146,41 +146,41 @@ int fn_80229E88(void)
     return err;
 }
 
-void fn_8022A304(void)
+void DbSplpModuleShutdown(void)
 {
     unsigned short i;
 
     for (i = 0; i < 21; i++) {
-        lbl_802FA180[i].mUnknown0 = 31;
-        lbl_802FA180[i].mUnknown4 = 31;
-        lbl_802FA180[i].mUnknown8 = 7;
-        lbl_802FA180[i].mUnknownC = 0;
-        lbl_802FA180[i].mUnknownD = 0;
-        lbl_802FA180[i].mUnknownE = 0;
-        lbl_802FA180[i].mUnknown10 = 0;
-        lbl_802FA180[i].mUnknown12 = 0;
-        lbl_802FA180[i].mUnknown14 = 0;
+        _DbSplp_aSplp[i].mUnknown0 = 31;
+        _DbSplp_aSplp[i].mUnknown4 = 31;
+        _DbSplp_aSplp[i].mUnknown8 = 7;
+        _DbSplp_aSplp[i].mUnknownC = 0;
+        _DbSplp_aSplp[i].mUnknownD = 0;
+        _DbSplp_aSplp[i].mUnknownE = 0;
+        _DbSplp_aSplp[i].mUnknown10 = 0;
+        _DbSplp_aSplp[i].mUnknown12 = 0;
+        _DbSplp_aSplp[i].mUnknown14 = 0;
     }
     for (i = 0; i < 17; i++) {
-        lbl_802FA378[i].mUnknown0 = 31;
-        lbl_802FA378[i].mUnknown4 = 31;
-        lbl_802FA378[i].mUnknown8 = 7;
-        lbl_802FA378[i].mUnknownC = 0;
-        lbl_802FA378[i].mUnknownD = 0;
-        lbl_802FA378[i].mUnknownE = 0;
-        lbl_802FA378[i].mUnknown10 = 0;
-        lbl_802FA378[i].mUnknown12 = 0;
-        lbl_802FA378[i].mUnknown14 = 0;
+        _DbSplp_aSprd[i].mUnknown0 = 31;
+        _DbSplp_aSprd[i].mUnknown4 = 31;
+        _DbSplp_aSprd[i].mUnknown8 = 7;
+        _DbSplp_aSprd[i].mUnknownC = 0;
+        _DbSplp_aSprd[i].mUnknownD = 0;
+        _DbSplp_aSprd[i].mUnknownE = 0;
+        _DbSplp_aSprd[i].mUnknown10 = 0;
+        _DbSplp_aSprd[i].mUnknown12 = 0;
+        _DbSplp_aSprd[i].mUnknown14 = 0;
     }
     for (i = 0; i < 10; i++) {
-        lbl_802FA510[i].mUnknown0 = 31;
-        lbl_802FA510[i].mUnknown4 = 31;
-        lbl_802FA510[i].mUnknown8 = 7;
-        lbl_802FA510[i].mUnknownC = 0;
-        lbl_802FA510[i].mUnknownD = 0;
-        lbl_802FA510[i].mUnknownE = 0;
-        lbl_802FA510[i].mUnknown10 = 0;
-        lbl_802FA510[i].mUnknown12 = 0;
-        lbl_802FA510[i].mUnknown14 = 0;
+        _DbSplp_aGsop[i].mUnknown0 = 31;
+        _DbSplp_aGsop[i].mUnknown4 = 31;
+        _DbSplp_aGsop[i].mUnknown8 = 7;
+        _DbSplp_aGsop[i].mUnknownC = 0;
+        _DbSplp_aGsop[i].mUnknownD = 0;
+        _DbSplp_aGsop[i].mUnknownE = 0;
+        _DbSplp_aGsop[i].mUnknown10 = 0;
+        _DbSplp_aGsop[i].mUnknown12 = 0;
+        _DbSplp_aGsop[i].mUnknown14 = 0;
     }
 }

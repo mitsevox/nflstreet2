@@ -50,7 +50,7 @@ int TDbTblFindUnusedId(int handle, int *pTable);
 int _TDbQrySelect(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 void *pSort, int *pCursor, QueryResult *pResult);
 int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 int DbUserGetDb(int handle);
@@ -337,7 +337,7 @@ int StoreTeamCreate(void)
     DbColumnValue columns[17];
     unsigned short count = 1;
     int team;
-    fn_8022C628(0x54415453, 0x4D414554, &team, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (int i = 0; i < 13; i++) {
         columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i], _StoreDb_aTeamDefaults[i]);
     }
