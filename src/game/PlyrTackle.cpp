@@ -674,11 +674,6 @@ extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut)
         if (pMessage->mId == 40) {
             goal = fn_80177FFC(p->mIdBytes[2]);
             switch (pMessage->mUnknown1[0]) {
-            case 0:
-            case 4:
-                target.mX = goal.mX;
-                target.mY = goal.mY + 8.0f;
-                break;
             case 1:
                 target.mX = goal.mX - 5.0f;
                 target.mY = goal.mY + 8.0f;
@@ -689,6 +684,11 @@ extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut)
                 break;
             case 3:
                 target.mX = goal.mX - 7.0f;
+                target.mY = goal.mY + 8.0f;
+                break;
+            case 0:
+            case 4:
+                target.mX = goal.mX;
                 target.mY = goal.mY + 8.0f;
                 break;
             case 5:
