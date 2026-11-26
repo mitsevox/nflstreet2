@@ -49,7 +49,7 @@ extern "C" {
 #endif
 int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
                 AnimChannel_t *pChannels);
-void fn_801BDAC0(Collection_801BE594 *p);
+void _AnimStOrganizeInfo(Collection_801BE594 *p);
 void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pChannels, int index,
                  void *pOwner);
 unsigned short fn_801BDF38(Collection_801BE594 *p);

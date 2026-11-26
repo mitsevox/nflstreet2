@@ -14,6 +14,9 @@
 #include "game/MemPoolDesc.h"
 #include <dolphin/os.h>
 
+class RcmpCodec;
+RcmpCodec *MAD_CODEC_create();
+
 extern "C" {
 extern char lbl_800034A0[];
 extern char lbl_802EC09C[];
@@ -39,8 +42,7 @@ void GlibSwitchToDouble(int a);
 int GlibGetXFBHeight(void);
 void fn_801D6F58(void);
 void MovieRcmpPlay(int a, int b, int c, int (*pCallback)(int), int d);
-int MovieRcmpInstallMADCOWCodec(void (*pCallback)(void));
-void fn_801DA46C(void);
+int MovieRcmpInstallMADCOWCodec(RcmpCodec *(*pCreate)(void));
 int PerPollSingleDevice(int a);
 int PerGetDeviceData(int a, struct PerDeviceData_t *pState);
 int PerSizeofPerDataT(void);
@@ -317,7 +319,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     int frameBuffer;
     int height;
 
-    MovieRcmpInstallMADCOWCodec(fn_801DA46C);
+    MovieRcmpInstallMADCOWCodec(MAD_CODEC_create);
     if (pBuffer == 0) {
         pBuffer = fn_801D2B7C(0x100000, 0, 0);
     }

@@ -17,7 +17,7 @@ int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event
     return lbl_803EBB98[type]->mpUnknown4[key](&lbl_8037EC7C, key, pObject, pRecords, pOwner, event);
 }
 
-void fn_801BDAC0(Collection_801BE594 *p)
+void _AnimStOrganizeInfo(Collection_801BE594 *p)
 {
     int count;
     int i;
@@ -32,10 +32,13 @@ void fn_801BDAC0(Collection_801BE594 *p)
         i = 0;
         while (i < count) {
             if (p->mUnknown4[i].mUnknown2 == 0) {
-                for (j = i; j < count; j++) {
-                    p->mUnknown4[j] = p->mUnknown4[j + 1];
-                    p->mUnknown4[j + 1].mUnknown2 = 0;
-                    p->mUnknown4[j + 1].mUnknown8 = 0.0f;
+                // FAKEMATCH: always true inside while (i < count); present only so the compiler emits the target's second i/count test before the inner loop.
+                if (i != count) {
+                    for (j = i; j < count; j++) {
+                        *(p->mUnknown4 + j) = *(p->mUnknown4 + j + 1);
+                        p->mUnknown4[j + 1].mUnknown2 = 0;
+                        p->mUnknown4[j + 1].mUnknown8 = 0.0f;
+                    }
                 }
                 count--;
             } else {
@@ -60,7 +63,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
     int freed = 0;
     int i;
 
-    fn_801BDAC0(p);
+    _AnimStOrganizeInfo(p);
     for (i = 0; i < 4; i++) {
         if (p->mUnknown4[i].mUnknown2 == 0) {
             slot = i;
@@ -72,7 +75,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
             if (p->mUnknown4[i].mUnknown8 != 0.0f) {
                 fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                 freed = 1;
-                fn_801BDAC0(p);
+                _AnimStOrganizeInfo(p);
                 break;
             }
         }
@@ -82,7 +85,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
                     p->mUnknown4[i].mUnknown0 != 0xFFFF && AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
-                    fn_801BDAC0(p);
+                    _AnimStOrganizeInfo(p);
                     break;
                 }
             }
@@ -93,7 +96,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
                     AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     fn_801BDBD4(p, pObject, pRecords, i, pOwner);
                     freed = 1;
-                    fn_801BDAC0(p);
+                    _AnimStOrganizeInfo(p);
                     break;
                 }
             }
@@ -112,7 +115,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
             if (index != -1) {
                 fn_801BDBD4(p, pObject, pRecords, index, pOwner);
                 freed = 1;
-                fn_801BDAC0(p);
+                _AnimStOrganizeInfo(p);
             }
         }
         if (freed == 1) {
@@ -127,7 +130,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
     if (slot == -1) {
         slot = 3;
         fn_801BDBD4(p, pObject, pRecords, 0, pOwner);
-        fn_801BDAC0(p);
+        _AnimStOrganizeInfo(p);
     }
     return slot;
 }
@@ -291,7 +294,7 @@ void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
             }
         }
     }
-    fn_801BDAC0(p);
+    _AnimStOrganizeInfo(p);
 }
 
 Slot_801BE594 *fn_801BE594(Collection_801BE594 *p, unsigned short key)
@@ -352,7 +355,7 @@ void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
             fn_801BDBD4(p, pObject, pRecords, i, pOwner);
         }
     }
-    fn_801BDAC0(p);
+    _AnimStOrganizeInfo(p);
     if (p->mUnknown4[0].mUnknown2 == 3) {
         p->mUnknown4[0].mUnknown8 = 0.0f;
         AnimWgtSet(&p->mUnknown4[0].mUnknown4C, 0, 1.0f, 0, 1.0f);

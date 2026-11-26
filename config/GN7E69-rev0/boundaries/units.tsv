@@ -18,6 +18,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801B9F00	0x801BA784	animchan.c	17	13	13	13	0	-	-
 0x801BA784	0x801BAD70	animemot.c	14	10	10	10	0	-	-
 0x801BC65C	0x801BCA74	animmot.c	4	3	3	3	0	-	-
+0x801BDA30	0x801BE7C8	animst.c	20	14	14	1	9	-	-
 0x801BE82C	0x801BF090	animtran.c	5	5	5	0	5	-	-
 0x801BF090	0x801BF8DC	animwgt.c	17	13	13	13	0	-	animcache.c
 0x801BFEF8	0x801C00F8	AnimSequencer.c	8	5	5	5	0	-	AnimSeqCamera.c
@@ -65,7 +66,8 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801D36E8	0x801D3BD0	MemExtern.c	10	10	10	1	9	-	-
 0x801D3BD0	0x801D3C68	TibNew.cpp	4	4	8	2	2	-	-
 0x801D86B4	0x801D94A0	moviercmp.cpp	21	18	21	16	2	-	-
-0x801D9A88	0x801DA4B8	rcmp_mad_codec.cpp	13	13	17	0	11	-	-
+0x801D9634	0x801D9A88	rcmpbase.cpp	17	17	17	0	17	-	-
+0x801D9A88	0x801DA4F8	rcmp_mad_codec.cpp	17	17	17	0	17	-	-
 0x801DA52C	0x801DB058	maddec.cpp	10	8	10	7	1	-	-
 0x801DB058	0x801DB21C	maddeca.cpp	2	2	2	1	1	-	-
 0x801DB7D4	0x801DB900	render.c	4	3	3	3	0	-	-
