@@ -8,7 +8,7 @@
 
 #include "game/DbCursor.h"
 #include "game/StoryEvents.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_8008044C.h"
 #include "game/DepthChart.h"
@@ -121,7 +121,7 @@ void fn_801485B4(void);
 int fn_801485D4(void);
 void fn_801485EC(int value);
 int fn_801486A0(void);
-void fn_80148AF8(Class_80148A58 *pObject);
+void fn_80148AF8(MiniGameC *pObject);
 void fn_8014F3DC(int ticks);
 void EditMenuBegin(int mode, int value);
 void UserProfileSelect(signed char a, int b);
@@ -583,7 +583,7 @@ void StoryEventsSetupTeams(void)
 void StoryEventsSetupMatch(void)
 {
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
     StoryEventsSetupTeams();
     AutoDepthSetRateCallback(0);
@@ -659,9 +659,9 @@ void StoryEventsStartEvent(void)
             if (type == 2) {
                 enable = 0;
             }
-            fn_80148A58()->vfn_07(0, enable);
+            MiniGameGetCurrent()->vfn_07(0, enable);
             type = _StoryEvents_pEvent->mPes[3];
-            fn_80148A58()->vfn_07(1, type);
+            MiniGameGetCurrent()->vfn_07(1, type);
             break;
         }
         }

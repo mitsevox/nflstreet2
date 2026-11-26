@@ -51,7 +51,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Move_8011AB38.h"
 #include "game/Record_800CE608.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 
 /* Views of the block at player +336. Only the accessed fields
    are declared. */
@@ -1375,7 +1375,7 @@ int fn_8009E180(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800B65A0(int team);
+unsigned char fn_800B65A0(int team);
 }
 
 extern "C" {
@@ -25406,7 +25406,7 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
         }
     }
     const Directions_8012430C *pRow = &lbl_8029F5A0[mode];
-    if (fn_801485D4() && fn_80148A58()->vfn_09(1)) pRow = (Directions_8012430C *)fn_80148A58()->vfn_09(1);
+    if (fn_801485D4() && MiniGameGetCurrent()->vfn_09(1)) pRow = (Directions_8012430C *)MiniGameGetCurrent()->vfn_09(1);
     for (unsigned char i = 0; i < 8; i++) pValues->mCost[i] += pRow->mCost[i];
 }
 }

@@ -5,7 +5,7 @@
    computer can choose for a captain. When the screen closes the picked teams
    get their depth charts and, when asked, are saved as new teams. */
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/FELoop.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -124,7 +124,7 @@ int TournamentClose(void);
 int TournamentOpen(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
-void fn_80148AF8(Class_80148A58 *pObject);
+void fn_80148AF8(MiniGameC *pObject);
 int fn_80178308(void);
 int fn_80178320(void);
 int GameModeTypeIsSpecial(void);
@@ -1188,13 +1188,13 @@ void MsgTeamPickInitState(void)
         MsgTeamPickInitSevenCaptains();
         break;
     case 3:
-        MsgTeamPickInitTwoTeams(fn_80148A58()->vfn_05(fn_80178308()));
+        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(fn_80178308()));
         break;
     case 2:
         MsgTeamPickInitPairedCaptains();
         break;
     case 4:
-        MsgTeamPickInitTwoTeams(fn_80148A58()->vfn_05(0));
+        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(0));
         break;
     default:
         MsgTeamPickInitTwoTeams(7);
@@ -1236,7 +1236,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     }
 
     if (fn_801485D4()) {
-        fn_80148AF8(fn_80148A58());
+        fn_80148AF8(MiniGameGetCurrent());
     }
     PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
     TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);

@@ -9,7 +9,7 @@ class LivePlayPhase {
 public:
     virtual void InitState();
     virtual void Shutdown();
-    virtual void OnEnter();
+    virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void OnExit();
 };

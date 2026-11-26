@@ -215,7 +215,7 @@ Object_80039F5C *PlyrStarGetBallPlayer(void);
 int PassIconsAreShown(void);
 int PassIconsAreLocked(void);
 int PassIconGetSlot(int index, int force);
-int fn_800B65A0(int team);
+unsigned char fn_800B65A0(int team);
 int fn_801787A0(void);
 void fn_800F1700(void);
 void fn_800C11B8(void);

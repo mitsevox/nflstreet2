@@ -4,7 +4,7 @@
    players, legends, created and randomized players) and hands the choices to the
    game when the screen closes. */
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
 #include <string.h>
@@ -230,8 +230,8 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
             rounds = 20;
             break;
         }
-        fn_80148A58()->vfn_07(0, type);
-        fn_80148A58()->vfn_07(1, rounds);
+        MiniGameGetCurrent()->vfn_07(0, type);
+        MiniGameGetCurrent()->vfn_07(1, rounds);
         break;
     }
     case 3:

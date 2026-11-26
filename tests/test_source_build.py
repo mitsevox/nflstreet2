@@ -1168,11 +1168,16 @@ class Holdouts(Fixture):
                 self.held(manifest)
         with self.assertRaisesRegex(ValueError, "duplicate holdout"):
             self.held(self.held_manifest(functions=("b", "0x80003118")))
-        # folded stays refused; kept_locals may go with holdouts (test_holdouts_may_keep_a_local_of_a_linked_run).
+        # folded and kept_locals may go with holdouts (test_holdouts_may_fold_a_local_duplicate,
+        # test_holdouts_may_keep_a_local_of_a_linked_run); a folded name is never a registered function.
         manifest = self.held_manifest()
         manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
-        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
-            self.held(manifest)
+        self.assertEqual(self.held(manifest)[0][0]["folded"], {"x": 0x80003130})
+        for name in ("a", "b"):
+            manifest = self.held_manifest()
+            manifest["units"][0]["folded"] = {"symbols": {name: "0x80003130"}, "evidence": "x"}
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "folded symbol cannot be a registered"):
+                self.held(manifest)
         # The runs are the unit's .text.
         manifest = self.held_manifest()
         for entry in manifest["units"][0]["sections"][:2]:
@@ -1219,7 +1224,7 @@ class Holdouts(Fixture):
         self.assertEqual(unit["link_object"], unit["object"].with_suffix(".holdouts.o"))
         self.assertEqual(unit["object"].read_bytes(), native)
         self.assertEqual(unit["held"], {"dropped": [dict(self.B, compiled=12)],
-                                        "discarded": {},
+                                        "discarded": {}, "discarded_globals": [], "folded": [],
                                         "globals": {"b": 0x80003118},
                                         "linked": {"a": 0x80003110, "c": 0x80003120}})
         derived = unit["link_object"].read_bytes()
@@ -1299,7 +1304,7 @@ class Holdouts(Fixture):
 
     def test_holdouts_may_keep_a_local_of_a_linked_run(self):
         # The local function c of the second run is the one copy another file's references use
-        # (kept_locals); b stays a holdout. Only this combination is allowed: folded stays refused.
+        # (kept_locals); b stays a holdout.
         units, _, _ = self.held(self.kept_manifest())
         self.assertEqual((units[0]["kept_locals"], units[0]["holdouts"]), ({"c": 0x80003120}, [self.B]))
         unit = dict(units[0], object=self.native())
@@ -1323,10 +1328,10 @@ class Holdouts(Fixture):
         # The inventory lists c once.
         self.assertEqual([f for f in sb.compiled_functions(unit, (sections, symbols)) if f["symbol"] == "c"],
                          [{"symbol": "c", "address": "0x80003120", "size": 8}])
+        # folded may go with it too ("x" is no compiled symbol: this checks manifest loading only).
         manifest = self.kept_manifest()
         manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
-        with self.assertRaisesRegex(ValueError, "holdouts cannot be combined with folded"):
-            self.held(manifest)
+        self.assertEqual(self.held(manifest)[0][0]["folded"], {"x": 0x80003130})
 
     def test_holdouts_may_keep_a_table_of_a_whole_data_section(self):
         # The other half of the real use (_vt.10FchrCursor): a local object of .rodata, which a
@@ -1595,10 +1600,12 @@ class Holdouts(Fixture):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, f"discarded function {name} has a "
                                                                              "target range"):
                 self.held(self.discarded_manifest((name,)))
-        # folded stays refused next to discarded functions; a kept local in a run is allowed.
+        # folded may go next to discarded functions, but a discarded function is not folded.
         manifest = self.discarded_manifest()
         manifest["units"][0]["folded"] = {"symbols": {"x": "0x80003130"}, "evidence": "x"}
-        with self.assertRaisesRegex(ValueError, "cannot be combined with folded"):
+        self.assertEqual(self.held(manifest)[0][0]["folded"], {"x": 0x80003130})
+        manifest["units"][0]["folded"] = {"symbols": {"z": "0x80003130"}, "evidence": "x"}
+        with self.assertRaisesRegex(ValueError, "folded symbol cannot be a registered function or a discarded"):
             self.held(manifest)
         # kept_locals next to discarded functions loads. "x" is no compiled symbol: this checks
         # manifest loading only (test_holdouts_may_keep_a_local_of_a_linked_run accepts a real one).
@@ -1618,7 +1625,7 @@ class Holdouts(Fixture):
         sb.link_object(unit)
         # z takes no address: the compiled order goes on from a to the holdout b.
         self.assertEqual(unit["held"], {"dropped": [dict(self.B, compiled=12)],
-                                        "discarded": {"z": 8},
+                                        "discarded": {"z": 8}, "discarded_globals": [], "folded": [],
                                         "globals": {"b": 0x80003118},
                                         "linked": {"a": 0x80003110, "c": 0x80003120}})
         derived = unit["link_object"].read_bytes()
@@ -1635,12 +1642,9 @@ class Holdouts(Fixture):
         with self.assertRaisesRegex(ValueError, "compiled function z at 0x80003118 does not fit"):
             sb.link_object(dict(units[0], object=self.discarded_native()))
 
-    def test_discarded_functions_are_unreferenced_file_statics(self):
-        units, _, _ = self.held(self.discarded_manifest())
-        with self.assertRaisesRegex(ValueError, "discarded function z is not one compiled local"):
-            sb.link_object(dict(units[0], object=self.discarded_native(z_bind=sb.STB_GLOBAL)))
+    def test_discarded_functions_are_unreferenced(self):
         units, _, _ = self.held(self.discarded_manifest(("y",)))
-        with self.assertRaisesRegex(ValueError, "discarded function y is not one compiled local"):
+        with self.assertRaisesRegex(ValueError, "discarded function y is not one compiled function"):
             sb.link_object(dict(units[0], object=self.discarded_native()))
         # Kept code or data, or a holdout (its code is in the target), that reaches z fails,
         # whether by z's symbol or its section's.
@@ -1680,6 +1684,170 @@ class Holdouts(Fixture):
         # A kept reference to the discarded function itself still fails.
         with self.assertRaisesRegex(ValueError, "discarded function z is referenced from .text.c"):
             sb.link_object(dict(units[0], object=self.discarded_native(extra=((4, 4, 8, 10),), wind=True)))
+
+    def test_a_global_discarded_function_is_referenced_by_no_other_unit(self):
+        # An out-of-line inline function that -fno-weak emits as a global (an implicit constructor
+        # nothing calls) is discarded like a file-static one; no other unit may then reference it.
+        units, _, _ = self.held(self.discarded_manifest())
+        unit = dict(units[0], object=self.discarded_native(z_bind=sb.STB_GLOBAL))
+        sb.link_object(unit)
+        self.assertEqual((unit["held"]["discarded"], unit["held"]["discarded_globals"]), ({"z": 8}, ["z"]))
+        objects = {"src/unit.c": sb.read_elf(unit["link_object"].read_bytes())}
+        self.assertNotIn("z", {s["name"] for s in objects["src/unit.c"][1]})
+        sb.plan(self.sections, [unit], objects, {"Other": 0x80003104})
+        caller = {"source": "src/other.c", "sections": [], "holdouts": None}
+        objects["src/other.c"] = ([], [{"name": "z", "value": 0, "size": 0, "bind": sb.STB_GLOBAL, "type": 0,
+                                        "shndx": sb.SHN_UNDEF}])
+        with self.assertRaisesRegex(ValueError, "discarded global function z is referenced by src/other.c"):
+            sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104})
+        # Another unit defining the same global (its own copy of the inline function) is refused too.
+        definer = {"source": "src/other.c", "holdouts": None, "sections": [
+            {"section": ".text", "placement": ".init", "start": 0x80003130, "end": 0x80003138, "kind": "code",
+             "follows": None}]}
+        objects["src/other.c"] = compiled([text(8)], [{"name": "z", "value": 0, "size": 8, "shndx": 1,
+                                                       "type": sb.STT_FUNC}])
+        with self.assertRaisesRegex(ValueError, "discarded global function z has a definition or an address"):
+            sb.plan(self.sections, [unit, definer], objects, {"Other": 0x80003104})
+        del objects["src/other.c"]
+        with self.assertRaisesRegex(ValueError, "discarded global function z has a definition or an address"):
+            sb.plan(self.sections, [unit], objects, {"Other": 0x80003104, "z": 0x80003108})
+        # Referenced from kept code it still fails, global or not.
+        with self.assertRaisesRegex(ValueError, "discarded function z is referenced from .text.c"):
+            sb.link_object(dict(units[0], object=self.discarded_native(z_bind=sb.STB_GLOBAL, extra=((4, 4, 8, 10),))))
+
+    def folded_manifest(self, symbols=None):
+        manifest = self.held_manifest()
+        manifest["units"][0]["folded"] = {"symbols": symbols or {"f": "0x80003100", "Vt": "0x80004000"},
+                                          "evidence": "another file's copies"}
+        return manifest
+
+    def folded_native(self, f_code=bytes(range(0x90, 0x9C)), extra=(), b_code=bytes(range(0x40, 0x4C)),
+                      b_relocations=((0, 7, 10),)):
+        """Sections 1 .text.a, 2 .text.b (the holdout), 3 .text.f (a local inline destructor the
+        target folds into another file's copy), 4 .text.c, 5 .rodata (the local table Vt, whose
+        second word points to f); symbols 2 to 6 are the section symbols, then a=7, b=8, f=9, c=10,
+        Vt=11, Other=12. `extra` adds (offset, symbol, type) relocations to c; `b_code` and
+        `b_relocations` (offset, symbol, type) replace the holdout's body (by default: call a)."""
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        path = Path(temporary.name) / "unit.o"
+        code = [dict(text(8), name=".text.a", data=bytes(range(8))),
+                dict(text(len(b_code)), name=".text.b", data=b_code),
+                dict(text(12), name=".text.f", data=f_code),
+                dict(text(8), name=".text.c", data=bytes(range(8, 16)))]
+        symbols = [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
+                   {"name": "b", "value": 0, "size": len(b_code), "shndx": 2, "type": sb.STT_FUNC},
+                   {"name": "f", "value": 0, "size": 12, "shndx": 3, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+                   {"name": "c", "value": 0, "size": 8, "shndx": 4, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
+                   {"name": "Vt", "value": 0, "size": 8, "shndx": 5, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL},
+                   {"name": "Other", "value": 0, "size": 0, "shndx": 0}]
+        sb.write_object(path, code + [rodata(8)], symbols)
+        with_relocations(path, 1, [(0, 8, 10, 0), (4, 11, 6, 0)])               # a: call b; Vt
+        with_relocations(path, 2, [(at, symbol, kind, 0) for at, symbol, kind in b_relocations])
+        with_relocations(path, 3, [(2, 11, 6, 0), (6, 11, 4, 0), (8, 10, 10, 0)])  # f: lis/addi Vt; call c
+        with_relocations(path, 4, [(4, 12, 10, 0)] + [(at, symbol, kind, 0) for at, symbol, kind in extra])
+        with_relocations(path, 5, [(4, 9, 1, 0)])                               # Vt: its slot holds f
+        return path
+
+    def test_holdouts_may_fold_a_local_duplicate(self):
+        units, _, _ = self.held(self.folded_manifest())
+        unit = dict(units[0], object=self.folded_native())
+        sb.link_object(unit)
+        # Folded first, then held out: f has no code of its own and takes no address.
+        self.assertEqual(unit["folded_object"], unit["object"].with_suffix(".folded.o"))
+        self.assertEqual(unit["link_object"], unit["object"].with_suffix(".holdouts.o"))
+        self.assertEqual(sorted(unit["folds"]), ["Vt", "f"])
+        self.assertEqual(unit["held"], {"dropped": [dict(self.B, compiled=12)], "discarded": {},
+                                        "discarded_globals": [], "folded": ["f"],
+                                        "globals": {"b": 0x80003118},
+                                        "linked": {"a": 0x80003110, "c": 0x80003120}})
+        derived = unit["link_object"].read_bytes()
+        sections, symbols = sb.read_elf(derived)
+        self.assertEqual([(s["name"], s["size"]) for s in sections if s["flags"] & sb.SHF_ALLOC],
+                         [(".text.holdout_run_80003110", 8), (".text.holdout_run_80003120", 8), (".rodata", 8)])
+        self.assertNotIn("f", {s["name"] for s in symbols})
+        # Every reference to f or Vt names the folded reference; Vt's bytes stay, unreferenced.
+        self.assertIn("Vt", {s["name"] for s in symbols})
+        self.assertEqual(relocations(derived), [(0, "__holdout_80003118", 10, 0), (4, "__folded_Vt", 6, 0),
+                                                (4, "Other", 10, 0), (4, "__folded_f", 1, 0)])
+        _, _, resolved = sb.plan(self.sections, [unit], {"src/unit.c": (sections, symbols)}, {"Other": 0x80003104})
+        self.assertEqual(resolved, {"__holdout_80003118": 0x80003118, "__folded_Vt": 0x80004000,
+                                    "__folded_f": 0x80003100, "Other": 0x80003104})
+        # The unreferenced copy of Vt, linked whole in .rodata at 0x80004008, must equal the table it
+        # folds into at 0x80004000.
+        result = bytearray(self.binary)
+        result[0x148:0x150] = bytes(range(0xA0, 0xA8))
+        with self.assertRaisesRegex(ValueError, "folded object Vt at 0x80004008 differs from the target bytes "
+                                                "at 0x80004000"):
+            sb.check_folded_objects(unit, self.binary, bytes(result))
+        binary = bytearray(self.binary)
+        binary[0x140:0x148] = bytes(range(0xA0, 0xA8))
+        sb.check_folded_objects(unit, bytes(binary), bytes(result))
+        # Without the fold, f is a compiled function in the code order and the runs do not fit it.
+        units, _, _ = self.held()
+        with self.assertRaisesRegex(ValueError, "does not fit a configured code run"):
+            sb.link_object(dict(units[0], object=self.folded_native()))
+        # A reference into f through its section symbol is refused, as for any fold.
+        units, _, _ = self.held(self.folded_manifest())
+        with self.assertRaisesRegex(ValueError, "reaches a folded extent through another symbol"):
+            sb.link_object(dict(units[0], object=self.folded_native(extra=((0, 4, 10),))))
+
+    def test_a_holdout_of_a_folding_unit_is_linked_alone_against_the_folded_copies(self):
+        compilers = toolchain.recorded("compilers")
+        compiler = compilers / "ProDG/3.9.3" if compilers else sb.ROOT / "build/toolchain/ProDG/3.9.3"
+        wrapper = toolchain.recorded("wibo") or sb.ROOT / "build/toolchain/wibo"
+        if not ((compiler / "ngcld.exe").is_file() and wrapper.is_file()):
+            self.skipTest("The pinned linker is installed by build.py configure")
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        # The holdout b, of its target's 8 bytes: li r3,Vt@l; then bl a (symbol 7) or bl f (symbol 9,
+        # folded). Linked alone it must address the table Vt folds into (0x80004000), not this unit's
+        # copy (0x80004008), and call f at its fold address 0x80003100.
+        for callee, call in ((7, "4bfffff5"), (9, "4bffffe5")):
+            with self.subTest(callee=callee):
+                units, _, _ = self.held(self.folded_manifest())
+                unit = dict(units[0], object=self.folded_native(
+                    b_code=bytes.fromhex("3860000048000001"),
+                    b_relocations=((2, 11, 4), (4, callee, 10))))
+                sb.link_object(unit)
+                _, defined, resolved = sb.plan(self.sections, [unit], {"src/unit.c": sb.read_elf(
+                    unit["link_object"].read_bytes())}, {"Other": 0x80003104})
+                references = {"Other": 0x80003104, **resolved,
+                              **{name: value for name, (value, _) in defined.items()}}
+                binary = bytearray(self.binary)
+                binary[0x118:0x120] = bytes.fromhex("38604000" + call)
+                # Exact against the folded copies, so it is no holdout.
+                with patch.object(sb, "BUILD", Path(temporary.name) / f"exact_{callee}"), \
+                        self.assertRaisesRegex(ValueError, "holdout b 0x80003118 is exact; link it"):
+                    sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
+                # The unit's own copy of Vt is not what the target loads.
+                binary[0x118:0x120] = bytes.fromhex("38604008" + call)
+                with patch.object(sb, "BUILD", Path(temporary.name) / f"held_{callee}"):
+                    sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
+
+    def test_a_folded_body_in_a_holdouts_unit_is_linked_alone_at_its_fold_address(self):
+        compilers = toolchain.recorded("compilers")
+        compiler = compilers / "ProDG/3.9.3" if compilers else sb.ROOT / "build/toolchain/ProDG/3.9.3"
+        wrapper = toolchain.recorded("wibo") or sb.ROOT / "build/toolchain/wibo"
+        if not ((compiler / "ngcld.exe").is_file() and wrapper.is_file()):
+            self.skipTest("The pinned linker is installed by build.py configure")
+        # f: lis r3,Vt@ha; addi r3,r3,Vt@l; bl c. Folded at 0x80003100, it loads 0x80004000 (the
+        # copy folded into) and calls c where c is linked (0x80003120).
+        units, _, _ = self.held(self.folded_manifest())
+        unit = dict(units[0], object=self.folded_native(f_code=bytes.fromhex("3c6000003863000048000001")))
+        sb.link_object(unit)
+        _, defined, resolved = sb.plan(self.sections, [unit], {"src/unit.c": sb.read_elf(
+            unit["link_object"].read_bytes())}, {"Other": 0x80003104})
+        references = {"Other": 0x80003104, **resolved, **{name: value for name, (value, _) in defined.items()}}
+        binary = bytearray(self.binary)
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        with patch.object(sb, "BUILD", Path(temporary.name) / "a"), \
+                self.assertRaisesRegex(ValueError, "folded function f differs from the target bytes at 0x80003100"):
+            sb.check_folded_functions(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
+        binary[0x100:0x10C] = bytes.fromhex("3c6080003863400048000019")
+        with patch.object(sb, "BUILD", Path(temporary.name) / "b"):
+            sb.check_folded_functions(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
 
 
 class ReadOnlyDataAfterCode(Fixture):
