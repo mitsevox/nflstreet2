@@ -24997,9 +24997,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BCA74.c",
+      "source": "src/engine/animmotroot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/cu_801BCA74.c, tail of animmot.c), function rows, data row 0x802AEDC0-0x802AEDC8, compiler row engine_c_fastmath and source-form row for the split at 0x801BC7C0. Comparison only; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8 and the HOLDOUT source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset, which keep the original code while AnimMotRotateHalfTurn and the pool link.",
       "sections": [
         {
           "section": ".text",
@@ -25016,19 +25016,14 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801BCA74",
+          "symbol": "AnimMotBlendRootAngle",
           "start": "0x801BCA74",
           "end": "0x801BCCAC"
         },
         {
-          "symbol": "fn_801BCCAC",
+          "symbol": "AnimMotBlendRootOffset",
           "start": "0x801BCCAC",
           "end": "0x801BCEEC"
-        },
-        {
-          "symbol": "fn_801BCEEC",
-          "start": "0x801BCEEC",
-          "end": "0x801BCF40"
         }
       ]
     },

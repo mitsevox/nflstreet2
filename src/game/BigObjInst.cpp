@@ -28,8 +28,8 @@ void BigObjParseBehavior(void *pOwner, BigObjInst *pObject);
 void BigObjFreeEvents(BigObjInst *pObject);
 void AnimChanProcess(void *a, void *b, float c, BigObjInst *pObject);
 int AnimMotCreateWeightList(void *a, void *b, void *c);
-int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
-int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
+int AnimMotBlendRootAngle(void *a, void *b, int c, void *d, int e, int f);
+int AnimMotBlendRootOffset(void *a, void *b, int c, void *d, int e, int f);
 void fn_801BE420(void *a, void *b, void *c, BigObjInst *pObject, float d);
 void QuatFromEulerYZX(float *pOut, int x, int y, int z);
 int Crc32Update(const void *p, int size, int seed);
@@ -185,8 +185,8 @@ int BigObjInstSimulateAll(float dt)
             AnimChanProcess(pExtra->mUnknown48, pExtra->mUnknown60, dt, pObject);
             a = AnimMotCreateWeightList(pExtra->mUnknown48, pExtra->mUnknown60, pExtra->mUnknown1300);
             BigObjAnimBlend(pExtra, BigObjGet(i), a);
-            pExtra->mSpin.mUnknown0 = fn_801BCA74(pExtra->mUnknown48, pExtra->mUnknown60, a, &pExtra->mSpin.mUnknown4, 0xFFFF, 1);
-            pExtra->mSpin.mUnknown1 = fn_801BCCAC(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
+            pExtra->mSpin.mUnknown0 = AnimMotBlendRootAngle(pExtra->mUnknown48, pExtra->mUnknown60, a, &pExtra->mSpin.mUnknown4, 0xFFFF, 1);
+            pExtra->mSpin.mUnknown1 = AnimMotBlendRootOffset(pExtra->mUnknown48, pExtra->mUnknown60, a, pExtra->mUnknown40,
                                              fn_801BE648(pObject->mUnknown428->mUnknown1300), 1);
             BigObjAnimBlendRoot(BigObjGet(i), pExtra->mUnknown60, pExtra->mUnknown52, pExtra->mUnknown1300);
         }

@@ -22433,6 +22433,38 @@
       ]
     },
     {
+      "source": "src/engine/animmotroot.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8 and the two HOLDOUT source-form rows. AnimMotRotateHalfTurn links exact; AnimMotBlendRootAngle and AnimMotBlendRootOffset keep the original code; the .rodata pool links whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCEEC",
+          "end": "0x801BCF40"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AEDC0",
+          "end": "0x802AEDC8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "AnimMotBlendRootAngle",
+            "evidence": "evidence.tsv source-form 0x801BCA74-0x801BCCAC"
+          },
+          {
+            "function": "AnimMotBlendRootOffset",
+            "evidence": "evidence.tsv source-form 0x801BCCAC-0x801BCEEC"
+          }
+        ],
+        "evidence": "Two blend functions stay measured partials after copy-form, indexing-form and inline-helper tries; merge notes of the e1d pull request list them."
+      }
+    },
+    {
       "source": "src/engine/llvector.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv whole-file unit row 0x802270A4-0x80227F14 and linker row 0x802270A4-0x80227F14, the .rodata rows at 0x802B2078-0x802B20C0, and the function, name and source-form rows.",
