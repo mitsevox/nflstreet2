@@ -18,11 +18,11 @@ typedef struct UIGCurvePoint_t {
 } UIGCurvePoint_t;
 
 /* Buffer descriptor: size and text pointer. */
-typedef struct Buffer_80222E54 {
+typedef struct UIGTextBuffer_t {
     Uint8 unk_00[0x04];
     Uint32 Size;    /* 0x04 */
     char *pText;    /* 0x08 */
-} Buffer_80222E54;
+} UIGTextBuffer_t;
 
 /* Only the accessed members are declared; the size is not established.
    Bit 15 of Flags selects the display-list form of the +0x10 member. */

@@ -315,7 +315,7 @@ char *fn_8021CE48(const char *pString, char *pDst, char *pEnd, Int32 Width, Int3
     return pDst;
 }
 
-void fn_8021D1FC(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs)
+void fn_8021D1FC(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs)
 {
     if (pFormat != NULL && pDst != NULL) {
         fn_8021CF38(pDst->pText, pDst->Size, pFormat->pText, a, pArgs);
