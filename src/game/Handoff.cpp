@@ -89,7 +89,7 @@ void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_801486A0(void);
 void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_80178308(void);
@@ -323,7 +323,7 @@ extern "C" int TurnToPlayUpdate(Object_80039F5C *p) {
         p->mUnknown336--;
         return 0;
     }
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     if (p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
         p->mFlags &= ~0x1000;
         Ball_t *pBall = BallFindHeldBy(p);
