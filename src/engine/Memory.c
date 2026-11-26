@@ -60,8 +60,8 @@ extern void *memset(void *pDst, int value, unsigned int size);
 extern void *memcpy();
 extern int sprintf(char *pDst, const char *pFormat, ...);
 
-void *fn_801D28A8(int ident, unsigned int size, int flags, int offset);
-void *fn_801D2E5C(int ident, void *pAddr, int size, int flags, int offset);
+static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset);
+void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset);
 extern int SysGetSystemTime(void);
 int fn_801D2130(Struct_801D2130 *pParams);
 extern int fn_801D2570(int ident);
@@ -907,7 +907,7 @@ int fn_801D2874(int a, void *pAddr)
     return 0;
 }
 
-void *fn_801D28A8(int ident, unsigned int size, int flags, int offset)
+static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset)
 {
     MemHeap_801D134C *pHeap = fn_801D134C(ident);
     const char *pName = lbl_802AF9BC;
@@ -1005,12 +1005,12 @@ void *fn_801D28A8(int ident, unsigned int size, int flags, int offset)
 
 void *fn_801D2B7C(int size, int a, int b)
 {
-    return fn_801D28A8(0, size, a, b);
+    return _MemAllocInternal(0, size, a, b);
 }
 
 void *fn_801D2BB0(int a, int size, int ident, int flags)
 {
-    return fn_801D28A8(a, size, ident, flags);
+    return _MemAllocInternal(a, size, ident, flags);
 }
 
 int fn_801D2BD0(void *pAddr)
@@ -1096,7 +1096,7 @@ int fn_801D2BD0(void *pAddr)
     return 0;
 }
 
-void *fn_801D2E5C(int ident, void *pAddr, int size, int flags, int offset)
+void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
 {
     MemHeap_801D134C *pHeap = fn_801D13A4(pAddr);
     MemBlock_801D134C *pBlock;
@@ -1143,7 +1143,7 @@ void *fn_801D2E5C(int ident, void *pAddr, int size, int flags, int offset)
     avail = (char *)pBlock->mpTail - (char *)*pBlock->mpTail;
     need = size + 4;
     if (avail - need < 0) {
-        pNew = fn_801D28A8(ident, size, flags, offset);
+        pNew = _MemAllocInternal(ident, size, flags, offset);
         if (pNew == 0) {
             fn_801D2BD0(pAddr);
             SysExitCriticalSectionFunc(&lbl_803E92AC);
@@ -1173,7 +1173,7 @@ void *fn_801D2E5C(int ident, void *pAddr, int size, int flags, int offset)
 
 void *fn_801D310C(void *pAddr, int size, int ident, int flags)
 {
-    return fn_801D2E5C(0, pAddr, size, ident, flags);
+    return MemHReallocMem(0, pAddr, size, ident, flags);
 }
 
 int fn_801D3148(int a, void *pAddr)

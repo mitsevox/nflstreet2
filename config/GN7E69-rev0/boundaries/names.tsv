@@ -808,11 +808,11 @@ address	size	sibling_name	how	sibling_file	unit
 0x801D277C	36	MemSetDefaultHeap	size	Memory.c	Memory.c
 0x801D27F4	128	MemGetLargestFree	size	Memory.c	Memory.c
 0x801D2874	52	MemCheckSentinel	size	Memory.c	Memory.c
-0x801D28A8	724	_MemAllocInternal	size	Memory.c	Memory.c
+0x801D28A8	724	_MemAllocInternal	name	Memory.c	Memory.c
 0x801D2B7C	52	MemAllocMem	size	Memory.c	Memory.c
 0x801D2BB0	32	MemHAllocMem	size	Memory.c	Memory.c
 0x801D2BD0	652	MemFree	size	Memory.c	Memory.c
-0x801D2E5C	688	MemHReallocMem	size	Memory.c	Memory.c
+0x801D2E5C	688	MemHReallocMem	name	Memory.c	Memory.c
 0x801D310C	60	MemReallocMem	size	Memory.c	Memory.c
 0x801D3148	168	MemGetSizeByAddr	size	Memory.c	Memory.c
 0x801D31F0	296	MemCopy	size	Memory.c	Memory.c
