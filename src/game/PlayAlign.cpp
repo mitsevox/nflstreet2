@@ -245,13 +245,14 @@ unsigned char fn_80164B78(void)
 {
     Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
     if (selected == PlyrGet(fn_80178308(), 0)) {
+        unsigned char i = 0;
         unsigned int n = fn_80178D18(fn_80178308());
-        for (unsigned char i = 0; i < n; ++i) {
+        if (i < n) do {
             Object_80039F5C *p = PlyrGet(fn_80178308(), i);
             PlayBookPlay_t *record = PlayBookGetPlay(fn_80178308());
             void *queue = fn_80164EC8(record, fn_80178308(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
-        }
+        } while (++i < n);
     }
     return selected->mIdBytes[1];
 }
@@ -266,34 +267,39 @@ void fn_80164C4C(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, 
 
 void fn_80164CE4(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
-    if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
-    unsigned char index = p->mIdBytes[1];
-    if (remap) index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
-    Message_800F01CC *other = fn_800AEE20(p);
-    if (other) {fn_800AEF74(p, other); return;}
-    Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
     short count = 0;
-    for (;;) {
-        int end = queue->mId & 0x80;
-        Message_800F01CC message = *queue;
-        if (end) message.mId &= 0x7F;
-        if (remap) fn_800F0910(0, &message);
-        if (!message.mId) break;
-        if (!count) fn_800F053C(0, p->mpState, &message, p);
-        else fn_800F03D8(0, p->mpState, &message, p);
-        ++count;
-        ++queue;
-        if (end) break;
+    if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
+    unsigned char index;
+    if (!remap) index = p->mIdBytes[1];
+    else index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
+    Message_800F01CC *queue = fn_800AEE20(p);
+    if (!queue) {
+        queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
+        int end;
+        do {
+            end = queue->mId >> 7;
+            Message_800F01CC message = *queue;
+            if (end) message.mId &= 0x7F;
+            if (remap) fn_800F0910(0, &message);
+            if (!message.mId) break;
+            if (!count) fn_800F053C(0, p->mpState, &message, p);
+            else fn_800F03D8(0, p->mpState, &message, p);
+            ++count;
+            ++queue;
+        } while (!end);
+    } else {
+        fn_800AEF74(p, queue);
     }
 }
 
 int fn_80164E30(PlayBookPlay_t *record, PlayBookFormation_t *object, Object_80039F5C *p, int kind)
 {
-    unsigned char index = p->mIdBytes[1];
+    unsigned char index;
     if (object->mUnknown8.mUnknownF) index = PlaySetGetEntry(object, p->mIdBytes[1], 0)->mUnknownB;
+    else index = p->mIdBytes[1];
     Message_800F01CC *queue = (Message_800F01CC *)fn_80164EC8(record, p->mIdBytes[2], index);
     for (;;) {
-        int end = queue->mId & 0x80;
+        int end = queue->mId >> 7;
         int id = queue->mId;
         if (end) id &= 0x7F;
         if (id == kind) return 1;
@@ -334,12 +340,18 @@ unsigned char fn_80164ED8(PlayBookFormation_t *object, PlayBookPlay_t *record, i
     return index;
 }
 
-void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, unsigned int index, unsigned char value, int remap)
+void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, int index, unsigned char value, int remap)
 {
+    unsigned char i;
     if (fn_801650DC(record)) {
+        unsigned char (*slots)[4] = record->mUnknown1C;
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
-        for (unsigned char i = 0; i <= 2; ++i)
-            if (record->mUnknown1C[i][0] == index) {record->mUnknown1C[i][1] = value; break;}
+        for (i = 0; i <= 2; ++i) {
+            if (index == slots[i][0]) {
+                slots[i][1] = value;
+                return;
+            }
+        }
     }
 }
 
@@ -368,22 +380,20 @@ int fn_801650FC(PlayBookPlay_t *record) {return record->mUnknown14 == 21;}
 void fn_80165110(PlayArtPlay_t *record, int force)
 {
     int swap = 0;
-    if (record->mUnknown14 >= 1 && record->mUnknown14 <= 5) {
+    if (fn_801650DC((PlayBookPlay_t *)record)) {
         PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
-            unsigned char index = record->mUnknown1C[i][0];
+            unsigned char index = *record->mUnknown1C[i];
             PlyrGet(fn_80178308(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
         if (swap || force) {
-            unsigned char first = record->mUnknown1C[0][0];
-            unsigned char last = record->mUnknown1C[2][0];
-            unsigned char a = record->mUnknown1C[0][1];
-            unsigned char b = record->mUnknown1C[2][1];
-            record->mUnknown1C[2][1] = a;
-            record->mUnknown1C[0][0] = last;
-            record->mUnknown1C[2][0] = first;
-            record->mUnknown1C[0][1] = b;
+            unsigned char index = record->mUnknown1C[0][0];
+            record->mUnknown1C[0][0] = record->mUnknown1C[2][0];
+            record->mUnknown1C[2][0] = index;
+            unsigned char value = record->mUnknown1C[0][1];
+            record->mUnknown1C[0][1] = record->mUnknown1C[2][1];
+            record->mUnknown1C[2][1] = value;
         }
     }
 }
@@ -528,16 +538,15 @@ int fn_80165890(void *handle, PlayArtPlayer_t *records, int first, unsigned char
             int status = TDbCompilePerformOp(0, "use \x8c select \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 and \x8c into \x85 from 'LTRA' where 'LTRA' = \x85\n",
                 (int)handle, axTag,&x,ayTag,&y,atTag,&type,auTag,&u,avTag,&v,ctTag,&link,spTag,&speed,ltTag,&arrow,lsTag,&color,record->mUnknown0Word);
             if (!status) {
-                PlayArtStep_t *step = &record->mUnknown1C[j];
-                step->mUnknown0 = (float)x;
-                step->mUnknown4 = (float)y;
-                step->mUnknown10 = type;
-                step->mUnknown8 = (float)u;
-                step->mUnknownC = (float)v;
-                step->mUnknown14 = link;
-                step->mUnknown18 = speed;
-                step->mUnknown1C = arrow;
-                step->mUnknown20 = color;
+                record->mUnknown1C[j].mUnknown0 = (float)x;
+                record->mUnknown1C[j].mUnknown4 = (float)y;
+                record->mUnknown1C[j].mUnknown10 = type;
+                record->mUnknown1C[j].mUnknown8 = (float)u;
+                record->mUnknown1C[j].mUnknownC = (float)v;
+                record->mUnknown1C[j].mUnknown14 = link;
+                record->mUnknown1C[j].mUnknown18 = speed;
+                record->mUnknown1C[j].mUnknown1C = arrow;
+                record->mUnknown1C[j].mUnknown20 = color;
             }
         }
         record->mUnknown1C[steps].mUnknown10 = -1;
