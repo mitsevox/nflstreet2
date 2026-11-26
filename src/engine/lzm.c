@@ -547,12 +547,13 @@ int sFlushMatch(unsigned char *out, int dist, int len, int mode, int limit, int 
     int lenBits;
     int range;
     int needed;
-    int maximum;
     int first;
 
     total = 0;
     switch (mode) {
-    case 2:
+    case 2: {
+        int maximum;
+
         len -= 2;
         lenBits = sCalcLogMagnitude(len);
         len &= (1 << (lenBits - 1)) - 1;
@@ -571,7 +572,10 @@ int sFlushMatch(unsigned char *out, int dist, int len, int mode, int limit, int 
         }
         total += sWriteBits(dist, bits, out, total);
         break;
-    case 3:
+    }
+    case 3: {
+        int maximum;
+
         len -= 2;
         lenBits = sCalcLogMagnitude(len);
         len &= (1 << (lenBits - 1)) - 1;
@@ -615,6 +619,7 @@ int sFlushMatch(unsigned char *out, int dist, int len, int mode, int limit, int 
             }
         }
         break;
+    }
     case 0:
         out[0] = len & 0x7F;
         out[1] = dist;
@@ -795,6 +800,7 @@ int _LZMDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
     unsigned int threshold;
     int range;
     int i;
+    int n;
     unsigned char token;
     unsigned int maximum;
 
@@ -813,7 +819,7 @@ int _LZMDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
     threshold = 2;
     mode = in[0];
     bitMode = mode == 2 || mode == 3;
-    lenBits = progress = 0;
+    progress = lenBits = 0;
     switch (mode) {
     case 0:
     case 2:
@@ -826,14 +832,14 @@ int _LZMDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
         break;
     case 1:
     case 3:
-        i = pSrc->mpData[1];
-        blockSize = i << 24;
-        i = pSrc->mpData[2];
-        blockSize |= i << 16;
-        i = pSrc->mpData[3];
-        blockSize |= i << 8;
-        i = pSrc->mpData[4];
-        blockSize |= i;
+        n = pSrc->mpData[1];
+        blockSize = n << 24;
+        n = pSrc->mpData[2];
+        blockSize |= n << 16;
+        n = pSrc->mpData[3];
+        blockSize |= n << 8;
+        n = pSrc->mpData[4];
+        blockSize |= n;
         inputPos = blockPos = 5;
         if (remaining > blockSize) {
             BitsLeftInChunk = blockSize * 8;

@@ -22922,12 +22922,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801E4D40",
-          "end": "0x801E6724"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E69D0",
           "end": "0x801E7034"
         },
         {
@@ -22952,10 +22946,6 @@
           {
             "function": "0x801E47B8",
             "evidence": "evidence.tsv source-form 0x801E47B8-0x801E4D40"
-          },
-          {
-            "function": "0x801E6724",
-            "evidence": "evidence.tsv source-form 0x801E6724-0x801E69D0"
           }
         ],
         "evidence": "w1a merge notes (swarm w1 tracking table): src/engine/physshape.cpp holds out SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw."
