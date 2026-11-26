@@ -1727,13 +1727,13 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
         Vec2Add(&target, &p->mMotion.mPos, &dir);
     } else if (fn_8011E188() > 30) {
         if (pCarrier) {
+            Point_8017886C lead;
             if (pCarrier->mpState->mId == 26) {
-                Point_8017886C lead;
-                Object_80039F5C *pTarget = PlyrGet(fn_80178308(), pCarrier->mpState->mUnknown1);
+                int index = pCarrier->mpState->mUnknown1;
+                Object_80039F5C *pTarget = PlyrGet(fn_80178308(), index);
                 Vec2FromAngle(&lead, pTarget->mMotion.mUnknown32, pTarget->mMotion.mUnknown28 * 60.0f);
                 Vec2Add(&target, &pTarget->mMotion.mPos, &lead);
             } else {
-                Point_8017886C lead;
                 Vec2FromAngle(&lead, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 60.0f);
                 Vec2Add(&target, &pCarrier->mMotion.mPos, &lead);
             }
@@ -1768,16 +1768,15 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
                 if (human) {
                     push += push;
                 }
-                float pull;
                 if ((unsigned int)mode <= 5) {
                     fn_8011E7CC(p, 1, push);
-                    fn_8011E7CC(pOther, 1, pull = -push);
+                    fn_8011E7CC(pOther, 1, -push);
                 } else {
                     fn_8011E7CC(p, 0, push);
-                    fn_8011E7CC(pOther, 0, pull = -push);
+                    fn_8011E7CC(pOther, 0, -push);
                 }
                 fn_8011E7CC(p, 2, push);
-                fn_8011E7CC(pOther, 2, pull);
+                fn_8011E7CC(pOther, 2, -push);
                 if (human) {
                     fn_8011E884(p, 15);
                     fn_8011E884(pOther, 15);
