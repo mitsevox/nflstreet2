@@ -2191,9 +2191,9 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
     } else BallGetPosition(BallGetCurrent(), &point);
-    Vector_80039F5C delta;
+    Point_8017886C delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
-    int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    int heading = delta.Heading() & 0xFFFFFF;
     int limit = fn_800ACD04(p);
     if (!(point.mY >= fn_80177FE0().mY) && !fn_801783AC(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
@@ -2201,20 +2201,22 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
         step = MathAngleDiff(heading, p->mMotion.mFacing);
     else step = limit;
-    int facing;
-    if (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000)
-        facing = p->mMotion.mFacing - step;
-    else facing = p->mMotion.mFacing + step;
-    facing &= 0xFFFFFF;
-    int remaining = (heading - facing) & 0xFFFFFF;
-    p->mUnknown512.mUnknown4 = facing;
+    step = (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000 ? p->mMotion.mFacing - step : p->mMotion.mFacing + step) & 0xFFFFFF;
+    heading = (heading - step) & 0xFFFFFF;
     p->mUnknown512.mUnknown0 = 1.0f;
     p->mUnknown512.mUnknown14 = 6;
-    p->mUnknown512.mUnknown8 = facing;
-    state->mUnknown9 = _PlyrTackle_aAimOctants[((remaining + 0x100000) >> 21) & 7];
+    p->mUnknown512.mUnknown8 = step;
+    p->mUnknown512.mUnknown4 = step;
+    state->mUnknown9 = _PlyrTackle_aAimOctants[((heading + 0x100000) >> 21) & 7];
     if (p->mIdBytes[2] == fn_80178320()) {
-        if (state->mUnknown9 == 2) state->mUnknown9 = 3;
-        else if (state->mUnknown9 == 7) state->mUnknown9 = 6;
+        switch (state->mUnknown9) {
+        case 7:
+            state->mUnknown9 = 6;
+            break;
+        case 2:
+            state->mUnknown9 = 3;
+            break;
+        }
     }
 }
 }
