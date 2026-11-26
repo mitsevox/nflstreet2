@@ -19159,12 +19159,12 @@
           "end": "0x8022C02C"
         },
         {
-          "symbol": "fn_8022C02C",
+          "symbol": "DbMttsBeginGame",
           "start": "0x8022C02C",
           "end": "0x8022C098"
         },
         {
-          "symbol": "fn_8022C098",
+          "symbol": "DbMttsResumeGame",
           "start": "0x8022C098",
           "end": "0x8022C0E0"
         },
@@ -19199,12 +19199,12 @@
           "end": "0x8022C81C"
         },
         {
-          "symbol": "fn_8022C81C",
+          "symbol": "DbSrptBeginGame",
           "start": "0x8022C81C",
           "end": "0x8022C858"
         },
         {
-          "symbol": "fn_8022C858",
+          "symbol": "DbSrptResumeGame",
           "start": "0x8022C858",
           "end": "0x8022C894"
         },

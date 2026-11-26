@@ -27406,16 +27406,16 @@ function	0x8022ACEC	0x8022AD64	fn_8022ACEC	target	exact	exact	bl target from 0x8
 function	0x8022AD64	0x8022AEFC	fn_8022AD64	target	exact	exact	bl target from 0x8022B120 and 0x8022B1A8; previous instruction at 0x8022AD60 is blr; last instruction blr at 0x8022AEF8; next start 0x8022AEFC.
 function	0x8022BF60	0x8022BF68	fn_8022BF60	target	exact	exact	bl target from 1 site incl. 0x8022C0CC; previous instruction at 0x8022BF5C is blr; last instruction blr at 0x8022BF64; next start 0x8022BF68.
 function	0x8022BF68	0x8022C02C	fn_8022BF68	target	exact	exact	bl target from 2 sites incl. 0x800C1D18, 0x8022C054; previous instruction at 0x8022BF64 is blr; last instruction blr at 0x8022C028; next start 0x8022C02C.
-function	0x8022C02C	0x8022C098	fn_8022C02C	target	exact	exact	bl target from 1 site incl. 0x8022E3F8; previous instruction at 0x8022C028 is blr; last instruction blr at 0x8022C094; next start 0x8022C098.
-function	0x8022C098	0x8022C0E0	fn_8022C098	target	exact	exact	bl target from 1 site incl. 0x8022E544; previous instruction at 0x8022C094 is blr; last instruction blr at 0x8022C0DC; next start 0x8022C0E0.
+function	0x8022C02C	0x8022C098	DbMttsBeginGame	target	exact	exact	bl target from 1 site incl. 0x8022E3F8; previous instruction at 0x8022C028 is blr; last instruction blr at 0x8022C094; next start 0x8022C098.
+function	0x8022C098	0x8022C0E0	DbMttsResumeGame	target	exact	exact	bl target from 1 site incl. 0x8022E544; previous instruction at 0x8022C094 is blr; last instruction blr at 0x8022C0DC; next start 0x8022C0E0.
 function	0x8022C0E0	0x8022C214	fn_8022C0E0	target	exact	exact	bl target from 0x8022C490 and 0x8022C5A0; previous instruction at 0x8022C0DC is blr; last instruction blr at 0x8022C210; next start 0x8022C214.
 function	0x8022C214	0x8022C3C8	fn_8022C214	target	exact	exact	bl target from 0x80232904; previous instruction at 0x8022C210 is blr; last instruction blr at 0x8022C3C4; next start 0x8022C3C8.
 function	0x8022C3C8	0x8022C410	fn_8022C3C8	target	exact	exact	bl target from 1 site incl. 0x8023296C; previous instruction at 0x8022C3C4 is blr; last instruction blr at 0x8022C40C; next start 0x8022C410.
 function	0x8022C410	0x8022C518	fn_8022C410	target	exact	exact	bl target from 0x80233040; previous instruction at 0x8022C40C is blr; last instruction blr at 0x8022C514; next start 0x8022C518.
 function	0x8022C518	0x8022C628	fn_8022C518	target	exact	exact	bl target from 0x80233030; previous instruction at 0x8022C514 is blr; last instruction blr at 0x8022C624; next start 0x8022C628.
 function	0x8022C628	0x8022C81C	fn_8022C628	target	exact	exact	bl target from 9 sites incl. 0x80004058, 0x80087788, 0x8022A6A4; previous instruction at 0x8022C624 is blr; last instruction blr at 0x8022C818; next start 0x8022C81C.
-function	0x8022C81C	0x8022C858	fn_8022C81C	target	exact	exact	bl target from 1 site incl. 0x8022E430; previous instruction at 0x8022C818 is blr; last instruction blr at 0x8022C854; next start 0x8022C858.
-function	0x8022C858	0x8022C894	fn_8022C858	target	exact	exact	bl target from 1 site incl. 0x8022E50C; previous instruction at 0x8022C854 is blr; last instruction blr at 0x8022C890; next start 0x8022C894.
+function	0x8022C81C	0x8022C858	DbSrptBeginGame	target	exact	exact	bl target from 1 site incl. 0x8022E430; previous instruction at 0x8022C818 is blr; last instruction blr at 0x8022C854; next start 0x8022C858.
+function	0x8022C858	0x8022C894	DbSrptResumeGame	target	exact	exact	bl target from 1 site incl. 0x8022E50C; previous instruction at 0x8022C854 is blr; last instruction blr at 0x8022C890; next start 0x8022C894.
 function	0x8022C894	0x8022C8C4	DbUtilRandomInit	target	exact	exact	bl target from 1 site incl. 0x8022947C; previous instruction at 0x8022C890 is blr; last instruction blr at 0x8022C8C0; next start 0x8022C8C4.
 function	0x8022C8C4	0x8022C8F0	DbUtilRandomShutdown	target	exact	exact	bl target from 1 site incl. 0x802294A0; previous instruction at 0x8022C8C0 is blr; last instruction blr at 0x8022C8EC; next start 0x8022C8F0.
 function	0x8022C8F0	0x8022C930	DbUtilRandomRange	target	exact	exact	bl target from 7 sites incl. 0x80011DC8, 0x80060C78, 0x80060D2C; previous instruction at 0x8022C8EC is blr; last instruction blr at 0x8022C92C; next start 0x8022C930.
@@ -27502,16 +27502,16 @@ name	0x8022ACEC	-	fn_8022ACEC	inferred	-	-	Neutral address label; no original na
 name	0x8022AD64	-	fn_8022AD64	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022AD64 is registered at 0x8022AD64.
 name	0x8022BF60	-	fn_8022BF60	inferred	-	-	Neutral address label; no original name is established for this function.
 name	0x8022BF68	-	fn_8022BF68	inferred	-	-	Neutral address label; no original name is established for this function.
-name	0x8022C02C	-	fn_8022C02C	inferred	-	-	Neutral address label; no original name is established for this function.
-name	0x8022C098	-	fn_8022C098	inferred	-	-	Neutral address label; no original name is established for this function.
+name	0x8022C02C	-	DbMttsBeginGame	inferred	-	-	Runs fn_8022BF68 when its third argument (the in-progress flag of DbRunUpdateChain) is 0, then calls the start callback 0x803EC028 that fn_8022B02C stores, with its four arguments; DbRunUpdateChain calls it as the first database module start hook.
+name	0x8022C098	-	DbMttsResumeGame	inferred	-	-	Calls the resume callback 0x803EC02C (which fn_8022B02C, the init of the module whose queries use the MTTS table (0x802B3524-0x802B35A0), stores from its callback argument) with its four arguments when it is set, then fn_8022BF60 when that returned 0; it is the fourth module hook DbRunLoadChain calls with the FNIG GTHG, GTAG, CSHG and CSAG values.
 name	0x8022C0E0	-	fn_8022C0E0	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022C0E0 is registered at 0x8022C0E0.
 name	0x8022C214	-	fn_8022C214	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022C214 is registered at 0x8022C214.
 name	0x8022C3C8	-	fn_8022C3C8	inferred	-	-	Neutral address label; no original name is established for this function.
 name	0x8022C410	-	fn_8022C410	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022C410 is registered at 0x8022C410.
 name	0x8022C518	-	fn_8022C518	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022C518 is registered at 0x8022C518.
 name	0x8022C628	-	fn_8022C628	inferred	-	-	Neutral address label; no original name established. Source compiler symbol fn_8022C628 is registered at 0x8022C628.
-name	0x8022C81C	-	fn_8022C81C	inferred	-	-	Neutral address label; no original name is established for this function.
-name	0x8022C858	-	fn_8022C858	inferred	-	-	Neutral address label; no original name is established for this function.
+name	0x8022C81C	-	DbSrptBeginGame	inferred	-	-	Calls the start callback 0x803EC034 with its four arguments when it is set (else returns 0); fn_8022C214, the init of the module that reads the SRPT table (0x802B3698, 0x802B36C4), stores it from its callback argument; DbRunUpdateChain calls it as the third database module start hook.
+name	0x8022C858	-	DbSrptResumeGame	inferred	-	-	Calls the resume callback 0x803EC038 with its four arguments when it is set (else returns 0); fn_8022C214 stores it with the start callback 0x803EC034; DbRunLoadChain calls it as the second database module resume hook.
 name	0x8022C894	-	DbUtilRandomInit	inferred	-	-	Creates the database random stream, MathNewRandomStream(0, MathGetRandomSeed()), and keeps it in .sdata 0x803EC040; called once, by the game-mode init 0x80229470 that DbGame::Init (0x8008CF88) calls. DbUtil prefix after the Db* files of the database code (src/engine/dbtats.c, dbteams.c).
 name	0x8022C8C4	-	DbUtilRandomShutdown	inferred	-	-	Deletes the database random stream (MathDelRandomStream on .sdata 0x803EC040) and clears the word; called once, by the game-mode reset 0x80229494 that DbGame::Shutdown (0x8008D060) calls.
 name	0x8022C8F0	-	DbUtilRandomRange	inferred	-	-	Returns low plus MathGetRandomRange(stream, high - low) from the database random stream when low < high, else low; called by the database key search 0x8022EFDC and by game code (e.g. 0x80011DC8, 0x80060C78) to pick values in a range.

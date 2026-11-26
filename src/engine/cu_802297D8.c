@@ -208,12 +208,12 @@ extern Record_8022A304 lbl_802FA510[10];
 
 typedef struct Callbacks_8022B02C {
     int (*mpUnknown0)(int a, int b, int c, int d);
-    int (*mpUnknown4)(int a);
+    int (*mpUnknown4)(int a, int b, int c, int d);
 } Callbacks_8022B02C;
 
 typedef struct Callbacks_8022C214 {
-    int (*mpUnknown0)(int a);
-    int (*mpUnknown4)(int a);
+    int (*mpUnknown0)(int a, int b, int c, int d);
+    int (*mpUnknown4)(int a, int b, int c, int d);
 } Callbacks_8022C214;
 
 extern Entry_803A2390 lbl_803A2390[];
@@ -248,10 +248,10 @@ extern TDbCol_801F9718 *lbl_803EC024[1];
 extern unsigned char lbl_803ED01C[1];
 extern int fn_802311C8(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
-extern int (*lbl_803EC02C)(int a);
+extern int (*lbl_803EC02C)(int a, int b, int c, int d);
 extern unsigned char lbl_803EC030;
-extern int (*lbl_803EC034)(int a);
-extern int (*lbl_803EC038)(int a);
+extern int (*lbl_803EC034)(int a, int b, int c, int d);
+extern int (*lbl_803EC038)(int a, int b, int c, int d);
 extern int (*_DbUslp_pFilter1)(int a);
 extern int (*_DbUslp_pFilter2)(int a);
 extern Node_8022CC6C *_DbUslp_pNodes;
@@ -495,16 +495,16 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks);
 void fn_8022B200(void);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
-int fn_8022C02C(int a, int b, int c, int d);
-int fn_8022C098(int a);
+int DbMttsBeginGame(int a, int b, int c, int d);
+int DbMttsResumeGame(int a, int b, int c, int d);
 int fn_8022C0E0(struct QueryCursor cursor, int a);
 int fn_8022C214(Callbacks_8022C214 *pCallbacks);
 void fn_8022C3C8(void);
 int fn_8022C410(int a);
 int fn_8022C518(int a);
 int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
-int fn_8022C81C(int a);
-int fn_8022C858(int a);
+int DbSrptBeginGame(int a, int b, int c, int d);
+int DbSrptResumeGame(int a, int b, int c, int d);
 void DbUtilRandomInit(void);
 void DbUtilRandomShutdown(void);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -1141,7 +1141,7 @@ int fn_8022BF68(void)
     return err;
 }
 
-int fn_8022C02C(int a, int b, int c, int d)
+int DbMttsBeginGame(int a, int b, int c, int d)
 {
     int err = 0;
 
@@ -1154,12 +1154,12 @@ int fn_8022C02C(int a, int b, int c, int d)
     return err;
 }
 
-int fn_8022C098(int a)
+int DbMttsResumeGame(int a, int b, int c, int d)
 {
     int err = 0;
 
     if (lbl_803EC02C != 0) {
-        err = lbl_803EC02C(a);
+        err = lbl_803EC02C(a, b, c, d);
     }
     if (err == 0) {
         err = fn_8022BF60();
@@ -1373,18 +1373,22 @@ int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
     return status;
 }
 
-int fn_8022C81C(int a)
+int DbSrptBeginGame(int a, int b, int c, int d)
 {
+    int err = 0;
+
     if (lbl_803EC034 != 0) {
-        return lbl_803EC034(a);
+        err = lbl_803EC034(a, b, c, d);
     }
-    return 0;
+    return err;
 }
 
-int fn_8022C858(int a)
+int DbSrptResumeGame(int a, int b, int c, int d)
 {
+    int err = 0;
+
     if (lbl_803EC038 != 0) {
-        return lbl_803EC038(a);
+        err = lbl_803EC038(a, b, c, d);
     }
-    return 0;
+    return err;
 }

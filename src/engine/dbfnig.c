@@ -40,10 +40,10 @@ typedef struct DbFnigRecord_t {
 
 int fn_80229E78(int home, int away, int mode, int arg);
 int fn_80229E80(int home, int away, int homeCshg, int awayCsag);
-int fn_8022C02C(int home, int away, int mode, int arg);
-int fn_8022C098(int home, int away, int homeCshg, int awayCsag);
-int fn_8022C81C(int home, int away, int mode, int arg);
-int fn_8022C858(int home, int away, int homeCshg, int awayCsag);
+int DbMttsBeginGame(int home, int away, int mode, int arg);
+int DbMttsResumeGame(int home, int away, int homeCshg, int awayCsag);
+int DbSrptBeginGame(int home, int away, int mode, int arg);
+int DbSrptResumeGame(int home, int away, int homeCshg, int awayCsag);
 int DbThcdBeginGame(int home, int away, int mode, int arg);
 int DbThcdResumeGame(int home, int away, int homeCshg, int awayCsag);
 int DbThcdSetLineups(int home, int *pHomePlayers, int away, int *pAwayPlayers, int table);
@@ -406,11 +406,11 @@ int DbRunUpdateChain(int inProgress, int arg, unsigned char *pDone, int *pHomePl
             err = _DbFnig_pStartGame(home, away, inProgress, arg);
         }
         if (err == 0) {
-            err = fn_8022C02C(home, away, inProgress, arg);
+            err = DbMttsBeginGame(home, away, inProgress, arg);
             if (err == 0) {
                 err = fn_80229E78(home, away, inProgress, arg);
                 if (err == 0) {
-                    err = fn_8022C81C(home, away, inProgress, arg);
+                    err = DbSrptBeginGame(home, away, inProgress, arg);
                     if (err == 0) {
                         err = DbThcdBeginGame(home, away, inProgress, arg);
                     }
@@ -443,11 +443,11 @@ int DbRunLoadChain(void)
     if (err == 0) {
         err = DbThcdResumeGame(home, away, homeCshg, awayCsag);
         if (err == 0) {
-            err = fn_8022C858(home, away, homeCshg, awayCsag);
+            err = DbSrptResumeGame(home, away, homeCshg, awayCsag);
             if (err == 0) {
                 err = fn_80229E80(home, away, homeCshg, awayCsag);
                 if (err == 0) {
-                    err = fn_8022C098(home, away, homeCshg, awayCsag);
+                    err = DbMttsResumeGame(home, away, homeCshg, awayCsag);
                 }
             }
         }
