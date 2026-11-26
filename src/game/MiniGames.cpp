@@ -122,7 +122,7 @@ struct Score_801531C4 {
 class Record_8005CE10 {
 public:
     Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
-    virtual ~Record_8005CE10() {}
+    virtual ~Record_8005CE10();
     unsigned int mOrdinal;
     unsigned int mEvent;
     int mPlayer;
@@ -995,7 +995,7 @@ Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n);
 void FieldLinesEnable(unsigned char enabled);
 extern char *lbl_803EB2F0;
 unsigned char PortDbCountSidePlayers(int team);
-int fn_800B65D0(int team);
+unsigned char fn_800B65D0(int team);
 void fn_800B65C0(int team, unsigned char index);
 extern int lbl_803EB2F4;
 void PlayBookLoadAudibles(int team);

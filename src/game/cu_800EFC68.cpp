@@ -1375,7 +1375,7 @@ int fn_8009E180(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800B65A0(int team);
+unsigned char fn_800B65A0(int team);
 }
 
 extern "C" {

@@ -33,7 +33,7 @@ BigObj_t *BigObjGet(int index);
 float fn_800A33D0(void);
 int fn_800A33DC(void);
 void fn_800B1508(void);
-int fn_800B65A0(int team);
+unsigned char fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
 void fn_800D782C(Object_80039F5C *p);
 void LooseBallBroadcast(int index);

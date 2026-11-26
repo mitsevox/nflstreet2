@@ -7219,11 +7219,11 @@ extern "C" void fn_800B64C4(void);
 
 extern "C" Object_80039F5C *fn_800B6544(int index);
 
-extern "C" int fn_800B65A0(int team);
+extern "C" unsigned char fn_800B65A0(int team);
 
 extern "C" void fn_800B65C0(int team, unsigned char index);
 
-extern "C" int fn_800B65D0(int team);
+extern "C" unsigned char fn_800B65D0(int team);
 
 extern "C" int fn_800B6644(int index);
 
@@ -26334,7 +26334,7 @@ extern "C" Object_80039F5C *fn_800B6544(int index)
     return p;
 }
 
-extern "C" int fn_800B65A0(int team)
+extern "C" unsigned char fn_800B65A0(int team)
 {
     if ((unsigned int)team <= 1) {
         return lbl_803EAB60->mUnknown6[team];
@@ -26347,7 +26347,7 @@ extern "C" void fn_800B65C0(int team, unsigned char index)
     lbl_803EAB60->mUnknown6[team] = index;
 }
 
-extern "C" int fn_800B65D0(int team)
+extern "C" unsigned char fn_800B65D0(int team)
 {
     unsigned char result = 0xFF;
     int i;
