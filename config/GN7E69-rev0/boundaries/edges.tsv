@@ -18,7 +18,8 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801B9F00	0x801B9F00	0x801B9F00	alignment	0	8	anim.c	animchan.c
 .text	0x801BA784	0x801BA784	0x801BA784	calls	0	5	animchan.c	animemot.c
 .text	-	0x801BAD70	0x801BC65C	open	-	-	animemot.c	animmot.c
-.text	-	0x801BCA74	0x801BE82C	open	-	-	animmot.c	animtran.c
+.text	-	0x801BCA74	0x801BDA30	open	-	-	animmot.c	animst.c
+.text	-	0x801BE7C8	0x801BE82C	open	-	-	animst.c	animtran.c
 .text	0x801BF090	0x801BF090	0x801BF090	alignment	0	4	animtran.c	animwgt.c
 .text	-	0x801BF8DC	0x801BFEF8	open	-	-	animwgt.c	AnimSequencer.c
 .text	-	0x801C00F8	0x801C06E8	open	-	-	AnimSequencer.c	animTexLib.c
