@@ -1,4 +1,7 @@
-/* Partial source: the cache of open table handles that the database queries use. */
+/* Partial source: the game database's column caches. Each cache is keyed by an open database
+   handle and keeps, per cached column ('DIGT' of the team table, 'DIGP' of the player table),
+   arrays of row values that the team and player queries look up instead of searching the
+   tables again; the caches are kept in one linked list. */
 
 #include "engine/TDbCreate.h"
 #include "engine/tdbext.h"
