@@ -8119,14 +8119,14 @@ extern "C" void fn_8008E978(Object_80039F5C *p)
 extern "C" void fn_8008E9B0(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
-    PlyrMoveCmd_t *current=&p->mUnknown512;
     PlyrMoveCmd_t *next=&p->mUnknown528;
+    PlyrMoveCmd_t *current=&p->mUnknown512;
     int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     } else if(difference<=0x56C16B && !(p->mUnknown492>gPlyrMoveSideSpeed)) {
         key=160;
         float speed=gPlyrMoveSideSpeed*0.18f/gPlyrMoveSideSpeed;
@@ -8141,7 +8141,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     }
     if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)
         fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
