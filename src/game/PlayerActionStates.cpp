@@ -1207,12 +1207,12 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
             Point_8017886C goal = fn_80177FFC(p->mIdBytes[2]);
             float direction = !(pBlock->mUnknown4.mX <= goal.mX) ? -1.0f : 1.0f;
             int next = 0;
-            pBlock->mUnknown22 = 0;
-            pBlock->mUnknown23 = 0;
+            pBlock->mGoalFound[0] = 0;
+            pBlock->mGoalFound[1] = 0;
             pBlock->mUnknown12.mY = pBlock->mUnknown4.mY;
             if (PlayerActionFindGap(p, count, values, &value, direction, target.mX) == 1) {
                 pGoal->mX = value;
-                pBlock->mUnknown22 = 1;
+                pBlock->mGoalFound[0] = 1;
                 next = 1;
             }
             if (PlayerActionFindGap(p, count, values, &value, -direction, target.mX) == 1) {
@@ -1220,14 +1220,14 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
                 pBlock->mGoalFound[next] = 1;
             }
         } else {
-            pBlock->mUnknown22 = 1;
+            pBlock->mGoalFound[0] = 1;
         }
     } else {
-        pBlock->mUnknown22 = 1;
+        pBlock->mGoalFound[0] = 1;
     }
-    if (!pBlock->mUnknown22) {
+    if (!pBlock->mGoalFound[0]) {
         pBlock->mUnknown24 = 0;
-    } else if (pBlock->mUnknown22 == 1 && pBlock->mUnknown23 == 1) {
+    } else if (pBlock->mGoalFound[0] == 1 && pBlock->mGoalFound[1] == 1) {
         int angle = (pRecord->mUnknown6 & 0x7F) << 17;
         if (PlayBookGetTeam(fn_80178320())->mUnknown48) angle = (0x800000 - angle) & 0xFFFFFF;
         if (angle <= 0xBFFFFF) {

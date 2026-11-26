@@ -415,10 +415,7 @@ struct Block_800E1954 {
     char mUnknown2[2];
     Point_8017886C mUnknown4, mUnknown12;
     unsigned short mUnknown20;
-    union {
-        struct { unsigned char mUnknown22, mUnknown23; };
-        unsigned char mGoalFound[2];
-    };
+    unsigned char mGoalFound[2];
     unsigned char mUnknown24;
     char mUnknown25[11];
     Object_80039F5C *mpUnknown36;
