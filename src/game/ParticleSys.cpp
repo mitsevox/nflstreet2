@@ -98,8 +98,8 @@ void ObjRemoveFromList(int handle, int item);
 void ObjSetPriority(int handle, int item, int a);
 void ParticleLibInit(PsysEmitterDesc_t *pDesc);
 void ParticleLibShutdown(void);
-void ParticleLibSetUpdatesPerSec(unsigned short a);
-void ParticleObjUpdate(PsysEmitter_t *pObject, int a);
+void ParticleLibSetUpdatesPerSec(unsigned int a);
+int ParticleObjUpdate(PsysEmitter_t *pObject, int a);
 unsigned short ParticlePoolCreate(unsigned short id, void *pDesc);
 PsysEmitter_t *ParticlePoolBorrow(unsigned short handle);
 void ParticlePoolReturn(PsysEmitter_t *pObject);
@@ -441,7 +441,7 @@ void ParticleSysUpdate(float rate)
     PsysManager_t *pManager;
     PsysPoolItem_t *pItem;
 
-    ParticleLibSetUpdatesPerSec((unsigned int)fabsf(1.0f / rate * 60.0f));
+    ParticleLibSetUpdatesPerSec((unsigned short)(unsigned int)fabsf(1.0f / rate * 60.0f));
     pList = &_ParticleSys_DrawList;
     pManager = ParticleLibGetSysList();
     for (pItem = (PsysPoolItem_t *)DSGetListNode(pManager->mpPool, 0); pItem != 0;
