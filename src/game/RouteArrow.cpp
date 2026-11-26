@@ -218,8 +218,9 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
     if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
         if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
+            unsigned char i = 0;
             unsigned int count = fn_80178D18(fn_80178308());
-            for (unsigned char i = 0; i < count; ++i) {
+            if (i < count) do {
                 Object_80039F5C *pCandidate = PlyrGet(fn_80178308(), i);
                 PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
                 void *pCommands = PlayAlignGetRoute(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
@@ -227,34 +228,36 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
                     pOther = pCandidate;
                     break;
                 }
-            }
+            } while (++i < count);
+
         }
     }
     float dx = pPlayer->mMotion.mPos.mX - origin.mX;
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;
+    Point_8017886C target;
+    Point_8017886C delta;
+    float length;
+    int angle;
     if (__builtin_fabsf(across) < 1.5f && __builtin_fabsf(otherDx) < 4.0f) {
-        Point_8017886C target;
         target.mY = pOther->mMotion.mPos.mY;
         target.mX = 1.5f - __builtin_fabsf(across);
         if (dx < 0.5f) target.mX = -target.mX;
         target.mX += pOther->mMotion.mPos.mX;
         if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-        Point_8017886C delta;
         Vec2Sub(&delta, &target, pPoint);
-        float length = Vec2Magnitude(&delta);
-        int angle = MathArcTan2(delta.mY, delta.mX);
+        length = Vec2Magnitude(&delta);
+        angle = MathArcTan2(delta.mY, delta.mX);
         if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
     }
-    Point_8017886C target;
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
     if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-    Point_8017886C delta;
     Vec2Sub(&delta, &target, pPoint);
-    float length = Vec2Magnitude(&delta);
-    int angle = MathArcTan2(delta.mY, delta.mX);
+    length = Vec2Magnitude(&delta);
+    angle = MathArcTan2(delta.mY, delta.mX);
+
     if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
     RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
@@ -386,6 +389,9 @@ void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C 
 int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint, int hasOther)
 {
     int more = 1;
+    Point_8017886C target;
+    float length;
+    int angle;
     switch (pCommand[0]) {
     case 30:
         RouteArrowStartAtPlayer(p, &pPoint->mX);
@@ -418,31 +424,34 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
         if (p->mPendingTurn == 7) break;
     case 1: {
         if (*(unsigned int *)p->mArrow > 1) break;
-        Point_8017886C point = {pPoint->mX, pPoint->mY};
+        Point_8017886C point;
+        point.mX = pPoint->mX;
+        point.mY = pPoint->mY;
         if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
-        Point_8017886C target;
         target.mX = fn_8011F4D4();
         Point_8017886C origin = fn_80177FE0();
         target.mY = origin.mY;
         Vec2Sub(&target, &target, &point);
-        int angle = MathArcTan2(target.mY, target.mX);
+        angle = MathArcTan2(target.mY, target.mX);
         if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
-        float length = Vec2Magnitude(&target);
+        length = Vec2Magnitude(&target);
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         break;
     }
     case 90: {
         if (*(unsigned int *)p->mArrow > 1) break;
-        Point_8017886C point = {pPoint->mX, pPoint->mY};
+        Point_8017886C point;
+        point.mX = pPoint->mX;
+        point.mY = pPoint->mY;
         if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
-        Point_8017886C target;
         target.mX = fn_8011F4D4() + (signed char)pCommand[1] * 0.0625f;
         if (target.mX < fn_80177FE0().mX) target.mX -= -2.0f;
         else target.mX += -2.0f;
         target.mY = fn_80177FE0().mY + (signed char)pCommand[2] * 0.0625f + -2.0f;
         Vec2Sub(&target, &target, &point);
-        int angle = MathArcTan2(target.mY, target.mX);
-        float length = Vec2Magnitude(&target);
+        angle = MathArcTan2(target.mY, target.mX);
+        length = Vec2Magnitude(&target);
+
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         p->mbMotion = 1;
         break;

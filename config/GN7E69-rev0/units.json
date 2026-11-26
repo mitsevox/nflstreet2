@@ -1525,12 +1525,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015A248",
-          "end": "0x8015A818"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015AB84",
           "end": "0x8015B344"
         },
         {
@@ -1566,10 +1560,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "RouteArrowAddBlockPath",
-            "evidence": "evidence.tsv source-form 0x8015A818-0x8015AB84"
-          },
           {
             "function": "RouteArrowAddCommand",
             "evidence": "evidence.tsv source-form 0x8015B344-0x8015B834"
