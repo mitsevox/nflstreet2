@@ -7757,7 +7757,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
 
 extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b);
 
-extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b, unsigned int c);
+extern "C" int PlyrContactTryBreakTackle(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b, unsigned int c);
 
 extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther);
 
@@ -33938,7 +33938,7 @@ extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
     return result;
 }
 
-extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b, unsigned int c)
+extern "C" int PlyrContactTryBreakTackle(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b, unsigned int c)
 {
     Query_800CE770 query;
     int types[5];
@@ -33989,6 +33989,11 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
     isTwo = fn_800CF090(p) == 2;
     count++;
     for (i = 0; i < count; i++) {
+        // FAKEMATCH: the dead stores to result and special here and on the success path are deleted by flow
+        // after loop optimisation; they only keep the loop large enough that the constant 1 of mUnknown1219
+        // stays on the success path, as in the target, and change no result
+        result = 0;
+        special = 0;
         query.mUnknown54 = types[i];
         result = fn_800CE2B8(&query);
         if (result != 0) {
@@ -34004,6 +34009,7 @@ extern "C" int fn_800C7118(Object_80039F5C *p, Object_80039F5C *pOther, int a, f
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
             p->mUnknown1219 = 1;
+            special = 1;
             break;
         }
     }
@@ -34156,11 +34162,11 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
             if (!result) {
                 result = fn_800C6CDC(pOther, p, 0);
                 if (!result) {
-                    result = fn_800C7118(pOther, p, kindB, 0.45f, 0x66666, chance);
+                    result = PlyrContactTryBreakTackle(pOther, p, kindB, 0.45f, 0x66666, chance);
                     if (!result && kindB == 93 && (p->mpState->mId == 12 || p->mpState->mId == 94)
                         && fn_800CD2B4(1, p)) {
                         fn_800C5F80(pOther, 31, &kindA, &kindB, &kindC);
-                        result = fn_800C7118(pOther, p, kindB, 0.45f, 0x66666, chance);
+                        result = PlyrContactTryBreakTackle(pOther, p, kindB, 0.45f, 0x66666, chance);
                         fn_800C5F80(pOther, key, &kindA, &kindB, &kindC);
                     }
                 }
