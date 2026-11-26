@@ -1842,11 +1842,12 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         !(p->mMotion.mUnknown28 >= 0.1f)) {
         int heading;
         if (fn_801486A0() != 1) {
-            Vector_80039F5C delta;
+            Point_8017886C delta;
             Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
-            heading = fn_801CFE40(delta.mY, delta.mX);
+            heading = delta.Heading();
         } else {
-            heading = p->mUnknown2913 ? 0x800000 : 0;
+            heading = 0x800000;
+            if (!p->mUnknown2913) heading = 0;
         }
         if (MathAngleDiff(p->mMotion.mFacing, heading) > 0x38E38) {
             if (((p->mMotion.mFacing - heading) & 0xFFFFFF) > 0x800000)
@@ -1857,10 +1858,10 @@ int PlyrWaitUpdate(Object_80039F5C *p)
     if (*pTimer < 0) return 1;
 
     if (fn_801486A0() == 0) {
-        p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.0f;
         unsigned short count = fn_80178D70(0);
         for (unsigned short i = 0; i < count; i++) {
             if (PlyrGet(0, i)->mpState->mId == 97) return 1;
