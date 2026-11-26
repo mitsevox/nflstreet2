@@ -25935,6 +25935,36 @@
           "placement": ".text",
           "start": "0x801D5D30",
           "end": "0x801D86B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFEC8",
+          "end": "0x802AFF40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B64",
+          "end": "0x802F7BA0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD00",
+          "end": "0x803EBD44"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80398DE0",
+          "end": "0x80399100"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF10",
+          "end": "0x803ECF1C"
         }
       ],
       "functions": [

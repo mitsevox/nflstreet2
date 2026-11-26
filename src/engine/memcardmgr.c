@@ -61,37 +61,42 @@ typedef struct Struct_80398DFC {
     unsigned char mUnknownF0;
 } Struct_80398DFC;
 
-extern unsigned int lbl_803EBD00;
-extern int lbl_803EBD04;
-extern signed char lbl_803EBD08;
-extern int lbl_803EBD0C;
-extern unsigned char lbl_803EBD10;
-extern unsigned char lbl_803EBD18;
-extern unsigned char lbl_803EBD19;
-extern int lbl_803EBD1C;
-extern Struct_803EBD20 *lbl_803EBD20;
-extern int lbl_803EBD24;
-extern Struct_801D4848 *lbl_803EBD28;
-extern Struct_803EBD2C *lbl_803EBD2C;
 typedef int (*Func_803EBD30)(char *pBuffer, int size, void *pComment);
 typedef void (*Func_803EBD34)(void);
 typedef void (*Func_803EBD38)(int arg0, unsigned char **ppData, unsigned int *pSize);
 typedef void (*Func_803EBD3C)(int arg0, int arg1);
 
-extern Func_803EBD30 lbl_803EBD30;
-extern Func_803EBD34 lbl_803EBD34;
-extern Func_803EBD38 lbl_803EBD38;
-extern Func_803EBD3C lbl_803EBD3C;
-extern int lbl_803ECF14;
-extern Struct_803ECF18 **lbl_803ECF18;
-extern Struct_80398DE0 lbl_80398DE0;
-extern Struct_80398DFC lbl_80398DFC;
-extern char lbl_80398F00[0x200];
-extern int lbl_802F7B64[];
-extern const char lbl_802AFED0[];
-extern const char lbl_802AFF0C[];
-extern const char lbl_802AFF14[];
-extern const char lbl_802AFF18[];
+static int lbl_802F7B64[] = {
+    0x1000, 0x1001, 0x1002, 0x1004, 0x100C, 0x100E, 0x1022, 0x1027,
+    0x102F, 0x1031, 0x1033, 0x1035, 0x1037, 0x1039, 0x102D,
+};
+
+static unsigned int lbl_803EBD00 = 0x103C;
+static int lbl_803EBD04 = 1;
+static signed char lbl_803EBD08 = -1;
+static int lbl_803EBD0C = 0;
+static unsigned char lbl_803EBD10 = 0;
+static int lbl_803EBD14 = 0;
+static unsigned char lbl_803EBD18 = 0;
+static unsigned char lbl_803EBD19 = 0;
+static int lbl_803EBD1C = 0;
+static Struct_803EBD20 *lbl_803EBD20 = 0;
+static int lbl_803EBD24 = 0;
+static Struct_801D4848 *lbl_803EBD28 = 0;
+static Struct_803EBD2C *lbl_803EBD2C = 0;
+static Func_803EBD30 lbl_803EBD30 = 0;
+static Func_803EBD34 lbl_803EBD34 = 0;
+static Func_803EBD38 lbl_803EBD38 = 0;
+static Func_803EBD3C lbl_803EBD3C = 0;
+static unsigned char lbl_803EBD40 = 1;
+
+static unsigned int lbl_803ECF10;
+static int lbl_803ECF14;
+static Struct_803ECF18 **lbl_803ECF18;
+
+static Struct_80398DE0 lbl_80398DE0;
+static Struct_80398DFC lbl_80398DFC;
+static char lbl_80398F00[0x200] __attribute__((aligned(32)));
 
 typedef struct Str3_t {
     char mText[3];
@@ -117,14 +122,6 @@ typedef struct Str7_t {
     char mText[7];
 } Str7_t;
 
-extern const char lbl_802AFEE4[];
-extern const char lbl_802AFEEC[];
-extern const char lbl_802AFEF4[];
-extern const char lbl_802AFEFC[];
-extern const char lbl_802AFF00[];
-extern const char lbl_802AFF08[];
-extern int lbl_803EBD14;
-extern unsigned int lbl_803ECF10;
 
 extern int MemCAsyncFormat(int port);
 extern int MemCAsyncMount(int port);
@@ -137,11 +134,6 @@ extern int MemCAsyncGetSysInfo(int port, const char *pName, int size);
 extern int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
                            unsigned int maxEntries);
 
-extern const char lbl_802AFEC8[];
-extern const char lbl_802AFEE0[];
-extern const char lbl_802AFF20[];
-extern const char lbl_802AFF24[];
-extern const char lbl_802AFF28[];
 
 extern int MemCAsyncProbe(int port);
 
@@ -270,7 +262,7 @@ void MemCardMgrUpdateProbe(void)
     switch (lbl_803EBD00) {
     case 0x102F:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncProbe(lbl_803ECF14);
             fn_801D5D30(0x1030);
@@ -508,7 +500,10 @@ void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type,
     char name[32];
 
     strcpy(name, lbl_803EBD20[type].mPrefix);
-    sprintf(pOut, lbl_802AFED0, pPrefix, name, pSuffix);
+    sprintf(pOut, "%s%s%s", pPrefix, name, pSuffix);
+    if (0) {
+        sprintf(pOut, "%s-%s", name, pSuffix);
+    }
 }
 
 void fn_801D6904(int a, int b)
@@ -607,7 +602,7 @@ int MemCardMgrGetSlotInfo(int slot, int type, char *pName, int nameSize, char *p
             used = pSlot->mUsed;
             if (pName != 0) {
                 if (pSlot->mFlag) {
-                    *(Str4_t *)pName = *(const Str4_t *)lbl_802AFEE0;
+                    *(Str4_t *)pName = *(const Str4_t *)"???";
                 } else {
                     strcpy(pName, pSlot->mName);
                 }
@@ -725,7 +720,6 @@ void fn_801D6F58(void)
     unsigned int size;
     unsigned int writeSize;
     unsigned int headerSize;
-    Str1_t pattern;
     int type;
 
     SysCheckReset();
@@ -753,7 +747,7 @@ void fn_801D6F58(void)
         }
         break;
     case 0x1001:
-        *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+        *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
         if (lbl_803EBD08 == 0) {
             poll = MemCAsyncPoll(&result);
             if (!lbl_803EBD18 && poll == 1) {
@@ -786,7 +780,7 @@ void fn_801D6F58(void)
         break;
     case 0x1002:
         if (MemCAsyncPoll(&result)) {
-            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)lbl_802AFEE4;
+            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)"Format";
             lbl_803EBD0C = 0;
             MemCAsyncFormat(lbl_803ECF14);
             fn_801D5D30(0x1003);
@@ -807,7 +801,7 @@ void fn_801D6F58(void)
         break;
     case 0x1004:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEEC;
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Load";
             lbl_803EBD0C = 0;
             fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
                         lbl_80398DFC.mDescription);
@@ -922,10 +916,10 @@ void fn_801D6F58(void)
         break;
     case 0x100C:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEF4;
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Save";
             lbl_803EBD0C = 0;
             SysEnableReset(0);
-            fn_801D6368(lbl_80398DFC.mDescription, lbl_802AFEFC);
+            fn_801D6368(lbl_80398DFC.mDescription, "");
             fn_801D5D30(0x100D);
         }
         break;
@@ -943,7 +937,7 @@ void fn_801D6F58(void)
         break;
     case 0x100E:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEF4;
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Save";
             lbl_803EBD0C = 0;
             SysEnableReset(0);
             fn_801D5D30(0x100F);
@@ -1207,7 +1201,7 @@ void fn_801D6F58(void)
         break;
     case 0x1022:
         if (MemCAsyncPoll(&result)) {
-            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)lbl_802AFF00;
+            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)"Delete";
             lbl_803EBD0C = 0;
             SysEnableReset(0);
             fn_801D6368(lbl_80398DFC.mDescription, lbl_80398DFC.mDescription);
@@ -1220,7 +1214,7 @@ void fn_801D6F58(void)
                 fn_801D6294(result);
                 break;
             }
-            fn_801D6368(lbl_80398DFC.mDescription, lbl_802AFEFC);
+            fn_801D6368(lbl_80398DFC.mDescription, "");
             fn_801D5D30(0x1024);
         }
         break;
@@ -1277,7 +1271,7 @@ void fn_801D6F58(void)
     case 0x1027:
     case 0x102D:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(Struct_801D4848));
             fn_801D8460(name, sizeof(name), lbl_80398DFC.mCode);
@@ -1285,8 +1279,9 @@ void fn_801D6F58(void)
                 MemCAsyncGetDir(lbl_803ECF14, name, name, lbl_803EBD28, lbl_803EBD24);
                 fn_801D5D30(0x1028);
             } else {
-                pattern = *(const Str1_t *)lbl_802AFF08;
-                MemCAsyncGetDir(lbl_803ECF14, name, pattern.mText, lbl_803EBD28, lbl_803EBD24);
+                char pattern[1] = "*";
+
+                MemCAsyncGetDir(lbl_803ECF14, name, pattern, lbl_803EBD28, lbl_803EBD24);
                 fn_801D5D30(0x102E);
             }
         }
@@ -1378,7 +1373,7 @@ void fn_801D6F58(void)
         break;
     case 0x1031:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncMount(lbl_803ECF14);
             fn_801D5D30(0x1032);
@@ -1396,7 +1391,7 @@ void fn_801D6F58(void)
         break;
     case 0x1033:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncMountAlt(lbl_803ECF14, lbl_80398DFC.mCode);
             fn_801D5D30(0x1034);
@@ -1413,7 +1408,7 @@ void fn_801D6F58(void)
         break;
     case 0x1035:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncCheck(lbl_803ECF14);
             fn_801D5D30(0x1036);
@@ -1430,7 +1425,7 @@ void fn_801D6F58(void)
         break;
     case 0x1037:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncGetFreeSpace(lbl_803ECF14);
             fn_801D5D30(0x1038);
@@ -1451,7 +1446,7 @@ void fn_801D6F58(void)
         break;
     case 0x1039:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
             lbl_803EBD0C = 0;
             MemCAsyncGetFreeEntries(lbl_803ECF14);
             fn_801D5D30(0x103A);
@@ -1473,19 +1468,24 @@ void fn_801D6F58(void)
     }
 }
 
+/* FAKEMATCH: the empty root of the card file names is spelled as a two-byte literal so that it stays
+   a constant of its own, apart from the empty extra name of the save and delete states (the target
+   keeps two empty strings in this file's .rodata) */
+#define MCM_CARD_ROOT "\0"
+
 void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused)
 {
-    sprintf(pBuffer, lbl_802AFF0C, lbl_802AFF14, pName);
+    sprintf(pBuffer, "%s%s", MCM_CARD_ROOT, pName);
 }
 
 void fn_801D8428(char *pBuffer, int size, const char *pName)
 {
-    sprintf(pBuffer, lbl_802AFF0C, lbl_802AFF14, pName);
+    sprintf(pBuffer, "%s%s", MCM_CARD_ROOT, pName);
 }
 
 void fn_801D8460(char *pBuffer, int size, const char *pName)
 {
-    sprintf(pBuffer, lbl_802AFF18, lbl_802AFF14, pName);
+    sprintf(pBuffer, "%s%s*", MCM_CARD_ROOT, pName);
 }
 
 void fn_801D8498(char *pDst, const char *pSrc)
@@ -1511,16 +1511,16 @@ void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry)
 
     if (hour == 0) {
         hour = 12;
-        suffix = *(const Str3_t *)lbl_802AFF20;
+        suffix = *(const Str3_t *)"AM";
     } else if (hour <= 11) {
-        suffix = *(const Str3_t *)lbl_802AFF20;
+        suffix = *(const Str3_t *)"AM";
     } else if (hour == 12) {
-        suffix = *(const Str3_t *)lbl_802AFF24;
+        suffix = *(const Str3_t *)"PM";
     } else {
         hour -= 12;
-        suffix = *(const Str3_t *)lbl_802AFF24;
+        suffix = *(const Str3_t *)"PM";
     }
-    sprintf(pBuffer, lbl_802AFF28, month, day, year, hour, minute, suffix.mText);
+    sprintf(pBuffer, "%d/%d/%d  %d:%02d %s", month, day, year, hour, minute, suffix.mText);
 }
 
 int fn_801D85A8(int unused)
