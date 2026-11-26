@@ -6,6 +6,8 @@
 /* The audio-callback count: the driver thread runs the 100 Hz server on every other callback. */
 static int everyother = 0;
 
+State_803A8D60 lbl_803A8D60 __attribute__((aligned(32)));
+
 void SNDDRV_freenextframe(void)
 {
     int i;
@@ -1149,7 +1151,7 @@ int SNDPLATFORM_downloadcomplete(int key)
 
 void SNDI_mutexalloc(void)
 {
-    OSInitMutex(&lbl_803B4B90);
+    OSInitMutex(&lbl_803A8D60.mBE30);
 }
 
 void SNDI_mutexfree(void)
@@ -1158,12 +1160,12 @@ void SNDI_mutexfree(void)
 
 void SNDI_mutexlock(void)
 {
-    OSLockMutex(&lbl_803B4B90);
+    OSLockMutex(&lbl_803A8D60.mBE30);
 }
 
 void SNDI_mutexunlock(void)
 {
-    OSUnlockMutex(&lbl_803B4B90);
+    OSUnlockMutex(&lbl_803A8D60.mBE30);
 }
 
 int SNDPLATFORM_ModeSetUp(Struct_802753AC *p, int mode)
