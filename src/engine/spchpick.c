@@ -1,5 +1,5 @@
-/* Speech picking (spchpick.c): chooses which sentence and which recorded samples to play for an
-   event, by its parameters, weights and what was played recently. */
+/* Commentary selection: choose sentences and recorded samples for speech events
+   using event parameters, selection weights and recent playback history. */
 
 #include "engine/spchlib.h"
 
