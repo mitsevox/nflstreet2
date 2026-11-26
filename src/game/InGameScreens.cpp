@@ -2046,7 +2046,7 @@ int fn_80178E4C(void);
 int fn_800AF078(int team);
 int InGameIsDemo(void);
 Object_80039F5C *PlyrFindById(int id);
-int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
+int PlayerDbFindNextPicked(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
 void PlayerDbGetFirstName(Object_8008044C *pObject,char *pText,int size);
 void fn_8017833C(int enabled);
 void fn_80178354(int enabled);
@@ -2323,7 +2323,7 @@ void InGameLeaderScore(int team)
     int row;
     float scores[11];
     int values[12];
-    if (fn_8008201C(&_InGameScreens_LeaderCursor,0,team,&row,0)) {
+    if (PlayerDbFindNextPicked(&_InGameScreens_LeaderCursor,0,team,&row,0)) {
         do {
             for (int i=0;i<12;i++) values[i]=InGameQueryStat(_InGameScreens_aLeaderStatWeights[i].mTag,_InGameScreens_aLeaderStatWeights[i].mColumn,row);
             float sum=0.0f;
@@ -2343,7 +2343,7 @@ void InGameLeaderScore(int team)
                 for(int i=0;i<12;i++) _InGameScreens_aLeaderStats[team].mStats[i]=values[i];
                 for(int i=0;i<11;i++) _InGameScreens_aLeaderStats[team].mValues[i]=scores[i];
             }
-        } while(fn_8008201C(&_InGameScreens_LeaderCursor,1,team,&row,0));
+        } while(PlayerDbFindNextPicked(&_InGameScreens_LeaderCursor,1,team,&row,0));
     }
 }
 

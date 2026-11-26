@@ -83,7 +83,7 @@ void UserStatsClose(DbCursor *pObject);
 int fn_80178AE0(void);
 int MsgGameGetSetupState(void);
 void UserProfileSelect(signed char a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int StoryGetLkss(int a);
 char *strncpy(char *pDest, const char *pSource, int count);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -206,8 +206,8 @@ void StoryTournamentFetchSkill(void)
 
 void StoryTournamentPurgeRosters(void)
 {
-    fn_8018C48C(0x54415453);
-    fn_8018C48C(0x454D4147);
+    TeamTablesPurgeCreated(0x54415453);
+    TeamTablesPurgeCreated(0x454D4147);
 }
 
 int StoryTournamentGetGameSlot(int game, int *pLvlt, int *pRow)

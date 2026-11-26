@@ -105,13 +105,13 @@ int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetWeight(Object_8008044C *pObject);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
-int fn_80082414(int index);
-int fn_8008257C(int count, unsigned int *pOut);
-int fn_800827EC(int id, int value);
-int fn_80082864(void);
-void fn_800828FC(void);
-void fn_800829D8(void);
-int fn_80082AB0(int a, int b, int c);
+int PlayerPoolGetCount(int index);
+int PlayerGetUnlockedCount(int count, unsigned int *pOut);
+int PlayerIsLocked(int id, int value);
+int PlayerGetUnlockTeamCount(void);
+void PlayerNamesOpen(void);
+void PlayerNamesClose(void);
+int PlayerCreateAtPosition(int a, int b, int c);
 int TeamDbGetColor1(DbCursor *pObject);
 int TeamDbGetColor2(DbCursor *pObject);
 int TeamDbGetColor3(DbCursor *pObject);
@@ -134,7 +134,7 @@ int GameTextGetPadPlayer(int a);
 void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPickPlayer_t *, TeamPickPlayer_t *), int b,
@@ -351,7 +351,7 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
     int value = 0;
     int picked[2];
     if (_MsgTeamPick_abSources[1]) {
-        fn_8008257C(fn_80082864(), &team);
+        PlayerGetUnlockedCount(PlayerGetUnlockTeamCount(), &team);
     }
     for (int i = 0; i <= 6; i++) {
         int count1;
@@ -366,7 +366,7 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
             for (int row = 0; row < rows; row++) {
                 PlayerQuerySetRow(row, 1);
                 PlayerQueryFetch(1);
-                if (fn_800827EC(id, team) == 0) count1++;
+                if (PlayerIsLocked(id, team) == 0) count1++;
             }
         } else {
             count1 = 0;
@@ -406,7 +406,7 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
                     int row = pick - count0;
                     PlayerQuerySetRow(row, 1);
                     PlayerQueryFetch(1);
-                    for (int tries = 0; tries < count1 - 1 && fn_800827EC(id, team) != 0; tries++) {
+                    for (int tries = 0; tries < count1 - 1 && PlayerIsLocked(id, team) != 0; tries++) {
                         row++;
                         if (row >= count0 + count1) row = count0;
                         PlayerQuerySetRow(row, 1);
@@ -450,7 +450,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
     if (!_MsgTeamPick_abSources[0]) count0 = 0;
     if (_MsgTeamPick_abSources[1]) {
         rows = PlayerQueryOpen(&id, &pos, &value, -1, -1, -1, 1);
-        count1 = fn_8008257C(rows, &team);
+        count1 = PlayerGetUnlockedCount(rows, &team);
     } else {
         count1 = 0;
     }
@@ -468,7 +468,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
                     int row = pick - count0 + offset;
                     PlayerQuerySetRow(row, 1);
                     PlayerQueryFetch(1);
-                    for (int tries = 0; tries < rows - 1 && fn_800827EC(id, team) != 0; tries++) {
+                    for (int tries = 0; tries < rows - 1 && PlayerIsLocked(id, team) != 0; tries++) {
                         row++;
                         if (row >= rows) row = 0;
                         PlayerQuerySetRow(row, 1);
@@ -489,7 +489,7 @@ int MsgTeamPickFillRemaining(int start, int teamId, float scale)
                     } else if (pick < count0 + count1) {
                         PlayerQuerySetRow(SyncRandGetRange(0, 11), 1);
                         PlayerQueryFetch(1);
-                        if (fn_800827EC(id, team)) taken = 1;
+                        if (PlayerIsLocked(id, team)) taken = 1;
                     }
                     for (int j = 0; j < n; j++) {
                         if (id == _MsgTeamPick_pPool[j].mId) {
@@ -659,7 +659,7 @@ void MsgTeamPickBuildPool(void)
         if (_MsgTeamPick_abSources[2]) {
             MsgTeamPickCreateHoldingTeams();
             team = TeamDbInsert("New Team", 6, 0);
-            fn_800828FC();
+            PlayerNamesOpen();
             scale = StoryEventsGetRatingScale();
         }
         for (i = 0; i < 7; i++) {
@@ -676,7 +676,7 @@ void MsgTeamPickBuildPool(void)
         }
     }
     if (_MsgTeamPick_abSources[2]) {
-        fn_800829D8();
+        PlayerNamesClose();
     }
     FESndUpdate(1);
 }
@@ -697,7 +697,7 @@ int MsgTeamPickCreatePlayer(TeamPickPlayer_t *pEntry, int pos, float scale, int 
 {
     int id;
 
-    id = fn_80082AB0(pos, team, _MsgTeamPick_iLastCreatedId);
+    id = PlayerCreateAtPosition(pos, team, _MsgTeamPick_iLastCreatedId);
     _MsgTeamPick_iLastCreatedId = id;
     PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, id, 0);
     PlayerDbSetTeamIndex(&_MsgTeamPick_PlayerCursor, _MsgTeamPick_aiHoldingTeam[_MsgTeamPick_iHoldingTeam]);
@@ -1325,7 +1325,7 @@ void MsgTeamPickShutdown(void)
             for (unsigned char team = 0; team <= 1; team++) {
                 for (unsigned char j = 0; j <= 6; j++) {
                     PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, records[team].mUnknown[j], 0);
-                    fn_80081F50(&_MsgTeamPick_PlayerCursor, team, 1);
+                    PlayerDbSetPickedFlag(&_MsgTeamPick_PlayerCursor, team, 1);
                 }
             }
             if (_MsgTeamPick_pState->mSize == 1) {
@@ -1338,8 +1338,8 @@ void MsgTeamPickShutdown(void)
         }
         FELoopSetResume(1);
     } else if (MsgGameGetSetupState() == 0) {
-        fn_8018C48C(0x54415453);
-        fn_8018C48C(0x454D4147);
+        TeamTablesPurgeCreated(0x54415453);
+        TeamTablesPurgeCreated(0x454D4147);
     }
 
     MsgTeamPickUnregisterPortraits();
@@ -1960,8 +1960,8 @@ void MsgTeamPickSetMode(int mode, int b)
         _MsgTeamPick_iPoolCount = 40;
         break;
     case 2:
-        _MsgTeamPick_iPoolCount = fn_80082414(0) * _MsgTeamPick_abSources[0] + fn_80082414(1) * _MsgTeamPick_abSources[1] +
-                       fn_80082414(2) * _MsgTeamPick_abSources[2] + fn_80082414(3) * _MsgTeamPick_abSources[3];
+        _MsgTeamPick_iPoolCount = PlayerPoolGetCount(0) * _MsgTeamPick_abSources[0] + PlayerPoolGetCount(1) * _MsgTeamPick_abSources[1] +
+                       PlayerPoolGetCount(2) * _MsgTeamPick_abSources[2] + PlayerPoolGetCount(3) * _MsgTeamPick_abSources[3];
         if (_MsgTeamPick_iPoolCount >= 14) {
             break;
         }

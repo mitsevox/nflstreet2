@@ -1,10 +1,10 @@
-#ifndef GAME_RECORD_80082B18_H
-#define GAME_RECORD_80082B18_H
+#ifndef GAME_PLAYERCREATERECORD_H
+#define GAME_PLAYERCREATERECORD_H
 
 /* 0x120-byte record initialised by PlayerRecordSetDefaults, filled from the 'ECAF' and
-   'YALP' tables by fn_80082D30 and fn_80082E48, and written back by
-   fn_8008318C. Each word holds the column named in the comments. */
-struct Record_80082B18 {
+   'YALP' tables by PlayerRecordRandomFace and PlayerRecordRandomAttributes, and written back by
+   PlayerRecordInsert. Each word holds the column named in the comments. */
+struct PlayerCreateRecord_t {
     int mUnknown00;   /* 'DIGP', 'DIOP' */
     char *mUnknown04; /* 'ANFP' */
     char *mUnknown08; /* 'ANLP' */

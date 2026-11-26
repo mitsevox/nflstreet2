@@ -102,7 +102,7 @@ void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_800D782C(Object_80039F5C *p);
+void PlyrBallHandUpdate(Object_80039F5C *p);
 int PlayerActionIsUserCatch(Object_80039F5C *p);
 int PlayerActionIsCatchBlocked(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
@@ -1231,7 +1231,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     BallSetTarget(pBall, 0);
     resolved = 0;
     if ((p->mId & 0xFF) == 1) {
-        fn_800D782C(p);
+        PlyrBallHandUpdate(p);
     }
     p->mFlags = (p->mFlags | 0x2000000) & ~0x800000;
     result = BallStateGetPrev(pBall, &status);

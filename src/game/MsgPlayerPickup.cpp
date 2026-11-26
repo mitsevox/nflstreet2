@@ -49,7 +49,7 @@ int StoryTeamLoadToStats(int a, int b, int *pIds, int *pCount);
 void StoryTeamStoreFromStats(int a, int b);
 void StoryPlayerMoveToTeam(int a, int b);
 void StoryPlayerDelete(int a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamLoadToStats(int a, int b);
 void CreateTeamStoreFromStats(int a, int b);
 void CreateTeamDeletePlayer(int a, int b);
@@ -480,12 +480,12 @@ void MsgPlayerPickupShutdown(void)
     FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
         StoryTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
         _MsgPlayerPickup_bCopyMode = 0;
         StoryEventsFreeTables();
     } else {
         CreateTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
     }
     TeamFilterSet(1023);
     _MsgPlayerPickup_bOpen = 0;

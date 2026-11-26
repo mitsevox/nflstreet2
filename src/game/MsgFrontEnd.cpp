@@ -163,7 +163,7 @@ void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetWeight(Object_8008044C *pObject);
 int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index);
-void fn_80082558(int a, int b);
+void PlayerRecordLoadTeam(int a, int b);
 void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
 int TeamDbGetId(DbCursor *pObject);
 int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult);
@@ -217,7 +217,7 @@ void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int StoryTeamExists(int a);
 void StoryTeamLoadUserTeams(int a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamExists(int a);
 void CreateTeamLoadUserTeams(void);
 int GauntletGetCurrentTeam(int a);
@@ -399,8 +399,8 @@ void MsgMainMenuEnter(void)
         if (!FELoopWasVisited()) {
             FELoopSetVisited(1);
         }
-        fn_8018C48C(0x54415453);
-        fn_8018C48C(0x454D4147);
+        TeamTablesPurgeCreated(0x54415453);
+        TeamTablesPurgeCreated(0x454D4147);
         FELoopResetIdle();
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
@@ -1911,7 +1911,7 @@ void MsgTeamSelectResetPicks(unsigned char team)
         }
         if (DbCursorFirst((DbCursor *)&_MsgTeamSelect_aPlayerDb[team])) {
             do {
-                fn_80081F50(&_MsgTeamSelect_aPlayerDb[team], team, 0);
+                PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[team], team, 0);
             } while (DbCursorNext((DbCursor *)&_MsgTeamSelect_aPlayerDb[team]));
         }
         _MsgTeamSelect_bMainFE = 1;
@@ -2802,7 +2802,7 @@ void MsgTeamSelectSetTeam(int team, int id)
             if (index == -1) {
                 index = UserProfileGetSelected(team == 0);
             }
-            fn_80082558(id, index);
+            PlayerRecordLoadTeam(id, index);
             MsgTeamSelectResetPicks(team);
             MsgTeamSelectFillRoster(team);
             MsgTeamSelectResetScroll(team);
@@ -2874,10 +2874,10 @@ void MsgTeamSelectExit(void)
         DepthChartGetSide(1, &records[1]);
         for (unsigned char i = 0; i <= 6; i++) {
             PlayerDbSeekId(&_MsgTeamSelect_aPlayerDb[0], records[0].mUnknown[i], 0);
-            fn_80081F50(&_MsgTeamSelect_aPlayerDb[0], 0, 1);
+            PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[0], 0, 1);
             ids[0][i] = _MsgTeamSelect_aRoster[0].mEntries[i].mId;
             PlayerDbSeekId(&_MsgTeamSelect_aPlayerDb[1], records[1].mUnknown[i], 0);
-            fn_80081F50(&_MsgTeamSelect_aPlayerDb[1], 1, 1);
+            PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[1], 1, 1);
             ids[1][i] = _MsgTeamSelect_aRoster[1].mEntries[i].mId;
         }
         PlyrObjsSetTeamIds(0, ids[0]);
@@ -2908,12 +2908,12 @@ void MsgTeamSelectExit(void)
         GameTextSetSetupActive(0);
         if (GameModeTypeGet() == 6) {
             if (!ChalGameHasGeneratedOpponent() || _MsgTeamSelect_iMode != 0x6B) {
-                fn_8018C48C(0x454D4147);
-                fn_8018C48C(0x54415453);
+                TeamTablesPurgeCreated(0x454D4147);
+                TeamTablesPurgeCreated(0x54415453);
             }
         } else {
-            fn_8018C48C(0x454D4147);
-            fn_8018C48C(0x54415453);
+            TeamTablesPurgeCreated(0x454D4147);
+            TeamTablesPurgeCreated(0x54415453);
         }
     }
 

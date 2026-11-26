@@ -34,18 +34,18 @@ int PortraitAllocSlot(int, int);
 int PlayerDbGetHairStyle(Object_8008044C *);
 int PlayerDbGetPlht(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
-int fn_80082280(Object_8008044C *);
-int fn_800822D4(Object_8008044C *);
+int PlayerDbGetFaceId(Object_8008044C *);
+int PlayerDbGetEyebrows(Object_8008044C *);
 int PlayerDbGetPlex(Object_8008044C *);
 int PlayerDbGetHairColor(Object_8008044C *);
 int PlayerDbGetFacialHairColor(Object_8008044C *);
 void fn_8015F638(int, int, int, int *);
 void PlaTexCacheGetHairTexture(int, int *, int *);
 int PlaTexCacheGetCapFaceId(int);
-void fn_8018C48C(int);
-void fn_8018C344(int database, int firstTable, int secondTable,
+void TeamTablesPurgeCreated(int);
+void TeamTablesCopy(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
-void fn_8018C3EC(int firstTable, int secondTable);
+void TeamTablesDestroy(int firstTable, int secondTable);
 int UserProfileGetSelected(unsigned char);
 int UserProfileFindIndex(int);
 int GauntletGetCurrentTeam(int);
@@ -331,12 +331,12 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
         int value6E = PlayerDbGetHairStyle(&object);
         int value6C = PlayerDbGetPlht(&object);
         int value72 = fn_80081E3C(&object);
-        int value73 = fn_80082280(&object);
-        int value74 = fn_800822D4(&object);
+        int value73 = PlayerDbGetFaceId(&object);
+        int value74 = PlayerDbGetEyebrows(&object);
         int value76 = PlayerDbGetPlex(&object);
         unsigned int color18 = PlayerDbGetHairColor(&object);
         unsigned int color19 = PlayerDbGetFacialHairColor(&object);
-        fn_80082138(&object, &block);
+        PlayerDbGetFaceFeatures(&object, &block);
         FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
         PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
@@ -380,8 +380,8 @@ int CreateTeamHasPlayers(int index)
 void CreateTeamLoadUserTeams()
 {
     int ids[16];
-    fn_8018C48C(0x54415453);
-    fn_8018C48C(0x454D4147);
+    TeamTablesPurgeCreated(0x54415453);
+    TeamTablesPurgeCreated(0x454D4147);
     for (unsigned char i = 0; i <= 1; i++) {
         int index = UserProfileGetSelected(i);
         if (index != -1 && CreateTeamExists(index)) {
@@ -394,7 +394,7 @@ void CreateTeamLoadUserTeams()
 int CreateTeamLoadToStats(int index, int rumt)
 {
     int ids[16];
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     CreateTeamSyncCreatedPlayers(index);
     return CreateTeamLoadAll(0x54415453, rumt, index, ids, 1);
 }
@@ -484,11 +484,11 @@ void CreateTeamAddPlayer(int team, int player, int useDefault)
 }
 void CreateTeamBackup(int *pFirstCopy, int *pSecondCopy, int database)
 {
-    fn_8018C344(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
+    TeamTablesCopy(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
 }
 void CreateTeamFreeBackup(int firstTable, int secondTable)
 {
-    fn_8018C3EC(firstTable, secondTable);
+    TeamTablesDestroy(firstTable, secondTable);
 }
 void CreateTeamRestore(int first, int second)
 {
