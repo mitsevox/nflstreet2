@@ -25695,12 +25695,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DEAB0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DEC10",
           "end": "0x800DF1F4"
         },
         {
@@ -25755,10 +25749,6 @@
           {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimBuildAlignCommand",
-            "evidence": "evidence.tsv source-form 0x800DEAB0-0x800DEC10"
           },
           {
             "function": "PlayerActionAnimGenericPhase",

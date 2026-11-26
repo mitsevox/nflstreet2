@@ -48,7 +48,7 @@ struct Table_80089904 {
 
 extern "C" {
 int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
-void AnimFileGetStateAnimList(unsigned short a, unsigned short b, Table_80089904 *pTable);
+void AnimFileGetStateAnimList(int objectType, int state, Table_80089904 *pTable);
 }
 
 #endif
