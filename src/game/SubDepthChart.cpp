@@ -11,7 +11,7 @@ int fn_8022D25C(int value);
 int fn_8022D2F4(unsigned short handle, unsigned short a, unsigned char b, unsigned char *pPairs, int c);
 int fn_8022D3AC(void);
 short fn_8022D3D4(unsigned char index);
-int fn_8022D418(int a, int b, int mode);
+int DbOpenDepthChartCursor(int a, int b, int mode);
 int fn_8022D540(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
@@ -72,7 +72,7 @@ void SubDepthWriteTeam(int team, PlayBookFormation_t *pTeam)
     } else {
         handle = fn_8022E560();
     }
-    fn_8022D418(handle, 0x3FF, 1);
+    DbOpenDepthChartCursor(handle, 0x3FF, 1);
     fn_8022D2F4(handle, pTeam->mUnknown8.mUnknown4, pTeam->mUnknown4, &pairs[0][0], 1);
 }
 

@@ -336,7 +336,7 @@ extern int fn_8022D6E8(void);
 extern void fn_8022D6F0(void);
 extern int fn_8022DA90(int *p);
 extern void fn_8022DB08(void);
-extern int fn_8022DB20(void);
+extern int DbResetGameInfo(void);
 extern int fn_8022DBF4(int a);
 extern int fn_8022DC38(int a);
 extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
@@ -1055,7 +1055,7 @@ int DbManagerMode2Finish(void)
             err = DbRunLoadChain();
         }
         if (err == 0) {
-            err = fn_8022DB20();
+            err = DbResetGameInfo();
             if (err == 0) {
                 err = DbManagerMode2Leave();
                 if (err == 0) {

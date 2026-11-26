@@ -33,7 +33,7 @@ void fn_801BDAC0(Collection_801BE594 *p)
         while (i < count) {
             if (p->mUnknown4[i].mUnknown2 == 0) {
                 for (j = i; j < count; j++) {
-                    p->mUnknown4[j] = p->mUnknown4[j + 1];
+                    p->mUnknown4[j] = (&p->mUnknown4[j])[1];
                     p->mUnknown4[j + 1].mUnknown2 = 0;
                     p->mUnknown4[j + 1].mUnknown8 = 0.0f;
                 }

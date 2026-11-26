@@ -306,19 +306,19 @@ int fn_8028291C(void)
     unsigned short scan;
     while (lbl_803ED45C <= 0x3FFF) {
         while (lbl_803ED444 <= 228) {
-            if (lbl_803ED488 != 0) {
-                lbl_803ED44C[lbl_803ED43E] = 16381;
-                lbl_803ED488--;
-                lbl_803ED440[lbl_803ED43E++] = *lbl_803ED48C++;
-                lbl_803ED444++;
-                lbl_803ED43E &= 0x7FFF;
-            } else if (lbl_803ED474->mUnknown18 == 0) {
-                fn_80285304(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
-                lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04;
-                return 1;
-            } else {
+            if (lbl_803ED488 == 0) {
+                if (lbl_803ED474->mUnknown18 == 0) {
+                    fn_80285304(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
+                    lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04;
+                    return 1;
+                }
                 break;
             }
+            lbl_803ED44C[lbl_803ED43E] = 16381;
+            lbl_803ED488--;
+            lbl_803ED440[lbl_803ED43E++] = *lbl_803ED48C++;
+            lbl_803ED444++;
+            lbl_803ED43E &= 0x7FFF;
         }
         if (lbl_803ED444 == 0) {
             break;
@@ -411,8 +411,8 @@ void fn_80282D70(void)
         b[i].mUnknown00 = 0;
     }
     for (j = 0; j < lbl_803ED45C; j++) {
-        n = lbl_803ED454[j];
         d = lbl_803ED458[j];
+        n = lbl_803ED454[j];
         if (d != 0) {
             a[lbl_803B7678[n] + 257].mUnknown00++;
             d--;

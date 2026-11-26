@@ -43,7 +43,7 @@ signed char DbUserFindIndex(int key);
 extern const unsigned char lbl_802AEF10[];
 extern int fn_802297D8(void *p, int tag);
 extern int fn_8022D8F8(int a, int *p, int c);
-int fn_8022DB20(void);
+int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
 extern void fn_80231208(void);
@@ -96,9 +96,9 @@ extern unsigned short lbl_803EC090;
 extern int (*lbl_803EC094)[3];
 extern unsigned short lbl_803EC098;
 extern int lbl_802FAA50[][10][2];
-int fn_8022E568(void);
-int fn_8022E6CC(void);
-int fn_8022E834(void);
+int DbLoadConferenceIds(void);
+int DbLoadDivisionIds(void);
+int DbLoadTeamList(void);
 int fn_8022E9E4(void);
 void fn_8022EA4C(void);
 
@@ -120,9 +120,9 @@ extern char lbl_802B48C4[];
 extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
 extern char lbl_802B4AE0[];
-void fn_8022C9B8(void *pPairs);
+void DbBuildPendingNodeList(void *pPairs);
 void DbAssignPendingNodeIds(void);
-int fn_8022D5A4(int key, int mode);
+int DbLoadTeamDepthChart(int key, int mode);
 int fn_8022D710(int a, int b, int c, int row, int value);
 unsigned short fn_8022D6FC(int index);
 
@@ -517,7 +517,7 @@ void *DbUtilAlloc(int size, int a);
 void DbUtilFree(void *p);
 void *fn_8022C9A8(void);
 void fn_8022C9B4(void *p);
-void fn_8022C9B8(void *pPairs);
+void DbBuildPendingNodeList(void *pPairs);
 void fn_8022CADC(void);
 void fn_8022CAEC(Node_8022CC6C **ppHead);
 Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key);
@@ -539,9 +539,9 @@ int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode);
 int fn_8022D2F4(int a, int b, int c, void *pPairs, int mode);
 int fn_8022D3AC(void);
 unsigned short fn_8022D3D4(unsigned char key);
-int fn_8022D418(int a, int b, int mode);
+int DbOpenDepthChartCursor(int a, int b, int mode);
 int fn_8022D540(void);
-int fn_8022D5A4(int key, int mode);
+int DbLoadTeamDepthChart(int key, int mode);
 int fn_8022D6E8(void);
 void fn_8022D6F0(void);
 unsigned short fn_8022D6FC(int index);
@@ -554,7 +554,7 @@ int fn_8022D8F8(int a, int *p, int tag);
 int fn_8022DA44(int a, int *b, int c, int *d, int e);
 int fn_8022DA90(void **p);
 void fn_8022DB08(void);
-int fn_8022DB20(void);
+int DbResetGameInfo(void);
 int fn_8022DBF4(int value);
 int fn_8022DC38(int value);
 int fn_8022DC7C(int value);
@@ -570,11 +570,11 @@ int DbRunUpdateChain(int a, int b, unsigned char *pDone, int *pC, int *pD);
 int DbRunLoadChain(void);
 int fn_8022E558(void);
 int fn_8022E560(void);
-int fn_8022E568(void);
+int DbLoadConferenceIds(void);
 void fn_8022E694(void);
-int fn_8022E6CC(void);
+int DbLoadDivisionIds(void);
 void fn_8022E7FC(void);
-int fn_8022E834(void);
+int DbLoadTeamList(void);
 void fn_8022E96C(void);
 int fn_8022E9A4(void);
 void fn_8022E9C4(void);
@@ -619,7 +619,7 @@ void fn_8022C9B4(void *p)
 {
 }
 
-void fn_8022C9B8(void *pPairs)
+void DbBuildPendingNodeList(void *pPairs)
 {
     unsigned char (*pValues)[2] = pPairs;
     unsigned char i;
@@ -632,19 +632,10 @@ void fn_8022C9B8(void *pPairs)
         lbl_803EC050[i].mUnknown2 = i;
         lbl_803EC050[i].mUnknown3 = pValues[i][1];
         lbl_803EC050[i].mUnknown4 = pValues[i][0];
-        lbl_803EC050[i].mUnknown5 = 0;
-        lbl_803EC050[i].mUnknown6 = 0;
+        lbl_803EC050[i].mUnknown5 = lbl_803EC050[i].mUnknown6 = 0;
         lbl_803EC050[i].mUnknown8 = 32767;
-        if (i != 0) {
-            lbl_803EC050[i].mpUnknown12 = &lbl_803EC050[i - 1];
-        } else {
-            lbl_803EC050[i].mpUnknown12 = 0;
-        }
-        if (i != 6) {
-            lbl_803EC050[i].mpUnknown16 = &lbl_803EC050[i + 1];
-        } else {
-            lbl_803EC050[i].mpUnknown16 = 0;
-        }
+        lbl_803EC050[i].mpUnknown12 = (i != 0) ? &lbl_803EC050[i - 1] : 0;
+        lbl_803EC050[i].mpUnknown16 = (i != 6) ? &lbl_803EC050[i + 1] : 0;
     }
     lbl_803EC058 = 0;
     lbl_803EC054 = lbl_803EC050;
@@ -980,10 +971,10 @@ int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode)
 {
     switch (action) {
     case 0:
-        fn_8022C9B8(pPairs);
+        DbBuildPendingNodeList(pPairs);
         break;
     case 1:
-        fn_8022D5A4(a, mode);
+        DbLoadTeamDepthChart(a, mode);
         break;
     case 2:
         fn_8022CD40(a, b, c);
@@ -1026,11 +1017,12 @@ unsigned short fn_8022D3D4(unsigned char key)
     return value;
 }
 
-int fn_8022D418(int a, int b, int mode)
+int DbOpenDepthChartCursor(int a, int b, int mode)
 {
     int tblA;
     int tblB;
     int status;
+    int key;
 
     if (mode == 1) {
         tblA = 0x41474C50;
@@ -1046,7 +1038,8 @@ int fn_8022D418(int a, int b, int mode)
     if (a != 1023 && b != 1023) {
         status = TDbCompilePerformOp(0, lbl_802B479C, &lbl_802FA8B0, tblA, tblB, tblB, tblA, tblA, 0, tblB, tblB);
     } else {
-        status = TDbCompilePerformOp(0, lbl_802B4828, &lbl_802FA8B0, tblA, tblB, tblB, tblA, tblA, (a != 1023) ? a : b,
+        key = (a == 1023) ? b : a;
+        status = TDbCompilePerformOp(0, lbl_802B4828, &lbl_802FA8B0, tblA, tblB, tblB, tblA, tblA, key,
                              tblA, 0, tblB, tblB);
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
@@ -1073,16 +1066,17 @@ int fn_8022D540(void)
     return result;
 }
 
-int fn_8022D5A4(int key, int mode)
+int DbLoadTeamDepthChart(int key, int mode)
 {
+    int result = 0;
     int tag = 0x54484344;
     int a, b, c, d;
-    int result;
-    unsigned int count = 0;
+    unsigned int count;
     if (mode == 1) {
         tag = 0x41474344;
     }
     lbl_802FA8B0.mUnknown4 = 0;
+    count = 0;
     do {
         result = TDbCompilePerformOp(0, lbl_802B48C4, &lbl_802FA8B0, tag, &a, tag, &b, tag, &c, tag, &d);
         if (result == 0) {
@@ -1204,7 +1198,7 @@ int fn_8022DA90(void **p)
     unsigned char found;
     int result = TDbCompilePerformOp(0, lbl_802B4EA0, &found);
     if (found == 0) {
-        result = fn_8022DB20();
+        result = DbResetGameInfo();
     }
     if (result == 0 && p != 0) {
         lbl_803EC06C = p[0];
@@ -1222,11 +1216,12 @@ void fn_8022DB08(void)
     lbl_803EC074 = 0;
 }
 
-int fn_8022DB20(void)
+int DbResetGameInfo(void)
 {
     int result;
+    void *pResult = 0;
 
-    result = TDbCompilePerformOp(0, lbl_802B4EC4, 999.99f, 999.99f, 15, 2047, 15, 127, 127, 127, -1, 1023, 63, 63, 4, 3,
+    result = TDbCompilePerformOp(pResult, lbl_802B4EC4, 999.99f, 999.99f, 15, 2047, 15, 127, 127, 127, -1, 1023, 63, 63, 4, 3,
                          255, 1023, 63, 63, 4, 3, 255, 1023, -1, 15, 1023, 15, 0, 0);
     lbl_803EC07C = 1023;
     lbl_803EC080 = 1023;
@@ -1536,12 +1531,12 @@ int fn_8022E560(void)
     return lbl_803EC080;
 }
 
-int fn_8022E568(void)
+int DbLoadConferenceIds(void)
 {
     struct QueryCursor cursor;
     struct QueryResult result;
     unsigned short i;
-    int status;
+    int status = 0;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -1577,12 +1572,12 @@ void fn_8022E694(void)
     }
 }
 
-int fn_8022E6CC(void)
+int DbLoadDivisionIds(void)
 {
     struct QueryCursor cursor;
     struct QueryResult result;
     unsigned short i;
-    int status;
+    int status = 0;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -1618,12 +1613,12 @@ void fn_8022E7FC(void)
     }
 }
 
-int fn_8022E834(void)
+int DbLoadTeamList(void)
 {
     struct QueryCursor cursor;
     struct QueryResult result;
     unsigned short i;
-    int status;
+    int status = 0;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
@@ -1681,11 +1676,11 @@ int fn_8022E9E4(void)
     if (lbl_803EC094 != 0) {
         fn_8022E96C();
     }
-    result = fn_8022E568();
+    result = DbLoadConferenceIds();
     if (result == 0) {
-        result = fn_8022E6CC();
+        result = DbLoadDivisionIds();
         if (result == 0) {
-            result = fn_8022E834();
+            result = DbLoadTeamList();
         }
     }
     return result;

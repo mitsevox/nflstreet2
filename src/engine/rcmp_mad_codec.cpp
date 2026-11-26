@@ -30,7 +30,7 @@ struct MadListNode {
     }
 };
 
-/* Decoded MAD frame (0x14 bytes; NASCAR 2005 MAD_FRAME): the frame record, a list node at +8
+/* Decoded MAD frame (0x14 bytes): the frame record, a list node at +8
    and a use count. */
 struct MadFrame : public RcmpFrame_t, public MadListNode {
     int mRefs;
@@ -87,7 +87,8 @@ struct MadFrameList : public MadListNode {
 
 };
 
-/* MAD codec state (0x34 bytes; NASCAR 2005 MAD_CODEC_INTERNAL). */
+/* MAD codec state (0x34 bytes): frame rate, picture size, current frame, the used and free frame
+   lists and the decoder that feeds it chunks. */
 class MadCodec : public RcmpCodec {
 public:
     float mFrameRate;

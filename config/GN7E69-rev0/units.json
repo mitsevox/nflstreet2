@@ -1871,7 +1871,7 @@
     {
       "source": "src/engine/rcmp_mad_codec.cpp",
       "profile": "rcmp_cxx",
-      "evidence": "evidence.tsv unit row 0x801D9A88-0x801DA4F8 (src/engine/rcmp_mad_codec.cpp), its compiler, function, name and data rows. The whole file links: .text 0x801D9A88-0x801DA4F8 and its .rodata 0x802AFFA8-0x802B0054 (two strings, the frame-rate constants and the MadCodec and RcmpCodec virtual tables).",
+      "evidence": "evidence.tsv unit row 0x801D9A88-0x801DA4F8 (src/engine/rcmp_mad_codec.cpp), its compiler, function, name and data rows. The whole file links: .text 0x801D9A88-0x801DA4F8 and its .rodata 0x802AFFA8-0x802B0050 (two strings, the frame-rate constants and the MadCodec and RcmpCodec virtual tables).",
       "sections": [
         {
           "section": ".text",
@@ -27935,55 +27935,13 @@
     },
     {
       "source": "src/engine/cu_8022C9A8.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_8022C9A8.c (0x8022C9A8-0x8022EA74) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 59 of 66 functions exact, the 7 holdouts keep the original bytes.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row of src/engine/cu_8022C9A8.c (0x8022C9A8-0x8022EA74), its function rows and the data row of its .rodata 0x802B5078-0x802B5080; the whole file links: all 66 functions exact.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022C9A8",
-          "end": "0x8022C9B8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022CADC",
-          "end": "0x8022D418"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022D540",
-          "end": "0x8022D5A4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022D6E8",
-          "end": "0x8022DB20"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022DBF4",
-          "end": "0x8022E568"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022E694",
-          "end": "0x8022E6CC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022E7FC",
-          "end": "0x8022E834"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022E96C",
           "end": "0x8022EA74"
         },
         {
@@ -27992,40 +27950,7 @@
           "start": "0x802B5078",
           "end": "0x802B5080"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "fn_8022C9B8",
-            "evidence": "evidence.tsv source-form 0x8022C9B8-0x8022CADC"
-          },
-          {
-            "function": "fn_8022D418",
-            "evidence": "evidence.tsv source-form 0x8022D418-0x8022D540"
-          },
-          {
-            "function": "fn_8022D5A4",
-            "evidence": "evidence.tsv source-form 0x8022D5A4-0x8022D6E8"
-          },
-          {
-            "function": "fn_8022DB20",
-            "evidence": "evidence.tsv source-form 0x8022DB20-0x8022DBF4"
-          },
-          {
-            "function": "fn_8022E568",
-            "evidence": "evidence.tsv source-form 0x8022E568-0x8022E694"
-          },
-          {
-            "function": "fn_8022E6CC",
-            "evidence": "evidence.tsv source-form 0x8022E6CC-0x8022E7FC"
-          },
-          {
-            "function": "fn_8022E834",
-            "evidence": "evidence.tsv source-form 0x8022E834-0x8022E96C"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_8022C9A8.c holds out fn_8022C9B8, fn_8022D418, fn_8022D5A4, fn_8022DB20, fn_8022E568, fn_8022E6CC, fn_8022E834."
-      }
+      ]
     },
     {
       "source": "src/game/cu_80196F48.cpp",
@@ -28152,7 +28077,7 @@
     {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/PJoyDrvr.c (0x801E1D44-0x801E274C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 6 functions exact, the 1 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/PJoyDrvr.c (0x801E1D44-0x801E274C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 6 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28186,7 +28111,7 @@
     {
       "source": "src/engine/cu_801C3EFC.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801C3EFC.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/cu_801C3EFC.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28220,7 +28145,7 @@
     {
       "source": "src/engine/splytree.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 15 functions exact, the 4 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 11 of 15 functions exact, the 4 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28356,7 +28281,7 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 21 of 37 functions exact, the 16 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 21 of 37 functions exact, the 16 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",

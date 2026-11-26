@@ -3,7 +3,7 @@
 
 #include "engine/MovieRcmpInfo.h"
 
-/* Movie player records shared by 0x801D86B4-0x801D94A0 (NASCAR 2005 moviercmp.cpp)
+/* Movie player records shared by 0x801D86B4-0x801D94A0 (moviercmp.cpp)
    and 0x801D94A0-0x801D9634 (llmoviercmp.cpp). */
 
 /* Decoded frame image: a header followed by the Y, U and V planes. */
@@ -40,7 +40,7 @@ typedef struct MovieRcmpAudioInfo_t {
     char mPad21[3];
 } MovieRcmpAudioInfo_t;
 
-/* Allocator hooks every RCMP object allocates through (0x10 bytes; NASCAR 2005 RCMP::RCMP_SYSTEM);
+/* Allocator hooks every RCMP object allocates through (0x10 bytes);
    MovieRcmpInitVideo installs them in the single instance gRcmpSystem. */
 class RcmpSystem {
 public:
@@ -86,7 +86,7 @@ class RcmpDecoder;
 typedef void (*RcmpGetChunkFunc_t)(RcmpDecoder *pDecoder, void *pStreamer, RcmpChunk_t **ppChunk);
 typedef void (*RcmpReleaseChunkFunc_t)(RcmpDecoder *pDecoder, void *pStreamer, RcmpChunk_t *pChunk);
 
-/* Chunk source handed to a decoder (0x10 bytes; NASCAR 2005 RCMP::CODEC_IDATA). */
+/* Chunk source handed to a decoder (0x10 bytes). */
 struct RcmpCodecIData_t {
     void *mpStreamer;
     RcmpGetChunkFunc_t mGet;
@@ -97,7 +97,7 @@ struct RcmpCodecIData_t {
     RcmpCodecIData_t(void *pStreamer, RcmpGetChunkFunc_t get, RcmpReleaseChunkFunc_t release, unsigned int count);
 };
 
-/* Codec interface (NASCAR 2005 RCMP::CODEC): a decoder for one movie format, chosen by the
+/* Codec interface: a decoder for one movie format, chosen by the
    decoder from a movie's first chunk. Its table holds the destructor and five pure functions. */
 class RcmpCodec {
 public:
@@ -114,7 +114,7 @@ public:
     virtual void ReleaseFrame(RcmpFrame_t *pFrame) = 0;
 };
 
-/* Frame decoder (0x1C bytes; NASCAR 2005 RCMP::DECODER): hands the codec chosen for a movie its
+/* Frame decoder (0x1C bytes): hands the codec chosen for a movie its
    chunks and passes frame requests on to it. Its virtual table pointer follows the data at +0x18. */
 class RcmpDecoder {
 public:
