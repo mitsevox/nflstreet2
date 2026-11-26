@@ -187,7 +187,7 @@ int StoreGetItem(int index, int id, int byRow, int *pId, int *pPrice,
     return result;
 }
 
-static int StoreGetStringById(int id, char *pName, int nameSize)
+static int _StoreGetStringById(int id, char *pName, int nameSize)
 {
     char name[36];
     int result = 0;

@@ -4279,7 +4279,7 @@
     {
       "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded _StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4359,9 +4359,9 @@
       },
       "link_roots": {
         "discarded": [
-          "StoreGetStringById"
+          "_StoreGetStringById"
         ],
-        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (StoreGetStringById, discarded; only its query string survives)"
+        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (_StoreGetStringById, discarded; only its query string survives)"
       }
     },
     {
