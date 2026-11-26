@@ -99,7 +99,7 @@ typedef struct UISString_t {
 } UISStringT;
 
 /* A loaded screen file; its pointer fields hold file offsets until
-   PatchScrData (0x8021861C) turns them into pointers. */
+   0x8021861C turns them into pointers. */
 typedef struct UISScreenData_t {
     Uint32 NumControls;      /* 0x00 */
     UISControlT *pControls;  /* 0x04 */
@@ -141,7 +141,7 @@ typedef union UISThreadAction_t {
     Int32 Words[4];
 } UISThreadActionT;
 
-/* The global script's screen record (laid out as UISScreenT; UISInit fills it). */
+/* The global script's screen record (laid out as UISScreenT; 0x802188D4 fills it). */
 typedef struct UISCursor_t {
     Int32 unk_00;               /* 0x00 */
     Uint16 GroupID;             /* 0x04 */
@@ -223,7 +223,7 @@ typedef struct UISActionStack_t {
     Int32 *pTop;   /* 0x04 */
 } UISActionStackT;
 
-#define UIS_MAGIC 0x5549535F /* "UIS_", stored by UISInit */
+#define UIS_MAGIC 0x5549535F /* "UIS_", stored by 0x802188D4 */
 
 typedef struct UISInfo_t {
     Int32 unk_00;                   /* 0x00: UIS_MAGIC once set up */
