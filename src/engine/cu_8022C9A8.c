@@ -1,4 +1,6 @@
-/* Partial source for several game-database modules (player lists, depth charts, game info, conference and division lists) not yet cut into their files. */
+/* Four game-database modules not yet cut into their files: the 'USLP' player-slot list, the
+   'THCD' depth chart, the 'FNIG' game-info record and the conference, division and team id
+   lists. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
