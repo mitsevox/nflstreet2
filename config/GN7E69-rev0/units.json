@@ -1984,6 +1984,38 @@
       }
     },
     {
+      "source": "src/game/cu_8018C344.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/cu_8018C344.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; the .rodata linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018C3EC",
+          "end": "0x8018C48C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA1FC",
+          "end": "0x802AA334"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8018C344",
+            "evidence": "evidence.tsv source-form 0x8018C344-0x8018C3EC"
+          },
+          {
+            "function": "fn_8018C48C",
+            "evidence": "evidence.tsv source-form 0x8018C48C-0x8018C688"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
+      }
+    },
+    {
       "source": "src/game/Loading.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80193FB0-0x80194B6C (src/game/Loading.cpp) and its data rows.",
