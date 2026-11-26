@@ -108,8 +108,7 @@ void _UIGArcBuildFan(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors, 
         if (pNode->Flags & 0x20) {
             pColors->a = (Float32)(pNode->u.t.unk_10 - i) / (Uint32)pNode->u.t.unk_10 * (Uint32)Color0.a;
             pColors->a += (Float32)i / (Uint32)pNode->u.t.unk_10 * (Uint32)Color1.a;
-            // FAKEMATCH: the flag test reads the node's first word (lwz/rlwinm) where Flags is a halfword
-            if ((*(Uint32 *)pNode & 0x60000) != 0x40000) {
+            if ((pNode->Flags & 6) != 4) {
                 pColors->r = (Float32)(pNode->u.t.unk_10 - i) / (Uint32)pNode->u.t.unk_10 * (Uint32)Color0.r;
                 pColors->r += (Float32)i / (Uint32)pNode->u.t.unk_10 * (Uint32)Color1.r;
                 pColors->g = (Float32)(pNode->u.t.unk_10 - i) / (Uint32)pNode->u.t.unk_10 * (Uint32)Color0.g;
@@ -363,6 +362,8 @@ void UIGArcObjAction(UIGNode_t *pNode, Uint32 Action, Int32 a, void *pData)
     case -3:
         _UIGArcUnload(pNode);
         break;
+    /* FAKEMATCH: the empty case -4 leaves no compare in the target; it only roots the decision
+       tree at -2 as in the target (cmpwi r30,-2 at 0x80225670; without it 97.44%) */
     case -4:
         break;
     }
