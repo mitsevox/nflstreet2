@@ -1,3 +1,9 @@
+/* Shops of create-a-player: the player picks a shop (Reebok Store,
+   Barbershop, Department Store, Jewelry Store, Screen Printing, Sporting
+   Goods, Tattoo Parlor), then a category, then an item priced in points.
+   The highlighted item is previewed on the two player models over the
+   player's saved look, and buying it spends the user's points. */
+
 #include <string.h>
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -5,33 +11,31 @@
 #include "game/fn_8021D7B8.h"
 #include "game/EditMenu.h"
 
-/* lbl_8036AD78: fourteen words copied from the record filled by PlayerDbReadGear. */
-struct Record_8036AD78 {
-    int mUnknown0[14];
+struct ShopSavedLook_t {
+    int mGear[14];
 };
 
 
-/* Object returned by fn_8000EC44. */
-struct Record_8036AD28 {
-    Record_8036AD28();
-    ~Record_8036AD28();
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    int mUnknown12;
-    DbCursor mUnknown16;
+struct ShopState {
+    ShopState();
+    ~ShopState();
+    int mPrice;
+    int mCategory;
+    unsigned char mBought;
+    int mPlayerId;
+    DbCursor mHairCursor;
 };
 
-inline Record_8036AD28 *fn_8000EC44()
+inline ShopState *ShopGetState()
 {
-    static Record_8036AD28 sRecord;
+    static ShopState sRecord;
     return &sRecord;
 }
 
-inline Record_8036AD28::Record_8036AD28() {}
-inline Record_8036AD28::~Record_8036AD28() {}
+inline ShopState::ShopState() {}
+inline ShopState::~ShopState() {}
 
-class Class_8000F540 : public MenuListScreen {
+class ShopStoreMenu : public MenuListScreen {
 public:
     virtual void Enter(int a, int *pCount, int *pOut);
     virtual int Leave(int a, int b, void **pOut);
@@ -54,7 +58,7 @@ public:
     char mUnknown4[4];
 };
 
-class Class_8000F500 : public MenuScreen {
+class ShopItemList : public MenuScreen {
 public:
     virtual void Enter(int a, int *pCount, int *pOut);
     virtual int Leave(int a, int b, void **pOut);
@@ -63,12 +67,12 @@ public:
     virtual void GetItem(int id, MenuEntry_t *pOut);
 
     char mUnknown4[4];
-    int mUnknown8;
+    int mCategory;
     char mUnknown12[4];
-    unsigned char mUnknown16;
+    unsigned char mOutOfStock;
 };
 
-class Class_8000F4B0 : public MenuListScreen {
+class ShopDepartmentMenu : public MenuListScreen {
 public:
     virtual int Leave(int a, int b, void **pOut);
     virtual void GetItem(int id, MenuEntry_t *pOut);
@@ -90,7 +94,7 @@ public:
     char mUnknown4[4];
 };
 
-class Class_8000F460 : public MenuListScreen {
+class ShopSportingGoodsMenu : public MenuListScreen {
 public:
     virtual int Leave(int a, int b, void **pOut);
     virtual void GetItem(int id, MenuEntry_t *pOut);
@@ -112,7 +116,7 @@ public:
     char mUnknown4[4];
 };
 
-class Class_8000F410 : public MenuListScreen {
+class ShopScreenPrintingMenu : public MenuListScreen {
 public:
     virtual int Leave(int a, int b, void **pOut);
     virtual void GetItem(int id, MenuEntry_t *pOut);
@@ -129,7 +133,7 @@ public:
     char mUnknown4[4];
 };
 
-class Class_8000F3C0 : public MenuListScreen {
+class ShopTattooMenu : public MenuListScreen {
 public:
     virtual int Leave(int a, int b, void **pOut);
     virtual void GetItem(int id, MenuEntry_t *pOut);
@@ -147,7 +151,7 @@ public:
     char mUnknown4[4];
 };
 
-class Class_8000F370 : public MenuListScreen {
+class ShopJewelryMenu : public MenuListScreen {
 public:
     virtual int Leave(int a, int b, void **pOut);
     virtual void GetItem(int id, MenuEntry_t *pOut);
@@ -164,45 +168,45 @@ public:
     char mUnknown4[4];
 };
 
-inline Class_8000F500 *fn_8000ED34()
+inline ShopItemList *ShopGetItemList()
 {
-    static Class_8000F500 sInstance;
+    static ShopItemList sInstance;
     return &sInstance;
 }
 
-inline Class_8000F4B0 *fn_8000ED64()
+inline ShopDepartmentMenu *ShopGetDepartmentMenu()
 {
-    static Class_8000F4B0 sInstance;
+    static ShopDepartmentMenu sInstance;
     return &sInstance;
 }
 
-inline Class_8000F410 *fn_8000ED8C()
+inline ShopScreenPrintingMenu *ShopGetScreenPrintingMenu()
 {
-    static Class_8000F410 sInstance;
+    static ShopScreenPrintingMenu sInstance;
     return &sInstance;
 }
 
-inline Class_8000F460 *fn_8000EDB4()
+inline ShopSportingGoodsMenu *ShopGetSportingGoodsMenu()
 {
-    static Class_8000F460 sInstance;
+    static ShopSportingGoodsMenu sInstance;
     return &sInstance;
 }
 
-inline Class_8000F3C0 *fn_8000EDDC()
+inline ShopTattooMenu *ShopGetTattooMenu()
 {
-    static Class_8000F3C0 sInstance;
+    static ShopTattooMenu sInstance;
     return &sInstance;
 }
 
-inline Class_8000F370 *fn_8000EE04()
+inline ShopJewelryMenu *ShopGetJewelryMenu()
 {
-    static Class_8000F370 sInstance;
+    static ShopJewelryMenu sInstance;
     return &sInstance;
 }
 
-inline Class_8000F540 *fn_8000EE2C()
+inline ShopStoreMenu *ShopGetStoreMenu()
 {
-    static Class_8000F540 sInstance;
+    static ShopStoreMenu sInstance;
     return &sInstance;
 }
 
@@ -250,11 +254,11 @@ void EditMenuHidePlayers(void);
 int DbUserGetCurrent(void);
 }
 
-static const int lbl_8000F590[] = {
+static const int _Shop_aCategorySlots[] = {
     10, 0, 10, 8, 1, 11, 11, 2, 3, 4, 5, 6, 9, 10, 14, 14, 12, 13, 14, 14, 14, 14, 14,
 };
 
-static const PlayerLayout_t lbl_8000F5EC[] = {
+static const PlayerLayout_t _Shop_aCategoryLayouts[] = {
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
     { 23.0f, 975.0f, 0.0f, 338.0f, 3.1f, 15, 0 },
     { 0.0f, 255.0f, 0.0f, 348.0f, 0.9f, 15, 0 },
@@ -280,62 +284,62 @@ static const PlayerLayout_t lbl_8000F5EC[] = {
     { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 1 },
 };
 
-static int lbl_803EB948 = -1;
-static int lbl_803EB94C = 0;
-static int _Appear_iSavedHairStyle;
-static int _Appear_iLastItem;
-static Record_8036AD78 lbl_8036AD78;
+static int _Shop_iPreviewLogo = -1;
+static int _Shop_iMannequinPads = 0;
+static int _Shop_iSavedHairStyle;
+static int _Shop_iLastStore;
+static ShopSavedLook_t _Shop_sSavedLook;
 
-static void fn_8000E70C();
-static void fn_8000E744(char *a, const char *b, const char *c);
-static void fn_8000E784(Record_8036AD78 *pOut);
-static void fn_8000E834(Record_8036AD78 *pRecord);
-static void fn_8000E8FC(int index, int value);
+static void _ShopResetView();
+static void _ShopSetTexts(char *a, const char *b, const char *c);
+static void _ShopSaveLook(ShopSavedLook_t *pOut);
+static void _ShopRestoreLook(ShopSavedLook_t *pRecord);
+static void _ShopPreviewItem(int index, int value);
 
-void Class_8000F500::Enter(int a, int *pCount, int *pOut)
+void ShopItemList::Enter(int a, int *pCount, int *pOut)
 {
-    fn_8000EC44()->mUnknown0 = -1;
+    ShopGetState()->mPrice = -1;
     fn_80087704();
-    fn_8000E70C();
-    fn_8000E784(&lbl_8036AD78);
-    lbl_803EB94C = GearDbFindIdByGbst(9, "MANNEQUINSHIRTPADS");
-    *pCount = fn_800872E8(mUnknown8);
+    _ShopResetView();
+    _ShopSaveLook(&_Shop_sSavedLook);
+    _Shop_iMannequinPads = GearDbFindIdByGbst(9, "MANNEQUINSHIRTPADS");
+    *pCount = fn_800872E8(mCategory);
     if (*pCount == 0) {
-        mUnknown16 = 1;
+        mOutOfStock = 1;
         *pCount = 1;
     } else {
-        mUnknown16 = 0;
+        mOutOfStock = 0;
     }
     *pOut = 0;
-    lbl_803EB948 = -1;
-    EditMenuMovePlayers(&lbl_8000F5EC[mUnknown8]);
+    _Shop_iPreviewLogo = -1;
+    EditMenuMovePlayers(&_Shop_aCategoryLayouts[mCategory]);
 }
 
-int Class_8000F500::Leave(int a, int b, void **pOut)
+int ShopItemList::Leave(int a, int b, void **pOut)
 {
     int result = -1;
 
-    fn_8000E834(&lbl_8036AD78);
+    _ShopRestoreLook(&_Shop_sSavedLook);
     FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
     FEPlyrRequestSwap();
     fn_800876C0();
-    fn_8000EC44()->mUnknown0 = 0;
+    ShopGetState()->mPrice = 0;
     EditMenuMovePlayers(0);
-    lbl_803EB948 = result;
+    _Shop_iPreviewLogo = result;
     return result;
 }
 
-void Class_8000F500::GetItemId(int index, int *pOut)
+void ShopItemList::GetItemId(int index, int *pOut)
 {
     *pOut = index;
 }
 
-void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
+void ShopItemList::GetItem(int id, MenuEntry_t *pOut)
 {
     pOut->mUnknown36 = id;
     pOut->mUnknown4 = 6;
     pOut->mId = id;
-    if (mUnknown16) {
+    if (mOutOfStock) {
         pOut->mUnknown30 = 0;
         pOut->mUnknown40 = 0;
         strncpy(pOut->mName, "Out of Stock", 22);
@@ -344,8 +348,8 @@ void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
         int price;
 
         pOut->mUnknown40 = 0;
-        fn_8008731C(mUnknown8, id, &item, &price, pOut->mName, 22);
-        if (!fn_8008736C(mUnknown8, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
+        fn_8008731C(mCategory, id, &item, &price, pOut->mName, 22);
+        if (!fn_8008736C(mCategory, item) || UserInfoGetPoints(DbUserGetCurrent()) < price) {
             pOut->mUnknown30 = 0;
         } else {
             pOut->mUnknown30 = 1;
@@ -353,407 +357,407 @@ void Class_8000F500::GetItem(int id, MenuEntry_t *pOut)
     }
 }
 
-void Class_8000F500::Highlight(int id)
+void ShopItemList::Highlight(int id)
 {
-    if (mUnknown16) {
-        fn_8000EC44()->mUnknown0 = -1;
+    if (mOutOfStock) {
+        ShopGetState()->mPrice = -1;
     } else {
         int item;
         int price;
 
-        fn_8008731C(mUnknown8, id, &item, &price, 0, 0);
-        fn_8000E8FC(mUnknown8, item);
-        if (fn_8008736C(mUnknown8, item)) {
+        fn_8008731C(mCategory, id, &item, &price, 0, 0);
+        _ShopPreviewItem(mCategory, item);
+        if (fn_8008736C(mCategory, item)) {
             if (price == 0) {
-                fn_8000EC44()->mUnknown0 = -2;
+                ShopGetState()->mPrice = -2;
             } else {
-                fn_8000EC44()->mUnknown0 = price;
+                ShopGetState()->mPrice = price;
             }
         } else {
-            fn_8000EC44()->mUnknown0 = -1;
+            ShopGetState()->mPrice = -1;
         }
         fn_8021D7B8(gUISMainInfo, 0x8000007E, 0, 0);
     }
 }
 
-void Class_8000F540::Enter(int a, int *pCount, int *pOut)
+void ShopStoreMenu::Enter(int a, int *pCount, int *pOut)
 {
     MenuListScreen::Enter(a, pCount, pOut);
-    fn_8000EC44()->mUnknown0 = 0;
+    ShopGetState()->mPrice = 0;
     fn_80087704();
     if (a == 1) {
         int value;
 
-        fn_8000EC44()->mUnknown8 = 0;
+        ShopGetState()->mBought = 0;
         EditMenuShowPlayers();
-        HairListOpen(&fn_8000EC44()->mUnknown16);
+        HairListOpen(&ShopGetState()->mHairCursor);
         DbCursorFirst((DbCursor *)EditMenuGetPlayerCursor());
         value = PlayerDbGetId(EditMenuGetPlayerCursor());
-        fn_8000EC44()->mUnknown12 = value;
+        ShopGetState()->mPlayerId = value;
         PlayerDbSeekId(EditMenuGetPlayerCursor(), value, 0);
         FEPlyrSetPlayer(FEPlyrGetBackIndex(), value, 1);
         FEPlyrSetPlayer(FEPlyrGetFrontIndex(), value, 1);
         FEPlyrLoadSetScaleRamp(0);
     }
     *pCount = 7;
-    *pOut = _Appear_iLastItem;
+    *pOut = _Shop_iLastStore;
 }
 
-void Class_8000F540::GetItem(int id, MenuEntry_t *pOut)
+void ShopStoreMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-void Class_8000F4B0::GetItem(int id, MenuEntry_t *pOut)
+void ShopDepartmentMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-void Class_8000F410::GetItem(int id, MenuEntry_t *pOut)
+void ShopScreenPrintingMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-void Class_8000F460::GetItem(int id, MenuEntry_t *pOut)
+void ShopSportingGoodsMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-void Class_8000F3C0::GetItem(int id, MenuEntry_t *pOut)
+void ShopTattooMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-void Class_8000F370::GetItem(int id, MenuEntry_t *pOut)
+void ShopJewelryMenu::GetItem(int id, MenuEntry_t *pOut)
 {
     MenuListScreen::GetItem(id, pOut);
     pOut->mUnknown40 = 0;
     pOut->mUnknown30 = 1;
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-int Class_8000F540::Leave(int a, int b, void **pOut)
+int ShopStoreMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b) {
         EditMenuHidePlayers();
         result = -1;
-        HairListClose(&fn_8000EC44()->mUnknown16);
-        fn_8000EC44()->mUnknown12 = result;
-        fn_8000EC44()->mUnknown0 = 0;
+        HairListClose(&ShopGetState()->mHairCursor);
+        ShopGetState()->mPlayerId = result;
+        ShopGetState()->mPrice = 0;
     } else {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            _Appear_iLastItem = a;
-            pItems = fn_8000ED34();
+            _Shop_iLastStore = a;
+            pItems = ShopGetItemList();
             result = 1;
             *pOut = pItems;
-            pItems->mUnknown8 = 22;
-            fn_8000EC44()->mUnknown4 = 22;
+            pItems->mCategory = 22;
+            ShopGetState()->mCategory = 22;
             break;
         case 1:
-            _Appear_iLastItem = a;
-            pItems = fn_8000ED34();
+            _Shop_iLastStore = a;
+            pItems = ShopGetItemList();
             result = 1;
             *pOut = pItems;
-            pItems->mUnknown8 = 18;
-            fn_8000EC44()->mUnknown4 = 18;
+            pItems->mCategory = 18;
+            ShopGetState()->mCategory = 18;
             break;
         case 2:
-            _Appear_iLastItem = 2;
+            _Shop_iLastStore = 2;
             result = 1;
-            *pOut = fn_8000ED64();
+            *pOut = ShopGetDepartmentMenu();
             break;
         case 4:
-            _Appear_iLastItem = 4;
+            _Shop_iLastStore = 4;
             result = 1;
-            *pOut = fn_8000ED8C();
+            *pOut = ShopGetScreenPrintingMenu();
             break;
         case 5:
-            _Appear_iLastItem = a;
+            _Shop_iLastStore = a;
             result = 1;
-            *pOut = fn_8000EDB4();
+            *pOut = ShopGetSportingGoodsMenu();
             break;
         case 6:
-            _Appear_iLastItem = a;
+            _Shop_iLastStore = a;
             result = 1;
-            *pOut = fn_8000EDDC();
+            *pOut = ShopGetTattooMenu();
             break;
         case 3:
-            _Appear_iLastItem = a;
+            _Shop_iLastStore = a;
             result = 1;
-            *pOut = fn_8000EE04();
+            *pOut = ShopGetJewelryMenu();
             break;
         }
     }
     return result;
 }
 
-int Class_8000F4B0::Leave(int a, int b, void **pOut)
+int ShopDepartmentMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 1;
-            fn_8000EC44()->mUnknown4 = 1;
+            pItems->mCategory = 1;
+            ShopGetState()->mCategory = 1;
             return 1;
         case 1:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 4;
-            fn_8000EC44()->mUnknown4 = 4;
+            pItems->mCategory = 4;
+            ShopGetState()->mCategory = 4;
             return 1;
         case 2:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 0;
-            fn_8000EC44()->mUnknown4 = 0;
+            pItems->mCategory = 0;
+            ShopGetState()->mCategory = 0;
             return 1;
         case 3:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 2;
-            fn_8000EC44()->mUnknown4 = 2;
+            pItems->mCategory = 2;
+            ShopGetState()->mCategory = 2;
             return 1;
         case 4:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 5;
-            fn_8000EC44()->mUnknown4 = 5;
+            pItems->mCategory = 5;
+            ShopGetState()->mCategory = 5;
             return 1;
         case 5:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 6;
-            fn_8000EC44()->mUnknown4 = 6;
+            pItems->mCategory = 6;
+            ShopGetState()->mCategory = 6;
             return 1;
         case 6:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 3;
-            fn_8000EC44()->mUnknown4 = 3;
+            pItems->mCategory = 3;
+            ShopGetState()->mCategory = 3;
             return 1;
         }
     }
     return result;
 }
 
-int Class_8000F460::Leave(int a, int b, void **pOut)
+int ShopSportingGoodsMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 13;
-            fn_8000EC44()->mUnknown4 = 13;
+            pItems->mCategory = 13;
+            ShopGetState()->mCategory = 13;
             break;
         case 1:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 7;
-            fn_8000EC44()->mUnknown4 = 7;
+            pItems->mCategory = 7;
+            ShopGetState()->mCategory = 7;
             break;
         case 2:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 8;
-            fn_8000EC44()->mUnknown4 = 8;
+            pItems->mCategory = 8;
+            ShopGetState()->mCategory = 8;
             break;
         case 3:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 9;
-            fn_8000EC44()->mUnknown4 = 9;
+            pItems->mCategory = 9;
+            ShopGetState()->mCategory = 9;
             break;
         case 4:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 10;
-            fn_8000EC44()->mUnknown4 = 10;
+            pItems->mCategory = 10;
+            ShopGetState()->mCategory = 10;
             FEPlyrSetPose(0, 8);
             FEPlyrSetPose(1, 8);
             break;
         case 5:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 11;
-            fn_8000EC44()->mUnknown4 = 11;
+            pItems->mCategory = 11;
+            ShopGetState()->mCategory = 11;
             FEPlyrSetPose(0, 8);
             FEPlyrSetPose(1, 8);
             break;
         case 6:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
             result = 1;
-            pItems->mUnknown8 = 12;
-            fn_8000EC44()->mUnknown4 = 12;
+            pItems->mCategory = 12;
+            ShopGetState()->mCategory = 12;
             break;
         }
     }
     return result;
 }
 
-int Class_8000F410::Leave(int a, int b, void **pOut)
+int ShopScreenPrintingMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 14;
-            fn_8000EC44()->mUnknown4 = 14;
+            pItems->mCategory = 14;
+            ShopGetState()->mCategory = 14;
             return 1;
         case 1:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 15;
-            fn_8000EC44()->mUnknown4 = 15;
+            pItems->mCategory = 15;
+            ShopGetState()->mCategory = 15;
             return 1;
         }
     }
     return result;
 }
 
-int Class_8000F3C0::Leave(int a, int b, void **pOut)
+int ShopTattooMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 19;
-            fn_8000EC44()->mUnknown4 = 19;
+            pItems->mCategory = 19;
+            ShopGetState()->mCategory = 19;
             return 1;
         case 2:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 20;
-            fn_8000EC44()->mUnknown4 = 20;
+            pItems->mCategory = 20;
+            ShopGetState()->mCategory = 20;
             return 1;
         case 1:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 21;
-            fn_8000EC44()->mUnknown4 = 21;
+            pItems->mCategory = 21;
+            ShopGetState()->mCategory = 21;
             return 1;
         }
     }
     return result;
 }
 
-int Class_8000F370::Leave(int a, int b, void **pOut)
+int ShopJewelryMenu::Leave(int a, int b, void **pOut)
 {
     int result = MenuListScreen::Leave(a, b, pOut);
 
     if (b == 0) {
-        Class_8000F500 *pItems;
+        ShopItemList *pItems;
 
         switch (a) {
         case 0:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 16;
-            fn_8000EC44()->mUnknown4 = 16;
+            pItems->mCategory = 16;
+            ShopGetState()->mCategory = 16;
             return 1;
         case 1:
-            pItems = fn_8000ED34();
+            pItems = ShopGetItemList();
             *pOut = pItems;
-            pItems->mUnknown8 = 17;
-            fn_8000EC44()->mUnknown4 = 17;
+            pItems->mCategory = 17;
+            ShopGetState()->mCategory = 17;
             return 1;
         }
     }
     return result;
 }
 
-static void fn_8000E70C()
+static void _ShopResetView()
 {
     EditMenuSetView(900);
-    fn_8000E744("", "", "");
+    _ShopSetTexts("", "", "");
 }
 
-static void fn_8000E744(char *a, const char *b, const char *c)
+static void _ShopSetTexts(char *a, const char *b, const char *c)
 {
     EditMenuSetName(a);
     EditMenuSetHeading(b);
     EditMenuSetItemName(c);
 }
 
-static void fn_8000E784(Record_8036AD78 *pOut)
+static void _ShopSaveLook(ShopSavedLook_t *pOut)
 {
     PlayerGear_t record;
 
     PlayerDbReadGear(EditMenuGetPlayerCursor(), &record);
-    pOut->mUnknown0[0] = record.mValues[0];
-    pOut->mUnknown0[1] = record.mValues[1];
-    pOut->mUnknown0[2] = record.mValues[2];
-    pOut->mUnknown0[3] = record.mValues[3];
-    pOut->mUnknown0[4] = record.mValues[4];
-    pOut->mUnknown0[5] = record.mValues[5];
-    pOut->mUnknown0[6] = record.mValues[6];
-    pOut->mUnknown0[7] = record.mValues[7];
-    pOut->mUnknown0[8] = record.mValues[8];
-    pOut->mUnknown0[9] = record.mValues[9];
-    pOut->mUnknown0[10] = record.mValues[10];
-    pOut->mUnknown0[11] = record.mValues[11];
-    pOut->mUnknown0[12] = record.mValues[12];
-    pOut->mUnknown0[13] = record.mValues[13];
-    _Appear_iSavedHairStyle = PlayerDbGetHairStyle(EditMenuGetPlayerCursor());
+    pOut->mGear[0] = record.mValues[0];
+    pOut->mGear[1] = record.mValues[1];
+    pOut->mGear[2] = record.mValues[2];
+    pOut->mGear[3] = record.mValues[3];
+    pOut->mGear[4] = record.mValues[4];
+    pOut->mGear[5] = record.mValues[5];
+    pOut->mGear[6] = record.mValues[6];
+    pOut->mGear[7] = record.mValues[7];
+    pOut->mGear[8] = record.mValues[8];
+    pOut->mGear[9] = record.mValues[9];
+    pOut->mGear[10] = record.mValues[10];
+    pOut->mGear[11] = record.mValues[11];
+    pOut->mGear[12] = record.mValues[12];
+    pOut->mGear[13] = record.mValues[13];
+    _Shop_iSavedHairStyle = PlayerDbGetHairStyle(EditMenuGetPlayerCursor());
 }
 
-static void fn_8000E834(Record_8036AD78 *pRecord)
+static void _ShopRestoreLook(ShopSavedLook_t *pRecord)
 {
     DbCursor object;
     int i;
 
     for (i = 0; i <= 13; i++) {
-        FEPlyrSetPairSlot(i, pRecord->mUnknown0[i]);
+        FEPlyrSetPairSlot(i, pRecord->mGear[i]);
     }
-    PlayerLookSetHair(0, _Appear_iSavedHairStyle);
-    PlayerLookSetHair(1, _Appear_iSavedHairStyle);
+    PlayerLookSetHair(0, _Shop_iSavedHairStyle);
+    PlayerLookSetHair(1, _Shop_iSavedHairStyle);
     for (i = 0; i <= 2; i++) {
         PlayerLookSetPartVariant(0, i, 0);
         PlayerLookSetPartVariant(1, i, 0);
@@ -762,10 +766,10 @@ static void fn_8000E834(Record_8036AD78 *pRecord)
     PlayerLookSetFrontDecalKind(1, 0);
 }
 
-static void fn_8000E8FC(int index, int value)
+static void _ShopPreviewItem(int index, int value)
 {
-    fn_8000E834(&lbl_8036AD78);
-    if (lbl_8000F590[index] != 14 || index == 22) {
+    _ShopRestoreLook(&_Shop_sSavedLook);
+    if (_Shop_aCategorySlots[index] != 14 || index == 22) {
         DbCursor object;
         int a = 0;
         int b = 0;
@@ -789,7 +793,7 @@ static void fn_8000E8FC(int index, int value)
                 FEPlyrSetPairSlot(12, 1);
                 break;
             case 2:
-                FEPlyrSetPairSlot(10, lbl_803EB94C);
+                FEPlyrSetPairSlot(10, _Shop_iMannequinPads);
                 break;
             }
             FEPlyrSetPairSlot(c, a);
@@ -802,9 +806,9 @@ static void fn_8000E8FC(int index, int value)
             PlayerLookSetFrontDecalKind(1, value);
             break;
         case 15:
-            lbl_803EB948 = value + 45;
+            _Shop_iPreviewLogo = value + 45;
             PlayerLookSetLogo(0, value + 45);
-            PlayerLookSetLogo(1, lbl_803EB948);
+            PlayerLookSetLogo(1, _Shop_iPreviewLogo);
             PlayerLookSetFrontDecalKind(0, 5);
             PlayerLookSetFrontDecalKind(1, 5);
             break;
@@ -826,39 +830,39 @@ static void fn_8000E8FC(int index, int value)
     FEPlyrRequestSwap();
 }
 
-extern "C" Class_8000F540 *fn_8000EB3C()
+extern "C" ShopStoreMenu *ShopGetMenu()
 {
-    return fn_8000EE2C();
+    return ShopGetStoreMenu();
 }
 
-extern "C" unsigned int fn_8000EB5C()
+extern "C" unsigned int ShopGetPoints()
 {
     return UserInfoGetPoints(DbUserGetCurrent());
 }
 
-extern "C" int fn_8000EB80()
+extern "C" int ShopGetPrice()
 {
-    return fn_8000EC44()->mUnknown0;
+    return ShopGetState()->mPrice;
 }
 
-extern "C" void fn_8000EBA4(int id)
+extern "C" void ShopBuyItem(int id)
 {
     int item;
     int price;
     char buffer[8];
 
-    fn_8008731C(fn_8000EC44()->mUnknown4, id, &item, &price, buffer, 8);
-    fn_8000EC44()->mUnknown8 = 1;
-    fn_80087600(fn_8000EC44()->mUnknown4, item);
+    fn_8008731C(ShopGetState()->mCategory, id, &item, &price, buffer, 8);
+    ShopGetState()->mBought = 1;
+    fn_80087600(ShopGetState()->mCategory, item);
     UserInfoSpendPoints(DbUserGetCurrent(), price);
 }
 
-extern "C" unsigned char fn_8000EC14()
+extern "C" unsigned char ShopIsBought()
 {
-    return fn_8000EC44()->mUnknown8;
+    return ShopGetState()->mBought;
 }
 
-extern "C" int fn_8000EC38()
+extern "C" int ShopGetPreviewLogo()
 {
-    return lbl_803EB948 | 0x40000;
+    return _Shop_iPreviewLogo | 0x40000;
 }
