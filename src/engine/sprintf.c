@@ -130,7 +130,7 @@ static char *_WriteSci(float value, char *pOut, char *pEnd, int width, int preci
         exponent = -exponent;
     }
     if (precision) {
-        length = precision + (negative + 6);
+        length = 6 + negative + precision;
     } else {
         length = negative + 5;
     }
