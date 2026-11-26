@@ -2232,8 +2232,8 @@ int PhysCollisionHandler::IgnorePair(RigidBody *pA, RigidBody *pB)
 }
 
 extern "C" {
-void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
-                 unsigned int otherIndex, unsigned int count, BodyContact *pContacts, float step)
+void PhysPushPlayer(float step, RigidBody *pBody, unsigned int index, RigidBody *pOther,
+                 unsigned int otherIndex, unsigned int count, BodyContact *pContacts)
 {
     Object_80039F5C *p = PlyrObjsFindPlayer(((PhysBodyOwner_t *)pBody->mpOwner)->mpBlock);
     CollisionShape *pShape = pBody->mpShapes->GetShape(index);
@@ -2368,11 +2368,11 @@ int PhysCollisionHandler::OnContacts(float step, RigidBody *pA, RigidBody *pB, u
     if (a->mKind == 1 && b->mKind == 1) return 3;
     if (a->mKind != 6 && b->mKind != 6) {
         if (a->mKind == 1) {
-            if (b->mKind == 2 || b->mKind == 4) PhysPushPlayer(pA, 0, pB, pContacts[0].mShapeB, count, pContacts, step);
+            if (b->mKind == 2 || b->mKind == 4) PhysPushPlayer(step, pA, 0, pB, pContacts[0].mShapeB, count, pContacts);
             return 2;
         }
         if (b->mKind == 1) {
-            if (a->mKind == 2 || a->mKind == 4) PhysPushPlayer(pB, 0, pA, pContacts[0].mShapeA, count, pContacts, step);
+            if (a->mKind == 2 || a->mKind == 4) PhysPushPlayer(step, pB, 0, pA, pContacts[0].mShapeA, count, pContacts);
             return 1;
         }
     }
@@ -2648,9 +2648,10 @@ void PhysAddPlayers(void)
     Vector_80039F5C velocity, force, a, b, inertia;
     Quat_801EB488 rotation;
     Vector_80039F5C position = {0.0f, 0.0f, 3.0f};
+    unsigned int team = 0;
     Object_8008044C query;
     PlayerCursorOpenDefault(&query, 0);
-    for (unsigned int team = 0; team < 2; team++) {
+    for (; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
             float radius = 0.45f;
             Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, index);
