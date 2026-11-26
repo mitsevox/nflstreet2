@@ -32,6 +32,7 @@ void _AnimStOrganizeInfo(Collection_801BE594 *p)
         i = 0;
         while (i < count) {
             if (p->mUnknown4[i].mUnknown2 == 0) {
+                // FAKEMATCH: always true inside while (i < count); present only so the compiler emits the target's second i/count test before the inner loop.
                 if (i != count) {
                     for (j = i; j < count; j++) {
                         *(p->mUnknown4 + j) = *(p->mUnknown4 + j + 1);
