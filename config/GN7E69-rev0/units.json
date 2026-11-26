@@ -14805,12 +14805,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8011E7CC",
-          "end": "0x80120384"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8012055C",
           "end": "0x80121918"
         },
         {
@@ -15055,10 +15049,6 @@
           {
             "function": "fn_8011E484",
             "evidence": "evidence.tsv source-form 0x8011E484-0x8011E7CC"
-          },
-          {
-            "function": "fn_80120384",
-            "evidence": "evidence.tsv source-form 0x80120384-0x8012055C"
           },
           {
             "function": "fn_80121918",
