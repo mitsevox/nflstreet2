@@ -2261,7 +2261,7 @@ int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
         choice = 2;
         kind = 1;
         if (distance <= 0.0f || !(distance < 4.0f)) {
-            // FAKEMATCH: the unused clamp stands in for the target's dead test of this distance against 0.0f (0x800E8200), which keeps 0.0f in f31 across the call; the function stays a holdout.
+            // FAKEMATCH: the unused clamp stands in for the target's dead test of this distance against 0.0f (fcmpu at 0x800E8208), which keeps 0.0f in f31 across the call; the function stays a holdout.
             distance = fn_80178A2C() - p->mMotion.mPos.mY;
             if (distance < 0.0f) distance = 0.0f;
         }
