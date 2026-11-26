@@ -13,6 +13,7 @@
 typedef struct SndStreamRequest_t {
     SndLinkNode_t mLink;
     int mData;
+    // FAKEMATCH: mId and mHold are volatile for the target's reloads after the stores in SNDSTRMI_queue and SNDSTRMI_isheld
     volatile int mId;
     unsigned int mDataRate;
     volatile unsigned int unk_0x14;
@@ -45,10 +46,11 @@ typedef struct SndStreamTapSend_t {
 /* One stream channel, found through the channel table by its index. */
 typedef struct SndStreamChannel_t {
     void *mpTap;
+    // FAKEMATCH: mVoice, mNextId and mSharedTap are volatile for the target's reloads and access order in SNDSTRMI_startstream, SNDSTRMI_queue and SNDSTRM_purge
     volatile int mVoice;
-    volatile int mBuffer;
+    int mBuffer;
     volatile int mNextId;
-    volatile unsigned char mState;
+    unsigned char mState;
     volatile signed char mSharedTap;
     unsigned char mPanned;
     unsigned char unk_0x13;

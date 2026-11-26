@@ -2720,7 +2720,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8026D9CC	280	SNDSTRMI_parsedata__FP16SNDSTREAMCHANNELP14STREAMCHUNKHDR	size	sst.c	sst.c
 0x8026DAE4	120	SNDSTRMI_parsechunk__FiP14STREAMCHUNKHDR	size	sst.c	sst.c
 0x8026DB5C	220	SNDSTRMI_isheld__FP16SNDSTREAMCHANNEL	size	sst.c	sst.c
-0x8026DC38	384	SNDSTRMI_service__Fv	name	sst.c	sst.c
+0x8026DC38	384	SNDSTRMI_service__Fv	size	sst.c	sst.c
 0x8026DDB8	72	SNDSTRMI_numcreated__Fv	size	sst.c	sst.c
 0x8026DE00	864	SNDSTRMI_create__FP11SNDPLAYOPTSiiPviii	size	sst.c	sst.c
 0x8026E160	288	SNDSTRMI_queue__FiiPcii	size	sst.c	sst.c

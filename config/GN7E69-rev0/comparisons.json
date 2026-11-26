@@ -30528,7 +30528,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function and name rows and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); written in w1, original bytes stay linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); all 20 functions written, 16 exact; original bytes stay linked.",
       "sections": [
         {
           "section": ".text",

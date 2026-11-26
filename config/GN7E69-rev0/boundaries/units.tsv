@@ -191,7 +191,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x8026B520	0x8026B898	smemman.c	5	5	5	0	5	-	-
 0x8026C9BC	0x8026CA50	spitch.c	1	1	1	1	0	-	-
 0x8026CAA8	0x8026CAE0	spoutlat.c	1	1	1	1	0	-	-
-0x8026D200	0x8026ED74	sst.c	29	20	20	5	15	-	-
+0x8026D200	0x8026ED74	sst.c	29	20	20	4	16	-	-
 0x8026ED74	0x8026EDC4	sstlowp.c	1	1	1	1	0	-	-
 0x8026EF88	0x8026F19C	sstrstat.c	1	1	1	1	0	-	-
 0x8026F19C	0x8026F1E8	sstsetgl.c	1	1	1	1	0	-	-

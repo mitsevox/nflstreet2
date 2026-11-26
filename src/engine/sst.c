@@ -17,8 +17,8 @@ int STREAM_queuemem(void *tap, char *name, int offset, int tag);
 void STREAM_release(void *tap, void *chunk);
 void STREAM_destroy(void *tap);
 void STREAM_kill(void *tap);
-void SNDPKTPLAY_destroy(int buffer);
-void SNDPKTPLAY_stop(int buffer);
+int SNDPKTPLAY_destroy(int buffer);
+int SNDPKTPLAY_stop(int buffer);
 void SNDMEMI_free(void *p);
 
 }
