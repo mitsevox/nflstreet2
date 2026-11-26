@@ -1134,7 +1134,7 @@ int fn_8015F5BC(const char *pName)
     return id;
 }
 
-// FAKEMATCH: linker-discarded user of the unreferenced .rodata string at 0x802A3FA4, modelled on fn_8015F5BC; only its string reaches the target.
+// FAKEMATCH: linker-discarded user of the unreferenced .rodata string at 0x802A3F9C, modelled on fn_8015F5BC; only its string reaches the target.
 static int _PlayerHeadFindCapModel(int cap, const char *pName)
 {
     char name[43];

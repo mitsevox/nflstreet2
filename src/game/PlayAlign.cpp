@@ -1,5 +1,7 @@
 /* Lines a team up for the snap: sends every player to his spot and facing in the
-   called play and staggers when they start moving. */
+   called play and staggers when they start moving. Also loads each play's player
+   sets and route steps from the play database, issues the routes to the players,
+   and builds the vertex strips of the route lines the play art draws. */
 
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
@@ -551,7 +553,7 @@ int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, u
     return 1;
 }
 
-void PlayArtCurvePoint(PlayArtVertex_t *points, int count, float t, PlayArtVertex_t *out)
+void PlayAlignCurvePoint(PlayArtVertex_t *points, int count, float t, PlayArtVertex_t *out)
 {
     int i, j;
     for (i = 0; i < count; ++i) _PlayAlign_aCurveWork[i] = *points++;
@@ -563,18 +565,18 @@ void PlayArtCurvePoint(PlayArtVertex_t *points, int count, float t, PlayArtVerte
     *out = _PlayAlign_aCurveWork[0];
 }
 
-void PlayArtSampleCurve(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, int samples)
+void PlayAlignSampleCurve(PlayArtVertex_t *points, int count, PlayArtVertex_t *out, int samples)
 {
     int i;
     float t;
     float step = 1.0f / (float)(samples - 1);
     out[0] = points[0];
     for (i = 1, t = step; i < samples - 1; ++i, t += step)
-        PlayArtCurvePoint(points, count, t, out + i);
+        PlayAlignCurvePoint(points, count, t, out + i);
     out[samples-1] = points[count-1];
 }
 
-void PlayArtStripEdge(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, PlayArtVertex_t *right,
+void PlayAlignStripEdge(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *left, PlayArtVertex_t *right,
                 int width, PlayArtVertex_t *prior, int average)
 {
     PlayArtVertex_t normal;
@@ -607,25 +609,25 @@ void PlayArtStripEdge(PlayArtVertex_t *a, PlayArtVertex_t *b, PlayArtVertex_t *l
     }
 }
 
-void PlayArtBuildCurveStrip(PlayArtVertex_t *control, PlayArtVertex_t *out, int samples, int width)
+void PlayAlignBuildCurveStrip(PlayArtVertex_t *control, PlayArtVertex_t *out, int samples, int width)
 {
     PlayArtVertex_t prior;
     int i;
     int n = 2;
 
-    PlayArtSampleCurve(control, 3, _PlayAlign_aCurveSamples, samples);
+    PlayAlignSampleCurve(control, 3, _PlayAlign_aCurveSamples, samples);
     _PlayAlign_aCurveSamples[samples].mX = _PlayAlign_aCurveSamples[samples-2].mX;
     _PlayAlign_aCurveSamples[samples].mY = _PlayAlign_aCurveSamples[samples-2].mY;
-    PlayArtStripEdge(&_PlayAlign_aCurveSamples[0], &_PlayAlign_aCurveSamples[1], &out[0], &out[1], width, &prior, 0);
+    PlayAlignStripEdge(&_PlayAlign_aCurveSamples[0], &_PlayAlign_aCurveSamples[1], &out[0], &out[1], width, &prior, 0);
     for (i = 1; i < samples - 1; ++i, n += 2)
-        PlayArtStripEdge(&_PlayAlign_aCurveSamples[i], &_PlayAlign_aCurveSamples[i+1], &out[n], &out[n+1], width, &prior, 1);
-    PlayArtStripEdge(&_PlayAlign_aCurveSamples[samples-1], &_PlayAlign_aCurveSamples[samples], &out[n+1], &out[n], width, 0, 0);
+        PlayAlignStripEdge(&_PlayAlign_aCurveSamples[i], &_PlayAlign_aCurveSamples[i+1], &out[n], &out[n+1], width, &prior, 1);
+    PlayAlignStripEdge(&_PlayAlign_aCurveSamples[samples-1], &_PlayAlign_aCurveSamples[samples], &out[n+1], &out[n], width, 0, 0);
 }
 
-void PlayArtBuildSegmentStrip(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
+void PlayAlignBuildSegmentStrip(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
 {
-    PlayArtStripEdge(&points[0], &points[1], &out[0], &out[1], width, 0, 0);
-    PlayArtStripEdge(&points[1], &points[0], &out[2], &out[3], width, 0, 0);
+    PlayAlignStripEdge(&points[0], &points[1], &out[0], &out[1], width, 0, 0);
+    PlayAlignStripEdge(&points[1], &points[0], &out[2], &out[3], width, 0, 0);
 }
 
 }

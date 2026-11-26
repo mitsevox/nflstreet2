@@ -180,8 +180,8 @@ extern "C" PlayArtVertex_t _PlayAlign_aCurveWork[], _PlayAlign_aCurveSamples[];
 
 extern "C" {
 void Vec2Normalize(void *, void *);
-void PlayArtBuildCurveStrip(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
-void PlayArtBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
+void PlayAlignBuildCurveStrip(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
+void PlayAlignBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
 
 extern int lbl_802E9964[];
 extern PlayArtVertex_t lbl_802E98FC[];
@@ -277,7 +277,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             ends[i+1] = controls[2];
             int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
-            PlayArtBuildCurveStrip(controls, strip, samples, width);
+            PlayAlignBuildCurveStrip(controls, strip, samples, width);
             for (int j = 0; j < samples; ++j) {
                 vertices[count] = strip[j*2];
                 vertices[count+1] = strip[j*2+1];
@@ -290,7 +290,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
             if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             ends[i+1] = controls[1];
-            PlayArtBuildSegmentStrip(controls, strip, width);
+            PlayAlignBuildSegmentStrip(controls, strip, width);
             count = PlayArtAddQuad(vertices, count, capacity, strip);
             if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
         } else if (step->mUnknown10 == 2) {
@@ -301,7 +301,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
-                PlayArtBuildSegmentStrip(controls, strip, width);
+                PlayAlignBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
                 if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
             }
@@ -314,7 +314,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
                 ends[i+1] = controls[1];
-                PlayArtBuildSegmentStrip(controls, strip, width);
+                PlayAlignBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
             }
             PlayArtVertex_t axis[2];

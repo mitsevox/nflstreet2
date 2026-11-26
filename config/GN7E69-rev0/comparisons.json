@@ -21688,7 +21688,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp). Draft comparisons of the unlinked functions 0x80164B78-0x80166110 behind DECOMP_COMPARE; the linked head 0x80164568-0x80164B78 keeps its units.json placement and the original bytes stay linked for the drafts.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); the six non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -21797,27 +21797,27 @@
           "end": "0x80165C50"
         },
         {
-          "symbol": "PlayArtCurvePoint",
+          "symbol": "PlayAlignCurvePoint",
           "start": "0x80165C50",
           "end": "0x80165D18"
         },
         {
-          "symbol": "PlayArtSampleCurve",
+          "symbol": "PlayAlignSampleCurve",
           "start": "0x80165D18",
           "end": "0x80165DF8"
         },
         {
-          "symbol": "PlayArtStripEdge",
+          "symbol": "PlayAlignStripEdge",
           "start": "0x80165DF8",
           "end": "0x80165F78"
         },
         {
-          "symbol": "PlayArtBuildCurveStrip",
+          "symbol": "PlayAlignBuildCurveStrip",
           "start": "0x80165F78",
           "end": "0x801660A0"
         },
         {
-          "symbol": "PlayArtBuildSegmentStrip",
+          "symbol": "PlayAlignBuildSegmentStrip",
           "start": "0x801660A0",
           "end": "0x80166110"
         }
