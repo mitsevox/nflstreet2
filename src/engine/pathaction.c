@@ -1,5 +1,5 @@
-/* PATH authored actions (pathaction.c): runs the actions and conditions authored into music
-   events and reads and writes the values they refer to. */
+/* PATH authored actions (pathaction.c): interprets music-event actions and conditions,
+   updates track controls and reads and writes the values those actions refer to. */
 
 #include "engine/pathlib.h"
 
