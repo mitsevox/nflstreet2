@@ -297,11 +297,11 @@ void fn_8021F5C0(UIGNode_t *pNode)
         Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
+        UIGRenderSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
     fn_8021F984(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
+        UIGRenderRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 
@@ -437,7 +437,7 @@ void fn_8021FB30(UIGNode_t *pNode)
     Int32 i;
     UIGNodeQuad_t *pQuad;
 
-    fn_80220D34();
+    UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
@@ -513,7 +513,7 @@ void fn_80220310(UIGNode_t *pNode)
     Int32 i;
     UIGNodeQuad_t *pQuad;
 
-    fn_80220D34();
+    UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
@@ -580,7 +580,7 @@ void fn_80220988(void)
     ColorWord_80220988 Mat;
     ColorWord_80220988 Light;
 
-    pColor = fn_80220D34();
+    pColor = UIGRenderGetColorState();
     Mat.Color = pColor->mMaterialColor;
     Light.Color = pColor->mLightColor;
     if (Mat.Value != lbl_803ECFF0 || Light.Value != lbl_803ECFF4) {

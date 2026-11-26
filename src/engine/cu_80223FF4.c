@@ -86,11 +86,11 @@ void fn_802254F8(UIGNode_t *pNode)
         Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
+        UIGRenderSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
     fn_80225958(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
+        UIGRenderRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 
@@ -260,7 +260,7 @@ void fn_80225AAC(UIGNode_t *pNode, Int32 a, Int32 Item)
 
 void fn_80225AE4(void)
 {
-    UIGMaterialColorState_t *pColor = fn_80220D34();
+    UIGMaterialColorState_t *pColor = UIGRenderGetColorState();
     GXColor MatColor = pColor->mMaterialColor;
     GXColor LightColor = pColor->mLightColor;
 

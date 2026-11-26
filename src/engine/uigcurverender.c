@@ -74,7 +74,7 @@ void UIGCurveRender(UIGNode_t *pNode, Int32 item)
 
 void _UIGCurveSetMaterialColors(void)
 {
-    UIGMaterialColorState_t *pColor = fn_80220D34();
+    UIGMaterialColorState_t *pColor = UIGRenderGetColorState();
     GXColor MatColor = pColor->mMaterialColor;
     GXColor LightColor = pColor->mLightColor;
 

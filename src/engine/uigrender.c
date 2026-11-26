@@ -23,8 +23,8 @@
    transform node that pushes and pops the matrix and colour state around its
    children. */
 
-/* Transform record read by fn_80221198; +0x30 is not accessed and the size is not established. */
-typedef struct Transform_80221198 {
+/* Transform record read by UIGRenderPushTransform; +0x30 is not accessed and the size is not established. */
+typedef struct UIGTransform_t {
     Float32 mPosition[3];   /* 0x00 */
     Float32 mPivot[3];      /* 0x0C */
     Float32 mRotation[3];   /* 0x18 */
@@ -32,23 +32,23 @@ typedef struct Transform_80221198 {
     Uint8 unk_30[4];        /* 0x30 */
     Float32 mMultiply[4];   /* 0x34 */
     Float32 mScaleColor[4]; /* 0x44 */
-} Transform_80221198;
+} UIGTransform_t;
 
-static UIGMaterialColorState_t lbl_8039F878[8];
-static unsigned short *lbl_803EBF48 = NULL;
-static Int32 lbl_803EBF4C = 0;
-static UIGMaterialColorState_t *lbl_803EBF50 = lbl_8039F878;
-static Int32 lbl_803EBF54 = 0;
-static Int32 lbl_803EBF58 = 0;
-static Uint8 lbl_803EBF5C = 0;
-static Int32 lbl_803ED00C;
+static UIGMaterialColorState_t _UIGRender_aColorStates[8];
+static unsigned short *_UIGRender_pSavedPalette = NULL;
+static Int32 _UIGRender_iUnreferenced = 0;
+static UIGMaterialColorState_t *_UIGRender_pColorState = _UIGRender_aColorStates;
+static Int32 _UIGRender_iActive = 0;
+static Int32 _UIGRender_iLast = 0;
+static Uint8 _UIGRender_bActiveValid = 0;
+static Int32 _UIGRender_iColorState;
 
-Int32 fn_80220BFC(Int32 a, Int32 b);
-void fn_80220D3C(void);
-void fn_80221198(void *p);
-void fn_80221294(void *p);
+Int32 UIGRenderLoadPalette(Int32 a, Int32 b);
+void UIGRenderResetColorState(void);
+void UIGRenderPushTransform(void *p);
+void UIGRenderPopTransform(void *p);
 
-Int32 fn_80220BFC(Int32 a, Int32 b)
+Int32 UIGRenderLoadPalette(Int32 a, Int32 b)
 {
     UIGLibrary_t *pObject;
 
@@ -59,71 +59,71 @@ Int32 fn_80220BFC(Int32 a, Int32 b)
     return UIGLibraryLoadItem(pObject, a, b);
 }
 
-void fn_80220C4C(Int32 a, Int32 b, Int32 c)
+void UIGRenderSwapPalette(Int32 a, Int32 b, Int32 c)
 {
     Int32 p;
 
-    lbl_803EBF48 = UIGTexNodeGetPalette((struct UIGTexNode_t *)c);
-    p = fn_80220BFC(a, b);
+    _UIGRender_pSavedPalette = UIGTexNodeGetPalette((struct UIGTexNode_t *)c);
+    p = UIGRenderLoadPalette(a, b);
     if (p != 0) {
         UIGTexNodeSetPalette((struct UIGTexNode_t *)c, (unsigned short *)p);
     }
 }
 
-void fn_80220CA4(Int32 a, Int32 b, Int32 c)
+void UIGRenderRestorePalette(Int32 a, Int32 b, Int32 c)
 {
-    if (lbl_803EBF48 != NULL) {
-        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, lbl_803EBF48);
+    if (_UIGRender_pSavedPalette != NULL) {
+        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, _UIGRender_pSavedPalette);
     }
-    lbl_803EBF48 = NULL;
+    _UIGRender_pSavedPalette = NULL;
 }
 
-void fn_80220CDC(Int32 a)
+void UIGRenderSetActive(Int32 a)
 {
-    lbl_803EBF54 = a;
+    _UIGRender_iActive = a;
 }
 
-Int32 fn_80220CE4(void)
+Int32 UIGRenderGetActive(void)
 {
-    if (lbl_803EBF5C == 0) {
+    if (_UIGRender_bActiveValid == 0) {
         return 0;
     }
-    return lbl_803EBF54;
+    return _UIGRender_iActive;
 }
 
-void fn_80220CFC(Int32 a)
+void UIGRenderSetLast(Int32 a)
 {
-    lbl_803EBF58 = a;
+    _UIGRender_iLast = a;
 }
 
-void fn_80220D04(void)
+void UIGRenderReset(void)
 {
-    fn_80220D3C();
-    fn_80220CDC(0);
-    fn_80220CFC(0);
+    UIGRenderResetColorState();
+    UIGRenderSetActive(0);
+    UIGRenderSetLast(0);
 }
 
-void *fn_80220D34(void)
+void *UIGRenderGetColorState(void)
 {
-    return lbl_803EBF50;
+    return _UIGRender_pColorState;
 }
 
-void fn_80220D3C(void)
+void UIGRenderResetColorState(void)
 {
-    lbl_803ED00C = 0;
-    lbl_8039F878[0].unk_00[0] = 1.0f;
-    lbl_8039F878[0].unk_00[1] = 1.0f;
-    lbl_8039F878[0].unk_00[2] = 1.0f;
-    lbl_8039F878[0].unk_00[3] = 1.0f;
-    lbl_8039F878[0].unk_00[4] = 0.0f;
-    lbl_8039F878[0].unk_00[5] = 0.0f;
-    lbl_8039F878[0].unk_00[6] = 0.0f;
-    lbl_8039F878[0].unk_00[7] = 0.0f;
-    lbl_803EBF50 = lbl_8039F878;
-    fn_80220CFC(0);
+    _UIGRender_iColorState = 0;
+    _UIGRender_aColorStates[0].unk_00[0] = 1.0f;
+    _UIGRender_aColorStates[0].unk_00[1] = 1.0f;
+    _UIGRender_aColorStates[0].unk_00[2] = 1.0f;
+    _UIGRender_aColorStates[0].unk_00[3] = 1.0f;
+    _UIGRender_aColorStates[0].unk_00[4] = 0.0f;
+    _UIGRender_aColorStates[0].unk_00[5] = 0.0f;
+    _UIGRender_aColorStates[0].unk_00[6] = 0.0f;
+    _UIGRender_aColorStates[0].unk_00[7] = 0.0f;
+    _UIGRender_pColorState = _UIGRender_aColorStates;
+    UIGRenderSetLast(0);
 }
 
-static inline unsigned char fn_80220DA4_ToByte(Float32 v)
+static inline unsigned char _UIGRenderColorToByte(Float32 v)
 {
     Float32 f;
 
@@ -137,12 +137,12 @@ static inline unsigned char fn_80220DA4_ToByte(Float32 v)
     return 0;
 }
 
-void fn_80220DA4(Float32 *pMul, Float32 *pScale)
+void UIGRenderPushColorState(Float32 *pMul, Float32 *pScale)
 {
     UIGMaterialColorState_t *pCur;
     UIGMaterialColorState_t *pNext;
 
-    pCur = &lbl_8039F878[lbl_803ED00C];
+    pCur = &_UIGRender_aColorStates[_UIGRender_iColorState];
     pNext = pCur + 1;
     pNext->unk_00[0] = pCur->unk_00[0] * pMul[0];
     pNext->unk_00[1] = pCur->unk_00[1] * pMul[1];
@@ -158,27 +158,27 @@ void fn_80220DA4(Float32 *pMul, Float32 *pScale)
     if (!(pNext->unk_00[3] > 0.0f)) {
         pNext->unk_00[3] = 0.0f;
     }
-    pNext->mMaterialColor.r = fn_80220DA4_ToByte(pNext->unk_00[0] * 255.0f);
-    pNext->mMaterialColor.g = fn_80220DA4_ToByte(pNext->unk_00[1] * 255.0f);
-    pNext->mMaterialColor.b = fn_80220DA4_ToByte(pNext->unk_00[2] * 255.0f);
-    pNext->mMaterialColor.a = fn_80220DA4_ToByte(pNext->unk_00[3] * 255.0f);
-    pNext->mLightColor.r = fn_80220DA4_ToByte(pNext->unk_00[4] * 255.0f);
-    pNext->mLightColor.g = fn_80220DA4_ToByte(pNext->unk_00[5] * 255.0f);
-    pNext->mLightColor.b = fn_80220DA4_ToByte(pNext->unk_00[6] * 255.0f);
-    pNext->mLightColor.a = fn_80220DA4_ToByte(pNext->unk_00[7] * 255.0f);
-    lbl_803ED00C++;
-    lbl_803EBF50++;
-    fn_80220CFC(0);
+    pNext->mMaterialColor.r = _UIGRenderColorToByte(pNext->unk_00[0] * 255.0f);
+    pNext->mMaterialColor.g = _UIGRenderColorToByte(pNext->unk_00[1] * 255.0f);
+    pNext->mMaterialColor.b = _UIGRenderColorToByte(pNext->unk_00[2] * 255.0f);
+    pNext->mMaterialColor.a = _UIGRenderColorToByte(pNext->unk_00[3] * 255.0f);
+    pNext->mLightColor.r = _UIGRenderColorToByte(pNext->unk_00[4] * 255.0f);
+    pNext->mLightColor.g = _UIGRenderColorToByte(pNext->unk_00[5] * 255.0f);
+    pNext->mLightColor.b = _UIGRenderColorToByte(pNext->unk_00[6] * 255.0f);
+    pNext->mLightColor.a = _UIGRenderColorToByte(pNext->unk_00[7] * 255.0f);
+    _UIGRender_iColorState++;
+    _UIGRender_pColorState++;
+    UIGRenderSetLast(0);
 }
 
-void fn_80221118(void)
+void UIGRenderPopColorState(void)
 {
-    lbl_803ED00C--;
-    lbl_803EBF50--;
-    fn_80220CFC(0);
+    _UIGRender_iColorState--;
+    _UIGRender_pColorState--;
+    UIGRenderSetLast(0);
 }
 
-long long fn_80221154(Float32 *pV)
+long long UIGRenderIsRotated(Float32 *pV)
 {
     long long result = 0;
 
@@ -188,16 +188,16 @@ long long fn_80221154(Float32 *pV)
     return result;
 }
 
-void fn_80221198(void *p)
+void UIGRenderPushTransform(void *p)
 {
-    Transform_80221198 *pXf = p;
+    UIGTransform_t *pXf = p;
     float aNeg[3];
 
     MatSetStack(VptGetMatrixStack());
     MatPush();
     MatTranslate(pXf->mPosition);
     MatTranslate(pXf->mPivot);
-    if (fn_80221154(pXf->mRotation) != 0) {
+    if (UIGRenderIsRotated(pXf->mRotation) != 0) {
         MatRotX((int)(pXf->mRotation[0] * 46603.38f));
         MatRotY((int)(pXf->mRotation[1] * 46603.38f));
         MatRotZ((int)(pXf->mRotation[2] * 46603.38f));
@@ -207,28 +207,28 @@ void fn_80221198(void *p)
     aNeg[1] = -pXf->mPivot[1];
     aNeg[2] = -pXf->mPivot[2];
     MatTranslate(aNeg);
-    fn_80220DA4(pXf->mMultiply, pXf->mScaleColor);
-    fn_80220CFC(0);
+    UIGRenderPushColorState(pXf->mMultiply, pXf->mScaleColor);
+    UIGRenderSetLast(0);
 }
 
-void fn_80221294(void *p)
+void UIGRenderPopTransform(void *p)
 {
     MatSetStack(VptGetMatrixStack());
     MatPop();
-    fn_80221118();
-    fn_80220CFC(0);
+    UIGRenderPopColorState();
+    UIGRenderSetLast(0);
 }
 
-void fn_802212C8(Uint32 Type, void *p)
+void UIGRenderTransformNodeAction(Uint32 Type, void *p)
 {
     switch (Type) {
     case 0:
         break;
     case 1:
-        fn_80221198(p);
+        UIGRenderPushTransform(p);
         break;
     case 2:
-        fn_80221294(p);
+        UIGRenderPopTransform(p);
         break;
     }
 }

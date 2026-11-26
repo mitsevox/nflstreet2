@@ -532,7 +532,7 @@ void UIGLibTextDraw(UIGText_t *pText)
         UIGLibraryClearMemInfo();
         pItem->unk_04 = 0;
     }
-    pScale = fn_80220D34();
+    pScale = UIGRenderGetColorState();
     Align = (Uint16)pText->Flags & 0xF0;
     Scale = 1.0f / 255.0f;
     FontClearRenderFlags(0xF0);
@@ -561,11 +561,11 @@ void UIGLibTextDraw(UIGText_t *pText)
         FontSetRenderColor(1, Color);
         FontSetShadowOffset(pText->unk_0C[0], pText->unk_0C[1], pText->unk_0C[2]);
     }
-    if (fn_80220CE4() != 2) {
+    if (UIGRenderGetActive() != 2) {
         FontLLRenderBegin();
-        fn_80220CDC(2);
+        UIGRenderSetActive(2);
     }
-    fn_80220CFC(2);
+    UIGRenderSetLast(2);
     if (pText->Flags & 0x8000) {
         UIGTextLayout(pText);
     }

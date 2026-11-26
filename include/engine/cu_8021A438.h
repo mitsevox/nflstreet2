@@ -72,7 +72,7 @@ typedef struct UIGNode_t {
     } u;            /* 0x10 */
 } UIGNode_t;
 
-/* 40-byte element of the array that fn_80220D34 returns a pointer into. */
+/* 40-byte element of the array that UIGRenderGetColorState returns a pointer into. */
 typedef struct UIGMaterialColorState_t {
     Float32 unk_00[8]; /* 0x00 */
     GXColor mMaterialColor; /* 0x20 */
@@ -83,18 +83,18 @@ typedef struct UIGMaterialColorState_t {
 extern "C" {
 #endif
 
-/* src/engine/cu_8021EFD8.c */
+/* src/engine/UIGColorStyle.c and src/engine/uigrender.c */
 Int32 fn_80220B4C(Int32 a, Int32 b);
 void fn_80220BE0(void);
-void fn_80220C4C(Int32 a, Int32 b, Int32 c);
-void fn_80220CA4(Int32 a, Int32 b, Int32 c);
-void fn_80220CDC(Int32 a);
-Int32 fn_80220CE4(void);
-void fn_80220CFC(Int32 a);
-void fn_80220DA4(Float32 *pMul, Float32 *pScale);
-void *fn_80220D34(void);
-void fn_80221118(void);
-long long fn_80221154(Float32 *pV);
+void UIGRenderSwapPalette(Int32 a, Int32 b, Int32 c);
+void UIGRenderRestorePalette(Int32 a, Int32 b, Int32 c);
+void UIGRenderSetActive(Int32 a);
+Int32 UIGRenderGetActive(void);
+void UIGRenderSetLast(Int32 a);
+void UIGRenderPushColorState(Float32 *pMul, Float32 *pScale);
+void *UIGRenderGetColorState(void);
+void UIGRenderPopColorState(void);
+long long UIGRenderIsRotated(Float32 *pV);
 
 #ifdef __cplusplus
 }
