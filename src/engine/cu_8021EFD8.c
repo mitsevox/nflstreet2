@@ -16,8 +16,11 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 
-/* Partial source for the engine range 0x8021EFD8-0x80221314 (neutral file
-   name). Functions without a body here keep their original bytes. */
+/* UI graphics node drawing: loads, updates and draws the image and colour
+   nodes of UI Studio screens (textured or flat-shaded quads and strips sent to
+   GX in immediate mode), with the material/light colour stack, the palette
+   swap for library items and the node transform push/pop callbacks.
+   Partial source: functions without a body here keep their original bytes. */
 
 /* A colour that is also compared as one word. */
 typedef union ColorWord_80220988 {
