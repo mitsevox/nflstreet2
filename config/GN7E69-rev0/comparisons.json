@@ -25928,7 +25928,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Draft comparisons only; original assembly remains linked. Strings and the .data/.sdata state stay extern (lbl_); fn_801D6F58 (the 5272-byte card state machine) has no draft yet.",
+      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with fn_801D654C, MemCardMgrFormatDate and fn_801D8618.",
       "sections": [
         {
           "section": ".text",

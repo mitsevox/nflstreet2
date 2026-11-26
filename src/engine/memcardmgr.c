@@ -110,10 +110,6 @@ typedef struct Str6_t {
     char mText[6];
 } Str6_t;
 
-typedef struct Str1_t {
-    char mText[1];
-} Str1_t;
-
 typedef struct Str5_t {
     char mText[5];
 } Str5_t;
@@ -501,6 +497,8 @@ void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type,
 
     strcpy(name, lbl_803EBD20[type].mPrefix);
     sprintf(pOut, "%s%s%s", pPrefix, name, pSuffix);
+    /* FAKEMATCH: the target keeps the unreferenced string "%s-%s" (0x802AFED8) right after "%s%s%s";
+       this never-executed call keeps it there with no code (see the evidence.tsv source-form row) */
     if (0) {
         sprintf(pOut, "%s-%s", name, pSuffix);
     }
