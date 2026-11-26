@@ -16140,7 +16140,7 @@ void LivePlayPhase::Shutdown()
     fn_800A039C(0);
 }
 
-void LivePlayPhase::OnEnter()
+void LivePlayPhase::OnEnter(float dt)
 {
     if (!fn_80177F70()) {
         DriveLogEndDrive();
@@ -20753,7 +20753,7 @@ void Class_80297B90::vfn_02()
     fn_800AACB8(0);
 }
 
-void Class_80297B90::vfn_03()
+void Class_80297B90::vfn_03(float dt)
 {
     fn_800C1E50();
     lbl_803EAA99 = 0;
@@ -25080,7 +25080,7 @@ void Class_80297B50::vfn_02()
     fn_800B3644(0);
 }
 
-void Class_80297B50::vfn_03()
+void Class_80297B50::vfn_03(float dt)
 {
     lbl_803EAB28 = -1;
     fn_8009D888(3, vfn_06());
@@ -25312,7 +25312,7 @@ extern "C" void fn_800B3EFC(int team)
     fn_800B50E8(team);
 }
 
-void Class_80297B50::vfn_05()
+void Class_80297B50::vfn_05(float dt)
 {
     fn_8009D944(1);
     fn_8009D944(0);
@@ -29135,7 +29135,7 @@ void PreGamePhase::Shutdown()
     fn_800BC51C(0);
 }
 
-void PreGamePhase::OnEnter()
+void PreGamePhase::OnEnter(float dt)
 {
     int practice;
     unsigned char i;
@@ -37529,7 +37529,7 @@ static inline void fn_800CF474(float dt)
 
 static inline void fn_800CF4AC(float dt)
 {
-    lbl_803EAB90->OnEnter();
+    lbl_803EAB90->OnEnter(dt);
 }
 
 static inline void fn_800CF4E4(float dt)
@@ -37544,7 +37544,7 @@ static inline void fn_800CF51C(float dt)
 
 static inline void fn_800CF554(float dt)
 {
-    lbl_803EAA8C->vfn_03();
+    lbl_803EAA8C->vfn_03(dt);
 }
 
 static inline void fn_800CF58C(float dt)
@@ -37559,7 +37559,7 @@ static inline void fn_800CF5C4(float dt)
 
 static inline void fn_800CF5FC(float dt)
 {
-    lbl_803EAB38->vfn_03();
+    lbl_803EAB38->vfn_03(dt);
 }
 
 static inline void fn_800CF634(float dt)
@@ -37569,12 +37569,12 @@ static inline void fn_800CF634(float dt)
 
 static inline void fn_800CF66C(float dt)
 {
-    lbl_803EAB38->vfn_05();
+    lbl_803EAB38->vfn_05(dt);
 }
 
 static inline void fn_800CF6A4(float dt)
 {
-    lbl_803EA9E4->OnEnter();
+    lbl_803EA9E4->OnEnter(dt);
 }
 
 static inline void fn_800CF6DC(float dt)

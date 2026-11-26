@@ -144,7 +144,7 @@ public:
 
 class TutorialPreGame : public PreGamePhase {
 public:
-    virtual void OnEnter();
+    virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void ShowIntroScreen();
     virtual void HideIntroScreen();
@@ -167,7 +167,7 @@ public:
 
 class TutorialLivePlay : public LivePlayPhase {
 public:
-    virtual void OnEnter();
+    virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
 };
 
@@ -1788,9 +1788,9 @@ void TutorialPostPlay::ShowResults()
 static unsigned char _Tutorial_bAwaitCamera = 0;
 static unsigned char _Tutorial_bKeyPromptShown = 0;
 
-void TutorialPreGame::OnEnter()
+void TutorialPreGame::OnEnter(float dt)
 {
-    PreGamePhase::OnEnter();
+    PreGamePhase::OnEnter(dt);
     StyleTrackerSetEnabled(1);
     mUnknown4 = 1;
     TutorialSetupSession();
@@ -1963,11 +1963,11 @@ int TutorialPreSnap::CanSnap()
     return result;
 }
 
-void TutorialLivePlay::OnEnter()
+void TutorialLivePlay::OnEnter(float dt)
 {
     TutorialStep_t *pEntry;
 
-    LivePlayPhase::OnEnter();
+    LivePlayPhase::OnEnter(dt);
     TutorialSetStepDone(0);
     CamMainWarpToDest(CamGameGetCamera(5));
     pEntry = TutorialGetLessonObject()->GetStep();

@@ -7,6 +7,8 @@
 struct Object_80039F5C;
 struct AutoDepthPlayer_t;
 
+extern "C" void GameStatsUpdateRecords(void);
+
 struct Record_80148C4C {
     int mUnknown0;
     int mUnknown4[10];
@@ -24,31 +26,35 @@ struct State_80148A58 {
 
 class Class_80148A58 {
 public:
-    virtual void vfn_01();
-    virtual void vfn_02();
+    virtual void vfn_01() = 0;
+    virtual void vfn_02() = 0;
     virtual int vfn_03();
     virtual unsigned int vfn_04(int team);
     virtual int vfn_05(int team);
     virtual unsigned int vfn_06();
-    virtual void vfn_07(int a, int b);
+    virtual void vfn_07(int a, int b) {}
     virtual int vfn_08(int a);
-    virtual float *vfn_09(int a);
+    virtual const float *vfn_09(int a) { return 0; }
     virtual void vfn_10(int value, int *list, int *ids);
-    virtual void vfn_11(int value, int *list, int *ids, int a, int b);
-    virtual void vfn_12();
+    virtual void vfn_11(int value, int *list, int *ids, unsigned int count, int b);
+    virtual void vfn_12() { GameStatsUpdateRecords(); }
     virtual int vfn_13();
-    virtual void vfn_14();
+    virtual void vfn_14() {}
     virtual void vfn_15();
     virtual void vfn_16(const int *pKinds);
     virtual void vfn_17(const int *pKinds);
     virtual void vfn_18(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19(int team, int column, char *pText, int length);
     virtual void vfn_20(int team, int index, int kind, char *pFirst, int firstLength,
-                        char *pSecond, int secondLength);
-    virtual int vfn_21();
-    virtual int vfn_22(int a);
+                        char *pSecond, int secondLength)
+    {
+        pSecond[0] = 0;
+        pFirst[0] = 0;
+    }
+    virtual int vfn_21() { return 1; }
+    virtual int vfn_22(int a) { return 1; }
 
-    virtual int vfn_23(AutoDepthPlayer_t *pRecords, int count);
+    virtual int vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count);
     virtual int vfn_24(int team, unsigned int tag);
     virtual unsigned char vfn_25(int team, int index);
     virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);
@@ -63,6 +69,7 @@ public:
     virtual int vfn_34(int kind, int team, int threshold, int mode);
 
     Class_80148A58();
+    int fn_80149014();
 
     int mUnknown0;
     int mUnknown4;

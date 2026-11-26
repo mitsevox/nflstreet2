@@ -686,6 +686,10 @@
       "address": "0x80148A98",
       "evidence": "evidence.tsv external row for 0x80148A98 (__14Class_80148A58)."
     },
+    "_vt.15Record_8005CE10": {
+      "address": "0x8028EAD0",
+      "evidence": "evidence.tsv external row for 0x8028EAD0 (_vt.15Record_8005CE10)."
+    },
     "_vt.14Class_80148A58": {
       "address": "0x802A2EE0",
       "evidence": "evidence.tsv external row for 0x802A2EE0 (_vt.14Class_80148A58)."
@@ -13681,7 +13685,7 @@
             "evidence": "evidence.tsv source-form 0x800BB5DC-0x800BB694"
           },
           {
-            "function": "OnEnter__12PreGamePhase",
+            "function": "OnEnter__12PreGamePhasef",
             "evidence": "evidence.tsv source-form 0x800BC5DC-0x800BC83C"
           },
           {
@@ -14411,7 +14415,7 @@
           "TutorialSetupSession",
           "TutorialBlinkPrompts",
           "ShowResults__16TutorialPostPlay",
-          "OnEnter__15TutorialPreGame",
+          "OnEnter__15TutorialPreGamef",
           "OnUpdate__15TutorialPreGamef",
           "EnterFirstPhase__15TutorialPreGamef",
           "ShowIntroScreen__15TutorialPreGame",
@@ -14420,7 +14424,7 @@
           "OnExit__15TutorialPreSnapf",
           "OnUpdate__15TutorialPreSnapf",
           "CanSnap__15TutorialPreSnap",
-          "OnEnter__16TutorialLivePlay",
+          "OnEnter__16TutorialLivePlayf",
           "OnUpdate__16TutorialLivePlayf",
           "OnEnter__16TutorialPostPlayf",
           "OnUpdate__16TutorialPostPlayf",

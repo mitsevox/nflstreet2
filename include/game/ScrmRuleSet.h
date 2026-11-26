@@ -22,7 +22,7 @@ public:
     virtual int GetTeamSize();
     virtual int AllowsAudibles();
     virtual int AllowsPrediction();
-    virtual int GetGoalLimit() { return 0; }
+    virtual unsigned int GetGoalLimit() { return 0; }
     virtual int GetGoalTotal(int team) { return 0; }
     virtual int GetGoalCount(int team) { return 0; }
     virtual void EndPlay();
