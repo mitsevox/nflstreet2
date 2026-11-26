@@ -1336,12 +1336,12 @@ void PlayTrackShutdown(void);
 void PlayTrackUpdateSummary(void);
 void PlayTrackPushPlay(int team, int value);
 void PlayTrackSetEntryWord4(int team, int value);
-void PlayTrackSetEntryByteC(int team, signed char value);
+void PlayTrackSetEntryByteC(int team, unsigned char value);
 void PlayTrackSetDirection(int team, Point_8017886C from, Point_8017886C to, int flag);
 void PlayTrackSetGain(int team, float value);
 void PlayTrackSetResult(int team, unsigned char value);
 void PlayTrackSetKind(int team, unsigned char value);
-void PlayTrackSetFlag10(int team, unsigned char value);
+void PlayTrackSetFlag10(int team, int value);
 void PlayTrackSetFlag11(int team, unsigned char value);
 void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int count);
 void PlayTrackGetGainTendency(int team, unsigned char *pOut, unsigned int *pFlags);
@@ -1841,7 +1841,7 @@ void PlayTrackSetEntryWord4(int team, int value)
     _PlayTrack_pData->mUnknown1C[team][0].mUnknown4 = value;
 }
 
-void PlayTrackSetEntryByteC(int team, signed char value)
+void PlayTrackSetEntryByteC(int team, unsigned char value)
 {
     _PlayTrack_pData->mUnknown1C[team][0].mUnknownC = value;
 }
@@ -1868,7 +1868,7 @@ void PlayTrackSetKind(int team, unsigned char value)
     _PlayTrack_pData->mUnknown1C[team][0].mUnknownF = value;
 }
 
-void PlayTrackSetFlag10(int team, unsigned char value)
+void PlayTrackSetFlag10(int team, int value)
 {
     _PlayTrack_pData->mUnknown1C[team][0].mUnknown10 = value;
 }

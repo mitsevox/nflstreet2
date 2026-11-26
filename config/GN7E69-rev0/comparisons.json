@@ -13756,7 +13756,7 @@
           "end": "0x800A06F4"
         },
         {
-          "symbol": "fn_800A06F4",
+          "symbol": "PlayResultApplyEvents",
           "start": "0x800A06F4",
           "end": "0x800A0EB8"
         },
