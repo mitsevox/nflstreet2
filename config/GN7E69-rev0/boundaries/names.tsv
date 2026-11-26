@@ -395,11 +395,11 @@ address	size	sibling_name	how	sibling_file	unit
 0x801C1FBC	48	memcpy	name	memory.c	memory.c
 0x801C1FEC	68	memcmp	name	memory.c	memory.c
 0x801C2030	112	memmove	name	memory.c	memory.c
-0x801C20F0	224	_WriteInt	size	sprintf.c	sprintf.c
-0x801C21D0	600	_WriteFloat	size	sprintf.c	sprintf.c
-0x801C2428	768	_WriteSci	size	sprintf.c	sprintf.c
-0x801C2728	168	_WriteHex	size	sprintf.c	sprintf.c
-0x801C27D0	204	_WriteString	size	sprintf.c	sprintf.c
+0x801C20F0	224	_WriteInt	name	sprintf.c	sprintf.c
+0x801C21D0	600	_WriteFloat	name	sprintf.c	sprintf.c
+0x801C2428	768	_WriteSci	name	sprintf.c	sprintf.c
+0x801C2728	168	_WriteHex	name	sprintf.c	sprintf.c
+0x801C27D0	204	_WriteString	name	sprintf.c	sprintf.c
 0x801C289C	1260	vsnprintf	name	sprintf.c	sprintf.c
 0x801C2D88	144	snprintf	name	sprintf.c	sprintf.c
 0x801C2E18	156	sprintf	name	sprintf.c	sprintf.c

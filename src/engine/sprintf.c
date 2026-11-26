@@ -1,4 +1,6 @@
-/* The integer, float, scientific, hex and string field writers used by vsnprintf. */
+/* Formatted text output of the engine's C library: sprintf, snprintf and vsnprintf, which build
+   the game's printed strings (labels, numbers, file names), and the integer, float, scientific,
+   hex and string field writers vsnprintf uses for each conversion. */
 
 #include <string.h>
 #include <stdarg.h>
@@ -128,7 +130,7 @@ static char *_WriteSci(float value, char *pOut, char *pEnd, int width, int preci
         exponent = -exponent;
     }
     if (precision) {
-        length = 6 + negative + precision;
+        length = precision + (negative + 6);
     } else {
         length = negative + 5;
     }
