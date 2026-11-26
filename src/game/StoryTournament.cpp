@@ -129,7 +129,6 @@ void StoryTournamentSetOptions(int value14, int value1);
 int StoryTournamentLoadCpuTeam(int digt);
 int StoryTournamentLoadUserTeam(int digt);
 
-#if defined(DECOMP_COMPARE)
 void StoryTournamentGetTeamName(int id, char *pName, int size)
 {
     char name[18];
@@ -516,7 +515,6 @@ int StoryTournamentLoadUserTeam(int digt)
     TeamDbLoadSideWithCopies(digt, list, 1, 7);
     return digt;
 }
-#endif
 
 void StoryTournamentSetupMatch(int dit1, int dit2, int lvlt)
 {

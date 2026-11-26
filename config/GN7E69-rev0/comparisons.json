@@ -2292,7 +2292,7 @@
     {
       "source": "src/game/StoryTournament.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/StoryTournament.cpp), source-form row 0x80060948-0x80061520, exact function rows 0x80060948-0x80061520 and the exact .rodata slice row 0x8028F4C8-0x8028F4D8. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 18 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x80060948-0x80061F04 (src/game/StoryTournament.cpp), its exact function rows 0x80060948-0x80061520 and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact StoryTournamentPlaceDrafted stays registered here as its partial (source-form row 0x80061274-0x80061390).",
       "sections": [
         {
           "section": ".text",
