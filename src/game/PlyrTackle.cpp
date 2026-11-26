@@ -646,9 +646,11 @@ void PlyrAlignCheckSpot(Object_80039F5C *p)
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
         Point_8017886C point;
         point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-        point.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
+        // FAKEMATCH: the pointer taken between the two stores gives the target's late addi of &point (0x800E3D3C) and its use for the y store and the Vec2Add arguments.
+        Point_8017886C *pPoint = &point;
+        pPoint->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
 
-        Vec2Add(&point, &point, &origin);
+        Vec2Add(pPoint, pPoint, &origin);
     }
     Point_8017886C target;
     int angle;
@@ -1491,7 +1493,14 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
     int result = 8;
     float rating = 0.0f;
     fn_800B6D34(p, &input);
-    if (pBlock->mUnknown0 == 4 || pBlock->mUnknown0 == 6) {
+    int kind;
+    // FAKEMATCH: identical arms on the human-player test reproduce the target's dead lbz/cmpwi 255/andi. 0x4000 (cross-jumped in jump2); kind is the block word either way.
+    if (p->mUnknown8 != 255 && (p->mFlags & 0x4000)) {
+        kind = pBlock->mUnknown0;
+    } else {
+        kind = pBlock->mUnknown0;
+    }
+    if (kind == 4 || kind == 6) {
         if (fn_8011F1CC() && !fn_801783AC(0)) {
             if (pCarrier && (pCarrier->mFlags & 0x8000)) {
                 result = SyncRandGetRange(0, 5);
@@ -1528,7 +1537,8 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
                 }
             }
             if ((unsigned int)result <= 1) {
-                result = ((p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF;
+                int turn = (p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF;
+                result = turn <= 0x7FFFFF;
             } else if ((unsigned int)(result - 2) <= 1) {
                 result = 2;
                 if (((p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF) {
@@ -1548,21 +1558,22 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
             if (pCarrier->mpState->mId == 26) {
                 Point_8017886C goal;
                 goal.mX = fn_8011F4D4();
-                Point_8017886C origin = fn_80177FE0();
-                goal.mY = origin.mY;
+                goal.mY = fn_80177FE0().mY;
                 int target = goal.Heading();
-                if (SyncRandGetFloat(0) <= 0.5f) {
-                    return 4;
+                if (SyncRandGetFloat(0) > 0.5f) {
+                    diff = (target - angle) & 0xFFFFFF;
+                    result = diff > 0x800000;
+                } else {
+                    result = 4;
                 }
-                diff = target - angle;
             } else {
                 if (pCarrier->mMotion.mUnknown28 != 0.0f &&
                     MathAngleDiff(p->mMotion.mFacing, heading) <= 0x155554) {
                     heading = pCarrier->mMotion.mUnknown32;
                 }
-                diff = heading - angle;
+                diff = (heading - angle) & 0xFFFFFF;
+                result = diff > 0x800000;
             }
-            result = (diff & 0xFFFFFF) > 0x800000;
         } else {
             float ratio = (float)pRatings[0] / (float)pRatings[9] * 128.0f;
             if (ratio >= 0.0f) {
@@ -1718,13 +1729,13 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
         Vec2Add(&target, &p->mMotion.mPos, &dir);
     } else if (fn_8011E188() > 30) {
         if (pCarrier) {
+            Point_8017886C lead;
             if (pCarrier->mpState->mId == 26) {
-                Point_8017886C lead;
-                Object_80039F5C *pTarget = PlyrGet(fn_80178308(), pCarrier->mpState->mUnknown1);
+                int index = pCarrier->mpState->mUnknown1;
+                Object_80039F5C *pTarget = PlyrGet(fn_80178308(), index);
                 Vec2FromAngle(&lead, pTarget->mMotion.mUnknown32, pTarget->mMotion.mUnknown28 * 60.0f);
                 Vec2Add(&target, &pTarget->mMotion.mPos, &lead);
             } else {
-                Point_8017886C lead;
                 Vec2FromAngle(&lead, pCarrier->mMotion.mUnknown32, pCarrier->mMotion.mUnknown28 * 60.0f);
                 Vec2Add(&target, &pCarrier->mMotion.mPos, &lead);
             }
@@ -1759,16 +1770,15 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
                 if (human) {
                     push += push;
                 }
-                float pull;
                 if ((unsigned int)mode <= 5) {
                     fn_8011E7CC(p, 1, push);
-                    fn_8011E7CC(pOther, 1, pull = -push);
+                    fn_8011E7CC(pOther, 1, -push);
                 } else {
                     fn_8011E7CC(p, 0, push);
-                    fn_8011E7CC(pOther, 0, pull = -push);
+                    fn_8011E7CC(pOther, 0, -push);
                 }
                 fn_8011E7CC(p, 2, push);
-                fn_8011E7CC(pOther, 2, pull);
+                fn_8011E7CC(pOther, 2, -push);
                 if (human) {
                     fn_8011E884(p, 15);
                     fn_8011E884(pOther, 15);
@@ -1834,11 +1844,12 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         !(p->mMotion.mUnknown28 >= 0.1f)) {
         int heading;
         if (fn_801486A0() != 1) {
-            Vector_80039F5C delta;
+            Point_8017886C delta;
             Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
-            heading = fn_801CFE40(delta.mY, delta.mX);
+            heading = delta.Heading();
         } else {
-            heading = p->mUnknown2913 ? 0x800000 : 0;
+            heading = 0x800000;
+            if (!p->mUnknown2913) heading = 0;
         }
         if (MathAngleDiff(p->mMotion.mFacing, heading) > 0x38E38) {
             if (((p->mMotion.mFacing - heading) & 0xFFFFFF) > 0x800000)
@@ -1849,10 +1860,10 @@ int PlyrWaitUpdate(Object_80039F5C *p)
     if (*pTimer < 0) return 1;
 
     if (fn_801486A0() == 0) {
-        p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
+        p->mUnknown512.mUnknown0 = 0.0f;
         unsigned short count = fn_80178D70(0);
         for (unsigned short i = 0; i < count; i++) {
             if (PlyrGet(0, i)->mpState->mId == 97) return 1;
@@ -2183,9 +2194,9 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
     } else BallGetPosition(BallGetCurrent(), &point);
-    Vector_80039F5C delta;
+    Point_8017886C delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
-    int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    int heading = delta.Heading() & 0xFFFFFF;
     int limit = fn_800ACD04(p);
     if (!(point.mY >= fn_80177FE0().mY) && !fn_801783AC(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
@@ -2193,20 +2204,22 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
         step = MathAngleDiff(heading, p->mMotion.mFacing);
     else step = limit;
-    int facing;
-    if (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000)
-        facing = p->mMotion.mFacing - step;
-    else facing = p->mMotion.mFacing + step;
-    facing &= 0xFFFFFF;
-    int remaining = (heading - facing) & 0xFFFFFF;
-    p->mUnknown512.mUnknown4 = facing;
+    step = (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000 ? p->mMotion.mFacing - step : p->mMotion.mFacing + step) & 0xFFFFFF;
+    heading = (heading - step) & 0xFFFFFF;
     p->mUnknown512.mUnknown0 = 1.0f;
     p->mUnknown512.mUnknown14 = 6;
-    p->mUnknown512.mUnknown8 = facing;
-    state->mUnknown9 = _PlyrTackle_aAimOctants[((remaining + 0x100000) >> 21) & 7];
+    p->mUnknown512.mUnknown8 = step;
+    p->mUnknown512.mUnknown4 = step;
+    state->mUnknown9 = _PlyrTackle_aAimOctants[((heading + 0x100000) >> 21) & 7];
     if (p->mIdBytes[2] == fn_80178320()) {
-        if (state->mUnknown9 == 2) state->mUnknown9 = 3;
-        else if (state->mUnknown9 == 7) state->mUnknown9 = 6;
+        switch (state->mUnknown9) {
+        case 7:
+            state->mUnknown9 = 6;
+            break;
+        case 2:
+            state->mUnknown9 = 3;
+            break;
+        }
     }
 }
 }
@@ -2231,47 +2244,58 @@ extern "C" int PlyrTackleAiTry(Object_80039F5C *p, void *pArg)
 extern "C" {
 int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
 {
-    if (!PlyrTackleCanStart(p) || !PlayerIsFreeOfBall(p)) return 0;
+    if (!PlyrTackleCanStart(p)) return 0;
+    if (!PlayerIsFreeOfBall(p)) return 0;
     Message_800F01CC message;
     memset(&message, 0, 4);
     message.mId = 12;
     Object_80039F5C *carrier = BallGetCurrentHolder();
     unsigned char choice;
     unsigned char kind;
+    Vector_80039F5C point;
+    Vector_80039F5C spot;
+    float range;
+    Point_8017886C delta;
     if (p == carrier) {
         float distance = fn_80178298() - p->mMotion.mPos.mY;
         choice = 2;
         kind = 1;
-        if (distance <= 0.0f || !(distance < 4.0f)) fn_80178A2C();
-        int team = fn_80178320();
-        unsigned char count = fn_80178D18(fn_80178320());
-        float range;
-        Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
-        if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
+        if (distance <= 0.0f || !(distance < 4.0f)) {
+            // FAKEMATCH: the unused clamp stands in for the target's dead test of this distance against 0.0f (fcmpu at 0x800E8208), which keeps 0.0f in f31 across the call; the function stays a holdout.
+            distance = fn_80178A2C() - p->mMotion.mPos.mY;
+            if (distance < 0.0f) distance = 0.0f;
+        }
+        if (kind == 1) {
+            int team = fn_80178320();
+            unsigned char count = fn_80178D18(fn_80178320());
+            Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
+            if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
+        }
     } else if (carrier && p->mIdBytes[2] == fn_80178320()) {
-        Vector_80039F5C delta;
         Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
         kind = 3;
         choice = 1;
-        int heading = fn_801CFE40(delta.mY, delta.mX);
+        int heading = delta.Heading();
         if (MathAngleDiff(heading, p->mMotion.mFacing) <= 0x3FFFFF) Vec2Magnitude(&delta);
     } else {
-        Vector_80039F5C point;
         BallGetLandingPoint(BallGetCurrent(), &point);
-        Vector_80039F5C delta;
         Vec2Sub(&delta, &point, &p->mMotion.mPos);
         if (!(Vec2Magnitude(&delta) >= 8.0f) && BallStateGet(BallGetCurrent(), 0) == 4) {
-            Vector_80039F5C spot = p->mMotion.mPos;
+            spot = p->mMotion.mPos;
             spot.mZ = (float)p->mMotion.mUnknown32;
+            choice = 2;
+            kind = 4;
+        } else {
+            choice = 2;
+            kind = 4;
         }
-        choice = 2;
-        kind = 4;
     }
     if (choice == 0) choice = SyncRandGetRange(0, 3) + 1;
     PlayerMoveBegin(p, mode, 12);
     message.mUnknown1[0] = kind;
     message.mUnknown1[1] = choice;
-    message.mUnknown1[2] = mode == 0 ? 0 : _PlyrTackle_aButtonKinds[SyncRandGetRange(0, 5)];
+    if (mode == 0) message.mUnknown1[2] = 0;
+    else message.mUnknown1[2] = _PlyrTackle_aButtonKinds[SyncRandGetRange(0, 5)];
     fn_800F00D4(0, p->mpState, &message, p);
     return 1;
 }
@@ -3055,10 +3079,18 @@ extern "C" int CarrierMomentumUpdate(Object_80039F5C *p) {
         p->mFlags &= ~0x80000;
         if (p->mUnknown9[0] != 8) {
             Message_800F01CC message;
-            memset(&message, 0, 4);
-            message.mId = 11;
-            message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            // FAKEMATCH: identical arms on state word +0 reproduce the target's dead lwz/cmplwi 10 (cross-jumped in jump2); the message sent is the same either way.
+            if ((unsigned int)state->mUnknown0 > 10) {
+                memset(&message, 0, 4);
+                message.mId = 11;
+                message.mUnknown1[0] = p->mUnknown9[0];
+                fn_800F05E4(0, p->mpState, &message, p);
+            } else {
+                memset(&message, 0, 4);
+                message.mId = 11;
+                message.mUnknown1[0] = p->mUnknown9[0];
+                fn_800F05E4(0, p->mpState, &message, p);
+            }
         } else {
             p->mFlags &= ~0x4000000;
         }
