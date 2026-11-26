@@ -278,7 +278,7 @@ void DepthChartLoad(int reset)
             memset(_DepthChart_aCommitted, 0, sizeof(_DepthChart_aCommitted));
         }
     } else {
-        fn_8008040C(&_DepthChart_sPlayerCursor, 0);
+        PlayerCursorOpenDefault(&_DepthChart_sPlayerCursor, 0);
         if (_DepthChart_bNeedsLoad) {
             Object_8008044C cursor;
             Desc_8008044C desc;
@@ -292,12 +292,12 @@ void DepthChartLoad(int reset)
                 desc.mUnknown0 = 1;
                 desc.mUnknown4 = 1;
                 desc.mUnknown8 = ids[group];
-                fn_8008040C(&cursor, &desc);
+                PlayerCursorOpenDefault(&cursor, &desc);
                 for (i = 0; i < 14; i++) {
                     PlayerDbSeekOriginalId(&cursor, _DepthChart_aCommitted[group][i], 0);
                     _DepthChart_aWorking[group][i] = _DepthChart_aCommitted[group][i] = PlayerDbGetId(&cursor);
                 }
-                fn_8008056C(&cursor);
+                PlayerCursorClose(&cursor);
             }
         }
         _DepthChart_bNeedsLoad = 0;
@@ -309,7 +309,7 @@ void DepthChartLoad(int reset)
 void DepthChartSave(void)
 {
     _DepthChart_bOpen = 0;
-    fn_8008056C(&_DepthChart_sPlayerCursor);
+    PlayerCursorClose(&_DepthChart_sPlayerCursor);
     if (!FELoopIsMainFEActive()) {
         int ids[2];
         unsigned char group;

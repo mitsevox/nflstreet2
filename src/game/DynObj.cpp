@@ -2372,7 +2372,7 @@ void PhysAddPlayers(void)
     Quat_801EB488 rotation;
     Vector_80039F5C position = {0.0f, 0.0f, 3.0f};
     Object_8008044C query;
-    fn_8008040C(&query, 0);
+    PlayerCursorOpenDefault(&query, 0);
     for (unsigned int team = 0; team < 2; team++) {
         for (unsigned int index = 0; index < 7; index++) {
             float radius = 0.45f;
@@ -2413,7 +2413,7 @@ void PhysAddPlayers(void)
             lbl_803EA524++;
         }
     }
-    fn_8008056C(&query);
+    PlayerCursorClose(&query);
 }
 
 void PhysAddBall(void)

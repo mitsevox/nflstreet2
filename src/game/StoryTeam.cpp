@@ -237,7 +237,7 @@ void StoryPlayerResetById(int id)
     Object_8008044C object;
     PlayerCursorOpen(&object, 0, 0x54415453);
     if (PlayerDbSeekId(&object, id, 0)) StoryPlayerSetDefaults(&object);
-    fn_8008056C(&object);
+    PlayerCursorClose(&object);
 }
 
 void StoryTeamCursorOpen(DbCursor *pCursor, int index)
@@ -319,7 +319,7 @@ void StoryTeamCreatePlayer(int index, int value)
     pPort->SetEntry(7, 0xFFFF, unknown8, unknown12, 0xA7, &text20, ids[0], unknown52, unknown56, &text60,
                     &values, value76);
     pPort->Start();
-    fn_8008056C(&object);
+    PlayerCursorClose(&object);
 }
 
 void CopyRdrcPlayersToTeam(int index, int team, int rumt)
@@ -374,7 +374,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         text20.mChars[19] = color19 + 0x80;
         gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,
             resultIds[0], unknown52, unknown56, &text60, &values, value76);
-        fn_8008056C(&object);
+        PlayerCursorClose(&object);
         TDbTblDestroy(0x54415453, table);
     }
     if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);

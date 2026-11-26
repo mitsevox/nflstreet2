@@ -110,7 +110,7 @@ void fn_8014B528(Class_802A2DB8 *p)
         desc.mUnknown4 = 1;
         desc.mUnknown12 = 0;
         desc.mUnknown8 = i;
-        fn_8008040C(&cursor, &desc);
+        PlayerCursorOpenDefault(&cursor, &desc);
         if (DepthChartGetEntry(i, 0, &id)) {
             PlayerDbSeekOriginalId(&cursor, id, 0);
             id = PlayerDbGetId(&cursor);
@@ -126,7 +126,7 @@ void fn_8014B528(Class_802A2DB8 *p)
             id = PlayerDbGetId(&cursor);
         }
         p->mpUnknown1C->mUnknown20[i][2] = id;
-        fn_8008056C(&cursor);
+        PlayerCursorClose(&cursor);
     }
 }
 }

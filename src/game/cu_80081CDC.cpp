@@ -4,20 +4,20 @@
 #include "game/FchrCursor.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Row_8007BC34.h"
+#include "game/GearDb.h"
 #include "game/TDbCompilePerformOp.h"
 #include "game/SyncRandGetRange.h"
 
 
 extern "C" {
 int DbCursorGetRow(DbCursor *pObject);
-void fn_8007BA88(DbCursor *pCursor, int value);
-void fn_8007BB04(DbCursor *pCursor);
-int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
+void GearDbOpenType(DbCursor *pCursor, int value);
+void GearDbClose(DbCursor *pCursor);
+int GearDbSeekId(DbCursor *pCursor, int key, int *pResult);
 int PlayerRecordCreate(int a, int b, int mode, int c);
 void PlayerRecordCopyTeam(int a, int b, int mode);
-int fn_8008058C(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
-void fn_80080874(int which);
+int PlayerQueryOpen(int *pId, int *pPos, int *pValue, int a, int b, int c, int mode);
+void PlayerQueryClose(int which);
 int PlayerDbGetId(Object_8008044C *pObject);
 void SndgMusicPumpFrame(int a);
 int UserProfileGetSelected(unsigned char index);
@@ -239,8 +239,8 @@ int fn_80082414(int index)
 
     switch (index) {
     case 0:
-        result = fn_8008058C(0, 0, 0, -1, -1, -1, 0);
-        fn_80080874(0);
+        result = PlayerQueryOpen(0, 0, 0, -1, -1, -1, 0);
+        PlayerQueryClose(0);
         return result;
     case 1: {
         int count = fn_80082864();
@@ -259,7 +259,7 @@ int fn_80082414(int index)
         desc.mUnknown0 = 0;
         PlayerCursorOpen(&cursor, &desc, 0x54415453);
         result = DbCursorGetRowCount((DbCursor *)&cursor);
-        fn_8008056C(&cursor);
+        PlayerCursorClose(&cursor);
         return result;
     }
     }
@@ -362,7 +362,7 @@ int fn_80082864(void)
     desc.mUnknown0 = 0;
     PlayerCursorOpen(&cursor, &desc, 0x54415453);
     count = DbCursorGetRowCount((DbCursor *)&cursor);
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
     return count;
 }
 
@@ -605,15 +605,15 @@ void fn_80083070(Record_80082B18 *pRecord)
     pRecord->mUnknownB0 = 0;
     pRecord->mUnknownB4 = 0;
     DbCursor rows;
-    fn_8007BA88(&rows, 9);
-    fn_8007BBFC(&rows, pRecord->mUnknown7C, 0);
-    if (fn_8007BDF8(&rows) == 5) {
+    GearDbOpenType(&rows, 9);
+    GearDbSeekId(&rows, pRecord->mUnknown7C, 0);
+    if (GearDbGetGrsi(&rows) == 5) {
         pRecord->mUnknown7C = 0x53;
         pRecord->mUnknown78 = 1;
         pRecord->mUnknownB8 = 0;
         pRecord->mUnknownBC = 0;
     }
-    fn_8007BB04(&rows);
+    GearDbClose(&rows);
     dftp = pRecord->mUnknownBC;
     dbtp = pRecord->mUnknownB8;
     cdhp = pRecord->mUnknownC0;

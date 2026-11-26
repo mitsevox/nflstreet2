@@ -220,13 +220,13 @@ void PlayerLookSetGear(int index, int a, int b);
 void PlayerLookSetFrontDecalKind(int a, int b);
 void PlayerLookSetHair(int a, int b);
 void PlayerLookSetPartVariant(int a, unsigned int b, int c);
-void fn_8007BA48(DbCursor *pObject);
-void fn_8007BB04(DbCursor *pObject);
-int fn_8007BB4C(DbCursor *pObject, int a, int b);
-int fn_8007BE54(DbCursor *pObject);
-int fn_8007BE7C(DbCursor *pObject);
-int fn_8007BECC(int a, const char *pName);
-int fn_8007BF28(int index);
+void GearDbOpen(DbCursor *pObject);
+void GearDbClose(DbCursor *pObject);
+int GearDbSeekKey(DbCursor *pObject, int a, int b);
+int GearDbGetId(DbCursor *pObject);
+int GearDbGetType(DbCursor *pObject);
+int GearDbFindIdByGbst(int a, const char *pName);
+int GearDbGetTypeSlot(int index);
 void HairListOpen(DbCursor *pObject);
 void HairListClose(DbCursor *pObject);
 int PlayerDbGetId(Object_8008044C *pObject);
@@ -298,7 +298,7 @@ void Class_8000F500::Enter(int a, int *pCount, int *pOut)
     fn_80087704();
     fn_8000E70C();
     fn_8000E784(&lbl_8036AD78);
-    lbl_803EB94C = fn_8007BECC(9, "MANNEQUINSHIRTPADS");
+    lbl_803EB94C = GearDbFindIdByGbst(9, "MANNEQUINSHIRTPADS");
     *pCount = fn_800872E8(mUnknown8);
     if (*pCount == 0) {
         mUnknown16 = 1;
@@ -771,13 +771,13 @@ static void fn_8000E8FC(int index, int value)
         int b = 0;
         int c = 0;
 
-        fn_8007BA48(&object);
-        if (fn_8007BB4C(&object, value, 0)) {
-            a = fn_8007BE54(&object);
-            b = fn_8007BE7C(&object);
-            c = fn_8007BF28(b);
+        GearDbOpen(&object);
+        if (GearDbSeekKey(&object, value, 0)) {
+            a = GearDbGetId(&object);
+            b = GearDbGetType(&object);
+            c = GearDbGetTypeSlot(b);
         }
-        fn_8007BB04(&object);
+        GearDbClose(&object);
         if (c == 14) {
             if (b == 6) {
                 FEPlyrSetPairSlot(6, a);

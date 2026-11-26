@@ -1,3 +1,8 @@
+/* Player table queries: finds free player ids and creates a new player record, opens player cursors
+   filtered by team or other columns for the roster screens, copies a team's player rows between the
+   game and profile databases, and runs the three position-group fastcursors the team pick screen
+   walks. */
+
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/Record_80082B18.h"
@@ -27,12 +32,12 @@ void SndgMusicPumpFrame(int);
 /* These fast cursors are also accessed by the selector, fetch and close
    functions below. The halfword at +4 can be overwritten independently. */
 extern "C" {
-QueryCursor lbl_8030BC58;
-QueryCursor lbl_8030BC68;
-QueryCursor lbl_8030BC78;
+QueryCursor _PlayerQuery_sTeamsCursor;
+QueryCursor _PlayerQuery_sTeam34Cursor;
+QueryCursor _PlayerQuery_sPrtyCursor;
 }
 
-extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *count, int start)
+extern "C" int PlayerRecordFindFreeIds(int db, int table, int *out, unsigned short *count, int start)
 {
     QueryCursor cursor;
     cursor.mUnknown8 = -1;
@@ -42,9 +47,9 @@ extern "C" int fn_8007FA48(int table, int column, int *out, unsigned short *coun
     int row;
     int result;
     if (start < 0)
-        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", table, &cursor, &row, column);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", db, &cursor, &row, table);
     else
-        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", table, &cursor, &row, column, start);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", db, &cursor, &row, table, start);
     int previous = start;
     int high = 0x7FFF;
     int next = -1;
@@ -97,7 +102,7 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
     record.mUnknown08 = last;
     record.mUnknown0C = other;
     unsigned short count = 1;
-    fn_8007FA48(0x54415453, 0x59414C50, &record.mUnknown00, &count, start);
+    PlayerRecordFindFreeIds(0x54415453, 0x59414C50, &record.mUnknown00, &count, start);
     record.mUnknown10 = value;
     record.mUnknown14 = value;
     fn_80082C64(&record);
@@ -151,11 +156,11 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
 
 /* The query cursor identities are distinct in adjacent source. These
    wrappers use the common query entry point with this caller's object. */
-extern "C" void fn_8007FE04(Object_8008044C *p, void *arg, int flags)
+extern "C" void PlayerCursorOpenAll(Object_8008044C *p, void *arg, int flags)
 {
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, 0, flags);
 }
-extern "C" void fn_8007FE40(Object_8008044C *p, void *arg, int selector, int flags)
+extern "C" void PlayerCursorOpenByTeam(Object_8008044C *p, void *arg, int selector, int flags)
 {
     DbFilter node;
     node.Set(6, 0x59414C5044494754LL, 3, selector);
@@ -169,13 +174,13 @@ extern "C" void PlayerCursorOpenByPlig(Object_8008044C *p, void *arg, int flags)
     node.Set(6, 0x59414C5047494C50LL, 3, selector);
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
-extern "C" void fn_8007FF30(Object_8008044C *p, void *arg, int selector, int flags)
+extern "C" void PlayerCursorOpenByPrty(Object_8008044C *p, void *arg, int selector, int flags)
 {
     DbFilter node;
     node.Set(6, 0x59414C5059545250LL, 3, selector);
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &node, flags);
 }
-extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int value, int flags)
+extern "C" void PlayerCursorOpenByTeamAndId(Object_8008044C *p, void *arg, int selector, int value, int flags)
 {
     DbFilter root, left, right;
     root.Set(11, &left, &right);
@@ -184,7 +189,7 @@ extern "C" void fn_8007FFA8(Object_8008044C *p, void *arg, int selector, int val
     right.mUnknown16.mValue.mInt = value;
     DbCursorOpen(reinterpret_cast<DbCursor *>(p), 0x59414C50, 0x44494750, arg, &root, flags);
 }
-extern "C" void fn_80080084(int value, int handle, int table, DbColumnValue *columns)
+extern "C" void PlayerRecordWriteById(int value, int handle, int table, DbColumnValue *columns)
 {
     DbQueryResult result;
     DbTableRef tables[2];
@@ -242,7 +247,7 @@ extern "C" void PlayerRecordCopyTeam(int selector, int index, int mode)
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = to;
                 columns[22].mColumnTag = -1;
                 columns[22].mTableTag = -1;
-                fn_80080084(columns[22].mValue, destination, to, columns);
+                PlayerRecordWriteById(columns[22].mValue, destination, to, columns);
                 for (int i = 21; i >= 0; --i) columns[i].mTableTag = from;
                 columns[22].mColumnTag = 0x44494750;
                 columns[22].mTableTag = from;
@@ -254,7 +259,7 @@ done:
     if (created) DbFileTblDestroy(0x54415453, from);
 }
 
-extern "C" void fn_8008040C(Object_8008044C *p, Desc_8008044C *desc)
+extern "C" void PlayerCursorOpenDefault(Object_8008044C *p, Desc_8008044C *desc)
 {
     int tag = TDbTblDefaultDbGet();
     PlayerCursorOpen(p, desc, tag);
@@ -276,19 +281,19 @@ extern "C" void PlayerCursorOpen(Object_8008044C *p, Desc_8008044C *desc, int ta
     case 2: arg = lbl_802D6990; break;
     }
     switch (local.mUnknown4) {
-    case 0: fn_8007FE04(p, arg, tag); break;
-    case 1: fn_8007FE40(p, arg, local.mUnknown8, tag); break;
+    case 0: PlayerCursorOpenAll(p, arg, tag); break;
+    case 1: PlayerCursorOpenByTeam(p, arg, local.mUnknown8, tag); break;
     case 2: PlayerCursorOpenByPlig(p, arg, tag); break;
-    case 3: fn_8007FF30(p, arg, local.mUnknown8, tag); break;
-    case 4: fn_8007FFA8(p, arg, local.mUnknown8, local.mUnknown12, tag); break;
+    case 3: PlayerCursorOpenByPrty(p, arg, local.mUnknown8, tag); break;
+    case 4: PlayerCursorOpenByTeamAndId(p, arg, local.mUnknown8, local.mUnknown12, tag); break;
     }
 }
-extern "C" void fn_8008056C(Object_8008044C *p)
+extern "C" void PlayerCursorClose(Object_8008044C *p)
 {
     DbCursorClose(reinterpret_cast<DbCursor *>(p));
 }
 
-extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, int mode)
+extern "C" int PlayerQueryOpen(int *id, int *pos, int *value, int a, int b, int c, int mode)
 {
     DbQueryResult result;
     result.mCount = 0;
@@ -296,59 +301,59 @@ extern "C" int fn_8008058C(int *id, int *pos, int *value, int a, int b, int c, i
     if (static_cast<unsigned int>(c) > 15) c = a;
     switch (mode) {
     case 0:
-        lbl_8030BC58.mUnknown0 = 0;
-        lbl_8030BC58.mUnknown8 = -1;
-        lbl_8030BC58.mUnknown12 = 0;
-        lbl_8030BC58.mUnknown4 = 0;
+        _PlayerQuery_sTeamsCursor.mUnknown0 = 0;
+        _PlayerQuery_sTeamsCursor.mUnknown8 = -1;
+        _PlayerQuery_sTeamsCursor.mUnknown12 = 0;
+        _PlayerQuery_sTeamsCursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value, a, b, c);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &_PlayerQuery_sTeamsCursor, id, pos, value, a, b, c);
         else
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &lbl_8030BC58, id, pos, value);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &_PlayerQuery_sTeamsCursor, id, pos, value);
         break;
     case 1:
-        lbl_8030BC68.mUnknown0 = 0;
-        lbl_8030BC68.mUnknown8 = -1;
-        lbl_8030BC68.mUnknown12 = 0;
-        lbl_8030BC68.mUnknown4 = 0;
+        _PlayerQuery_sTeam34Cursor.mUnknown0 = 0;
+        _PlayerQuery_sTeam34Cursor.mUnknown8 = -1;
+        _PlayerQuery_sTeam34Cursor.mUnknown12 = 0;
+        _PlayerQuery_sTeam34Cursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, a, b, c, 34);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, a, b, c, 34);
         else
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &lbl_8030BC68, id, pos, value, 34);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, 34);
         break;
     case 2:
-        lbl_8030BC78.mUnknown0 = 0;
-        lbl_8030BC78.mUnknown8 = -1;
-        lbl_8030BC78.mUnknown12 = 0;
-        lbl_8030BC78.mUnknown4 = 0;
+        _PlayerQuery_sPrtyCursor.mUnknown0 = 0;
+        _PlayerQuery_sPrtyCursor.mUnknown8 = -1;
+        _PlayerQuery_sPrtyCursor.mUnknown12 = 0;
+        _PlayerQuery_sPrtyCursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, a, b, c, 1);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sPrtyCursor, id, pos, value, a, b, c, 1);
         else
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &lbl_8030BC78, id, pos, value, 1);
+            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sPrtyCursor, id, pos, value, 1);
         break;
     }
     return result.mCount;
 }
-extern "C" void fn_8008079C(int which)
+extern "C" void PlayerQueryFetch(int which)
 {
     switch (which) {
-    case 0: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC58); break;
-    case 1: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC68); break;
-    case 2: TDbCompilePerformOp(0, "fetch from \x8a\n", &lbl_8030BC78); break;
+    case 0: TDbCompilePerformOp(0, "fetch from \x8a\n", &_PlayerQuery_sTeamsCursor); break;
+    case 1: TDbCompilePerformOp(0, "fetch from \x8a\n", &_PlayerQuery_sTeam34Cursor); break;
+    case 2: TDbCompilePerformOp(0, "fetch from \x8a\n", &_PlayerQuery_sPrtyCursor); break;
     }
 }
-extern "C" void fn_8008082C(unsigned short value, int which)
+extern "C" void PlayerQuerySetRow(unsigned short value, int which)
 {
     switch (which) {
-    case 0: lbl_8030BC58.mUnknown4 = value; break;
-    case 1: lbl_8030BC68.mUnknown4 = value; break;
-    case 2: lbl_8030BC78.mUnknown4 = value; break;
+    case 0: _PlayerQuery_sTeamsCursor.mUnknown4 = value; break;
+    case 1: _PlayerQuery_sTeam34Cursor.mUnknown4 = value; break;
+    case 2: _PlayerQuery_sPrtyCursor.mUnknown4 = value; break;
     }
 }
-extern "C" void fn_80080874(int which)
+extern "C" void PlayerQueryClose(int which)
 {
     switch (which) {
-    case 0: if (lbl_8030BC58.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC58); break;
-    case 1: if (lbl_8030BC68.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC68); break;
-    case 2: if (lbl_8030BC78.mUnknown0) TDbSQLDestroyCursor(&lbl_8030BC78); break;
+    case 0: if (_PlayerQuery_sTeamsCursor.mUnknown0) TDbSQLDestroyCursor(&_PlayerQuery_sTeamsCursor); break;
+    case 1: if (_PlayerQuery_sTeam34Cursor.mUnknown0) TDbSQLDestroyCursor(&_PlayerQuery_sTeam34Cursor); break;
+    case 2: if (_PlayerQuery_sPrtyCursor.mUnknown0) TDbSQLDestroyCursor(&_PlayerQuery_sPrtyCursor); break;
     }
 }
