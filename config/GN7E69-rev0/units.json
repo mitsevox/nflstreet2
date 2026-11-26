@@ -15962,7 +15962,7 @@
             "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
           },
           {
-            "function": "fn_801D6F58",
+            "function": "MemCardMgrUpdate",
             "evidence": "evidence.tsv source-form 0x801D6F58-0x801D83F0"
           },
           {

@@ -10,7 +10,7 @@ void fn_801D6E04(int error);
 void fn_801D6E10(void *pData, unsigned int size);
 void fn_801D6E54(void *pData, unsigned int size);
 int fn_801D6EA0(unsigned char *pFailed);
-void fn_801D6F58(void);
+void MemCardMgrUpdate(void);
 }
 
 /*
@@ -101,7 +101,7 @@ static int _CardStreamFillToEnd(CardStream *pStream)
                 result = 0x24;
                 break;
             }
-            fn_801D6F58();
+            MemCardMgrUpdate();
             _CardStreamYield();
         }
         if (failed) {
@@ -152,7 +152,7 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
             result = 0x24;
             break;
         }
-        fn_801D6F58();
+        MemCardMgrUpdate();
         _CardStreamYield();
     }
     if (!failed) {
@@ -179,7 +179,7 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
             result = 0x24;
             break;
         }
-        fn_801D6F58();
+        MemCardMgrUpdate();
         _CardStreamYield();
     }
     if (!failed) {

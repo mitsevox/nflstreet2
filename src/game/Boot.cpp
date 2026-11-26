@@ -40,7 +40,7 @@ int GlibGetScreenWidth(void);
 void GlibSwitchToSingle(void);
 void GlibSwitchToDouble(int a);
 int GlibGetXFBHeight(void);
-void fn_801D6F58(void);
+void MemCardMgrUpdate(void);
 void MovieRcmpPlay(int a, int b, int c, int (*pCallback)(int), int d);
 int MovieRcmpInstallMADCOWCodec(RcmpCodec *(*pCreate)(void));
 int PerPollSingleDevice(int a);
@@ -94,7 +94,7 @@ static void _BootWaitForScreen(void *p, unsigned short a, unsigned short b, int 
         UISGameRefreshAll();
         ConUpdateChannel(-1);
         ConProcessChannel(-1);
-        fn_801D6F58();
+        MemCardMgrUpdate();
         VptProcessViewports();
         FileDebugProcess();
         GlibSwapBuffers();

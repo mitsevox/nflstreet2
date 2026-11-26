@@ -710,7 +710,7 @@ void fn_801D6EFC(void)
     }
 }
 
-void fn_801D6F58(void)
+void MemCardMgrUpdate(void)
 {
     int error;
     Struct_803ECF18 *pSlot;
