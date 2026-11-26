@@ -2979,9 +2979,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8000DCD8.cpp",
+      "source": "src/game/CreatePlayerShop.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects. The source is linked with holdouts (units.json, whose storage map places the same COMMON and .sbss statics); the non-exact function stays registered here as its partial.",
+      "evidence": "evidence.tsv unit row src/game/CreatePlayerShop.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects. The source is linked with holdouts (units.json, whose storage map places the same COMMON and .sbss statics); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -3022,274 +3022,274 @@
           "end": "0x8000DD04"
         },
         {
-          "symbol": "Enter__14Class_8000F500iPiT2",
+          "symbol": "Enter__12ShopItemListiPiT2",
           "start": "0x8000DD04",
           "end": "0x8000DDC0"
         },
         {
-          "symbol": "Leave__14Class_8000F500iiPPv",
+          "symbol": "Leave__12ShopItemListiiPPv",
           "start": "0x8000DDC0",
           "end": "0x8000DE24"
         },
         {
-          "symbol": "GetItemId__14Class_8000F500iPi",
+          "symbol": "GetItemId__12ShopItemListiPi",
           "start": "0x8000DE24",
           "end": "0x8000DE2C"
         },
         {
-          "symbol": "GetItem__14Class_8000F500iP11MenuEntry_t",
+          "symbol": "GetItem__12ShopItemListiP11MenuEntry_t",
           "start": "0x8000DE2C",
           "end": "0x8000DEEC"
         },
         {
-          "symbol": "Highlight__14Class_8000F500i",
+          "symbol": "Highlight__12ShopItemListi",
           "start": "0x8000DEEC",
           "end": "0x8000DFB0"
         },
         {
-          "symbol": "Enter__14Class_8000F540iPiT2",
+          "symbol": "Enter__13ShopStoreMenuiPiT2",
           "start": "0x8000DFB0",
           "end": "0x8000E07C"
         },
         {
-          "symbol": "GetItem__14Class_8000F540iP11MenuEntry_t",
+          "symbol": "GetItem__13ShopStoreMenuiP11MenuEntry_t",
           "start": "0x8000E07C",
           "end": "0x8000E0CC"
         },
         {
-          "symbol": "GetItem__14Class_8000F4B0iP11MenuEntry_t",
+          "symbol": "GetItem__18ShopDepartmentMenuiP11MenuEntry_t",
           "start": "0x8000E0CC",
           "end": "0x8000E11C"
         },
         {
-          "symbol": "GetItem__14Class_8000F410iP11MenuEntry_t",
+          "symbol": "GetItem__22ShopScreenPrintingMenuiP11MenuEntry_t",
           "start": "0x8000E11C",
           "end": "0x8000E16C"
         },
         {
-          "symbol": "GetItem__14Class_8000F460iP11MenuEntry_t",
+          "symbol": "GetItem__21ShopSportingGoodsMenuiP11MenuEntry_t",
           "start": "0x8000E16C",
           "end": "0x8000E1BC"
         },
         {
-          "symbol": "GetItem__14Class_8000F3C0iP11MenuEntry_t",
+          "symbol": "GetItem__14ShopTattooMenuiP11MenuEntry_t",
           "start": "0x8000E1BC",
           "end": "0x8000E20C"
         },
         {
-          "symbol": "GetItem__14Class_8000F370iP11MenuEntry_t",
+          "symbol": "GetItem__15ShopJewelryMenuiP11MenuEntry_t",
           "start": "0x8000E20C",
           "end": "0x8000E25C"
         },
         {
-          "symbol": "Leave__14Class_8000F540iiPPv",
+          "symbol": "Leave__13ShopStoreMenuiiPPv",
           "start": "0x8000E25C",
           "end": "0x8000E390"
         },
         {
-          "symbol": "Leave__14Class_8000F4B0iiPPv",
+          "symbol": "Leave__18ShopDepartmentMenuiiPPv",
           "start": "0x8000E390",
           "end": "0x8000E478"
         },
         {
-          "symbol": "Leave__14Class_8000F460iiPPv",
+          "symbol": "Leave__21ShopSportingGoodsMenuiiPPv",
           "start": "0x8000E478",
           "end": "0x8000E588"
         },
         {
-          "symbol": "Leave__14Class_8000F410iiPPv",
+          "symbol": "Leave__22ShopScreenPrintingMenuiiPPv",
           "start": "0x8000E588",
           "end": "0x8000E600"
         },
         {
-          "symbol": "Leave__14Class_8000F3C0iiPPv",
+          "symbol": "Leave__14ShopTattooMenuiiPPv",
           "start": "0x8000E600",
           "end": "0x8000E694"
         },
         {
-          "symbol": "Leave__14Class_8000F370iiPPv",
+          "symbol": "Leave__15ShopJewelryMenuiiPPv",
           "start": "0x8000E694",
           "end": "0x8000E70C"
         },
         {
-          "symbol": "fn_8000E70C__Fv",
+          "symbol": "_ShopResetView__Fv",
           "start": "0x8000E70C",
           "end": "0x8000E744"
         },
         {
-          "symbol": "fn_8000E744__FPcPCcT1",
+          "symbol": "_ShopSetTexts__FPcPCcT1",
           "start": "0x8000E744",
           "end": "0x8000E784"
         },
         {
-          "symbol": "fn_8000E784__FP15Record_8036AD78",
+          "symbol": "_ShopSaveLook__FP15ShopSavedLook_t",
           "start": "0x8000E784",
           "end": "0x8000E834"
         },
         {
-          "symbol": "fn_8000E834__FP15Record_8036AD78",
+          "symbol": "_ShopRestoreLook__FP15ShopSavedLook_t",
           "start": "0x8000E834",
           "end": "0x8000E8FC"
         },
         {
-          "symbol": "fn_8000E8FC__Fii",
+          "symbol": "_ShopPreviewItem__Fii",
           "start": "0x8000E8FC",
           "end": "0x8000EB3C"
         },
         {
-          "symbol": "fn_8000EB3C",
+          "symbol": "ShopGetMenu",
           "start": "0x8000EB3C",
           "end": "0x8000EB5C"
         },
         {
-          "symbol": "fn_8000EB5C",
+          "symbol": "ShopGetPoints",
           "start": "0x8000EB5C",
           "end": "0x8000EB80"
         },
         {
-          "symbol": "fn_8000EB80",
+          "symbol": "ShopGetPrice",
           "start": "0x8000EB80",
           "end": "0x8000EBA4"
         },
         {
-          "symbol": "fn_8000EBA4",
+          "symbol": "ShopBuyItem",
           "start": "0x8000EBA4",
           "end": "0x8000EC14"
         },
         {
-          "symbol": "fn_8000EC14",
+          "symbol": "ShopIsBought",
           "start": "0x8000EC14",
           "end": "0x8000EC38"
         },
         {
-          "symbol": "fn_8000EC38",
+          "symbol": "ShopGetPreviewLogo",
           "start": "0x8000EC38",
           "end": "0x8000EC44"
         },
         {
-          "symbol": "fn_8000EC44__Fv",
+          "symbol": "ShopGetState__Fv",
           "start": "0x8000EC44",
           "end": "0x8000EC94"
         },
         {
-          "symbol": "_._15Record_8036AD28",
+          "symbol": "_._9ShopState",
           "start": "0x8000EC94",
           "end": "0x8000ECBC"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F540",
+          "symbol": "GetEntryCount__13ShopStoreMenu",
           "start": "0x8000ECBC",
           "end": "0x8000ECC4"
         },
         {
-          "symbol": "GetEntries__14Class_8000F540",
+          "symbol": "GetEntries__13ShopStoreMenu",
           "start": "0x8000ECC4",
           "end": "0x8000ECD0"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F4B0",
+          "symbol": "GetEntryCount__18ShopDepartmentMenu",
           "start": "0x8000ECD0",
           "end": "0x8000ECD8"
         },
         {
-          "symbol": "GetEntries__14Class_8000F4B0",
+          "symbol": "GetEntries__18ShopDepartmentMenu",
           "start": "0x8000ECD8",
           "end": "0x8000ECE4"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F460",
+          "symbol": "GetEntryCount__21ShopSportingGoodsMenu",
           "start": "0x8000ECE4",
           "end": "0x8000ECEC"
         },
         {
-          "symbol": "GetEntries__14Class_8000F460",
+          "symbol": "GetEntries__21ShopSportingGoodsMenu",
           "start": "0x8000ECEC",
           "end": "0x8000ECF8"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F410",
+          "symbol": "GetEntryCount__22ShopScreenPrintingMenu",
           "start": "0x8000ECF8",
           "end": "0x8000ED00"
         },
         {
-          "symbol": "GetEntries__14Class_8000F410",
+          "symbol": "GetEntries__22ShopScreenPrintingMenu",
           "start": "0x8000ED00",
           "end": "0x8000ED0C"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F3C0",
+          "symbol": "GetEntryCount__14ShopTattooMenu",
           "start": "0x8000ED0C",
           "end": "0x8000ED14"
         },
         {
-          "symbol": "GetEntries__14Class_8000F3C0",
+          "symbol": "GetEntries__14ShopTattooMenu",
           "start": "0x8000ED14",
           "end": "0x8000ED20"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F370",
+          "symbol": "GetEntryCount__15ShopJewelryMenu",
           "start": "0x8000ED20",
           "end": "0x8000ED28"
         },
         {
-          "symbol": "GetEntries__14Class_8000F370",
+          "symbol": "GetEntries__15ShopJewelryMenu",
           "start": "0x8000ED28",
           "end": "0x8000ED34"
         },
         {
-          "symbol": "fn_8000ED34__Fv",
+          "symbol": "ShopGetItemList__Fv",
           "start": "0x8000ED34",
           "end": "0x8000ED64"
         },
         {
-          "symbol": "fn_8000ED64__Fv",
+          "symbol": "ShopGetDepartmentMenu__Fv",
           "start": "0x8000ED64",
           "end": "0x8000ED8C"
         },
         {
-          "symbol": "fn_8000ED8C__Fv",
+          "symbol": "ShopGetScreenPrintingMenu__Fv",
           "start": "0x8000ED8C",
           "end": "0x8000EDB4"
         },
         {
-          "symbol": "fn_8000EDB4__Fv",
+          "symbol": "ShopGetSportingGoodsMenu__Fv",
           "start": "0x8000EDB4",
           "end": "0x8000EDDC"
         },
         {
-          "symbol": "fn_8000EDDC__Fv",
+          "symbol": "ShopGetTattooMenu__Fv",
           "start": "0x8000EDDC",
           "end": "0x8000EE04"
         },
         {
-          "symbol": "fn_8000EE04__Fv",
+          "symbol": "ShopGetJewelryMenu__Fv",
           "start": "0x8000EE04",
           "end": "0x8000EE2C"
         },
         {
-          "symbol": "fn_8000EE2C__Fv",
+          "symbol": "ShopGetStoreMenu__Fv",
           "start": "0x8000EE2C",
           "end": "0x8000EE54"
         },
         {
-          "symbol": "__15Record_8036AD28",
+          "symbol": "__9ShopState",
           "start": "0x8000EE54",
           "end": "0x8000EE78"
         }
       ],
       "storage": [
         {
-          "symbol": "_17fn_8000EC44__Fv.0.sRecord",
+          "symbol": "_18ShopGetState__Fv.0.sRecord",
           "start": "0x8036AD28",
           "end": "0x8036AD64"
         },
         {
-          "symbol": "_17fn_8000ED34__Fv.0.sInstance",
+          "symbol": "_21ShopGetItemList__Fv.0.sInstance",
           "start": "0x8036AD64",
           "end": "0x8036AD78"
         },
         {
-          "symbol": "lbl_8036AD78",
+          "symbol": "_Shop_sSavedLook",
           "start": "0x8036AD78",
           "end": "0x8036ADB0"
         },
@@ -3304,7 +3304,7 @@
           "end": "0x803ECDE8"
         },
         {
-          "symbol": "_17fn_8000ED64__Fv.0.sInstance",
+          "symbol": "_27ShopGetDepartmentMenu__Fv.0.sInstance",
           "start": "0x803ECDE8",
           "end": "0x803ECDF0"
         },
@@ -3314,7 +3314,7 @@
           "end": "0x803ECDF4"
         },
         {
-          "symbol": "_17fn_8000ED8C__Fv.0.sInstance",
+          "symbol": "_31ShopGetScreenPrintingMenu__Fv.0.sInstance",
           "start": "0x803ECDF4",
           "end": "0x803ECDFC"
         },
@@ -3324,7 +3324,7 @@
           "end": "0x803ECE00"
         },
         {
-          "symbol": "_17fn_8000EDB4__Fv.0.sInstance",
+          "symbol": "_30ShopGetSportingGoodsMenu__Fv.0.sInstance",
           "start": "0x803ECE00",
           "end": "0x803ECE08"
         },
@@ -3334,7 +3334,7 @@
           "end": "0x803ECE0C"
         },
         {
-          "symbol": "_17fn_8000EDDC__Fv.0.sInstance",
+          "symbol": "_23ShopGetTattooMenu__Fv.0.sInstance",
           "start": "0x803ECE0C",
           "end": "0x803ECE14"
         },
@@ -3344,7 +3344,7 @@
           "end": "0x803ECE18"
         },
         {
-          "symbol": "_17fn_8000EE04__Fv.0.sInstance",
+          "symbol": "_24ShopGetJewelryMenu__Fv.0.sInstance",
           "start": "0x803ECE18",
           "end": "0x803ECE20"
         },
@@ -3354,7 +3354,7 @@
           "end": "0x803ECE24"
         },
         {
-          "symbol": "_17fn_8000EE2C__Fv.0.sInstance",
+          "symbol": "_22ShopGetStoreMenu__Fv.0.sInstance",
           "start": "0x803ECE24",
           "end": "0x803ECE2C"
         },
@@ -3364,12 +3364,12 @@
           "end": "0x803ECE30"
         },
         {
-          "symbol": "_Appear_iSavedHairStyle",
+          "symbol": "_Shop_iSavedHairStyle",
           "start": "0x803ECE30",
           "end": "0x803ECE34"
         },
         {
-          "symbol": "_Appear_iLastItem",
+          "symbol": "_Shop_iLastStore",
           "start": "0x803ECE34",
           "end": "0x803ECE38"
         }
