@@ -111,7 +111,7 @@ extern "C" void PATHI_serviceproject(void)
         if (!ready)
             continue;
 
-        int remaining = fn_801B6CB4(track);
+        int remaining = PATHI_timeremaining(track);
         if (track->mUnknown40) {
             if (track->mUnknown40 > gPathMilliseconds - track->mUnknown8.halves.high)
                 continue;

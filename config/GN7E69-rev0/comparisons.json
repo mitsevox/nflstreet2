@@ -27429,7 +27429,7 @@
     {
       "source": "src/engine/pathnode.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B6780-0x801B7778 (src/engine/pathnode.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
       "sections": [
         {
           "section": ".text",
@@ -27446,19 +27446,9 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801B6780",
+          "symbol": "PATHI_sampleoffset",
           "start": "0x801B6780",
           "end": "0x801B67F8"
-        },
-        {
-          "symbol": "PATHI_beatinfo",
-          "start": "0x801B67F8",
-          "end": "0x801B68EC"
-        },
-        {
-          "symbol": "PATHI_calcwaitbeat",
-          "start": "0x801B68EC",
-          "end": "0x801B6A18"
         },
         {
           "symbol": "PATHI_choosesynchtime",
@@ -27466,34 +27456,14 @@
           "end": "0x801B6CB4"
         },
         {
-          "symbol": "fn_801B6CB4",
+          "symbol": "PATHI_timeremaining",
           "start": "0x801B6CB4",
           "end": "0x801B6D20"
-        },
-        {
-          "symbol": "fn_801B6D20",
-          "start": "0x801B6D20",
-          "end": "0x801B6D9C"
-        },
-        {
-          "symbol": "PATHI_nextnode",
-          "start": "0x801B6D9C",
-          "end": "0x801B6ED0"
         },
         {
           "symbol": "PATHI_enternode",
           "start": "0x801B6ED0",
           "end": "0x801B7178"
-        },
-        {
-          "symbol": "fn_801B7178",
-          "start": "0x801B7178",
-          "end": "0x801B721C"
-        },
-        {
-          "symbol": "PATHI_seeknextnode",
-          "start": "0x801B721C",
-          "end": "0x801B7460"
         },
         {
           "symbol": "PATHI_queuenode",
@@ -27505,28 +27475,40 @@
     {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B7880-0x801B8C18 (src/engine/pathaction.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
+      "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B7880",
           "end": "0x801B8C18"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED58",
+          "end": "0x802AED94"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB70",
+          "end": "0x803EBB78"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801B845C",
+          "symbol": "PATHI_serviceaction",
+          "start": "0x801B7880",
+          "end": "0x801B845C"
+        },
+        {
+          "symbol": "PATHI_conditiondone",
           "start": "0x801B845C",
           "end": "0x801B84E4"
         },
         {
-          "symbol": "fn_801B84E4",
-          "start": "0x801B84E4",
-          "end": "0x801B8580"
-        },
-        {
-          "symbol": "fn_801B8580",
+          "symbol": "PATHI_trackstatus",
           "start": "0x801B8580",
           "end": "0x801B864C"
         },
@@ -27534,11 +27516,6 @@
           "symbol": "PATHI_getvalue",
           "start": "0x801B864C",
           "end": "0x801B89B0"
-        },
-        {
-          "symbol": "PATHI_setvalue",
-          "start": "0x801B89B0",
-          "end": "0x801B8C18"
         }
       ]
     },
