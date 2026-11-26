@@ -28707,6 +28707,50 @@
         ],
         "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out fn_802822E0, fn_802824A8, fn_80282654, fn_80282740, fn_8028291C, fn_80282D70, fn_80282F24, fn_802830F0, fn_802832CC, fn_80283660, fn_80283E48, fn_80284030, fn_8028410C, fn_80284E70, fn_80284FB8, fn_802855EC."
       }
+    },
+    {
+      "source": "src/engine/physbroadphase.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its compiler, type, function and name rows and the exact data row of its whole .rodata, the BroadPhase vtable 0x802B1708-0x802B1720; linked with holdouts (owner ruling of 2026-11-20): 20 of 22 functions exact, the holdouts BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E9F70",
+          "end": "0x801EA668"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EA6C0",
+          "end": "0x801EAB60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EAC98",
+          "end": "0x801EADD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1708",
+          "end": "0x802B1720"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GetOverlapIndex__10BroadPhaseUsUs",
+            "evidence": "evidence.tsv source-form 0x801EA668-0x801EA6C0"
+          },
+          {
+            "function": "InsertEndpoint__10BroadPhaseiUs",
+            "evidence": "evidence.tsv source-form 0x801EAB60-0x801EAC98"
+          }
+        ],
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/physbroadphase.cpp holds out BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint."
+      }
     }
   ]
 }
