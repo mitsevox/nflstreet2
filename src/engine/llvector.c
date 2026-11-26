@@ -4,8 +4,8 @@
 #include <math.h>
 
 extern float MathInvSqrt(float x);
-extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
-extern void fn_801CFCD0(int *pAngles, float *pFirst, float *pSecond);
+extern void MathSinCos(int angle, float *pFirst, float *pSecond);
+extern void MathSinCosVec4(int *pAngles, float *pFirst, float *pSecond);
 extern void MatStore(float m[4][4]);
 extern double fabs(double x);
 
@@ -100,7 +100,7 @@ void Vec2Rotate(float *pOut, float *p, int angle)
     float x;
     float y;
 
-    fn_801CFC14(angle, &s, &c);
+    MathSinCos(angle, &s, &c);
     x = p[0];
     y = p[1];
     pOut[0] = c * x - s * y;
@@ -120,7 +120,7 @@ void Vec3RotateXYZ(float *pOut, float *p, int a, int b, int c)
     angles[0] = a;
     angles[1] = b;
     angles[2] = c;
-    fn_801CFCD0(angles, first, second);
+    MathSinCosVec4(angles, first, second);
     x0 = second[2] * p[0] - first[2] * p[1];
     y0 = first[2] * p[0] + second[2] * p[1];
     x1 = second[1] * x0 + first[1] * p[2];
@@ -143,7 +143,7 @@ void Vec3RotateZYX(float *pOut, float *p, int a, int b, int c)
     angles[0] = c;
     angles[1] = b;
     angles[2] = a;
-    fn_801CFCD0(angles, first, second);
+    MathSinCosVec4(angles, first, second);
     y0 = second[0] * p[1] - first[0] * p[2];
     z0 = first[0] * p[1] + second[0] * p[2];
     x1 = second[1] * p[0] + first[1] * z0;
@@ -158,7 +158,7 @@ void Vec2FromAngle(float *pOut, int angle, float length)
     float first;
     float second;
 
-    fn_801CFC14(angle, &first, &second);
+    MathSinCos(angle, &first, &second);
     pOut[0] = second * length;
     pOut[1] = first * length;
 }

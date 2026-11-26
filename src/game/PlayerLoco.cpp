@@ -31,7 +31,7 @@ float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendS
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 Object_801BBD5C *AnimFileGetStateData(unsigned short a, unsigned short b);
 void AnimSeqSetDuration(AnimSeq_t *p, float value);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 
@@ -247,7 +247,7 @@ extern "C" int PlayerLocoIsEngaged(Object_80039F5C *p, int a)
                     if (pOther) {
                         Pair_802270A4 delta;
                         Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
-                        if (MathAngleDiff(fn_801CFE40(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
+                        if (MathAngleDiff(MathArcTan2(delta.mUnknown4, delta.mUnknown0), p->mMotion.mFacing) <= 0x1FFFFF
                             && Vec2Magnitude(&delta) < 4.5f) {
                             result = 1;
                         }

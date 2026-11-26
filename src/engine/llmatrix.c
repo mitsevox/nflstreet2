@@ -12,10 +12,10 @@ static MatMatrix_t _LLMatrix_SlotArray[16];
 
 void PSMTXConcat(float *pA, float *pB, float *pDst);
 void QuatToMatrix(float *pMatrix, float *pQuat);
-void fn_801CFC14(int angle, float *pSin, float *pCos);
-float fn_801CFB18(int angle);
-float fn_801CFB94(int angle);
-int fn_801CFE40(float y, float x);
+void MathSinCos(int angle, float *pSin, float *pCos);
+float MathSin(int angle);
+float MathCos(int angle);
+int MathArcTan2(float y, float x);
 float MathInverse(float x);
 
 void MatMakeUnitMatrix(float *pMatrix)
@@ -144,8 +144,8 @@ void MatLLInit(void)
 void MatRotAxis(float *pAxis, int angle)
 {
     float m[16];
-    float s = fn_801CFB18(angle);
-    float c = fn_801CFB94(angle);
+    float s = MathSin(angle);
+    float c = MathCos(angle);
     float x = pAxis[0];
     float y = pAxis[1];
     float z = pAxis[2];
@@ -206,7 +206,7 @@ void MatRotX(int angle)
     float s;
     float c;
 
-    fn_801CFC14(angle, &s, &c);
+    MathSinCos(angle, &s, &c);
     m[1] = p[1] * c + p[2] * s;
     m[2] = p[1] * -s + p[2] * c;
     m[5] = p[5] * c + p[6] * s;
@@ -228,7 +228,7 @@ void MatRotY(int angle)
     float s;
     float c;
 
-    fn_801CFC14(angle, &s, &c);
+    MathSinCos(angle, &s, &c);
     m[0] = p[0] * c + p[2] * -s;
     m[2] = p[0] * s + p[2] * c;
     m[4] = p[4] * c + p[6] * -s;
@@ -250,7 +250,7 @@ void MatRotZ(int angle)
     float s;
     float c;
 
-    fn_801CFC14(angle, &s, &c);
+    MathSinCos(angle, &s, &c);
     m[0] = p[0] * c + p[1] * s;
     m[1] = p[0] * -s + p[1] * c;
     m[4] = p[4] * c + p[5] * s;
@@ -419,9 +419,9 @@ void MatGetRotFromMatrixZYX(int *pAngles, float *pMatrix)
         cz = 1.0f;
         sz = 0.0f;
     }
-    pAngles[0] = fn_801CFE40(sx, cx);
-    pAngles[1] = fn_801CFE40(sy, cy);
-    pAngles[2] = fn_801CFE40(sz, cz);
+    pAngles[0] = MathArcTan2(sx, cx);
+    pAngles[1] = MathArcTan2(sy, cy);
+    pAngles[2] = MathArcTan2(sz, cz);
 }
 
 void MatGetRotFromMatrixYZX(int *pAngles, float *pMatrix)
@@ -451,9 +451,9 @@ void MatGetRotFromMatrixYZX(int *pAngles, float *pMatrix)
         cx = pMatrix[5];
         sy = 0.0f;
     }
-    pAngles[0] = fn_801CFE40(sx, cx);
-    pAngles[1] = fn_801CFE40(sy, cy);
-    pAngles[2] = fn_801CFE40(sz, cz);
+    pAngles[0] = MathArcTan2(sx, cx);
+    pAngles[1] = MathArcTan2(sy, cy);
+    pAngles[2] = MathArcTan2(sz, cz);
 }
 
 void MatGetRotByOrder(int *pAngles, unsigned int order)

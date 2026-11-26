@@ -194,7 +194,7 @@ int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, BigObjAnimHandlerSet_t *pTable);
 void fn_801BE040(void *p);
 AnimSeqncrStatic_t *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void Vec2Scale(void *pOut, void *p, float scale);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float SyncRandGetFloat(int stream);
@@ -710,7 +710,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                 if (!pObject->mUnknown381) {
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                         pExtra->mUnknown1704 = pObject->mUnknown424;
-                        pExtra->mUnknown1705 = lbl_803EA4DC[(((fn_801CFE40(pObject->mUnknown352, pObject->mUnknown348) -
+                        pExtra->mUnknown1705 = lbl_803EA4DC[(((MathArcTan2(pObject->mUnknown352, pObject->mUnknown348) -
                                                                (pObject->mState.mUnknown24 + 0x400000)) &
                                                               0xFFFFFF) +
                                                              0x100000) >>
@@ -1379,8 +1379,8 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
                 direction.mX = -pObject->mUnknown348;
                 direction.mY = -pObject->mUnknown352;
                 direction.mZ = -pObject->mUnknown356;
-                int angle = fn_801CFE40(direction.mZ, direction.mX);
-                int heading = fn_801CFE40(direction.mY, direction.mX);
+                int angle = MathArcTan2(direction.mZ, direction.mX);
+                int heading = MathArcTan2(direction.mY, direction.mX);
                 QuatFromEulerYZX(&rotation, angle, heading, 0);
                 position = pObject->mUnknown360;
             } else {
@@ -1997,7 +1997,7 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
                 p->mMotion.mPos.mY = p->mMotion.mUnknown12.mY;
             else p->mMotion.mPos.mY += direction.mY * distance;
         }
-        int angle = fn_801CFE40(direction.mY, direction.mX);
+        int angle = MathArcTan2(direction.mY, direction.mX);
         int facing = (angle + 0x800000) & 0xFFFFFF;
         if (code != 0xB5 && code != 0xBA && code != 0xC5 && code != 0xC3 && code != 0xC4 &&
             code != 0xD2 && code != 0xE0 && code != 0xE5 && code != 0xE4 && code != 0xE6 && code != 0xED) {

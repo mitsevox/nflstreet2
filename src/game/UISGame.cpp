@@ -92,7 +92,7 @@ int GlibGetScreenLetterBoxHeight(void);
 int GlibGetScreenLetterBoxWidth(void);
 int GlibRenderGetBin(int index);
 void GlibRenderSelectBin(int a);
-float fn_801CFD28(int a);
+float MathTan(int a);
 void fn_801D339C(int a);
 void fn_801D342C(int a);
 int ObjNewType_(int a, int b, int c, void (*pA)(), void (*pB)());
@@ -485,7 +485,7 @@ void UISGameCreateMain(void)
     VptSetEraseColor(_UISGame_pMainVpt, 0.0f, 0.0f, 0.0f);
     _UISGame_pMainCam = CamCreate(0, 0);
     CamFreeSetAngle(_UISGame_pMainCam, 0, 0x800000, 0x800000);
-    CamFreeSetPos(_UISGame_pMainCam, 427.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamFreeSetPos(_UISGame_pMainCam, 427.0f, 240.0f, -(240.0f / MathTan(0x100000)));
     CamAddCameraToViewport(_UISGame_pMainVpt, _UISGame_pMainCam);
     if (FELoopIsMainFEActive()) {
         CamSetZScale(_UISGame_pMainCam, 1.0f);
@@ -527,7 +527,7 @@ void UISGameCreateSub(void)
     VptSetEraseColor(_UISGame_pSubVpt, 0.0f, 0.0f, 0.0f);
     _UISGame_pSubCam = CamCreate(0, 0);
     CamFreeSetAngle(_UISGame_pSubCam, 0, 0x800000, 0x800000);
-    CamFreeSetPos(_UISGame_pSubCam, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamFreeSetPos(_UISGame_pSubCam, 320.0f, 240.0f, -(240.0f / MathTan(0x100000)));
     CamAddCameraToViewport(_UISGame_pSubVpt, _UISGame_pSubCam);
     CamSetZScale(_UISGame_pSubCam, 4.0f);
     _UISGame_pSubObjList = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);
@@ -561,7 +561,7 @@ void UISGameCreateSub2(void)
     VptSetEraseColor(_UISGame_pSub2Vpt, 0.0f, 0.0f, 0.0f);
     _UISGame_pSub2Cam = CamCreate(0, 0);
     CamFreeSetAngle(_UISGame_pSub2Cam, 0, 0x800000, 0x800000);
-    CamFreeSetPos(_UISGame_pSub2Cam, 320.0f, 240.0f, -(240.0f / fn_801CFD28(0x100000)));
+    CamFreeSetPos(_UISGame_pSub2Cam, 320.0f, 240.0f, -(240.0f / MathTan(0x100000)));
     CamAddCameraToViewport(_UISGame_pSub2Vpt, _UISGame_pSub2Cam);
     CamSetZScale(_UISGame_pSub2Cam, 4.0f);
     _UISGame_pSub2ObjList = ObjNewList(1, 336, 0, 0, 0, 1, 0, -1);

@@ -115,7 +115,7 @@ void BannerClear(int);
 void GameTextSetLastPlayer(unsigned short);
 int ScreenTransCanCapture(int);
 void CamSetFieldOfView(void *, float, float);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 void Vec3RotateZYX(void *, void *, int, int, int);
 void CamShotHandleMsg(GameCamera_t *, int);
 void CamShotSetTeamBlockFlag(int, int);
@@ -186,10 +186,10 @@ extern "C" void CamShotUpdateFollow(CamShotCamera_t *p)
     s->mTarget.mX = target->mResult.mX;
     s->mTarget.mY = target->mResult.mY;
     s->mTarget.mZ = target->mResult.mZ;
-    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
+    int yaw = -MathArcTan2(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     Vec3RotateZYX(&v, &v, yaw, 0, 0);
-    p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
+    p->mHeader.mUnknown14[0] = -(MathArcTan2(v.mZ, v.mY) + 0x400000);
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
     Vec3Magnitude(&v);
 }
@@ -221,10 +221,10 @@ extern "C" void CamShotUpdateFixed(CamShotCamera_t *p)
     Vector_80039F5C v;
     Vec3Sub(&v, target, p->mHeader.mUnknown04);
     s->mTarget.mX = target->mX; s->mTarget.mY = target->mY; s->mTarget.mZ = target->mZ;
-    int yaw = -fn_801CFE40(v.mY, v.mX) + 0x400000;
+    int yaw = -MathArcTan2(v.mY, v.mX) + 0x400000;
     p->mHeader.mUnknown14[2] = yaw;
     Vec3RotateZYX(&v, &v, yaw, 0, 0);
-    p->mHeader.mUnknown14[0] = -(fn_801CFE40(v.mZ, v.mY) + 0x400000);
+    p->mHeader.mUnknown14[0] = -(MathArcTan2(v.mZ, v.mY) + 0x400000);
     Vec3Magnitude(&v);
     CamSetFieldOfView(p, fov->mValue, p->mHeader.mUnknown24);
 }

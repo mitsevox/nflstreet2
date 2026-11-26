@@ -48,7 +48,7 @@ extern "C" void PlayerActionAnimReleasePitch(Object_80039F5C *p, Ball_t *pBall, 
     if (pOther) {
         Point_8017886C delta;
         Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-        pRecord8011F518->mUnknown12 = fn_801CFE40(delta.mY, delta.mX);
+        pRecord8011F518->mUnknown12 = MathArcTan2(delta.mY, delta.mX);
     } else {
         pRecord8011F518->mUnknown12 = p->mMotion.mUnknown32;
     }
@@ -1351,7 +1351,7 @@ extern "C" int PlayerActionAnimIsFlaggedKey(unsigned int id)
 
 extern "C" void PlayerActionAnimSetupAlign(Block_800DE3B0 *pBlock, Object_80039F5C *p, Command_800DE3B0 *pCommand)
 {
-    int desired = fn_801CFE40(pCommand->mUnknown0.mUnknown4, pCommand->mUnknown0.mUnknown0) & 0xFFFFFF;
+    int desired = MathArcTan2(pCommand->mUnknown0.mUnknown4, pCommand->mUnknown0.mUnknown0) & 0xFFFFFF;
     State_800DE3B0 *pState = (State_800DE3B0 *)p->mUnknown1160.mUnknown12;
     int original = pState->mUnknown0 & 0xFFFFFF;
     Pair_802270A4 old = pState->mUnknown4;

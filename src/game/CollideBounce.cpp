@@ -9,7 +9,7 @@
 extern float gPlyrMoveFwdSpeed;
 
 extern "C" {
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void MatSetStack(int mode);
 void MatResetStack(void);
@@ -87,7 +87,7 @@ int BounceCheckApproach(BounceSegment_t *pA, BounceSegment_t *pB, unsigned char 
 
 static inline int Heading(float *v)
 {
-    return fn_801CFE40(v[1], v[0]);
+    return MathArcTan2(v[1], v[0]);
 }
 
 void BounceBody2D(BounceBody_t *pBody, float *pNormal, float restitution)

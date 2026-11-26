@@ -71,7 +71,7 @@ void MatTranslate(void *);
 void MatScale(float);
 void MatScaleCol(float, float, float);
 void MatLoadSlot(int);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 void Vec4Mat44Mul(void *, void *);
 void TMRenderBindTexture(int, int, int);
 void TMRenderSetZRange(float, float);
@@ -557,7 +557,7 @@ int PlyrStarProjectOffscreen(Vector_80039F5C *input, Vector_80039F5C *out, int *
         original.mX = point.mX;
         original.mY = point.mY;
         original.mZ = point.mZ;
-        *angle = fn_801CFE40(-point.mX, point.mY);
+        *angle = MathArcTan2(-point.mX, point.mY);
         float ratio = 1.0f;
         if (!(fabsf(point.mW) >= 1.0f)) {
             if (!(point.mW >= 0.0f))

@@ -39,7 +39,7 @@ unsigned char fn_8011F59C(int index);
 void fn_8011F5AC(int index);
 
 int MathAngleDiff(int a, int b);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 int fn_80106580(Object_80039F5C *p, int a);
@@ -266,7 +266,7 @@ int fn_801486A0(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void PossReleaseBall(Object_80039F5C *p);
 int fn_80178308(void);
-int fn_801CFE08(float value);
+int MathArcTan(float value);
 int MathAngleDiff(int a, int b);
 void Vec2Normalize(Vector_80039F5C *pOut, Vector_80039F5C *p);
 void Vec2Scale(void *pOut, void *p, float scale);
@@ -287,7 +287,7 @@ struct Block_800DFCEC {
 extern "C" {
 float fn_80178A2C(void);
 Point_8017886C fn_80177FFC(int team);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void PlyrObjsSetDrawFlag(int a);
 int FELoopIsMainFEActive(void);

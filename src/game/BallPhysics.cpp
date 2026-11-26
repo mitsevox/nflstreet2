@@ -71,7 +71,7 @@ int BallStateGet(Ball_t *pBall, int *pArg);
 int fn_800A3444(void);
 int fn_801784C4(void);
 float SyncRandGetFloat(int stream);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void Vec3Normalize(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -303,9 +303,9 @@ void BallUpdateRotation(Ball_t *pBall, float dt)
         v.mX = pBall->mState.mUnknown54.mX;
         v.mY = pBall->mState.mUnknown54.mY;
         v.mZ = pBall->mState.mUnknown54.mZ;
-        angles[2] = fn_801CFE40(v.mY, v.mX) + 0x400000;
+        angles[2] = MathArcTan2(v.mY, v.mX) + 0x400000;
         Vec3RotateZYX(&v, &v, -angles[2], 0, 0);
-        angles[0] = fn_801CFE40(v.mZ, v.mY);
+        angles[0] = MathArcTan2(v.mZ, v.mY);
         QuatFromEuler(&pBall->mState.mUnknown18, angles[2], 0, angles[0]);
         if (pBall->mState.mUnknownD0 == 2) {
             QuatFromEuler(&tilt, 0, 0xFFC00000, 0x400000);
@@ -329,7 +329,7 @@ void BallUpdateRotation(Ball_t *pBall, float dt)
         v.mX = pBall->mState.mUnknown54.mX;
         v.mY = pBall->mState.mUnknown54.mY;
         v.mZ = pBall->mState.mUnknown54.mZ;
-        angles[2] = fn_801CFE40(v.mY, v.mX) + 0x400000;
+        angles[2] = MathArcTan2(v.mY, v.mX) + 0x400000;
         QuatFromEuler(&pBall->mState.mUnknown18, angles[2], 0, 0);
         tiltAngle = (int)(pBall->mState.mUnknownDC * 466033.0f) - 0x400000;
         QuatFromEuler(&tilt, 0, 0x400000, (int)tiltAngle);
@@ -872,7 +872,7 @@ int BallCanPlayerTouch(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int
     default:
         if (facing && (type == 0 || type == 7 || type == 5 || type == 1 || type == 3)) {
             Vec2Sub(&delta, &pBall->mState.mPos, &p->mMotion.mPos);
-            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF) {
+            if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF) {
                 result = 1;
             }
         }

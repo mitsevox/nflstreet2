@@ -69,7 +69,7 @@ extern "C" {
 void CamPresetSetEaseRates(GameCamera_t *, int);
 unsigned int SyncRandGetRange(unsigned int,unsigned int);
 void Vec3Add(void *,void *,void *);
-int fn_801CFDD0(float);
+int MathArcSin(float);
 void CamFreeClearVelocity(GameCamera_t *);
 int fn_800AD9B4(void);
 int fn_801784C4(void);
@@ -150,7 +150,7 @@ void CamPlayPanWithBall(CamPlayVec3_t *point, CamPlayAngles_t *angles, CamPlayVe
         angles->mZ = _CamPlay_PanAngles.mZ;
         point->mX = _CamPlay_PanPoint.mX;
     } else {
-        angles->mZ -= fn_801CFDD0(amount/length);
+        angles->mZ -= MathArcSin(amount/length);
         if (mode == 4) amount = -amount;
         point->mX += amount;
         _CamPlay_PanAngles.mZ = angles->mZ;

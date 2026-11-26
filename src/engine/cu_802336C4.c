@@ -409,8 +409,8 @@ extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int
 void ScaleBlockReset(Block_802349CC *pBlock);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void LLCacheLockedEnable(void);
-extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
-extern unsigned char lbl_803E9288[];
+extern void _MathSinCos16(int angle, void *pTable, float *pSin, float *pCos);
+extern float _Math_Taylor[];
 
 void fn_8023123C(void *p, int mode, unsigned char *pDone);
 int DbManagerEnterMode0(void);
@@ -769,9 +769,9 @@ static inline void _BuildBoneMatrix(Mtx44 *pParent, Mtx44 *pOut, int rx, int ry,
     float sxsy, cxsy;
     Mtx44 mtx;
 
-    fn_801CFC58(rx, lbl_803E9288, &sx, &cx);
-    fn_801CFC58(ry, lbl_803E9288, &sy, &cy);
-    fn_801CFC58(rz, lbl_803E9288, &sz, &cz);
+    _MathSinCos16(rx, _Math_Taylor, &sx, &cx);
+    _MathSinCos16(ry, _Math_Taylor, &sy, &cy);
+    _MathSinCos16(rz, _Math_Taylor, &sz, &cz);
     cxsy = cx * sy;
     sxsy = sx * sy;
     mtx[0][3] = pPos[0];

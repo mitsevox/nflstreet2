@@ -74,7 +74,7 @@ int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009A8D4(void *p);
 int fn_800B78DC(Object_80039F5C *p);
@@ -349,7 +349,7 @@ extern "C" void LooseBallSteer(Object_80039F5C *p, LooseBallBlock_t *state, Vect
     delta.mZ = pTarget->mZ;
     Vec3Sub(&delta, &delta, &p->mMotion.mPos);
     float dist = Vec3Magnitude(&delta);
-    state->mUnknown36 = fn_801CFE40(delta.mY, delta.mX);
+    state->mUnknown36 = MathArcTan2(delta.mY, delta.mX);
     if (LooseBallCanChase(p, state)) {
         state->mUnknown32 = 0.72f;
         if (dist < 3.0f) {
@@ -567,7 +567,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 if (pOther) {
                     Point_8017886C offset;
                     Vec2Sub(&offset, &ballPos, &pOther->mMotion.mPos);
-                    int angle = fn_801CFE40(offset.mY, offset.mX);
+                    int angle = MathArcTan2(offset.mY, offset.mX);
                     if (pOther->mMotion.mUnknown28 != 0.0f && distance < _LooseBall_fThreatRange &&
                         MathAngleDiff(angle, pOther->mMotion.mUnknown32) < (int)(_LooseBall_fThreatAngle * 46603.37890625f) &&
                         !(p->mFlags & 0x4000))

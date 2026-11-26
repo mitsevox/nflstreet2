@@ -2256,7 +2256,7 @@ extern "C" {
 extern unsigned char gGameTextPlayArtShift;
 State_8011F4EC *fn_8011F4EC(void);
 void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 
 void PlayBookGetZoneCenter(int zone, Point_8017886C *pOut)
 {
@@ -2338,7 +2338,7 @@ void PlayBookRouteAddZoneStep(unsigned char *pArgs, PlayRoute_t *pRoute)
     cmd.mArgs[0] = 0x50;
     center.mX = (pBox->mUnknown8 + pBox->mUnknownC) * 0.5f - 0.5f;
     center.mY = (pBox->mUnknown0 + pBox->mUnknown4) * 0.5f;
-    cmd.mArgs[1] = fn_801CFE40(center.mY, center.mX) >> 17;
+    cmd.mArgs[1] = MathArcTan2(center.mY, center.mX) >> 17;
     PlayBookRouteAddStep(cmd.mArgs, pRoute);
 }
 

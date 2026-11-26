@@ -1930,6 +1930,44 @@
       ]
     },
     {
+      "source": "src/engine/llangle.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CF944-0x801CFF34 (src/engine/llangle.c), its compiler, function and name rows and the exact data rows of all its storage: .rodata 0x802AF548-0x802AF5D0, .data _Math_ArcTanTable 0x802F7B0C-0x802F7B30, the file-static .bss _Math_TaylorConst 0x803847A0-0x803847C0 and the uninitialized global _Math_Taylor (COMMON) placed by the storage map at 0x803E9288-0x803E92AC. All 15 functions exact; the two paired-single routines _MathSin and _MathSinCos16 are C functions whose bodies are asm blocks.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CF944",
+          "end": "0x801CFF34"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF548",
+          "end": "0x802AF5D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B0C",
+          "end": "0x802F7B30"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803847A0",
+          "end": "0x803847C0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Math_Taylor",
+          "start": "0x803E9288",
+          "end": "0x803E92AC"
+        }
+      ]
+    },
+    {
       "source": "src/engine/TibNew.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows; every function exact, promoted from comparison-only.",

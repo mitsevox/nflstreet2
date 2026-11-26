@@ -36,7 +36,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
 int fn_80178320(void);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_80177F70(void);
@@ -138,8 +138,8 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
         for (i = 0; i < total; ++i) {
             Object_80039F5C *other = PlyrGet(fn_80178320(), i);
             Vec2Sub(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
-            int otherAngle = fn_801CFE40(offset.mY, offset.mX);
-            angle = fn_801CFE40(delta.mY, delta.mX);
+            int otherAngle = MathArcTan2(offset.mY, offset.mX);
+            angle = MathArcTan2(delta.mY, delta.mX);
             if (MathAngleDiff(otherAngle, angle) <= 0x555554 && Vec2Magnitude(&offset) < 5.0f) {
                 count = 1;
                 break;
@@ -158,7 +158,7 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
                 if (other != p) {
                     Point_8017886C toOther;
                     Vec2Sub(&toOther, &other->mMotion.mPos, &p->mMotion.mPos);
-                    int otherAngle = fn_801CFE40(toOther.mY, toOther.mX);
+                    int otherAngle = MathArcTan2(toOther.mY, toOther.mX);
                     if (MathAngleDiff(otherAngle, angle) <= 0x555554 && Vec2Magnitude(&toOther) < 5.0f) {
                         ++count;
                         break;
@@ -454,7 +454,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             Point_8017886C point, delta;
             if (GetOpenFindOpenSpot(&point, p, b, a)) {
                 Vec2Sub(&delta, &point, &p->mMotion.mPos);
-                PlayerCutPostTurn(p, fn_801CFE40(delta.mY, delta.mX));
+                PlayerCutPostTurn(p, MathArcTan2(delta.mY, delta.mX));
                 memset(&message, 0, 4);
                 message.mId = 19;
                 fn_800FD68C(&message, &p->mMotion, &point);

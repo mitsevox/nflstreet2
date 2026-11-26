@@ -55,7 +55,7 @@ int fn_801783AC(int bit);
 float fn_80178A08(void);
 float fn_80178A44(void);
 int CharSkelGetJointByName(void *p, const char *pName);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float SyncRandGetFloat(int stream);
@@ -102,7 +102,7 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
             int dir;
 
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            dir = fn_801CFE40(delta.mY, delta.mX);
+            dir = MathArcTan2(delta.mY, delta.mX);
             if (MathAngleDiff(dir, angle) < (int)(_RouteRun_fAvoidConeDeg * 46603.38f)) {
                 int offset = (int)(p->mUnknown560.mFlags.mBytes[0] ? _RouteRun_fAvoidTurnWideDeg : _RouteRun_fAvoidTurnDeg);
 
@@ -160,7 +160,7 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
             int diff;
 
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            diff = fn_801CFE40(delta.mY, delta.mX);
+            diff = MathArcTan2(delta.mY, delta.mX);
             diff = MathAngleDiff(p->mMotion.mUnknown32, diff);
             if (diff <= bestDiff) {
                 bestDiff = diff;
@@ -222,7 +222,7 @@ extern "C" int RouteRunAvoidWalls(Object_80039F5C *p, RouteRunBlock_t *pBlock)
             int dir;
 
             Vec2Sub(&delta, &nearest, &p->mMotion.mPos);
-            dir = fn_801CFE40(delta.mY, delta.mX);
+            dir = MathArcTan2(delta.mY, delta.mX);
             if (MathAngleDiff(dir, p->mMotion.mUnknown32) <= 0x3FFFFF) {
                 if ((dir - p->mMotion.mUnknown32 & 0xFFFFFF) <= 0x7FFFFF) {
                     pBlock->mUnknown16 = dir - 0x438E39 & 0xFFFFFF;
@@ -317,7 +317,7 @@ extern "C" int RouteRunEnter(Object_80039F5C *p)
         delta.mY = pBlock->mUnknown4;
         Vec2Sub(&delta, &delta, &p->mMotion.mPos);
         pBlock->mUnknown8 = Vec2Magnitude(&delta);
-        pBlock->mUnknown16 = fn_801CFE40(delta.mY, delta.mX);
+        pBlock->mUnknown16 = MathArcTan2(delta.mY, delta.mX);
     }
     pBlock->mUnknown24 = 0;
     pBlock->mUnknown60 = 0;
@@ -396,7 +396,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
 
                     BallGetPosition(BallGetCurrent(), &delta);
                     Vec2Sub(&delta, &delta, &p->mMotion.mPos);
-                    dir = fn_801CFE40(delta.mY, delta.mX);
+                    dir = MathArcTan2(delta.mY, delta.mX);
                     side = MathAngleDiff(p->mMotion.mFacing, dir + 0x400000) <= 0x3FFFFF;
                     pBlock->mUnknown34 = side ? 19 : 18;
                     pBlock->mUnknown32 = SyncRandGetRange(0, 40) + 40;

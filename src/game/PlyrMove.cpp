@@ -31,8 +31,8 @@ int PlyrMoveInCappedState(Object_80039F5C *p);
 void PlyrMoveModeStop(Object_80039F5C *p);
 void PlyrMoveModeSpin(Object_80039F5C *p);
 int fn_80178308(void);
-float fn_801CFB18(int angle);
-int fn_801CFE40(float y, float x);
+float MathSin(int angle);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 }
@@ -85,7 +85,7 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
         limit = _PlyrMove_fSlowSpeed;
     } else if (turn <= 0x2E38E2) {
         speed = gPlyrMoveFwdSpeed * p->mUnknown528.mUnknown0;
-        limit = gPlyrMoveFwdSpeed - fn_801CFB18(turn) * (gPlyrMoveFwdSpeed / 2.0f);
+        limit = gPlyrMoveFwdSpeed - MathSin(turn) * (gPlyrMoveFwdSpeed / 2.0f);
         if (pInput->mUnknown4 != p->mUnknown512.mUnknown4) {
             reverse = 1;
         }
@@ -95,10 +95,10 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
     } else if (PlayerActionAnimIsPassReady(p) == 0) {
         if (turn <= 0x56C16B) {
             speed = gPlyrMoveSideSpeed * p->mUnknown528.mUnknown0;
-            limit = gPlyrMoveSideSpeed - fn_801CFB18(0x56C16C - turn) * (gPlyrMoveSideSpeed / 2.0f);
+            limit = gPlyrMoveSideSpeed - MathSin(0x56C16C - turn) * (gPlyrMoveSideSpeed / 2.0f);
         } else {
             speed = gPlyrMoveBackSpeed * p->mUnknown528.mUnknown0;
-            limit = gPlyrMoveBackSpeed - fn_801CFB18(0x80B60C - turn) * (gPlyrMoveBackSpeed / 2.0f);
+            limit = gPlyrMoveBackSpeed - MathSin(0x80B60C - turn) * (gPlyrMoveBackSpeed / 2.0f);
         }
     } else {
         limit = speed = gPlyrMoveBackSpeed * p->mUnknown528.mUnknown0;
@@ -152,7 +152,7 @@ void PlyrMovePickSideType(Object_80039F5C *p)
             int angle;
 
             Vec2Sub(delta, &pOther->mMotion, &p->mMotion);
-            angle = fn_801CFE40(delta[1], delta[0]);
+            angle = MathArcTan2(delta[1], delta[0]);
             if (distance < 2.0f - MathAngleDiff(angle, p->mMotion.mFacing) / 3495253.0f &&
                 fn_80124714(p, pOther, 0)) {
                 if (((angle - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF) {

@@ -51,7 +51,7 @@ static int _LLLight_iCurrentMask;
 static LLLightState_t _LLLight_State;
 extern float Vec2Magnitude(float *p);
 extern void Vec2ScaleLength(float *pOut, float *p, float length);
-extern void fn_801CFC14(int angle, float *pFirst, float *pSecond);
+extern void MathSinCos(int angle, float *pFirst, float *pSecond);
 LLLight_t *_LLLightGetSceneLight(LLLightScene_t *pScene, int index);
 void _LLLightUpdateProjectors(LLLightScene_t *pScene, GXLightObj *pLights, unsigned int *pColors);
 int _LLLightLoadSetScaled(LLLightSet_t *pSet, float r, float g, float b);
@@ -92,7 +92,7 @@ void _LLLightProjectorAngleMatrix(float m[4][4], int angle, float scale)
     float first;
     float second;
 
-    fn_801CFC14(angle, &first, &second);
+    MathSinCos(angle, &first, &second);
     m[0][0] = 1.0f;
     m[1][0] = 0.0f;
     m[2][0] = 0.0f;

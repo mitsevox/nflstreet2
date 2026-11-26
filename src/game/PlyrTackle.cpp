@@ -93,7 +93,7 @@ extern float gPlyrMoveFwdSpeed;
 extern "C" void Vec2Sub(void *pOut, void *pA, void *pB);
 
 extern "C" {
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 }
 
 extern "C" {
@@ -411,7 +411,7 @@ struct State_800E4EE4 {
 };
 
 extern "C" {
-float fn_801CFB94(int angle);
+float MathCos(int angle);
 }
 
 extern "C" {
@@ -490,7 +490,7 @@ float PlayTrackGetPlayIdRate(void);
 }
 
 extern "C" {
-float fn_801CFB18(int angle);
+float MathSin(int angle);
 }
 
 extern "C" {
@@ -502,7 +502,7 @@ float PlayerGetActionScale(int kind, Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_801CFE08(float value);
+int MathArcTan(float value);
 }
 
 extern "C" {
@@ -1068,7 +1068,7 @@ extern "C" int PlyrAlignExit(Object_80039F5C *p)
         if (angle < 0) {
             angle = 0xC00000 - (pRecord->mUnknown6 << 17 & 0xFE0000);
         }
-        float distance = yards * fn_801CFB94(angle);
+        float distance = yards * MathCos(angle);
         yards *= (distance + delta.mY) / distance;
         if (yards < 0.0f) {
             yards = 0.0f;
@@ -1143,7 +1143,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     speed = Vec2Magnitude(&dir) > 1.0f ? 1.0f : Vec2Magnitude(&dir);
     if (dir.mY != 0.0f || dir.mX != 0.0f) {
         p->mFlags = (p->mFlags | 0x400) & ~0x10;
-        int heading = fn_801CFE40(dir.mY, dir.mX) - input.mUnknown20;
+        int heading = MathArcTan2(dir.mY, dir.mX) - input.mUnknown20;
         if (fn_801784C4()) {
             heading -= 0x800000;
         }
@@ -1450,14 +1450,14 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
     if (facing && pBall) {
         Point_8017886C delta;
         Vec2Sub(&delta, (Point_8017886C *)&pOther->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
+        int angle = MathArcTan2(delta.mY, delta.mX);
         Vec2Sub(&delta, (Point_8017886C *)&pBall->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
-        int turn = MathAngleDiff(angle, fn_801CFE40(delta.mY, delta.mX));
+        int turn = MathAngleDiff(angle, MathArcTan2(delta.mY, delta.mX));
         if (turn <= 0x3FFFFF) {
-            defense -= (int)(defense * (fn_801CFB18(turn) * 0.5f));
+            defense -= (int)(defense * (MathSin(turn) * 0.5f));
         } else {
             defense = (int)(defense * 0.5f);
-            defense += (int)(defense * (fn_801CFB94(turn) * 0.5f));
+            defense += (int)(defense * (MathCos(turn) * 0.5f));
         }
     }
     offense = fn_800AC074(p->mIdBytes[2], offense);
@@ -1744,7 +1744,7 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
     }
     target.mZ = 0.0f;
     Vec2Sub(&target, &target, &p->mMotion.mPos);
-    p->mUnknown512.mUnknown4 = fn_801CFE40(target.mY, target.mX);
+    p->mUnknown512.mUnknown4 = MathArcTan2(target.mY, target.mX);
     if (mode == 8) {
         mode = PlyrEngagePickMove(p, pOther, pBlock);
     }
@@ -1836,7 +1836,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         if (fn_801486A0() != 1) {
             Vector_80039F5C delta;
             Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
-            heading = fn_801CFE40(delta.mY, delta.mX);
+            heading = MathArcTan2(delta.mY, delta.mX);
         } else {
             heading = p->mUnknown2913 ? 0x800000 : 0;
         }
@@ -1882,7 +1882,7 @@ extern "C" int PlyrTackleIsShallowPath(Object_80039F5C *p)
     Record_800EA284 *pRecord = p->mpUnknown3092->mpUnknown32;
     float distance = Vec2Distance(&pRecord->mUnknown32, &pRecord->mUnknown16);
     if (distance > 0.0f) {
-        result = fn_801CFE08(fabsf(pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ) / distance) <= 0x155555;
+        result = MathArcTan(fabsf(pRecord->mUnknown32.mZ - pRecord->mUnknown16.mZ) / distance) <= 0x155555;
     }
     return result;
 }
@@ -1895,7 +1895,7 @@ extern "C" int PlyrTackleCanReach(Object_80039F5C *p)
         Point_8017886C delta;
         Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
         float distance = Vec2Magnitude(&delta);
-        int difference = MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing);
+        int difference = MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing);
         if (fn_8011F1CC() && pCarrier->mMotion.mPos.mY < fn_80177FE0().mY) {
             int id = fn_800F06F4(0, pCarrier->mpState, 18, 0xFFFF);
             if (id != 0xFFFF || fn_800F06F4(0, pCarrier->mpState, 15, 0xFFFF) != id) {
@@ -2025,7 +2025,7 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
         p->mUnknown1008.mUnknown2 = 5;
         p->mUnknown1008.mUnknown1 = 2;
         BallGetVelocity(BallGetCurrent(), &velocity);
-        int heading = fn_801CFE40(velocity.mY, velocity.mX);
+        int heading = MathArcTan2(velocity.mY, velocity.mX);
         p->mUnknown1011 = _PlyrTackle_aAnimOctants[(((heading - p->mMotion.mFacing) & 0xFFFFFF) + 0x100000) >> 21 & 7];
         break;
     }
@@ -2185,7 +2185,7 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     } else BallGetPosition(BallGetCurrent(), &point);
     Vector_80039F5C delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
-    int heading = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    int heading = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
     int limit = fn_800ACD04(p);
     if (!(point.mY >= fn_80177FE0().mY) && !fn_801783AC(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
@@ -2219,7 +2219,7 @@ extern "C" int PlyrTackleAiTry(Object_80039F5C *p, void *pArg)
         if (pCarrier && pCarrier->mpState->mId == 1) {
             Point_8017886C delta;
             Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
-            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF &&
+            if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF &&
                 Vec2Magnitude(&delta) < 10.0f) {
                 result = PlyrTackleStart(p, (int)pArg, 0);
             }
@@ -2253,7 +2253,7 @@ int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
         Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
         kind = 3;
         choice = 1;
-        int heading = fn_801CFE40(delta.mY, delta.mX);
+        int heading = MathArcTan2(delta.mY, delta.mX);
         if (MathAngleDiff(heading, p->mMotion.mFacing) <= 0x3FFFFF) Vec2Magnitude(&delta);
     } else {
         Vector_80039F5C point;
@@ -2658,7 +2658,7 @@ extern "C" void PlyrContactSendHit(Object_80039F5C *p, int id) {
         if (pOther) {
             Point_8017886C delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            int angle = fn_801CFE40(delta.mY, delta.mX);
+            int angle = MathArcTan2(delta.mY, delta.mX);
             difference = MathAngleDiff(p->mMotion.mFacing, angle);
             angle = (angle - p->mMotion.mFacing) & 0xFFFFFF;
             if (BallFindHeldBy(p) && p->mUnknown776 == 1)
@@ -2858,7 +2858,7 @@ extern "C" int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther) 
         Object_800B26B0 *pOtherMotion = &pOther->mMotion;
         Object_800B26B0 *pMotion = &p->mMotion;
         Vec2Sub(&delta, &pOtherMotion->mPos, &pMotion->mPos);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
+        int angle = MathArcTan2(delta.mY, delta.mX);
         int away = (angle - 0x800000) & 0xFFFFFF;
         int difference = MathAngleDiff(pOtherMotion->mUnknown32, away) * 2 / 3;
         if (((away - pOtherMotion->mUnknown32) & 0xFFFFFF) > 0x800000)
@@ -2893,7 +2893,7 @@ extern "C" int PlyrContactSendBump(Object_80039F5C *p, Object_80039F5C *pOther) 
     Point_8017886C delta;
     Object_800B26B0 *pMotion = &p->mMotion;
     Vec2Sub(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
-    int angle = fn_801CFE40(delta.mY, delta.mX);
+    int angle = MathArcTan2(delta.mY, delta.mX);
     int away = (angle - 0x800000) & 0xFFFFFF;
     int difference = MathAngleDiff(angle, away);
     memset(&message, 0, 4);
@@ -2988,7 +2988,7 @@ extern "C" int PlyrContactSendCarrierAction(Object_80039F5C *p, int kind) {
 extern "C" void PlyrContactCollide(Object_80039F5C *p, Object_80039F5C *pOther) {
     Point_8017886C delta;
     Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-    int direction = fn_801CFE40(delta.mY, delta.mX);
+    int direction = MathArcTan2(delta.mY, delta.mX);
     PlyrContactResolve(p, (direction + 0x800000) & 0xFFFFFF, direction);
 }
 
@@ -3186,7 +3186,7 @@ extern "C" int PlyrContactResolve(Object_80039F5C *p, int angle, int direction) 
             Point_8017886C delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             blocked = 0;
-            otherDirection = fn_801CFE40(delta.mY, delta.mX);
+            otherDirection = MathArcTan2(delta.mY, delta.mX);
             otherAngle = (otherDirection + 0x800000) & 0xFFFFFF;
             Record_800EA284 *pRecord = pOther->mpUnknown3092->mpUnknown32;
             if (pRecord->mUnknown8 < 1.0f)

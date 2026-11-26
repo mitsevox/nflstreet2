@@ -44,7 +44,7 @@ void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
 void fn_8011E240(Object_80039F5C *);
 float fn_80178A08(void);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 float Vec2Distance(void *, void *);
 void Vec2Sub(void *, void *, void *);
@@ -78,7 +78,7 @@ void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockCont
         float distance = Vec2Magnitude(delta);
         if (!(distance >= 3.25f)) {
             fallback = 0;
-            aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
+            aim->mUnknown10 = MathArcTan2(delta[1], delta[0]);
             int angle = fn_80120794(motion, &other->mMotion,
                 &other->mMotion.mUnknown40, motion->mUnknown28,
                 other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
@@ -95,7 +95,7 @@ void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockCont
             delta[0] = !(motion->mPos.mX >= point.mX) ? point.mX - 2.0f : point.mX + 2.0f;
         delta[1] = point.mY - 9.0f;
         Vec2Sub(delta, &motion->mPos, delta);
-        aim->mUnknown10 = fn_801CFE40(delta[1], delta[0]);
+        aim->mUnknown10 = MathArcTan2(delta[1], delta[0]);
         aim->mUnknownC = AngleSub(aim->mUnknown10, 0x800000);
     }
 }
@@ -109,7 +109,7 @@ int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_8003
     Vector_80039F5C *otherPos = &other->mMotion.mPos;
     int reverse = (angle + 0x800000) & 0xFFFFFF;
     Vec2Sub(delta, otherPos, pos);
-    if (MathAngleDiff(reverse, fn_801CFE40(delta[1], delta[0])) > 0x471C72) {
+    if (MathAngleDiff(reverse, MathArcTan2(delta[1], delta[0])) > 0x471C72) {
         if (ball && !(ball->mFlags & 0x8000) && !(pos->mY + 1.0f >= location.mY) &&
             !(otherPos->mY + 1.0f >= location.mY) &&
             Vec2Distance(&location, pos) < Vec2Distance(&location, otherPos)) {
@@ -124,9 +124,9 @@ int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_8003
                     Object_80039F5C *entry = BallGetCurrentTarget();
                     if (entry) {
                         Vec2Sub(delta, otherPos, &entry->mMotion.mPos);
-                        otherAngle = fn_801CFE40(delta[1], delta[0]);
+                        otherAngle = MathArcTan2(delta[1], delta[0]);
                         Vec2Sub(delta, pos, &entry->mMotion.mPos);
-                        angle = fn_801CFE40(delta[1], delta[0]);
+                        angle = MathArcTan2(delta[1], delta[0]);
                     }
                 }
                 int limit = 0x11C71C;
@@ -187,7 +187,7 @@ void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockCon
     }
     s->mUnknown10 = 0x400000;
     Vec2Sub(target, target, pos);
-    s->mUnknownC = fn_801CFE40(target[1], target[0]) & 0xFFFFFF;
+    s->mUnknownC = MathArcTan2(target[1], target[0]) & 0xFFFFFF;
     float distance = Vec2Magnitude(target);
     if (!(distance <= 3.0f)) {
         if (!(distance >= 6.0f))
@@ -265,15 +265,15 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
     if (other) {
         float delta[2];
         Vec2Sub(delta, &other->mMotion.mPos, &motion->mPos);
-        int toward = fn_801CFE40(delta[1], delta[0]);
+        int toward = MathArcTan2(delta[1], delta[0]);
         distance = Vec2Magnitude(delta);
         s->mUnknownC = fn_80120794(motion, &other->mMotion,
             &other->mMotion.mUnknown40, motion->mUnknown28,
             other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
         Vec2Sub(delta, &other->mMotion.mPos, reference);
-        int otherAngle = fn_801CFE40(delta[1], delta[0]);
+        int otherAngle = MathArcTan2(delta[1], delta[0]);
         Vec2Sub(delta, &motion->mPos, reference);
-        int angle = fn_801CFE40(delta[1], delta[0]);
+        int angle = MathArcTan2(delta[1], delta[0]);
         if ((s->mUnknown1B & 1) == 0 && PassBlockShouldEngage(p, ball, other, point, location, angle, otherAngle, distance)) {
             s->mUnknown10 = toward;
             if (other->mUnknown1032 == 4 && MathAngleDiff(toward, motion->mFacing) <= 0x11C71C &&
@@ -284,7 +284,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
                 int turn;
                 if (fn_8011E188() <= 59 && MathAngleDiff(otherAngle, toward) > 0xAAAAA) {
                     Vec2Sub(delta, reference, &motion->mPos);
-                    turn = fn_801CFE40(delta[1], delta[0]);
+                    turn = MathArcTan2(delta[1], delta[0]);
                 } else turn = s->mUnknownC;
                 s->mUnknownC = ((turn - toward) & 0xFFFFFF) <= 0x7FFFFF ? s->mUnknown10 + 0x400000 : s->mUnknown10 - 0x400000;
                 if (!(distance >= 3.5f)) {
@@ -354,7 +354,7 @@ void PassBlockLeanIntoDefender(Object_80039F5C *p, Object_80039F5C *other)
             distance -= 1.0f;
             if (!(distance >= 0.0f)) distance = 0.0f;
             float amount = 1.0f - distance * 0.25f;
-            int angle = fn_801CFE40(delta[1], delta[0]);
+            int angle = MathArcTan2(delta[1], delta[0]);
             fn_800C89F0(p, angle & 0xFFFFFF, 2, 0, amount);
         }
     }
@@ -385,7 +385,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, PassBlockCont
                     point.mY = (target->mMotion.mPos.mY + linked->mMotion.mPos.mY) * 0.5f;
                 }
                 Vec2Sub(delta, &point, pos);
-                int angle = fn_801CFE40(delta[1], delta[0]);
+                int angle = MathArcTan2(delta[1], delta[0]);
                 if (MathAngleDiff(angle, aim->mUnknownC) <= 0x271C70) {
                     float amount = distance * 0.4444444477558136f;
                     int turn;
@@ -582,7 +582,7 @@ int PassBlockInput(Object_80039F5C *p)
             Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
             float delta[2];
             Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
-            if (MathAngleDiff(p->mUnknown512.mUnknown4, fn_801CFE40(delta[1], delta[0])) > 0x600000) {
+            if (MathAngleDiff(p->mUnknown512.mUnknown4, MathArcTan2(delta[1], delta[0])) > 0x600000) {
                 fn_8011E3EC(p, 0);
                 fn_8011E240(p);
                 goto done;

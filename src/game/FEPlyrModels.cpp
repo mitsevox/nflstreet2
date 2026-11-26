@@ -92,7 +92,7 @@ int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 int fn_801BCCAC(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 void fn_801BE420(void *a, AnimHeader_t *pObject, void *b, FEPlyrModel_t *pRecord, float c);
 void GlibSetZBufferEnable(int a);
-float fn_801CFD28(int a);
+float MathTan(int a);
 int MathRLerp(int a, int b, float c);
 void MatSetStack(int);
 void MatPush(void);
@@ -214,8 +214,8 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
 
 static void _FEPlyrScreenToWorld(float x, float y, float z, float *pOut)
 {
-    float limit = -(240.0f / fn_801CFD28(0x100000));
-    float offset = 240.0f / fn_801CFD28(0x100000);
+    float limit = -(240.0f / MathTan(0x100000));
+    float offset = 240.0f / MathTan(0x100000);
     float scale;
 
     pOut[2] = 1.0f - offset + 1.0f + 10.0f - z;

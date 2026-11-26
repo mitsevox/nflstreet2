@@ -52,7 +52,7 @@ float fn_80178298(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 int fn_801783AC(int bit);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float Vec2DotProduct(Point_8017886C *pA, Point_8017886C *pB);
@@ -152,7 +152,7 @@ extern "C" int OptionRunIsThreat(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     if (result) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mFacing) > 0x400000) {
+        if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), pOther->mMotion.mFacing) > 0x400000) {
             result = 0;
         }
     }
@@ -399,7 +399,7 @@ extern "C" void OptionRunFacePartner(Object_80039F5C *p, OptionRunControl_t *pCo
         Point_8017886C delta;
 
         Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
-        fn_801CFE40(delta.mY, delta.mX);
+        MathArcTan2(delta.mY, delta.mX);
     }
 }
 

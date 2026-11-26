@@ -69,7 +69,7 @@ int fn_801486A0(void);
 int fn_80178320(void);
 float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float Vec2DistanceSqr(void *pA, void *pB);
@@ -100,7 +100,7 @@ int fn_8011F1CC(void);
 int fn_8011F1A4(void);
 int fn_8011F4C8(void);
 int fn_80177C38(void);
-float fn_801CFB18(int angle);
+float MathSin(int angle);
 int PlyrTackleRollKind(Object_80039F5C *p);
 int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 int fn_80111090(Object_80039F5C *p, int a);
@@ -112,7 +112,7 @@ int fn_8011F32C(void);
 int fn_80178308(void);
 int fn_80178BA4(int team);
 int PlayerMoveGetKind(Object_80039F5C *p);
-float fn_801CFB94(int angle);
+float MathCos(int angle);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, Point_8017886C *pOut);
 int OptionRunCanPitchTo(Object_80039F5C *p, Point_8017886C *pOut, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int a);
@@ -352,7 +352,7 @@ extern "C" void CarrierRunSteerToSideline(Object_80039F5C *p)
         Object_80039F5C *other = fn_801244F0(p, team, 0, fn_80178D18(fn_80178320()), &distance, 0);
 
         Vec2Sub(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
-        int side = MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), 0) <= 0x3FFFFF;
+        int side = MathAngleDiff(MathArcTan2(delta.mY, delta.mX), 0) <= 0x3FFFFF;
 
         if (!(p->mMotion.mPos.mY <= fn_80178A2C() - 10.0f)) {
             if (!control->mUnknown56.mUnknown4) {
@@ -417,7 +417,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
 
         point.mY = ball.mY - (projected <= distance ? projected : distance);
         Vec2Sub(&point, &point, motion);
-        angle = fn_801CFE40(point.mY, point.mX);
+        angle = MathArcTan2(point.mY, point.mX);
     } else {
         float threshold = fn_801783AC(0) ? -8.0f : 0.0f;
 
@@ -433,7 +433,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
 
                 if (nearest && !(distance >= 4.0f)) {
                     Vec2Sub(&point, &nearest->mMotion.mPos, motion);
-                    if (((fn_801CFE40(point.mY, point.mX) - motion->mFacing) & 0xFFFFFF) > 0x800000) {
+                    if (((MathArcTan2(point.mY, point.mX) - motion->mFacing) & 0xFFFFFF) > 0x800000) {
                         right -= 1.0f;
                     } else {
                         left -= 1.0f;
@@ -448,7 +448,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
                 degrees *= 5.0f;
 
                 if (!(degrees >= 90.0f)) {
-                    sine = fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f;
+                    sine = MathCos((int)(degrees * 46603.37890625f)) * 0.5f;
                     change = (int)(sine * 2097152.0f);
                 }
             } else if (!(left >= right)) {
@@ -457,7 +457,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
                 degrees *= 5.0f;
 
                 if (!(degrees >= 90.0f)) {
-                    sine = fn_801CFB94((int)(degrees * 46603.37890625f)) * 0.5f;
+                    sine = MathCos((int)(degrees * 46603.37890625f)) * 0.5f;
                     change = (int)(sine * 2097152.0f);
                     change = -change;
                 }
@@ -468,7 +468,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
     if (control->mUnknown44 != angle) {
         if (other) {
             Vec2Sub(&point, &other->mMotion.mPos, &p->mMotion.mPos);
-            int toward = fn_801CFE40(point.mY, point.mX);
+            int toward = MathArcTan2(point.mY, point.mX);
             int candidate = MathAngleDiff(toward, angle);
 
             if (candidate > MathAngleDiff(toward, control->mUnknown44)) {
@@ -516,9 +516,9 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
         point.mX = (other->mMotion.mPos.mX + partner->mMotion.mPos.mX) * 0.5f;
         point.mY = (other->mMotion.mPos.mY + partner->mMotion.mPos.mY) * 0.5f;
         Vec2Sub(&delta, &other->mMotion.mPos, motion);
-        firstAngle = fn_801CFE40(delta.mY, delta.mX);
+        firstAngle = MathArcTan2(delta.mY, delta.mX);
         Vec2Sub(&delta, &partner->mMotion.mPos, motion);
-        secondAngle = fn_801CFE40(delta.mY, delta.mX);
+        secondAngle = MathArcTan2(delta.mY, delta.mX);
         int sector = (firstAngle - secondAngle) & 0xFFFFFF;
         if ((sector <= 0x7FFFFF && ((control->mUnknown44 - secondAngle) & 0xFFFFFF) <= 0x7FFFFF)
             || (sector > 0x800000 && ((control->mUnknown44 - secondAngle) & 0xFFFFFF) > 0x800000)) {
@@ -528,7 +528,7 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
             }
         }
         Vec2Sub(&delta, &point, motion);
-        direction = fn_801CFE40(delta.mY, delta.mX);
+        direction = MathArcTan2(delta.mY, delta.mX);
         distance = Vec2Magnitude(&delta);
         if (!(Vec2Distance(&other->mMotion.mPos, motion) >= distance)) {
             distance = Vec2Distance(&other->mMotion.mPos, motion);
@@ -543,7 +543,7 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
         point.mX += other->mMotion.mUnknown40 * 10.0f;
         point.mY += other->mMotion.mUnknown44 * 10.0f;
         Vec2Sub(&delta, &point, motion);
-        direction = fn_801CFE40(delta.mY, delta.mX);
+        direction = MathArcTan2(delta.mY, delta.mX);
         distance = Vec2Magnitude(&delta);
     }
     if (distance >= limit) {
@@ -598,7 +598,7 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
     if (angle > 0x400000) {
         angle = 0x400000;
     }
-    fn_801CFB18(angle);
+    MathSin(angle);
     limit = 0.72f;
     if (control->mUnknown40 < limit
         || (MathAngleDiff(direction, motion->mFacing) <= 0xE38E2
@@ -738,8 +738,8 @@ extern "C" int CarrierRunIsShielded(Object_80039F5C *p, Object_80039F5C *pOther)
             Point_8017886C delta;
 
             Vec2Sub(&delta, &pRef->mMotion.mPos, &p->mMotion.mPos);
-            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), state->mUnknown44) <= 0x355554
-                && MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x355554) {
+            if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), state->mUnknown44) <= 0x355554
+                && MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x355554) {
                 float distance = Vec2MagnitudeSqr(&delta);
 
                 if (distance < Vec2DistanceSqr(&p->mMotion.mPos, &pOther->mMotion.mPos)) {
@@ -823,7 +823,7 @@ extern "C" int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pO
         int direction;
 
         Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
-        direction = fn_801CFE40(delta.mY, delta.mX);
+        direction = MathArcTan2(delta.mY, delta.mX);
         if (MathAngleDiff(pMotion->mFacing, direction) <= 0x11C71B) {
             int side = 1;
 
@@ -938,7 +938,7 @@ extern "C" int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, fl
         float remaining = fn_80178A2C() - motion->mPos.mY;
         float limit = 4.2f;
 
-        limit = fn_801CFB18(p->mMotion.mFacing) * limit;
+        limit = MathSin(p->mMotion.mFacing) * limit;
 
         if (!(remaining <= 0.0f) && !(remaining >= limit)) {
             if (MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0xAAAA9
@@ -1091,7 +1091,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
         Point_8017886C delta;
 
         Vec2Sub(&delta, &other->mMotion.mPos, motion);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
+        int angle = MathArcTan2(delta.mY, delta.mX);
         int turn = MathAngleDiff(angle, motion->mFacing);
         int opposed = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, other->mMotion.mFacing) <= 0x1FFFFF;
         unsigned char *order = _CarrierRun_aucMoveOrder[CarrierRunGetMoveRow(p)];
@@ -1151,7 +1151,7 @@ extern "C" void CarrierRunSetSpeed(Object_80039F5C *p, OptionRunControl_t *contr
                 || fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), turn, &distance, 0)) {
                 control->mUnknown52 = 0;
                 if (!(distance >= 3.0f)) {
-                    control->mUnknown40 = fn_801CFB94(turn / 2) * 0.72f;
+                    control->mUnknown40 = MathCos(turn / 2) * 0.72f;
                     control->mUnknown40 = control->mUnknown40 >= 0.5f ? control->mUnknown40 : 0.5f;
                 }
             }

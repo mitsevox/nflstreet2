@@ -54,9 +54,9 @@ void CamFreeSetPos(GameCamera_t *pCamera, float x, float y, float z);
 void CamFreeMovePos(GameCamera_t *pCamera, float x, float y, float z);
 void CamFreeSetAngle(GameCamera_t *pCamera, int a, int b, int c);
 void CamFreeMoveAngle(GameCamera_t *pCamera, int a, int b, int c);
-float fn_801CFB18(int angle);
-float fn_801CFB94(int angle);
-int fn_801CFE40(float y, float x);
+float MathSin(int angle);
+float MathCos(int angle);
+int MathArcTan2(float y, float x);
 void MatSetStack(int a);
 void MatPushUnit(void);
 void MatPop(void);
@@ -268,13 +268,13 @@ void _CamMainGetAngleToFocus(GameCamera_t *pCamera, int *pAngles)
     if (pCamera->mUnknown98 == 0) {
         _CamMainGetCameraPos(pCamera, &from);
         _CamMainGetFocusPos(pCamera->mUnknownA8, pCamera->mUnknownAC, &to);
-        pAngles[2] = fn_801CFE40(to.mX - from.mX, to.mY - from.mY);
+        pAngles[2] = MathArcTan2(to.mX - from.mX, to.mY - from.mY);
         pAngles[2] += pCamera->mUnknownD8;
         pAngles[1] = 0;
         pAngles[1] += pCamera->mUnknownD4;
         dz = to.mZ - from.mZ;
-        c = fn_801CFB94(pAngles[2]);
-        pAngles[0] = fn_801CFE40(dz, c * (to.mY - from.mY) + fn_801CFB18(pAngles[2]) * (to.mX - from.mX));
+        c = MathCos(pAngles[2]);
+        pAngles[0] = MathArcTan2(dz, c * (to.mY - from.mY) + MathSin(pAngles[2]) * (to.mX - from.mX));
         pAngles[0] += pCamera->mUnknownD0;
     } else {
         angles[0] = angles[1] = angles[2] = 0;

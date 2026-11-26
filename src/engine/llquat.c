@@ -23,11 +23,11 @@ typedef struct QuatMatrix_t {
 static const unsigned char Quat_NextTraceIndex[3] = { 1, 2, 0 };
 
 double fabs(double x);
-void fn_801CFC14(int angle, float *pSin, float *pCos);
-void fn_801CFCD0(int *pAngles, float *pSin, float *pCos);
-float fn_801CFB74(float x);
-float fn_801CFDB0(float x);
-int fn_801CFE40(float y, float x);
+void MathSinCos(int angle, float *pSin, float *pCos);
+void MathSinCosVec4(int *pAngles, float *pSin, float *pCos);
+float MathSinf(float x);
+float MathArcCosf(float x);
+int MathArcTan2(float y, float x);
 float MathInvSqrt(float x);
 float MathInverse(float x);
 float QuatInvLength(Quat_t *q);
@@ -213,7 +213,7 @@ void QuatFromAxisAngle(Quat_t *q, Vec3_801DE1E0 *pAxis, int angle)
     float s;
     float c;
 
-    fn_801CFC14(angle / 2, &s, &c);
+    MathSinCos(angle / 2, &s, &c);
     q->x = pAxis->x * s;
     q->y = pAxis->y * s;
     q->z = pAxis->z * s;
@@ -250,9 +250,9 @@ void QuatToEuler(QuatEulerAngles_t *pOut, float *pRot)
         sinZ = 0.0f;
         cosZ = 1.0f;
     }
-    pOut->mUnknown0 = fn_801CFE40(sinX, cosX);
-    pOut->mUnknown4 = fn_801CFE40(sinY, cosY);
-    pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
+    pOut->mUnknown0 = MathArcTan2(sinX, cosX);
+    pOut->mUnknown4 = MathArcTan2(sinY, cosY);
+    pOut->mUnknown8 = MathArcTan2(sinZ, cosZ);
 }
 
 void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_t *q)
@@ -285,9 +285,9 @@ void QuatToEulerYZX(Triple_801BCA74 *pOut, Quat_t *q)
         sinY = 0.0f;
         cosY = 1.0f;
     }
-    pOut->mUnknown0 = fn_801CFE40(sinX, cosX);
-    pOut->mUnknown4 = fn_801CFE40(sinY, cosY);
-    pOut->mUnknown8 = fn_801CFE40(sinZ, cosZ);
+    pOut->mUnknown0 = MathArcTan2(sinX, cosX);
+    pOut->mUnknown4 = MathArcTan2(sinY, cosY);
+    pOut->mUnknown8 = MathArcTan2(sinZ, cosZ);
 }
 
 void QuatFromEuler(Quat_t *q, int x, int y, int z)
@@ -303,7 +303,7 @@ void QuatFromEuler(Quat_t *q, int x, int y, int z)
     angles[0] = z >> 1;
     angles[1] = y >> 1;
     angles[2] = x >> 1;
-    fn_801CFCD0(angles, s, c);
+    MathSinCosVec4(angles, s, c);
     cc = c[2] * c[1];
     sc = s[2] * c[1];
     ss = s[2] * s[1];
@@ -327,7 +327,7 @@ void QuatFromEulerYZX(Quat_t *q, int x, int y, int z)
     angles[0] = z >> 1;
     angles[1] = x >> 1;
     angles[2] = y >> 1;
-    fn_801CFCD0(angles, s, c);
+    MathSinCosVec4(angles, s, c);
     cc = c[2] * c[1];
     sc = s[2] * c[1];
     ss = s[2] * s[1];
@@ -361,10 +361,10 @@ void QuatSlerp(Quat_t *q, Quat_t *pTo, Quat_t *pFrom, float t)
         to.w = pTo->w;
     }
     if (!(cosom > 0.99f)) {
-        omega = fn_801CFDB0(cosom);
-        sinom = 1.0f / fn_801CFB74(omega);
-        scale0 = fn_801CFB74(omega * (1.0f - t)) * sinom;
-        scale1 = fn_801CFB74(omega * t) * sinom;
+        omega = MathArcCosf(cosom);
+        sinom = 1.0f / MathSinf(omega);
+        scale0 = MathSinf(omega * (1.0f - t)) * sinom;
+        scale1 = MathSinf(omega * t) * sinom;
     } else {
         scale0 = 1.0f - t;
         scale1 = t;

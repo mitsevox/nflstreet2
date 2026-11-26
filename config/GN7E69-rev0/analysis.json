@@ -401,6 +401,16 @@
       "start": "0x8000CDB0",
       "end": "0x8000CEB4",
       "symbol": "fn_8000CDB0"
+    },
+    {
+      "start": "0x801CF944",
+      "end": "0x801CF998",
+      "symbol": "fn_801CF944"
+    },
+    {
+      "start": "0x801CFC58",
+      "end": "0x801CFCD0",
+      "symbol": "fn_801CFC58"
     }
   ],
   "absolute_symbols": {

@@ -79,7 +79,7 @@ void fn_800B2640(int, int);
 int fn_800B2600(void);
 void fn_800B260C(short);
 float fn_800B2618(int);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 void Vec2Sub(void *, void *, void *);
 int BallStateGet(void *, int *);
@@ -735,9 +735,9 @@ int PenaltySkipInterferenceAt(Object_80039F5C *a, Object_80039F5C *b, Vector_800
 int PenaltyIsPlayingBall(Object_80039F5C *a, Object_80039F5C *b, void *) {
   Point2_t toPlayer, fromPlayer, toBall;
   Vec2Sub(&toPlayer, &b->mMotion.mPos, &a->mMotion.mPos);
-  int toward = fn_801CFE40(toPlayer.mY, toPlayer.mX);
+  int toward = MathArcTan2(toPlayer.mY, toPlayer.mX);
   Vec2Sub(&fromPlayer, &a->mMotion.mPos, &b->mMotion.mPos);
-  int away = fn_801CFE40(fromPlayer.mY, fromPlayer.mX);
+  int away = MathArcTan2(fromPlayer.mY, fromPlayer.mX);
   Vector_80039F5C point;
   BallGetLandingPoint(BallGetCurrent(), &point);
   point.mZ = 0.0f;
@@ -757,7 +757,7 @@ int PenaltyIsPlayingBall(Object_80039F5C *a, Object_80039F5C *b, void *) {
         }
       }
       Vec2Sub(&toBall, &point, &b->mMotion.mPos);
-      int direction = fn_801CFE40(toBall.mY, toBall.mX);
+      int direction = MathArcTan2(toBall.mY, toBall.mX);
       if (MathAngleDiff(away, direction) > 0x200000)
         reject = 1;
     }
@@ -973,10 +973,10 @@ void PenaltyCheckPassInterference(void) {
   Point2_t delta;
   Vec2Sub(&delta, &pos, &carrier->mMotion.mPos);
   float carrierDistance = Vec2Magnitude(&delta);
-  int carrierAngle = fn_801CFE40(delta.mY, delta.mX);
+  int carrierAngle = MathArcTan2(delta.mY, delta.mX);
   Vec2Sub(&delta, &pos, &tackler->mMotion.mPos);
   float tacklerDistance = Vec2Magnitude(&delta);
-  int tacklerAngle = fn_801CFE40(delta.mY, delta.mX);
+  int tacklerAngle = MathArcTan2(delta.mY, delta.mX);
   if (!(carrierDistance >= 4.0f))
     PenaltyPickInterferenceNear(carrier, tackler, carrierDistance, &ballPos,
                 tacklerDistance);

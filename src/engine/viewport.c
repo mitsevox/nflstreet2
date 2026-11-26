@@ -27,7 +27,7 @@ extern void FileAsyncCheckError(void);
 extern void GlibSetUpRender(void);
 extern void GlibFinishRender(void);
 extern int GlibGetScreenHeight(void);
-extern float fn_801CFD28(int angle);
+extern float MathTan(int angle);
 extern int MatNewStack(unsigned int a, unsigned int b);
 extern int MatDelStack(unsigned int a);
 extern void ObjProcessListFunc(int handle, int a, int b);
@@ -331,7 +331,7 @@ void VptSetPerspective(Viewport_t *pObject, float fovy, float aspect, float n, f
     pObject->mUnknown208 = aspect;
     pObject->mUnknown232 = n;
     pObject->mUnknown236 = f;
-    t = n * fn_801CFD28((int)(fovy * 46603.379f) / 2);
+    t = n * MathTan((int)(fovy * 46603.379f) / 2);
     pObject->mUnknown228 = -t;
     pObject->mUnknown224 = t;
     pObject->mUnknown216 = -t * aspect;
@@ -340,5 +340,5 @@ void VptSetPerspective(Viewport_t *pObject, float fovy, float aspect, float n, f
 
 void VptSetZScale(Viewport_t *pObject, float a)
 {
-    pObject->mUnknown240 = a * (fn_801CFD28(0x100000) / (pObject->mUnknown224 / pObject->mUnknown232));
+    pObject->mUnknown240 = a * (MathTan(0x100000) / (pObject->mUnknown224 / pObject->mUnknown232));
 }

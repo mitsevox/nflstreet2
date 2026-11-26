@@ -11,7 +11,7 @@
 #include "engine/llmatrix.h"
 
 extern void GlibSetScissor(int a, int b, int c, int d);
-extern float fn_801CFD28(int angle);
+extern float MathTan(int angle);
 extern int ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
 extern void ObjDelList(int handle);
 extern int ObjAddToList(int handle, int b);
@@ -81,7 +81,7 @@ void VptOrtho(Mtx44 m, float l, float r, float b, float t, float n, float f)
 
 void VptPerspective(Mtx44 m, float fovy, float aspect, float n, float f)
 {
-    float t = n * fn_801CFD28((int)(fovy * 46603.379f) / 2);
+    float t = n * MathTan((int)(fovy * 46603.379f) / 2);
 
     VptFrustum(m, -t * aspect, t * aspect, -t, t, n, f, 1.0f);
 }

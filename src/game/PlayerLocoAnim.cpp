@@ -31,7 +31,7 @@ int PlayerLocoUseAltCategory(Object_80039F5C *p, Object_80039F5C *pOther, int te
 int PlayerLocoUseSpecialCategory(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerLocoIsEngaged(Object_80039F5C *p, int flag);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Add(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
 void Vec2Sub(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
@@ -111,7 +111,7 @@ int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, 
             if (p->mUnknown2914 != 0 && p->mUnknown2914 != 20 &&
                 p->mUnknown2914 != 1 && p->mUnknown2914 != 3) goto finish;
             if (PlayerActionAnimIsPassReady(p)) {
-                int direction = fn_801CFE40(p->mMotion.mUnknown44, p->mMotion.mUnknown40) & 0xFFFFFF;
+                int direction = MathArcTan2(p->mMotion.mUnknown44, p->mMotion.mUnknown40) & 0xFFFFFF;
                 Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, 74);
                 int angle;
                 if (p->mUnknown2913 == 0) {

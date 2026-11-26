@@ -19,7 +19,7 @@ extern "C" {
 LevelSurface_t *LevelMeshFindArea(float *pPos, int value);
 int fn_801784C4(void);
 void *fn_801D2BB0(int a, int size, int c, int d);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 unsigned int strlen(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
@@ -162,7 +162,7 @@ void LevelBuildWallInfo(void)
         int angle;
 
         gLevelWallInfo[i].mUnknown0 = LevelGetWallHeight(pRecord);
-        angle = fn_801CFE40(pRecord->mUnknown0.mY, pRecord->mUnknown0.mX);
+        angle = MathArcTan2(pRecord->mUnknown0.mY, pRecord->mUnknown0.mX);
         gLevelWallInfo[i].mUnknown4 = angle;
         gLevelWallInfo[i].mUnknown8 = (angle + 0x800000) & 0xFFFFFF;
     }

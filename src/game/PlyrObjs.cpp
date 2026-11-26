@@ -51,8 +51,8 @@ void Vec3Normalize(void *, void *);
 void Vec3Mat33Mul(void *, void *);
 float Vec2DotProduct(void *, void *);
 int Vec3GetAngle(void *, void *);
-void fn_801CFC14(int, float *, float *);
-float fn_801CFD28(int);
+void MathSinCos(int, float *, float *);
+float MathTan(int);
 Region_8003BDF0 *LevelGetData();
 int LevelFindArea(float *);
 void LevelGetQuadBase(void *, void *, void *);
@@ -192,7 +192,7 @@ void PlyrObjsBuildShadow(Object_8003DEC4 *object, float *color, Point2_t *axis,
   Vec3Mat34Mul(center, center);
   Vec3Mat34Mul(delta, delta);
   delta[2] = 0.0f;
-  fn_801CFC14(object->mUnknown36, &direction.mY, &direction.mX);
+  MathSinCos(object->mUnknown36, &direction.mY, &direction.mX);
   float width = fabsf(Vec2DotProduct(&direction, axis));
   if (!(width >= 0.65f))
     width = 0.65f;
@@ -263,7 +263,7 @@ void PlyrObjsClipShadowToLevel(Object_8003DEC4 *object, Point2_t *axis, int angl
   Vec3Scale(center, center, 0.5f);
   PlyrPoseGetBoneTransform(object, 26, first, 0);
   first[2] = (first[2] + center[2]) * 0.5f;
-  float radius = fabsf(1.0f / fn_801CFD28(angle)) * first[2];
+  float radius = fabsf(1.0f / MathTan(angle)) * first[2];
   Projection_8003BA10 *p = &object->mUnknown4256;
   radius += Vec2Distance(p->mPoints[0], p->mPoints[2]);
   for (unsigned char i = 0; i < regions->mUnknown128; ++i) {
@@ -298,7 +298,7 @@ void PlyrObjsClipShadowQuad(Object_8003DEC4 *object, float *center, Point2_t *ax
   if (PlyrObjsIntersectLines(&original, &shifted, a, b, &t, &u) && t > 0.0f)
     return;
   unsigned char i = 0;
-  float height = fn_801CFD28(angle);
+  float height = MathTan(angle);
   Projection_8003BA10 *p = &object->mUnknown4256;
   scale *= 0.7142857313156128f;
   float shift = scale / height;
