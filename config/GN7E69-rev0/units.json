@@ -3245,12 +3245,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E4120",
-          "end": "0x800E4264"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E4494",
           "end": "0x800E513C"
         },
         {
@@ -3331,10 +3325,6 @@
           {
             "function": "PlyrAlignGetCallTarget",
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
-          },
-          {
-            "function": "PlyrAlignTurnPhase",
-            "evidence": "evidence.tsv source-form 0x800E4264-0x800E4494"
           },
           {
             "function": "PlyrAlignInput",

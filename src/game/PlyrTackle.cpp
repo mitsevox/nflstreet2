@@ -768,11 +768,11 @@ extern "C" int PlyrAlignTurnPhase(Table_80089904 *pTable, unsigned short key, vo
         if (MathAngleDiff(heading, p->mMotion.mFacing) > 46603) {
             fn_801BE760(p->mpUnknown792, key, 1);
             if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 189)) {
-                AnimChannel_t *pChannels = p->mpUnknown800;
-                int channel = AnimChanGetStateChannelByIndex(p->mpUnknown796, pChannels, 189, 0);
-                pState->mUnknown64 = pChannels[channel].mUnknown48;
+                pEntries = p->mpUnknown800;
+                int channel = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 189, 0);
+                pState->mUnknown64 = pEntries[channel].mUnknown48;
                 if (pState->mUnknown64 == 0.0f) {
-                    pState->mUnknown64 = AnimSeqGetTimeToOpcode(&pChannels[channel].mUnknown4C, 0xC004);
+                    pState->mUnknown64 = AnimSeqGetTimeToOpcode(&pEntries[channel].mUnknown4C, 0xC004);
                     if (pState->mUnknown64 == 0.0f) {
                         break;
                     }
