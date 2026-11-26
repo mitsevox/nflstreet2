@@ -22,8 +22,8 @@ typedef struct SndAemsModuleBank_t {
     int mBankB;
 } SndAemsModuleBank_t;
 
-int fn_80269484(void);
-void fn_802694AC(SndAemsModuleBank_t *bank, void *modules, char *name, int arg);
+int SNDAEMSI_createmodulebankhandle(void);
+void SNDAEMSI_resolvemodulebank(SndAemsModuleBank_t *bank, void *modules, char *name, int arg);
 int SNDbankadd(int *handle, BankVer_t *bank);
 int SNDbankheadersize(int bank);
 int SNDbankheadercopy(void *dst, int bank);
@@ -45,7 +45,7 @@ int SNDAEMS_addmodulebank(SndAemsModuleBank_t *data, char *name, int arg,
     if (sndaems.mpBeforeAddBank != 0) {
         sndaems.mpBeforeAddBank();
     }
-    data->mHandle = fn_80269484();
+    data->mHandle = SNDAEMSI_createmodulebankhandle();
     if (data->mBankOffsetA != 0) {
         resultA = SNDbankadd(&data->mBankA, (BankVer_t *)((char *)data + data->mBankOffsetA));
         if (resultA < 0) {
@@ -88,7 +88,7 @@ int SNDAEMS_addmodulebank(SndAemsModuleBank_t *data, char *name, int arg,
     if (resultB > 0 && (moved != data || resultA == 7)) {
         SNDbankheadercopy((char *)moved + size, bank->mBankB);
     }
-    fn_802694AC(bank, (char *)data + bank->mFixupHeaderOffset, name, arg);
+    SNDAEMSI_resolvemodulebank(bank, (char *)data + bank->mFixupHeaderOffset, name, arg);
     return bank->mHandle;
 
 fail:

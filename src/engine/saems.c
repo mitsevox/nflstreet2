@@ -9,14 +9,6 @@
 
 extern "C" {
 
-typedef struct Object_8026739C {
-    unsigned char mUnknown0[8];
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-} Object_8026739C;
-
 typedef struct Object_80267404 {
     int mUnknown0;
     int mUnknown4;
@@ -159,7 +151,6 @@ typedef int (*SndAemsUpdateFn_t)(void *state);
 
 extern SndAemsBankSetter_t playerinterfacefn[12];
 extern SndAemsOptSetter_t SNDAEMSoptfn[12];
-extern int fn_801B9B30(void *p, int *value);
 extern int SNDvol(int handle, int value);
 extern float lbl_80300028;
 void SNDAEMSI_bankvol(int voice, int value);
@@ -401,9 +392,10 @@ typedef struct AemsModuleBank_t {
 } AemsModuleBank_t;
 
 #define AEMS_BANK_FROM_LINK(link) ((AemsModuleBank_t *)((char *)(link) - 80))
+// FAKEMATCH: the module bank list head read through a constant address (sndaems + 4) instead of sndaems.mpModuleBanks, for the target's folded sndaems+4 accesses
+#define AEMS_MODULE_BANKS (*(SndAemsModuleBankLink_t **)((char *)&sndaems + 4))
 
 int SNDAEMS_removemodulebank(int handle);
-extern SndAemsModuleBankLink_t *lbl_803A6BD0;
 int SNDAEMSI_updatedestroy(DestroyState_t *p);
 void SNDAEMSI_timerupdate(void *unused);
 extern void SNDSYS_entercritical(void);
@@ -411,7 +403,7 @@ extern void SNDSYS_leavecritical(void);
 unsigned int strlen(const char *s);
 char *strcpy(char *dst, const char *src);
 
-int fn_80266E88(int *p)
+int SNDAEMSI_UpdateClassDestructor(int *p)
 {
     int value = p[4];
 
@@ -419,17 +411,17 @@ int fn_80266E88(int *p)
     return value;
 }
 
-int fn_80266E9C(int *p)
+int SNDAEMSI_UpdateClassData(int *p)
 {
     return p[5];
 }
 
-int fn_80266EA4(int *p)
+int SNDAEMSI_UpdateGlobalVariable(int *p)
 {
     return p[6];
 }
 
-int fn_80266EAC(int *p)
+int SNDAEMSI_updatecreate(int *p)
 {
     int value = p[0];
 
@@ -499,7 +491,7 @@ int SNDAEMSI_updatedestroy(DestroyState_t *p)
     return 0;
 }
 
-int fn_80267114(CallFunctionState_t *p)
+int UpdateCallFunction(CallFunctionState_t *p)
 {
     CallFunctionInput_t *input;
 
@@ -593,28 +585,37 @@ int UpdateControlClass(ControlClassState_t *p)
     return refs;
 }
 
-int fn_8026739C(Object_8026739C *p)
+/* A set-global-variable module: the Csis handle, the value range, the last input and the input. */
+typedef struct SetGlobalVariableState_t {
+    Csis::GlobalVariableHandle mHandle;
+    int mMin;
+    int mMax;
+    int mLast;
+    int mInput;
+} SetGlobalVariableState_t;
+
+int UpdateSetGlobalVariable(SetGlobalVariableState_t *p)
 {
     int value;
-    int v = p->mUnknown14;
+    int v = p->mInput;
     int lo, hi;
 
-    if (p->mUnknown10 != v) {
-        p->mUnknown10 = v;
-        lo = p->mUnknown8;
-        hi = p->mUnknownC;
+    if (p->mLast != v) {
+        p->mLast = v;
+        lo = p->mMin;
+        hi = p->mMax;
         if (v < lo)
             value = lo;
         else if (v > hi)
             value = hi;
         else
             value = v;
-        fn_801B9B30(p, &value);
+        Csis::GlobalVariable::SetFast(&p->mHandle, &value);
     }
     return 0;
 }
 
-int fn_80267404(Object_80267404 *p)
+int SNDAEMSI_updatecounter(Object_80267404 *p)
 {
     int v = p->mUnknown14;
 
@@ -631,7 +632,7 @@ int fn_80267404(Object_80267404 *p)
     return p->mUnknown8;
 }
 
-int fn_80267480(Object_80267480 *p)
+int SNDAEMSI_updaterandom(Object_80267480 *p)
 {
     int result;
 
@@ -644,7 +645,7 @@ int fn_80267480(Object_80267480 *p)
     return result;
 }
 
-int fn_802674DC(Object_802674DC *p)
+int SNDAEMSI_updaterandomshuffle(Object_802674DC *p)
 {
     unsigned int index;
 
@@ -704,7 +705,7 @@ int SNDAEMSI_updaterandomweighted(RandomWeightedState_t *p)
     return p->mValue;
 }
 
-int fn_8026769C(Object_8026769C *p)
+int SNDAEMSI_updaterangetrig(Object_8026769C *p)
 {
     if (p->mUnknown14 >= p->mUnknown0 && p->mUnknown14 <= p->mUnknown4) {
         if (p->mUnknown10 == 0) {
@@ -744,13 +745,15 @@ int SNDAEMSI_updatedelaytrig(DelayTrigState_t *p)
     return 0;
 }
 
-int fn_802677B4(Object_802677B4 *p)
+int SNDAEMSI_updatestategen(Object_802677B4 *p)
 {
     int *flags = (int *)((char *)p + p->mUnknown0);
     int i;
 
     for (i = 0; i < p->mUnknown2; i++) {
-        if (flags[i] != 0) {
+        int *flag = &flags[i];
+
+        if (*flag != 0) {
             p->mUnknown4 = p->mUnknown8[i];
             break;
         }
@@ -758,7 +761,7 @@ int fn_802677B4(Object_802677B4 *p)
     return p->mUnknown4;
 }
 
-int fn_80267814(Object_80267814 *p)
+int SNDAEMSI_updatemerge(Object_80267814 *p)
 {
     int i;
 
@@ -772,7 +775,8 @@ int fn_80267814(Object_80267814 *p)
 void SNDAEMSI_envelopeprogramsegment(EnvelopeState_80267858 *p)
 {
     p->mTime = p->mSegments[p->mSegment].mTime;
-    p->mStep = Snd::gVariableTimerPeriod * ((p->mSegments[p->mSegment].mLevel - p->mLevel) / p->mTime);
+    p->mStep = (p->mSegments[p->mSegment].mLevel - p->mLevel) / p->mTime;
+    p->mStep *= Snd::gVariableTimerPeriod;
 }
 
 int SNDAEMSI_updateenvelope(EnvelopeState_80267858 *p)
@@ -923,7 +927,7 @@ int SNDAEMSI_updatedelayline(DelayLineState_t *p)
     return value;
 }
 
-int fn_80267D84(Args_80267D84 *p)
+int SNDAEMSI_updatemux(Args_80267D84 *p)
 {
     int index = p->mValues[0];
 
@@ -932,7 +936,7 @@ int fn_80267D84(Args_80267D84 *p)
     return p->mValues[index];
 }
 
-int fn_80267DB4(Object_80267DB4 *p)
+int SNDAEMSI_updatedemux(Object_80267DB4 *p)
 {
     int index;
 
@@ -945,7 +949,7 @@ int fn_80267DB4(Object_80267DB4 *p)
     return p->mUnknownC[0];
 }
 
-int fn_80267E04(Args_80267D84 *p)
+int SNDAEMSI_updatemin(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -957,7 +961,7 @@ int fn_80267E04(Args_80267D84 *p)
     return result;
 }
 
-int fn_80267E48(int *p)
+int SNDAEMSI_updatemin2(int *p)
 {
     int a = p[0];
     int b = p[1];
@@ -967,7 +971,7 @@ int fn_80267E48(int *p)
     return b;
 }
 
-int fn_80267E64(Args_80267D84 *p)
+int SNDAEMSI_updatemax(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -979,7 +983,7 @@ int fn_80267E64(Args_80267D84 *p)
     return result;
 }
 
-int fn_80267EA8(int *p)
+int SNDAEMSI_updatemax2(int *p)
 {
     int a = p[0];
     int b = p[1];
@@ -1007,7 +1011,7 @@ int SNDAEMSI_updatescale2(Scale2State_80267F80 *p)
     return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
 }
 
-int fn_8026801C(Args_80267D84 *p)
+int SNDAEMSI_updateadd(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -1017,40 +1021,40 @@ int fn_8026801C(Args_80267D84 *p)
     return result;
 }
 
-int fn_80268058(int *p)
+int SNDAEMSI_updateadd2(int *p)
 {
     return p[0] + p[1];
 }
 
-int fn_80268068(int *p)
+int SNDAEMSI_updatesubtract(int *p)
 {
     return p[0] - p[1];
 }
 
-int fn_80268078(int *p)
+int SNDAEMSI_updatemultiply(int *p)
 {
     return p[0] * p[1];
 }
 
-int fn_80268088(int *p)
+int SNDAEMSI_updatedivide(int *p)
 {
     if (p[1] != 0)
         return p[0] / p[1];
     return 0;
 }
 
-int fn_802680A8(int *p)
+int SNDAEMSI_updatemodulo(int *p)
 {
     if (p[1] != 0)
         return p[0] % p[1];
     return 0;
 }
 
-void fn_802680D0(void)
+void SNDAEMSI_bankinputstub(void)
 {
 }
 
-void fn_802680D4(int voice, int value)
+void SNDAEMSI_bankpitchmult(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -1062,7 +1066,7 @@ void fn_802680D4(int voice, int value)
     SNDPLATFORM_setpitch(voice);
 }
 
-void fn_80268130(int voice, int value)
+void SNDAEMSI_banktimemult(int voice, int value)
 {
     if (value > 8192)
         value = 8192;
@@ -1096,7 +1100,7 @@ void SNDAEMSI_bankvol(int voice, int value)
     }
 }
 
-void fn_80268270(int voice, int value)
+void SNDAEMSI_bankazimuth(int voice, int value)
 {
     Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
 
@@ -1121,7 +1125,7 @@ void SNDAEMSI_bankfxwet0(int voice, int value)
     SNDPLATFORM_setfxlevel(voice, 0);
 }
 
-void fn_80268354(int voice, int value)
+void SNDAEMSI_banklowpass(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -1132,7 +1136,7 @@ void fn_80268354(int voice, int value)
     SNDPLATFORM_lowpass(voice, value);
 }
 
-void fn_8026839C(int voice, int value)
+void SNDAEMSI_bankhighpass(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -1143,7 +1147,7 @@ void fn_8026839C(int voice, int value)
     SNDPLATFORM_highpass(voice, value);
 }
 
-void fn_802683E4(int voice, int value)
+void SNDAEMSI_bankdrylevel(int voice, int value)
 {
     Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
     int clamped;
@@ -1163,7 +1167,7 @@ void fn_802683E4(int voice, int value)
     }
 }
 
-void fn_80268480(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optpitchmult(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -1174,7 +1178,7 @@ void fn_80268480(SndPlayOpts_t *p, int value)
     p->mC = value;
 }
 
-void fn_802684B0(SndPlayOpts_t *p, int value)
+void SNDAEMSI_opttimemult(SndPlayOpts_t *p, int value)
 {
     if (value > 8192)
         value = 8192;
@@ -1183,7 +1187,7 @@ void fn_802684B0(SndPlayOpts_t *p, int value)
     p->mE = value;
 }
 
-void fn_802684D4(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optvol(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -1196,12 +1200,12 @@ void fn_802684D4(SndPlayOpts_t *p, int value)
     p->m0 = clamped >> 8;
 }
 
-void fn_802684FC(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optazimuth(SndPlayOpts_t *p, int value)
 {
     p->m8 = value;
 }
 
-void fn_80268504(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optfxwet0(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -1214,7 +1218,7 @@ void fn_80268504(SndPlayOpts_t *p, int value)
     p->m5 = clamped >> 8;
 }
 
-void fn_8026852C(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optlowpass(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -1225,7 +1229,7 @@ void fn_8026852C(SndPlayOpts_t *p, int value)
     p->m14 = value;
 }
 
-void fn_8026855C(SndPlayOpts_t *p, int value)
+void SNDAEMSI_opthighpass(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -1236,7 +1240,7 @@ void fn_8026855C(SndPlayOpts_t *p, int value)
     p->m16 = value;
 }
 
-void fn_8026858C(SndPlayOpts_t *p, int value)
+void SNDAEMSI_optdrylevel(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -1249,11 +1253,11 @@ void fn_8026858C(SndPlayOpts_t *p, int value)
     p->m4 = clamped >> 8;
 }
 
-void fn_802685B4(void)
+void SNDAEMSI_optstub(void)
 {
 }
 
-Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
+Result_802685B8 SNDAEMSI_playerplaybank(Object_802685B8 *p, int *q)
 {
     SndPlayOpts_t params;
     Result_802685B8 result;
@@ -1271,12 +1275,12 @@ Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
     return result;
 }
 
-int fn_80268668(Object_802686CC *p)
+int SNDAEMSI_playerstopbank(Object_802686CC *p)
 {
     return SNDstop(p->mUnknown8);
 }
 
-int fn_8026868C(int *p)
+int SNDAEMSI_playerpausebank(int *p)
 {
     int handle = *p;
 
@@ -1284,7 +1288,7 @@ int fn_8026868C(int *p)
     return SNDpitchmult(handle, 0);
 }
 
-void fn_802686CC(Object_802686CC *p)
+void SNDAEMSI_playerunpausebank(Object_802686CC *p)
 {
     int a = 4096;
     int b = 32767;
@@ -1304,7 +1308,7 @@ void fn_802686CC(Object_802686CC *p)
                 e->mUnknown4 = b;
             }
         }
-        fn_802680D4(handle, a);
+        SNDAEMSI_bankpitchmult(handle, a);
         SNDAEMSI_bankvol(handle, b);
     }
 }
@@ -1314,10 +1318,10 @@ int SNDAEMSI_playerresetoutputs(PlayerState_80268774 *p)
     p->mUnknown10 = -1;
     if (p->mPlaying != 0) {
         PlayerOutput_80268774 *outputs = p->mOutputs;
-        int output = p->mOutput;
+        PlayerOutput_80268774 *output = &outputs[p->mOutput];
 
-        outputs[output].mUnknown4 = 0;
-        outputs[output].mUnknown0 = 0;
+        output->mUnknown4 = 0;
+        output->mUnknown0 = 0;
     }
     return 0;
 }
@@ -1492,7 +1496,7 @@ int SNDAEMSI_updateramp(RampState_t *p)
     return (int)(!(p->mValue < 0.0f) ? p->mValue + 0.5f : p->mValue - 0.5f);
 }
 
-int fn_80268F54(Object_80268F54 *p)
+int SNDAEMSI_updateaddmax(Object_80268F54 *p)
 {
     int i;
     int sum = p->mValues[0];
@@ -1504,7 +1508,7 @@ int fn_80268F54(Object_80268F54 *p)
     return sum;
 }
 
-int fn_80268FA0(int *p)
+int SNDAEMSI_updatesubtractmin(int *p)
 {
     int value = p[1] - p[2];
 
@@ -1513,7 +1517,7 @@ int fn_80268FA0(int *p)
     return value;
 }
 
-int fn_80268FC4(int *p)
+int SNDAEMSI_updatemultiplymax(int *p)
 {
     int value = p[1] * p[2];
 
@@ -1522,7 +1526,7 @@ int fn_80268FC4(int *p)
     return value;
 }
 
-int fn_80268FE8(Object_80269048 *p)
+int UpdateFunction(Object_80269048 *p)
 {
     int value = p->mUnknown19;
 
@@ -1530,17 +1534,17 @@ int fn_80268FE8(Object_80269048 *p)
     return value;
 }
 
-void fn_80268FFC(int *values, Object_80268FFC *p)
+void SNDAEMSI_SetGlobalVariable(int *values, Object_80268FFC *p)
 {
     p->mUnknown18 = values[0];
 }
 
-void fn_80269008(int *values, Object_80269008 *p)
+void SNDAEMSI_SetClassDestructor(int *values, Object_80269008 *p)
 {
     p->mUnknown10 = 1;
 }
 
-void fn_80269014(int *values, Object_80269014 *p)
+void SNDAEMSI_SetClassData(int *values, Object_80269014 *p)
 {
     int i;
 
@@ -1548,7 +1552,7 @@ void fn_80269014(int *values, Object_80269014 *p)
         p->mUnknown14[i] = values[i];
 }
 
-void fn_80269048(int *values, Object_80269048 *p)
+void CsisFunctionCallback(int *values, Object_80269048 *p)
 {
     int i;
 
@@ -1592,14 +1596,14 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
         AemsDestructorClient_t *client = (AemsDestructorClient_t *)data;
 
         client->mClient.mContext = client;
-        client->mClient.mCallback = (void (*)(Csis::Class *, void *))fn_80269008;
+        client->mClient.mCallback = (void (*)(Csis::Class *, void *))SNDAEMSI_SetClassDestructor;
         object->SubscribeDestructorFast(&client->mClient);
         data = inst->mData + sizeof(AemsDestructorClient_t);
     }
     for (i = 0; i < c->mNumGlobals; i++) {
         AemsVariableClient_t *client = (AemsVariableClient_t *)data;
 
-        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80268FFC;
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetGlobalVariable;
         client->mClient.mContext = client;
         Csis::GlobalVariable::SubscribeFast(&client->mHandle, &client->mClient);
         data += sizeof(AemsVariableClient_t);
@@ -1608,14 +1612,14 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
         AemsMemberDataClient_t *client = (AemsMemberDataClient_t *)data;
 
         client->mClient.mContext = client;
-        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80269014;
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetClassData;
         object->SubscribeMemberDataFast(&client->mClient);
         data += client->mNumParams * 4 + 20;
     }
     for (i = 0; i < c->mNumFunctions; i++) {
         AemsFunctionClient_t *client = (AemsFunctionClient_t *)data;
 
-        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80269048;
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))CsisFunctionCallback;
         client->mClient.mContext = client;
         Csis::Function::SubscribeFast(&client->mHandle, &client->mClient);
         data += client->mNumParams * 4 + 28;
@@ -1626,47 +1630,47 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
 
 
 SndAemsBankSetter_t playerinterfacefn[12] = {
-    fn_802680D4, fn_80268130, SNDAEMSI_bankvol, fn_80268270,
-    (SndAemsBankSetter_t)fn_802680D0, SNDAEMSI_bankfxwet0, fn_80268354, fn_8026839C,
-    fn_802683E4, (SndAemsBankSetter_t)fn_802680D0, (SndAemsBankSetter_t)fn_802680D0,
-    (SndAemsBankSetter_t)fn_802680D0,
+    SNDAEMSI_bankpitchmult, SNDAEMSI_banktimemult, SNDAEMSI_bankvol, SNDAEMSI_bankazimuth,
+    (SndAemsBankSetter_t)SNDAEMSI_bankinputstub, SNDAEMSI_bankfxwet0, SNDAEMSI_banklowpass, SNDAEMSI_bankhighpass,
+    SNDAEMSI_bankdrylevel, (SndAemsBankSetter_t)SNDAEMSI_bankinputstub, (SndAemsBankSetter_t)SNDAEMSI_bankinputstub,
+    (SndAemsBankSetter_t)SNDAEMSI_bankinputstub,
 };
 
 SndAemsOptSetter_t SNDAEMSoptfn[12] = {
-    fn_80268480, fn_802684B0, fn_802684D4, fn_802684FC,
-    (SndAemsOptSetter_t)fn_802685B4, fn_80268504, fn_8026852C, fn_8026855C,
-    fn_8026858C, (SndAemsOptSetter_t)fn_802685B4, (SndAemsOptSetter_t)fn_802685B4,
-    (SndAemsOptSetter_t)fn_802685B4,
+    SNDAEMSI_optpitchmult, SNDAEMSI_opttimemult, SNDAEMSI_optvol, SNDAEMSI_optazimuth,
+    (SndAemsOptSetter_t)SNDAEMSI_optstub, SNDAEMSI_optfxwet0, SNDAEMSI_optlowpass, SNDAEMSI_opthighpass,
+    SNDAEMSI_optdrylevel, (SndAemsOptSetter_t)SNDAEMSI_optstub, (SndAemsOptSetter_t)SNDAEMSI_optstub,
+    (SndAemsOptSetter_t)SNDAEMSI_optstub,
 };
 
-SndAemsPlayFn_t SNDAEMSplayerplayfn[4] = { (SndAemsPlayFn_t)fn_802685B8 };
-SndAemsPlayerFn_t SNDAEMSplayerstopfn[4] = { (SndAemsPlayerFn_t)fn_80268668 };
-SndAemsPauseFn_t SNDAEMSplayerpausefn[4] = { (SndAemsPauseFn_t)fn_8026868C };
-SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4] = { (SndAemsPlayerFn_t)fn_802686CC };
+SndAemsPlayFn_t SNDAEMSplayerplayfn[4] = { (SndAemsPlayFn_t)SNDAEMSI_playerplaybank };
+SndAemsPlayerFn_t SNDAEMSplayerstopfn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerstopbank };
+SndAemsPauseFn_t SNDAEMSplayerpausefn[4] = { (SndAemsPauseFn_t)SNDAEMSI_playerpausebank };
+SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerunpausebank };
 SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerupdatebank };
 
 SndAemsUpdateFn_t sndaemsfuncs[40] = {
-    (SndAemsUpdateFn_t)fn_80266E88, (SndAemsUpdateFn_t)fn_80266E9C, (SndAemsUpdateFn_t)fn_80266EA4,
-    (SndAemsUpdateFn_t)fn_80266EAC, (SndAemsUpdateFn_t)SNDAEMSI_updatedestroy, (SndAemsUpdateFn_t)fn_80267114,
-    (SndAemsUpdateFn_t)fn_80267404, (SndAemsUpdateFn_t)fn_80267480, (SndAemsUpdateFn_t)fn_802674DC,
-    (SndAemsUpdateFn_t)SNDAEMSI_updaterandomweighted, (SndAemsUpdateFn_t)fn_8026769C,
-    (SndAemsUpdateFn_t)SNDAEMSI_updatedelaytrig, (SndAemsUpdateFn_t)fn_802677B4,
-    (SndAemsUpdateFn_t)fn_80267814, (SndAemsUpdateFn_t)SNDAEMSI_updateenvelope, (SndAemsUpdateFn_t)SNDAEMSI_updatetable, (SndAemsUpdateFn_t)SNDAEMSI_updatedelayline,
-    (SndAemsUpdateFn_t)fn_80267D84, (SndAemsUpdateFn_t)fn_80267DB4, (SndAemsUpdateFn_t)fn_80267E04,
-    (SndAemsUpdateFn_t)fn_80267E64, (SndAemsUpdateFn_t)SNDAEMSI_updatescale,
-    (SndAemsUpdateFn_t)fn_8026801C, (SndAemsUpdateFn_t)fn_80268068, (SndAemsUpdateFn_t)fn_80268078,
-    (SndAemsUpdateFn_t)fn_80268088, (SndAemsUpdateFn_t)fn_802680A8, (SndAemsUpdateFn_t)SNDAEMSI_updateplayer, (SndAemsUpdateFn_t)SNDAEMSI_updateoscillator,
-    (SndAemsUpdateFn_t)SNDAEMSI_updateramp, (SndAemsUpdateFn_t)fn_80268F54, (SndAemsUpdateFn_t)fn_80268FA0,
-    (SndAemsUpdateFn_t)fn_80268FC4, (SndAemsUpdateFn_t)fn_80267E48, (SndAemsUpdateFn_t)fn_80267EA8,
-    (SndAemsUpdateFn_t)SNDAEMSI_updatescale2, (SndAemsUpdateFn_t)fn_80268058,
-    (SndAemsUpdateFn_t)fn_80268FE8, (SndAemsUpdateFn_t)UpdateControlClass, (SndAemsUpdateFn_t)fn_8026739C,
+    (SndAemsUpdateFn_t)SNDAEMSI_UpdateClassDestructor, (SndAemsUpdateFn_t)SNDAEMSI_UpdateClassData, (SndAemsUpdateFn_t)SNDAEMSI_UpdateGlobalVariable,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatecreate, (SndAemsUpdateFn_t)SNDAEMSI_updatedestroy, (SndAemsUpdateFn_t)UpdateCallFunction,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatecounter, (SndAemsUpdateFn_t)SNDAEMSI_updaterandom, (SndAemsUpdateFn_t)SNDAEMSI_updaterandomshuffle,
+    (SndAemsUpdateFn_t)SNDAEMSI_updaterandomweighted, (SndAemsUpdateFn_t)SNDAEMSI_updaterangetrig,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatedelaytrig, (SndAemsUpdateFn_t)SNDAEMSI_updatestategen,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemerge, (SndAemsUpdateFn_t)SNDAEMSI_updateenvelope, (SndAemsUpdateFn_t)SNDAEMSI_updatetable, (SndAemsUpdateFn_t)SNDAEMSI_updatedelayline,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemux, (SndAemsUpdateFn_t)SNDAEMSI_updatedemux, (SndAemsUpdateFn_t)SNDAEMSI_updatemin,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemax, (SndAemsUpdateFn_t)SNDAEMSI_updatescale,
+    (SndAemsUpdateFn_t)SNDAEMSI_updateadd, (SndAemsUpdateFn_t)SNDAEMSI_updatesubtract, (SndAemsUpdateFn_t)SNDAEMSI_updatemultiply,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatedivide, (SndAemsUpdateFn_t)SNDAEMSI_updatemodulo, (SndAemsUpdateFn_t)SNDAEMSI_updateplayer, (SndAemsUpdateFn_t)SNDAEMSI_updateoscillator,
+    (SndAemsUpdateFn_t)SNDAEMSI_updateramp, (SndAemsUpdateFn_t)SNDAEMSI_updateaddmax, (SndAemsUpdateFn_t)SNDAEMSI_updatesubtractmin,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemultiplymax, (SndAemsUpdateFn_t)SNDAEMSI_updatemin2, (SndAemsUpdateFn_t)SNDAEMSI_updatemax2,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatescale2, (SndAemsUpdateFn_t)SNDAEMSI_updateadd2,
+    (SndAemsUpdateFn_t)UpdateFunction, (SndAemsUpdateFn_t)UpdateControlClass, (SndAemsUpdateFn_t)UpdateSetGlobalVariable,
 };
 
 void SNDAEMSI_restore(void)
 {
     SNDSYS_entercritical();
-    while (lbl_803A6BD0 != 0)
-        SNDAEMS_removemodulebank(AEMS_BANK_FROM_LINK(lbl_803A6BD0)->mHandle);
+    while (AEMS_MODULE_BANKS != 0)
+        SNDAEMS_removemodulebank(AEMS_BANK_FROM_LINK(AEMS_MODULE_BANKS)->mHandle);
     SNDSYS_leavecritical();
 }
 
@@ -1677,7 +1681,7 @@ int SNDAEMS_removemodulebank(int handle)
     if (sndaems.mpBeforeRemoveBank != 0)
         sndaems.mpBeforeRemoveBank();
     SNDSYS_entercritical();
-    for (bank = AEMS_BANK_FROM_LINK(sndaems.mpModuleBanks); bank != 0;
+    for (bank = AEMS_BANK_FROM_LINK(AEMS_MODULE_BANKS); bank != 0;
          bank = AEMS_BANK_FROM_LINK(bank->mLink.mpNext)) {
         if (handle == bank->mHandle) {
             AemsClass_t *c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
@@ -1704,13 +1708,13 @@ int SNDAEMS_removemodulebank(int handle)
                 SNDbankremove(bank->mBankA);
             if (bank->mBankB >= 0)
                 SNDbankremove(bank->mBankB);
-            if (&bank->mLink == sndaems.mpModuleBanks)
-                sndaems.mpModuleBanks = bank->mLink.mpNext;
+            if (&bank->mLink == AEMS_MODULE_BANKS)
+                AEMS_MODULE_BANKS = bank->mLink.mpNext;
             if (bank->mLink.mpPrev != 0)
                 bank->mLink.mpPrev->mpNext = bank->mLink.mpNext;
             if (bank->mLink.mpNext != 0)
                 bank->mLink.mpNext->mpPrev = bank->mLink.mpPrev;
-            if (sndaems.mpModuleBanks == 0)
+            if (AEMS_MODULE_BANKS == 0)
                 Snd::gVariableTimerList.Remove((SndStreamFader_t *)&sndaems.mTimerClient);
             SNDSYS_leavecritical();
             return 0;
@@ -1761,12 +1765,12 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
 
     lbl_803A6C24.m1B4[0] = SNDAEMSI_restore;
     SNDSYS_entercritical();
-    first = sndaems.mpModuleBanks == 0;
-    bank->mLink.mpNext = sndaems.mpModuleBanks;
+    first = AEMS_MODULE_BANKS == 0;
+    bank->mLink.mpNext = AEMS_MODULE_BANKS;
     bank->mLink.mpPrev = 0;
-    if (sndaems.mpModuleBanks != 0)
-        sndaems.mpModuleBanks->mpPrev = &bank->mLink;
-    sndaems.mpModuleBanks = &bank->mLink;
+    if (AEMS_MODULE_BANKS != 0)
+        AEMS_MODULE_BANKS->mpPrev = &bank->mLink;
+    AEMS_MODULE_BANKS = &bank->mLink;
     for (i = 0; i < fixups->mCount; i++) {
         unsigned short *id = (unsigned short *)((char *)bank + fixups->mOffsets[i]);
         unsigned short *fn = (unsigned short *)&sndaemsfuncs[(id[0] << 16) | id[2]];
