@@ -149,7 +149,7 @@ def main():
         print(f'RTL dumps in {args.dump.resolve()}')
 
     accepted = json.loads(source_report.read_text())['units']
-    addresses, ambiguous = fc.reference_addresses(ROOT, manifest, accepted)
+    addresses, ambiguous, commons = fc.accepted_references(ROOT, manifest, accepted)
     native = unit['object'].read_bytes()
     sections, symbols = sb.read_elf(native)
     functions = {s['name']: s for s in symbols if s['type'] == 2 and s['size'] and s['shndx'] != sb.SHN_UNDEF}
@@ -180,7 +180,7 @@ def main():
         pair.mkdir()
         try:
             _, _, linked = fc.link_data(native, section, placement['start'], functions, targets, placements, addresses,
-                                        pair, target_sections, storage, target, compiler, wrapper)
+                                        pair, target_sections, storage, target, compiler, wrapper, commons)
             resolved[name] = (placement['start'], linked['data'])
         except (ValueError, RuntimeError) as error:
             unchecked[name] = str(error)
@@ -198,7 +198,7 @@ def main():
         pair = folder / str(number)
         pair.mkdir()
         _, _, actual = fc.link_function(native, section, symbol, a, functions, targets, placements, addresses, pair,
-                                        target_sections, storage, target, compiler, wrapper)
+                                        target_sections, storage, target, compiler, wrapper, commons)
         expected = sb.dol_bytes(binary, a, b)
         score = matching.score_pair(tool, expected, actual,
                                     [{'name': 'function', 'value': 0, 'size': b - a, 'type': 2, 'shndx': 1}], 'code', pair)

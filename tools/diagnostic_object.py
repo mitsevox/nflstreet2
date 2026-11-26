@@ -98,7 +98,7 @@ def register_base(code, at, value, size):
 
 
 def fragment(native, section, offset, size, target_start, functions, targets, placements, externals, output, target_sections,
-             storage=None):
+             storage=None, commons=None):
     sections, symbols = sb.read_elf(native)
     referenced = {}
     relocations = []
@@ -124,13 +124,14 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
         value = symbol['value'] + addend
         if symbol['shndx'] == sb.SHN_COMMON:
             # COMMON storage has no section; only an evidenced storage address locates it: the
-            # comparison's own storage map, or the address the verified source build placed a linked
-            # unit's mapped COMMON symbol at (function_compare.reference_addresses), which covers a
-            # holdouts file whose COMMON lies outside its own uninitialized placements.
+            # comparison's own storage map, or commons, the addresses the verified source build placed
+            # linked units' mapped COMMON symbols at (function_compare.accepted_references). That covers
+            # a holdouts file whose COMMON lies outside its own uninitialized placements. A configured
+            # external of the same name (externals) never places a COMMON symbol.
             if storage is not None and index - 1 in storage:
                 address = storage[index - 1] + addend
-            elif name in externals:
-                address = externals[name] + addend
+            elif commons is not None and name in commons:
+                address = commons[name] + addend
             else:
                 raise ValueError(f'Comparison common symbol {name} lacks an evidenced storage address')
         elif symbol['shndx'] == sb.SHN_UNDEF:

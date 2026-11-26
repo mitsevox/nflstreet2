@@ -507,7 +507,17 @@ class MeasurementCache:
 def reference_addresses(root, manifest, accepted):
     """The addresses a comparison object's undefined names resolve to, from the configured
     externals and the accepted (linked) source build's verified objects, and the ambiguous names."""
+    references, ambiguous, _ = accepted_references(root, manifest, accepted)
+    return references, ambiguous
+
+
+def accepted_references(root, manifest, accepted):
+    """reference_addresses, and separately the mapped COMMON addresses: each linked unit's COMMON
+    symbol at the address its storage map gave it, which the verified source build placed it at.
+    Only these may place a comparison's own COMMON symbol (diagnostic_object.fragment commons); a
+    configured external of the same name carries no storage evidence and does not."""
     externals = {name: int(e['address'], 16) for name, e in manifest['externals'].items()}
+    commons = {}
     accepted_objects = []
     for u in accepted:
         # Only public definitions may resolve another file's undefined reference.
@@ -520,8 +530,12 @@ def reference_addresses(root, manifest, accepted):
         public = public_definitions(native_symbols)
         externals.update({f['symbol']: int(f['address'], 16) for f in u['functions'] if f['symbol'] in public})
         # A linked unit's mapped COMMON symbols are defined at the addresses the build verified.
-        externals.update({name: int(value, 16) for name, value in (u.get('storage') or {}).items()
-                          if any(s['name'] == name and s['shndx'] == sb.SHN_COMMON for s in native_symbols)})
+        mapped = {name: int(value, 16) for name, value in (u.get('storage') or {}).items()
+                  if any(s['name'] == name and s['shndx'] == sb.SHN_COMMON for s in native_symbols)}
+        if any(commons.get(name, value) != value for name, value in mapped.items()):
+            raise ValueError('Linked units map one COMMON symbol to different addresses')
+        commons.update(mapped)
+        externals.update(mapped)
         # A kept local is public only in the derived link object (source_build.keep_object).
         externals.update({name: int(value, 16) for name, value in (u.get('kept_locals') or {}).items()})
         # A public holdout keeps its original bytes at its target start (source_build.holdout_object).
@@ -530,16 +544,16 @@ def reference_addresses(root, manifest, accepted):
         accepted_objects.append((u['sections'], native_sections, native_symbols))
     # Public data objects of accepted source resolve at their verified linked placements.
     data_symbols, ambiguous = accepted_data_symbols(accepted_objects, externals)
-    return comparison_references(externals, data_symbols), ambiguous
+    return comparison_references(externals, data_symbols), ambiguous, commons
 
 
 def link_function(native, section, symbol, a, functions, targets, placements, addresses, pair, target_sections,
-                  storage, target, compiler, wrapper):
+                  storage, target, compiler, wrapper, commons=None):
     """Link one compiled function alone at its target address a, with every reference resolved;
     return the linked ELF's path, the fragment's symbol name and the function's resolved bytes."""
     fragment = pair / 'fragment.o'
     fragment_symbol, references, reference_script = diagnostic_object.fragment(native, section, symbol['value'],
-        symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections, storage)
+        symbol['size'], a, functions, targets, placements, addresses, fragment, target_sections, storage, commons)
     script = pair / 'link.ld'
     script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n" +
                       f"{section['name']} 0x{a:08X} : {{ *({section['name']}) }}\n" + '\n'.join(reference_script) + '\n}\n')
@@ -556,13 +570,13 @@ def link_function(native, section, symbol, a, functions, targets, placements, ad
 
 
 def link_data(native, section, a, functions, targets, placements, addresses, pair, target_sections, storage,
-              target, compiler, wrapper):
+              target, compiler, wrapper, commons=None):
     """Link one compiled data section alone at its target address a, with every reference resolved;
     return the linked ELF's path, the fragment's symbol name and the linked section."""
     name = section['name']
     data_fragment = pair / ('data' + name + '.o')
     data_symbol, references, reference_script = diagnostic_object.fragment(native, section, 0, section['size'],
-        a, functions, targets, placements, addresses, data_fragment, target_sections, storage)
+        a, functions, targets, placements, addresses, data_fragment, target_sections, storage, commons)
     data_script = pair / ('data' + name + '.ld')
     data_script.write_text(f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n{name} 0x{a:08X} : {{ *({name}) }}\n" + '\n'.join(reference_script) + '\n}\n')
     data_output = pair / ('data' + name + '.elf')
@@ -591,7 +605,7 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
     accepted = json.loads(source_report.read_text())['units']
     accepted_bounds = [(int(s['start'], 16), int(s['end'], 16)) for u in accepted for s in u['sections']]
     accepted_linked = linked_ranges(accepted, sb.address)
-    addresses, ambiguous = reference_addresses(root, manifest, accepted)
+    addresses, ambiguous, commons = accepted_references(root, manifest, accepted)
     compiler, wrapper = sb.setup_compiler.setup()
     sdk = sb.setup_compiler.setup_sdks(u['compiler_version'] for u in units if u['compiler'] == 'mwcc')
     work = root / 'build/matching/candidates'
@@ -677,7 +691,7 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
             pair = folder / str(number)
             pair.mkdir()
             output, fragment_symbol, actual = link_function(unit['object'].read_bytes(), section, symbol, a, functions,
-                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper)
+                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper, commons)
             expected = sb.dol_bytes(binary, a, b)
             if expected is None or len(actual) != symbol['size']:
                 raise ValueError('Comparison requires complete function bytes')
@@ -707,13 +721,13 @@ def generate(original, source_report, tool, cache=None, compile_cache=None):
                     check_folder = folder / f'check-{name.lstrip(".")}'
                     check_folder.mkdir()
                     resolved[name] = (a, link_data(unit['object'].read_bytes(), section, a, functions, targets,
-                        placements, addresses, check_folder, target_sections, storage, target, compiler, wrapper)[2]['data'])
+                        placements, addresses, check_folder, target_sections, storage, target, compiler, wrapper, commons)[2]['data'])
                 continue
             sliced = slices != [(a, b)]
             if sliced and section['size'] != b - a:
                 raise ValueError('Comparison data with linked bytes must compile to its full target placement')
             data_output, data_symbol, linked_section = link_data(unit['object'].read_bytes(), section, a, functions,
-                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper)
+                targets, placements, addresses, pair, target_sections, storage, target, compiler, wrapper, commons)
             resolved[name] = (a, linked_section['data'])
             if sliced:
                 check_native_placement(binary, linked_section['data'], a, b, slices)

@@ -187,7 +187,6 @@ void _TDbQryQIdxRowDelete(TDbTable_t *pTable, int row)
 int _TDbQryCompareIndexCol(TDbExpr_t *pExpr, unsigned int column, TDbExpr_t **ppOut);
 int _TDbQryCompareIndexExpr(TDbExpr_t *pA, TDbExpr_t *pB);
 extern unsigned int _tDbstrEmptyString;
-extern TDbMemPool_t _tDbQrySearchMem;
 static int _TDbQry_aSwappedOps[6] = { 0x10004, 0x10005, 0x10003, 0x10001, 0x10002, 0x10006 };
 
 int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t **ppDst, int top)
@@ -1263,8 +1262,6 @@ int _TDbQryDeleteRow(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
 }
 
 
-extern TDbMemPool_t _tDbQryMem;
-extern TDbHandler_8020A660 _tDbQryCallbackNames[15];
 
 int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, TDbIdxColumnDef_t *pCols,
                 int arg, TDbResult_8020AD1C *pResult)

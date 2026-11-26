@@ -4,6 +4,7 @@
 #include "engine/t3db_index.h"
 #include "engine/TDbCreate.h"
 #include "engine/TDbLoad.h"
+#include "engine/t3db_mem.h"
 typedef struct TDbDefault_803E944C {
     int mDb;
     int mTbl;
@@ -168,23 +169,17 @@ typedef struct TDbEvent_801F8A54 {
     int mUnk8;
 } TDbEvent_801F8A54;
 
-typedef struct TDbPool_803E9654 {
-    char mUnk0[0x1C];
-} TDbPool_803E9654;
-
 TDbDefault_803E944C _tDbDefaultDbStack[50];
-TDbDefault_803E944C _tDbQryCallbackNames[15];
-TDbPool_803E9654 _tDbGlobalExprPool;
-TDbPool_803E9654 _tDbQryMem;
-TDbPool_803E9654 _tDbQrySearchMem;
-TDbPool_803E9654 _tDbIndexPool;
+TDbHandler_8020A660 _tDbQryCallbackNames[15];
+TDbMemPool_t _tDbGlobalExprPool;
+TDbMemPool_t _tDbQryMem;
+TDbMemPool_t _tDbQrySearchMem;
+TDbMemPool_t _tDbIndexPool;
 
 extern unsigned int strlen(const char *s);
 extern int strncmp(const char *a, const char *b, unsigned int n);
 extern char *strcpy(char *dst, const char *src);
 extern char *strncpy(char *dst, const char *src, unsigned int n);
-extern int _TDbMemPoolInit(TDbPool_803E9654 *pPool, void *pHeap, int size, unsigned short max, unsigned short grow);
-extern void _TDbMemPoolDeinit(TDbPool_803E9654 *pPool);
 extern int TDbExtMemInit(int a, int size, void **ppHeap);
 extern void TDbExtMemShutdown(void *pHeap);
 extern int TDbExtMemAlloc(void *pHeap, int size, void *ppOut);
@@ -393,8 +388,8 @@ int TDbInit(TDbInitParms_801F8A0C *pParms)
     int i;
 
     for (i = 0; i < 15; i++) {
-        _tDbQryCallbackNames[i].mDb = 0;
-        _tDbQryCallbackNames[i].mTbl = 0;
+        _tDbQryCallbackNames[i].mpFn = 0;
+        _tDbQryCallbackNames[i].mKey = 0;
     }
     _tDbDefaultDbStackUsed = 0;
     _tDbDatabaseList = 0;
@@ -1398,14 +1393,14 @@ int TDbQryCreateTbl(int db, int tbl, int ref, int a, int b)
     return err;
 }
 
-int TDbRegisterHandler(int db, int tbl)
+int TDbRegisterHandler(TDbHandlerFn_8020A660 pFn, int key)
 {
     unsigned int i;
     int err;
 
     err = 0;
     for (i = 0; i < 15; i++) {
-        if (tbl == _tDbQryCallbackNames[i].mTbl) {
+        if (key == _tDbQryCallbackNames[i].mKey) {
             err = 0xA;
             break;
         }
@@ -1414,9 +1409,9 @@ int TDbRegisterHandler(int db, int tbl)
         return err;
     }
     for (i = 0; i < 15; i++) {
-        if (_tDbQryCallbackNames[i].mTbl == 0) {
-            _tDbQryCallbackNames[i].mDb = db;
-            _tDbQryCallbackNames[i].mTbl = tbl;
+        if (_tDbQryCallbackNames[i].mKey == 0) {
+            _tDbQryCallbackNames[i].mpFn = pFn;
+            _tDbQryCallbackNames[i].mKey = key;
             break;
         }
     }
@@ -1426,14 +1421,14 @@ int TDbRegisterHandler(int db, int tbl)
     return err;
 }
 
-int TDbUnregisterHandler(int tbl)
+int TDbUnregisterHandler(int key)
 {
     unsigned int i;
 
     for (i = 0; i < 15; i++) {
-        if (tbl == _tDbQryCallbackNames[i].mTbl) {
-            _tDbQryCallbackNames[i].mDb = 0;
-            _tDbQryCallbackNames[i].mTbl = 0;
+        if (key == _tDbQryCallbackNames[i].mKey) {
+            _tDbQryCallbackNames[i].mpFn = 0;
+            _tDbQryCallbackNames[i].mKey = 0;
             break;
         }
     }
