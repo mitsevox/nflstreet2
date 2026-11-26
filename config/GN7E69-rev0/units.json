@@ -13393,12 +13393,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C7084",
-          "end": "0x800C7118"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C73E0",
           "end": "0x800C9FC0"
         },
         {
@@ -13685,10 +13679,6 @@
             "evidence": "evidence.tsv source-form 0x800C6DF8-0x800C7084"
           },
           {
-            "function": "fn_800C7118",
-            "evidence": "evidence.tsv source-form 0x800C7118-0x800C73E0"
-          },
-          {
             "function": "fn_800C9FC0",
             "evidence": "evidence.tsv source-form 0x800C9FC0-0x800CA14C"
           },
@@ -13701,7 +13691,7 @@
             "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 59 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 58 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
@@ -25560,12 +25550,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DE51C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DE910",
           "end": "0x800DEAB0"
         },
         {
@@ -25626,10 +25610,6 @@
           {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimFindAlignTarget",
-            "evidence": "evidence.tsv source-form 0x800DE51C-0x800DE910"
           },
           {
             "function": "PlayerActionAnimBuildAlignCommand",
