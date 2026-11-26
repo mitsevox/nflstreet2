@@ -1786,7 +1786,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 34 of 39 functions exact, the holdouts fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 34 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail, fn_801D2130 and MemCustomHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
       "sections": [
         {
           "section": ".text",
