@@ -16,8 +16,8 @@ typedef struct DbSrptRow_t {
 } DbSrptRow_t;
 
 typedef struct DbSrptCallbacks_t {
-    int (*mpUnknown0)(int a, int b, int c, int d);
-    int (*mpUnknown4)(int a, int b, int c, int d);
+    int (*mpBeginGameFunc)(int a, int b, int c, int d);
+    int (*mpResumeGameFunc)(int a, int b, int c, int d);
 } DbSrptCallbacks_t;
 
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
@@ -120,8 +120,8 @@ int DbSrptModuleInit(DbSrptCallbacks_t *pCallbacks)
     if (status == 0) {
         _DbSrpt_bHasTable = TDbTblExists(0, 0x53525054) == 0;
         if (pCallbacks != 0) {
-            _DbSrpt_pBeginGameFunc = pCallbacks->mpUnknown0;
-            _DbSrpt_pResumeGameFunc = pCallbacks->mpUnknown4;
+            _DbSrpt_pBeginGameFunc = pCallbacks->mpBeginGameFunc;
+            _DbSrpt_pResumeGameFunc = pCallbacks->mpResumeGameFunc;
         }
     }
     return status;

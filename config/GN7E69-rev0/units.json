@@ -1238,6 +1238,30 @@
       "address": "0x803ED681",
       "evidence": "Linker-defined end of .sbss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
     },
+    "DbYalpModuleInit": {
+      "address": "0x802299FC",
+      "evidence": "evidence.tsv function and name rows at 0x802299FC. src/engine/dbmanager.c calls the original-byte DbYalpModuleInit provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpModuleShutdown": {
+      "address": "0x80229A70",
+      "evidence": "evidence.tsv function and name rows at 0x80229A70. src/engine/dbmanager.c calls the original-byte DbYalpModuleShutdown provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbFindUnusedPlayerIds": {
+      "address": "0x80229AA4",
+      "evidence": "evidence.tsv function and name rows at 0x80229AA4. src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp and src/game/TeamDb.cpp calls the original-byte DbFindUnusedPlayerIds provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpGetOverallRating": {
+      "address": "0x80229CFC",
+      "evidence": "evidence.tsv function and name rows at 0x80229CFC. src/game/cu_80081CDC.cpp calls the original-byte DbYalpGetOverallRating provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpBeginGame": {
+      "address": "0x80229E78",
+      "evidence": "evidence.tsv function and name rows at 0x80229E78. src/engine/dbfnig.c calls the original-byte DbYalpBeginGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpResumeGame": {
+      "address": "0x80229E80",
+      "evidence": "evidence.tsv function and name rows at 0x80229E80. src/engine/dbfnig.c calls the original-byte DbYalpResumeGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
     "DbMttsBeginGame": {
       "address": "0x8022C02C",
       "evidence": "evidence.tsv function and name rows at 0x8022C02C. src/engine/dbfnig.c calls the original-byte DbMttsBeginGame provider (src/engine/dbmtts.c is a registered comparison)."
@@ -4646,7 +4670,7 @@
             "evidence": "evidence.tsv source-form 0x8022C628-0x8022C81C"
           }
         ],
-        "evidence": "w2d merge notes (PR #1490 holdouts table): src/engine/dbsrpt.c holds out fn_8022C628."
+        "evidence": "w2d merge notes (PR #1490 holdouts table): src/engine/dbsrpt.c holds out DbFindUnusedTeamIds (0x8022C628)."
       }
     },
     {

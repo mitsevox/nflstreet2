@@ -64,7 +64,7 @@ int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
@@ -199,7 +199,7 @@ void MsgPlayerPickupCopyTeam(int db)
     value = StoryEventsGetPlayerTable();
     DbCursorOpen(&cursor, value, 0x44494750, 0, 0, 0x54415453);
     n = DbCursorGetRowCount(&cursor);
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     n = count;
     DbFindUnusedTeamIds(0x54415453, 0x4D414554, &_MsgPlayerPickup_iCopyTeam, &teamCount);
     for (i = 0; i < n; i++) {

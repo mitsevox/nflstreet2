@@ -20,7 +20,7 @@ extern "C" {
 int TDbTblFindUnusedId(int handle, int *pTable);
 int TDbTblDestroy(int handle, int table);
 int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int TeamDbCreate(int type, int logo, const char *pName);
@@ -74,7 +74,7 @@ int ChalGameCopyTeam(int sourceTeam)
     }
     if (status != 23) {
         count = result.mUnknown0;
-        fn_80229AA4(0x454D4147, 0x59414C50, ids, &count);
+        DbFindUnusedPlayerIds(0x454D4147, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
             TDbTblFindUnusedId(0x454D4147, &table);

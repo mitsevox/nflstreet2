@@ -19040,22 +19040,22 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802297D8",
+          "symbol": "DbYalpLoadWeightTable",
           "start": "0x802297D8",
           "end": "0x802299FC"
         },
         {
-          "symbol": "fn_802299FC",
+          "symbol": "DbYalpModuleInit",
           "start": "0x802299FC",
           "end": "0x80229A70"
         },
         {
-          "symbol": "fn_80229A70",
+          "symbol": "DbYalpModuleShutdown",
           "start": "0x80229A70",
           "end": "0x80229AA4"
         },
         {
-          "symbol": "fn_80229AA4",
+          "symbol": "DbFindUnusedPlayerIds",
           "start": "0x80229AA4",
           "end": "0x80229C98"
         },
@@ -19080,17 +19080,17 @@
           "end": "0x80229CFC"
         },
         {
-          "symbol": "fn_80229CFC",
+          "symbol": "DbYalpGetOverallRating",
           "start": "0x80229CFC",
           "end": "0x80229E78"
         },
         {
-          "symbol": "fn_80229E78",
+          "symbol": "DbYalpBeginGame",
           "start": "0x80229E78",
           "end": "0x80229E80"
         },
         {
-          "symbol": "fn_80229E80",
+          "symbol": "DbYalpResumeGame",
           "start": "0x80229E80",
           "end": "0x80229E88"
         }

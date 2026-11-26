@@ -320,8 +320,8 @@ extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
-extern int fn_802299FC(void);
-extern int fn_80229A70(void);
+extern int DbYalpModuleInit(void);
+extern int DbYalpModuleShutdown(void);
 extern int DbSplpModuleInit(void);
 extern void DbSplpModuleShutdown(void);
 extern int fn_8022B02C(int a);
@@ -670,7 +670,7 @@ int DbManagerInitModules(void)
     if ((err = DbSrptModuleInit(0)) != 0) {
         return err;
     }
-    if ((err = fn_802299FC()) != 0) {
+    if ((err = DbYalpModuleInit()) != 0) {
         return err;
     }
     if ((err = DbThcdModuleInit()) != 0) {
@@ -687,7 +687,7 @@ void DbManagerShutdownModules(void)
     DbFnigModuleShutdown();
     DbUslpModuleShutdown();
     DbThcdModuleShutdown();
-    fn_80229A70();
+    DbYalpModuleShutdown();
     DbSrptModuleShutdown();
     fn_8022B200();
     DbSplpModuleShutdown();

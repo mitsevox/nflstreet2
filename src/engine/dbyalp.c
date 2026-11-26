@@ -51,7 +51,7 @@ extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
-extern int fn_802297D8(void *p, int tag);
+extern int DbYalpLoadWeightTable(void *p, int tag);
 extern int DbThcdSetLineup(int a, int *p, int c);
 int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
@@ -434,14 +434,14 @@ void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
 int DbNiomModeResume(void);
-int fn_802299FC(void);
-int fn_80229A70(void);
+int DbYalpModuleInit(void);
+int DbYalpModuleShutdown(void);
 float DbYalpGetLowRating(int index);
 float DbYalpGetHighRating(int index);
 float DbYalpGetRatingWeight(int index, int item);
 float DbYalpGetWeightSum(int index);
-int fn_80229E78(void);
-int fn_80229E80(void);
+int DbYalpBeginGame(void);
+int DbYalpResumeGame(void);
 void DbSplpModuleShutdown(void);
 int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
@@ -570,7 +570,7 @@ int DbUserGetDb(int key);
 extern char lbl_802B2430[];
 extern char lbl_802B2458[];
 
-int fn_802297D8(void *pTable, int tag)
+int DbYalpLoadWeightTable(void *pTable, int tag)
 {
     struct QueryCursor cursor;
     float aVals[10];
@@ -618,18 +618,18 @@ int fn_802297D8(void *pTable, int tag)
     return err;
 }
 
-int fn_802299FC(void)
+int DbYalpModuleInit(void)
 {
-    int result = fn_802297D8(lbl_803A1C60, 0x43524F50);
+    int result = DbYalpLoadWeightTable(lbl_803A1C60, 0x43524F50);
     if (result == 0) {
-        result = fn_802297D8(lbl_803A20A4, 0x524F4250);
+        result = DbYalpLoadWeightTable(lbl_803A20A4, 0x524F4250);
     } else {
-        fn_802297D8(lbl_803A20A4, 0x524F4250);
+        DbYalpLoadWeightTable(lbl_803A20A4, 0x524F4250);
     }
     return result;
 }
 
-int fn_80229A70(void)
+int DbYalpModuleShutdown(void)
 {
     return MemFill(lbl_803A1C60, 1092, 0, 4);
 }
@@ -637,7 +637,7 @@ int fn_80229A70(void)
 extern char lbl_802B255C[];
 extern char lbl_802B259C[];
 
-int fn_80229AA4(int db, int tbl, int *pIds, unsigned short *pCount)
+int DbFindUnusedPlayerIds(int db, int tbl, int *pIds, unsigned short *pCount)
 {
     struct QueryCursor cursor;
     int status = 0;
@@ -715,7 +715,7 @@ float DbYalpGetWeightSum(int index)
     return lbl_803A20A4[index].mUnknown30;
 }
 
-unsigned int fn_80229CFC(int index, int *pRatings, int clamp)
+unsigned int DbYalpGetOverallRating(int index, int *pRatings, int clamp)
 {
     float sum = 0.0f;
     float weight;
@@ -750,12 +750,12 @@ unsigned int fn_80229CFC(int index, int *pRatings, int clamp)
     return sum;
 }
 
-int fn_80229E78(void)
+int DbYalpBeginGame(void)
 {
     return 0;
 }
 
-int fn_80229E80(void)
+int DbYalpResumeGame(void)
 {
     return 0;
 }

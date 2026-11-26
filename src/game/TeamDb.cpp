@@ -34,7 +34,7 @@ int fn_80082AB0(int a, int b, int c);
 void *UIGLibraryGetGlobal(int index);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -735,7 +735,7 @@ void TeamDbCopyPlayers(int team, int *pIds, unsigned int count)
     unsigned int i;
     unsigned int j;
 
-    fn_80229AA4(0x54415453, 0x59414C50, pNewIds, &found);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, pNewIds, &found);
     for (i = 0; i < count; i++) {
         TDbTblFindUnusedId(0x54415453, &table);
         pOldIds[i] = pIds[i];

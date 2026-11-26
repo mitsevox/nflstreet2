@@ -28,7 +28,7 @@ int DbUserGetDb(int handle);
 int TDbTblFindUnusedId(int handle, int *pTable);
 int TDbTblDestroy(int handle, int table);
 int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int MemCardFilesNeedsSave(int type, int index);
 void MemCardFilesStoreChecksum(int type, int index);
 int PortraitAllocSlot(int value, int group);
@@ -111,7 +111,7 @@ int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
         } else {
             count = *pCount;
         }
-        fn_80229AA4(destination, 0x59414C50, ids, &count);
+        DbFindUnusedPlayerIds(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
             TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
@@ -335,7 +335,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     TDbTblGetCount(0x54415453, 0x52445243, &arg, &total);
     count = total;
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;

@@ -1,7 +1,7 @@
 /* The three position tables of the game database: when the database modules start, every row
    of 'SPLP' (keyed by 'SOPP', 21 entries), 'SPRD' (keyed by 'PRDP', 17 entries) and 'GSOP'
    (keyed by 'RGPP', 10 entries) is read into a fixed table of the same shape; when they stop,
-   every entry goes back to its default {31, 31, 7, 0, ...}. */
+   every entry is reset to {31, 31, 7, 0, ...}. */
 
 #include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
@@ -9,14 +9,14 @@
 typedef struct DbSplpEntry_t {
     int mUnknown0;
     int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC;
-    unsigned char mUnknownD;
-    unsigned char mUnknownE;
+    int mIrop;
+    unsigned char mMipp;
+    unsigned char mRipp;
+    unsigned char mAipp;
     char mUnknownF[1];
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    unsigned short mUnknown14;
+    unsigned short mFdpp;
+    unsigned short mGspp;
+    unsigned short mSppp;
     char mUnknown16[2];
 } DbSplpEntry_t;
 
@@ -52,8 +52,8 @@ int DbSplpModuleInit(void)
     int a2;
     int err = 0;
 
-    cursor.mUnknown0 = err;
-    cursor.mUnknown4 = err;
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
     err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from 'SPLP'\n", &cursor);
@@ -63,13 +63,13 @@ int DbSplpModuleInit(void)
         if (err == 0 && index <= 20) {
             _DbSplp_aSplp[index].mUnknown0 = a0;
             _DbSplp_aSplp[index].mUnknown4 = a1;
-            _DbSplp_aSplp[index].mUnknown8 = a2;
-            _DbSplp_aSplp[index].mUnknownC = b0;
-            _DbSplp_aSplp[index].mUnknownD = b1;
-            _DbSplp_aSplp[index].mUnknownE = b2;
-            _DbSplp_aSplp[index].mUnknown10 = h0;
-            _DbSplp_aSplp[index].mUnknown12 = h1;
-            _DbSplp_aSplp[index].mUnknown14 = h2;
+            _DbSplp_aSplp[index].mIrop = a2;
+            _DbSplp_aSplp[index].mMipp = b0;
+            _DbSplp_aSplp[index].mRipp = b1;
+            _DbSplp_aSplp[index].mAipp = b2;
+            _DbSplp_aSplp[index].mFdpp = h0;
+            _DbSplp_aSplp[index].mGspp = h1;
+            _DbSplp_aSplp[index].mSppp = h2;
         }
     }
     if (QUERY_STATUS_ACCEPTED(err) == 1) {
@@ -93,13 +93,13 @@ int DbSplpModuleInit(void)
             if (err == 0 && index <= 16) {
                 _DbSplp_aSprd[index].mUnknown0 = a0;
                 _DbSplp_aSprd[index].mUnknown4 = a1;
-                _DbSplp_aSprd[index].mUnknown8 = a2;
-                _DbSplp_aSprd[index].mUnknownC = b0;
-                _DbSplp_aSprd[index].mUnknownD = b1;
-                _DbSplp_aSprd[index].mUnknownE = b2;
-                _DbSplp_aSprd[index].mUnknown10 = h0;
-                _DbSplp_aSprd[index].mUnknown12 = h1;
-                _DbSplp_aSprd[index].mUnknown14 = h2;
+                _DbSplp_aSprd[index].mIrop = a2;
+                _DbSplp_aSprd[index].mMipp = b0;
+                _DbSplp_aSprd[index].mRipp = b1;
+                _DbSplp_aSprd[index].mAipp = b2;
+                _DbSplp_aSprd[index].mFdpp = h0;
+                _DbSplp_aSprd[index].mGspp = h1;
+                _DbSplp_aSprd[index].mSppp = h2;
             }
         }
     }
@@ -124,13 +124,13 @@ int DbSplpModuleInit(void)
             if (err == 0 && index <= 9) {
                 _DbSplp_aGsop[index].mUnknown0 = a0;
                 _DbSplp_aGsop[index].mUnknown4 = a1;
-                _DbSplp_aGsop[index].mUnknown8 = a2;
-                _DbSplp_aGsop[index].mUnknownC = b0;
-                _DbSplp_aGsop[index].mUnknownD = b1;
-                _DbSplp_aGsop[index].mUnknownE = b2;
-                _DbSplp_aGsop[index].mUnknown10 = h0;
-                _DbSplp_aGsop[index].mUnknown12 = h1;
-                _DbSplp_aGsop[index].mUnknown14 = h2;
+                _DbSplp_aGsop[index].mIrop = a2;
+                _DbSplp_aGsop[index].mMipp = b0;
+                _DbSplp_aGsop[index].mRipp = b1;
+                _DbSplp_aGsop[index].mAipp = b2;
+                _DbSplp_aGsop[index].mFdpp = h0;
+                _DbSplp_aGsop[index].mGspp = h1;
+                _DbSplp_aGsop[index].mSppp = h2;
             }
         }
     }
@@ -153,34 +153,34 @@ void DbSplpModuleShutdown(void)
     for (i = 0; i < 21; i++) {
         _DbSplp_aSplp[i].mUnknown0 = 31;
         _DbSplp_aSplp[i].mUnknown4 = 31;
-        _DbSplp_aSplp[i].mUnknown8 = 7;
-        _DbSplp_aSplp[i].mUnknownC = 0;
-        _DbSplp_aSplp[i].mUnknownD = 0;
-        _DbSplp_aSplp[i].mUnknownE = 0;
-        _DbSplp_aSplp[i].mUnknown10 = 0;
-        _DbSplp_aSplp[i].mUnknown12 = 0;
-        _DbSplp_aSplp[i].mUnknown14 = 0;
+        _DbSplp_aSplp[i].mIrop = 7;
+        _DbSplp_aSplp[i].mMipp = 0;
+        _DbSplp_aSplp[i].mRipp = 0;
+        _DbSplp_aSplp[i].mAipp = 0;
+        _DbSplp_aSplp[i].mFdpp = 0;
+        _DbSplp_aSplp[i].mGspp = 0;
+        _DbSplp_aSplp[i].mSppp = 0;
     }
     for (i = 0; i < 17; i++) {
         _DbSplp_aSprd[i].mUnknown0 = 31;
         _DbSplp_aSprd[i].mUnknown4 = 31;
-        _DbSplp_aSprd[i].mUnknown8 = 7;
-        _DbSplp_aSprd[i].mUnknownC = 0;
-        _DbSplp_aSprd[i].mUnknownD = 0;
-        _DbSplp_aSprd[i].mUnknownE = 0;
-        _DbSplp_aSprd[i].mUnknown10 = 0;
-        _DbSplp_aSprd[i].mUnknown12 = 0;
-        _DbSplp_aSprd[i].mUnknown14 = 0;
+        _DbSplp_aSprd[i].mIrop = 7;
+        _DbSplp_aSprd[i].mMipp = 0;
+        _DbSplp_aSprd[i].mRipp = 0;
+        _DbSplp_aSprd[i].mAipp = 0;
+        _DbSplp_aSprd[i].mFdpp = 0;
+        _DbSplp_aSprd[i].mGspp = 0;
+        _DbSplp_aSprd[i].mSppp = 0;
     }
     for (i = 0; i < 10; i++) {
         _DbSplp_aGsop[i].mUnknown0 = 31;
         _DbSplp_aGsop[i].mUnknown4 = 31;
-        _DbSplp_aGsop[i].mUnknown8 = 7;
-        _DbSplp_aGsop[i].mUnknownC = 0;
-        _DbSplp_aGsop[i].mUnknownD = 0;
-        _DbSplp_aGsop[i].mUnknownE = 0;
-        _DbSplp_aGsop[i].mUnknown10 = 0;
-        _DbSplp_aGsop[i].mUnknown12 = 0;
-        _DbSplp_aGsop[i].mUnknown14 = 0;
+        _DbSplp_aGsop[i].mIrop = 7;
+        _DbSplp_aGsop[i].mMipp = 0;
+        _DbSplp_aGsop[i].mRipp = 0;
+        _DbSplp_aGsop[i].mAipp = 0;
+        _DbSplp_aGsop[i].mFdpp = 0;
+        _DbSplp_aGsop[i].mGspp = 0;
+        _DbSplp_aGsop[i].mSppp = 0;
     }
 }

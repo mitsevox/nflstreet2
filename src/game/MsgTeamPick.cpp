@@ -144,7 +144,7 @@ int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 void UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 void DbFnigSetHomeOffPlaybook(int a);
@@ -954,7 +954,7 @@ void MsgTeamPickSaveTeam(int *pTeam, int *pIds, const char *pName)
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'ANDT' = \x88 and 'LDTC' = \x82\n",
                 *pTeam, 6, *pTeam, 0, 0, 1, pName, 1);
-    fn_80229AA4(0x54415453, 0x59414C50, newIds, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, newIds, &count);
     for (i = 0; i < 7; i++) {
         TDbTblFindUnusedId(0x54415453, &handle);
         oldIds[i] = pIds[i];
