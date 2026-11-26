@@ -1,4 +1,4 @@
-/* Comparison fragment of src/engine/cu_8021A438.c: fn_80221154 and its literal pool. */
+/* Comparison fragment of src/engine/cu_8021EFD8.c: fn_80221154 and its literal pool. */
 #include "engine/cu_8021A438.h"
 
 long long fn_80221154(Float32 *pV)

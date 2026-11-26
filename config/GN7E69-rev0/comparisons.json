@@ -24402,7 +24402,7 @@
     {
       "source": "src/Common/UIStudio/UISStack.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021A45C as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E78-0x802B1E88).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts UISStackProcess as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E78-0x802B1E88).",
       "sections": [
         {
           "section": ".text",
@@ -24433,7 +24433,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021CB68, fn_8021CE48, fn_8021CF38 as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
       "sections": [
         {
           "section": ".text",
@@ -24574,7 +24574,7 @@
     {
       "source": "src/Common/UIStudio/UISActionProcess.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021D888 as partials (HOLDOUT source-form rows) and keep the exact functions measured.",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts UISAddThreadActionAt as partials (HOLDOUT source-form rows) and keep the exact functions measured.",
       "sections": [
         {
           "section": ".text",

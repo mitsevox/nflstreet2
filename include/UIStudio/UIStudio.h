@@ -253,7 +253,7 @@ void fn_80219E18(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
 void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID);
 void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
 
-/* UI Studio functions outside UIStudio.c whose names are not yet established. */
+/* UI Studio functions of UISStack.c, UISUtils.c and UISActionProcess.c called from other files. */
 Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState);
 Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);

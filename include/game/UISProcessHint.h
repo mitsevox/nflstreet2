@@ -1,5 +1,5 @@
-#ifndef GAME_FN_8021D7B8_H
-#define GAME_FN_8021D7B8_H
+#ifndef GAME_UISPROCESSHINT_H
+#define GAME_UISPROCESSHINT_H
 
 /* One word of the argument block posted through UISProcessHint. */
 union Arg_8021D7B8 {

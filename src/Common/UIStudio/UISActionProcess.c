@@ -15,9 +15,9 @@ Int32 *UISAddThreadActionAt(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction
     *p = Type;
     *--p = GroupID;
     *--p = ScreenID;
-    p = p - 5;
-    pDst = (UISThreadActionT *)p;
+    pDst = (UISThreadActionT *)(p - 5);
     *pDst = *pAction;
+    p -= 5;
     *--p = Count;
     p--;
     if (pArgs != 0) {

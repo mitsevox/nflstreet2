@@ -1,4 +1,4 @@
-/* Comparison fragment of src/engine/cu_8021A438.c: fn_8021F77C, fn_8021F82C and their literal pools. */
+/* Comparison fragment of src/engine/cu_8021EFD8.c: fn_8021F77C, fn_8021F82C and their literal pools. */
 #include "engine/cu_8021A438.h"
 
 Uint8 fn_8021F77C(Uint32 a, Uint32 b, Uint32 c, Uint32 d, Float32 s, Float32 t)

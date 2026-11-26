@@ -28785,7 +28785,7 @@
     {
       "source": "src/Common/UIStudio/UISStack.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 1 of 2 functions exact, the holdouts fn_8021A45C keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 1 of 2 functions exact, the holdouts UISStackProcess keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28807,13 +28807,13 @@
             "evidence": "evidence.tsv source-form 0x8021A45C-0x8021C5EC"
           }
         ],
-        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISStack.c holds out fn_8021A45C."
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISStack.c holds out UISStackProcess."
       }
     },
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts fn_8021CB68, fn_8021CE48, fn_8021CF38 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28855,7 +28855,7 @@
             "evidence": "evidence.tsv source-form 0x8021CF38-0x8021D1FC"
           }
         ],
-        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISUtils.c holds out fn_8021CB68, fn_8021CE48, fn_8021CF38."
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISUtils.c holds out _WriteFloat, _WriteString, UISSprintf."
       }
     },
     {
@@ -28870,6 +28870,18 @@
           "end": "0x8021D888"
         },
         {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1EB0",
+          "end": "0x802B1EF4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9F98",
+          "end": "0x802F9FA0"
+        },
+        {
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EBF30",
@@ -28880,7 +28892,7 @@
     {
       "source": "src/Common/UIStudio/UISActionProcess.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the holdouts fn_8021D888 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the holdouts UISAddThreadActionAt keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28896,7 +28908,7 @@
             "evidence": "evidence.tsv source-form 0x8021D888-0x8021D904"
           }
         ],
-        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISActionProcess.c holds out fn_8021D888."
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISActionProcess.c holds out UISAddThreadActionAt."
       }
     }
   ]
