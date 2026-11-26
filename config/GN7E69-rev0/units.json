@@ -4589,6 +4589,31 @@
       ]
     },
     {
+      "source": "src/engine/dbsplp.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229E88-0x8022A428 (src/engine/dbsplp.c), its function, name, type and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); every function exact, its complete .text and its own .rodata and .data linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229E88",
+          "end": "0x8022A428"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2CA0",
+          "end": "0x802B2F64"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA180",
+          "end": "0x802FA600"
+        }
+      ]
+    },
+    {
       "source": "src/engine/dbevas.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022EA74-0x8022EBF0 (src/engine/dbevas.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text and .sdata 0x803EC0A0-0x803EC0AC (data row 0x803EC0A0) linked.",

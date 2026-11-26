@@ -23,7 +23,14 @@ struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
-extern float lbl_803A20A4[][13];
+typedef struct Record_802297D8 {
+    float mUnknown0;
+    float mUnknown4;
+    float aUnknown8[10];
+    float mUnknown30;
+} Record_802297D8;
+
+extern Record_802297D8 lbl_803A20A4[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
@@ -169,20 +176,6 @@ typedef struct Entry_803A2390 {
     unsigned short mUnknown6;
 } Entry_803A2390;
 
-typedef struct Record_8022A304 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC;
-    unsigned char mUnknownD;
-    unsigned char mUnknownE;
-    char mUnknownF[1];
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    unsigned short mUnknown14;
-    char mUnknown16[2];
-} Record_8022A304;
-
 /* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
 {
@@ -190,10 +183,6 @@ static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
     pCol->mUnk4 = -1;
     pCol->mUnk0 = 0;
 }
-
-extern Record_8022A304 lbl_802FA180[21];
-extern Record_8022A304 lbl_802FA378[17];
-extern Record_8022A304 lbl_802FA510[10];
 
 typedef struct Callbacks_8022B02C {
     int (*mpUnknown0)(int a, int b, int c, int d);
@@ -575,6 +564,57 @@ int DbUserGetId(int index);
 signed char DbUserFindIndex(int key);
 int DbUserGetDb(int key);
 
+extern char lbl_802B2430[];
+extern char lbl_802B2458[];
+
+int fn_802297D8(void *pTable, int tag)
+{
+    struct QueryCursor cursor;
+    float aVals[10];
+    int index;
+    unsigned int a;
+    unsigned int b;
+    Record_802297D8 *pRow;
+    int err = 0;
+    unsigned char i;
+
+    cursor.mUnknown0 = err;
+    cursor.mUnknown4 = err;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    err = TDbCompilePerformOp(0, lbl_802B2430, &cursor, tag);
+    while (err == 0) {
+        err = TDbCompilePerformOp(0, lbl_802B2458, &cursor, &aVals[0], &aVals[1], &aVals[2], &aVals[3],
+                                  &aVals[4], &aVals[5], &aVals[6], &aVals[7], &aVals[8], &aVals[9],
+                                  &index, &a, &b);
+        if (err == 0) {
+            pRow = &((Record_802297D8 *)pTable)[index];
+            pRow->mUnknown0 = a;
+            pRow->mUnknown4 = b;
+            pRow->mUnknown30 = 0.0f;
+            for (i = 0; i < 10; i++) {
+                pRow->aUnknown8[i] = aVals[i];
+                pRow->mUnknown30 += aVals[i];
+            }
+        }
+    }
+    if (QUERY_STATUS_ACCEPTED(err) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            err = TDbSQLDestroyCursor(&cursor);
+        } else {
+            err = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        TDbSQLDestroyCursor(&cursor);
+    }
+    if (err == 0) {
+        err = DbTatsCopyTblDestroy(0, tag);
+    } else {
+        DbTatsCopyTblDestroy(0, tag);
+    }
+    return err;
+}
+
 int fn_802299FC(void)
 {
     int result = fn_802297D8(lbl_803A1C60, 0x43524F50);
@@ -591,24 +631,120 @@ int fn_80229A70(void)
     return MemFill(lbl_803A1C60, 1092, 0, 4);
 }
 
+extern char lbl_802B255C[];
+extern char lbl_802B259C[];
+
+int fn_80229AA4(int db, int tbl, int *pIds, unsigned short *pCount)
+{
+    struct QueryCursor cursor;
+    int status = 0;
+    int id;
+    int prev;
+    int next;
+    int last;
+    unsigned short count;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    status = TDbCompilePerformOp(0, lbl_802B255C, db, &cursor, tbl);
+    prev = -1;
+    next = -1;
+    last = 0x7FFF;
+    count = 0;
+    while (status == 0 && count < *pCount) {
+        status = TDbCompilePerformOp(0, lbl_802B259C, &cursor, &id);
+        if (status == 0) {
+            if (id > prev + 1) {
+                next = prev + 1;
+                while (status == 0 && next < id && count < *pCount && next <= 0x7F14) {
+                    pIds[count] = next;
+                    count++;
+                    next++;
+                }
+            }
+            last = (next > id) ? next : id;
+            prev = id;
+        }
+    }
+    if (QUERY_STATUS_ACCEPTED(status) == 1) {
+        if (cursor.mUnknown0 != 0) {
+            status = TDbSQLDestroyCursor(&cursor);
+        } else {
+            status = 0;
+        }
+    } else if (cursor.mUnknown0 != 0) {
+        TDbSQLDestroyCursor(&cursor);
+    }
+    if (status == 0 && count < *pCount) {
+        next = last + 1;
+        if (last == 0x7FFF) {
+            next = 0;
+        }
+        while (count < *pCount && next <= 0x7F14) {
+            pIds[count] = next;
+            count++;
+            next++;
+        }
+    }
+    *pCount = count;
+    return status;
+}
+
 float fn_80229C98(int index)
 {
-    return lbl_803A20A4[index][1];
+    return lbl_803A20A4[index].mUnknown4;
 }
 
 float fn_80229CB0(int index)
 {
-    return lbl_803A20A4[index][0];
+    return lbl_803A20A4[index].mUnknown0;
 }
 
 float fn_80229CC4(int index, int item)
 {
-    return lbl_803A20A4[index][item + 2];
+    return lbl_803A20A4[index].aUnknown8[item];
 }
 
 float fn_80229CE4(int index)
 {
-    return lbl_803A20A4[index][12];
+    return lbl_803A20A4[index].mUnknown30;
+}
+
+unsigned int fn_80229CFC(int index, int *pRatings, int clamp)
+{
+    float sum = 0.0f;
+    float weight;
+    float total;
+    float low;
+    float high;
+    int i;
+
+    for (i = 0; i < 10; i++) {
+        weight = fn_80229CC4(index, i);
+        if (weight <= 0.0f) {
+            continue;
+        }
+        sum += pRatings[i] * weight;
+    }
+    total = fn_80229CE4(index);
+    low = fn_80229C98(index);
+    high = fn_80229CB0(index);
+    sum -= low * total;
+    sum /= (high - low) * total * (1.0f / 99.0f);
+    sum += 0.5f;
+    if (!(sum >= 0.0f)) {
+        sum = 0.0f;
+    }
+    if (clamp == 1) {
+        if (sum < 12.0f) {
+            sum = 12.0f;
+        } else if (!(sum <= 100.0f)) {
+            sum = 100.0f;
+        }
+    }
+    return sum;
 }
 
 int fn_80229E78(void)
@@ -621,48 +757,12 @@ int fn_80229E80(void)
     return 0;
 }
 
-void fn_8022A304(void)
-{
-    unsigned short i;
-
-    for (i = 0; i < 21; i++) {
-        lbl_802FA180[i].mUnknown0 = 31;
-        lbl_802FA180[i].mUnknown4 = 31;
-        lbl_802FA180[i].mUnknown8 = 7;
-        lbl_802FA180[i].mUnknownC = 0;
-        lbl_802FA180[i].mUnknownD = 0;
-        lbl_802FA180[i].mUnknownE = 0;
-        lbl_802FA180[i].mUnknown10 = 0;
-        lbl_802FA180[i].mUnknown12 = 0;
-        lbl_802FA180[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 17; i++) {
-        lbl_802FA378[i].mUnknown0 = 31;
-        lbl_802FA378[i].mUnknown4 = 31;
-        lbl_802FA378[i].mUnknown8 = 7;
-        lbl_802FA378[i].mUnknownC = 0;
-        lbl_802FA378[i].mUnknownD = 0;
-        lbl_802FA378[i].mUnknownE = 0;
-        lbl_802FA378[i].mUnknown10 = 0;
-        lbl_802FA378[i].mUnknown12 = 0;
-        lbl_802FA378[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 10; i++) {
-        lbl_802FA510[i].mUnknown0 = 31;
-        lbl_802FA510[i].mUnknown4 = 31;
-        lbl_802FA510[i].mUnknown8 = 7;
-        lbl_802FA510[i].mUnknownC = 0;
-        lbl_802FA510[i].mUnknownD = 0;
-        lbl_802FA510[i].mUnknownE = 0;
-        lbl_802FA510[i].mUnknown10 = 0;
-        lbl_802FA510[i].mUnknown12 = 0;
-        lbl_802FA510[i].mUnknown14 = 0;
-    }
-}
-
 int fn_8022A428(int a)
 {
-    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
+    // FAKEMATCH: the last variadic 0 comes from a local so its constant is loaded first.
+    int zero = 0;
+
+    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, zero);
 }
 
 int fn_8022A490(unsigned int count)
