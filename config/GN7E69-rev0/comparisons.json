@@ -3378,7 +3378,7 @@
     {
       "source": "src/game/TeamTables.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv cu_8018C344 bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -9844,7 +9844,7 @@
           "end": "0x80082864"
         },
         {
-          "symbol": "PlayerGetUnlockTeamCount",
+          "symbol": "PlayerGetUnlockRosterCount",
           "start": "0x80082864",
           "end": "0x800828FC"
         },

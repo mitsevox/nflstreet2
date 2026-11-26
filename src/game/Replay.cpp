@@ -1246,7 +1246,7 @@ extern "C" void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value) { p->mU
    0x209F0, PS2 0x1B4F30). Nothing on GameCube installs them, so the linker
    drops both; only their strings remain (0x8028A9F0-0x8028AB28). The PS2
    build reads the two animation tables through out-of-line getters of the
-   PlyrAnimReplayRegister file (0x271490, 0x2714C0) that GameCube also discards; with
+   PlyrAnimTurn.cpp file (0x271490, 0x2714C0) that GameCube also discards; with
    no GameCube address for them, the tables are read directly here, as the
    Xbox build does after inlining. State is taken from the lower table as on
    PS2 (Xbox reads the two the other way round). The window calls this slot

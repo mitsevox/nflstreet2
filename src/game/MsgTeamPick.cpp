@@ -108,7 +108,7 @@ void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int PlayerPoolGetCount(int index);
 int PlayerGetUnlockedCount(int count, unsigned int *pOut);
 int PlayerIsLocked(int id, int value);
-int PlayerGetUnlockTeamCount(void);
+int PlayerGetUnlockRosterCount(void);
 void PlayerNamesOpen(void);
 void PlayerNamesClose(void);
 int PlayerCreateAtPosition(int a, int b, int c);
@@ -351,7 +351,7 @@ int MsgTeamPickFillRandomGroups(int n, int teamId, float scale)
     int value = 0;
     int picked[2];
     if (_MsgTeamPick_abSources[1]) {
-        PlayerGetUnlockedCount(PlayerGetUnlockTeamCount(), &team);
+        PlayerGetUnlockedCount(PlayerGetUnlockRosterCount(), &team);
     }
     for (int i = 0; i <= 6; i++) {
         int count1;

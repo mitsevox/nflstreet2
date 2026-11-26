@@ -36,7 +36,7 @@ int DbUserGetDb(int handle);
 
 int PlayerDbGetFaceId(Object_8008044C *pObject);
 int PlayerGetUnlockedCount(int count, unsigned int *pOut);
-int PlayerGetUnlockTeamCount(void);
+int PlayerGetUnlockRosterCount(void);
 
 extern int lbl_802D6850[18];
 extern int lbl_802D69F0[];
@@ -248,7 +248,7 @@ int PlayerPoolGetCount(int index)
         PlayerQueryClose(0);
         return result;
     case 1: {
-        int count = PlayerGetUnlockTeamCount();
+        int count = PlayerGetUnlockRosterCount();
         unsigned int teams = 0;
 
         return PlayerGetUnlockedCount(count, &teams);
@@ -356,7 +356,7 @@ int PlayerIsLocked(int id, unsigned int value)
     return result;
 }
 
-int PlayerGetUnlockTeamCount(void)
+int PlayerGetUnlockRosterCount(void)
 {
     Object_8008044C cursor;
     Desc_8008044C desc;

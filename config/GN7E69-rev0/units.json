@@ -27423,7 +27423,7 @@
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form rows cu_80081CDC FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
+        "evidence": "evidence.tsv source-form rows PlayerCreateDb FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
       },
       "holdouts": {
         "functions": [
