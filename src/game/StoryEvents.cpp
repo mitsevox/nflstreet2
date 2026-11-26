@@ -214,7 +214,7 @@ void StoryEventsSetLineup(int index, int *pList);
 void StoryEventsClose(void)
 {
     ExpLevelClose();
-    fn_8008056C(_StoryEvents_pPlayerCursor);
+    PlayerCursorClose(_StoryEvents_pPlayerCursor);
     _StoryEvents_pPlayerCursor = 0;
     StevClose();
     UserStatsClose(_StoryEvents_pUserStats);
@@ -1464,7 +1464,7 @@ void StoryEventsBuildPickupTables(int *pFirst, int *pSecond)
                 itgt[found++] = DbCursorGetInt(&object, 0x49544754);
             }
         }
-        fn_8008056C(&object);
+        PlayerCursorClose(&object);
     }
     if (_StoryEvents_iPlayerTable != -1) {
         TDbTblDestroy(0x54415453, _StoryEvents_iPlayerTable);

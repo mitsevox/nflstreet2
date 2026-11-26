@@ -1,12 +1,12 @@
-#ifndef GAME_ROW_8007BC34_H
-#define GAME_ROW_8007BC34_H
+#ifndef GAME_GEARDB_H
+#define GAME_GEARDB_H
 
 #include "game/DbCursor.h"
 
-/* One 'RAEG' row as fn_8007BC34 copies it out of the cursor: four words, two
+/* One 'RAEG' row as GearDbReadRow copies it out of the cursor: four words, two
    33-byte names (the second one is cut at its first space), 16 bytes, words at
    +0x64, +0x68 and +0x6C, seven flags at +0x70 and a word at +0x78. */
-struct Row_8007BC34 {
+struct GearRow_t {
     int mUnknown00;
     int mUnknown04;
     int mUnknown08;
@@ -28,8 +28,8 @@ struct Row_8007BC34 {
 };
 
 extern "C" {
-void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pRow);
-unsigned int fn_8007BDF8(DbCursor *pCursor);
+void GearDbReadRow(DbCursor *pCursor, GearRow_t *pRow);
+unsigned int GearDbGetGrsi(DbCursor *pCursor);
 }
 
 #endif

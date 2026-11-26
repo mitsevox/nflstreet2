@@ -1807,7 +1807,7 @@ void MsgTeamSelectUnloadPortraits(int side)
                 UIGLibraryUnLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
             } while (DbCursorNext((DbCursor *)&list));
         }
-        fn_8008056C(&list);
+        PlayerCursorClose(&list);
     }
 }
 
@@ -1825,7 +1825,7 @@ void MsgTeamSelectLoadPortraits(int side)
             UIGLibraryLoadItem(pList, 10, PlayerDbGetPortraitId(&list));
         } while (DbCursorNext((DbCursor *)&list));
     }
-    fn_8008056C(&list);
+    PlayerCursorClose(&list);
 }
 
 void MsgTeamSelectGetPlayerName(int side, char *pBuffer, int size, int full)
@@ -1843,7 +1843,7 @@ void MsgTeamSelectOpenRoster(unsigned char side)
     Object_8008044C *pObject = &_MsgTeamSelect_aPlayerDb[side];
 
     if (pObject->mUnknown0 != 0) {
-        fn_8008056C(pObject);
+        PlayerCursorClose(pObject);
     }
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 1;
@@ -2885,11 +2885,11 @@ void MsgTeamSelectExit(void)
     }
 
     if (_MsgTeamSelect_aPlayerDb[0].mUnknown0) {
-        fn_8008056C(&_MsgTeamSelect_aPlayerDb[0]);
+        PlayerCursorClose(&_MsgTeamSelect_aPlayerDb[0]);
     }
     Object_8008044C *pPlayer = &_MsgTeamSelect_aPlayerDb[1];
     if (pPlayer->mUnknown0) {
-        fn_8008056C(pPlayer);
+        PlayerCursorClose(pPlayer);
     }
     DepthChartSave();
 

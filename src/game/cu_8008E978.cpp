@@ -3987,7 +3987,7 @@ void PlayTrackSetEntryWord4(int,int);
 }
 
 extern "C" {
-void PlayTrackSetEntryByteC(int,signed char);
+void PlayTrackSetEntryByteC(int,unsigned char);
 }
 
 extern "C" {
@@ -4007,7 +4007,7 @@ void PlayTrackSetKind(int,unsigned char);
 }
 
 extern "C" {
-void PlayTrackSetFlag10(int,unsigned char);
+void PlayTrackSetFlag10(int,int);
 }
 
 extern "C" {
@@ -5443,7 +5443,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p);
 
 extern "C" void fn_8008EB18(int id,int flag,void *data);
 
-extern "C" int fn_8008EBBC(void *object,int event,unsigned int key);
+extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int key);
 
 extern "C" int fn_8008F78C(void *,int event,unsigned int);
 
@@ -6139,7 +6139,7 @@ extern "C" void fn_800A0624(Record_800A0624 *p);
 
 extern "C" void fn_800A0684(Record_800A0684 *p);
 
-extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out);
+extern "C" void PlayResultApplyEvents(Record_800A0624 *state,Object_8017886C *out);
 
 extern "C" void fn_800A0EB8(Record_800A0624 *state,Object_8017886C *out);
 
@@ -7885,7 +7885,7 @@ extern "C" Table_800CA8EC *fn_800CA8EC(void);
 
 extern "C" void fn_800CA8F4(Object_80039F5C *p);
 
-extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p);
+extern "C" float PlayerGetActionScale(int kind, Object_80039F5C *p);
 
 extern "C" int fn_800CAA6C(int value);
 
@@ -8151,54 +8151,62 @@ extern "C" void fn_8008EB18(int id,int flag,void *data)
     else AnimFileLoadResident(id,data);
 }
 
-extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
+extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int key)
 {
     Object_80039F5C *p=(Object_80039F5C *)object;
     BigObjInst *placed=(BigObjInst *)object;
     int mode=0;
+    int result=0;
     if(!FELoopIsMainFEActive() && object==BallModelGetLinkedObj(BallGetModel(BallGetCurrent()))) return 1;
     void *collection;
-    if(event>=0xD000 && event<=0xD005) collection=placed->mUnknown428->mUnknown1300;
-    else collection=p->mpUnknown792;
+    switch(event) {
+    case 0xD000:case 0xD001:case 0xD002:case 0xD003:case 0xD004:case 0xD005:
+        collection=placed->mUnknown428->mUnknown1300;break;
+    default:collection=p->mpUnknown792;break;
+    }
     unsigned int active=fn_801BE648(collection);
     if(key==active || key==0xFFFF || event==0xC01A) {
         switch(event) {
-        case 0xC000:case 0xC027:
-            p->mUnknown9[0]=(unsigned char)AnimSeqGetOpcodeParameter();return 1;
-        case 0xC001:p->mFlags|=0x100800;return 1;
-        case 0xC002:p->mFlags&=~0x10800;return 1;
-        case 0xC003:p->mFlags|=0x1000;return 1;
-        case 0xC004:p->mFlags|=4;return 1;
-        case 0xC005:case 0xC009:case 0xC00A:case 0xC01D:return 1;
-        case 0xC006:p->mFlags|=1;return 1;
-        case 0xC007:p->mFlags|=0x40;return 1;
-        case 0xC008:p->mFlags|=0x80;return 1;
-        case 0xC00B:p->mFlags|=0x100;return 1;
-        case 0xC00C:p->mFlags|=0x40000;return 1;
+        case 0xC01F:
+            if(AnimSeqGetOpcodeParameter()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);
+            else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
+            result=1;break;
+        case 0xC00C:p->mFlags|=0x40000;result=1;break;
+        case 0xC001:p->mFlags|=0x800;p->mFlags|=0x100000;result=1;break;
+        case 0xC028:p->mFlags|=0x40000000;result=1;break;
+        case 0xC002:p->mFlags&=~0x10000;p->mFlags&=~0x800;result=1;break;
+        case 0xC023:if(AnimSeqGetOpcodeParameter()==1) PlayerMoveClear(p);result=1;break;
+        case 0xC003:p->mFlags|=0x1000;result=1;break;
+        case 0xC018:p->mFlags|=0x2000;result=1;break;
         case 0xC00D:
             p->mUnknown1240.mUnknown0=(short)AnimSeqGetOpcodeParameter();
             p->mUnknown1240.mUnknown2=(signed char)AnimSeqGetOpcodeParameter();
-            if(p->mUnknown1240.mUnknown2==7) {
-                PhysPlayerHitObject(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
-            } else {
+            if(p->mUnknown1240.mUnknown2!=7) {
                 fn_800C8688(p,0,p->mUnknown1240.mUnknown0,0);
                 if(fn_800C8694(p) && p->mpState->mId==16) p->mFlags|=0x10000;
+            } else {
+                PhysPlayerHitObject(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
             }
-            return 1;
-        case 0xC00E:
-            if(AnimSeqGetOpcodeParameter()==2) p->mFlags&=~8;else p->mFlags|=8;return 1;
+            result=1;break;
         case 0xC00F:
-            if(AnimSeqGetOpcodeParameter()==2) p->mFlags|=0x80000;else p->mFlags&=~0x80000;return 1;
+            if(AnimSeqGetOpcodeParameter()==2) p->mFlags|=0x80000;else p->mFlags&=~0x80000;result=1;break;
+        case 0xC014:p->mUnknown1240.mUnknown3=(unsigned char)AnimSeqGetOpcodeParameter();result=1;break;
+        case 0xC00E:
+            if(AnimSeqGetOpcodeParameter()==2) p->mFlags&=~8;else p->mFlags|=8;result=1;break;
+        case 0xC000:case 0xC027:
+            p->mUnknown9[0]=(unsigned char)AnimSeqGetOpcodeParameter();result=1;break;
+        case 0xC006:p->mFlags|=1;result=1;break;
+        case 0xC004:p->mFlags|=4;result=1;break;
+        case 0xC007:p->mFlags|=0x40;result=1;break;
+        case 0xC008:p->mFlags|=0x80;result=1;break;
         case 0xC010: {
             int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,10,0);
             if(index==0xFFFF) index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
             if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
-            fn_800ADBFC(p,mode);return 1;
+            fn_800ADBFC(p,mode);result=1;break;
         }
-        case 0xC011:fn_800ADD04(p);return 1;
-        case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();return 1;
-        case 0xC013:fn_800AE0B8(p);return 1;
-        case 0xC014:p->mUnknown1240.mUnknown3=(unsigned char)AnimSeqGetOpcodeParameter();return 1;
+        case 0xC011:fn_800ADD04(p);result=1;break;
+        case 0xC00B:p->mFlags|=0x100;result=1;break;
         case 0xC015: {
             int selection=2;
             int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
@@ -8206,10 +8214,8 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             if(AnimSeqGetOpcodeParameter()==2) selection=1;
             if(mode) selection=selection==2?1:2;
             if(!PlayerActionAnimIsPitchArmed(p)) fn_800D7A0C(p,selection);
-            return 1;
+            result=1;break;
         }
-        case 0xC016:case 0xC01B:case 0xC021:case 0xD004:
-            AnimSeqGetOpcodeParameter();return 1;
         case 0xC017: {
             int index=AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
             if(index!=0xFFFF) mode=AnimChanIsMirrored(&p->mpUnknown800[index]);
@@ -8218,13 +8224,19 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             switch(selection) {
             case 1:record=&p->mUnknown16;break;
             case 2:record=mode?&p->mUnknown200:&p->mUnknown108;break;
+            // FAKEMATCH: case 3 repeats the default body; the target tests 3 as its own node and cross-jumps it into the default
+            case 3:record=mode?&p->mUnknown108:&p->mUnknown200;break;
             default:record=mode?&p->mUnknown108:&p->mUnknown200;break;
             }
-            fn_8009D00C(p,record);return 1;
+            if(event==0xC017) fn_8009D00C(p,record);
+            else {
+                fn_8009CF78(p,(Block_8009C6F4 *)record,8);
+                fn_8009CE88(p,(Block_8009C6F4 *)&p->mUnknown16,8);
+            }
+            result=1;break;
         }
-        case 0xC018:p->mFlags|=0x2000;return 1;
-        case 0xC019:fn_800ADD00(p);return 1;
-        case 0xC01A:AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);return 1;
+        case 0xC019:fn_800ADD00(p);result=1;break;
+        case 0xC01A:AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);result=1;break;
         case 0xC01C: {
             short bone=(short)(AnimSeqGetOpcodeParameter()-1);
             short effect=(short)(AnimSeqGetOpcodeParameter()-1);
@@ -8232,56 +8244,60 @@ extern "C" int fn_8008EBBC(void *object,int event,unsigned int key)
             PlyrPoseGetBoneTransform((Object_8003DEC4 *)p->mpUnknown4,lbl_802D7154[bone],position,angles);
             QuatFromEuler(&rotation,angles[2],angles[1],angles[0]);
             ParticlesSpawnAt(lbl_802D71CC[effect],position,&rotation.mX,0);
-            return 1;
+            result=1;break;
+        }
+        case 0xC022:ParticleTrailStopAfterimage((Object_8003DEC4 *)p->mpUnknown4);result=1;break;
+        case 0xC020:fn_800943D8();result=1;break;
+        case 0xC005:result=1;break;
+        case 0xC009:result=1;break;
+        case 0xC00A:result=1;break;
+        case 0xC01D:result=1;break;
+        case 0xC024: {
+            unsigned int effect=(unsigned int)AnimSeqGetOpcodeParameter()-1;
+            if(effect<=26) fn_800A9B54(effect,p);result=1;break;
         }
         case 0xC01E:
             AnimChanGetStateChannelByIndex(p->mpUnknown796,p->mpUnknown800,(unsigned short)key,0);
-            ReplayEventAddForCode(p,AnimSeqGetOpcodeParameter());return 1;
-        case 0xC01F:
-            if(AnimSeqGetOpcodeParameter()==1) AudmonEventPostId(43,&p->mMotion.mPos,p->mId,0,0,0);
-            else AudmonEventPostId(35,&p->mMotion.mPos,p->mId,(int)p,(int)p,0);
-            return 1;
-        case 0xC020:fn_800943D8();return 1;
-        case 0xC022:ParticleTrailStopAfterimage((Object_8003DEC4 *)p->mpUnknown4);return 1;
-        case 0xC023:if(AnimSeqGetOpcodeParameter()==1) PlayerMoveClear(p);return 1;
-        case 0xC024: {
-            unsigned int effect=(unsigned int)AnimSeqGetOpcodeParameter()-1;
-            if(effect<=26) fn_800A9B54(effect,p);return 1;
-        }
-        case 0xC026: {
-            unsigned int time=AnimSeqGetOpcodeParameter();unsigned int scale=AnimSeqGetOpcodeParameter();
-            TimeScaleRamp((float)time*0.001f,(float)scale*0.1f);return 1;
-        }
-        case 0xC028:p->mFlags|=0x40000000;return 1;
-        case 0xD000:placed->mUnknown428->mUnknown1708|=1;return 1;
-        case 0xD001:placed->mUnknown424=AnimSeqGetOpcodeParameter();return 1;
-        case 0xD002:placed->mUnknown428->mUnknown1708|=8;return 1;
+            ReplayEventAddForCode(p,AnimSeqGetOpcodeParameter());result=1;break;
+        case 0xD000:placed->mUnknown428->mUnknown1708|=1;result=1;break;
         case 0xD003: {
             int value=AnimSeqGetOpcodeParameter();BigObj_t *owner=BigObjGet(placed->mUnknown4);
-            if(value) owner->mUnknown232_31=1;else owner->mUnknown232_31=0;return 1;
+            if(value) owner->mUnknown232_31=1;else owner->mUnknown232_31=0;result=1;break;
         }
-        case 0xD005:placed->mUnknown428->mUnknown1708|=0x20;return 1;
-        default:return 0;
+        case 0xD001:placed->mUnknown424=AnimSeqGetOpcodeParameter();result=1;break;
+        case 0xD002:placed->mUnknown428->mUnknown1708|=8;result=1;break;
+        case 0xD005:placed->mUnknown428->mUnknown1708|=0x20;result=1;break;
+        case 0xC026: {
+            unsigned int time=AnimSeqGetOpcodeParameter();unsigned int scale=AnimSeqGetOpcodeParameter();
+            TimeScaleRamp((float)time*0.001f,(float)scale*0.1f);result=1;break;
         }
-    }
+        case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();result=1;break;
+        case 0xC013:fn_800AE0B8(p);result=1;break;
+        case 0xC016:case 0xC01B:case 0xC021:case 0xD004:
+            AnimSeqGetOpcodeParameter();result=1;break;
+        case 0xC025:break;
+        }
+    } else {
     switch(event) {
+    case 0xC013:fn_800AE0B8(p);result=1;break;
+    case 0xC010:fn_800ADBFC(0,0);result=1;break;
+    case 0xC019:fn_800ADD00(0);result=1;break;
+    case 0xC011:fn_800ADD04(0);result=1;break;
+    case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();result=1;break;
     case 0xC003:
         if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B8))
             p->mFlags|=0x1000;
-        return 1;
-    case 0xC009:return 1;
-    case 0xC010:fn_800ADBFC(0,0);return 1;
-    case 0xC011:fn_800ADD04(0);return 1;
-    case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();return 1;
-    case 0xC013:fn_800AE0B8(p);return 1;
+        result=1;break;
     case 0xC018:
         if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B4))
             p->mFlags|=0x2000;
-        return 1;
-    case 0xC019:fn_800ADD00(0);return 1;
-    case 0xC01F:case 0xC023:case 0xD004:AnimSeqGetOpcodeParameter();return 1;
+        result=1;break;
+    case 0xC01F:case 0xC023:case 0xD004:AnimSeqGetOpcodeParameter();result=1;break;
+    case 0xC009:result=1;break;
+    default:result=fn_8008F78C(object,event,key);break;
     }
-    return fn_8008F78C(object,event,key);
+    }
+    return result;
 }
 
 extern "C" int fn_8008F78C(void *,int event,unsigned int)
@@ -8361,7 +8377,7 @@ extern "C" void fn_8008FBA0(void)
     AnimData *pModule=&gAnimData;
     FlowModulePreStart(pModule);FlowModuleStart(pModule,0);
     lbl_802D713C.mpArchive=pModule->GetArchive();
-    AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
+    AnimSetUserOpcodeCallbacks(PlayerAnimUserOpcodeCallback,fn_8008F78C);
     AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
     AnimFileStart(&lbl_802D713C);ResSync(0);
     if(lbl_803EA8B0) {fn_801D2BD0(lbl_803EA8B0);lbl_803EA8B0=0;}
@@ -8375,7 +8391,7 @@ extern "C" void fn_8008FCB4(int flag)
     if(flag) lbl_802D713C.mpArchive=gAnimData.GetArchive();
     else lbl_802D70D0.mpArchive=gAnimData.GetArchive();
     AnimInit(1);AnimSequencerInit(60.0f);
-    AnimSetUserOpcodeCallbacks(fn_8008EBBC,fn_8008F78C);
+    AnimSetUserOpcodeCallbacks(PlayerAnimUserOpcodeCallback,fn_8008F78C);
     AnimFileSetCustomRelocateFunc(AnimExtnRelocateFile);AnimFileSetFreeFunc(AnimExtnFreeFile);
     fn_8008F978();AnimWgtInit(4);
     if(flag) AnimFileStart(&lbl_802D713C);else AnimFileStart(&lbl_802D70D0);
@@ -9121,6 +9137,7 @@ extern "C" void fn_800919F0(int index)
     for (; i < pActor->mUnknown4; i++) {
         switch (AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown20) {
         case 0x434F494E:
+        case 0x48454C4D:
             break;
         case 0x42414C4C:
             if (BallsExist()) {
@@ -16204,11 +16221,12 @@ extern "C" void fn_800A0684(Record_800A0684 *p)
     p->mUnknown1C = fn_80178308();
 }
 
-extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
+extern "C" void PlayResultApplyEvents(Record_800A0624 *state,Object_8017886C *out)
 {
     int team=fn_80178348();
     bool special=false,placed=false,tracked=false;
-    Point_8017886C point=fn_80177FE0();
+    Point_8017886C point,to;
+    point=fn_80177FE0();
     unsigned short count=fn_800B15D4();
     int ref=0;
     if(count>1 && !fn_8011F354()) {
@@ -16218,7 +16236,7 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
         else {
             PlayTrackSetKind(team,1);
             if(fn_8011F524())PlayTrackSetResult(team,6);
-            Point_8017886C to={fn_8011F4D4(),point.mY};
+            to.mY=point.mY;to.mX=fn_8011F4D4();
             PlayTrackSetDirection(team,point,to,fn_8009E9C8());
         }
         PlayTrackSetFlag10(team,fn_8011F37C());
@@ -16228,87 +16246,11 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
     for(unsigned short i=0;i<count;++i) {
         Record_800B15FC *e=fn_800B1648(i);
         switch(e->mUnknown14) {
-        case 2:
-            if(tracked)PlayTrackSetGain(team,out->mUnknown08.mY-point.mY);
-            break;
         case 3:
             state->mUnknown0=1;
             out->mUnknown18|=0x2000;
             state->mUnknown4=2;
             fn_8009BD2C(0,&ref);
-            break;
-        case 4:case 8:
-            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
-            if(tracked)PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
-            break;
-        case 5:
-            ref=e->mUnknown0;state->mUnknown4=4;special=true;
-            out->mUnknown18|=0x8000;
-            if(!(fabsf(e->mUnknownC-point.mX)<=4.0f))PlayTrackSetResult(team,5);
-            if(tracked && e->mUnknown8)PlayTrackSetEntryByteC(team,((Object_80039F5C *)e->mUnknown8)->mIdBytes[1]);
-            break;
-        case 6:
-            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
-            SpchIGSetPassCatcher(e->mUnknown0);out->mUnknown18|=0x10000;
-            if(tracked) {
-                Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());
-                PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
-            }
-            break;
-        case 7:
-            ref=e->mUnknown0;state->mUnknown4=3;state->mWord8=1;state->mFloat14=e->mUnknown10;
-            break;
-        case 10:case 13:
-            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
-            if(e->mUnknown14==13){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-            break;
-        case 11:case 31:
-            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
-        case 16:out->mUnknown18|=0x4000;break;
-        case 17:ref=e->mUnknown0;break;
-        case 18:case 55:
-            state->mWord8=1;state->mUnknown4=5;state->mFloat14=e->mUnknown10;
-            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-            if(tracked)PlayTrackSetResult(team,2);
-            break;
-        case 19:
-            ref=e->mUnknown0;SpchIGSetTurnoverPlayer(e->mUnknown0);
-            if(e->mUnknown0Bytes[2]==fn_80178360())out->mUnknown18|=0x200;
-            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
-        case 20:
-            ref=e->mUnknown0;out->mUnknown18|=0x400;SpchIGSetTurnoverPlayer(e->mUnknown0);
-            if(tracked) {
-                Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,3);
-            }
-            break;
-        case 21:
-            i=count;
-            if(tracked) {
-                Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,1);
-            }
-            break;
-        case 22:
-            if(fn_8009BCE8(&e->mUnknown0)){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-            else if((state->mUnknown4==3 || state->mUnknown4==5) && state->mWord8==1) {
-                if(state->mFloat14>=e->mUnknown10 || e->mUnknown10<=fn_80178A2C()) {
-                    {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
-                } else {
-                    out->mUnknown08.mX=0.0f;out->mUnknown08.mY=-e->mUnknown10;
-                    if(fn_801486A0()!=2)out->mUnknown18|=4;
-                    out->mUnknown18|=0x100;
-                    fn_8017CA94((unsigned short)fn_80178308(),1);StyleTrackerOnTouchback(1);
-                }
-            }
-            placed=true;break;
-        case 24:
-            if(tracked && !special && fn_8011F1CC() && fn_8009BCE8(&e->mUnknown0)) {
-                PlayTrackSetKind(team,1);PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
-                Point_8017886C to={e->mUnknownC,e->mUnknown10};
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,5);
-            }
             break;
         case 28:
             if(!placed){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
@@ -16319,8 +16261,88 @@ extern "C" void fn_800A06F4(Record_800A0624 *state,Object_8017886C *out)
                 else if(fn_8011F1CC() && !(e->mUnknown10>=point.mY))PlayTrackSetResult(team,4);
             }
             break;
+        case 22:
+            if(fn_8009BCE8(&e->mUnknown0)){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
+            else if((state->mUnknown4==3 || state->mUnknown4==5) && state->mWord8==1) {
+                if(!(state->mFloat14>=e->mUnknown10 || e->mUnknown10<=fn_80178A2C())) {
+                    out->mUnknown08.mX=0.0f;out->mUnknown08.mY=-e->mUnknown10;
+                    if(fn_801486A0()!=2)out->mUnknown18|=4;
+                    out->mUnknown18|=0x100;
+                    fn_8017CA94((unsigned short)fn_80178308(),1);StyleTrackerOnTouchback(1);
+                } else {
+                    {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
+                }
+            }
+            placed=true;break;
+        case 5:
+            ref=e->mUnknown0;state->mUnknown4=4;special=true;
+            out->mUnknown18|=0x8000;
+            if(!(fabsf(e->mUnknownC-point.mX)<=4.0f))PlayTrackSetResult(team,5);
+            if(tracked && e->mUnknown8)PlayTrackSetEntryByteC(team,((Object_80039F5C *)e->mUnknown8)->mIdBytes[1]);
+            break;
+        case 7:
+            ref=e->mUnknown0;state->mUnknown4=3;state->mWord8=1;state->mFloat14=e->mUnknown10;
+            break;
+        case 21:
+            i=count;
+            if(tracked) {
+                to.mX=e->mUnknownC;to.mY=e->mUnknown10;
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,1);
+            }
+            break;
+        case 2:
+            if(tracked)PlayTrackSetGain(team,out->mUnknown08.mY-point.mY);
+            break;
+        case 6:
+            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
+            SpchIGSetPassCatcher(e->mUnknown0);out->mUnknown18|=0x10000;
+            if(tracked) {
+                to.mX=e->mUnknownC;to.mY=e->mUnknown10;
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());
+                PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+            }
+            break;
+        case 20:
+            ref=e->mUnknown0;out->mUnknown18|=0x400;SpchIGSetTurnoverPlayer(e->mUnknown0);
+            if(tracked) {
+                to.mX=e->mUnknownC;to.mY=e->mUnknown10;
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,3);
+            }
+            break;
+        case 4:case 8:
+            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
+            if(tracked)PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+            break;
+        case 10:case 13:
+            ref=e->mUnknown0;state->mUnknown4=1;state->mWord8=0;
+            if(e->mUnknown14==13){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
+            break;
+        case 18:case 55:
+            state->mWord8=1;state->mUnknown4=5;state->mFloat14=e->mUnknown10;
+            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
+            if(tracked)PlayTrackSetResult(team,2);
+            break;
+        case 19:
+            ref=e->mUnknown0;SpchIGSetTurnoverPlayer(e->mUnknown0);
+            if(e->mUnknown0Bytes[2]==fn_80178360())out->mUnknown18|=0x200;
+            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
+        case 11:case 31:
+            {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
+        case 17:ref=e->mUnknown0;break;
+        case 24:
+            if(tracked && !special && fn_8011F1CC() && fn_8009BCE8(&e->mUnknown0)) {
+                PlayTrackSetKind(team,1);PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
+                to.mX=e->mUnknownC;to.mY=e->mUnknown10;
+                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,5);
+            }
+            break;
+        case 16:out->mUnknown18|=0x4000;break;
         case 47:case 54:out->mUnknown18|=0x20000;break;
         case 61:PlayTrackSetFlag11(fn_80178308(),1);break;
+        case 25:case 30:case 32:case 33:case 34:case 35:case 36:case 37:case 38:case 39:
+        case 40:case 41:case 42:case 43:case 44:case 45:case 46:case 48:case 49:case 50:
+        case 51:case 52:case 53:case 56:case 57:case 58:case 59:case 60:
+            break;
         }
     }
 }
@@ -16570,7 +16592,7 @@ extern "C" void fn_800A1A84(Object_8017886C *pResult, Object_8017886C *pSaved)
     lbl_802D7C64[0].mUnknown4 = 0;
     fn_800A0684((Record_800A0684 *)pResult);
     fn_800A0624(&state);
-    fn_800A06F4(&state, pResult);
+    PlayResultApplyEvents(&state, pResult);
     fn_800A0EB8(&state, pResult);
     fn_800A1620(pResult);
     if ((fn_80178348() != fn_80178308() && !(pResult->mUnknown18 & 4))
@@ -29034,7 +29056,7 @@ extern "C" void fn_800BC190(int index, int value)
             lbl_803EAB9C = 0;
         }
     }
-    fn_8008040C(&reader, 0);
+    PlayerCursorOpenDefault(&reader, 0);
     for (i = 0; i < pActor->mUnknown4; i++) {
         int position = fn_80096440(AnimSeqncrGetPlayerPtr(pActor, i)->mUnknown0);
 
@@ -29045,7 +29067,7 @@ extern "C" void fn_800BC190(int index, int value)
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2912 = fn_80081E3C(&reader);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = PlayerDbGetPybt(&reader);
     }
-    fn_8008056C(&reader);
+    PlayerCursorClose(&reader);
     lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 31;
 }
 
@@ -33131,7 +33153,7 @@ extern "C" int fn_800C52C8(Object_80039F5C *p, Object_80039F5C *pOther, int valu
     scale = rating * 0.00078431377f + 0.05f;
     scale = scale < 0.05f ? 0.05f : (scale > 0.25f ? 0.25f : scale);
     if (useModifier) {
-        scale *= fn_800CA9B4(5, p);
+        scale *= PlayerGetActionScale(5, p);
     }
     return value * scale;
 }
@@ -33278,10 +33300,10 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 stripChance = 50;
             }
             if (mode == 2 && fromBehind) {
-                stripChance = stripChance * fn_800CA9B4(5, p);
+                stripChance = stripChance * PlayerGetActionScale(5, p);
             }
             if (fn_800CA5CC(pOther, 9, 0)) {
-                stripChance = stripChance * fn_800CA9B4(7, pOther);
+                stripChance = stripChance * PlayerGetActionScale(7, pOther);
             }
             if (fn_800C53D8(p)) {
                 stripChance = lbl_803EAC0C * 100.0f;
@@ -33584,10 +33606,10 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                 }
                 scale = 0.0f;
                 if (fn_800CA5CC(pTarget, 9, 0)) {
-                    scale = fn_800CA9B4(7, pTarget) - 1.0f;
+                    scale = PlayerGetActionScale(7, pTarget) - 1.0f;
                 }
                 if (fn_800CA5CC(p, 10, 0)) {
-                    scale -= fn_800CA9B4(8, p) - 1.0f;
+                    scale -= PlayerGetActionScale(8, p) - 1.0f;
                 }
                 chance = chance + chance * scale;
                 if (!fn_800C53D8(p)) {
@@ -35486,7 +35508,7 @@ extern "C" void fn_800CA8F4(Object_80039F5C *p)
     }
 }
 
-extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p)
+extern "C" float PlayerGetActionScale(int kind, Object_80039F5C *p)
 {
     float scale = lbl_802DA69C[kind];
 
@@ -35501,6 +35523,11 @@ extern "C" float fn_800CA9B4(int kind, Object_80039F5C *p)
             scale *= 0.33333334f;
         }
         break;
+    // FAKEMATCH: the target's tree needs a 0-4 range and three more no-op nodes above 6 (pivot at 6); which kinds 7-12 they were cannot be read from the bytes
+    case 0:case 1:case 2:case 3:case 4:break;
+    case 7:break;
+    case 9:break;
+    case 11:break;
     }
     return scale;
 }

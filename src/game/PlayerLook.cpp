@@ -10,7 +10,7 @@
 #include "game/PlayerObjInit.h"
 #include "game/Object_8008044C.h"
 #include "game/PlayerLookRecord.h"
-#include "game/Row_8007BC34.h"
+#include "game/GearDb.h"
 #include "game/PlayerLook.h"
 #include "game/PlaTex.h"
 #include "game/StoryPlayerScreen.h"
@@ -131,11 +131,11 @@ void PlyrPoseInit(Object_8003DEC4 *pPlayer, int a, void *b, int c, int d);
 void PlyrPoseFree(Object_8003DEC4 *pPlayer);
 unsigned char CheatFlagsIsSet(int index);
 int StoryEventsGetCurrentEvent(void);
-void fn_8007BA48(DbCursor *pObject);
-void fn_8007BA88(DbCursor *pObject, int a);
-void fn_8007BB04(DbCursor *pObject);
-int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
-int fn_8007BF14(int index);
+void GearDbOpen(DbCursor *pObject);
+void GearDbOpenType(DbCursor *pObject, int a);
+void GearDbClose(DbCursor *pObject);
+int GearDbSeekTypeId(DbCursor *pCursor, int a, int b, int *pResult);
+int GearDbGetSlotType(int index);
 int GameInfoGet(int index);
 int PlayerDbGetTeamIndex(Object_8008044C *pObject);
 void PlayerDbGetNickname(Object_8008044C *pObject, char *pBuffer, int size);
@@ -185,15 +185,15 @@ extern "C" void PlayerLookRandomizeGear(int index)
     int c;
     DbCursor cursor;
 
-    fn_8007BA88(&cursor, 11);
+    GearDbOpenType(&cursor, 11);
     a = DbCursorGetRowCount(&cursor);
-    fn_8007BB04(&cursor);
-    fn_8007BA88(&cursor, 12);
+    GearDbClose(&cursor);
+    GearDbOpenType(&cursor, 12);
     b = DbCursorGetRowCount(&cursor);
-    fn_8007BB04(&cursor);
-    fn_8007BA88(&cursor, 1);
+    GearDbClose(&cursor);
+    GearDbOpenType(&cursor, 1);
     c = DbCursorGetRowCount(&cursor);
-    fn_8007BB04(&cursor);
+    GearDbClose(&cursor);
     int x = SyncRandGetRange(0, a - 1) + 1;
     int y = SyncRandGetRange(0, b);
     int z = SyncRandGetRange(0, c - 1) + 1;
@@ -212,7 +212,7 @@ extern "C" void PlayerLookApplySwitchList(int player, int index)
     }
 }
 
-extern "C" void PlayerLookApplyItemSwitches(Row_8007BC34 *pRow, PlayerGear_t *pInfo, int player, int slot)
+extern "C" void PlayerLookApplyItemSwitches(GearRow_t *pRow, PlayerGear_t *pInfo, int player, int slot)
 {
     int type = pRow->mUnknown64;
 
@@ -383,7 +383,7 @@ extern "C" void PlayerLookSetNumberIds(int base, unsigned int number, unsigned c
     PlyrSwitchSet(player, 23, 0);
 }
 
-extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigned char flag, int player, int *pIds, int *pPalettes)
+extern "C" void PlayerLookSetJerseyDecal(GearRow_t *pRow, int offset, unsigned char flag, int player, int *pIds, int *pPalettes)
 {
     char name[82];
     int id;
@@ -410,7 +410,7 @@ extern "C" void PlayerLookSetJerseyDecal(Row_8007BC34 *pRow, int offset, unsigne
     }
 }
 
-extern "C" void PlayerLookSetHeadDecal(Row_8007BC34 *pRow, int offset, int player, int *pIds, int *pPalettes)
+extern "C" void PlayerLookSetHeadDecal(GearRow_t *pRow, int offset, int player, int *pIds, int *pPalettes)
 {
     char name[82];
     int id;
@@ -501,7 +501,7 @@ extern "C" void PlayerLookSetDecal(int kind, int key, PlayerLookColors_t colors,
     }
 }
 
-extern "C" void PlayerLookSetJerseyDecals(Row_8007BC34 *pRow, PlayerGear_t *pInfo, unsigned char number, int index,
+extern "C" void PlayerLookSetJerseyDecals(GearRow_t *pRow, PlayerGear_t *pInfo, unsigned char number, int index,
                             unsigned char flag, unsigned char home, int player, int *pIds, int *pPalettes)
 {
     if (PlaTexIsNumberItem(pRow)) {
@@ -594,20 +594,20 @@ extern "C" int PlayerLookGetHatKind(int index)
 {
     int result;
 
-    fn_8007BB84(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
-    if (fn_8007BDF8(&_PlayerLook_sGearCursor) == 13) {
+    GearDbSeekTypeId(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
+    if (GearDbGetGrsi(&_PlayerLook_sGearCursor) == 13) {
         result = 0;
     } else {
-        fn_8007BB84(&_PlayerLook_sGearCursor, 0, gPlayerLooks[index].mInfo.mValues[0], 0);
-        result = PlayerLookMapHatKind(fn_8007BDF8(&_PlayerLook_sGearCursor));
+        GearDbSeekTypeId(&_PlayerLook_sGearCursor, 0, gPlayerLooks[index].mInfo.mValues[0], 0);
+        result = PlayerLookMapHatKind(GearDbGetGrsi(&_PlayerLook_sGearCursor));
     }
     return result;
 }
 
 extern "C" int PlayerLookGetSlot1Kind(int index)
 {
-    fn_8007BB84(&_PlayerLook_sGearCursor, 1, gPlayerLooks[index].mInfo.mValues[1], 0);
-    switch (fn_8007BDF8(&_PlayerLook_sGearCursor)) {
+    GearDbSeekTypeId(&_PlayerLook_sGearCursor, 1, gPlayerLooks[index].mInfo.mValues[1], 0);
+    switch (GearDbGetGrsi(&_PlayerLook_sGearCursor)) {
     case 45:
         return 1;
     case 46:
@@ -691,14 +691,14 @@ extern "C" void PlayerLookOpen(void)
 {
     PlayerCursorOpen(&_PlayerLook_sPlayerCursor, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
     fn_80081CDC();
-    fn_8007BA48(&_PlayerLook_sGearCursor);
+    GearDbOpen(&_PlayerLook_sGearCursor);
 }
 
 extern "C" void PlayerLookClose(void)
 {
-    fn_8007BB04(&_PlayerLook_sGearCursor);
+    GearDbClose(&_PlayerLook_sGearCursor);
     fn_80081D24();
-    fn_8008056C(&_PlayerLook_sPlayerCursor);
+    PlayerCursorClose(&_PlayerLook_sPlayerCursor);
 }
 
 extern "C" void PlayerLookSetName(int index, const char *pName)
@@ -726,7 +726,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
     Object_8008044C cursor;
     int i;
 
-    fn_8008040C(&cursor, 0);
+    PlayerCursorOpenDefault(&cursor, 0);
     gPlayerLookBonuses[index].mId = id;
     if (PlayerDbSeekId(&cursor, id, 0)) {
         PlayerGearGetScaledBonuses(&cursor, gPlayerLookBonuses[index].mValues);
@@ -735,7 +735,7 @@ extern "C" void PlayerLookLoadBonuses(int index, int unused, int id)
             gPlayerLookBonuses[index].mValues[i] = 0;
         }
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
 }
 
 extern "C" void PlayerLookSetGear(int player, int slot, int value)
@@ -751,7 +751,7 @@ extern "C" void PlayerLookApply(int player)
 {
     int ids[32];
     int palettes[32];
-    Row_8007BC34 row;
+    GearRow_t row;
     PlayerLookColors_t colors;
     int id;
     int palette;
@@ -789,8 +789,8 @@ extern "C" void PlayerLookApply(int player)
     PlaTexRemapColors(pColors);
     PlaTexApplyAwayColors(pColors, gPlayerLooks[index].mUnknown93);
     for (slot = 0; slot <= 13; slot++) {
-        fn_8007BB84(&_PlayerLook_sGearCursor, fn_8007BF14(slot), gPlayerLooks[index].mInfo.mValues[slot], 0);
-        fn_8007BC34(&_PlayerLook_sGearCursor, &row);
+        GearDbSeekTypeId(&_PlayerLook_sGearCursor, GearDbGetSlotType(slot), gPlayerLooks[index].mInfo.mValues[slot], 0);
+        GearDbReadRow(&_PlayerLook_sGearCursor, &row);
         PlaTexBuildPartIds(&row, &gPlayerLooks[index], ids, palettes, slot);
         PlayerLookApplyItemSwitches(&row, &gPlayerLooks[index].mInfo, key, slot);
         if (slot == 10) {
@@ -987,7 +987,7 @@ extern "C" int PlayerLookGetSlot1Model(int index)
 
 extern "C" int PlayerLookGetAccessoryModel(int index)
 {
-    Row_8007BC34 row;
+    GearRow_t row;
     unsigned int a = gPlayerLooks[index].mInfo.mValues[12];
     unsigned int b = gPlayerLooks[index].mInfo.mValues[13];
     int result;
@@ -995,8 +995,8 @@ extern "C" int PlayerLookGetAccessoryModel(int index)
     if (a == 0) {
         result = 0x151;
     } else {
-        fn_8007BB84(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
-        fn_8007BC34(&_PlayerLook_sGearCursor, &row);
+        GearDbSeekTypeId(&_PlayerLook_sGearCursor, 9, gPlayerLooks[index].mInfo.mValues[10], 0);
+        GearDbReadRow(&_PlayerLook_sGearCursor, &row);
         result = (a - 1) / 2;
         result = result * 13;
         result = result + b;

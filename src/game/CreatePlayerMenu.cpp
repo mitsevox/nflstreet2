@@ -713,7 +713,7 @@ static void _CreatePlayerQueuePortrait(int id)
     text20.mChars[19] = color19 + 0x80;
     gFMCAPPORT.SetEntry(entryId, 0xFFFF, unknown8, unknown12, 0xA7, &text20, ids[0], unknown52, unknown56, &text60,
                         &values, value76);
-    fn_8008056C(&object);
+    PlayerCursorClose(&object);
 }
 
 static void _CreatePlayerSetFaceFeature(int index, int value)

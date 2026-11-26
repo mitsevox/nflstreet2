@@ -8,7 +8,7 @@
 #include "game/DbQueryTable.h"
 
 extern "C" {
-int fn_8007BF14(int index);
+int GearDbGetSlotType(int index);
 int TDbQryGetSingleRow(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                        DbColumnValue *pColumns);
 void PlayerDbReadRatings(Object_8008044C *pObject, int *pValues);
@@ -68,7 +68,7 @@ void PlayerGearSumBonuses(PlayerGear_t *pInfo, short *pValues)
     const long long gearTypeColumn = ((unsigned long long)0x52414547 << 32) | 0x49545247;
     for (i = 0; i < 14; i++) {
         if (i != 7) {
-            int gearType = fn_8007BF14(i);
+            int gearType = GearDbGetSlotType(i);
 
             // Slot 7 supplies the fallback gear ID when slot 6 is empty.
             if (i == 6 && pInfo->mValues[6] == 0) {
