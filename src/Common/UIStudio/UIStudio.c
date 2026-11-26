@@ -227,21 +227,22 @@ static void _ParseTransforms(UISInfoT *pInfo, Int32 Action, UISScreenT *pScreen,
    they link to, with its colour factors folded into the current ones. */
 static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, Int32 FncID)
 {
+    UISControlT *pControl;
+    Uint32 Node;
+    UISNodeT *pNode;
+    Uint32 Obj;
+    UISNodeEntryT *pEntry;
+    UISObjectRefT *pRef;
+    void *pObject;
     UISColorVectorT OldMultipler = {1.0f, 1.0f, 1.0f, 1.0f};
     UISColorVectorT OldAdditive = {0.0f};
     UISColorVectorT *pCurMultipler;
     UISColorVectorT *pCurAdditive;
-    UISControlT *pControl;
-    UISObjectRefT *pRef;
-    UISNodeT *pNode;
-    UISNodeEntryT *pEntry;
-    void *pObject;
-    Uint32 Node;
 
     if (pScreen->pData != 0 && pScreen->bWaitingToBeUnloaded == 0) {
         pControl = &pScreen->pData->pControls[Control];
-        for (Control = 0; Control < pScreen->pData->NumObjects; Control++) {
-            pRef = &pScreen->pData->pObjects[Control];
+        for (Obj = 0; Obj < pScreen->pData->NumObjects; Obj++) {
+            pRef = &pScreen->pData->pObjects[Obj];
             if (pRef->ID < pInfo->NumActionFncs && pInfo->ActionFncs[pRef->ID].pFnc != 0) {
                 pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
                 pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
@@ -260,8 +261,8 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
             for (Node = 0; Node < pControl->NumNodes; Node++) {
                 pNode = pControl->ppNodes[Node];
                 if (*pNode->pFlag != 0) {
-                    for (Control = 0; Control < pNode->NumEntries; Control++) {
-                        pEntry = &pNode->pEntries[Control];
+                    for (Obj = 0; Obj < pNode->NumEntries; Obj++) {
+                        pEntry = &pNode->pEntries[Obj];
                         if (pEntry->ID == 0xFFFF) {
                             _ParseObjects(pInfo, pScreen, pEntry->Value, FncID);
                         } else if (pEntry->State != 0 && pEntry->ID < pInfo->NumActionFncs &&
