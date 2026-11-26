@@ -1434,10 +1434,12 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
     if (fn_800A7F58(p->mIdBytes[2]) == 0) {
         return 0;
     }
-    Object_80039F5C *pBall = BallGetCurrentHolder();
-    int defense = (int)(float)pOther->mRatings[7];
-    int offense = p->mRatings[9];
+    short *pOtherRatings = pOther->mRatings;
+    short *pRatings = p->mRatings;
     int facing = 0;
+    Object_80039F5C *pBall = BallGetCurrentHolder();
+    int defense = (int)(float)pOtherRatings[7];
+    int offense = pRatings[9];
     if (kind <= 5) {
         if (pA->mUnknown28 > pB->mUnknown28) {
             defense = (int)(defense * 0.75f);
@@ -1457,15 +1459,18 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
         Vec2Sub(&delta, (Point_8017886C *)&pBall->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
         int turn = MathAngleDiff(angle, MathArcTan2(delta.mY, delta.mX));
         if (turn <= 0x3FFFFF) {
-            defense -= (int)(defense * (MathSin(turn) * 0.5f));
+            float scale = MathSin(turn) * 0.5f;
+            defense -= (int)(defense * scale);
         } else {
             defense = (int)(defense * 0.5f);
-            defense += (int)(defense * (MathCos(turn) * 0.5f));
+            float scale = MathCos(turn) * 0.5f;
+            defense += (int)(defense * scale);
         }
     }
     offense = fn_800AC074(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
-        offense += (int)(offense * (PlayTrackGetPlayIdRate() * 0.5f));
+        float scale = PlayTrackGetPlayIdRate() * 0.5f;
+        offense += (int)(offense * scale);
     }
     if (offense < 0) {
         offense = 0;
