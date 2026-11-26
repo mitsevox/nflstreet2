@@ -833,6 +833,22 @@
           "object_seed": true
         },
         {
+          "section": ".bss",
+          "start": "0x803A4540",
+          "end": "0x803A5540",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "DBStack, the 4096-byte debugger stack of dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc src/db/db.c; the .sdata word DBStackEnd 0x803EC170 holds 0x803A5538 = DBStack + 0xFF8, the donor's DBStack + (sizeof(DBStack) - 8). It lies after OSReboot.c's .bss and before dvd.c's, the SDK order."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC170",
+          "end": "0x803EC174",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "DBStackEnd of dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc src/db/db.c: one .sdata word, initial value 0x803A5538 = DBStack + 0xFF8; after OSThread.c's .sdata and before dvdfs.c's."
+        },
+        {
           "section": ".sbss",
           "start": "0x803ED0F0",
           "end": "0x803ED0F8",

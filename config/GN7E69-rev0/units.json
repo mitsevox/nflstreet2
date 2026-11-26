@@ -18051,6 +18051,18 @@
           "placement": ".sbss",
           "start": "0x803ED0F0",
           "end": "0x803ED0F8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A4540",
+          "end": "0x803A5540"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC170",
+          "end": "0x803EC174"
         }
       ]
     },
