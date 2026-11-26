@@ -14072,6 +14072,25 @@
       ]
     },
     {
+      "source": "src/game/PlayerStatText.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802EA490-0x802EA934 (src/game/PlayerStatText.cpp) and its data and name rows: the code-less file of the player-statistic tables gPlayerStatColumns, gPlayerStatNames and gPlayerStatHeaders and their strings.",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5DEC",
+          "end": "0x802A6400"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA490",
+          "end": "0x802EA934"
+        }
+      ]
+    },
+    {
       "source": "src/game/UISGroup2Msg.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8017F6A8-0x8017F718 (src/game/UISGroup2Msg.cpp) and its source-form row.",
