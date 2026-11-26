@@ -1700,6 +1700,14 @@ class Holdouts(Fixture):
                                         "shndx": sb.SHN_UNDEF}])
         with self.assertRaisesRegex(ValueError, "discarded global function z is referenced by src/other.c"):
             sb.plan(self.sections, [unit, caller], objects, {"Other": 0x80003104})
+        # Another unit defining the same global (its own copy of the inline function) is refused too.
+        definer = {"source": "src/other.c", "holdouts": None, "sections": [
+            {"section": ".text", "placement": ".init", "start": 0x80003130, "end": 0x80003138, "kind": "code",
+             "follows": None}]}
+        objects["src/other.c"] = compiled([text(8)], [{"name": "z", "value": 0, "size": 8, "shndx": 1,
+                                                       "type": sb.STT_FUNC}])
+        with self.assertRaisesRegex(ValueError, "discarded global function z has a definition or an address"):
+            sb.plan(self.sections, [unit, definer], objects, {"Other": 0x80003104})
         del objects["src/other.c"]
         with self.assertRaisesRegex(ValueError, "discarded global function z has a definition or an address"):
             sb.plan(self.sections, [unit], objects, {"Other": 0x80003104, "z": 0x80003108})
@@ -1713,27 +1721,29 @@ class Holdouts(Fixture):
                                           "evidence": "another file's copies"}
         return manifest
 
-    def folded_native(self, f_code=bytes(range(0x90, 0x9C)), extra=()):
+    def folded_native(self, f_code=bytes(range(0x90, 0x9C)), extra=(), b_code=bytes(range(0x40, 0x4C)),
+                      b_relocations=((0, 7, 10),)):
         """Sections 1 .text.a, 2 .text.b (the holdout), 3 .text.f (a local inline destructor the
         target folds into another file's copy), 4 .text.c, 5 .rodata (the local table Vt, whose
         second word points to f); symbols 2 to 6 are the section symbols, then a=7, b=8, f=9, c=10,
-        Vt=11, Other=12. `extra` adds (offset, symbol, type) relocations to c."""
+        Vt=11, Other=12. `extra` adds (offset, symbol, type) relocations to c; `b_code` and
+        `b_relocations` (offset, symbol, type) replace the holdout's body (by default: call a)."""
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         path = Path(temporary.name) / "unit.o"
         code = [dict(text(8), name=".text.a", data=bytes(range(8))),
-                dict(text(12), name=".text.b", data=bytes(range(0x40, 0x4C))),
+                dict(text(len(b_code)), name=".text.b", data=b_code),
                 dict(text(12), name=".text.f", data=f_code),
                 dict(text(8), name=".text.c", data=bytes(range(8, 16)))]
         symbols = [{"name": "a", "value": 0, "size": 8, "shndx": 1, "type": sb.STT_FUNC},
-                   {"name": "b", "value": 0, "size": 12, "shndx": 2, "type": sb.STT_FUNC},
+                   {"name": "b", "value": 0, "size": len(b_code), "shndx": 2, "type": sb.STT_FUNC},
                    {"name": "f", "value": 0, "size": 12, "shndx": 3, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
                    {"name": "c", "value": 0, "size": 8, "shndx": 4, "type": sb.STT_FUNC, "bind": sb.STB_LOCAL},
                    {"name": "Vt", "value": 0, "size": 8, "shndx": 5, "type": sb.STT_OBJECT, "bind": sb.STB_LOCAL},
                    {"name": "Other", "value": 0, "size": 0, "shndx": 0}]
         sb.write_object(path, code + [rodata(8)], symbols)
         with_relocations(path, 1, [(0, 8, 10, 0), (4, 11, 6, 0)])               # a: call b; Vt
-        with_relocations(path, 2, [(0, 7, 10, 0)])                              # b: call a
+        with_relocations(path, 2, [(at, symbol, kind, 0) for at, symbol, kind in b_relocations])
         with_relocations(path, 3, [(2, 11, 6, 0), (6, 11, 4, 0), (8, 10, 10, 0)])  # f: lis/addi Vt; call c
         with_relocations(path, 4, [(4, 12, 10, 0)] + [(at, symbol, kind, 0) for at, symbol, kind in extra])
         with_relocations(path, 5, [(4, 9, 1, 0)])                               # Vt: its slot holds f
@@ -1763,6 +1773,16 @@ class Holdouts(Fixture):
         _, _, resolved = sb.plan(self.sections, [unit], {"src/unit.c": (sections, symbols)}, {"Other": 0x80003104})
         self.assertEqual(resolved, {"__holdout_80003118": 0x80003118, "__folded_Vt": 0x80004000,
                                     "__folded_f": 0x80003100, "Other": 0x80003104})
+        # The unreferenced copy of Vt, linked whole in .rodata at 0x80004008, must equal the table it
+        # folds into at 0x80004000.
+        result = bytearray(self.binary)
+        result[0x148:0x150] = bytes(range(0xA0, 0xA8))
+        with self.assertRaisesRegex(ValueError, "folded object Vt at 0x80004008 differs from the target bytes "
+                                                "at 0x80004000"):
+            sb.check_folded_objects(unit, self.binary, bytes(result))
+        binary = bytearray(self.binary)
+        binary[0x140:0x148] = bytes(range(0xA0, 0xA8))
+        sb.check_folded_objects(unit, bytes(binary), bytes(result))
         # Without the fold, f is a compiled function in the code order and the runs do not fit it.
         units, _, _ = self.held()
         with self.assertRaisesRegex(ValueError, "does not fit a configured code run"):
@@ -1771,6 +1791,39 @@ class Holdouts(Fixture):
         units, _, _ = self.held(self.folded_manifest())
         with self.assertRaisesRegex(ValueError, "reaches a folded extent through another symbol"):
             sb.link_object(dict(units[0], object=self.folded_native(extra=((0, 4, 10),))))
+
+    def test_a_holdout_of_a_folding_unit_is_linked_alone_against_the_folded_copies(self):
+        compilers = toolchain.recorded("compilers")
+        compiler = compilers / "ProDG/3.9.3" if compilers else sb.ROOT / "build/toolchain/ProDG/3.9.3"
+        wrapper = toolchain.recorded("wibo") or sb.ROOT / "build/toolchain/wibo"
+        if not ((compiler / "ngcld.exe").is_file() and wrapper.is_file()):
+            self.skipTest("The pinned linker is installed by build.py configure")
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        # The holdout b, of its target's 8 bytes: li r3,Vt@l; then bl a (symbol 7) or bl f (symbol 9,
+        # folded). Linked alone it must address the table Vt folds into (0x80004000), not this unit's
+        # copy (0x80004008), and call f at its fold address 0x80003100.
+        for callee, call in ((7, "4bfffff5"), (9, "4bffffe5")):
+            with self.subTest(callee=callee):
+                units, _, _ = self.held(self.folded_manifest())
+                unit = dict(units[0], object=self.folded_native(
+                    b_code=bytes.fromhex("3860000048000001"),
+                    b_relocations=((2, 11, 4), (4, callee, 10))))
+                sb.link_object(unit)
+                _, defined, resolved = sb.plan(self.sections, [unit], {"src/unit.c": sb.read_elf(
+                    unit["link_object"].read_bytes())}, {"Other": 0x80003104})
+                references = {"Other": 0x80003104, **resolved,
+                              **{name: value for name, (value, _) in defined.items()}}
+                binary = bytearray(self.binary)
+                binary[0x118:0x120] = bytes.fromhex("38604000" + call)
+                # Exact against the folded copies, so it is no holdout.
+                with patch.object(sb, "BUILD", Path(temporary.name) / f"exact_{callee}"), \
+                        self.assertRaisesRegex(ValueError, "holdout b 0x80003118 is exact; link it"):
+                    sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
+                # The unit's own copy of Vt is not what the target loads.
+                binary[0x118:0x120] = bytes.fromhex("38604008" + call)
+                with patch.object(sb, "BUILD", Path(temporary.name) / f"held_{callee}"):
+                    sb.check_holdouts(unit, TARGET, self.sections, bytes(binary), references, compiler, wrapper)
 
     def test_a_folded_body_in_a_holdouts_unit_is_linked_alone_at_its_fold_address(self):
         compilers = toolchain.recorded("compilers")

@@ -1704,6 +1704,7 @@ def link_object(unit, aliases=()):
                     runs=bool(unit.get("holdouts")))
         unit["link_object"] = derived
     unit["link_object_sha256"] = sha256(unit["link_object"])
+    unit["folded_object_sha256"] = sha256(unit["folded_object"]) if unit["folded_object"] else None
 
 
 def retained_layout(unit, compiler, wrapper):
@@ -1979,7 +1980,9 @@ def build(original, manifest_path, report_path, cache=None):
     if not elf.is_file() or not elf.stat().st_size:
         raise RuntimeError("Linker did not produce a fresh ELF")
     if any(sha256(unit["object"]) != unit["native_object_sha256"]
-           or sha256(unit["link_object"]) != unit["link_object_sha256"] for unit in units):
+           or sha256(unit["link_object"]) != unit["link_object_sha256"]
+           or (unit.get("folded_object") and sha256(unit["folded_object"]) != unit["folded_object_sha256"])
+           for unit in units):
         raise RuntimeError("Final linker input no longer equals the native compiler object "
                            "or its derived link object")
     final = {s["name"]: s["value"] for s in read_elf(elf.read_bytes())[1] if s["bind"] != STB_LOCAL}
@@ -2013,10 +2016,11 @@ def check_folded_functions(unit, target, sections, binary, references, compiler,
     held = unit.get("holdouts")
     placements = {entry["section"]: entry for entry in unit["sections"] if not entry.get("input")}
     folded_object = (unit["folded_object"] if held else unit["link_object"]).read_bytes()
-    functions, targets = {}, {}
+    functions, targets, storage = {}, {}, None
     if held:
-        functions = {s["name"]: s for s in read_elf(folded_object)[1]
-                     if s["type"] == STT_FUNC and s["shndx"] != SHN_UNDEF and s["size"]}
+        elf_sections, symbols = read_elf(folded_object)
+        functions = {s["name"]: s for s in symbols if s["type"] == STT_FUNC and s["shndx"] != SHN_UNDEF and s["size"]}
+        storage = fragment_storage(unit, elf_sections, symbols, placements)
         targets = {name: (at, at + functions[name]["size"]) for name, at in unit["held"]["linked"].items()}
         targets.update({row["symbol"]: (row["start"], row["end"]) for row in held})
     for name, (symbol, section) in unit["folds"].items():
@@ -2031,7 +2035,7 @@ def check_folded_functions(unit, target, sections, binary, references, compiler,
         fragment = directory / "fragment.o"
         label, objects, script = diagnostic_object.fragment(
             folded_object, section, symbol["value"], size, start, functions, targets, placements,
-            references, fragment, sections)
+            references, fragment, sections, storage)
         (directory / "link.ld").write_text(
             f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n"
             f"{section['name']} 0x{start:08X} : {{ *({section['name']}) }}\n" + "\n".join(script) + "\n}\n")
@@ -2069,7 +2073,9 @@ def check_holdouts(unit, target, sections, binary, references, compiler, wrapper
     another size differs already. An exact function is linked, not held out."""
     if not unit.get("holdouts"):
         return
-    native = unit["object"].read_bytes()
+    # With folds, a holdout's references to a folded name go where the target's do (__folded_<name>),
+    # not to this unit's own copy: link it from the folded object, as check_folded_functions does.
+    native = (unit.get("folded_object") or unit["object"]).read_bytes()
     elf_sections, symbols = read_elf(native)
     functions = {symbol["name"]: symbol for symbol in symbols
                  if symbol["type"] == STT_FUNC and symbol["shndx"] != SHN_UNDEF and symbol["size"]}
@@ -2083,24 +2089,31 @@ def check_holdouts(unit, target, sections, binary, references, compiler, wrapper
                              "instead of holding it out")
 
 
+def fragment_storage(unit, elf_sections, symbols, placements):
+    """The storage map a lone link of a holdouts unit's function passes to diagnostic_object.fragment,
+    or None: mapped COMMON symbols and file statics, and then each uninitialized object, resolve one
+    by one."""
+    if not (any(symbol["shndx"] == SHN_COMMON for symbol in symbols) or unit.get("statics")):
+        return None
+    nobits = {s["index"]: s["name"] for s in elf_sections if s["type"] == SHT_NOBITS and s["flags"] & SHF_ALLOC}
+    storage = {}
+    for index, symbol in enumerate(symbols):
+        mapped = symbol["shndx"] == SHN_COMMON or (symbol["shndx"] in nobits and symbol["bind"] == STB_LOCAL
+                                                  and symbol["name"] in (unit.get("statics") or {}))
+        if mapped and symbol["name"] in (unit.get("storage") or {}):
+            storage[index] = unit["storage"][symbol["name"]][0]
+        elif symbol["shndx"] in nobits and symbol["size"] and nobits[symbol["shndx"]] in placements:
+            storage[index] = placements[nobits[symbol["shndx"]]]["start"] + symbol["value"]
+    return storage
+
+
 def link_holdout(unit, row, native, elf_sections, symbols, functions, target, sections, references, compiler, wrapper):
     """Link one holdout's compiled body alone at its target start; return the linked bytes."""
     import diagnostic_object
     targets = {name: (at, at + functions[name]["size"]) for name, at in unit["held"]["linked"].items()}
     targets.update({row["symbol"]: (row["start"], row["end"]) for row in unit["holdouts"]})
     placements = {entry["section"]: entry for entry in unit["sections"] if not entry.get("input")}
-    storage = None
-    if any(symbol["shndx"] == SHN_COMMON for symbol in symbols) or unit.get("statics"):
-        # Mapped COMMON symbols and file statics, and then each uninitialized object, resolve one by one.
-        nobits = {s["index"]: s["name"] for s in elf_sections if s["type"] == SHT_NOBITS and s["flags"] & SHF_ALLOC}
-        storage = {}
-        for index, symbol in enumerate(symbols):
-            mapped = symbol["shndx"] == SHN_COMMON or (symbol["shndx"] in nobits and symbol["bind"] == STB_LOCAL
-                                                      and symbol["name"] in (unit.get("statics") or {}))
-            if mapped and symbol["name"] in (unit.get("storage") or {}):
-                storage[index] = unit["storage"][symbol["name"]][0]
-            elif symbol["shndx"] in nobits and symbol["size"] and nobits[symbol["shndx"]] in placements:
-                storage[index] = placements[nobits[symbol["shndx"]]]["start"] + symbol["value"]
+    storage = fragment_storage(unit, elf_sections, symbols, placements)
     symbol = functions[row["symbol"]]
     section = next(s for s in elf_sections if s["index"] == symbol["shndx"])
     directory = BUILD / "holdouts" / re.sub(r"[^A-Za-z0-9]+", "_", f"{unit['source']}_{row['symbol']}").strip("_")
@@ -2237,6 +2250,9 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                                       for row in unit["held"]["dropped"]] if unit.get("holdouts") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),
+                         # A holdouts unit with folds links from a derivative of this folded object.
+                         **({"folded_object_sha256": unit["folded_object_sha256"]}
+                            if unit.get("holdouts") and unit.get("folded_object") else {}),
                          "status": "matched" if identical else "unverified", "sections": entries,
                          "storage_extents": stored,
                          "functions": compiled_functions(unit, objects[unit["source"]])})
