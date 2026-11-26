@@ -4,16 +4,16 @@
 #include "engine/maddec.h"
 
 extern "C" {
-void fn_801DB21C(int *pIn, int *pOut);
-void fn_801DB490(int *pIn, int *pOut);
+void IdctColumn(int *pIn, int *pOut);
+void IdctRow(int *pIn, int *pOut);
 }
 
 extern int idctinput[64];
-extern int lbl_8039AC10[64];
+static int work[64];
 
 #define IDCT_MUL(a, c) ((int)(((long long)(a) * (c) + 0x8000) >> 16))
 
-void fn_801DB21C(int *pIn, int *pOut)
+void IdctColumn(int *pIn, int *pOut)
 {
     int x1 = pIn[1];
     int x2 = pIn[2];
@@ -58,17 +58,17 @@ void fn_801DB21C(int *pIn, int *pOut)
         int b3 = u;
 
         pOut[0] = a0 + b0;
-        pOut[56] = a0 - b0;
         pOut[8] = a1 + b1;
-        pOut[48] = a1 - b1;
         pOut[16] = a2 + b2;
-        pOut[40] = a2 - b2;
         pOut[24] = a3 + b3;
         pOut[32] = a3 - b3;
+        pOut[40] = a2 - b2;
+        pOut[48] = a1 - b1;
+        pOut[56] = a0 - b0;
     }
 }
 
-void fn_801DB490(int *pIn, int *pOut)
+void IdctRow(int *pIn, int *pOut)
 {
     int d17 = pIn[1] - pIn[7];
     int d53 = pIn[5] - pIn[3];
@@ -104,22 +104,22 @@ void fn_801DB490(int *pIn, int *pOut)
     pOut[4] = a3 - b3;
 }
 
-void fn_801DB670(int *pOut, int stride)
+void idctcompute(int *pOut, int stride)
 {
-    fn_801DB21C(&idctinput[0], &lbl_8039AC10[0]);
-    fn_801DB21C(&idctinput[8], &lbl_8039AC10[1]);
-    fn_801DB21C(&idctinput[16], &lbl_8039AC10[2]);
-    fn_801DB21C(&idctinput[24], &lbl_8039AC10[3]);
-    fn_801DB21C(&idctinput[32], &lbl_8039AC10[4]);
-    fn_801DB21C(&idctinput[40], &lbl_8039AC10[5]);
-    fn_801DB21C(&idctinput[48], &lbl_8039AC10[6]);
-    fn_801DB21C(&idctinput[56], &lbl_8039AC10[7]);
-    fn_801DB490(&lbl_8039AC10[0], pOut);
-    fn_801DB490(&lbl_8039AC10[8], pOut + stride);
-    fn_801DB490(&lbl_8039AC10[16], pOut + stride * 2);
-    fn_801DB490(&lbl_8039AC10[24], pOut + stride * 3);
-    fn_801DB490(&lbl_8039AC10[32], pOut + stride * 4);
-    fn_801DB490(&lbl_8039AC10[40], pOut + stride * 5);
-    fn_801DB490(&lbl_8039AC10[48], pOut + stride * 6);
-    fn_801DB490(&lbl_8039AC10[56], pOut + stride * 7);
+    IdctColumn(&idctinput[0], &work[0]);
+    IdctColumn(&idctinput[8], &work[1]);
+    IdctColumn(&idctinput[16], &work[2]);
+    IdctColumn(&idctinput[24], &work[3]);
+    IdctColumn(&idctinput[32], &work[4]);
+    IdctColumn(&idctinput[40], &work[5]);
+    IdctColumn(&idctinput[48], &work[6]);
+    IdctColumn(&idctinput[56], &work[7]);
+    IdctRow(&work[0], pOut);
+    IdctRow(&work[8], pOut + stride);
+    IdctRow(&work[16], pOut + stride * 2);
+    IdctRow(&work[24], pOut + stride * 3);
+    IdctRow(&work[32], pOut + stride * 4);
+    IdctRow(&work[40], pOut + stride * 5);
+    IdctRow(&work[48], pOut + stride * 6);
+    IdctRow(&work[56], pOut + stride * 7);
 }

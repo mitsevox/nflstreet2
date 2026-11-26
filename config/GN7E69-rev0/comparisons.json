@@ -27517,32 +27517,33 @@
       ]
     },
     {
-      "source": "src/engine/cu_801DB21C.cpp",
+      "source": "src/engine/madidct.cpp",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801DB21C-0x801DB7D4 (src/engine/cu_801DB21C.cpp) and its function rows. Draft comparisons only; original assembly remains linked. NASCAR 2005 symbols.tsv names this file madidct.cpp (C-linkage IdctColumn, IdctRow); 0x801DB21C and 0x801DB490 (64-bit fixed-point IDCT passes) have no draft yet; the block 0x8039AB10 and work buffer 0x8039AC10 stay extern (lbl_).",
+      "evidence": "evidence.tsv compiler row 0x801DB21C-0x801DB7D4 (src/engine/madidct.cpp), its function rows and the HOLDOUT source-form rows of IdctColumn and IdctRow, which keep the original code while idctcompute and the work block link.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DB21C",
           "end": "0x801DB7D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AC10",
+          "end": "0x8039AD10"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801DB21C",
+          "symbol": "IdctColumn",
           "start": "0x801DB21C",
           "end": "0x801DB490"
         },
         {
-          "symbol": "fn_801DB490",
+          "symbol": "IdctRow",
           "start": "0x801DB490",
           "end": "0x801DB670"
-        },
-        {
-          "symbol": "fn_801DB670",
-          "start": "0x801DB670",
-          "end": "0x801DB7D4"
         }
       ]
     },

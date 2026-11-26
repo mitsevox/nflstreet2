@@ -15780,6 +15780,38 @@
       ]
     },
     {
+      "source": "src/engine/madidct.cpp",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801DB21C-0x801DB7D4 (src/engine/madidct.cpp), its compiler row and the two HOLDOUT source-form rows. idctcompute links exact; IdctColumn and IdctRow keep the original code. It owns and links its .bss block work 0x8039AC10-0x8039AD10 (evidence.tsv data row).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DB670",
+          "end": "0x801DB7D4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AC10",
+          "end": "0x8039AD10"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "IdctColumn",
+            "evidence": "evidence.tsv source-form 0x801DB21C-0x801DB490"
+          },
+          {
+            "function": "IdctRow",
+            "evidence": "evidence.tsv source-form 0x801DB490-0x801DB670"
+          }
+        ],
+        "evidence": "IdctColumn and IdctRow stay measured partials after store-order, jidctfst-order, inline-product and scheduling tries with ProDG RTL dumps (register pressure from the first scheduling pass); merge notes of the e1d pull request list them."
+      }
+    },
+    {
       "source": "src/engine/render.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801DB7D4-0x801DB900 (src/engine/render.c) and its data rows; every function exact, promoted from comparison-only. It owns and links its data (da1c): .sbss 0x803ECF30-0x803ECF4C, each with its evidence.tsv data rows.",
