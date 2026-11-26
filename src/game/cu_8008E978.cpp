@@ -7995,7 +7995,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
 
 extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800CE608 *pA, Record_800CE608 *pB, int index);
 
-extern "C" void fn_800CE218(Group_800CC98C *p);
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p);
 
 extern "C" int fn_800CE2B8(Query_800CE770 *p);
 
@@ -37116,20 +37116,20 @@ extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800C
     pA->mUnknown14 = 0;
 }
 
-extern "C" void fn_800CE218(Group_800CC98C *p)
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p)
 {
     Block_800C8330 *pBlock = &p->mpUnknown0->mUnknown1160Wide;
+    Block_800C8330 *pOther;
+    Object_80039F5C *pB;
     unsigned char i;
 
     if (p->mUnknown60 != 0) {
         pBlock->mUnknown56[0] = 1;
         pBlock->mBlock.mUnknown55[0] = p->mUnknown57;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 1;
                 pOther->mBlock.mUnknown55[0] = p->mUnknown57;
             }
@@ -37137,11 +37137,9 @@ extern "C" void fn_800CE218(Group_800CC98C *p)
     } else {
         pBlock->mUnknown56[0] = 0;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 0;
             }
         }
@@ -37169,7 +37167,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
         Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
         if (pFound != 0) {
             result = 1;
-            fn_800CE218(p);
+            PlyrContactSetGroupMirror(p);
             fn_800CDD98(p, pFound, index);
         }
     }
@@ -37179,7 +37177,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
             Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
             if (pFound != 0) {
                 result = 1;
-                fn_800CE218(p);
+                PlyrContactSetGroupMirror(p);
                 fn_800CDD98(p, pFound, index);
             }
         }
