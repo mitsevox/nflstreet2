@@ -1,3 +1,6 @@
+/* Particle effects: pooled systems, particle generation and lifetime updates,
+   effect parameter loading, and render colour evaluation. */
+
 #include <string.h>
 #include "engine/particleLib.h"
 #include "engine/animTexLib.h"
