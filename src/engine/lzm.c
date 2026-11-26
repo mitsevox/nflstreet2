@@ -429,8 +429,6 @@ int sReadZeroBits(unsigned char *in, int *pos)
     return count;
 }
 
-#if defined(DECOMP_COMPARE)
-
 /* Write literal bytes in the selected byte or bit stream mode. */
 int sFlushBuffer(unsigned char *out, unsigned char *src, int len, int mode, int limit, int *state)
 {
@@ -984,4 +982,9 @@ void _LZMDecStop(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
 {
 }
 
-#endif
+GCmpCodec_t GCmpTypeLZM = {
+    'LZM1', 1,
+    (GCmpCodecInitFunc_t)_LZMCoStart, (GCmpCodecRunFunc_t)_LZMCoProcess, (GCmpCodecEndFunc_t)_LZMCoStop,
+    (GCmpCodecInitFunc_t)_LZMDecStart, (GCmpCodecRunFunc_t)_LZMDecProcess, (GCmpCodecEndFunc_t)_LZMDecStop,
+    0, 0
+};

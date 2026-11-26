@@ -39,6 +39,7 @@ typedef struct GCmpCodec_t {
 extern GCmpCodec_t GCmpTypeHuffman;
 extern GCmpCodec_t GCmpTypeRLE;
 extern GCmpCodec_t GCmpTypeNONE;
+extern GCmpCodec_t GCmpTypeLZM;
 
 int GCmpRead(GCmpBuffer_t *pBuffer, void *pOut, unsigned int size);
 int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size);
