@@ -19313,32 +19313,32 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8022F80C",
+          "symbol": "DbCacheNewId",
           "start": "0x8022F80C",
           "end": "0x8022F858"
         },
         {
-          "symbol": "fn_8022F858",
+          "symbol": "DbCacheFindById",
           "start": "0x8022F858",
           "end": "0x8022F880"
         },
         {
-          "symbol": "fn_8022F880",
+          "symbol": "DbCacheFindByDb",
           "start": "0x8022F880",
           "end": "0x8022F8A8"
         },
         {
-          "symbol": "fn_8022F8A8",
+          "symbol": "DbCacheCreate",
           "start": "0x8022F8A8",
           "end": "0x8022FBAC"
         },
         {
-          "symbol": "fn_8022FBAC",
+          "symbol": "DbCacheDestroy",
           "start": "0x8022FBAC",
           "end": "0x8022FC8C"
         },
         {
-          "symbol": "fn_8022FC8C",
+          "symbol": "DbCacheUpdateHandler",
           "start": "0x8022FC8C",
           "end": "0x8022FEF8"
         },
@@ -19348,37 +19348,37 @@
           "end": "0x8022FFD0"
         },
         {
-          "symbol": "fn_8022FFD0",
+          "symbol": "DbCacheCreateScratchTable",
           "start": "0x8022FFD0",
           "end": "0x802303A0"
         },
         {
-          "symbol": "fn_802303A0",
+          "symbol": "DbCacheGetTableId",
           "start": "0x802303A0",
           "end": "0x802303B4"
         },
         {
-          "symbol": "fn_802303B4",
+          "symbol": "DbCacheOpen",
           "start": "0x802303B4",
           "end": "0x80230400"
         },
         {
-          "symbol": "fn_80230400",
+          "symbol": "DbCacheCopyRows",
           "start": "0x80230400",
           "end": "0x80230CC8"
         },
         {
-          "symbol": "fn_80230CC8",
+          "symbol": "DbCacheClose",
           "start": "0x80230CC8",
           "end": "0x80230CEC"
         },
         {
-          "symbol": "fn_80230CEC",
+          "symbol": "DbCacheCopy",
           "start": "0x80230CEC",
           "end": "0x80230D8C"
         },
         {
-          "symbol": "fn_80230D8C",
+          "symbol": "DbCacheDeleteRows",
           "start": "0x80230D8C",
           "end": "0x802311C8"
         }

@@ -4746,19 +4746,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8022FC8C",
+            "function": "DbCacheUpdateHandler",
             "evidence": "evidence.tsv source-form 0x8022FC8C-0x8022FEF8"
           },
           {
-            "function": "fn_8022FFD0",
+            "function": "DbCacheCreateScratchTable",
             "evidence": "evidence.tsv source-form 0x8022FFD0-0x802303A0"
           },
           {
-            "function": "fn_80230400",
+            "function": "DbCacheCopyRows",
             "evidence": "evidence.tsv source-form 0x80230400-0x80230CC8"
           },
           {
-            "function": "fn_80230D8C",
+            "function": "DbCacheDeleteRows",
             "evidence": "evidence.tsv source-form 0x80230D8C-0x802311C8"
           }
         ],

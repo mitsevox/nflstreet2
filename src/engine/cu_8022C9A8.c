@@ -67,7 +67,7 @@ extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
 int fn_8022C0E0(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
-extern int fn_80230D8C(int id, int a, int b);
+extern int DbCacheDeleteRows(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
 extern char lbl_802B479C[];
@@ -150,8 +150,8 @@ typedef struct Node_8022CC6C {
 void fn_8022CAEC(Node_8022CC6C **ppHead);
 
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
-extern int fn_802303B4(int key, unsigned short *pId);
-extern int fn_80230CC8(unsigned short id);
+extern int DbCacheOpen(int key, unsigned short *pId);
+extern int DbCacheClose(unsigned short id);
 extern int DbLockAcquire(void);
 extern int DbLockRelease(void);
 
