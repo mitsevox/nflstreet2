@@ -28,7 +28,7 @@ int RcmpDecoder::ChooseCodec(RcmpCodec *pCodec, RcmpChunk_t *pChunk)
 {
     mpChunk = pChunk;
     mpCodec = pCodec;
-    return pCodec->fn_801D9DA4(this, pChunk);
+    return pCodec->Init(this, pChunk);
 }
 
 void RcmpDecoder::FreeChosenCodec()
@@ -44,7 +44,7 @@ unsigned int RcmpDecoder::GetCurrentFrameNumber()
     if (mpCodec == 0) {
         return 0;
     }
-    return mpCodec->fn_801D9DC0();
+    return mpCodec->GetCurrentFrameNumber();
 }
 
 RcmpFrame_t *RcmpDecoder::GetFrame(unsigned int frame)
@@ -57,12 +57,12 @@ RcmpFrame_t *RcmpDecoder::GetFrame(unsigned int frame)
     if (mpCodec == 0) {
         return 0;
     }
-    return mpCodec->fn_801DA20C(frame);
+    return mpCodec->GetFrame(frame);
 }
 
 void RcmpDecoder::ReleaseFrame(RcmpFrame_t *pFrame)
 {
-    mpCodec->fn_801DA418(pFrame);
+    mpCodec->ReleaseFrame(pFrame);
 }
 
 RcmpChunk_t *RcmpDecoder::GetChunk()

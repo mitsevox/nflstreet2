@@ -2004,6 +2004,25 @@
       ]
     },
     {
+      "source": "src/engine/rcmp_mad_codec.cpp",
+      "profile": "rcmp_cxx",
+      "evidence": "evidence.tsv unit row 0x801D9A88-0x801DA4F8 (src/engine/rcmp_mad_codec.cpp), its compiler, function, name and data rows. The whole file links: .text 0x801D9A88-0x801DA4F8 and its .rodata 0x802AFFA8-0x802B0054 (two strings, the frame-rate constants and the MadCodec and RcmpCodec virtual tables).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D9A88",
+          "end": "0x801DA4F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFFA8",
+          "end": "0x802B0050"
+        }
+      ]
+    },
+    {
       "source": "src/engine/rcmp_mad_codec_chunk_types.cpp",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801DA4F8-0x801DA52C (src/engine/rcmp_mad_codec_chunk_types.cpp) and its function rows; every function exact, promoted from comparison-only.",
