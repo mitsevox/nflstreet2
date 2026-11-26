@@ -9,7 +9,7 @@
 #include <string.h>
 #include "game/ResLoad.h"
 #include "game/PlayCallScript.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"

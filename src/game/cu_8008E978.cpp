@@ -26,7 +26,7 @@
 #include "engine/animchan.h"
 #include "game/GameCamera.h"
 #include "game/CamInterp.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/Entry_800B206C.h"
 #include "game/Block_800B21D0.h"
 #include "game/Entry_80219044.h"
@@ -2164,7 +2164,7 @@ extern Table_800AA80C lbl_802D8194;
 extern "C" int ResSync(int a);
 
 extern "C" {
-int fn_8014F448(Class_80148A58 *p);
+int fn_8014F448(MiniGameC *p);
 }
 
 extern "C" {
@@ -28704,7 +28704,7 @@ extern "C" void fn_800BB5DC(void)
 
 extern "C" void fn_800BB694(int index, unsigned int kind, float value)
 {
-    Class_80148A58 *pMode;
+    MiniGameC *pMode;
     int i;
 
     if (value == 0.0f || lbl_803EC98C->mUnknown4 <= 20) {
@@ -28969,7 +28969,7 @@ extern "C" void fn_800BBE98(void)
 extern "C" void fn_800BBF18(void)
 {
     int playing = fn_80096B1C(lbl_803EC98C->mUnknown8);
-    Class_80148A58 *pMode;
+    MiniGameC *pMode;
     int i;
 
     if (playing == 0 && lbl_803EC98C->mUnknownC != -1

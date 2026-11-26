@@ -2,7 +2,7 @@
 
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/Ball.h"
 #include "game/fn_80178D18.h"
 #include "game/AutoDepth.h"
@@ -131,62 +131,62 @@ public:
     unsigned char mFlag;
 };
 
-class Class_802A2DB8;
-class Class_802A2C90;
-class Class_802A2B68;
-class Class_802A2A40;
-class Class_802A2918;
-class Class_802A27F0;
-class Class_802A2788;
-class Class_802A2748;
-class Class_802A26D8;
-class Class_802A26A0;
-class Class_802A2618;
-class Class_802A2560;
-class Class_802A24F8;
+class MiniGame2MinuteC;
+class MiniGame4On4C;
+class MiniGameCrushCarrierC;
+class MiniGameQuickStrikeC;
+class MiniGameJumpBallC;
+class MiniGameOpenFieldC;
+class MiniGame2MinutePreGameC;
+class MiniGame2MinutePlayCallC;
+class MiniGame2MinutePrePlayC;
+class MiniGame2MinuteDuringPlayC;
+class MiniGame2MinutePostPlayC;
+class MiniGame2MinuteScrmRulesC;
+class MiniGame2MinuteGameEndC;
 struct States_802A2DB8;
-class Class_802A2490;
-class Class_802A2450;
-class Class_802A23E0;
-class Class_802A23A8;
-class Class_802A2320;
-class Class_802A2268;
-class Class_802A2200;
+class MiniGame4On4PreGameC;
+class MiniGame4On4PlayCallC;
+class MiniGame4On4PrePlayC;
+class MiniGame4On4DuringPlayC;
+class MiniGame4On4PostPlayC;
+class MiniGame4On4ScrmRulesC;
+class MiniGame4On4GameEndC;
 class Block_802A21E8;
-class Class_802A2130;
-class Class_802A20C8;
-class Class_802A2058;
-class Class_802A2020;
-class Class_802A1F90;
+class MiniGameCrushCarrierRulesC;
+class MiniGameCrushCarrierPreGameC;
+class MiniGameCrushCarrierPrePlayC;
+class MiniGameCrushCarrierDuringPlayC;
+class MiniGameCrushCarrierPostPlayC;
 class Record_8014F104;
-class Class_802A1F10;
+class MiniGameCrushCarrierGameEndC;
 class Block_8014F104;
-class Class_802A1E38;
-class Class_802A1DC8;
-class Class_802A1D58;
-class Class_802A1D20;
-class Class_802A1C98;
-class Class_802A1C30;
+class MiniGameJumpBallRulesC;
+class MiniGameJumpBallPreGameC;
+class MiniGameJumpBallPrePlayC;
+class MiniGameJumpBallDuringPlayC;
+class MiniGameJumpBallPostPlayC;
+class MiniGameJumpBallGameEndC;
 struct Object_8015005C;
-class Class_802A1BC8;
-class Class_802A1B58;
-class Class_802A1B18;
-class Class_802A1AE0;
-class Class_802A1A58;
-class Class_802A19F0;
-class Class_802A1930;
+class MiniGameOpenFieldPreGameC;
+class MiniGameOpenFieldPrePlayC;
+class MiniGameOpenFieldPlayCallC;
+class MiniGameOpenFieldDuringPlayC;
+class MiniGameOpenFieldPostPlayC;
+class MiniGameOpenFieldGameEndC;
+class MiniGameOpenFieldRulesC;
 struct Rules_801531C4;
-class Class_802A18C8;
-class Class_802A1860;
-class Class_802A17A8;
+class MiniGameQuickStrikePreGameC;
+class MiniGameQuickStrikeGameEndC;
+class MiniGameQuickStrikeRulesC;
 class Block_80156400;
 
-extern Class_802A2918 lbl_8031BDD4;
+extern MiniGameJumpBallC lbl_8031BDD4;
 
-class Class_802A2DB8 : public Class_80148A58 {
+class MiniGame2MinuteC : public MiniGameC {
 public:
-    Class_802A2DB8();
-    virtual ~Class_802A2DB8();
+    MiniGame2MinuteC();
+    virtual ~MiniGame2MinuteC();
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_05(int team);
@@ -200,10 +200,10 @@ public:
     States_802A2DB8 *mpUnknown1C;
 };
 
-class Class_802A2C90 : public Class_80148A58 {
+class MiniGame4On4C : public MiniGameC {
 public:
-    Class_802A2C90();
-    virtual ~Class_802A2C90() { }
+    MiniGame4On4C();
+    virtual ~MiniGame4On4C() { }
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_03();
@@ -222,11 +222,11 @@ public:
     int mUnknown20;
 };
 
-class Class_802A2B68 : public Class_80148A58 {
+class MiniGameCrushCarrierC : public MiniGameC {
 public:
-    Class_802A2B68();
+    MiniGameCrushCarrierC();
     void fn_8014DA90();
-    virtual ~Class_802A2B68() { }
+    virtual ~MiniGameCrushCarrierC() { }
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_05(int team);
@@ -242,10 +242,10 @@ public:
     Block_8014F104 *mpUnknown1C;
 };
 
-class Class_802A2A40 : public Class_80148A58 {
+class MiniGameQuickStrikeC : public MiniGameC {
 public:
-    Class_802A2A40() : mpUnknown1C(0) {}
-    virtual ~Class_802A2A40() { }
+    MiniGameQuickStrikeC() : mpUnknown1C(0) {}
+    virtual ~MiniGameQuickStrikeC() { }
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_08(int a);
@@ -253,10 +253,10 @@ public:
     Block_80156400 *mpUnknown1C;
 };
 
-class Class_802A2918 : public Class_80148A58 {
+class MiniGameJumpBallC : public MiniGameC {
 public:
-    Class_802A2918();
-    virtual ~Class_802A2918() { }
+    MiniGameJumpBallC();
+    virtual ~MiniGameJumpBallC() { }
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_05(int team);
@@ -277,9 +277,9 @@ public:
     unsigned char mUnknown44[4];
 };
 
-class Class_802A27F0 : public Class_80148A58 {
+class MiniGameOpenFieldC : public MiniGameC {
 public:
-    Class_802A27F0();
+    MiniGameOpenFieldC();
     virtual void vfn_01();
     virtual void vfn_02();
     virtual int vfn_05(int team);
@@ -300,14 +300,14 @@ public:
     unsigned char mUnknown25;
 };
 
-class Class_802A2788 : public PreGamePhase {
+class MiniGame2MinutePreGameC : public PreGamePhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void ShowIntroScreen();
 };
 
-class Class_802A2748 : public Class_80297B50 {
+class MiniGame2MinutePlayCallC : public Class_80297B50 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_04(float dt);
@@ -315,27 +315,27 @@ public:
     virtual int vfn_06();
 };
 
-class Class_802A26D8 : public PreSnapPhase {
+class MiniGame2MinutePrePlayC : public PreSnapPhase {
 public:
-    virtual ~Class_802A26D8() { }
+    virtual ~MiniGame2MinutePrePlayC() { }
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
 };
 
-class Class_802A26A0 : public LivePlayPhase {
+class MiniGame2MinuteDuringPlayC : public LivePlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
 };
 
-class Class_802A2618 : public PostPlayPhase {
+class MiniGame2MinutePostPlayC : public PostPlayPhase {
 public:
     virtual void OnUpdate(float dt);
     virtual int GetResultText(char *pText);
     virtual void Finish(float dt);
 };
 
-class Class_802A2560 : public ScrmRuleSet {
+class MiniGame2MinuteScrmRulesC : public ScrmRuleSet {
 public:
     virtual int GetScoreLimit();
     virtual int GetWinner();
@@ -348,7 +348,7 @@ public:
     virtual int IsWinAwarded();
 };
 
-class Class_802A24F8 : public Class_80297B90 {
+class MiniGame2MinuteGameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -360,19 +360,19 @@ public:
 };
 
 struct States_802A2DB8 {
-    Class_802A2788 mUnknown0;
-    Class_802A2748 mUnknown4;
-    Class_802A26D8 mUnknown8;
-    Class_802A26A0 mUnknownC;
-    Class_802A2618 mUnknown10;
-    Class_802A24F8 mUnknown14;
-    Class_802A2560 mUnknown18;
+    MiniGame2MinutePreGameC mUnknown0;
+    MiniGame2MinutePlayCallC mUnknown4;
+    MiniGame2MinutePrePlayC mUnknown8;
+    MiniGame2MinuteDuringPlayC mUnknownC;
+    MiniGame2MinutePostPlayC mUnknown10;
+    MiniGame2MinuteGameEndC mUnknown14;
+    MiniGame2MinuteScrmRulesC mUnknown18;
     int mUnknown1C;
     int mUnknown20[2][3];
     unsigned char mUnknown38;
 };
 
-class Class_802A2490 : public PreGamePhase {
+class MiniGame4On4PreGameC : public PreGamePhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -380,18 +380,18 @@ public:
     virtual void HideIntroScreen();
 };
 
-class Class_802A2450 : public Class_80297B50 {
+class MiniGame4On4PlayCallC : public Class_80297B50 {
 public:
     virtual void vfn_03(float dt);
 };
 
-class Class_802A23E0 : public PreSnapPhase {
+class MiniGame4On4PrePlayC : public PreSnapPhase {
 public:
-    virtual ~Class_802A23E0() { }
+    virtual ~MiniGame4On4PrePlayC() { }
     virtual void OnEnter(float dt);
 };
 
-class Class_802A23A8 : public LivePlayPhase {
+class MiniGame4On4DuringPlayC : public LivePlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -399,20 +399,20 @@ public:
     unsigned char mUnknown4;
 };
 
-class Class_802A2320 : public PostPlayPhase {
+class MiniGame4On4PostPlayC : public PostPlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void ShowResultText();
 };
 
-class Class_802A2268 : public ScrmRuleSet {
+class MiniGame4On4ScrmRulesC : public ScrmRuleSet {
 public:
     virtual int GetTeamSize();
     virtual int AllowsPrediction();
 };
 
-class Class_802A2200 : public Class_80297B90 {
+class MiniGame4On4GameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -428,18 +428,18 @@ public:
     Block_802A21E8() : mUnknown20(0), mUnknown24(0) {}
     virtual ~Block_802A21E8() {}
 
-    Class_802A2490 mUnknown0;
-    Class_802A2450 mUnknown4;
-    Class_802A23E0 mUnknown8;
-    Class_802A23A8 mUnknownC;
-    Class_802A2320 mUnknown14;
-    Class_802A2268 mUnknown18;
-    Class_802A2200 mUnknown1C;
+    MiniGame4On4PreGameC mUnknown0;
+    MiniGame4On4PlayCallC mUnknown4;
+    MiniGame4On4PrePlayC mUnknown8;
+    MiniGame4On4DuringPlayC mUnknownC;
+    MiniGame4On4PostPlayC mUnknown14;
+    MiniGame4On4ScrmRulesC mUnknown18;
+    MiniGame4On4GameEndC mUnknown1C;
     int mUnknown20;
     int mUnknown24;
 };
 
-class Class_802A2130 : public ScrmRuleSet {
+class MiniGameCrushCarrierRulesC : public ScrmRuleSet {
 public:
     virtual int GetScoreLimit() { return 0x7FFFFFFF; }
     virtual int GetWinner();
@@ -454,7 +454,7 @@ public:
     virtual int AllowsAudibles() { return 0; }
 };
 
-class Class_802A20C8 : public PreGamePhase {
+class MiniGameCrushCarrierPreGameC : public PreGamePhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -465,9 +465,9 @@ public:
     void fn_8014DA20();
 };
 
-class Class_802A2058 : public PreSnapPhase {
+class MiniGameCrushCarrierPrePlayC : public PreSnapPhase {
 public:
-    virtual ~Class_802A2058() {}
+    virtual ~MiniGameCrushCarrierPrePlayC() {}
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void ReleaseHeldBalls() { }
@@ -476,7 +476,7 @@ public:
     unsigned char mUnknown4;
 };
 
-class Class_802A2020 : public LivePlayPhase {
+class MiniGameCrushCarrierDuringPlayC : public LivePlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -484,10 +484,10 @@ public:
     unsigned char mUnknown4;
 };
 
-class Class_802A1F90 : public PostPlayPhase {
+class MiniGameCrushCarrierPostPlayC : public PostPlayPhase {
 public:
-    Class_802A1F90() : mpUnknown4(0), mpUnknown8(0), mUnknown12(1) {}
-    virtual ~Class_802A1F90() {}
+    MiniGameCrushCarrierPostPlayC() : mpUnknown4(0), mpUnknown8(0), mUnknown12(1) {}
+    virtual ~MiniGameCrushCarrierPostPlayC() {}
     virtual void OnEnter(float dt);
     virtual void OnExit();
     virtual void ShowResultText() { }
@@ -513,7 +513,7 @@ public:
     unsigned int mUnknown12[10];
 };
 
-class Class_802A1F10 : public Class_80297B90 {
+class MiniGameCrushCarrierGameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -529,12 +529,12 @@ public:
     Block_8014F104() : mUnknown2C(0), mUnknown30(1), mpUnknown34(0), mUnknown38(0), mpUnknown3C(0) { memset(mUnknown40, 0, sizeof(mUnknown40)); }
     virtual ~Block_8014F104() {}
 
-    Class_802A2130 mUnknown0;
-    Class_802A20C8 mUnknown4;
-    Class_802A2058 mUnknown8;
-    Class_802A2020 mUnknown10;
-    Class_802A1F90 mUnknown18;
-    Class_802A1F10 mUnknown28;
+    MiniGameCrushCarrierRulesC mUnknown0;
+    MiniGameCrushCarrierPreGameC mUnknown4;
+    MiniGameCrushCarrierPrePlayC mUnknown8;
+    MiniGameCrushCarrierDuringPlayC mUnknown10;
+    MiniGameCrushCarrierPostPlayC mUnknown18;
+    MiniGameCrushCarrierGameEndC mUnknown28;
     int mUnknown2C;
     unsigned char mUnknown30;
     Record_8014F104 *mpUnknown34;
@@ -543,9 +543,9 @@ public:
     int mUnknown40[2][7];
 };
 
-class Class_802A1E38 : public ScrmRuleSet {
+class MiniGameJumpBallRulesC : public ScrmRuleSet {
 public:
-    virtual ~Class_802A1E38() { }
+    virtual ~MiniGameJumpBallRulesC() { }
     virtual int GetScoreLimit() { return 0x7FFFFFFF; }
     virtual int GetWinner();
     virtual void AwardWin(int value);
@@ -564,10 +564,10 @@ public:
     virtual void EndPlay();
 };
 
-class Class_802A1DC8 : public PreGamePhase {
+class MiniGameJumpBallPreGameC : public PreGamePhase {
 public:
-    Class_802A1DC8() : mUnknown4(1) {}
-    virtual ~Class_802A1DC8() { }
+    MiniGameJumpBallPreGameC() : mUnknown4(1) {}
+    virtual ~MiniGameJumpBallPreGameC() { }
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float value);
     virtual void OnExit();
@@ -578,16 +578,16 @@ public:
     unsigned char mUnknown4;
 };
 
-class Class_802A1D58 : public PreSnapPhase {
+class MiniGameJumpBallPrePlayC : public PreSnapPhase {
 public:
-    virtual ~Class_802A1D58() { }
+    virtual ~MiniGameJumpBallPrePlayC() { }
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void AssignControlledPlayers();
     virtual void SetupCamera();
 };
 
-class Class_802A1D20 : public LivePlayPhase {
+class MiniGameJumpBallDuringPlayC : public LivePlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -599,7 +599,7 @@ public:
     unsigned char mUnknown9;
 };
 
-class Class_802A1C98 : public PostPlayPhase {
+class MiniGameJumpBallPostPlayC : public PostPlayPhase {
 public:
     virtual void OnExit();
     virtual void SetupCamera();
@@ -608,7 +608,7 @@ public:
     virtual void Finish(float dt);
 };
 
-class Class_802A1C30 : public Class_80297B90 {
+class MiniGameJumpBallGameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -620,16 +620,16 @@ public:
 };
 
 struct Object_8015005C {
-    Class_802A1DC8 mUnknown0;
-    Class_802A1D58 mUnknown8;
-    Class_802A1D20 mUnknown12;
-    Class_802A1C98 mUnknown24;
-    Class_802A1C30 mUnknown28;
-    Class_802A1E38 mUnknown32;
+    MiniGameJumpBallPreGameC mUnknown0;
+    MiniGameJumpBallPrePlayC mUnknown8;
+    MiniGameJumpBallDuringPlayC mUnknown12;
+    MiniGameJumpBallPostPlayC mUnknown24;
+    MiniGameJumpBallGameEndC mUnknown28;
+    MiniGameJumpBallRulesC mUnknown32;
     Table_8015005C *mpUnknown36;
 };
 
-class Class_802A1BC8 : public PreGamePhase {
+class MiniGameOpenFieldPreGameC : public PreGamePhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -638,9 +638,9 @@ public:
     virtual void HideIntroScreen();
 };
 
-class Class_802A1B58 : public PreSnapPhase {
+class MiniGameOpenFieldPrePlayC : public PreSnapPhase {
 public:
-    virtual ~Class_802A1B58() {}
+    virtual ~MiniGameOpenFieldPrePlayC() {}
     virtual void OnEnter(float dt);
     virtual void AssignControlledPlayers();
 
@@ -648,14 +648,14 @@ public:
     signed char mUnknown20[2][2];
 };
 
-class Class_802A1B18 : public Class_80297B50 {
+class MiniGameOpenFieldPlayCallC : public Class_80297B50 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_04(float dt);
     virtual void vfn_05(float dt);
 };
 
-class Class_802A1AE0 : public LivePlayPhase {
+class MiniGameOpenFieldDuringPlayC : public LivePlayPhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -664,12 +664,12 @@ public:
     int mUnknown4;
 };
 
-class Class_802A1A58 : public PostPlayPhase {
+class MiniGameOpenFieldPostPlayC : public PostPlayPhase {
 public:
     virtual int GetResultText(char *pText);
 };
 
-class Class_802A19F0 : public Class_80297B90 {
+class MiniGameOpenFieldGameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -680,7 +680,7 @@ public:
     virtual int vfn_11() { return 0; }
 };
 
-class Class_802A1930 : public ScrmRuleSet {
+class MiniGameOpenFieldRulesC : public ScrmRuleSet {
 public:
     virtual int GetScoreLimit();
     virtual int GetWinner();
@@ -699,17 +699,17 @@ public:
 };
 
 struct Rules_801531C4 {
-    Class_802A1BC8 mUnknown0;
-    Class_802A1B58 mUnknown4;
-    Class_802A1B18 mUnknown28;
-    Class_802A1AE0 mUnknown32;
-    Class_802A1A58 mUnknown40;
-    Class_802A1930 mUnknown44;
-    Class_802A19F0 mUnknown48;
+    MiniGameOpenFieldPreGameC mUnknown0;
+    MiniGameOpenFieldPrePlayC mUnknown4;
+    MiniGameOpenFieldPlayCallC mUnknown28;
+    MiniGameOpenFieldDuringPlayC mUnknown32;
+    MiniGameOpenFieldPostPlayC mUnknown40;
+    MiniGameOpenFieldRulesC mUnknown44;
+    MiniGameOpenFieldGameEndC mUnknown48;
     Score_801531C4 *mpUnknown52;
 };
 
-class Class_802A18C8 : public PreGamePhase {
+class MiniGameQuickStrikePreGameC : public PreGamePhase {
 public:
     virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
@@ -717,7 +717,7 @@ public:
     virtual void HideIntroScreen();
 };
 
-class Class_802A1860 : public Class_80297B90 {
+class MiniGameQuickStrikeGameEndC : public Class_80297B90 {
 public:
     virtual void vfn_03(float dt);
     virtual void vfn_06() { }
@@ -728,7 +728,7 @@ public:
     virtual int vfn_11() { return 1; }
 };
 
-class Class_802A17A8 : public ScrmRuleSet {
+class MiniGameQuickStrikeRulesC : public ScrmRuleSet {
 public:
     virtual int GetScoreLimit();
     virtual int GetWinner();
@@ -744,9 +744,9 @@ public:
 class Block_80156400 {
 public:
 
-    Class_802A18C8 mObject0;
-    Class_802A17A8 mObject4;
-    Class_802A1860 mObject12;
+    MiniGameQuickStrikePreGameC mObject0;
+    MiniGameQuickStrikeRulesC mObject4;
+    MiniGameQuickStrikeGameEndC mObject12;
     int mUnknown16;
     Record_8005CE10 mRecords[2][3];
     unsigned char mUnknown188;
@@ -767,7 +767,7 @@ extern "C" {
 void fn_801D31F0(void *pDst, const void *pSrc, int size);
 extern int lbl_803EB2A8;
 extern int lbl_803EB2AC;
-extern Class_80148A58 *lbl_8031BDBC[];
+extern MiniGameC *lbl_8031BDBC[];
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB);
 void fn_80149040(Object_80039F5C *p);
@@ -881,9 +881,9 @@ extern char *lbl_803EB2B8;
 extern int lbl_802DE95C[];
 void fn_8014BC98(const int *pValues, int *pOrder, unsigned int count);
 void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count);
-Block_8014F104 *fn_8014F104(Class_80148A58 *p);
+Block_8014F104 *fn_8014F104(MiniGameC *p);
 void fn_8014D024(unsigned short index);
-void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value);
+void fn_8014F4D8(MiniGameC *p, Object_80039F5C *pPlayer, int kind, int value);
 void HudShowPlayerPopup(Object_80039F5C *p, int team, const char *pText, int value, int d);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
@@ -936,31 +936,31 @@ void InGameOverlayShow(void);
 void fn_800A8738(int value);
 int StoryEventsGetCurrentEvent(void);
 void StoryEventsSetRewardPenalty(int value);
-int fn_8014FF34(Class_802A2B68 *p);
+int fn_8014FF34(MiniGameCrushCarrierC *p);
 int GameTextGetPadPlayer(int index);
 int UserProfileGetPadName(unsigned char index, char *pText, int count);
 int UserProfileGetFreeKey(int kind, int key, int first, int last);
-unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer);
+unsigned int fn_8014F474(MiniGameC *p, Object_80039F5C *pPlayer);
 int RecordsGetValue(int a);
 float fn_800A32B4(void);
 float SyncRandGetFloatRange(int selector, float first, float last);
-extern Class_802A2918 lbl_8031BDD4;
-void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value);
-void fn_801526EC(Class_802A2918 *p);
+extern MiniGameJumpBallC lbl_8031BDD4;
+void fn_80151CCC(MiniGameJumpBallC *p, unsigned int index, unsigned char value);
+void fn_801526EC(MiniGameJumpBallC *p);
 void fn_801502B4(void *p);
-int fn_80151B20(Class_802A2918 *p);
+int fn_80151B20(MiniGameJumpBallC *p);
 int fn_8009D9A8(int index);
 void PlyrMgrResetAll(void);
-void fn_801527E0(Class_802A2918 *p, int value);
-void fn_80151010(Class_802A1D20 *p);
-void ResetBallsAndFieldPositions(Class_802A1D20 *p);
+void fn_801527E0(MiniGameJumpBallC *p, int value);
+void fn_80151010(MiniGameJumpBallDuringPlayC *p);
+void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p);
 void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d);
 void SndgEventSetCrowdCycle(int value);
 void OSReport(const char *pMessage, ...);
-void RefreshFourPlayerScoreRows(Class_802A1D20 *p);
-void fn_80151BCC(Class_802A2918 *p);
-void fn_80151D9C(Class_802A2918 *p);
-void fn_80153168(Class_802A2918 *p, int index, unsigned char value);
+void RefreshFourPlayerScoreRows(MiniGameJumpBallDuringPlayC *p);
+void fn_80151BCC(MiniGameJumpBallC *p);
+void fn_80151D9C(MiniGameJumpBallC *p);
+void fn_80153168(MiniGameJumpBallC *p, int index, unsigned char value);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 void fn_8015013C(Object_8015005C *p, int id, int flag);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
@@ -973,7 +973,7 @@ void fn_80177C50(int a);
 void fn_8011DF90(void);
 void PlayBookRestoreSelection(int team);
 void fn_8009B924(void);
-int fn_801529C0(Class_802A2918 *p);
+int fn_801529C0(MiniGameJumpBallC *p);
 void *SyncStateGetData(void *pHandle);
 void PlyrStarSetBallRingEnabled(unsigned char value);
 Point_8017886C fn_80177FFC(int team);
@@ -981,8 +981,8 @@ void HudSetScoreTableRows(int a);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 int MathAngleDiff(int a, int b);
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex);
-void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo);
-Rules_801531C4 *fn_80155128(Class_80148A58 *p);
+void fn_80152940(MiniGameJumpBallC *p, int index, MiniGameSlotInfo_t *pInfo);
+Rules_801531C4 *fn_80155128(MiniGameC *p);
 int fn_800948E4(Object_8017886C *p);
 void fn_80177E6C(int a, int b);
 int FormationLineupSwapAllUser(int a, int b, int c, int d);
@@ -1005,20 +1005,20 @@ extern int lbl_802DEB08[];
 extern int lbl_802DEB40[];
 int fn_80178EA0(int team);
 int fn_80178EE0(int team);
-int fn_80155130(Class_80148A58 *p, int team, unsigned char index);
-Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index);
+int fn_80155130(MiniGameC *p, int team, unsigned char index);
+Object_80039F5C *fn_80154FC0(MiniGameOpenFieldC *p, int team, int index);
 extern unsigned char lbl_803EB2FC;
 extern unsigned char lbl_803EB2FD;
 int fn_80177F70(void);
 float SyncRandGetFloat(int stream);
 unsigned short fn_80178E94(void);
-void fn_80155D7C(Class_80148A58 *p);
+void fn_80155D7C(MiniGameC *p);
 extern char *lbl_803EB2F8;
-void fn_80155A7C(Class_80148A58 *p, unsigned char team, int kind, int value);
-void fn_80155BF4(Class_80148A58 *p, unsigned char team, int kind, int value, int flag);
+void fn_80155A7C(MiniGameC *p, unsigned char team, int kind, int value);
+void fn_80155BF4(MiniGameC *p, unsigned char team, int kind, int value, int flag);
 void fn_8017CAC0(void (*pCallback)(unsigned int, int, int));
 void fn_801556D0(unsigned int kind, int value, int flag);
-unsigned char fn_80155D38(Class_80148A58 *p, int team);
+unsigned char fn_80155D38(MiniGameC *p, int team);
 }
 
 extern "C" {
@@ -1189,7 +1189,7 @@ void fn_801488D4(Object_80039F5C *pA, Object_80039F5C *pB)
     }
 }
 
-Class_80148A58 *fn_80148A58(void)
+MiniGameC *fn_80148A58(void)
 {
     int index = fn_801486A0();
     if (index != 15) {
@@ -1202,7 +1202,7 @@ Class_80148A58 *fn_80148A58(void)
 
  /* extern "C" */
 
-Class_80148A58::Class_80148A58()
+MiniGameC::MiniGameC()
 {
     mUnknown0 = 2;
     mUnknown4 = 1;
@@ -1212,34 +1212,34 @@ Class_80148A58::Class_80148A58()
     mState.mUnknownC = 1;
 }
 
-int Class_80148A58::vfn_03()
+int MiniGameC::vfn_03()
 {
     return 14;
 }
 
-unsigned int Class_80148A58::vfn_04(int team)
+unsigned int MiniGameC::vfn_04(int team)
 {
     return 7;
 }
 
-int Class_80148A58::vfn_05(int team)
+int MiniGameC::vfn_05(int team)
 {
     return 7;
 }
 
-unsigned int Class_80148A58::vfn_06()
+unsigned int MiniGameC::vfn_06()
 {
     return 7;
 }
 
-int Class_80148A58::vfn_08(int a)
+int MiniGameC::vfn_08(int a)
 {
     return 0;
 }
 
 extern "C" {
 
-void fn_80148AF8(Class_80148A58 *p)
+void fn_80148AF8(MiniGameC *p)
 {
     if (p->mState.mCount && p->mState.mpRecords) {
         AutoDepthSetRateCallback(fn_80148D20);
@@ -1249,17 +1249,17 @@ void fn_80148AF8(Class_80148A58 *p)
 
 } /* extern "C" */
 
-void Class_80148A58::vfn_10(int value, int *pList, int *pIds)
+void MiniGameC::vfn_10(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
 }
 
-void Class_80148A58::vfn_11(int value, int *pList, int *pIds, unsigned int count, int b)
+void MiniGameC::vfn_11(int value, int *pList, int *pIds, unsigned int count, int b)
 {
     AutoDepthFillChart(value, pList, pIds);
 }
 
-int Class_80148A58::vfn_13()
+int MiniGameC::vfn_13()
 {
     unsigned char result = 0;
     unsigned char team = (unsigned char)fn_80178AE0();
@@ -1269,7 +1269,7 @@ int Class_80148A58::vfn_13()
     return result;
 }
 
-void Class_80148A58::vfn_15()
+void MiniGameC::vfn_15()
 {
     int value = (int)fn_8009D990(1);
     if (value != mState.mCachedValue && value >= 0) {
@@ -1280,7 +1280,7 @@ void Class_80148A58::vfn_15()
     }
 }
 
-int Class_80148A58::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
+int MiniGameC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
 {
     unsigned int index = 0;
     while (index < mState.mCount && mState.mpRecords[index].mUnknown2C) {
@@ -1289,7 +1289,7 @@ int Class_80148A58::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
     return index == mState.mCount ? 0 : index;
 }
 
-int Class_80148A58::vfn_24(int team, unsigned int tag)
+int MiniGameC::vfn_24(int team, unsigned int tag)
 {
     int value = 0;
     int result = 0;
@@ -1307,7 +1307,7 @@ extern "C" {
 
 void fn_80148D20(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor *)
 {
-    Class_80148A58 *p = fn_80148A58();
+    MiniGameC *p = fn_80148A58();
     unsigned int i;
     unsigned int j;
 
@@ -1326,7 +1326,7 @@ void fn_80148D20(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor *)
 
 void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *pCategory)
 {
-    Class_80148A58 *p = fn_80148A58();
+    MiniGameC *p = fn_80148A58();
     int index = p->vfn_23(pRecords, count);
     unsigned int values[4];
     int ids[4];
@@ -1381,7 +1381,7 @@ void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *p
 
 } /* extern "C" */
 
-int Class_80148A58::fn_80149014()
+int MiniGameC::fn_80149014()
 {
     return GameModeTypeGet() == 11;
 }
@@ -1470,7 +1470,7 @@ unsigned char lbl_803EB2B5 = 0;
 
 } /* extern "C" */
 
-void Class_80148A58::vfn_16(const int *pKinds)
+void MiniGameC::vfn_16(const int *pKinds)
 {
     memset(lbl_8031BE04,0,168);
     memset(lbl_8031BEAC,0,54);
@@ -1490,7 +1490,7 @@ void Class_80148A58::vfn_16(const int *pKinds)
     }
 }
 
-void Class_80148A58::vfn_17(const int *pKinds)
+void MiniGameC::vfn_17(const int *pKinds)
 {
     memset(lbl_8031BE04,0,168);
     memset(lbl_8031BEAC,0,54);
@@ -1506,7 +1506,7 @@ void Class_80148A58::vfn_17(const int *pKinds)
     }
 }
 
-void Class_80148A58::vfn_18(int team, unsigned char index, char *text, unsigned char capacity)
+void MiniGameC::vfn_18(int team, unsigned char index, char *text, unsigned char capacity)
 {
     *text=0;
     for(unsigned char i=0;i<3 && lbl_8031BE04[team*7+index][i];i++) {
@@ -1524,19 +1524,19 @@ void Class_80148A58::vfn_18(int team, unsigned char index, char *text, unsigned 
     }
 }
 
-void Class_80148A58::vfn_19(int team, int column, char *text, int capacity)
+void MiniGameC::vfn_19(int team, int column, char *text, int capacity)
 {
     fn_801C2D88(text,capacity,vfn_29(lbl_8031BE04[team][column]));
 }
 
-unsigned char Class_80148A58::vfn_25(int team, int index)
+unsigned char MiniGameC::vfn_25(int team, int index)
 {
     unsigned char row=team*7+index,count=0;
     while(count<3 && lbl_8031BE04[row][count])count++;
     return count;
 }
 
-int Class_80148A58::vfn_26(int team, int index, Object_80039F5C *player, int kind)
+int MiniGameC::vfn_26(int team, int index, Object_80039F5C *player, int kind)
 {
     int result=0;
     switch(kind) {
@@ -1562,7 +1562,7 @@ int Class_80148A58::vfn_26(int team, int index, Object_80039F5C *player, int kin
     return result;
 }
 
-int Class_80148A58::vfn_27(int team, int index, int value)
+int MiniGameC::vfn_27(int team, int index, int value)
 {
     int found=0;
     index=(unsigned char)(index+team*7);
@@ -1570,19 +1570,19 @@ int Class_80148A58::vfn_27(int team, int index, int value)
     return found;
 }
 
-const char * Class_80148A58::vfn_29(int kind)
+const char * MiniGameC::vfn_29(int kind)
 {
     unsigned char index=0;
     if(lbl_802DDC20[kind].mCount>1)index=SyncRandGetRange(0,lbl_802DDC20[kind].mCount);
     return lbl_802DDC20[kind].mpText[index];
 }
 
-unsigned char Class_80148A58::vfn_28(int index)
+unsigned char MiniGameC::vfn_28(int index)
 {
     return lbl_8031BEAC[index];
 }
 
-int Class_80148A58::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int result=0;
     unsigned short id=pPlayer->mUnknown2908;
@@ -1630,7 +1630,7 @@ int Class_80148A58::vfn_30(int kind, int team, int index, Object_80039F5C *pPlay
     return result;
 }
 
-int Class_80148A58::vfn_31(int kind, int team, int index, Object_80039F5C *player, int threshold, int mode)
+int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, int threshold, int mode)
 {
     int value=vfn_30(kind,team,index,player);
     int count;
@@ -1657,7 +1657,7 @@ int Class_80148A58::vfn_31(int kind, int team, int index, Object_80039F5C *playe
     return result;
 }
 
-int Class_80148A58::vfn_32(int team, int kind)
+int MiniGameC::vfn_32(int team, int kind)
 {
     int result=0;
     if(kind!=21 && vfn_27(0,team,8))return 0;
@@ -1683,7 +1683,7 @@ int Class_80148A58::vfn_32(int team, int kind)
     return result;
 }
 
-int Class_80148A58::vfn_33(int kind, int team)
+int MiniGameC::vfn_33(int kind, int team)
 {
     int result=0,value;
     int handle=fn_800C8744(team);
@@ -1736,7 +1736,7 @@ int Class_80148A58::vfn_33(int kind, int team)
     return result;
 }
 
-int Class_80148A58::vfn_34(int kind, int team, int threshold, int mode)
+int MiniGameC::vfn_34(int kind, int team, int threshold, int mode)
 {
     int value=vfn_33(kind,team);
     int other=(team+1)&1;
@@ -1812,16 +1812,16 @@ void fn_8014A8D8(const int *pValues,int *pOrder,unsigned int count)
 
 } /* extern "C" */
 
-int Class_802A2560::IsTimed()
+int MiniGame2MinuteScrmRulesC::IsTimed()
 {return 1;}
 
-int Class_802A2560::IsWinAwarded()
+int MiniGame2MinuteScrmRulesC::IsWinAwarded()
 {return lbl_803EB2B4;}
 
-int Class_802A2560::GetGameTime()
+int MiniGame2MinuteScrmRulesC::GetGameTime()
 {return 120;}
 
-void Class_802A2560::ResetPlaySpot()
+void MiniGame2MinuteScrmRulesC::ResetPlaySpot()
 {
     ScrmRuleSet::ResetPlaySpot();
     fn_80177F88(1);
@@ -1833,10 +1833,10 @@ void Class_802A2560::ResetPlaySpot()
     }
 }
 
-int Class_802A2560::GetScoreLimit()
+int MiniGame2MinuteScrmRulesC::GetScoreLimit()
 {return 0x7FFFFFFF;}
 
-int Class_802A2560::GetWinner()
+int MiniGame2MinuteScrmRulesC::GetWinner()
 {
     int result = 2;
     int first = fn_801787DC(0);
@@ -1853,13 +1853,13 @@ int Class_802A2560::GetWinner()
     return result;
 }
 
-void Class_802A2560::ResetGame(int team)
+void MiniGame2MinuteScrmRulesC::ResetGame(int team)
 {
     ScrmRuleSet::ResetGame(team);
     lbl_803EB2B4 = 0;
 }
 
-void Class_802A2560::AwardWin(int team)
+void MiniGame2MinuteScrmRulesC::AwardWin(int team)
 {
     lbl_803EB2B4 = 1;
     unsigned short points;
@@ -1876,7 +1876,7 @@ void Class_802A2560::AwardWin(int team)
     fn_8009D964(1, 0);
 }
 
-void Class_802A2788::OnEnter(float dt)
+void MiniGame2MinutePreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
     fn_80178E88(fn_80178A2C() * 2.0f - 20.0f);
@@ -1891,14 +1891,14 @@ void Class_802A2788::OnEnter(float dt)
     TutorialReleasePause();
 }
 
-void Class_802A2788::OnUpdate(float dt)
+void MiniGame2MinutePreGameC::OnUpdate(float dt)
 {
     if (MsgBoxIsClosed()) {
         PreGamePhase::OnUpdate(dt);
     }
 }
 
-void Class_802A2788::ShowIntroScreen()
+void MiniGame2MinutePreGameC::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         MsgBoxShow("2 Minute Challenge", lbl_803EB2B0, "|^Done");
@@ -1924,7 +1924,7 @@ Record_80148C4C lbl_802DE130[14] = {
 
 int lbl_802DE3D0[19] = {21, 20, 16, 15, 14, 13, 2, 1, 9, 11, 3, 7, 4, 5, 6, 8, 12, 10, 0};
 
-void Class_802A24F8::vfn_03(float dt)
+void MiniGame2MinuteGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
@@ -1934,17 +1934,17 @@ void Class_802A24F8::vfn_03(float dt)
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A24F8::vfn_08()
+void MiniGame2MinuteGameEndC::vfn_08()
 {
     PauseOpenScreen(3, 17, -1);
 }
 
-void Class_802A24F8::vfn_09()
+void MiniGame2MinuteGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 17, 1);
 }
 
-void Class_802A2748::vfn_03(float dt)
+void MiniGame2MinutePlayCallC::vfn_03(float dt)
 {
     fn_801487C0(fn_80178308(), 3);
     fn_801487C0(fn_80178320(), 2);
@@ -1955,7 +1955,7 @@ void Class_802A2748::vfn_03(float dt)
     }
 }
 
-void Class_802A2748::vfn_04(float dt)
+void MiniGame2MinutePlayCallC::vfn_04(float dt)
 {
     if (fn_800B65A0(fn_80178308()) != 255) {
         Class_80297B50::vfn_04(dt);
@@ -1977,7 +1977,7 @@ void Class_802A2748::vfn_04(float dt)
     fn_80148A58()->vfn_15();
 }
 
-void Class_802A2748::vfn_05(float dt)
+void MiniGame2MinutePlayCallC::vfn_05(float dt)
 {
     if (fn_800B65A0(fn_80178308()) != 255) {
         Class_80297B50::vfn_05(dt);
@@ -1993,12 +1993,12 @@ void Class_802A2748::vfn_05(float dt)
     }
 }
 
-int Class_802A2748::vfn_06()
+int MiniGame2MinutePlayCallC::vfn_06()
 {
     return 10;
 }
 
-void Class_802A26D8::OnEnter(float dt)
+void MiniGame2MinutePrePlayC::OnEnter(float dt)
 {
     fn_801486A8();
     PreSnapPhase::OnEnter(dt);
@@ -2012,7 +2012,7 @@ void Class_802A26D8::OnEnter(float dt)
     BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
-void Class_802A26D8::OnUpdate(float dt)
+void MiniGame2MinutePrePlayC::OnUpdate(float dt)
 {
     PreSnapPhase::OnUpdate(dt);
     fn_80148A58()->vfn_15();
@@ -2021,13 +2021,13 @@ void Class_802A26D8::OnUpdate(float dt)
     }
 }
 
-void Class_802A26A0::OnEnter(float dt)
+void MiniGame2MinuteDuringPlayC::OnEnter(float dt)
 {
     ClockRuleSetFlags(2048);
     LivePlayPhase::OnEnter(dt);
 }
 
-void Class_802A26A0::OnUpdate(float dt)
+void MiniGame2MinuteDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
     fn_80148A58()->vfn_15();
@@ -2040,7 +2040,7 @@ void Class_802A26A0::OnUpdate(float dt)
     }
 }
 
-int Class_802A2618::GetResultText(char *pText)
+int MiniGame2MinutePostPlayC::GetResultText(char *pText)
 {
     if (fn_8009D990(1) != 0 || lbl_803EB2B4 != 0) {
         return PostPlayPhase::GetResultText(pText);
@@ -2049,13 +2049,13 @@ int Class_802A2618::GetResultText(char *pText)
     return 1;
 }
 
-void Class_802A2618::OnUpdate(float dt)
+void MiniGame2MinutePostPlayC::OnUpdate(float dt)
 {
     PostPlayPhase::OnUpdate(dt);
     fn_80148A58()->vfn_15();
 }
 
-void Class_802A2618::Finish(float dt)
+void MiniGame2MinutePostPlayC::Finish(float dt)
 {
     PlyrMgrClearStates();
     if (InGameOverlayGetState() != 4) {
@@ -2101,19 +2101,19 @@ unsigned char lbl_803EB2D1 = 0;
 
  /* extern "C" */
 
-Class_802A2DB8::Class_802A2DB8()
+MiniGame2MinuteC::MiniGame2MinuteC()
 {
     mState.mCount = 14;
     mState.mpRecords = lbl_802DE130;
 }
 
-Class_802A2DB8::~Class_802A2DB8()
+MiniGame2MinuteC::~MiniGame2MinuteC()
 {
     mState.mCount = 0;
     mState.mpRecords = 0;
 }
 
-void Class_802A2DB8::vfn_01()
+void MiniGame2MinuteC::vfn_01()
 {
     unsigned int i;
     int id;
@@ -2166,7 +2166,7 @@ void Class_802A2DB8::vfn_01()
     }
 }
 
-void Class_802A2DB8::vfn_02()
+void MiniGame2MinuteC::vfn_02()
 {
     if (mpUnknown1C->mUnknown38 != 0) {
         GameOptionsSet(19, 1);
@@ -2185,12 +2185,12 @@ void Class_802A2DB8::vfn_02()
     mpUnknown1C = 0;
 }
 
-int Class_802A2DB8::vfn_08(int a)
+int MiniGame2MinuteC::vfn_08(int a)
 {
     return 2;
 }
 
-int Class_802A2DB8::vfn_05(int team)
+int MiniGame2MinuteC::vfn_05(int team)
 {
     if (team == fn_80178308()) {
         return 3;
@@ -2198,14 +2198,14 @@ int Class_802A2DB8::vfn_05(int team)
     return 2;
 }
 
-void Class_802A2DB8::vfn_10(int value, int *pList, int *pIds)
+void MiniGame2MinuteC::vfn_10(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
     fn_8014A6A0(pList, pIds, 3);
     fn_8014A8D8(pList, pIds, 3);
 }
 
-void Class_802A2DB8::vfn_11(int value, int *pList, int *pIds, unsigned int count, int slot)
+void MiniGame2MinuteC::vfn_11(int value, int *pList, int *pIds, unsigned int count, int slot)
 {
     AutoDepthFillChart(value, pList, pIds);
     int first = pList[0];
@@ -2235,7 +2235,7 @@ void Class_802A2DB8::vfn_11(int value, int *pList, int *pIds, unsigned int count
 
 extern "C" {
 
-void fn_8014BA20(Class_802A2DB8 *p, int team, Stats_8005C844 *pStats)
+void fn_8014BA20(MiniGame2MinuteC *p, int team, Stats_8005C844 *pStats)
 {
     int value = 0;
     int handle = fn_800C8744(team);
@@ -2257,7 +2257,7 @@ void fn_8014BA20(Class_802A2DB8 *p, int team, Stats_8005C844 *pStats)
 
 } /* extern "C" */
 
-int Class_802A2DB8::vfn_32(int team, int kind)
+int MiniGame2MinuteC::vfn_32(int team, int kind)
 {
     int result = 0;
     switch (kind) {
@@ -2277,13 +2277,13 @@ int Class_802A2DB8::vfn_32(int team, int kind)
         }
         break;
     default:
-        result = Class_80148A58::vfn_32(team, kind);
+        result = MiniGameC::vfn_32(team, kind);
         break;
     }
     return result;
 }
 
-int Class_802A2DB8::vfn_33(int kind, int team)
+int MiniGame2MinuteC::vfn_33(int kind, int team)
 {
     switch (kind) {
     case 16:
@@ -2291,11 +2291,11 @@ int Class_802A2DB8::vfn_33(int kind, int team)
     case 21:
         return fn_801787DC(team);
     default:
-        return Class_80148A58::vfn_33(kind, team);
+        return MiniGameC::vfn_33(kind, team);
     }
 }
 
-int Class_802A2DB8::vfn_21()
+int MiniGame2MinuteC::vfn_21()
 {
     return 0;
 }
@@ -2493,30 +2493,30 @@ void fn_8014BED8(const int *pValues, int *pOrder, unsigned int count)
 
 } /* extern "C" */
 
-void Class_802A2450::vfn_03(float dt)
+void MiniGame4On4PlayCallC::vfn_03(float dt)
 {
     Class_80297B50::vfn_03(dt);
     fn_801487C0(0, 4);
     fn_801487C0(1, 4);
 }
 
-int Class_802A2268::GetTeamSize()
+int MiniGame4On4ScrmRulesC::GetTeamSize()
 {
     return 4;
 }
 
-int Class_802A2268::AllowsPrediction()
+int MiniGame4On4ScrmRulesC::AllowsPrediction()
 {
     return 1;
 }
 
-void Class_802A2320::OnEnter(float dt)
+void MiniGame4On4PostPlayC::OnEnter(float dt)
 {
     PostPlayPhase::OnEnter(dt);
     fn_8009D8CC(5);
 }
 
-void Class_802A2320::ShowResultText()
+void MiniGame4On4PostPlayC::ShowResultText()
 {
     char text[32];
     int changed = PostPlayPhase::GetResultText(text);
@@ -2532,7 +2532,7 @@ void Class_802A2320::ShowResultText()
     }
 }
 
-void Class_802A2320::OnUpdate(float dt)
+void MiniGame4On4PostPlayC::OnUpdate(float dt)
 {
     PostPlayPhase::OnUpdate(dt);
     if ((unsigned char)fn_800B9A90(lbl_803EAB84)) {
@@ -2547,7 +2547,7 @@ void Class_802A2320::OnUpdate(float dt)
     }
 }
 
-void Class_802A23A8::OnEnter(float dt)
+void MiniGame4On4DuringPlayC::OnEnter(float dt)
 {
     LivePlayPhase::OnEnter(dt);
     if (fn_800A937C() == 0) {
@@ -2560,7 +2560,7 @@ void Class_802A23A8::OnEnter(float dt)
     mUnknown4 = blocked;
 }
 
-void Class_802A23A8::OnUpdate(float dt)
+void MiniGame4On4DuringPlayC::OnUpdate(float dt)
 {
     int clear = 1;
     LivePlayPhase::OnUpdate(dt);
@@ -2596,7 +2596,7 @@ void Class_802A23A8::OnUpdate(float dt)
     }
 }
 
-void Class_802A23E0::OnEnter(float dt)
+void MiniGame4On4PrePlayC::OnEnter(float dt)
 {
     fn_801486A8();
     PreSnapPhase::OnEnter(dt);
@@ -2605,7 +2605,7 @@ void Class_802A23E0::OnEnter(float dt)
     fn_8009D964(5, 5);
 }
 
-void Class_802A2490::OnEnter(float dt)
+void MiniGame4On4PreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
     fn_80178E88(5.0f);
@@ -2618,7 +2618,7 @@ void Class_802A2490::OnEnter(float dt)
     TutorialReleasePause();
 }
 
-void Class_802A2490::OnUpdate(float dt)
+void MiniGame4On4PreGameC::OnUpdate(float dt)
 {
     if (MsgBoxIsClosed()) {
         if (!lbl_803EB2D1 && fn_800C1E40() == 0) {
@@ -2665,7 +2665,7 @@ Record_80148C4C lbl_802DE6BC[14] = {
     {13, {0, 6, 0, 0, 10, 6, 0, 0, 8, 0}, 0},
 };
 
-Class_802A2C90::Class_802A2C90()
+MiniGame4On4C::MiniGame4On4C()
 {
     mpUnknown1C = 0;
     mUnknown20 = -1;
@@ -2673,7 +2673,7 @@ Class_802A2C90::Class_802A2C90()
     mState.mpRecords = lbl_802DE41C;
 }
 
-void Class_802A2C90::vfn_01()
+void MiniGame4On4C::vfn_01()
 {
     mUnknown0 = 10;
     mUnknown4 = 9;
@@ -2698,7 +2698,7 @@ void Class_802A2C90::vfn_01()
     fn_80178F20(&mpUnknown1C->mUnknown18);
 }
 
-void Class_802A2490::ShowIntroScreen()
+void MiniGame4On4PreGameC::ShowIntroScreen()
 {
     char text[300];
 
@@ -2714,7 +2714,7 @@ int lbl_803EB2D8 = 0;
 int lbl_803EB2DC = 0;
 Object_80039F5C *lbl_803EB2E0 = 0;
 
-void Class_802A2490::HideIntroScreen()
+void MiniGame4On4PreGameC::HideIntroScreen()
 {
     if (lbl_803EB2D1) {
         fn_8021956C(gUISMainInfo, 3, 8, 1);
@@ -2724,7 +2724,7 @@ void Class_802A2490::HideIntroScreen()
 
 int lbl_802DE95C[16] = {41, 15, 14, 13, 12, 11, 9, 7, 6, 5, 4, 3, 2, 1, 10, 0};
 
-void Class_802A2200::vfn_03(float dt)
+void MiniGame4On4GameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
@@ -2734,17 +2734,17 @@ void Class_802A2200::vfn_03(float dt)
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A2200::vfn_08()
+void MiniGame4On4GameEndC::vfn_08()
 {
     PauseOpenScreen(3, 24, -1);
 }
 
-void Class_802A2200::vfn_09()
+void MiniGame4On4GameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 24, 1);
 }
 
-void Class_802A2C90::vfn_02()
+void MiniGame4On4C::vfn_02()
 {
     fn_800BC51C(0);
     fn_800B3644(0);
@@ -2764,27 +2764,27 @@ void Class_802A2C90::vfn_02()
     mpUnknown1C = 0;
 }
 
-unsigned int Class_802A2C90::vfn_06()
+unsigned int MiniGame4On4C::vfn_06()
 {
     return 7;
 }
 
-unsigned int Class_802A2C90::vfn_04(int team)
+unsigned int MiniGame4On4C::vfn_04(int team)
 {
     return 7;
 }
 
-int Class_802A2C90::vfn_05(int team)
+int MiniGame4On4C::vfn_05(int team)
 {
     return 4;
 }
 
-int Class_802A2C90::vfn_03()
+int MiniGame4On4C::vfn_03()
 {
     return 14;
 }
 
-int Class_802A2C90::vfn_08(int a)
+int MiniGame4On4C::vfn_08(int a)
 {
     int result = 0;
     if (fn_8014BC90()) {
@@ -2793,14 +2793,14 @@ int Class_802A2C90::vfn_08(int a)
     return result;
 }
 
-void Class_802A2C90::vfn_10(int value, int *pList, int *pIds)
+void MiniGame4On4C::vfn_10(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
     fn_8014BC98(pList, pIds, 4);
     fn_8014BED8(pList, pIds, 4);
 }
 
-void Class_802A2C90::vfn_11(int value, int *list, int *ids, unsigned int count, int b)
+void MiniGame4On4C::vfn_11(int value, int *list, int *ids, unsigned int count, int b)
 {
     mState.mpRecords = lbl_802DE6BC;
     AutoDepthFillChart(value, list, ids);
@@ -2876,7 +2876,7 @@ void Class_802A2C90::vfn_11(int value, int *list, int *ids, unsigned int count, 
 
 extern "C" {
 
-void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
+void fn_8014CCE8(MiniGameC *p, int team, Stats_8005CAE4 *pStats)
 {
     int ids[4];
     Object_8008044C cursor;
@@ -2922,7 +2922,7 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
 
 } /* extern "C" */
 
-void Class_802A2C90::vfn_14()
+void MiniGame4On4C::vfn_14()
 {
     if (fn_801486A0() == 4) {
         fn_8009D8CC(5);
@@ -2930,29 +2930,29 @@ void Class_802A2C90::vfn_14()
     }
 }
 
-int Class_802A2C90::vfn_32(int team, int kind)
+int MiniGame4On4C::vfn_32(int team, int kind)
 {
     int result;
     if (kind == 41) {
         result = vfn_34(41, team, 1, 0);
     } else {
-        result = Class_80148A58::vfn_32(team, kind);
+        result = MiniGameC::vfn_32(team, kind);
     }
     return result;
 }
 
-int Class_802A2C90::vfn_33(int kind, int team)
+int MiniGame4On4C::vfn_33(int kind, int team)
 {
     int result;
     if (kind == 41) {
         result = StyleTrackerGetEventCount(team, 101);
     } else {
-        result = Class_80148A58::vfn_33(kind, team);
+        result = MiniGameC::vfn_33(kind, team);
     }
     return result;
 }
 
-void Class_802A2C90::vfn_07(int a, int b)
+void MiniGame4On4C::vfn_07(int a, int b)
 {
     if (a == 0) {
         mUnknown20 = b;
@@ -3193,7 +3193,7 @@ void RefreshSixPlayerScoreRows(void *p)
 
 } /* extern "C" */
 
-void Class_802A20C8::fn_8014DA20()
+void MiniGameCrushCarrierPreGameC::fn_8014DA20()
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
@@ -3204,7 +3204,7 @@ void Class_802A20C8::fn_8014DA20()
     }
 }
 
-void Class_802A2B68::fn_8014DA90()
+void MiniGameCrushCarrierC::fn_8014DA90()
 {
     Block_8014F104 *pBlock = fn_8014F104(fn_80148A58());
     for (unsigned int team = 0; team <= 1; team++) {
@@ -3224,7 +3224,7 @@ Record_80148C4C lbl_802DE99C[1] = {
 
 int lbl_802DE9CC[19] = {26, 19, 16, 17, 18, 22, 23, 24, 25, 1, 3, 4, 5, 6, 7, 8, 9, 10, 0};
 
-void Class_802A1F10::vfn_03(float dt)
+void MiniGameCrushCarrierGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
@@ -3234,17 +3234,17 @@ void Class_802A1F10::vfn_03(float dt)
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A1F10::vfn_08()
+void MiniGameCrushCarrierGameEndC::vfn_08()
 {
     PauseOpenScreen(3, 18, -1);
 }
 
-void Class_802A1F10::vfn_09()
+void MiniGameCrushCarrierGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 18, 1);
 }
 
-int Class_802A2130::GetWinner()
+int MiniGameCrushCarrierRulesC::GetWinner()
 {
     if (fn_8009D990(1) == 0) {
         return 1;
@@ -3252,12 +3252,12 @@ int Class_802A2130::GetWinner()
     return 2;
 }
 
-int Class_802A2130::GetGameTime()
+int MiniGameCrushCarrierRulesC::GetGameTime()
 {
     return fn_8014EDBC();
 }
 
-void Class_802A2130::ResetGame(int team)
+void MiniGameCrushCarrierRulesC::ResetGame(int team)
 {
     ScrmRuleSet::ResetGame(2);
     for (unsigned char i = 0; i <= 5; i++) {
@@ -3268,13 +3268,13 @@ void Class_802A2130::ResetGame(int team)
     lbl_803EB2E0 = 0;
 }
 
-void Class_802A2130::ResetPlaySpot()
+void MiniGameCrushCarrierRulesC::ResetPlaySpot()
 {
     ScrmRuleSet::ResetPlaySpot();
     fn_80178CD8(0);
 }
 
-void Class_802A2130::AwardWin(int team)
+void MiniGameCrushCarrierRulesC::AwardWin(int team)
 {
     int pad = PauseGetValue();
     unsigned short i;
@@ -3289,7 +3289,7 @@ void Class_802A2130::AwardWin(int team)
     fn_8009D964(1, 0);
 }
 
-void Class_802A20C8::OnEnter(float dt)
+void MiniGameCrushCarrierPreGameC::OnEnter(float dt)
 {
     Block_8014F104 *pBlock = fn_8014F104(fn_80148A58());
     int keepIds = fn_80148A58()->fn_80149014();
@@ -3376,12 +3376,12 @@ void Class_802A20C8::OnEnter(float dt)
     fn_800A8738(1);
 }
 
-void Class_802A20C8::EnterFirstPhase(float dt)
+void MiniGameCrushCarrierPreGameC::EnterFirstPhase(float dt)
 {
     fn_800AD910(2, dt);
 }
 
-void Class_802A20C8::OnExit()
+void MiniGameCrushCarrierPreGameC::OnExit()
 {
     PreGamePhase::OnExit();
     CamGameSetModeAll(1);
@@ -3391,21 +3391,21 @@ void Class_802A20C8::OnExit()
     fn_8014D67C();
 }
 
-void Class_802A20C8::OnUpdate(float dt)
+void MiniGameCrushCarrierPreGameC::OnUpdate(float dt)
 {
     if (MsgBoxIsClosed()) {
         PreGamePhase::OnUpdate(dt);
     }
 }
 
-void Class_802A20C8::ShowIntroScreen()
+void MiniGameCrushCarrierPreGameC::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         MsgBoxShow("Crush the Carrier", lbl_803EB2D4, "|^Done");
     }
 }
 
-void Class_802A2058::AssignControlledPlayers()
+void MiniGameCrushCarrierPrePlayC::AssignControlledPlayers()
 {
     for (unsigned char i = 0; i <= 5; i++) {
         Object_80039F5C *pPlayer = PlyrFindById(fn_8014F104(fn_80148A58())->mpUnknown34[i].mUnknown0);
@@ -3421,7 +3421,7 @@ void Class_802A2058::AssignControlledPlayers()
     }
 }
 
-void Class_802A2058::OnEnter(float dt)
+void MiniGameCrushCarrierPrePlayC::OnEnter(float dt)
 {
     PreSnapPhase::OnEnter(dt);
     PlyrStarSetShown(1, 1);
@@ -3440,7 +3440,7 @@ void Class_802A2058::OnEnter(float dt)
     mUnknown4 = 1;
 }
 
-void Class_802A2058::OnUpdate(float dt)
+void MiniGameCrushCarrierPrePlayC::OnUpdate(float dt)
 {
     if (mUnknown4) {
         mUnknown4 = 0;
@@ -3461,7 +3461,7 @@ void Class_802A2058::OnUpdate(float dt)
     }
 }
 
-void Class_802A2020::OnEnter(float dt)
+void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
 {
     mUnknown4 = 0;
     LivePlayPhase::OnEnter(dt);
@@ -3517,7 +3517,7 @@ void Class_802A2020::OnEnter(float dt)
     fn_80120618();
 }
 
-void Class_802A2020::OnUpdate(float dt)
+void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
 {
     Vector_80039F5C pos;
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
@@ -3588,7 +3588,7 @@ void Class_802A2020::OnUpdate(float dt)
     }
 }
 
-void Class_802A1F90::OnEnter(float dt)
+void MiniGameCrushCarrierPostPlayC::OnEnter(float dt)
 {
     Object_80039F5C *pPlayer = PlyrGet(1, 0);
     mpUnknown4 = BallGetCurrentHolder();
@@ -3636,7 +3636,7 @@ void Class_802A1F90::OnEnter(float dt)
     PostPlayPhase::OnEnter(dt);
 }
 
-void Class_802A1F90::OnExit()
+void MiniGameCrushCarrierPostPlayC::OnExit()
 {
     PostPlayPhase::OnExit();
     if (fn_8009D990(1)) {
@@ -3658,7 +3658,7 @@ void Class_802A1F90::OnExit()
     mpUnknown8 = 0;
 }
 
-int Class_802A1F90::IsFinished(int busy)
+int MiniGameCrushCarrierPostPlayC::IsFinished(int busy)
 {
     if (!mUnknown12 || InGameOverlayGetState() == 1) {
         return 1;
@@ -3666,7 +3666,7 @@ int Class_802A1F90::IsFinished(int busy)
     return 0;
 }
 
-void Class_802A1F90::Finish(float dt)
+void MiniGameCrushCarrierPostPlayC::Finish(float dt)
 {
     if (fn_8009D990(1)) {
         fn_800AD910(2, dt);
@@ -3686,14 +3686,14 @@ int fn_8014EDBC(void)
 
  /* extern "C" */
 
-Class_802A2B68::Class_802A2B68()
+MiniGameCrushCarrierC::MiniGameCrushCarrierC()
 {
     mState.mCount = 1;
     mState.mpRecords = lbl_802DE99C;
     mpUnknown1C = 0;
 }
 
-void Class_802A2B68::vfn_01()
+void MiniGameCrushCarrierC::vfn_01()
 {
     Block_8014F104 *pBlock = new (0) Block_8014F104;
     mpUnknown1C = pBlock;
@@ -3711,7 +3711,7 @@ void Class_802A2B68::vfn_01()
     }
 }
 
-void Class_802A2B68::vfn_02()
+void MiniGameCrushCarrierC::vfn_02()
 {
     fn_800A8738(0);
     if (mpUnknown1C->mUnknown2C != 1) {
@@ -3737,14 +3737,14 @@ void Class_802A2B68::vfn_02()
 
 extern "C" {
 
-Block_8014F104 *fn_8014F104(Class_80148A58 *p)
+Block_8014F104 *fn_8014F104(MiniGameC *p)
 {
-    return static_cast<Class_802A2B68 *>(p)->mpUnknown1C;
+    return static_cast<MiniGameCrushCarrierC *>(p)->mpUnknown1C;
 }
 
 } /* extern "C" */
 
-int Class_802A2B68::vfn_05(int team)
+int MiniGameCrushCarrierC::vfn_05(int team)
 {
     if (team == 0) {
         return 5;
@@ -3752,19 +3752,19 @@ int Class_802A2B68::vfn_05(int team)
     return 1;
 }
 
-void Class_802A2B68::vfn_10(int value, int *pList, int *pIds)
+void MiniGameCrushCarrierC::vfn_10(int value, int *pList, int *pIds)
 {
     for (unsigned char i = 0; i <= 6 && pList[i] != 32767; i++) {
         pIds[i] = pIds[i + 7] = pList[i];
     }
 }
 
-void Class_802A2B68::vfn_11(int value, int *pList, int *pIds, unsigned int a, int b)
+void MiniGameCrushCarrierC::vfn_11(int value, int *pList, int *pIds, unsigned int a, int b)
 {
     vfn_10(value, pList, pIds);
 }
 
-void Class_802A2B68::vfn_12()
+void MiniGameCrushCarrierC::vfn_12()
 {
     for (unsigned short i = 0; i <= 5; i++) {
         if (mpUnknown1C->mpUnknown34[i].mUnknown8 == 255) {
@@ -3813,7 +3813,7 @@ extern const int lbl_802A11F4[20] = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 
 extern const char *const lbl_802A1280[15] = {"5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "60", "70", "80", "90", "100"};
 int lbl_803EB2EC = 0;
 
-int Class_802A2B68::vfn_13()
+int MiniGameCrushCarrierC::vfn_13()
 {
     if (GameModeTypeGet() == 7) {
         return fn_8014FF34(this) <= 4;
@@ -3828,9 +3828,9 @@ void fn_8014F3DC(int value)
     lbl_803EB2D8 = value;
 }
 
-void fn_8014F3E4(Class_80148A58 *p, int index, Info_8014F3E4 *pInfo)
+void fn_8014F3E4(MiniGameC *p, int index, Info_8014F3E4 *pInfo)
 {
-    Record_8014F104 *pRecord = &static_cast<Class_802A2B68 *>(p)->mpUnknown1C->mpUnknown34[index];
+    Record_8014F104 *pRecord = &static_cast<MiniGameCrushCarrierC *>(p)->mpUnknown1C->mpUnknown34[index];
     pInfo->mUnknown4 = pRecord->mUnknown4;
     pInfo->mUnknown8 = pRecord->mUnknown12[8];
     pInfo->mUnknown12 = pRecord->mUnknown12[0];
@@ -3838,12 +3838,12 @@ void fn_8014F3E4(Class_80148A58 *p, int index, Info_8014F3E4 *pInfo)
     pInfo->mUnknown16 = pRecord->mUnknown8;
 }
 
-Object_80039F5C *fn_8014F448(Class_80148A58 *p)
+Object_80039F5C *fn_8014F448(MiniGameC *p)
 {
-    return PlyrFindById(static_cast<Class_802A2B68 *>(p)->mpUnknown1C->mpUnknown34[0].mUnknown0);
+    return PlyrFindById(static_cast<MiniGameCrushCarrierC *>(p)->mpUnknown1C->mpUnknown34[0].mUnknown0);
 }
 
-unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer)
+unsigned int fn_8014F474(MiniGameC *p, Object_80039F5C *pPlayer)
 {
     unsigned int i;
     for (i = 0; i <= 5; i++) {
@@ -3854,7 +3854,7 @@ unsigned int fn_8014F474(Class_80148A58 *p, Object_80039F5C *pPlayer)
     return i;
 }
 
-void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int value)
+void fn_8014F4D8(MiniGameC *p, Object_80039F5C *pPlayer, int kind, int value)
 {
     unsigned int index = fn_8014F474(fn_80148A58(), pPlayer);
     if (kind == 8 && value > fn_8014F104(fn_80148A58())->mpUnknown34[index].mUnknown12[9]) {
@@ -3865,7 +3865,7 @@ void fn_8014F4D8(Class_80148A58 *p, Object_80039F5C *pPlayer, int kind, int valu
 
 } /* extern "C" */
 
-int Class_802A2B68::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
+int MiniGameCrushCarrierC::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
 {
     int result = 0;
     unsigned int i = fn_8014F474(this, pPlayer);
@@ -3964,13 +3964,13 @@ int Class_802A2B68::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
         break;
     case 10:
     default:
-        result = Class_80148A58::vfn_26(team, index, pPlayer, kind);
+        result = MiniGameC::vfn_26(team, index, pPlayer, kind);
         break;
     }
     return result;
 }
 
-int Class_802A2B68::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameCrushCarrierC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int result = 0;
     unsigned int i = fn_8014F474(this, pPlayer);
@@ -4021,13 +4021,13 @@ int Class_802A2B68::vfn_30(int kind, int team, int index, Object_80039F5C *pPlay
         break;
     case 10:
     default:
-        result = Class_80148A58::vfn_30(kind, team, index, pPlayer);
+        result = MiniGameC::vfn_30(kind, team, index, pPlayer);
         break;
     }
     return result;
 }
 
-int Class_802A2B68::vfn_31(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode)
+int MiniGameCrushCarrierC::vfn_31(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode)
 {
     int answer = 0;
     int original = vfn_30(kind, team, index, pPlayer);
@@ -4055,14 +4055,14 @@ int Class_802A2B68::vfn_31(int kind, int team, int index, Object_80039F5C *pPlay
     return answer;
 }
 
-int Class_802A2B68::vfn_21()
+int MiniGameCrushCarrierC::vfn_21()
 {
     return 0;
 }
 
 extern "C" {
 
-int fn_8014FF34(Class_802A2B68 *p)
+int fn_8014FF34(MiniGameCrushCarrierC *p)
 {
     int result = 0;
     for (unsigned int i = 0; i <= 5; i++) {
@@ -4119,12 +4119,12 @@ void fn_8015013C(Object_8015005C *p, int id, int flag)
 
 } /* extern "C" */
 
-int Class_802A1E38::GetWinner()
+int MiniGameJumpBallRulesC::GetWinner()
 {
     return fn_801530FC()->mUnknown125;
 }
 
-void Class_802A1E38::AwardWin(int value)
+void MiniGameJumpBallRulesC::AwardWin(int value)
 {
     fn_801530FC()->mUnknown125 = value;
     int count = lbl_8031BDD4.mUnknown32;
@@ -4162,20 +4162,20 @@ extern "C" void fn_801502B4(void *p)
     fn_801530FC()->mUnknown125 = 1;
 }
 
-void Class_802A1E38::ResetGame(int team)
+void MiniGameJumpBallRulesC::ResetGame(int team)
 {
     ScrmRuleSet::ResetGame(2);
     fn_801526EC(&lbl_8031BDD4);
 }
 
-void Class_802A1E38::EndPlay()
+void MiniGameJumpBallRulesC::EndPlay()
 {
     if (fn_801530FC()->mUnknown117) {
         ScrmRuleSet::EndPlay();
     }
 }
 
-void Class_802A1DC8::OnEnter(float dt)
+void MiniGameJumpBallPreGameC::OnEnter(float dt)
 {
     fn_800A8738(1);
     fn_8017833C(0);
@@ -4252,14 +4252,14 @@ void Class_802A1DC8::OnEnter(float dt)
     FieldLinesEnable(0);
 }
 
-void Class_802A1DC8::OnUpdate(float value)
+void MiniGameJumpBallPreGameC::OnUpdate(float value)
 {
     if (MsgBoxIsClosed()) {
         EnterFirstPhase(value);
     }
 }
 
-void Class_802A1DC8::OnExit()
+void MiniGameJumpBallPreGameC::OnExit()
 {
     PreGamePhase::OnExit();
     for (unsigned char team = 0; team <= 1; team++) {
@@ -4272,23 +4272,23 @@ void Class_802A1DC8::OnExit()
 }
 
  /* extern "C" */
-void Class_802A1DC8::ShowIntroScreen()
+void MiniGameJumpBallPreGameC::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         MsgBoxShow("Jump Ball Battle", lbl_803EB2E4, "|^Done");
     }
 }
 
-void Class_802A1DC8::HideIntroScreen()
+void MiniGameJumpBallPreGameC::HideIntroScreen()
 {
 }
 
-void Class_802A1DC8::EnterFirstPhase(float value)
+void MiniGameJumpBallPreGameC::EnterFirstPhase(float value)
 {
     fn_800AD910(2, value);
 }
 
-void Class_802A1D58::OnEnter(float dt)
+void MiniGameJumpBallPrePlayC::OnEnter(float dt)
 {
     unsigned int i;
     unsigned int count;
@@ -4308,7 +4308,7 @@ void Class_802A1D58::OnEnter(float dt)
     }
 }
 
-void Class_802A1D58::OnUpdate(float dt)
+void MiniGameJumpBallPrePlayC::OnUpdate(float dt)
 {
     fn_800AD910(3, dt);
     if (lbl_8031BDD4.mUnknown36 != 0) {
@@ -4316,7 +4316,7 @@ void Class_802A1D58::OnUpdate(float dt)
     }
 }
 
-void Class_802A1D58::AssignControlledPlayers()
+void MiniGameJumpBallPrePlayC::AssignControlledPlayers()
 {
     unsigned char i;
 
@@ -4334,11 +4334,11 @@ void Class_802A1D58::AssignControlledPlayers()
     }
 }
 
-void Class_802A1D58::SetupCamera()
+void MiniGameJumpBallPrePlayC::SetupCamera()
 {
 }
 
-void Class_802A1D20::OnEnter(float dt)
+void MiniGameJumpBallDuringPlayC::OnEnter(float dt)
 {
     LivePlayPhase::OnEnter(dt);
     PlyrStarSetShown(1, 1);
@@ -4348,7 +4348,7 @@ void Class_802A1D20::OnEnter(float dt)
     fn_80151010(this);
 }
 
-void Class_802A1D20::OnUpdate(float dt)
+void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
 {
     unsigned char i;
     for (i = 0; i < BallsGetCount(); i++) {
@@ -4420,7 +4420,7 @@ void Class_802A1D20::OnUpdate(float dt)
         pTarget->mZ = 2.0f;
     }
     RefreshFourPlayerScoreRows(this);
-    Class_802A2918 *pRules = &lbl_8031BDD4;
+    MiniGameJumpBallC *pRules = &lbl_8031BDD4;
     fn_80151BCC(pRules);
     if (noneFree) {
         fn_80151D9C(pRules);
@@ -4433,7 +4433,7 @@ void Class_802A1D20::OnUpdate(float dt)
     }
 }
 
-void Class_802A1D20::OnExit()
+void MiniGameJumpBallDuringPlayC::OnExit()
 {
     LivePlayPhase::OnExit();
 }
@@ -4441,7 +4441,7 @@ void Class_802A1D20::OnExit()
 extern "C" {
 
 // Reset the balls and keep the three random field positions at least four units apart.
-void ResetBallsAndFieldPositions(Class_802A1D20 *p)
+void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p)
 {
     unsigned int count = BallsGetCount();
     Table_8015005C *pTable = fn_801530FC();
@@ -4486,7 +4486,7 @@ void ResetBallsAndFieldPositions(Class_802A1D20 *p)
     }
 }
 
-void fn_80151010(Class_802A1D20 *p)
+void fn_80151010(MiniGameJumpBallDuringPlayC *p)
 {
     fn_801527E0(&lbl_8031BDD4, 1);
     ResetBallsAndFieldPositions(p);
@@ -4585,7 +4585,7 @@ void fn_80151010(Class_802A1D20 *p)
 }
 
 // Clear eliminated players' rows; show each remaining player's current round total.
-void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
+void RefreshFourPlayerScoreRows(MiniGameJumpBallDuringPlayC *p)
 {
     for (unsigned char i = 0; i <= 3; i++) {
         if (fn_801530FC()->mEntries[i].mUnknown13 == 0) {
@@ -4604,13 +4604,13 @@ void RefreshFourPlayerScoreRows(Class_802A1D20 *p)
 
 } /* extern "C" */
 
-int Class_802A1C98::IsFinished(int busy)
+int MiniGameJumpBallPostPlayC::IsFinished(int busy)
 {
     ForceFinish();
     return 1;
 }
 
-void Class_802A1C98::OnExit()
+void MiniGameJumpBallPostPlayC::OnExit()
 {
     unsigned char team;
 
@@ -4624,7 +4624,7 @@ void Class_802A1C98::OnExit()
     PlayBookRestoreSelection(team);
 }
 
-void Class_802A1C98::Finish(float dt)
+void MiniGameJumpBallPostPlayC::Finish(float dt)
 {
     if (InGameOverlayGetState() != 4) {
         InGameOverlayReset();
@@ -4636,11 +4636,11 @@ void Class_802A1C98::Finish(float dt)
     }
 }
 
-void Class_802A1C98::SetupCamera()
+void MiniGameJumpBallPostPlayC::SetupCamera()
 {
 }
 
-int Class_802A1C98::GetBusy(float dt)
+int MiniGameJumpBallPostPlayC::GetBusy(float dt)
 {
     fn_8009B924();
     return 0;
@@ -4653,7 +4653,7 @@ Record_80148C4C lbl_802DEA18[2] = {
 
 int lbl_802DEA78[12] = {17, 33, 19, 18, 30, 27, 28, 29, 31, 32, 10, 0};
 
-void Class_802A1C30::vfn_03(float dt)
+void MiniGameJumpBallGameEndC::vfn_03(float dt)
 {
     unsigned int i;
 
@@ -4671,19 +4671,19 @@ void Class_802A1C30::vfn_03(float dt)
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A1C30::vfn_08()
+void MiniGameJumpBallGameEndC::vfn_08()
 {
     PauseOpenScreen(3, 19, -1);
 }
 
-void Class_802A1C30::vfn_09()
+void MiniGameJumpBallGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 19, 1);
 }
 
  /* extern "C" */
 
-Class_802A2918::Class_802A2918()
+MiniGameJumpBallC::MiniGameJumpBallC()
 {
     mpUnknown1C = 0;
     mUnknown32 = 0;
@@ -4693,7 +4693,7 @@ Class_802A2918::Class_802A2918()
     mState.mpRecords = lbl_802DEA18;
 }
 
-void Class_802A2918::vfn_01()
+void MiniGameJumpBallC::vfn_01()
 {
     void *pHandle = 0;
     int allocate = fn_80149014() == 0;
@@ -4733,7 +4733,7 @@ void Class_802A2918::vfn_01()
     PlyrStarSetBallRingEnabled(0);
 }
 
-void Class_802A2918::vfn_02()
+void MiniGameJumpBallC::vfn_02()
 {
     PlyrStarSetBallRingEnabled(1);
     if (mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
@@ -4757,7 +4757,7 @@ void Class_802A2918::vfn_02()
 
 extern "C" {
 
-int fn_80151B20(Class_802A2918 *p)
+int fn_80151B20(MiniGameJumpBallC *p)
 {
     if (p->mUnknown40 == 0) {
         Entry_8015005C *pFirst = &p->mpUnknown1C->mpUnknown36->mEntries[0];
@@ -4780,7 +4780,7 @@ int fn_80151B20(Class_802A2918 *p)
     }
 }
 
-void fn_80151BCC(Class_802A2918 *p)
+void fn_80151BCC(MiniGameJumpBallC *p)
 {
     unsigned int i;
     unsigned int count;
@@ -4804,7 +4804,7 @@ void fn_80151BCC(Class_802A2918 *p)
     }
 }
 
-void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
+void fn_80151CCC(MiniGameJumpBallC *p, unsigned int index, unsigned char value)
 {
     Object_80039F5C *pPlayer;
     Object_80039F5C *pOther;
@@ -4824,7 +4824,7 @@ void fn_80151CCC(Class_802A2918 *p, unsigned int index, unsigned char value)
     }
 }
 
-void fn_80151D9C(Class_802A2918 *p)
+void fn_80151D9C(MiniGameJumpBallC *p)
 {
     char text[83];
     char line[83];
@@ -4834,7 +4834,7 @@ void fn_80151D9C(Class_802A2918 *p)
     Object_80039F5C *pPlayer;
     unsigned int i;
     bool last;
-    Class_802A1D20 *pState;
+    MiniGameJumpBallDuringPlayC *pState;
     Entry_8015005C *pEntries;
     Entry_8015005C *pRows;
 
@@ -4995,7 +4995,7 @@ int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
 
 } /* extern "C" */
 
-void Class_802A2918::vfn_10(int value, int *list, int *ids)
+void MiniGameJumpBallC::vfn_10(int value, int *list, int *ids)
 {
     unsigned char i;
 
@@ -5004,12 +5004,12 @@ void Class_802A2918::vfn_10(int value, int *list, int *ids)
     }
 }
 
-void Class_802A2918::vfn_11(int value, int *list, int *ids, unsigned int a, int b)
+void MiniGameJumpBallC::vfn_11(int value, int *list, int *ids, unsigned int a, int b)
 {
     vfn_10(value, list, ids);
 }
 
-void Class_802A2918::vfn_12()
+void MiniGameJumpBallC::vfn_12()
 {
     for (unsigned short i = 0; i <= 3; i++) {
         if (mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12 == 255) {
@@ -5056,14 +5056,14 @@ void Class_802A2918::vfn_12()
 
 extern "C" {
 
-Object_80039F5C *fn_8015264C(Class_802A2918 *p)
+Object_80039F5C *fn_8015264C(MiniGameJumpBallC *p)
 {
     return PlyrFindById(lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
 }
 
 } /* extern "C" */
 
-int Class_802A2918::vfn_13()
+int MiniGameJumpBallC::vfn_13()
 {
     if (GameModeTypeGet() == 7) {
         return fn_801529C0(this) <= 2;
@@ -5073,7 +5073,7 @@ int Class_802A2918::vfn_13()
 
 extern "C" {
 
-void fn_801526EC(Class_802A2918 *p)
+void fn_801526EC(MiniGameJumpBallC *p)
 {
     unsigned char i;
 
@@ -5091,12 +5091,12 @@ void fn_801526EC(Class_802A2918 *p)
     }
 }
 
-void fn_801527B8(Class_802A2918 *p, Vector_80039F5C *pOut)
+void fn_801527B8(MiniGameJumpBallC *p, Vector_80039F5C *pOut)
 {
     *pOut = p->mpUnknown1C->mpUnknown36->mUnknown80;
 }
 
-void fn_801527E0(Class_802A2918 *p, int value)
+void fn_801527E0(MiniGameJumpBallC *p, int value)
 {
     unsigned char begin = fn_801530FC()->mUnknown119;
 
@@ -5113,14 +5113,14 @@ void fn_801527E0(Class_802A2918 *p, int value)
     fn_801487C0(0, begin);
 }
 
-Object_80039F5C *fn_8015286C(Class_802A2918 *p, int index)
+Object_80039F5C *fn_8015286C(MiniGameJumpBallC *p, int index)
 {
     return PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[index].mUnknown0);
 }
 
 } /* extern "C" */
 
-int Class_802A2918::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
+int MiniGameJumpBallC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
 {
     unsigned int n = 0;
     unsigned int i;
@@ -5135,7 +5135,7 @@ int Class_802A2918::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
 
 extern "C" {
 
-void fn_801528E0(Class_802A2918 *p, Point_8017886C *pOut)
+void fn_801528E0(MiniGameJumpBallC *p, Point_8017886C *pOut)
 {
     pOut->mX = 0.0f;
     pOut->mY = fn_80177FE0().mY + 20.0f + 10.0f;
@@ -5144,7 +5144,7 @@ void fn_801528E0(Class_802A2918 *p, Point_8017886C *pOut)
 char *lbl_803EB2F0 = "Open Field Showdown\n\nScore against your opponent in an open field situation, then stop your opponent from scoring in the very same situation.";
 int lbl_803EB2F4 = 0;
 
-void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo)
+void fn_80152940(MiniGameJumpBallC *p, int index, MiniGameSlotInfo_t *pInfo)
 {
     Entry_8015005C *pEntry = &p->mpUnknown1C->mpUnknown36->mEntries[index];
 
@@ -5157,7 +5157,7 @@ void fn_80152940(Class_802A2918 *p, int index, MiniGameSlotInfo_t *pInfo)
     pInfo->mUnknown21 = index;
 }
 
-int fn_801529C0(Class_802A2918 *p)
+int fn_801529C0(MiniGameJumpBallC *p)
 {
     MiniGameSlotInfo_t info;
     unsigned char result = 0;
@@ -5175,7 +5175,7 @@ int fn_801529C0(Class_802A2918 *p)
 
 } /* extern "C" */
 
-int Class_802A2918::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameJumpBallC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     MiniGameSlotInfo_t info;
     int result = 0;
@@ -5204,14 +5204,14 @@ int Class_802A2918::vfn_30(int kind, int team, int index, Object_80039F5C *pPlay
             result = info.mUnknown4;
             break;
         default:
-            result = Class_80148A58::vfn_30(kind, team, index, pPlayer);
+            result = MiniGameC::vfn_30(kind, team, index, pPlayer);
             break;
         }
     }
     return result;
 }
 
-int Class_802A2918::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
+int MiniGameJumpBallC::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
 {
     int result = 0;
     MiniGameSlotInfo_t info;
@@ -5286,7 +5286,7 @@ int Class_802A2918::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
                 }
                 break;
             default:
-                result = Class_80148A58::vfn_26(team, index, pSlotPlayer, kind);
+                result = MiniGameC::vfn_26(team, index, pSlotPlayer, kind);
                 break;
             }
         }
@@ -5294,7 +5294,7 @@ int Class_802A2918::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
     return result;
 }
 
-int Class_802A2918::vfn_05(int team)
+int MiniGameJumpBallC::vfn_05(int team)
 {
     if (team == 0) {
         return mpUnknown1C ? mpUnknown1C->mpUnknown36->mUnknown119 : 3;
@@ -5302,12 +5302,12 @@ int Class_802A2918::vfn_05(int team)
     return mpUnknown1C ? mpUnknown1C->mpUnknown36->mCount : 4;
 }
 
-int Class_802A2918::vfn_21()
+int MiniGameJumpBallC::vfn_21()
 {
     return 0;
 }
 
-int Class_802A2918::vfn_22(int value)
+int MiniGameJumpBallC::vfn_22(int value)
 {
     int result = 0;
 
@@ -5341,7 +5341,7 @@ Table_8015005C *fn_801530FC(void)
     return lbl_8031BDD4.mpUnknown1C->mpUnknown36;
 }
 
-int fn_8015310C(Class_802A2918 *p)
+int fn_8015310C(MiniGameJumpBallC *p)
 {
     int result = 1;
     unsigned char i;
@@ -5355,14 +5355,14 @@ int fn_8015310C(Class_802A2918 *p)
     return result;
 }
 
-void fn_80153168(Class_802A2918 *p, int index, unsigned char value)
+void fn_80153168(MiniGameJumpBallC *p, int index, unsigned char value)
 {
     p->mUnknown44[index] = value;
 }
 
 } /* extern "C" */
 
-int Class_802A1930::GetScoreLimit()
+int MiniGameOpenFieldRulesC::GetScoreLimit()
 {
     unsigned short score0 = fn_801787DC(0);
     unsigned short score1 = fn_801787DC(1);
@@ -5377,12 +5377,12 @@ int Class_802A1930::GetScoreLimit()
     return high + 8;
 }
 
-int Class_802A1930::GetWinner()
+int MiniGameOpenFieldRulesC::GetWinner()
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown32;
 }
 
-int Class_802A1930::IsNearWin(int team)
+int MiniGameOpenFieldRulesC::IsNearWin(int team)
 {
     Score_801531C4 *pScore = fn_80155128(fn_80148A58())->mpUnknown52;
     int other = !team;
@@ -5396,7 +5396,7 @@ int Class_802A1930::IsNearWin(int team)
     return score > otherScore;
 }
 
-int Class_802A1930::IsOpponentNearWin(int team)
+int MiniGameOpenFieldRulesC::IsOpponentNearWin(int team)
 {
     Score_801531C4 *pScore = fn_80155128(fn_80148A58())->mpUnknown52;
     int other = !team;
@@ -5407,37 +5407,37 @@ int Class_802A1930::IsOpponentNearWin(int team)
     return score <= otherScore;
 }
 
-int Class_802A1930::GetScoreType()
+int MiniGameOpenFieldRulesC::GetScoreType()
 {
     return 2;
 }
 
-int Class_802A1930::GetScore(int team)
+int MiniGameOpenFieldRulesC::GetScore(int team)
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown24[team];
 }
 
-unsigned int Class_802A1930::GetGoalLimit()
+unsigned int MiniGameOpenFieldRulesC::GetGoalLimit()
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown16;
 }
 
-int Class_802A1930::GetGoalTotal(int team)
+int MiniGameOpenFieldRulesC::GetGoalTotal(int team)
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown20[team];
 }
 
-int Class_802A1930::GetGoalCount(int team)
+int MiniGameOpenFieldRulesC::GetGoalCount(int team)
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown24[team];
 }
 
-unsigned short Class_802A1930::vfn_22(int team)
+unsigned short MiniGameOpenFieldRulesC::vfn_22(int team)
 {
     return fn_80155128(fn_80148A58())->mpUnknown52->mUnknown28[team];
 }
 
-int Class_802A1930::AllowsAudibles()
+int MiniGameOpenFieldRulesC::AllowsAudibles()
 {
     unsigned int count0 = 0;
     unsigned int count1 = 0;
@@ -5457,7 +5457,7 @@ int Class_802A1930::AllowsAudibles()
     return 0;
 }
 
-void Class_802A1930::ResetPlaySpot()
+void MiniGameOpenFieldRulesC::ResetPlaySpot()
 {
     int a = 1;
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
@@ -5503,10 +5503,10 @@ void Class_802A1930::ResetPlaySpot()
         }
         fn_80178CD8(1);
     }
-    ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178348(), 0);
+    ((MiniGameOpenFieldC *)fn_80148A58())->vfn_35(fn_80178348(), 0);
 }
 
-void Class_802A1930::ResetGame(int team)
+void MiniGameOpenFieldRulesC::ResetGame(int team)
 {
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
 
@@ -5519,19 +5519,19 @@ void Class_802A1930::ResetGame(int team)
     StyleTrackerSetEnabled(0);
 }
 
-void Class_802A1BC8::OnEnter(float dt)
+void MiniGameOpenFieldPreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
     fn_80148A58()->vfn_14();
     HudSetScoreTableRows(fn_80178D70(0) * 2);
-    ((Class_802A27F0 *)fn_80148A58())->vfn_35(0, 0);
-    ((Class_802A27F0 *)fn_80148A58())->vfn_35(1, 0);
+    ((MiniGameOpenFieldC *)fn_80148A58())->vfn_35(0, 0);
+    ((MiniGameOpenFieldC *)fn_80148A58())->vfn_35(1, 0);
     HudPost3AOff();
     fn_800A8738(1);
     TutorialReleasePause();
 }
 
-void Class_802A1930::AwardWin(int team)
+void MiniGameOpenFieldRulesC::AwardWin(int team)
 {
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
     int other = !team;
@@ -5543,7 +5543,7 @@ void Class_802A1930::AwardWin(int team)
     pRules->mpUnknown52->mUnknown32 = team;
 }
 
-void Class_802A1BC8::OnExit()
+void MiniGameOpenFieldPreGameC::OnExit()
 {
     PreGamePhase::OnExit();
     CamGameSetModeAll(1);
@@ -5552,25 +5552,25 @@ void Class_802A1BC8::OnExit()
     CamPlaySetYOffset(2.5f);
 }
 
-void Class_802A1BC8::OnUpdate(float dt)
+void MiniGameOpenFieldPreGameC::OnUpdate(float dt)
 {
     if (MsgBoxIsClosed()) {
         PreGamePhase::OnUpdate(dt);
     }
 }
 
-void Class_802A1BC8::ShowIntroScreen()
+void MiniGameOpenFieldPreGameC::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         MsgBoxShow("Open Field Showdown", lbl_803EB2F0, "|^Done");
     }
 }
 
-void Class_802A1BC8::HideIntroScreen()
+void MiniGameOpenFieldPreGameC::HideIntroScreen()
 {
 }
 
-void Class_802A1B58::OnEnter(float dt)
+void MiniGameOpenFieldPrePlayC::OnEnter(float dt)
 {
     Rules_801531C4 *pRules = fn_80155128(fn_80148A58());
     int team = fn_80178308();
@@ -5583,8 +5583,8 @@ void Class_802A1B58::OnEnter(float dt)
         pRules->mpUnknown52->mUnknown8 = SyncRandGetRange(0, 3);
     } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && SyncRandGetRange(0, 100) > 20);
     pRules->mpUnknown52->mUnknown0[team] = pRules->mpUnknown52->mUnknown8;
-    ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178308(), 1);
-    ((Class_802A27F0 *)fn_80148A58())->vfn_35(fn_80178320(), 0);
+    ((MiniGameOpenFieldC *)fn_80148A58())->vfn_35(fn_80178308(), 1);
+    ((MiniGameOpenFieldC *)fn_80148A58())->vfn_35(fn_80178320(), 0);
 
     unsigned int limit = pRules->mpUnknown52->mUnknown12;
     if (pRules->mUnknown44.GetGoalLimit() > limit && pRules->mpUnknown52->mUnknown20[0] == pRules->mpUnknown52->mUnknown20[1]) {
@@ -5605,7 +5605,7 @@ void Class_802A1B58::OnEnter(float dt)
     BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
 }
 
-void Class_802A1B58::AssignControlledPlayers()
+void MiniGameOpenFieldPrePlayC::AssignControlledPlayers()
 {
     PreSnapPhase::AssignControlledPlayers();
     int team = fn_80178308();
@@ -5659,11 +5659,11 @@ void Class_802A1B58::AssignControlledPlayers()
     }
 }
 
-void Class_802A1B18::vfn_03(float dt)
+void MiniGameOpenFieldPlayCallC::vfn_03(float dt)
 {
 }
 
-void Class_802A1B18::vfn_04(float dt)
+void MiniGameOpenFieldPlayCallC::vfn_04(float dt)
 {
     int team = fn_80178308();
     int other = !team;
@@ -5682,7 +5682,7 @@ void Class_802A1B18::vfn_04(float dt)
     fn_800AD910(2, dt);
 }
 
-void Class_802A1B18::vfn_05(float dt)
+void MiniGameOpenFieldPlayCallC::vfn_05(float dt)
 {
     fn_8009D888(0, 10);
     CamGameResumeAll();
@@ -5692,14 +5692,14 @@ void Class_802A1B18::vfn_05(float dt)
     fn_801790D0(fn_80178320(), 18.0f, 0.0f);
 }
 
-void Class_802A1AE0::OnEnter(float dt)
+void MiniGameOpenFieldDuringPlayC::OnEnter(float dt)
 {
     LivePlayPhase::OnEnter(dt);
     mUnknown4 = 0;
     fn_8009D888(5, 0);
 }
 
-void Class_802A1AE0::OnUpdate(float dt)
+void MiniGameOpenFieldDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
     if (fn_801787A0() == 0) {
@@ -5726,13 +5726,13 @@ void Class_802A1AE0::OnUpdate(float dt)
     }
 }
 
-void Class_802A1AE0::OnExit()
+void MiniGameOpenFieldDuringPlayC::OnExit()
 {
     LivePlayPhase::OnExit();
     fn_8009D8CC(5);
 }
 
-int Class_802A1A58::GetResultText(char *pText)
+int MiniGameOpenFieldPostPlayC::GetResultText(char *pText)
 {
     char touchdown[10] = "Touchdown";
     char defensive[13] = "Defensive TD";
@@ -5762,7 +5762,7 @@ int lbl_802DEB40[14] = {1, 11, 12, 13, 9, 10, 2, 3, 0, 7, 8, 4, 5, 6};
 
 int lbl_802DEB78[22] = {37, 39, 35, 16, 34, 36, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 0, 0};
 
-void Class_802A19F0::vfn_03(float dt)
+void MiniGameOpenFieldGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
@@ -5772,26 +5772,26 @@ void Class_802A19F0::vfn_03(float dt)
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A19F0::vfn_08()
+void MiniGameOpenFieldGameEndC::vfn_08()
 {
     PauseOpenScreen(3, 20, -1);
 }
 
-void Class_802A19F0::vfn_09()
+void MiniGameOpenFieldGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 20, 1);
 }
 
  /* extern "C" */
 
-Class_802A27F0::Class_802A27F0()
+MiniGameOpenFieldC::MiniGameOpenFieldC()
 {
     mState.mUnknownC = 0;
     mState.mCount = 2;
     mState.mpRecords = lbl_802DEAA8;
 }
 
-void Class_802A27F0::vfn_01()
+void MiniGameOpenFieldC::vfn_01()
 {
     void *pHandle = 0;
     int allocate = fn_80149014() == 0;
@@ -5834,7 +5834,7 @@ void Class_802A27F0::vfn_01()
     GameOptionsSet(14, 2);
 }
 
-void Class_802A27F0::vfn_02()
+void MiniGameOpenFieldC::vfn_02()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -5852,12 +5852,12 @@ void Class_802A27F0::vfn_02()
     fn_800A8738(0);
 }
 
-int Class_802A27F0::vfn_05(int team)
+int MiniGameOpenFieldC::vfn_05(int team)
 {
     return mUnknown24;
 }
 
-void Class_802A27F0::vfn_07(int kind, int value)
+void MiniGameOpenFieldC::vfn_07(int kind, int value)
 {
     switch (kind) {
     case 0:
@@ -5886,7 +5886,7 @@ static const float lbl_802A3000[3][8] = {
     {-5.0f, -6.0f, -8.0f, -6.0f, -5.0f, 85.0f, 200.0f, 85.0f},
 };
 
-const float * Class_802A27F0::vfn_09(int index)
+const float * MiniGameOpenFieldC::vfn_09(int index)
 {
     if (index == 1) {
         return lbl_802A3000[fn_80155128(fn_80148A58())->mpUnknown52->mUnknown8];
@@ -5894,7 +5894,7 @@ const float * Class_802A27F0::vfn_09(int index)
     return 0;
 }
 
-void Class_802A27F0::vfn_10(int value, int *pList, int *pIds)
+void MiniGameOpenFieldC::vfn_10(int value, int *pList, int *pIds)
 {
     unsigned char i;
 
@@ -5903,7 +5903,7 @@ void Class_802A27F0::vfn_10(int value, int *pList, int *pIds)
     }
 }
 
-void Class_802A27F0::vfn_11(int value, int *pList, int *pIds, unsigned int count, int b)
+void MiniGameOpenFieldC::vfn_11(int value, int *pList, int *pIds, unsigned int count, int b)
 {
     int second = pList[1];
     int found = 0;
@@ -5971,7 +5971,7 @@ void Class_802A27F0::vfn_11(int value, int *pList, int *pIds, unsigned int count
     }
 }
 
-void Class_802A27F0::vfn_35(int team, int showColors)
+void MiniGameOpenFieldC::vfn_35(int team, int showColors)
 {
     char text[16];
     int first = fn_80178EE0(team);
@@ -6013,13 +6013,13 @@ void Class_802A27F0::vfn_35(int team, int showColors)
     }
 }
 
-void Class_802A27F0::vfn_14()
+void MiniGameOpenFieldC::vfn_14()
 {
     fn_8009D8CC(5);
     fn_8009D964(5, 20);
 }
 
-int Class_802A27F0::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
+int MiniGameOpenFieldC::vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind)
 {
     int other = !team;
     int result = 0;
@@ -6027,15 +6027,15 @@ int Class_802A27F0::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
     switch (kind) {
     case 1:
         if (vfn_27(team, index, 36) == 0 && vfn_27(team, index, 39) == 0) {
-            result = Class_80148A58::vfn_26(team, index, pPlayer, kind);
+            result = MiniGameC::vfn_26(team, index, pPlayer, kind);
         }
         break;
     case 9:
-        result = Class_80148A58::vfn_26(team, index, pPlayer, kind);
+        result = MiniGameC::vfn_26(team, index, pPlayer, kind);
         break;
     case 2:
         if (mUnknown24 > 1 && vfn_27(team, index, 35) == 0) {
-            result = Class_80148A58::vfn_26(team, index, pPlayer, kind);
+            result = MiniGameC::vfn_26(team, index, pPlayer, kind);
         }
         break;
     case 3:
@@ -6049,15 +6049,15 @@ int Class_802A27F0::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
     case 13:
     case 14:
     case 15:
-        result = Class_80148A58::vfn_26(team, index, pPlayer, kind);
+        result = MiniGameC::vfn_26(team, index, pPlayer, kind);
         break;
     case 16: {
         int value = 0;
         if (mpUnknown1C->mUnknown44.GetWinner() != team &&
             mpUnknown1C->mUnknown44.GetGoalLimit() > 10) {
-            Class_802A1930 *pRules = &mpUnknown1C->mUnknown44;
-            unsigned char selected = pRules->Class_802A1930::GetWinner();
-            value = pRules->Class_802A1930::GetGoalCount(selected);
+            MiniGameOpenFieldRulesC *pRules = &mpUnknown1C->mUnknown44;
+            unsigned char selected = pRules->MiniGameOpenFieldRulesC::GetWinner();
+            value = pRules->MiniGameOpenFieldRulesC::GetGoalCount(selected);
             value = value - mpUnknown1C->mUnknown44.GetGoalCount(team) == 1;
         }
         result = value;
@@ -6067,9 +6067,9 @@ int Class_802A27F0::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
         int value = 0;
         if (mpUnknown1C->mUnknown44.GetWinner() == team &&
             mpUnknown1C->mUnknown44.GetGoalLimit() > 10) {
-            Class_802A1930 *pRules = &mpUnknown1C->mUnknown44;
-            unsigned char selected = pRules->Class_802A1930::GetWinner();
-            value = pRules->Class_802A1930::GetGoalCount(selected);
+            MiniGameOpenFieldRulesC *pRules = &mpUnknown1C->mUnknown44;
+            unsigned char selected = pRules->MiniGameOpenFieldRulesC::GetWinner();
+            value = pRules->MiniGameOpenFieldRulesC::GetGoalCount(selected);
             value = value - mpUnknown1C->mUnknown44.GetGoalCount(other) == 1;
         }
         result = value;
@@ -6117,21 +6117,21 @@ int Class_802A27F0::vfn_26(int team, int index, Object_80039F5C *pPlayer, int ki
     return result;
 }
 
-int Class_802A27F0::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameOpenFieldC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int value;
 
     if (kind == 37) {
         fn_8022B7A4(lbl_803ECA24[team], 0x7A707374, &value);
     } else {
-        value = Class_80148A58::vfn_30(kind, team, index, pPlayer);
+        value = MiniGameC::vfn_30(kind, team, index, pPlayer);
     }
     return value;
 }
 
 extern "C" {
 
-Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index)
+Object_80039F5C *fn_80154FC0(MiniGameOpenFieldC *p, int team, int index)
 {
     Object_80039F5C *result = 0;
 
@@ -6143,7 +6143,7 @@ Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index)
 
 } /* extern "C" */
 
-void Class_802A27F0::vfn_20(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength, char *pSecond, unsigned char secondLength)
+void MiniGameOpenFieldC::vfn_20(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength, char *pSecond, unsigned char secondLength)
 {
     Object_80039F5C *pPlayer = PlyrGet(team, index);
     switch (kind) {
@@ -6166,19 +6166,19 @@ unsigned char lbl_803EB2FD = 0;
 
 extern "C" {
 
-Rules_801531C4 *fn_80155128(Class_80148A58 *p)
+Rules_801531C4 *fn_80155128(MiniGameC *p)
 {
-    return static_cast<Class_802A27F0 *>(p)->mpUnknown1C;
+    return static_cast<MiniGameOpenFieldC *>(p)->mpUnknown1C;
 }
 
-int fn_80155130(Class_80148A58 *p, int team, unsigned char index)
+int fn_80155130(MiniGameC *p, int team, unsigned char index)
 {
     int color = 255;
 
     if (fn_800B65A0(team) != 255) {
         if (PortDbCountSidePlayers(team) == 2) {
             Object_80039F5C *pPlayer = PlyrGet(team, index);
-            Rules_801531C4 *pRules = static_cast<Class_802A27F0 *>(p)->mpUnknown1C;
+            Rules_801531C4 *pRules = static_cast<MiniGameOpenFieldC *>(p)->mpUnknown1C;
 
             if (pRules->mUnknown4.mpUnknown4[team][index] != pPlayer->mpUnknown4) {
                 color = (unsigned char)pRules->mUnknown4.mUnknown20[team][index ^ 1];
@@ -6194,12 +6194,12 @@ int fn_80155130(Class_80148A58 *p, int team, unsigned char index)
 
 } /* extern "C" */
 
-int Class_802A27F0::vfn_21()
+int MiniGameOpenFieldC::vfn_21()
 {
     return 0;
 }
 
-int Class_802A17A8::GetScoreLimit()
+int MiniGameQuickStrikeRulesC::GetScoreLimit()
 {
     int mode = fn_80177F70();
     int team = fn_80178308();
@@ -6223,7 +6223,7 @@ int Class_802A17A8::GetScoreLimit()
     return result;
 }
 
-void Class_802A17A8::PlaceBallForDrive(int flip)
+void MiniGameQuickStrikeRulesC::PlaceBallForDrive(int flip)
 {
     if (!lbl_803EB2FC) {
         float distance = fn_80178A2C() * 2.0f -
@@ -6238,22 +6238,22 @@ void Class_802A17A8::PlaceBallForDrive(int flip)
     ScrmRuleSet::PlaceBallForDrive(flip);
 }
 
-int Class_802A17A8::GetWinner()
+int MiniGameQuickStrikeRulesC::GetWinner()
 {
     return mUnknown4;
 }
 
-void Class_802A17A8::AwardWin(int team)
+void MiniGameQuickStrikeRulesC::AwardWin(int team)
 {
     mUnknown4 = team;
 }
 
-int Class_802A17A8::IsNearWin(int team)
+int MiniGameQuickStrikeRulesC::IsNearWin(int team)
 {
     return 1;
 }
 
-void Class_802A17A8::ResetPlaySpot()
+void MiniGameQuickStrikeRulesC::ResetPlaySpot()
 {
     int a = 1;
     Object_8017886C *o = fn_8017886C();
@@ -6310,14 +6310,14 @@ void Class_802A17A8::ResetPlaySpot()
     }
 }
 
-void Class_802A17A8::ResetGame(int team)
+void MiniGameQuickStrikeRulesC::ResetGame(int team)
 {
     ScrmRuleSet::ResetGame(team);
     mUnknown4 = 2;
     fn_80155D7C(fn_80148A58());
 }
 
-void Class_802A18C8::OnEnter(float dt)
+void MiniGameQuickStrikePreGameC::OnEnter(float dt)
 {
     fn_80178E88(fn_80178A2C() * 2.0f - 18.0f);
     PreGamePhase::OnEnter(dt);
@@ -6327,21 +6327,21 @@ void Class_802A18C8::OnEnter(float dt)
     TutorialReleasePause();
 }
 
-void Class_802A18C8::OnUpdate(float dt)
+void MiniGameQuickStrikePreGameC::OnUpdate(float dt)
 {
     if (MsgBoxIsClosed()) {
         PreGamePhase::OnUpdate(dt);
     }
 }
 
-void Class_802A18C8::ShowIntroScreen()
+void MiniGameQuickStrikePreGameC::ShowIntroScreen()
 {
     if (fn_800C1E40() == 0) {
         MsgBoxShow("Quick Strike", lbl_803EB2F8, "|^Done");
     }
 }
 
-void Class_802A18C8::HideIntroScreen()
+void MiniGameQuickStrikePreGameC::HideIntroScreen()
 {
 }
 
@@ -6360,24 +6360,24 @@ void fn_801556D0(unsigned int kind, int value, int flag)
 
 } /* extern "C" */
 
-void Class_802A1860::vfn_03(float dt)
+void MiniGameQuickStrikeGameEndC::vfn_03(float dt)
 {
     fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
     fn_80148A58()->vfn_12();
     Class_80297B90::vfn_03(dt);
 }
 
-void Class_802A1860::vfn_08()
+void MiniGameQuickStrikeGameEndC::vfn_08()
 {
     PauseOpenScreen(3, 25, -1);
 }
 
-void Class_802A1860::vfn_09()
+void MiniGameQuickStrikeGameEndC::vfn_09()
 {
     fn_8021956C(gUISMainInfo, 3, 25, 1);
 }
 
-void Class_802A2A40::vfn_01()
+void MiniGameQuickStrikeC::vfn_01()
 {
     mpUnknown1C = new (0) Block_80156400;
     mpUnknown1C->mUnknown188 = 2;
@@ -6394,7 +6394,7 @@ void Class_802A2A40::vfn_01()
     fn_80178F20(&mpUnknown1C->mObject4);
 }
 
-void Class_802A2A40::vfn_02()
+void MiniGameQuickStrikeC::vfn_02()
 {
     fn_800BC51C(0);
     fn_800AACB8(0);
@@ -6407,7 +6407,7 @@ void Class_802A2A40::vfn_02()
     mpUnknown1C = 0;
 }
 
-int Class_802A2A40::vfn_08(int a)
+int MiniGameQuickStrikeC::vfn_08(int a)
 {
     int result = 0;
 
@@ -6432,70 +6432,70 @@ int Class_802A2A40::vfn_08(int a)
 
 extern "C" {
 
-void fn_80155A7C(Class_80148A58 *p, unsigned char team, int kind, int value)
+void fn_80155A7C(MiniGameC *p, unsigned char team, int kind, int value)
 {
     unsigned char i;
 
-    if (static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mEvent <= 1
-        && static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mConversion == 9
+    if (static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mEvent <= 1
+        && static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mConversion == 9
         && (kind == 6 || kind == 7)) {
         return;
     }
-    if (static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown188 != team) {
+    if (static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown188 != team) {
         for (i = 2; i != 0; i--) {
-            if (static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mEvent != 11) {
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mOrdinal = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mOrdinal;
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mEvent = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mEvent;
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mPlayer = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mPlayer;
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mConversion = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mConversion;
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mOther = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mOther;
-                static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mFlag = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i - 1].mFlag;
+            if (static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mEvent != 11) {
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mOrdinal = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mOrdinal;
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mEvent = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mEvent;
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mPlayer = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mPlayer;
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mConversion = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mConversion;
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mOther = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mOther;
+                static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mFlag = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i - 1].mFlag;
             }
         }
-        static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown188 = team;
-        static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown189[team]++;
+        static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown188 = team;
+        static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown189[team]++;
     }
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mOrdinal = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown189[team];
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mEvent = kind;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mPlayer = value;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mConversion = 9;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mOther = 32767;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mFlag = 0;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mOrdinal = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown189[team];
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mEvent = kind;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mPlayer = value;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mConversion = 9;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mOther = 32767;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mFlag = 0;
 }
 
-void fn_80155BF4(Class_80148A58 *p, unsigned char team, int kind, int value, int flag)
+void fn_80155BF4(MiniGameC *p, unsigned char team, int kind, int value, int flag)
 {
-    if (static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mConversion != 9 && kind == 2) {
+    if (static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mConversion != 9 && kind == 2) {
         flag = 1;
     }
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mConversion = kind;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mOther = value;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][0].mFlag = flag;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mConversion = kind;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mOther = value;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mFlag = flag;
 }
 
-void fn_80155C44(Class_80148A58 *p, int team, int index, Record_8005CE10 *pOut)
+void fn_80155C44(MiniGameC *p, int team, int index, Record_8005CE10 *pOut)
 {
     unsigned char count = fn_80155D38(p, team);
     int depth = index + 1;
     int slot = count - depth;
 
-    pOut->mOrdinal = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mOrdinal;
-    pOut->mEvent = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mEvent;
-    pOut->mPlayer = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mPlayer;
-    pOut->mConversion = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mConversion;
-    pOut->mOther = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mOther;
-    pOut->mFlag = static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][slot].mFlag;
+    pOut->mOrdinal = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mOrdinal;
+    pOut->mEvent = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mEvent;
+    pOut->mPlayer = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mPlayer;
+    pOut->mConversion = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mConversion;
+    pOut->mOther = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mOther;
+    pOut->mFlag = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][slot].mFlag;
 }
 
-void fn_80155CF0(Class_80148A58 *p, int team, int *pFirst, int *pSecond)
+void fn_80155CF0(MiniGameC *p, int team, int *pFirst, int *pSecond)
 {
     *pFirst = fn_800C8744(team);
     *pSecond = fn_801787DC(team);
 }
 
-unsigned char fn_80155D38(Class_80148A58 *p, int team)
+unsigned char fn_80155D38(MiniGameC *p, int team)
 {
-    Block_80156400 *pBlock = static_cast<Class_802A2A40 *>(p)->mpUnknown1C;
+    Block_80156400 *pBlock = static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C;
     unsigned char count = 0;
     unsigned char i;
 
@@ -6507,35 +6507,35 @@ unsigned char fn_80155D38(Class_80148A58 *p, int team)
     return count;
 }
 
-void fn_80155D7C(Class_80148A58 *p)
+void fn_80155D7C(MiniGameC *p)
 {
     unsigned char team;
     unsigned char i;
 
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 2; i++) {
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mOrdinal = 0;
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mEvent = 11;
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mPlayer = 32767;
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mConversion = 11;
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mOther = 32767;
-            static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mRecords[team][i].mFlag = 0;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mOrdinal = 0;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mEvent = 11;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mPlayer = 32767;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mConversion = 11;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mOther = 32767;
+            static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][i].mFlag = 0;
         }
     }
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown188 = 2;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown189[0] = 0;
-    static_cast<Class_802A2A40 *>(p)->mpUnknown1C->mUnknown189[1] = 0;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown188 = 2;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown189[0] = 0;
+    static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mUnknown189[1] = 0;
 }
 
 } /* extern "C" */
 
-Class_802A2C90 lbl_8031BD10;
-Class_802A2DB8 lbl_8031BD34;
-Class_802A2B68 lbl_8031BD54;
-Class_802A2A40 lbl_8031BD74;
-Class_802A27F0 lbl_8031BD94;
-Class_80148A58 *lbl_8031BDBC[6] = {&(Class_80148A58 &)lbl_8031BD54, &(Class_80148A58 &)lbl_8031BDD4, &(Class_80148A58 &)lbl_8031BD94, &(Class_80148A58 &)lbl_8031BD34, &(Class_80148A58 &)lbl_8031BD10, &(Class_80148A58 &)lbl_8031BD74};
-Class_802A2918 lbl_8031BDD4;
+MiniGame4On4C lbl_8031BD10;
+MiniGame2MinuteC lbl_8031BD34;
+MiniGameCrushCarrierC lbl_8031BD54;
+MiniGameQuickStrikeC lbl_8031BD74;
+MiniGameOpenFieldC lbl_8031BD94;
+MiniGameC *lbl_8031BDBC[6] = {&(MiniGameC &)lbl_8031BD54, &(MiniGameC &)lbl_8031BDD4, &(MiniGameC &)lbl_8031BD94, &(MiniGameC &)lbl_8031BD34, &(MiniGameC &)lbl_8031BD10, &(MiniGameC &)lbl_8031BD74};
+MiniGameJumpBallC lbl_8031BDD4;
 int lbl_8031BE04[14][3];
 unsigned char lbl_8031BEAC[54];
 int lbl_803ECA24[2];

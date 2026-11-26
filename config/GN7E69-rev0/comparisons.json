@@ -20939,32 +20939,32 @@
           "end": "0x80148A98"
         },
         {
-          "symbol": "__14Class_80148A58",
+          "symbol": "__9MiniGameC",
           "start": "0x80148A98",
           "end": "0x80148AD0"
         },
         {
-          "symbol": "vfn_03__14Class_80148A58",
+          "symbol": "vfn_03__9MiniGameC",
           "start": "0x80148AD0",
           "end": "0x80148AD8"
         },
         {
-          "symbol": "vfn_04__14Class_80148A58i",
+          "symbol": "vfn_04__9MiniGameCi",
           "start": "0x80148AD8",
           "end": "0x80148AE0"
         },
         {
-          "symbol": "vfn_05__14Class_80148A58i",
+          "symbol": "vfn_05__9MiniGameCi",
           "start": "0x80148AE0",
           "end": "0x80148AE8"
         },
         {
-          "symbol": "vfn_06__14Class_80148A58",
+          "symbol": "vfn_06__9MiniGameC",
           "start": "0x80148AE8",
           "end": "0x80148AF0"
         },
         {
-          "symbol": "vfn_08__14Class_80148A58i",
+          "symbol": "vfn_08__9MiniGameCi",
           "start": "0x80148AF0",
           "end": "0x80148AF8"
         },
@@ -20974,32 +20974,32 @@
           "end": "0x80148B44"
         },
         {
-          "symbol": "vfn_10__14Class_80148A58iPiT2",
+          "symbol": "vfn_10__9MiniGameCiPiT2",
           "start": "0x80148B44",
           "end": "0x80148B70"
         },
         {
-          "symbol": "vfn_11__14Class_80148A58iPiT2Uii",
+          "symbol": "vfn_11__9MiniGameCiPiT2Uii",
           "start": "0x80148B70",
           "end": "0x80148B9C"
         },
         {
-          "symbol": "vfn_13__14Class_80148A58",
+          "symbol": "vfn_13__9MiniGameC",
           "start": "0x80148B9C",
           "end": "0x80148BF0"
         },
         {
-          "symbol": "vfn_15__14Class_80148A58",
+          "symbol": "vfn_15__9MiniGameC",
           "start": "0x80148BF0",
           "end": "0x80148C4C"
         },
         {
-          "symbol": "vfn_23__14Class_80148A58P17AutoDepthPlayer_tUi",
+          "symbol": "vfn_23__9MiniGameCP17AutoDepthPlayer_tUi",
           "start": "0x80148C4C",
           "end": "0x80148CA0"
         },
         {
-          "symbol": "vfn_24__14Class_80148A58iUi",
+          "symbol": "vfn_24__9MiniGameCiUi",
           "start": "0x80148CA0",
           "end": "0x80148D20"
         },
@@ -21014,7 +21014,7 @@
           "end": "0x80149014"
         },
         {
-          "symbol": "fn_80149014__14Class_80148A58",
+          "symbol": "fn_80149014__9MiniGameC",
           "start": "0x80149014",
           "end": "0x80149040"
         },
@@ -21024,72 +21024,72 @@
           "end": "0x80149154"
         },
         {
-          "symbol": "vfn_16__14Class_80148A58PCi",
+          "symbol": "vfn_16__9MiniGameCPCi",
           "start": "0x80149154",
           "end": "0x801492C4"
         },
         {
-          "symbol": "vfn_17__14Class_80148A58PCi",
+          "symbol": "vfn_17__9MiniGameCPCi",
           "start": "0x801492C4",
           "end": "0x801493E0"
         },
         {
-          "symbol": "vfn_18__14Class_80148A58iUcPcUc",
+          "symbol": "vfn_18__9MiniGameCiUcPcUc",
           "start": "0x801493E0",
           "end": "0x80149518"
         },
         {
-          "symbol": "vfn_19__14Class_80148A58iiPci",
+          "symbol": "vfn_19__9MiniGameCiiPci",
           "start": "0x80149518",
           "end": "0x80149588"
         },
         {
-          "symbol": "vfn_25__14Class_80148A58ii",
+          "symbol": "vfn_25__9MiniGameCii",
           "start": "0x80149588",
           "end": "0x801495E0"
         },
         {
-          "symbol": "vfn_26__14Class_80148A58iiP15Object_80039F5Ci",
+          "symbol": "vfn_26__9MiniGameCiiP15Object_80039F5Ci",
           "start": "0x801495E0",
           "end": "0x801498EC"
         },
         {
-          "symbol": "vfn_27__14Class_80148A58iii",
+          "symbol": "vfn_27__9MiniGameCiii",
           "start": "0x801498EC",
           "end": "0x8014993C"
         },
         {
-          "symbol": "vfn_29__14Class_80148A58i",
+          "symbol": "vfn_29__9MiniGameCi",
           "start": "0x8014993C",
           "end": "0x80149998"
         },
         {
-          "symbol": "vfn_28__14Class_80148A58i",
+          "symbol": "vfn_28__9MiniGameCi",
           "start": "0x80149998",
           "end": "0x801499A8"
         },
         {
-          "symbol": "vfn_30__14Class_80148A58iiiP15Object_80039F5C",
+          "symbol": "vfn_30__9MiniGameCiiiP15Object_80039F5C",
           "start": "0x801499A8",
           "end": "0x80149DA4"
         },
         {
-          "symbol": "vfn_31__14Class_80148A58iiiP15Object_80039F5Cii",
+          "symbol": "vfn_31__9MiniGameCiiiP15Object_80039F5Cii",
           "start": "0x80149DA4",
           "end": "0x80149F40"
         },
         {
-          "symbol": "vfn_32__14Class_80148A58ii",
+          "symbol": "vfn_32__9MiniGameCii",
           "start": "0x80149F40",
           "end": "0x8014A1B8"
         },
         {
-          "symbol": "vfn_33__14Class_80148A58ii",
+          "symbol": "vfn_33__9MiniGameCii",
           "start": "0x8014A1B8",
           "end": "0x8014A5B4"
         },
         {
-          "symbol": "vfn_34__14Class_80148A58iiii",
+          "symbol": "vfn_34__9MiniGameCiiii",
           "start": "0x8014A5B4",
           "end": "0x8014A6A0"
         },
@@ -21104,167 +21104,167 @@
           "end": "0x8014AACC"
         },
         {
-          "symbol": "IsTimed__14Class_802A2560",
+          "symbol": "IsTimed__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AACC",
           "end": "0x8014AAD4"
         },
         {
-          "symbol": "IsWinAwarded__14Class_802A2560",
+          "symbol": "IsWinAwarded__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AAD4",
           "end": "0x8014AADC"
         },
         {
-          "symbol": "GetGameTime__14Class_802A2560",
+          "symbol": "GetGameTime__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AADC",
           "end": "0x8014AAE4"
         },
         {
-          "symbol": "ResetPlaySpot__14Class_802A2560",
+          "symbol": "ResetPlaySpot__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AAE4",
           "end": "0x8014AB58"
         },
         {
-          "symbol": "GetScoreLimit__14Class_802A2560",
+          "symbol": "GetScoreLimit__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AB58",
           "end": "0x8014AB64"
         },
         {
-          "symbol": "GetWinner__14Class_802A2560",
+          "symbol": "GetWinner__25MiniGame2MinuteScrmRulesC",
           "start": "0x8014AB64",
           "end": "0x8014ABE4"
         },
         {
-          "symbol": "ResetGame__14Class_802A2560i",
+          "symbol": "ResetGame__25MiniGame2MinuteScrmRulesCi",
           "start": "0x8014ABE4",
           "end": "0x8014AC0C"
         },
         {
-          "symbol": "AwardWin__14Class_802A2560i",
+          "symbol": "AwardWin__25MiniGame2MinuteScrmRulesCi",
           "start": "0x8014AC0C",
           "end": "0x8014AC88"
         },
         {
-          "symbol": "OnEnter__14Class_802A2788f",
+          "symbol": "OnEnter__23MiniGame2MinutePreGameCf",
           "start": "0x8014AC88",
           "end": "0x8014AD24"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2788f",
+          "symbol": "OnUpdate__23MiniGame2MinutePreGameCf",
           "start": "0x8014AD24",
           "end": "0x8014AD70"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A2788",
+          "symbol": "ShowIntroScreen__23MiniGame2MinutePreGameC",
           "start": "0x8014AD70",
           "end": "0x8014ADB0"
         },
         {
-          "symbol": "vfn_03__14Class_802A24F8f",
+          "symbol": "vfn_03__23MiniGame2MinuteGameEndCf",
           "start": "0x8014ADB0",
           "end": "0x8014AE58"
         },
         {
-          "symbol": "vfn_08__14Class_802A24F8",
+          "symbol": "vfn_08__23MiniGame2MinuteGameEndC",
           "start": "0x8014AE58",
           "end": "0x8014AE84"
         },
         {
-          "symbol": "vfn_09__14Class_802A24F8",
+          "symbol": "vfn_09__23MiniGame2MinuteGameEndC",
           "start": "0x8014AE84",
           "end": "0x8014AEB4"
         },
         {
-          "symbol": "vfn_03__14Class_802A2748f",
+          "symbol": "vfn_03__24MiniGame2MinutePlayCallCf",
           "start": "0x8014AEB4",
           "end": "0x8014AF24"
         },
         {
-          "symbol": "vfn_04__14Class_802A2748f",
+          "symbol": "vfn_04__24MiniGame2MinutePlayCallCf",
           "start": "0x8014AF24",
           "end": "0x8014B028"
         },
         {
-          "symbol": "vfn_05__14Class_802A2748f",
+          "symbol": "vfn_05__24MiniGame2MinutePlayCallCf",
           "start": "0x8014B028",
           "end": "0x8014B0C8"
         },
         {
-          "symbol": "vfn_06__14Class_802A2748",
+          "symbol": "vfn_06__24MiniGame2MinutePlayCallC",
           "start": "0x8014B0C8",
           "end": "0x8014B0D0"
         },
         {
-          "symbol": "OnEnter__14Class_802A26D8f",
+          "symbol": "OnEnter__23MiniGame2MinutePrePlayCf",
           "start": "0x8014B0D0",
           "end": "0x8014B178"
         },
         {
-          "symbol": "OnUpdate__14Class_802A26D8f",
+          "symbol": "OnUpdate__23MiniGame2MinutePrePlayCf",
           "start": "0x8014B178",
           "end": "0x8014B1C8"
         },
         {
-          "symbol": "OnEnter__14Class_802A26A0f",
+          "symbol": "OnEnter__26MiniGame2MinuteDuringPlayCf",
           "start": "0x8014B1C8",
           "end": "0x8014B210"
         },
         {
-          "symbol": "OnUpdate__14Class_802A26A0f",
+          "symbol": "OnUpdate__26MiniGame2MinuteDuringPlayCf",
           "start": "0x8014B210",
           "end": "0x8014B2CC"
         },
         {
-          "symbol": "GetResultText__14Class_802A2618Pc",
+          "symbol": "GetResultText__24MiniGame2MinutePostPlayCPc",
           "start": "0x8014B2CC",
           "end": "0x8014B350"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2618f",
+          "symbol": "OnUpdate__24MiniGame2MinutePostPlayCf",
           "start": "0x8014B350",
           "end": "0x8014B38C"
         },
         {
-          "symbol": "Finish__14Class_802A2618f",
+          "symbol": "Finish__24MiniGame2MinutePostPlayCf",
           "start": "0x8014B38C",
           "end": "0x8014B498"
         },
         {
-          "symbol": "__14Class_802A2DB8",
+          "symbol": "__16MiniGame2MinuteC",
           "start": "0x8014B498",
           "end": "0x8014B4E8"
         },
         {
-          "symbol": "_._14Class_802A2DB8",
+          "symbol": "_._16MiniGame2MinuteC",
           "start": "0x8014B4E8",
           "end": "0x8014B528"
         },
         {
-          "symbol": "vfn_01__14Class_802A2DB8",
+          "symbol": "vfn_01__16MiniGame2MinuteC",
           "start": "0x8014B528",
           "end": "0x8014B7D4"
         },
         {
-          "symbol": "vfn_02__14Class_802A2DB8",
+          "symbol": "vfn_02__16MiniGame2MinuteC",
           "start": "0x8014B7D4",
           "end": "0x8014B890"
         },
         {
-          "symbol": "vfn_08__14Class_802A2DB8i",
+          "symbol": "vfn_08__16MiniGame2MinuteCi",
           "start": "0x8014B890",
           "end": "0x8014B898"
         },
         {
-          "symbol": "vfn_05__14Class_802A2DB8i",
+          "symbol": "vfn_05__16MiniGame2MinuteCi",
           "start": "0x8014B898",
           "end": "0x8014B8D4"
         },
         {
-          "symbol": "vfn_10__14Class_802A2DB8iPiT2",
+          "symbol": "vfn_10__16MiniGame2MinuteCiPiT2",
           "start": "0x8014B8D4",
           "end": "0x8014B930"
         },
         {
-          "symbol": "vfn_11__14Class_802A2DB8iPiT2Uii",
+          "symbol": "vfn_11__16MiniGame2MinuteCiPiT2Uii",
           "start": "0x8014B930",
           "end": "0x8014BA20"
         },
@@ -21274,17 +21274,17 @@
           "end": "0x8014BB4C"
         },
         {
-          "symbol": "vfn_32__14Class_802A2DB8ii",
+          "symbol": "vfn_32__16MiniGame2MinuteCii",
           "start": "0x8014BB4C",
           "end": "0x8014BC40"
         },
         {
-          "symbol": "vfn_33__14Class_802A2DB8ii",
+          "symbol": "vfn_33__16MiniGame2MinuteCii",
           "start": "0x8014BC40",
           "end": "0x8014BC88"
         },
         {
-          "symbol": "vfn_21__14Class_802A2DB8",
+          "symbol": "vfn_21__16MiniGame2MinuteC",
           "start": "0x8014BC88",
           "end": "0x8014BC90"
         },
@@ -21304,132 +21304,132 @@
           "end": "0x8014C118"
         },
         {
-          "symbol": "vfn_03__14Class_802A2450f",
+          "symbol": "vfn_03__21MiniGame4On4PlayCallCf",
           "start": "0x8014C118",
           "end": "0x8014C150"
         },
         {
-          "symbol": "GetTeamSize__14Class_802A2268",
+          "symbol": "GetTeamSize__22MiniGame4On4ScrmRulesC",
           "start": "0x8014C150",
           "end": "0x8014C158"
         },
         {
-          "symbol": "AllowsPrediction__14Class_802A2268",
+          "symbol": "AllowsPrediction__22MiniGame4On4ScrmRulesC",
           "start": "0x8014C158",
           "end": "0x8014C160"
         },
         {
-          "symbol": "OnEnter__14Class_802A2320f",
+          "symbol": "OnEnter__21MiniGame4On4PostPlayCf",
           "start": "0x8014C160",
           "end": "0x8014C188"
         },
         {
-          "symbol": "ShowResultText__14Class_802A2320",
+          "symbol": "ShowResultText__21MiniGame4On4PostPlayC",
           "start": "0x8014C188",
           "end": "0x8014C214"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2320f",
+          "symbol": "OnUpdate__21MiniGame4On4PostPlayCf",
           "start": "0x8014C214",
           "end": "0x8014C278"
         },
         {
-          "symbol": "OnEnter__14Class_802A23A8f",
+          "symbol": "OnEnter__23MiniGame4On4DuringPlayCf",
           "start": "0x8014C278",
           "end": "0x8014C308"
         },
         {
-          "symbol": "OnUpdate__14Class_802A23A8f",
+          "symbol": "OnUpdate__23MiniGame4On4DuringPlayCf",
           "start": "0x8014C308",
           "end": "0x8014C4C0"
         },
         {
-          "symbol": "OnEnter__14Class_802A23E0f",
+          "symbol": "OnEnter__20MiniGame4On4PrePlayCf",
           "start": "0x8014C4C0",
           "end": "0x8014C528"
         },
         {
-          "symbol": "OnEnter__14Class_802A2490f",
+          "symbol": "OnEnter__20MiniGame4On4PreGameCf",
           "start": "0x8014C528",
           "end": "0x8014C5AC"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2490f",
+          "symbol": "OnUpdate__20MiniGame4On4PreGameCf",
           "start": "0x8014C5AC",
           "end": "0x8014C630"
         },
         {
-          "symbol": "__14Class_802A2C90",
+          "symbol": "__13MiniGame4On4C",
           "start": "0x8014C630",
           "end": "0x8014C690"
         },
         {
-          "symbol": "vfn_01__14Class_802A2C90",
+          "symbol": "vfn_01__13MiniGame4On4C",
           "start": "0x8014C690",
           "end": "0x8014C808"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A2490",
+          "symbol": "ShowIntroScreen__20MiniGame4On4PreGameC",
           "start": "0x8014C808",
           "end": "0x8014C868"
         },
         {
-          "symbol": "HideIntroScreen__14Class_802A2490",
+          "symbol": "HideIntroScreen__20MiniGame4On4PreGameC",
           "start": "0x8014C868",
           "end": "0x8014C8AC"
         },
         {
-          "symbol": "vfn_03__14Class_802A2200f",
+          "symbol": "vfn_03__20MiniGame4On4GameEndCf",
           "start": "0x8014C8AC",
           "end": "0x8014C954"
         },
         {
-          "symbol": "vfn_08__14Class_802A2200",
+          "symbol": "vfn_08__20MiniGame4On4GameEndC",
           "start": "0x8014C954",
           "end": "0x8014C980"
         },
         {
-          "symbol": "vfn_09__14Class_802A2200",
+          "symbol": "vfn_09__20MiniGame4On4GameEndC",
           "start": "0x8014C980",
           "end": "0x8014C9B0"
         },
         {
-          "symbol": "vfn_02__14Class_802A2C90",
+          "symbol": "vfn_02__13MiniGame4On4C",
           "start": "0x8014C9B0",
           "end": "0x8014CA78"
         },
         {
-          "symbol": "vfn_06__14Class_802A2C90",
+          "symbol": "vfn_06__13MiniGame4On4C",
           "start": "0x8014CA78",
           "end": "0x8014CA80"
         },
         {
-          "symbol": "vfn_04__14Class_802A2C90i",
+          "symbol": "vfn_04__13MiniGame4On4Ci",
           "start": "0x8014CA80",
           "end": "0x8014CA88"
         },
         {
-          "symbol": "vfn_05__14Class_802A2C90i",
+          "symbol": "vfn_05__13MiniGame4On4Ci",
           "start": "0x8014CA88",
           "end": "0x8014CA90"
         },
         {
-          "symbol": "vfn_03__14Class_802A2C90",
+          "symbol": "vfn_03__13MiniGame4On4C",
           "start": "0x8014CA90",
           "end": "0x8014CA98"
         },
         {
-          "symbol": "vfn_08__14Class_802A2C90i",
+          "symbol": "vfn_08__13MiniGame4On4Ci",
           "start": "0x8014CA98",
           "end": "0x8014CAD4"
         },
         {
-          "symbol": "vfn_10__14Class_802A2C90iPiT2",
+          "symbol": "vfn_10__13MiniGame4On4CiPiT2",
           "start": "0x8014CAD4",
           "end": "0x8014CB30"
         },
         {
-          "symbol": "vfn_11__14Class_802A2C90iPiT2Uii",
+          "symbol": "vfn_11__13MiniGame4On4CiPiT2Uii",
           "start": "0x8014CB30",
           "end": "0x8014CCE8"
         },
@@ -21439,22 +21439,22 @@
           "end": "0x8014CF44"
         },
         {
-          "symbol": "vfn_14__14Class_802A2C90",
+          "symbol": "vfn_14__13MiniGame4On4C",
           "start": "0x8014CF44",
           "end": "0x8014CF80"
         },
         {
-          "symbol": "vfn_32__14Class_802A2C90ii",
+          "symbol": "vfn_32__13MiniGame4On4Cii",
           "start": "0x8014CF80",
           "end": "0x8014CFDC"
         },
         {
-          "symbol": "vfn_33__14Class_802A2C90ii",
+          "symbol": "vfn_33__13MiniGame4On4Cii",
           "start": "0x8014CFDC",
           "end": "0x8014D014"
         },
         {
-          "symbol": "vfn_07__14Class_802A2C90ii",
+          "symbol": "vfn_07__13MiniGame4On4Cii",
           "start": "0x8014D014",
           "end": "0x8014D024"
         },
@@ -21484,122 +21484,122 @@
           "end": "0x8014DA20"
         },
         {
-          "symbol": "fn_8014DA20__14Class_802A20C8",
+          "symbol": "fn_8014DA20__28MiniGameCrushCarrierPreGameC",
           "start": "0x8014DA20",
           "end": "0x8014DA90"
         },
         {
-          "symbol": "fn_8014DA90__14Class_802A2B68",
+          "symbol": "fn_8014DA90__21MiniGameCrushCarrierC",
           "start": "0x8014DA90",
           "end": "0x8014DB24"
         },
         {
-          "symbol": "vfn_03__14Class_802A1F10f",
+          "symbol": "vfn_03__28MiniGameCrushCarrierGameEndCf",
           "start": "0x8014DB24",
           "end": "0x8014DBCC"
         },
         {
-          "symbol": "vfn_08__14Class_802A1F10",
+          "symbol": "vfn_08__28MiniGameCrushCarrierGameEndC",
           "start": "0x8014DBCC",
           "end": "0x8014DBF8"
         },
         {
-          "symbol": "vfn_09__14Class_802A1F10",
+          "symbol": "vfn_09__28MiniGameCrushCarrierGameEndC",
           "start": "0x8014DBF8",
           "end": "0x8014DC28"
         },
         {
-          "symbol": "GetWinner__14Class_802A2130",
+          "symbol": "GetWinner__26MiniGameCrushCarrierRulesC",
           "start": "0x8014DC28",
           "end": "0x8014DC5C"
         },
         {
-          "symbol": "GetGameTime__14Class_802A2130",
+          "symbol": "GetGameTime__26MiniGameCrushCarrierRulesC",
           "start": "0x8014DC5C",
           "end": "0x8014DC7C"
         },
         {
-          "symbol": "ResetGame__14Class_802A2130i",
+          "symbol": "ResetGame__26MiniGameCrushCarrierRulesCi",
           "start": "0x8014DC7C",
           "end": "0x8014DD04"
         },
         {
-          "symbol": "ResetPlaySpot__14Class_802A2130",
+          "symbol": "ResetPlaySpot__26MiniGameCrushCarrierRulesC",
           "start": "0x8014DD04",
           "end": "0x8014DD2C"
         },
         {
-          "symbol": "AwardWin__14Class_802A2130i",
+          "symbol": "AwardWin__26MiniGameCrushCarrierRulesCi",
           "start": "0x8014DD2C",
           "end": "0x8014DDCC"
         },
         {
-          "symbol": "OnEnter__14Class_802A20C8f",
+          "symbol": "OnEnter__28MiniGameCrushCarrierPreGameCf",
           "start": "0x8014DDCC",
           "end": "0x8014E220"
         },
         {
-          "symbol": "EnterFirstPhase__14Class_802A20C8f",
+          "symbol": "EnterFirstPhase__28MiniGameCrushCarrierPreGameCf",
           "start": "0x8014E220",
           "end": "0x8014E244"
         },
         {
-          "symbol": "OnExit__14Class_802A20C8",
+          "symbol": "OnExit__28MiniGameCrushCarrierPreGameC",
           "start": "0x8014E244",
           "end": "0x8014E290"
         },
         {
-          "symbol": "OnUpdate__14Class_802A20C8f",
+          "symbol": "OnUpdate__28MiniGameCrushCarrierPreGameCf",
           "start": "0x8014E290",
           "end": "0x8014E2DC"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A20C8",
+          "symbol": "ShowIntroScreen__28MiniGameCrushCarrierPreGameC",
           "start": "0x8014E2DC",
           "end": "0x8014E31C"
         },
         {
-          "symbol": "AssignControlledPlayers__14Class_802A2058",
+          "symbol": "AssignControlledPlayers__28MiniGameCrushCarrierPrePlayC",
           "start": "0x8014E31C",
           "end": "0x8014E3B4"
         },
         {
-          "symbol": "OnEnter__14Class_802A2058f",
+          "symbol": "OnEnter__28MiniGameCrushCarrierPrePlayCf",
           "start": "0x8014E3B4",
           "end": "0x8014E48C"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2058f",
+          "symbol": "OnUpdate__28MiniGameCrushCarrierPrePlayCf",
           "start": "0x8014E48C",
           "end": "0x8014E534"
         },
         {
-          "symbol": "OnEnter__14Class_802A2020f",
+          "symbol": "OnEnter__31MiniGameCrushCarrierDuringPlayCf",
           "start": "0x8014E534",
           "end": "0x8014E7D4"
         },
         {
-          "symbol": "OnUpdate__14Class_802A2020f",
+          "symbol": "OnUpdate__31MiniGameCrushCarrierDuringPlayCf",
           "start": "0x8014E7D4",
           "end": "0x8014EA90"
         },
         {
-          "symbol": "OnEnter__14Class_802A1F90f",
+          "symbol": "OnEnter__29MiniGameCrushCarrierPostPlayCf",
           "start": "0x8014EA90",
           "end": "0x8014EC74"
         },
         {
-          "symbol": "OnExit__14Class_802A1F90",
+          "symbol": "OnExit__29MiniGameCrushCarrierPostPlayC",
           "start": "0x8014EC74",
           "end": "0x8014ED30"
         },
         {
-          "symbol": "IsFinished__14Class_802A1F90i",
+          "symbol": "IsFinished__29MiniGameCrushCarrierPostPlayCi",
           "start": "0x8014ED30",
           "end": "0x8014ED70"
         },
         {
-          "symbol": "Finish__14Class_802A1F90f",
+          "symbol": "Finish__29MiniGameCrushCarrierPostPlayCf",
           "start": "0x8014ED70",
           "end": "0x8014EDBC"
         },
@@ -21609,17 +21609,17 @@
           "end": "0x8014EDC4"
         },
         {
-          "symbol": "__14Class_802A2B68",
+          "symbol": "__21MiniGameCrushCarrierC",
           "start": "0x8014EDC4",
           "end": "0x8014EE1C"
         },
         {
-          "symbol": "vfn_01__14Class_802A2B68",
+          "symbol": "vfn_01__21MiniGameCrushCarrierC",
           "start": "0x8014EE1C",
           "end": "0x8014EFC0"
         },
         {
-          "symbol": "vfn_02__14Class_802A2B68",
+          "symbol": "vfn_02__21MiniGameCrushCarrierC",
           "start": "0x8014EFC0",
           "end": "0x8014F104"
         },
@@ -21629,27 +21629,27 @@
           "end": "0x8014F10C"
         },
         {
-          "symbol": "vfn_05__14Class_802A2B68i",
+          "symbol": "vfn_05__21MiniGameCrushCarrierCi",
           "start": "0x8014F10C",
           "end": "0x8014F120"
         },
         {
-          "symbol": "vfn_10__14Class_802A2B68iPiT2",
+          "symbol": "vfn_10__21MiniGameCrushCarrierCiPiT2",
           "start": "0x8014F120",
           "end": "0x8014F168"
         },
         {
-          "symbol": "vfn_11__14Class_802A2B68iPiT2Uii",
+          "symbol": "vfn_11__21MiniGameCrushCarrierCiPiT2Uii",
           "start": "0x8014F168",
           "end": "0x8014F19C"
         },
         {
-          "symbol": "vfn_12__14Class_802A2B68",
+          "symbol": "vfn_12__21MiniGameCrushCarrierC",
           "start": "0x8014F19C",
           "end": "0x8014F36C"
         },
         {
-          "symbol": "vfn_13__14Class_802A2B68",
+          "symbol": "vfn_13__21MiniGameCrushCarrierC",
           "start": "0x8014F36C",
           "end": "0x8014F3DC"
         },
@@ -21679,22 +21679,22 @@
           "end": "0x8014F57C"
         },
         {
-          "symbol": "vfn_26__14Class_802A2B68iiP15Object_80039F5Ci",
+          "symbol": "vfn_26__21MiniGameCrushCarrierCiiP15Object_80039F5Ci",
           "start": "0x8014F57C",
           "end": "0x8014FBB4"
         },
         {
-          "symbol": "vfn_30__14Class_802A2B68iiiP15Object_80039F5C",
+          "symbol": "vfn_30__21MiniGameCrushCarrierCiiiP15Object_80039F5C",
           "start": "0x8014FBB4",
           "end": "0x8014FDD0"
         },
         {
-          "symbol": "vfn_31__14Class_802A2B68iiiP15Object_80039F5Cii",
+          "symbol": "vfn_31__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
           "start": "0x8014FDD0",
           "end": "0x8014FF2C"
         },
         {
-          "symbol": "vfn_21__14Class_802A2B68",
+          "symbol": "vfn_21__21MiniGameCrushCarrierC",
           "start": "0x8014FF2C",
           "end": "0x8014FF34"
         },
@@ -21719,12 +21719,12 @@
           "end": "0x801501CC"
         },
         {
-          "symbol": "GetWinner__14Class_802A1E38",
+          "symbol": "GetWinner__22MiniGameJumpBallRulesC",
           "start": "0x801501CC",
           "end": "0x801501F0"
         },
         {
-          "symbol": "AwardWin__14Class_802A1E38i",
+          "symbol": "AwardWin__22MiniGameJumpBallRulesCi",
           "start": "0x801501F0",
           "end": "0x801502B4"
         },
@@ -21734,77 +21734,77 @@
           "end": "0x8015034C"
         },
         {
-          "symbol": "ResetGame__14Class_802A1E38i",
+          "symbol": "ResetGame__22MiniGameJumpBallRulesCi",
           "start": "0x8015034C",
           "end": "0x8015037C"
         },
         {
-          "symbol": "EndPlay__14Class_802A1E38",
+          "symbol": "EndPlay__22MiniGameJumpBallRulesC",
           "start": "0x8015037C",
           "end": "0x801503BC"
         },
         {
-          "symbol": "OnEnter__14Class_802A1DC8f",
+          "symbol": "OnEnter__24MiniGameJumpBallPreGameCf",
           "start": "0x801503BC",
           "end": "0x80150710"
         },
         {
-          "symbol": "OnUpdate__14Class_802A1DC8f",
+          "symbol": "OnUpdate__24MiniGameJumpBallPreGameCf",
           "start": "0x80150710",
           "end": "0x8015076C"
         },
         {
-          "symbol": "OnExit__14Class_802A1DC8",
+          "symbol": "OnExit__24MiniGameJumpBallPreGameC",
           "start": "0x8015076C",
           "end": "0x801507E0"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A1DC8",
+          "symbol": "ShowIntroScreen__24MiniGameJumpBallPreGameC",
           "start": "0x801507E0",
           "end": "0x80150820"
         },
         {
-          "symbol": "HideIntroScreen__14Class_802A1DC8",
+          "symbol": "HideIntroScreen__24MiniGameJumpBallPreGameC",
           "start": "0x80150820",
           "end": "0x80150824"
         },
         {
-          "symbol": "EnterFirstPhase__14Class_802A1DC8f",
+          "symbol": "EnterFirstPhase__24MiniGameJumpBallPreGameCf",
           "start": "0x80150824",
           "end": "0x80150848"
         },
         {
-          "symbol": "OnEnter__14Class_802A1D58f",
+          "symbol": "OnEnter__24MiniGameJumpBallPrePlayCf",
           "start": "0x80150848",
           "end": "0x80150984"
         },
         {
-          "symbol": "OnUpdate__14Class_802A1D58f",
+          "symbol": "OnUpdate__24MiniGameJumpBallPrePlayCf",
           "start": "0x80150984",
           "end": "0x801509D4"
         },
         {
-          "symbol": "AssignControlledPlayers__14Class_802A1D58",
+          "symbol": "AssignControlledPlayers__24MiniGameJumpBallPrePlayC",
           "start": "0x801509D4",
           "end": "0x80150A70"
         },
         {
-          "symbol": "SetupCamera__14Class_802A1D58",
+          "symbol": "SetupCamera__24MiniGameJumpBallPrePlayC",
           "start": "0x80150A70",
           "end": "0x80150A74"
         },
         {
-          "symbol": "OnEnter__14Class_802A1D20f",
+          "symbol": "OnEnter__27MiniGameJumpBallDuringPlayCf",
           "start": "0x80150A74",
           "end": "0x80150AC4"
         },
         {
-          "symbol": "OnUpdate__14Class_802A1D20f",
+          "symbol": "OnUpdate__27MiniGameJumpBallDuringPlayCf",
           "start": "0x80150AC4",
           "end": "0x80150DFC"
         },
         {
-          "symbol": "OnExit__14Class_802A1D20",
+          "symbol": "OnExit__27MiniGameJumpBallDuringPlayC",
           "start": "0x80150DFC",
           "end": "0x80150E1C"
         },
@@ -21824,57 +21824,57 @@
           "end": "0x80151598"
         },
         {
-          "symbol": "IsFinished__14Class_802A1C98i",
+          "symbol": "IsFinished__25MiniGameJumpBallPostPlayCi",
           "start": "0x80151598",
           "end": "0x801515D0"
         },
         {
-          "symbol": "OnExit__14Class_802A1C98",
+          "symbol": "OnExit__25MiniGameJumpBallPostPlayC",
           "start": "0x801515D0",
           "end": "0x80151628"
         },
         {
-          "symbol": "Finish__14Class_802A1C98f",
+          "symbol": "Finish__25MiniGameJumpBallPostPlayCf",
           "start": "0x80151628",
           "end": "0x80151680"
         },
         {
-          "symbol": "SetupCamera__14Class_802A1C98",
+          "symbol": "SetupCamera__25MiniGameJumpBallPostPlayC",
           "start": "0x80151680",
           "end": "0x80151684"
         },
         {
-          "symbol": "GetBusy__14Class_802A1C98f",
+          "symbol": "GetBusy__25MiniGameJumpBallPostPlayCf",
           "start": "0x80151684",
           "end": "0x801516A8"
         },
         {
-          "symbol": "vfn_03__14Class_802A1C30f",
+          "symbol": "vfn_03__24MiniGameJumpBallGameEndCf",
           "start": "0x801516A8",
           "end": "0x80151798"
         },
         {
-          "symbol": "vfn_08__14Class_802A1C30",
+          "symbol": "vfn_08__24MiniGameJumpBallGameEndC",
           "start": "0x80151798",
           "end": "0x801517C4"
         },
         {
-          "symbol": "vfn_09__14Class_802A1C30",
+          "symbol": "vfn_09__24MiniGameJumpBallGameEndC",
           "start": "0x801517C4",
           "end": "0x801517F4"
         },
         {
-          "symbol": "__14Class_802A2918",
+          "symbol": "__17MiniGameJumpBallC",
           "start": "0x801517F4",
           "end": "0x80151858"
         },
         {
-          "symbol": "vfn_01__14Class_802A2918",
+          "symbol": "vfn_01__17MiniGameJumpBallC",
           "start": "0x80151858",
           "end": "0x80151A28"
         },
         {
-          "symbol": "vfn_02__14Class_802A2918",
+          "symbol": "vfn_02__17MiniGameJumpBallC",
           "start": "0x80151A28",
           "end": "0x80151B20"
         },
@@ -21914,17 +21914,17 @@
           "end": "0x80152400"
         },
         {
-          "symbol": "vfn_10__14Class_802A2918iPiT2",
+          "symbol": "vfn_10__17MiniGameJumpBallCiPiT2",
           "start": "0x80152400",
           "end": "0x80152448"
         },
         {
-          "symbol": "vfn_11__14Class_802A2918iPiT2Uii",
+          "symbol": "vfn_11__17MiniGameJumpBallCiPiT2Uii",
           "start": "0x80152448",
           "end": "0x8015247C"
         },
         {
-          "symbol": "vfn_12__14Class_802A2918",
+          "symbol": "vfn_12__17MiniGameJumpBallC",
           "start": "0x8015247C",
           "end": "0x8015264C"
         },
@@ -21934,7 +21934,7 @@
           "end": "0x8015267C"
         },
         {
-          "symbol": "vfn_13__14Class_802A2918",
+          "symbol": "vfn_13__17MiniGameJumpBallC",
           "start": "0x8015267C",
           "end": "0x801526EC"
         },
@@ -21959,7 +21959,7 @@
           "end": "0x8015289C"
         },
         {
-          "symbol": "vfn_23__14Class_802A2918P17AutoDepthPlayer_tUi",
+          "symbol": "vfn_23__17MiniGameJumpBallCP17AutoDepthPlayer_tUi",
           "start": "0x8015289C",
           "end": "0x801528E0"
         },
@@ -21979,27 +21979,27 @@
           "end": "0x80152A54"
         },
         {
-          "symbol": "vfn_30__14Class_802A2918iiiP15Object_80039F5C",
+          "symbol": "vfn_30__17MiniGameJumpBallCiiiP15Object_80039F5C",
           "start": "0x80152A54",
           "end": "0x80152B98"
         },
         {
-          "symbol": "vfn_26__14Class_802A2918iiP15Object_80039F5Ci",
+          "symbol": "vfn_26__17MiniGameJumpBallCiiP15Object_80039F5Ci",
           "start": "0x80152B98",
           "end": "0x80152FFC"
         },
         {
-          "symbol": "vfn_05__14Class_802A2918i",
+          "symbol": "vfn_05__17MiniGameJumpBallCi",
           "start": "0x80152FFC",
           "end": "0x80153044"
         },
         {
-          "symbol": "vfn_21__14Class_802A2918",
+          "symbol": "vfn_21__17MiniGameJumpBallC",
           "start": "0x80153044",
           "end": "0x8015304C"
         },
         {
-          "symbol": "vfn_22__14Class_802A2918i",
+          "symbol": "vfn_22__17MiniGameJumpBallCi",
           "start": "0x8015304C",
           "end": "0x801530FC"
         },
@@ -22019,217 +22019,217 @@
           "end": "0x80153174"
         },
         {
-          "symbol": "GetScoreLimit__14Class_802A1930",
+          "symbol": "GetScoreLimit__23MiniGameOpenFieldRulesC",
           "start": "0x80153174",
           "end": "0x801531C4"
         },
         {
-          "symbol": "GetWinner__14Class_802A1930",
+          "symbol": "GetWinner__23MiniGameOpenFieldRulesC",
           "start": "0x801531C4",
           "end": "0x801531F0"
         },
         {
-          "symbol": "IsNearWin__14Class_802A1930i",
+          "symbol": "IsNearWin__23MiniGameOpenFieldRulesCi",
           "start": "0x801531F0",
           "end": "0x80153270"
         },
         {
-          "symbol": "IsOpponentNearWin__14Class_802A1930i",
+          "symbol": "IsOpponentNearWin__23MiniGameOpenFieldRulesCi",
           "start": "0x80153270",
           "end": "0x801532E0"
         },
         {
-          "symbol": "GetScoreType__14Class_802A1930",
+          "symbol": "GetScoreType__23MiniGameOpenFieldRulesC",
           "start": "0x801532E0",
           "end": "0x801532E8"
         },
         {
-          "symbol": "GetScore__14Class_802A1930i",
+          "symbol": "GetScore__23MiniGameOpenFieldRulesCi",
           "start": "0x801532E8",
           "end": "0x80153328"
         },
         {
-          "symbol": "GetGoalLimit__14Class_802A1930",
+          "symbol": "GetGoalLimit__23MiniGameOpenFieldRulesC",
           "start": "0x80153328",
           "end": "0x80153354"
         },
         {
-          "symbol": "GetGoalTotal__14Class_802A1930i",
+          "symbol": "GetGoalTotal__23MiniGameOpenFieldRulesCi",
           "start": "0x80153354",
           "end": "0x80153394"
         },
         {
-          "symbol": "GetGoalCount__14Class_802A1930i",
+          "symbol": "GetGoalCount__23MiniGameOpenFieldRulesCi",
           "start": "0x80153394",
           "end": "0x801533D4"
         },
         {
-          "symbol": "vfn_22__14Class_802A1930i",
+          "symbol": "vfn_22__23MiniGameOpenFieldRulesCi",
           "start": "0x801533D4",
           "end": "0x80153414"
         },
         {
-          "symbol": "AllowsAudibles__14Class_802A1930",
+          "symbol": "AllowsAudibles__23MiniGameOpenFieldRulesC",
           "start": "0x80153414",
           "end": "0x801534D4"
         },
         {
-          "symbol": "ResetPlaySpot__14Class_802A1930",
+          "symbol": "ResetPlaySpot__23MiniGameOpenFieldRulesC",
           "start": "0x801534D4",
           "end": "0x80153700"
         },
         {
-          "symbol": "ResetGame__14Class_802A1930i",
+          "symbol": "ResetGame__23MiniGameOpenFieldRulesCi",
           "start": "0x80153700",
           "end": "0x801537A0"
         },
         {
-          "symbol": "OnEnter__14Class_802A1BC8f",
+          "symbol": "OnEnter__25MiniGameOpenFieldPreGameCf",
           "start": "0x801537A0",
           "end": "0x80153844"
         },
         {
-          "symbol": "AwardWin__14Class_802A1930i",
+          "symbol": "AwardWin__23MiniGameOpenFieldRulesCi",
           "start": "0x80153844",
           "end": "0x801538C8"
         },
         {
-          "symbol": "OnExit__14Class_802A1BC8",
+          "symbol": "OnExit__25MiniGameOpenFieldPreGameC",
           "start": "0x801538C8",
           "end": "0x80153910"
         },
         {
-          "symbol": "OnUpdate__14Class_802A1BC8f",
+          "symbol": "OnUpdate__25MiniGameOpenFieldPreGameCf",
           "start": "0x80153910",
           "end": "0x8015395C"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A1BC8",
+          "symbol": "ShowIntroScreen__25MiniGameOpenFieldPreGameC",
           "start": "0x8015395C",
           "end": "0x8015399C"
         },
         {
-          "symbol": "HideIntroScreen__14Class_802A1BC8",
+          "symbol": "HideIntroScreen__25MiniGameOpenFieldPreGameC",
           "start": "0x8015399C",
           "end": "0x801539A0"
         },
         {
-          "symbol": "OnEnter__14Class_802A1B58f",
+          "symbol": "OnEnter__25MiniGameOpenFieldPrePlayCf",
           "start": "0x801539A0",
           "end": "0x80153BBC"
         },
         {
-          "symbol": "AssignControlledPlayers__14Class_802A1B58",
+          "symbol": "AssignControlledPlayers__25MiniGameOpenFieldPrePlayC",
           "start": "0x80153BBC",
           "end": "0x80153DB8"
         },
         {
-          "symbol": "vfn_03__14Class_802A1B18f",
+          "symbol": "vfn_03__26MiniGameOpenFieldPlayCallCf",
           "start": "0x80153DB8",
           "end": "0x80153DBC"
         },
         {
-          "symbol": "vfn_04__14Class_802A1B18f",
+          "symbol": "vfn_04__26MiniGameOpenFieldPlayCallCf",
           "start": "0x80153DBC",
           "end": "0x80153EA8"
         },
         {
-          "symbol": "vfn_05__14Class_802A1B18f",
+          "symbol": "vfn_05__26MiniGameOpenFieldPlayCallCf",
           "start": "0x80153EA8",
           "end": "0x80153F14"
         },
         {
-          "symbol": "OnEnter__14Class_802A1AE0f",
+          "symbol": "OnEnter__28MiniGameOpenFieldDuringPlayCf",
           "start": "0x80153F14",
           "end": "0x80153F54"
         },
         {
-          "symbol": "OnUpdate__14Class_802A1AE0f",
+          "symbol": "OnUpdate__28MiniGameOpenFieldDuringPlayCf",
           "start": "0x80153F54",
           "end": "0x80154028"
         },
         {
-          "symbol": "OnExit__14Class_802A1AE0",
+          "symbol": "OnExit__28MiniGameOpenFieldDuringPlayC",
           "start": "0x80154028",
           "end": "0x80154050"
         },
         {
-          "symbol": "GetResultText__14Class_802A1A58Pc",
+          "symbol": "GetResultText__26MiniGameOpenFieldPostPlayCPc",
           "start": "0x80154050",
           "end": "0x80154110"
         },
         {
-          "symbol": "vfn_03__14Class_802A19F0f",
+          "symbol": "vfn_03__25MiniGameOpenFieldGameEndCf",
           "start": "0x80154110",
           "end": "0x801541B8"
         },
         {
-          "symbol": "vfn_08__14Class_802A19F0",
+          "symbol": "vfn_08__25MiniGameOpenFieldGameEndC",
           "start": "0x801541B8",
           "end": "0x801541E4"
         },
         {
-          "symbol": "vfn_09__14Class_802A19F0",
+          "symbol": "vfn_09__25MiniGameOpenFieldGameEndC",
           "start": "0x801541E4",
           "end": "0x80154214"
         },
         {
-          "symbol": "__14Class_802A27F0",
+          "symbol": "__18MiniGameOpenFieldC",
           "start": "0x80154214",
           "end": "0x8015426C"
         },
         {
-          "symbol": "vfn_01__14Class_802A27F0",
+          "symbol": "vfn_01__18MiniGameOpenFieldC",
           "start": "0x8015426C",
           "end": "0x80154468"
         },
         {
-          "symbol": "vfn_02__14Class_802A27F0",
+          "symbol": "vfn_02__18MiniGameOpenFieldC",
           "start": "0x80154468",
           "end": "0x80154520"
         },
         {
-          "symbol": "vfn_05__14Class_802A27F0i",
+          "symbol": "vfn_05__18MiniGameOpenFieldCi",
           "start": "0x80154520",
           "end": "0x80154528"
         },
         {
-          "symbol": "vfn_07__14Class_802A27F0ii",
+          "symbol": "vfn_07__18MiniGameOpenFieldCii",
           "start": "0x80154528",
           "end": "0x80154588"
         },
         {
-          "symbol": "vfn_09__14Class_802A27F0i",
+          "symbol": "vfn_09__18MiniGameOpenFieldCi",
           "start": "0x80154588",
           "end": "0x801545D4"
         },
         {
-          "symbol": "vfn_10__14Class_802A27F0iPiT2",
+          "symbol": "vfn_10__18MiniGameOpenFieldCiPiT2",
           "start": "0x801545D4",
           "end": "0x80154638"
         },
         {
-          "symbol": "vfn_11__14Class_802A27F0iPiT2Uii",
+          "symbol": "vfn_11__18MiniGameOpenFieldCiPiT2Uii",
           "start": "0x80154638",
           "end": "0x801548EC"
         },
         {
-          "symbol": "vfn_35__14Class_802A27F0ii",
+          "symbol": "vfn_35__18MiniGameOpenFieldCii",
           "start": "0x801548EC",
           "end": "0x80154A88"
         },
         {
-          "symbol": "vfn_14__14Class_802A27F0",
+          "symbol": "vfn_14__18MiniGameOpenFieldC",
           "start": "0x80154A88",
           "end": "0x80154AB8"
         },
         {
-          "symbol": "vfn_26__14Class_802A27F0iiP15Object_80039F5Ci",
+          "symbol": "vfn_26__18MiniGameOpenFieldCiiP15Object_80039F5Ci",
           "start": "0x80154AB8",
           "end": "0x80154F70"
         },
         {
-          "symbol": "vfn_30__14Class_802A27F0iiiP15Object_80039F5C",
+          "symbol": "vfn_30__18MiniGameOpenFieldCiiiP15Object_80039F5C",
           "start": "0x80154F70",
           "end": "0x80154FC0"
         },
@@ -22239,7 +22239,7 @@
           "end": "0x80155004"
         },
         {
-          "symbol": "vfn_20__14Class_802A27F0iUciPcUcT4Uc",
+          "symbol": "vfn_20__18MiniGameOpenFieldCiUciPcUcT4Uc",
           "start": "0x80155004",
           "end": "0x80155128"
         },
@@ -22254,62 +22254,62 @@
           "end": "0x801551F0"
         },
         {
-          "symbol": "vfn_21__14Class_802A27F0",
+          "symbol": "vfn_21__18MiniGameOpenFieldC",
           "start": "0x801551F0",
           "end": "0x801551F8"
         },
         {
-          "symbol": "GetScoreLimit__14Class_802A17A8",
+          "symbol": "GetScoreLimit__25MiniGameQuickStrikeRulesC",
           "start": "0x801551F8",
           "end": "0x801552C4"
         },
         {
-          "symbol": "PlaceBallForDrive__14Class_802A17A8i",
+          "symbol": "PlaceBallForDrive__25MiniGameQuickStrikeRulesCi",
           "start": "0x801552C4",
           "end": "0x80155384"
         },
         {
-          "symbol": "GetWinner__14Class_802A17A8",
+          "symbol": "GetWinner__25MiniGameQuickStrikeRulesC",
           "start": "0x80155384",
           "end": "0x8015538C"
         },
         {
-          "symbol": "AwardWin__14Class_802A17A8i",
+          "symbol": "AwardWin__25MiniGameQuickStrikeRulesCi",
           "start": "0x8015538C",
           "end": "0x80155394"
         },
         {
-          "symbol": "IsNearWin__14Class_802A17A8i",
+          "symbol": "IsNearWin__25MiniGameQuickStrikeRulesCi",
           "start": "0x80155394",
           "end": "0x8015539C"
         },
         {
-          "symbol": "ResetPlaySpot__14Class_802A17A8",
+          "symbol": "ResetPlaySpot__25MiniGameQuickStrikeRulesC",
           "start": "0x8015539C",
           "end": "0x80155588"
         },
         {
-          "symbol": "ResetGame__14Class_802A17A8i",
+          "symbol": "ResetGame__25MiniGameQuickStrikeRulesCi",
           "start": "0x80155588",
           "end": "0x801555C4"
         },
         {
-          "symbol": "OnEnter__14Class_802A18C8f",
+          "symbol": "OnEnter__27MiniGameQuickStrikePreGameCf",
           "start": "0x801555C4",
           "end": "0x80155640"
         },
         {
-          "symbol": "OnUpdate__14Class_802A18C8f",
+          "symbol": "OnUpdate__27MiniGameQuickStrikePreGameCf",
           "start": "0x80155640",
           "end": "0x8015568C"
         },
         {
-          "symbol": "ShowIntroScreen__14Class_802A18C8",
+          "symbol": "ShowIntroScreen__27MiniGameQuickStrikePreGameC",
           "start": "0x8015568C",
           "end": "0x801556CC"
         },
         {
-          "symbol": "HideIntroScreen__14Class_802A18C8",
+          "symbol": "HideIntroScreen__27MiniGameQuickStrikePreGameC",
           "start": "0x801556CC",
           "end": "0x801556D0"
         },
@@ -22319,32 +22319,32 @@
           "end": "0x8015576C"
         },
         {
-          "symbol": "vfn_03__14Class_802A1860f",
+          "symbol": "vfn_03__27MiniGameQuickStrikeGameEndCf",
           "start": "0x8015576C",
           "end": "0x801557E0"
         },
         {
-          "symbol": "vfn_08__14Class_802A1860",
+          "symbol": "vfn_08__27MiniGameQuickStrikeGameEndC",
           "start": "0x801557E0",
           "end": "0x8015580C"
         },
         {
-          "symbol": "vfn_09__14Class_802A1860",
+          "symbol": "vfn_09__27MiniGameQuickStrikeGameEndC",
           "start": "0x8015580C",
           "end": "0x8015583C"
         },
         {
-          "symbol": "vfn_01__14Class_802A2A40",
+          "symbol": "vfn_01__20MiniGameQuickStrikeC",
           "start": "0x8015583C",
           "end": "0x801558FC"
         },
         {
-          "symbol": "vfn_02__14Class_802A2A40",
+          "symbol": "vfn_02__20MiniGameQuickStrikeC",
           "start": "0x801558FC",
           "end": "0x801559B8"
         },
         {
-          "symbol": "vfn_08__14Class_802A2A40i",
+          "symbol": "vfn_08__20MiniGameQuickStrikeCi",
           "start": "0x801559B8",
           "end": "0x80155A7C"
         },
@@ -22384,112 +22384,112 @@
           "end": "0x80155F48"
         },
         {
-          "symbol": "vfn_07__14Class_80148A58ii",
+          "symbol": "vfn_07__9MiniGameCii",
           "start": "0x80155F48",
           "end": "0x80155F4C"
         },
         {
-          "symbol": "vfn_09__14Class_80148A58i",
+          "symbol": "vfn_09__9MiniGameCi",
           "start": "0x80155F4C",
           "end": "0x80155F54"
         },
         {
-          "symbol": "vfn_12__14Class_80148A58",
+          "symbol": "vfn_12__9MiniGameC",
           "start": "0x80155F54",
           "end": "0x80155F74"
         },
         {
-          "symbol": "vfn_14__14Class_80148A58",
+          "symbol": "vfn_14__9MiniGameC",
           "start": "0x80155F74",
           "end": "0x80155F78"
         },
         {
-          "symbol": "vfn_20__14Class_80148A58iUciPcUcT4Uc",
+          "symbol": "vfn_20__9MiniGameCiUciPcUcT4Uc",
           "start": "0x80155F78",
           "end": "0x80155F88"
         },
         {
-          "symbol": "vfn_21__14Class_80148A58",
+          "symbol": "vfn_21__9MiniGameC",
           "start": "0x80155F88",
           "end": "0x80155F90"
         },
         {
-          "symbol": "vfn_22__14Class_80148A58i",
+          "symbol": "vfn_22__9MiniGameCi",
           "start": "0x80155F90",
           "end": "0x80155F98"
         },
         {
-          "symbol": "_._14Class_802A2C90",
+          "symbol": "_._13MiniGame4On4C",
           "start": "0x80155F98",
           "end": "0x80155FCC"
         },
         {
-          "symbol": "_._14Class_802A2B68",
+          "symbol": "_._21MiniGameCrushCarrierC",
           "start": "0x80155FCC",
           "end": "0x80156000"
         },
         {
-          "symbol": "_._14Class_802A2A40",
+          "symbol": "_._20MiniGameQuickStrikeC",
           "start": "0x80156000",
           "end": "0x80156034"
         },
         {
-          "symbol": "_._14Class_802A2918",
+          "symbol": "_._17MiniGameJumpBallC",
           "start": "0x80156034",
           "end": "0x80156068"
         },
         {
-          "symbol": "_._14Class_802A26D8",
+          "symbol": "_._23MiniGame2MinutePrePlayC",
           "start": "0x80156068",
           "end": "0x8015609C"
         },
         {
-          "symbol": "AllowsAudibles__14Class_802A2560",
+          "symbol": "AllowsAudibles__25MiniGame2MinuteScrmRulesC",
           "start": "0x8015609C",
           "end": "0x801560A4"
         },
         {
-          "symbol": "vfn_06__14Class_802A24F8",
+          "symbol": "vfn_06__23MiniGame2MinuteGameEndC",
           "start": "0x801560A4",
           "end": "0x801560A8"
         },
         {
-          "symbol": "vfn_07__14Class_802A24F8",
+          "symbol": "vfn_07__23MiniGame2MinuteGameEndC",
           "start": "0x801560A8",
           "end": "0x801560AC"
         },
         {
-          "symbol": "vfn_10__14Class_802A24F8",
+          "symbol": "vfn_10__23MiniGame2MinuteGameEndC",
           "start": "0x801560AC",
           "end": "0x801560B4"
         },
         {
-          "symbol": "vfn_11__14Class_802A24F8",
+          "symbol": "vfn_11__23MiniGame2MinuteGameEndC",
           "start": "0x801560B4",
           "end": "0x801560BC"
         },
         {
-          "symbol": "_._14Class_802A23E0",
+          "symbol": "_._20MiniGame4On4PrePlayC",
           "start": "0x801560BC",
           "end": "0x801560F0"
         },
         {
-          "symbol": "vfn_06__14Class_802A2200",
+          "symbol": "vfn_06__20MiniGame4On4GameEndC",
           "start": "0x801560F0",
           "end": "0x801560F4"
         },
         {
-          "symbol": "vfn_07__14Class_802A2200",
+          "symbol": "vfn_07__20MiniGame4On4GameEndC",
           "start": "0x801560F4",
           "end": "0x801560F8"
         },
         {
-          "symbol": "vfn_10__14Class_802A2200",
+          "symbol": "vfn_10__20MiniGame4On4GameEndC",
           "start": "0x801560F8",
           "end": "0x80156100"
         },
         {
-          "symbol": "vfn_11__14Class_802A2200",
+          "symbol": "vfn_11__20MiniGame4On4GameEndC",
           "start": "0x80156100",
           "end": "0x80156108"
         },
@@ -22499,72 +22499,72 @@
           "end": "0x80156148"
         },
         {
-          "symbol": "GetScoreLimit__14Class_802A2130",
+          "symbol": "GetScoreLimit__26MiniGameCrushCarrierRulesC",
           "start": "0x80156148",
           "end": "0x80156154"
         },
         {
-          "symbol": "IsNearWin__14Class_802A2130i",
+          "symbol": "IsNearWin__26MiniGameCrushCarrierRulesCi",
           "start": "0x80156154",
           "end": "0x8015615C"
         },
         {
-          "symbol": "GetScoreType__14Class_802A2130",
+          "symbol": "GetScoreType__26MiniGameCrushCarrierRulesC",
           "start": "0x8015615C",
           "end": "0x80156164"
         },
         {
-          "symbol": "GetScore__14Class_802A2130i",
+          "symbol": "GetScore__26MiniGameCrushCarrierRulesCi",
           "start": "0x80156164",
           "end": "0x8015616C"
         },
         {
-          "symbol": "IsTimed__14Class_802A2130",
+          "symbol": "IsTimed__26MiniGameCrushCarrierRulesC",
           "start": "0x8015616C",
           "end": "0x80156174"
         },
         {
-          "symbol": "AllowsAudibles__14Class_802A2130",
+          "symbol": "AllowsAudibles__26MiniGameCrushCarrierRulesC",
           "start": "0x80156174",
           "end": "0x8015617C"
         },
         {
-          "symbol": "HideIntroScreen__14Class_802A20C8",
+          "symbol": "HideIntroScreen__28MiniGameCrushCarrierPreGameC",
           "start": "0x8015617C",
           "end": "0x80156180"
         },
         {
-          "symbol": "_._14Class_802A2058",
+          "symbol": "_._28MiniGameCrushCarrierPrePlayC",
           "start": "0x80156180",
           "end": "0x801561B4"
         },
         {
-          "symbol": "ReleaseHeldBalls__14Class_802A2058",
+          "symbol": "ReleaseHeldBalls__28MiniGameCrushCarrierPrePlayC",
           "start": "0x801561B4",
           "end": "0x801561B8"
         },
         {
-          "symbol": "_._14Class_802A1F90",
+          "symbol": "_._29MiniGameCrushCarrierPostPlayC",
           "start": "0x801561B8",
           "end": "0x801561EC"
         },
         {
-          "symbol": "ShowResultText__14Class_802A1F90",
+          "symbol": "ShowResultText__29MiniGameCrushCarrierPostPlayC",
           "start": "0x801561EC",
           "end": "0x801561F0"
         },
         {
-          "symbol": "UpdateCue__14Class_802A1F90f",
+          "symbol": "UpdateCue__29MiniGameCrushCarrierPostPlayCf",
           "start": "0x801561F0",
           "end": "0x801561F4"
         },
         {
-          "symbol": "IsHeld__14Class_802A1F90f",
+          "symbol": "IsHeld__29MiniGameCrushCarrierPostPlayCf",
           "start": "0x801561F4",
           "end": "0x801561FC"
         },
         {
-          "symbol": "GetBusy__14Class_802A1F90f",
+          "symbol": "GetBusy__29MiniGameCrushCarrierPostPlayCf",
           "start": "0x801561FC",
           "end": "0x80156204"
         },
@@ -22574,22 +22574,22 @@
           "end": "0x80156238"
         },
         {
-          "symbol": "vfn_06__14Class_802A1F10",
+          "symbol": "vfn_06__28MiniGameCrushCarrierGameEndC",
           "start": "0x80156238",
           "end": "0x8015623C"
         },
         {
-          "symbol": "vfn_07__14Class_802A1F10",
+          "symbol": "vfn_07__28MiniGameCrushCarrierGameEndC",
           "start": "0x8015623C",
           "end": "0x80156240"
         },
         {
-          "symbol": "vfn_10__14Class_802A1F10",
+          "symbol": "vfn_10__28MiniGameCrushCarrierGameEndC",
           "start": "0x80156240",
           "end": "0x80156248"
         },
         {
-          "symbol": "vfn_11__14Class_802A1F10",
+          "symbol": "vfn_11__28MiniGameCrushCarrierGameEndC",
           "start": "0x80156248",
           "end": "0x80156250"
         },
@@ -22599,112 +22599,112 @@
           "end": "0x8015629C"
         },
         {
-          "symbol": "_._14Class_802A1E38",
+          "symbol": "_._22MiniGameJumpBallRulesC",
           "start": "0x8015629C",
           "end": "0x801562D0"
         },
         {
-          "symbol": "GetScoreLimit__14Class_802A1E38",
+          "symbol": "GetScoreLimit__22MiniGameJumpBallRulesC",
           "start": "0x801562D0",
           "end": "0x801562DC"
         },
         {
-          "symbol": "IsNearWin__14Class_802A1E38i",
+          "symbol": "IsNearWin__22MiniGameJumpBallRulesCi",
           "start": "0x801562DC",
           "end": "0x801562E4"
         },
         {
-          "symbol": "GetScore__14Class_802A1E38i",
+          "symbol": "GetScore__22MiniGameJumpBallRulesCi",
           "start": "0x801562E4",
           "end": "0x801562EC"
         },
         {
-          "symbol": "IsTimed__14Class_802A1E38",
+          "symbol": "IsTimed__22MiniGameJumpBallRulesC",
           "start": "0x801562EC",
           "end": "0x80156308"
         },
         {
-          "symbol": "GetGameTime__14Class_802A1E38",
+          "symbol": "GetGameTime__22MiniGameJumpBallRulesC",
           "start": "0x80156308",
           "end": "0x80156314"
         },
         {
-          "symbol": "AllowsAudibles__14Class_802A1E38",
+          "symbol": "AllowsAudibles__22MiniGameJumpBallRulesC",
           "start": "0x80156314",
           "end": "0x8015631C"
         },
         {
-          "symbol": "_._14Class_802A1DC8",
+          "symbol": "_._24MiniGameJumpBallPreGameC",
           "start": "0x8015631C",
           "end": "0x80156350"
         },
         {
-          "symbol": "_._14Class_802A1D58",
+          "symbol": "_._24MiniGameJumpBallPrePlayC",
           "start": "0x80156350",
           "end": "0x80156384"
         },
         {
-          "symbol": "vfn_06__14Class_802A1C30",
+          "symbol": "vfn_06__24MiniGameJumpBallGameEndC",
           "start": "0x80156384",
           "end": "0x80156388"
         },
         {
-          "symbol": "vfn_07__14Class_802A1C30",
+          "symbol": "vfn_07__24MiniGameJumpBallGameEndC",
           "start": "0x80156388",
           "end": "0x8015638C"
         },
         {
-          "symbol": "vfn_10__14Class_802A1C30",
+          "symbol": "vfn_10__24MiniGameJumpBallGameEndC",
           "start": "0x8015638C",
           "end": "0x80156394"
         },
         {
-          "symbol": "vfn_11__14Class_802A1C30",
+          "symbol": "vfn_11__24MiniGameJumpBallGameEndC",
           "start": "0x80156394",
           "end": "0x8015639C"
         },
         {
-          "symbol": "_._14Class_802A1B58",
+          "symbol": "_._25MiniGameOpenFieldPrePlayC",
           "start": "0x8015639C",
           "end": "0x801563D0"
         },
         {
-          "symbol": "vfn_06__14Class_802A19F0",
+          "symbol": "vfn_06__25MiniGameOpenFieldGameEndC",
           "start": "0x801563D0",
           "end": "0x801563D4"
         },
         {
-          "symbol": "vfn_07__14Class_802A19F0",
+          "symbol": "vfn_07__25MiniGameOpenFieldGameEndC",
           "start": "0x801563D4",
           "end": "0x801563D8"
         },
         {
-          "symbol": "vfn_10__14Class_802A19F0",
+          "symbol": "vfn_10__25MiniGameOpenFieldGameEndC",
           "start": "0x801563D8",
           "end": "0x801563E0"
         },
         {
-          "symbol": "vfn_11__14Class_802A19F0",
+          "symbol": "vfn_11__25MiniGameOpenFieldGameEndC",
           "start": "0x801563E0",
           "end": "0x801563E8"
         },
         {
-          "symbol": "vfn_06__14Class_802A1860",
+          "symbol": "vfn_06__27MiniGameQuickStrikeGameEndC",
           "start": "0x801563E8",
           "end": "0x801563EC"
         },
         {
-          "symbol": "vfn_07__14Class_802A1860",
+          "symbol": "vfn_07__27MiniGameQuickStrikeGameEndC",
           "start": "0x801563EC",
           "end": "0x801563F0"
         },
         {
-          "symbol": "vfn_10__14Class_802A1860",
+          "symbol": "vfn_10__27MiniGameQuickStrikeGameEndC",
           "start": "0x801563F0",
           "end": "0x801563F8"
         },
         {
-          "symbol": "vfn_11__14Class_802A1860",
+          "symbol": "vfn_11__27MiniGameQuickStrikeGameEndC",
           "start": "0x801563F8",
           "end": "0x80156400"
         },

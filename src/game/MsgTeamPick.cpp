@@ -5,7 +5,7 @@
    computer can choose for a captain. When the screen closes the picked teams
    get their depth charts and, when asked, are saved as new teams. */
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/FELoop.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
@@ -124,7 +124,7 @@ int TournamentClose(void);
 int TournamentOpen(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
-void fn_80148AF8(Class_80148A58 *pObject);
+void fn_80148AF8(MiniGameC *pObject);
 int fn_80178308(void);
 int fn_80178320(void);
 int GameModeTypeIsSpecial(void);

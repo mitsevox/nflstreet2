@@ -10,7 +10,7 @@
 #include "game/Cheat.h"
 #include "game/GameOptions.h"
 #include "game/fn_8009D990.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/StyleTracker.h"
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
@@ -2625,15 +2625,15 @@ int TeamPairHandleMessage(int,TeamPairArgs_t *,int,int *);
 void PauseOpenScreenArgs(unsigned short,unsigned short,int,unsigned int,int *,int);
 int fn_80178EE0(int team);
 int fn_80178EA0(int team);
-int fn_80155130(Class_80148A58 *,int,int);
+int fn_80155130(MiniGameC *,int,int);
 int fn_80178D70(int team);
 int GameInfoGet(int team);
-void fn_8014F3E4(Class_80148A58 *,int,Stats_8005C4A4 *);
-void fn_8014BA20(Class_80148A58 *,int,Stats_8005C844 *);
-void fn_8014CCE8(Class_80148A58 *,int,Stats_8005CAE4 *);
-void fn_80155CF0(Class_80148A58 *,int,int *,int *);
-void fn_80155C44(Class_80148A58 *,int,int,Record_8005CE10 *);
-int fn_80155D38(Class_80148A58 *,int);
+void fn_8014F3E4(MiniGameC *,int,Stats_8005C4A4 *);
+void fn_8014BA20(MiniGameC *,int,Stats_8005C844 *);
+void fn_8014CCE8(MiniGameC *,int,Stats_8005CAE4 *);
+void fn_80155CF0(MiniGameC *,int,int *,int *);
+void fn_80155C44(MiniGameC *,int,int,Record_8005CE10 *);
+int fn_80155D38(MiniGameC *,int);
 
 void InGameRewardSetNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
 void InGameRewardSetOtherNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}

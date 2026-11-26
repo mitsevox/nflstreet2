@@ -1,5 +1,5 @@
-#ifndef GAME_CLASS_80148A58_H
-#define GAME_CLASS_80148A58_H
+#ifndef GAME_MINIGAMEC_H
+#define GAME_MINIGAMEC_H
 
 /* Object returned by fn_80148A58; its vtable pointer is at offset 0x18,
    after 24 bytes of data. Only the vtable slots called through are given
@@ -24,7 +24,7 @@ struct State_80148A58 {
     char mUnknownD[3];
 };
 
-class Class_80148A58 {
+class MiniGameC {
 public:
     virtual void vfn_01() = 0;
     virtual void vfn_02() = 0;
@@ -68,7 +68,7 @@ public:
     virtual int vfn_33(int kind, int team);
     virtual int vfn_34(int kind, int team, int threshold, int mode);
 
-    Class_80148A58();
+    MiniGameC();
     int fn_80149014();
 
     int mUnknown0;
@@ -79,6 +79,6 @@ public:
     };
 };
 
-extern "C" Class_80148A58 *fn_80148A58(void);
+extern "C" MiniGameC *fn_80148A58(void);
 
 #endif

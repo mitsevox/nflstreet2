@@ -4,7 +4,7 @@
    players, legends, created and randomized players) and hands the choices to the
    game when the screen closes. */
 
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
 #include <string.h>

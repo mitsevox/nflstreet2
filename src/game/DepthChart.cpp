@@ -1,7 +1,7 @@
 /* The team depth chart: which player fills each of the 14 roster slots of both teams, loaded from
    and saved to the roster tables, and the edits the depth-chart screen makes (cycling, swapping,
    committing and cancelling). */
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/FELoop.h"
 #include "game/Object_8008044C.h"
 #include "game/DepthChart.h"

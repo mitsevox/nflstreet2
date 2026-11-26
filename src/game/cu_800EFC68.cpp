@@ -51,7 +51,7 @@
 #include "game/Class_80297B90.h"
 #include "game/Move_8011AB38.h"
 #include "game/Record_800CE608.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 
 /* Views of the block at player +336. Only the accessed fields
    are declared. */

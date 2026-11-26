@@ -19,7 +19,7 @@
 #include "game/SndgCrowd.h"
 #include "game/PauseMenu.h"
 #include "game/GameCamera.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/InGame.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
@@ -354,7 +354,7 @@ void fn_801485EC(int mode);
 int fn_801485F4(void);
 void fn_80148644(void);
 int fn_801486A0(void);
-Class_80148A58 * fn_80148A58(void);
+MiniGameC * fn_80148A58(void);
 void fn_80149040(Object_80039F5C *pObject);
 void fn_8014F3DC(int a);
 void RouteArrowSetEnabled(int a);

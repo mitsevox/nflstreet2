@@ -1,7 +1,7 @@
 /* Game-wide front-end message handler: the first handler the message dispatcher tries, it answers the generic message ids that no screen handler took (game setup values, Street Event sides, controllers, profiles, player status and portrait, user text buffers, demo and memory card flags). */
 #include "game/ResLoad.h"
 #include "game/DbUserSetCurrent.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/FELoop.h"
 #include "game/InGame.h"
 #include "game/DbCursor.h"
@@ -47,7 +47,7 @@ int UserRecGetCount(void);
 int UserProfileGetOldest(int a);
 void UserProfileCreate(int a, char *pText, int c);
 int fn_801486A0(void);
-void fn_80152940(Class_80148A58 *pObject, int index, MiniGameSlotInfo_t *pInfo);
+void fn_80152940(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int fn_80178AE0(void);
 void PerCheckConnectAll(void);
 void PortDbOpenSides(DbCursor *pObject);
