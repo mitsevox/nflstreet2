@@ -4762,7 +4762,7 @@
             "evidence": "evidence.tsv source-form 0x80230D8C-0x802311C8"
           }
         ],
-        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out fn_8022FC8C, fn_8022FFD0, fn_80230400 and fn_80230D8C."
+        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out DbCacheUpdateHandler (0x8022FC8C), DbCacheCreateScratchTable (0x8022FFD0), DbCacheCopyRows (0x80230400) and DbCacheDeleteRows (0x80230D8C)."
       }
     },
     {

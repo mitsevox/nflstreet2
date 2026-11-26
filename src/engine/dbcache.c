@@ -203,10 +203,7 @@ typedef struct Cache_8022F8A8 {
     int *mpUnknown12[2];
     int *mpUnknown20[2];
     int *mpUnknown28[2];
-    union {
-        int mWord;
-        unsigned char mBytes[4];
-    } mUnknown36;
+    int mUnknown36;
     int mUnknown40[2];
     struct CacheRec_8022F8A8 {
         int mUnknown0;
@@ -779,7 +776,7 @@ int DbCacheCreate(int key, Cache_8022F8A8 **ppCache)
     pCache->mUnknown0 = DbCacheNewId();
     pCache->mUnknown8 = 1023;
     pCache->mUnknown4 = key;
-    pCache->mUnknown36.mWord = err;
+    pCache->mUnknown36 = err;
     pCache->mpUnknown96 = 0;
     pCache->mpUnknown100 = 0;
     for (; i <= 1; i++) {
@@ -850,7 +847,7 @@ int DbCacheDestroy(Cache_8022F8A8 *pCache)
 {
     unsigned short i;
 
-    if (pCache->mUnknown36.mWord != 0) {
+    if (pCache->mUnknown36 != 0) {
         for (i = 0; i <= 1; i++) {
             if (DBCACHE_BIT_IS_SET(&pCache->mUnknown36, i)) {
                 DbUtilFree(pCache->mpUnknown12[i]);
@@ -1066,6 +1063,8 @@ int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable
     }
     if (found == 1) {
         err = TDbQryCreateTbl(db, table, cursor, aKeys, 0);
+        /* Redundant (found is already 1): kept for the target's dead 0/23 test at 0x8023031C/20
+           (holdout, see its HOLDOUT row). */
         if (err == 0 || err == 23) {
             found = 1;
         }
@@ -1134,162 +1133,164 @@ int DbCacheCopyRows(unsigned short id, int key, int value, int db, int mode, uns
         }
     }
     if (tableMask != 0) {
-    if (key != 1023) {
-        for (i = 0; i <= 2; i++) {
-            aCreated[i] = 0;
-            if (err == 0 && DBCACHE_BIT_IS_SET(&tableMask, i)
-                && TDbTblExists(db, _DbCache_aTables[i].mUnknown4) == 0
-                && TDbIdxExists(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12) == 13) {
-                _DbCacheSetIdxCol(&aCols[0], _DbCache_aTables[i].mUnknown4, 0x44494754, err);
-                n = 1;
-                if (TDbTblColExists(db, _DbCache_aTables[i].mUnknown4, 0x44494750) == 0) {
-                    n = 2;
-                    _DbCacheSetIdxCol(&aCols[1], _DbCache_aTables[i].mUnknown4, 0x44494750, err);
-                }
-                _DbCacheSetIdxCol(&aCols[n], -1, -1, 3);
-                _DbCacheSetValueExpr(&where, _DbCacheColKey(_DbCache_aTables[i].mUnknown4, 0x44494754), key);
-                err = TDbIdxCreate(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12, aCols, &where, 0);
-                if (err == 0) {
-                    aCreated[i] = 1;
-                }
-            }
-        }
-    }
-    if (err == 0 && colMask != 0) {
-        for (j = 0; j <= 1; j++) {
-            if (DBCACHE_BIT_IS_SET(&colMask, j) && TDbTblExists(pCache->mUnknown4, _DbCache_aCachedCols[j].mTable) != 0) {
-                ((unsigned char *)&colMask)[j >> 3] &= ~DBCACHE_BIT(j);
-            }
-        }
-        for (i = 0; i <= 2; i++) {
-            aColMask[i] = 0;
-            if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
-                for (j = 0; j <= 1; j++) {
-                    if (DBCACHE_BIT_IS_SET(&colMask, j)
-                        && TDbTblColExists(db, _DbCache_aTables[i].mUnknown0, _DbCache_aCachedCols[j].mCol) == 0) {
-                        ((unsigned char *)&aColMask[i])[j >> 3] |= DBCACHE_BIT(j);
-                    }
-                }
-            }
-        }
-    }
-    MemFill(aNew, sizeof(aNew), -1, 4);
-    if (err == 0) {
         if (key != 1023) {
             for (i = 0; i <= 2; i++) {
+                aCreated[i] = 0;
+                if (err == 0 && DBCACHE_BIT_IS_SET(&tableMask, i)
+                    && TDbTblExists(db, _DbCache_aTables[i].mUnknown4) == 0
+                    && TDbIdxExists(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12) == 13) {
+                    _DbCacheSetIdxCol(&aCols[0], _DbCache_aTables[i].mUnknown4, 0x44494754, err);
+                    n = 1;
+                    if (TDbTblColExists(db, _DbCache_aTables[i].mUnknown4, 0x44494750) == 0) {
+                        n = 2;
+                        _DbCacheSetIdxCol(&aCols[1], _DbCache_aTables[i].mUnknown4, 0x44494750, err);
+                    }
+                    _DbCacheSetIdxCol(&aCols[n], -1, -1, 3);
+                    _DbCacheSetValueExpr(&where, _DbCacheColKey(_DbCache_aTables[i].mUnknown4, 0x44494754), key);
+                    err = TDbIdxCreate(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12, aCols,
+                                       &where, 0);
+                    if (err == 0) {
+                        aCreated[i] = 1;
+                    }
+                }
+            }
+        }
+        if (err == 0 && colMask != 0) {
+            for (j = 0; j <= 1; j++) {
+                if (DBCACHE_BIT_IS_SET(&colMask, j)
+                    && TDbTblExists(pCache->mUnknown4, _DbCache_aCachedCols[j].mTable) != 0) {
+                    ((unsigned char *)&colMask)[j >> 3] &= ~DBCACHE_BIT(j);
+                }
+            }
+            for (i = 0; i <= 2; i++) {
+                aColMask[i] = 0;
                 if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
-                    err = DbCacheCreateScratchTable(key, i, db, &aNew[i]);
-                    if (err != 0) {
-                        goto cleanup;
+                    for (j = 0; j <= 1; j++) {
+                        if (DBCACHE_BIT_IS_SET(&colMask, j)
+                            && TDbTblColExists(db, _DbCache_aTables[i].mUnknown0, _DbCache_aCachedCols[j].mCol) == 0) {
+                            ((unsigned char *)&aColMask[i])[j >> 3] |= DBCACHE_BIT(j);
+                        }
                     }
                 }
             }
         }
-        if (err != 0) {
-            goto cleanup;
-        }
-        if (colMask != 0 && mode == 1) {
-            for (i = 0; i <= 2; i++) {
-                if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1 && aColMask[i] != 0) {
-                    err = DbCacheCreateScratchTable(key, i, db, &aNew[i]);
-                    if (err != 0) {
-                        goto cleanup;
-                    }
-                }
-            }
-        }
+        MemFill(aNew, sizeof(aNew), -1, 4);
         if (err == 0) {
-            for (i = 0; i <= 2; i++) {
-                if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1) {
-                    aNew[i] = _DbCache_aTables[i].mUnknown0;
+            if (key != 1023) {
+                for (i = 0; i <= 2; i++) {
+                    if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+                        err = DbCacheCreateScratchTable(key, i, db, &aNew[i]);
+                        if (err != 0) {
+                            goto cleanup;
+                        }
+                    }
                 }
             }
-        }
-        if (err != 0) {
-            goto cleanup;
-        }
-        if (colMask != 0) {
-            tag = ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 % 10 + '0' : pCache->mUnknown0 + '0') << 24)
-                | ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 / 10 + '0' : '0') << 16) | ('D' << 8) | 'T';
-            err = TDbRegisterHandler(DbCacheUpdateHandler, tag);
-            registered = err == 0;
+            if (err != 0) {
+                goto cleanup;
+            }
+            if (colMask != 0 && mode == 1) {
+                for (i = 0; i <= 2; i++) {
+                    if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1 && aColMask[i] != 0) {
+                        err = DbCacheCreateScratchTable(key, i, db, &aNew[i]);
+                        if (err != 0) {
+                            goto cleanup;
+                        }
+                    }
+                }
+            }
             if (err == 0) {
                 for (i = 0; i <= 2; i++) {
-                    if (aColMask[i] != 0) {
-                        _DbCacheSetTable(&aTables[0], aNew[i], 2, 0);
-                        _DbCacheSetTable(&aTables[1], -1, 2, 0);
-                        n = 0;
-                        for (j = 0; j <= 1; j++) {
-                            if (DBCACHE_BIT_IS_SET(&aColMask[i], j)) {
-                                pCache->mUnknown48[n].mUnknown8 = _DbCache_aCachedCols[j].mCol;
-                                pCache->mUnknown48[n].mUnknown4 = aNew[i];
-                                n++;
+                    if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1) {
+                        aNew[i] = _DbCache_aTables[i].mUnknown0;
+                    }
+                }
+            }
+            if (err != 0) {
+                goto cleanup;
+            }
+            if (colMask != 0) {
+                tag = ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 % 10 + '0' : pCache->mUnknown0 + '0') << 24)
+                    | ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 / 10 + '0' : '0') << 16) | ('D' << 8) | 'T';
+                err = TDbRegisterHandler(DbCacheUpdateHandler, tag);
+                registered = err == 0;
+                if (err == 0) {
+                    for (i = 0; i <= 2; i++) {
+                        if (aColMask[i] != 0) {
+                            _DbCacheSetTable(&aTables[0], aNew[i], 2, 0);
+                            _DbCacheSetTable(&aTables[1], -1, 2, 0);
+                            n = 0;
+                            for (j = 0; j <= 1; j++) {
+                                if (DBCACHE_BIT_IS_SET(&aColMask[i], j)) {
+                                    pCache->mUnknown48[n].mUnknown8 = _DbCache_aCachedCols[j].mCol;
+                                    pCache->mUnknown48[n].mUnknown4 = aNew[i];
+                                    n++;
+                                }
+                            }
+                            pCache->mUnknown48[n].mUnknown0 = 0;
+                            pCache->mUnknown48[n].mUnknown8 = -1;
+                            pCache->mUnknown48[n].mUnknown4 = -1;
+                            err = TDbQryUpdateWithHandler(db, aTables, 0, tag, pCache->mUnknown48, pCache->mUnknown0, 0,
+                                                          0);
+                            ok = 0;
+                            if (err == 0 || err == 23 || err == 21 || err == 20) {
+                                ok = 1;
+                            }
+                            if (ok == 1) {
+                                err = 0;
                             }
                         }
-                        pCache->mUnknown48[n].mUnknown0 = 0;
-                        pCache->mUnknown48[n].mUnknown8 = -1;
-                        pCache->mUnknown48[n].mUnknown4 = -1;
-                        err = TDbQryUpdateWithHandler(db, aTables, 0, tag, pCache->mUnknown48, pCache->mUnknown0, 0,
-                                                      0);
+                        if (err != 0) {
+                            break;
+                        }
+                    }
+                }
+                if (registered == 1) {
+                    if (err == 0) {
+                        err = TDbUnregisterHandler(tag);
+                    } else {
+                        TDbUnregisterHandler(tag);
+                    }
+                }
+            }
+            if (err == 0) {
+                for (i = 0; i <= 2; i++) {
+                    if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+                        err = TDbTblRowCopyTrig(db, aNew[i], pCache->mUnknown4, _DbCache_aTables[i].mUnknown0, 0, 0);
                         ok = 0;
                         if (err == 0 || err == 23 || err == 21 || err == 20) {
                             ok = 1;
                         }
-                        if (ok == 1) {
-                            err = 0;
+                        if (ok != 1) {
+                            break;
                         }
+                        err = 0;
                     }
-                    if (err != 0) {
-                        break;
-                    }
-                }
-            }
-            if (registered == 1) {
-                if (err == 0) {
-                    err = TDbUnregisterHandler(tag);
-                } else {
-                    TDbUnregisterHandler(tag);
                 }
             }
         }
-        if (err == 0) {
-            for (i = 0; i <= 2; i++) {
-                if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
-                    err = TDbTblRowCopyTrig(db, aNew[i], pCache->mUnknown4, _DbCache_aTables[i].mUnknown0, 0, 0);
-                    ok = 0;
-                    if (err == 0 || err == 23 || err == 21 || err == 20) {
-                        ok = 1;
-                    }
-                    if (ok != 1) {
-                        break;
-                    }
-                    err = 0;
-                }
-            }
-        }
-    }
 cleanup:
-    for (i = 0; i <= 2; i++) {
-        if (aNew[i] != -1 && aNew[i] != _DbCache_aTables[i].mUnknown0) {
-            if (err == 0) {
-                err = TDbTblDestroy(db, aNew[i]);
-            } else {
-                TDbTblDestroy(db, aNew[i]);
-            }
-        }
-    }
-    if (key != 1023) {
         for (i = 0; i <= 2; i++) {
-            if (aCreated[i] == 1) {
+            if (aNew[i] != -1 && aNew[i] != _DbCache_aTables[i].mUnknown0) {
                 if (err == 0) {
-                    err = TDbIdxDestroy(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12);
+                    err = TDbTblDestroy(db, aNew[i]);
                 } else {
-                    TDbIdxDestroy(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12);
+                    TDbTblDestroy(db, aNew[i]);
                 }
             }
         }
-    }
-    pCache->mUnknown8 = 1023;
+        if (key != 1023) {
+            for (i = 0; i <= 2; i++) {
+                if (aCreated[i] == 1) {
+                    if (err == 0) {
+                        err = TDbIdxDestroy(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12);
+                    } else {
+                        TDbIdxDestroy(db, _DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown12);
+                    }
+                }
+            }
+        }
+        pCache->mUnknown8 = 1023;
     }
     return err;
 }
