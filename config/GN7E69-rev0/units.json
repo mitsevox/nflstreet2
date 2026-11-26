@@ -14267,12 +14267,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80165770",
-          "end": "0x80165890"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80165C50",
           "end": "0x80166110"
         },
         {
@@ -14303,10 +14297,6 @@
           {
             "function": "PlayAlignLoadPlayRoutes",
             "evidence": "evidence.tsv source-form 0x80165464-0x80165770"
-          },
-          {
-            "function": "PlayAlignLoadRouteSteps",
-            "evidence": "evidence.tsv source-form 0x80165890-0x80165C50"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"

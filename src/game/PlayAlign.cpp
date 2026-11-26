@@ -525,7 +525,8 @@ int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, u
         int steps = record->mUnknown4Word;
         memset(record->mUnknown1C, 0, 0x1B0);
         for (int j = 0; j < steps; ++j) {
-            char ax[8], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
+            // FAKEMATCH: ax sized 5 (the formatted name and its NUL) so it is not a DImode array
+            char ax[5], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
             fn_801C2E18(ax, "ax%02d", j+1);
             fn_801C2E18(ay, "ay%02d", j+1);
             fn_801C2E18(au, "au%02d", j+1);
