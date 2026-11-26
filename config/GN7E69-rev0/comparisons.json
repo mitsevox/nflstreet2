@@ -20711,7 +20711,7 @@
     {
       "source": "src/game/cu_800D760C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata rows 0x8029D6BC-0x8029D7B8. The two file-static functions SN's linker discarded (_StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
       "sections": [
         {
           "section": ".text",
