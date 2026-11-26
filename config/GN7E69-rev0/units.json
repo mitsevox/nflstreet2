@@ -14173,9 +14173,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800EFC68.cpp",
+      "source": "src/game/Assign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/cu_800EFC68.cpp) and its data rows; holdouts approved by the owner ruling of 2026-11-19 (holdouts_approved).",
+      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/Assign.cpp) and its data rows; holdouts approved by the owner ruling of 2026-11-19 (holdouts_approved).",
       "sections": [
         {
           "section": ".text",
@@ -14681,7 +14681,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_800EFC68.cpp: the 52 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 52 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
