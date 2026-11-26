@@ -26739,7 +26739,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802DBEBC",
-          "end": "0x802DBF2C"
+          "end": "0x802DCEB0"
         },
         {
           "section": ".bss",

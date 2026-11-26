@@ -10752,7 +10752,7 @@
     {
       "source": "src/game/camplay.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/data/sdata/bss/sbss accesses; the camera view and definition tables after the jitter definitions remain original and unclaimed. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv provisional camera grouping, exact function extents, direct type/field observations and bounded rodata/data/sdata/bss/sbss accesses; the whole .data 0x802DBEBC-0x802DCEB0 (jitter state and definitions, view sets, CamPlayMode and the camera definition table) is the file's own. The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10782,7 +10782,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802DBEBC",
-          "end": "0x802DBF2C"
+          "end": "0x802DCEB0"
         },
         {
           "section": ".bss",

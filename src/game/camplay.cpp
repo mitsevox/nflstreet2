@@ -26,9 +26,14 @@ struct CamPlayState_t {
     CamPlayAngles_t mUnknown2C;
     float mUnknown38;
 };
+struct CamPlayMode_t {
+    void (*mUnknown0)(GameCamera_t *camera, CameraDesc_t *desc);
+    void (*mUnknown4)(GameCamera_t *camera);
+    int mUnknown8;
+};
 struct CamPlayDef_t {
     CamPlayView_t *mUnknown0;
-    int mUnknown4;
+    CamPlayMode_t *mUnknown4;
     float mUnknown8;
     float mUnknownC[2];
     float mUnknown14[2][2];
@@ -57,7 +62,152 @@ static CamPlayJitter_t _CamPlay_aJitterDefs[3] = {
     {1, 20, -0.2f, 0.2f, {0.0f, 0.0f, 0.0f}, 1, 0, {0, 0}},
     {1, 20, -0.3f, 0.3f, {0.0f, 0.0f, 0.0f}, 1, 1, {0, 0}},
 };
-extern "C" CamPlayDef_t lbl_802DC718[];
+extern "C" {
+void CamPlayInit(GameCamera_t *camera, CameraDesc_t *);
+void CamPlayUninit(GameCamera_t *camera);
+}
+extern CamPlayMode_t CamPresetMode;
+extern CamPlayMode_t CamCurveMode;
+extern CamPlayMode_t gCamReplayMode;
+extern CamPlayMode_t gCamShotMode;
+extern "C" CamPlayMode_t lbl_802DCF80;
+static CamPlayView_t _CamPlay_aaViews[12][6] = {
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCD82D9, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.4f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCD82D9, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCD82D9, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCD82D9, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCD82D9, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+    {
+        {{0.0f, -12.0f, 3.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -11.7f, 4.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -10.7f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -15.0f, 6.5f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -6.0f, 2.0f}, {0xCAAAAB, 0, 0}, 5},
+        {{0.0f, -16.0f, 8.2f}, {0xCE38E4, 0, 0}, 5},
+    },
+};
+CamPlayMode_t CamPlayMode = { CamPlayInit, CamPlayUninit, 0 };
+static CamPlayDef_t _CamPlay_aDefs[18] = {
+    {_CamPlay_aaViews[0], &CamPlayMode, 15.0f, {-17.0f, 17.0f}, {{-56.5f, 56.5f}, {-58.0f, 59.5f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[1], &CamPlayMode, 12.0f, {-15.5f, 15.5f}, {{-46.0f, 46.5f}, {-49.0f, 49.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[2], &CamPlayMode, 10.0f, {-11.0f, 11.0f}, {{-46.5f, 46.5f}, {-48.2f, 49.5f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[3], &CamPlayMode, 14.0f, {-14.7f, 14.7f}, {{-46.8f, 46.8f}, {-49.0f, 49.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[4], &CamPlayMode, 14.0f, {-15.0f, 15.0f}, {{-46.2f, 46.2f}, {-49.0f, 49.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[5], &CamPlayMode, 16.0f, {-17.0f, 17.0f}, {{-56.5f, 56.5f}, {-59.5f, 59.5f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[6], &CamPlayMode, 15.0f, {-16.0f, 16.0f}, {{-56.5f, 56.5f}, {-59.0f, 59.5f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[7], &CamPlayMode, 11.5f, {-12.0f, 12.0f}, {{-56.0f, 56.0f}, {-58.0f, 58.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[8], &CamPlayMode, 13.0f, {-15.0f, 15.0f}, {{-46.5f, 46.5f}, {-49.9f, 49.9f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[9], &CamPlayMode, 14.0f, {-16.0f, 16.0f}, {{-56.3f, 56.3f}, {-59.0f, 59.5f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[10], &CamPlayMode, 15.0f, {-16.0f, 16.0f}, {{-56.3f, 56.3f}, {-59.0f, 59.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[11], &CamPlayMode, 12.0f, {-14.0f, 14.0f}, {{-47.2f, 47.2f}, {-49.0f, 49.0f}},
+     {0.0f, -3.0f, 3.0f}, {8.0f, 0.0f, 0.0f}, {0.0f, -9.0f, 7.0f}, {-70.0f, 0.0f, 0.0f}, {0.0f, 3.5f, 0.0f}, {2.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &CamCurveMode, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &CamPresetMode, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &lbl_802DCF80, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &gCamReplayMode, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &gCamReplayMode, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+    {_CamPlay_aaViews[0], &gCamShotMode, 6.0f, {-9.0f, 9.0f}, {{-45.0f, 45.0f}, {-45.0f, 45.0f}},
+     {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}},
+};
 static CamPlayVec3_t _CamPlay_PanPoint;
 static CamPlayAngles_t _CamPlay_PanAngles;
 static float _CamPlay_fOrbitDir = 1.0f;
@@ -138,8 +288,8 @@ void CamPlayApplyJitter(GameCamera_t *camera, CamPlayVec3_t *point)
 }
 void CamPlayPanWithBall(CamPlayVec3_t *point, CamPlayAngles_t *angles, CamPlayVec3_t *velocity, int index, int mode)
 {
-    float base = lbl_802DC718[index].mUnknown8;
-    float amount = velocity->mX/base*(lbl_802DC718[index].mUnknownC[1]-base);
+    float base = _CamPlay_aDefs[index].mUnknown8;
+    float amount = velocity->mX/base*(_CamPlay_aDefs[index].mUnknownC[1]-base);
     float length = Vec3Magnitude(point);
     int reset = 0;
     switch (mode) {
@@ -157,9 +307,9 @@ void CamPlayPanWithBall(CamPlayVec3_t *point, CamPlayAngles_t *angles, CamPlayVe
         _CamPlay_PanPoint.mX = point->mX;
     }
 }
-void CamPlayInit(GameCamera_t *camera)
+void CamPlayInit(GameCamera_t *camera, CameraDesc_t *)
 {
-    _CamPlay_pViews = lbl_802DC718[camera->mUnknown9C].mUnknown0;
+    _CamPlay_pViews = _CamPlay_aDefs[camera->mUnknown9C].mUnknown0;
     camera->mUnknownE0 = 0.0f;
     camera->mUnknownE4 = 0;
     camera->mUnknownE5 = 0;
@@ -257,7 +407,7 @@ void CamPlayProcess(GameCamera_t *camera)
     CamPlayAngles_t offset;
     if (BallsExist()) {
         BallGetPosition(BallGetCurrent(),&velocity);
-        float bound = lbl_802DC718[camera->mUnknown9C].mUnknown8;
+        float bound = _CamPlay_aDefs[camera->mUnknown9C].mUnknown8;
         velocity.mX = velocity.mX < -bound ? -bound : (velocity.mX > bound ? bound : velocity.mX);
     } else velocity.mX = velocity.mY = velocity.mZ = 0.0f;
     fn_80177FE0();
@@ -265,8 +415,8 @@ void CamPlayProcess(GameCamera_t *camera)
     switch (camera->mUnknownA0) {
     case 12:
         if (fn_801486A0() == 1) {
-            ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown48);
-            CamMainSetOffset(camera,&lbl_802DC718[camera->mUnknown9C].mUnknown3C);
+            ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown48);
+            CamMainSetOffset(camera,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown3C);
             CamMainSetAngle(camera,&offset,5);
         }
         break;
@@ -303,13 +453,13 @@ void CamPlayProcess(GameCamera_t *camera)
         if (gameMode != 2) CamPlayPanWithBall(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
         if (fn_801486A0() == 0) {
             CamPlayAngles_t unused; // FAKEMATCH: unused local (compiled-out debug filler) gives the target's frame slots
-            Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown24);
-            ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown30);
+            Vec3Add(&point,&point,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown24);
+            ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown30);
             Orient3Add(&angles,&angles,&offset);
         }
         if (fn_801486A0() == 2) {
-            Vec3Add(&point,&point,&lbl_802DC718[camera->mUnknown9C].mUnknown54);
-            ANGLES_FROM_DEGREES(offset, lbl_802DC718[camera->mUnknown9C].mUnknown60);
+            Vec3Add(&point,&point,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown54);
+            ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown60);
             Orient3Add(&angles,&angles,&offset);
         } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = fn_80178320();
@@ -387,7 +537,7 @@ void CamPlayStart(GameCamera_t *camera)
         if (mode == 1 && (unsigned int)camera->mUnknownA0 <= 2) camera->mUnknownA0 = 12;
     }
 }
-int CamPlayGetDefMode(int index) { return lbl_802DC718[index].mUnknown4; }
+CamPlayMode_t *CamPlayGetDefMode(int index) { return _CamPlay_aDefs[index].mUnknown4; }
 void CamPlayGetPosLimits(int index, unsigned int mode, float *a, float *b)
 {
     int alternate = 0;
@@ -395,12 +545,12 @@ void CamPlayGetPosLimits(int index, unsigned int mode, float *a, float *b)
     case 0: case 1: case 4: case 7: case 8: case 9: case 10: case 11: case 12: alternate = 0; break;
     case 2: case 3: case 5: alternate = 1; break;
     }
-    float *pa = lbl_802DC718[index].mUnknownC;
+    float *pa = _CamPlay_aDefs[index].mUnknownC;
     /* FAKEMATCH: the target adds the pair offset and the row offset before
        the table base ((alternate * 8 + index * 0x6C) + &mUnknown14); every
        array-index form adds the row offset to the base first. */
-    float *pb = (float *)((char *)lbl_802DC718[0].mUnknown14 +
-                          (alternate * sizeof(lbl_802DC718[0].mUnknown14[0]) + index * sizeof(CamPlayDef_t)));
+    float *pb = (float *)((char *)_CamPlay_aDefs[0].mUnknown14 +
+                          (alternate * sizeof(_CamPlay_aDefs[0].mUnknown14[0]) + index * sizeof(CamPlayDef_t)));
     a[0] = pa[0];
     a[1] = pa[1];
     b[0] = pb[0];
