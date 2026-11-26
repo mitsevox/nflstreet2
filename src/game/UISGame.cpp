@@ -130,7 +130,7 @@ void fn_80220CFC(int a);
 void fn_80220D04(void);
 void fn_802212C8(void);
 void UIGLibTextObjAction(void);
-void fn_80225654(void);
+void UIGArcObjAction(void);
 void LLLightAttachViewport(Viewport_t *pObject);
 void LLLightDetachViewport(Viewport_t *pObject);
 int LLFogEnable(int a);
@@ -196,7 +196,7 @@ void UISGameSetCallbacks(void *p)
     fn_80218AD4(p, 1, UISSoundObjAction);
     fn_80218AD4(p, 2, (void (*)(void))UIGCurveObjAction);
     fn_80218AD4(p, 3, UISViewObjAction);
-    fn_80218AD4(p, 4, fn_80225654);
+    fn_80218AD4(p, 4, UIGArcObjAction);
     fn_80218AD4(p, 5, UISTextTableAction);
     fn_80218AD4(p, 6, UISModelObjAction);
     fn_80218AD4(p, 7, UISGameObjSlot7);
