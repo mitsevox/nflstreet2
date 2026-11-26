@@ -24,11 +24,9 @@ void SNDSYS_entercritical(void);
 void SNDSTRM_requeststatus(int handle, void *pStatus);
 void SNDSYS_leavecritical(void);
 int SNDPROFILE_outputlatency(void);
-RcmpDecoder *fn_801D9654(void *pMem, RcmpCodecIData_t *pIData);
 }
 
 
-extern RcmpAllocator_t lbl_80399100;
 static RcmpCodec *(*_MovieRcmp_pfnMadCodecCreate)(void) = 0;
 static RcmpCodec *(*_MovieRcmp_pfnVp6CodecCreate)(void) = 0;
 
@@ -96,7 +94,7 @@ void _MovieRcmpGetChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, Rcm
             }
             pInfo->mCodec = codec;
             if (codec != 0) {
-                pChunk = fn_801D9958((RcmpChunk_t *)lbl_80399100.Alloc(sizeof(RcmpChunk_t), ""));
+                pChunk = new (gRcmpSystem.Alloc(sizeof(RcmpChunk_t), "")) RcmpChunk_t;
                 *ppChunk = pChunk;
                 pChunk->mpHeader = pHeader;
                 if (codec == 2) {
@@ -121,13 +119,13 @@ void _MovieRcmpGetChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer, Rcm
                     return;
                 }
                 if (codec == 2 && _MovieRcmp_pfnMadCodecCreate != 0) {
-                    if (fn_801D9720(pDecoder, _MovieRcmp_pfnMadCodecCreate(), pChunk) != 2) {
-                        fn_801D9768(pDecoder);
+                    if (pDecoder->ChooseCodec(_MovieRcmp_pfnMadCodecCreate(), pChunk) != 2) {
+                        pDecoder->FreeChosenCodec();
                     }
                 }
                 if (codec == 4 && _MovieRcmp_pfnVp6CodecCreate != 0) {
-                    if (fn_801D9720(pDecoder, _MovieRcmp_pfnVp6CodecCreate(), pChunk) != 2) {
-                        fn_801D9768(pDecoder);
+                    if (pDecoder->ChooseCodec(_MovieRcmp_pfnVp6CodecCreate(), pChunk) != 2) {
+                        pDecoder->FreeChosenCodec();
                     }
                 }
                 return;
@@ -141,7 +139,7 @@ void _MovieRcmpReleaseChunk(RcmpDecoder *pDecoder, MovieRcmpInfo_t **ppStreamer,
 {
     STREAM_release((*ppStreamer)->mpVideo->mpStream, pChunk->mpHeader);
     if (pChunk != 0) {
-        lbl_80399100.mFree(pChunk);
+        gRcmpSystem.mFree(pChunk);
     }
 }
 
@@ -151,11 +149,10 @@ void MovieRcmpInitVideo(MovieRcmpInfo_t *pInfo, void *pStream)
 {
     MovieRcmpVideoInfo_t *pVideo;
     MovieRcmpAudioInfo_t *pAudio;
-    RcmpCodecIData_t iData;
 
-    lbl_80399100.mAlloc = _MovieRcmpAllocMem;
-    lbl_80399100.mFree = _MovieRcmpFreeMem;
-    lbl_80399100.mFlags = 1;
+    gRcmpSystem.mAlloc = _MovieRcmpAllocMem;
+    gRcmpSystem.mFree = _MovieRcmpFreeMem;
+    gRcmpSystem.mFlags = 1;
     pVideo = (MovieRcmpVideoInfo_t *)fn_801D2B7C(sizeof(MovieRcmpVideoInfo_t), 0, 0);
     pAudio = (MovieRcmpAudioInfo_t *)fn_801D2B7C(sizeof(MovieRcmpAudioInfo_t), 0, 0);
     pInfo->mpVideo = pVideo;
@@ -170,8 +167,8 @@ void MovieRcmpInitVideo(MovieRcmpInfo_t *pInfo, void *pStream)
     pAudio->mHandle = -1;
     MovieRcmpResetTime(pAudio);
     pVideo->mpInfo = pInfo;
-    fn_801D9990(&iData, &pVideo->mpInfo, (RcmpGetChunkFunc_t)_MovieRcmpGetChunk, (RcmpReleaseChunkFunc_t)_MovieRcmpReleaseChunk, 2);
-    pVideo->mpDecoder = fn_801D9654(lbl_80399100.Alloc(0x1C, ""), &iData);
+    RcmpCodecIData_t iData(&pVideo->mpInfo, (RcmpGetChunkFunc_t)_MovieRcmpGetChunk, (RcmpReleaseChunkFunc_t)_MovieRcmpReleaseChunk, 2);
+    pVideo->mpDecoder = new (gRcmpSystem.Alloc(0x1C, "")) RcmpDecoder(&iData);
 }
 
 void MovieRcmpShutdownVideo(MovieRcmpInfo_t *pInfo)
@@ -331,17 +328,17 @@ unsigned int MovieRcmpGetCurFrame(MovieRcmpInfo_t *pInfo)
 
 RcmpFrame_t *MovieRcmpGetFrame(MovieRcmpInfo_t *pInfo, unsigned int frame)
 {
-    RcmpFrame_t *pFrame = fn_801D9808(pInfo->mpVideo->mpDecoder, frame);
+    RcmpFrame_t *pFrame = pInfo->mpVideo->mpDecoder->GetFrame(frame);
 
     if (pFrame != 0) {
-        pInfo->mpVideo->mCurFrame = fn_801D97C0(pInfo->mpVideo->mpDecoder);
+        pInfo->mpVideo->mCurFrame = pInfo->mpVideo->mpDecoder->GetCurrentFrameNumber();
     }
     return pFrame;
 }
 
 void MovieRcmpReleaseFrame(MovieRcmpInfo_t *pInfo, RcmpFrame_t *pFrame)
 {
-    fn_801D9894(pInfo->mpVideo->mpDecoder, pFrame);
+    pInfo->mpVideo->mpDecoder->ReleaseFrame(pFrame);
 }
 
 void MovieRcmpGetDataFromFrame(RcmpFrame_t *pFrame, unsigned char **ppY, unsigned char **ppU, unsigned char **ppV)

@@ -507,6 +507,18 @@
       "include_dirs": [
         "include/libc"
       ]
+    },
+    "rcmp_cxx": {
+      "flags": [
+        "-O2",
+        "-fno-weak",
+        "-fno-implement-inlines"
+      ],
+      "include_dirs": [
+        "include/libc"
+      ],
+      "language": "c++",
+      "evidence": "TEMP"
     }
   },
   "externals": {
@@ -1951,6 +1963,43 @@
           "placement": ".data5",
           "start": "0x803EBD4C",
           "end": "0x803EBD50"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/rcmpbase.cpp",
+      "profile": "rcmp_cxx",
+      "evidence": "evidence.tsv unit row 0x801D9634-0x801D9A88 (src/engine/rcmpbase.cpp), its compiler, function, name and data rows. The whole file links: .text 0x801D9634-0x801D9A88, the decoder and allocator virtual tables 0x802AFF78-0x802AFFA8, the allocator instance gRcmpSystem 0x80399100-0x80399110 and its .ctors and .dtors words.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D9634",
+          "end": "0x801D9A88"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFF78",
+          "end": "0x802AFFA8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80399100",
+          "end": "0x80399110"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289B48",
+          "end": "0x80289B4C"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289C68",
+          "end": "0x80289C6C"
         }
       ]
     },

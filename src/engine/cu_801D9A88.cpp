@@ -79,7 +79,6 @@ extern "C" {
 MadCodec_801D9A88 *fn_801D9BC8(void *pMem);
 }
 
-extern RcmpAllocator_t lbl_80399100;
 extern const char lbl_802AFFA8[];
 extern const char lbl_802AFFAC[];
 
@@ -95,8 +94,8 @@ extern "C" MadFrame_801D9A88 *fn_801D9AA8(MadFrame_801D9A88 *pFrame, unsigned in
 {
     pFrame->mRefs = 0;
     pFrame->mUnknown0 = 1;
-    pFrame->mpShape = (Shape_t *)lbl_80399100.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
-                                                           lbl_80399100.mFlags);
+    pFrame->mpShape = (Shape_t *)gRcmpSystem.mAlloc(lbl_802AFFAC, width * 3 * height / 2 + 0x10, 0, 0x10,
+                                                           gRcmpSystem.mFlags);
     MemFill((char *)pFrame->mpShape, 0x10, 0, 4);
     pFrame->mpShape->mUnknown0[0] = 0x6C;
     pFrame->mpShape->mWidth = width;
@@ -124,14 +123,14 @@ float MadCodec_801D9A88::fn_801D9DC8()
 
 void MadCodec_801D9A88::fn_801D9DD0(RcmpChunk_t **ppChunk)
 {
-    *ppChunk = fn_801D98CC(mpDecoder);
+    *ppChunk = mpDecoder->GetChunk();
     mCurFrame++;
 }
 
 void MadCodec_801D9A88::fn_801D9E14(RcmpChunk_t *pChunk)
 {
     if (pChunk != 0) {
-        fn_801D9924(mpDecoder, pChunk);
+        mpDecoder->ReleaseChunk(pChunk);
     }
 }
 
@@ -171,7 +170,7 @@ MadFrame_801D9A88 *MadCodec_801D9A88::fn_801D9E40(RcmpChunk_t *pChunk)
         for (i = 0; i < count; i++) {
             int width = mWidth;
             int height = mHeight;
-            void *pMem = lbl_80399100.mAlloc(lbl_802AFFA8, sizeof(MadFrame_801D9A88), 0, 0, lbl_80399100.mFlags);
+            void *pMem = gRcmpSystem.mAlloc(lbl_802AFFA8, sizeof(MadFrame_801D9A88), 0, 0, gRcmpSystem.mFlags);
 
             mFree.PushFront(fn_801D9AA8((MadFrame_801D9A88 *)pMem, width, height));
         }
@@ -299,5 +298,5 @@ void MadCodec_801D9A88::fn_801DA418(RcmpFrame_t *pFrame)
 
 RcmpCodec *fn_801DA46C()
 {
-    return fn_801D9BC8(lbl_80399100.mAlloc(lbl_802AFFA8, sizeof(MadCodec_801D9A88), 0, 0, lbl_80399100.mFlags));
+    return fn_801D9BC8(gRcmpSystem.mAlloc(lbl_802AFFA8, sizeof(MadCodec_801D9A88), 0, 0, gRcmpSystem.mFlags));
 }

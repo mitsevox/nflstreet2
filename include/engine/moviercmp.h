@@ -40,11 +40,39 @@ typedef struct MovieRcmpAudioInfo_t {
     char mPad21[3];
 } MovieRcmpAudioInfo_t;
 
+/* Allocator hooks every RCMP object allocates through (0x10 bytes; NASCAR 2005 RCMP::RCMP_SYSTEM);
+   MovieRcmpInitVideo installs them in the single instance gRcmpSystem. */
+class RcmpSystem {
+public:
+    void *(*mAlloc)(const char *pName, int size, int a, int b, int flags);
+    int (*mFree)(void *pAddr);
+    int mFlags;
+
+    RcmpSystem();
+    virtual ~RcmpSystem() {}
+
+    /* Allocates through the installed hook with the stored flags. */
+    void *Alloc(int size, const char *pName)
+    {
+        return mAlloc(pName, size, 0, 0, mFlags);
+    }
+};
+
+extern RcmpSystem gRcmpSystem;
+
+/* Placement form the movie code constructs its objects in RCMP-allocated memory with. */
+inline void *operator new(unsigned int size, void *p)
+{
+    return p;
+}
+
 /* Chunk handed to the decoder (0xC bytes). */
 typedef struct RcmpChunk_t {
     void *mpHeader;
     void *mpData;
     unsigned int mSize;
+
+    RcmpChunk_t();
 } RcmpChunk_t;
 
 /* Frame returned by the decoder. */
@@ -63,7 +91,10 @@ struct RcmpCodecIData_t {
     void *mpStreamer;
     RcmpGetChunkFunc_t mGet;
     RcmpReleaseChunkFunc_t mRelease;
-    int mCount;
+    unsigned int mCount;
+
+    RcmpCodecIData_t();
+    RcmpCodecIData_t(void *pStreamer, RcmpGetChunkFunc_t get, RcmpReleaseChunkFunc_t release, unsigned int count);
 };
 
 /* Codec interface (NASCAR 2005 RCMP::CODEC). The slots follow the MAD codec's table at
@@ -78,37 +109,30 @@ public:
     virtual void fn_801DA418(RcmpFrame_t *pFrame);
 };
 
-/* Frame decoder (0x1C bytes; NASCAR 2005 RCMP::DECODER); its virtual table pointer follows
-   the data at +0x18. */
+/* Frame decoder (0x1C bytes; NASCAR 2005 RCMP::DECODER): hands the codec chosen for a movie its
+   chunks and passes frame requests on to it. Its virtual table pointer follows the data at +0x18. */
 class RcmpDecoder {
 public:
     RcmpChunk_t *mpChunk;
     RcmpCodecIData_t mIData;
     RcmpCodec *mpCodec;
 
+    RcmpDecoder(const RcmpCodecIData_t *pIData);
     virtual ~RcmpDecoder();
+
+    int ChooseCodec(RcmpCodec *pCodec, RcmpChunk_t *pChunk);
+    void FreeChosenCodec();
+    unsigned int GetCurrentFrameNumber();
+    RcmpFrame_t *GetFrame(unsigned int frame);
+    void ReleaseFrame(RcmpFrame_t *pFrame);
+    RcmpChunk_t *GetChunk();
+    void ReleaseChunk(RcmpChunk_t *pChunk);
+
+    void operator delete(void *p)
+    {
+        gRcmpSystem.mFree(p);
+    }
 };
-
-/* Decoder operations (src/engine/cu_801D9634.cpp; NASCAR 2005 RCMP::DECODER methods ChooseCodec,
-   FreeChosenCodec, GetCurrentFrameNumber, GetFrame, ReleaseFrame, GetChunk, ReleaseChunk). */
-extern "C" {
-int fn_801D9720(RcmpDecoder *pDecoder, RcmpCodec *pCodec, RcmpChunk_t *pChunk);
-void fn_801D9768(RcmpDecoder *pDecoder);
-unsigned int fn_801D97C0(RcmpDecoder *pDecoder);
-RcmpFrame_t *fn_801D9808(RcmpDecoder *pDecoder, unsigned int frame);
-void fn_801D9894(RcmpDecoder *pDecoder, RcmpFrame_t *pFrame);
-RcmpChunk_t *fn_801D98CC(RcmpDecoder *pDecoder);
-void fn_801D9924(RcmpDecoder *pDecoder, RcmpChunk_t *pChunk);
-}
-
-/* Constructors of the chunk and chunk-source records (src/engine/cu_801D9634.cpp); they return
-   the object. */
-extern "C" {
-RcmpChunk_t *fn_801D9958(RcmpChunk_t *pChunk);
-RcmpCodecIData_t *fn_801D9970(RcmpCodecIData_t *pIData);
-RcmpCodecIData_t *fn_801D9990(RcmpCodecIData_t *pIData, void *pStreamer, RcmpGetChunkFunc_t get,
-                                 RcmpReleaseChunkFunc_t release, int count);
-}
 
 /* llmoviercmp.cpp (src/engine/llmoviercmp.cpp). */
 int MovieRcmpHandleChunk(void *pInfo, void *pChunk);
@@ -119,18 +143,5 @@ void MovieRcmpRenderShape(Shape_t *pShape, int type);
 int MAD_CODEC_is_chunk_for_codec(int id);
 int VP6_CODEC_is_head_chunk_for_codec(int id);
 int VP6_CODEC_is_chunk_for_codec(int id);
-
-/* Allocator hooks at 0x80399100, installed by MovieRcmpInitVideo. */
-typedef struct RcmpAllocator_t {
-    void *(*mAlloc)(const char *pName, int size, int a, int b, int flags);
-    int (*mFree)(void *pAddr);
-    int mFlags;
-
-    /* Allocates through the installed hook with the stored flags. */
-    void *Alloc(int size, const char *pName)
-    {
-        return mAlloc(pName, size, 0, 0, mFlags);
-    }
-} RcmpAllocator_t;
 
 #endif

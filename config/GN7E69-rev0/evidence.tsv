@@ -25003,6 +25003,17 @@ function	0x801D9494	0x801D94A0	MovieRcmpInstallMADCOWCodec	target	exact	exact	bl
 name	0x801D9494	-	MovieRcmpInstallMADCOWCodec	related	-	-	NASCAR 2005 DOL-GN4E-USA symbols.tsv `MovieRcmpInstallMADCOWCodec` (moviercmp.cpp, 12 bytes), last in that file's function order as here; size equal. Stores its argument, a codec create function, to the MAD hook 0x803EBD44 (stw at 0x801D9494) and returns 1.
 unit	0x801D9634	0x801D9A88	src/engine/cu_801D9634.cpp	inferred	provisional	provisional	NASCAR 2005 symbols.tsv file row rcmpbase.cpp, marker at 0x801CEC98, spans 0x454 bytes (RCMP::RCMP_SYSTEM, DECODER, CHUNK and CODEC_IDATA members up to _GLOBAL_.D.__Q24RCMP11RCMP_SYSTEM); 0x801D9634-0x801D9A88 is the same 0x454 bytes, between the llmoviercmp.cpp blr at 0x801D9630 and the blr at 0x801D9A84. Edges provisional (NASCAR layout).
 compiler	0x801D9634	0x801D9A88	engine_c	inferred	-	-	ProDG 3.9.3 cc1plus -O2 (engine_c; .cpp source, NASCAR 2005 symbols.tsv rcmpbase.cpp with C++-mangled RCMP::DECODER / RCMP::CHUNK / RCMP::CODEC_IDATA members) reproduces all 10 draft bodies of src/engine/cu_801D9634.cpp (fcmp): the virtual calls through the codec table (delta/function pairs at +0x10 ... +0x34) and the deleting virtual destructor call with flag 3 come from g++ 2.95 virtual dispatch. No global is accessed by the drafted bodies, so the -G setting is not discriminated; the profile follows the neighbouring moviercmp.cpp/maddec.cpp units, whose r13 globals rule out engine_cpp_nosda. No float code, so -ffast-math (game_cpp) is not needed.
+data	0x802AFF78	0x802AFFA8	rcmpbase.cpp vtables	inferred	exact	exact	DRAFT
+data	0x802AFF78	0x802AFF90	_vt.11RcmpDecoder	related	exact	exact	DRAFT
+data	0x802AFF90	0x802AFFA8	_vt.10RcmpSystem	related	exact	exact	DRAFT
+data	0x80399100	0x80399110	gRcmpSystem	inferred	exact	exact	DRAFT
+function	0x801D9634	0x801D9654	fn_801D9634	target	exact	exact	DRAFT
+function	0x801D9654	0x801D96C8	fn_801D9654	target	exact	exact	DRAFT
+function	0x801D96C8	0x801D9720	fn_801D96C8	target	exact	exact	DRAFT
+function	0x801D99A8	0x801D99FC	fn_801D99A8	target	exact	exact	DRAFT
+function	0x801D99FC	0x801D9A30	fn_801D99FC	target	exact	exact	DRAFT
+function	0x801D9A30	0x801D9A5C	fn_801D9A30	target	exact	exact	DRAFT
+function	0x801D9A5C	0x801D9A88	fn_801D9A5C	target	exact	exact	DRAFT
 function	0x801D9720	0x801D9768	fn_801D9720	target	exact	exact	bl target from 2 sites incl. 0x801D8950, 0x801D898C; previous instruction at 0x801D971C is blr; last instruction blr at 0x801D9764; next start 0x801D9768; size 72 equals NASCAR 2005 symbols.tsv ChooseCodec__Q24RCMP7DECODERPQ24RCMP5CODECPQ24RCMP5CHUNK in the same file order.
 function	0x801D9768	0x801D97C0	fn_801D9768	target	exact	exact	bl target from 3 sites incl. 0x801D8960, 0x801D899C, 0x801D96EC; previous instruction at 0x801D9764 is blr; last instruction blr at 0x801D97BC; next start 0x801D97C0; size 88 equals NASCAR 2005 symbols.tsv FreeChosenCodec__Q24RCMP7DECODER in the same file order.
 function	0x801D97C0	0x801D9808	fn_801D97C0	target	exact	exact	bl target from 1 site incl. 0x801D926C; previous instruction at 0x801D97BC is blr; last instruction blr at 0x801D9804; next start 0x801D9808; size 72 equals NASCAR 2005 symbols.tsv GetCurrentFrameNumber__Q24RCMP7DECODER in the same file order.
