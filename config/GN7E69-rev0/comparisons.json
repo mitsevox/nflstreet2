@@ -31191,6 +31191,11 @@
       ],
       "functions": [
         {
+          "symbol": "fn_8027D588",
+          "start": "0x8027D588",
+          "end": "0x8027D5CC"
+        },
+        {
           "symbol": "fn_8027D5CC",
           "start": "0x8027D5CC",
           "end": "0x8027D5EC"
@@ -31374,6 +31379,11 @@
           "symbol": "vfn_23__15Object_8027E518P15Record_8027EC7C",
           "start": "0x8027EC7C",
           "end": "0x8027ECD8"
+        },
+        {
+          "symbol": "fn_8027ECD8",
+          "start": "0x8027ECD8",
+          "end": "0x8027ED18"
         },
         {
           "symbol": "fn_8027ED4C",

@@ -162,6 +162,15 @@ int SNDbankheadercopy(void *dest, int handle);
 int SNDstop(int handle);
 int fn_8026E388(int handle);
 void PATHI_memfree(void *p);
+int SNDSTRM_lowpass(int handle, int value);
+void *fn_8027DAA4(int size);
+void *fn_8027DAE4(void *mem, int count);
+
+int fn_8027D588(void *self, void **track, int count)
+{
+    *track = fn_8027DAE4(fn_8027DAA4(308), count);
+    return 0;
+}
 
 void *fn_8027D5CC(int size)
 {
@@ -545,6 +554,13 @@ void Object_8027E518::vfn_23(Record_8027EC7C *record)
 }
 
 extern "C" {
+
+void fn_8027ECD8(Object_8027E518 *p, int value)
+{
+    SNDSYS_entercritical();
+    SNDSTRM_lowpass(p->m0, value);
+    SNDSYS_leavecritical();
+}
 
 void fn_8027ED4C(Object_8027D6E8 *p)
 {
