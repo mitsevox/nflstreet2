@@ -4214,6 +4214,94 @@
       }
     },
     {
+      "source": "src/game/cu_80086C10.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/cu_80086C10.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80086C10",
+          "end": "0x80086D0C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800872E8",
+          "end": "0x8008736C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800876C0",
+          "end": "0x8008775C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087880",
+          "end": "0x80087BE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294B38",
+          "end": "0x80294F0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6B8C",
+          "end": "0x802D6BD8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA808",
+          "end": "0x803EA80C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80086D0C",
+            "evidence": "evidence.tsv source-form 0x80086D0C-0x80087128"
+          },
+          {
+            "function": "fn_80087128",
+            "evidence": "evidence.tsv source-form 0x80087128-0x800872E8"
+          },
+          {
+            "function": "fn_8008736C",
+            "evidence": "evidence.tsv source-form 0x8008736C-0x80087460"
+          },
+          {
+            "function": "fn_80087460",
+            "evidence": "evidence.tsv source-form 0x80087460-0x8008754C"
+          },
+          {
+            "function": "fn_8008754C",
+            "evidence": "evidence.tsv source-form 0x8008754C-0x80087600"
+          },
+          {
+            "function": "fn_80087600",
+            "evidence": "evidence.tsv source-form 0x80087600-0x800876C0"
+          },
+          {
+            "function": "fn_8008775C",
+            "evidence": "evidence.tsv source-form 0x8008775C-0x80087880"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 3 holdout table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "StoreGetStringById"
+        ],
+        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (StoreGetStringById, discarded; only its query string survives)"
+      }
+    },
+    {
       "source": "src/game/gsflowman.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/gsflowman.cpp) and its data rows.",

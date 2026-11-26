@@ -183,7 +183,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     return result;
 }
 
-int StoreGetStringById(int id, char *pName, int nameSize)
+static int StoreGetStringById(int id, char *pName, int nameSize)
 {
     char name[36];
     int result = 0;
