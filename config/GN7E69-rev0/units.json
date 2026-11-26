@@ -13514,7 +13514,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C4184",
-          "end": "0x800C5BF0"
+          "end": "0x800C5DE4"
         },
         {
           "section": ".text",
@@ -13790,10 +13790,6 @@
           {
             "function": "fn_800C3BEC",
             "evidence": "evidence.tsv source-form 0x800C3BEC-0x800C4184"
-          },
-          {
-            "function": "fn_800C5BF0",
-            "evidence": "evidence.tsv source-form 0x800C5BF0-0x800C5DE4"
           },
           {
             "function": "fn_800C5DE4",

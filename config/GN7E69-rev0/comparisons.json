@@ -17983,7 +17983,7 @@
           "end": "0x800C5BF0"
         },
         {
-          "symbol": "fn_800C5BF0",
+          "symbol": "PlyrContactIsKnockable",
           "start": "0x800C5BF0",
           "end": "0x800C5DE4"
         },
