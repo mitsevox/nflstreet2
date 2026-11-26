@@ -2292,7 +2292,7 @@
     {
       "source": "src/game/StoryTournament.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/StoryTournament.cpp), source-form row 0x80060948-0x80061520, exact function rows 0x80060948-0x80061520 and the exact .rodata slice row 0x8028F4C8-0x8028F4D8. Draft comparisons only; the full native placements are kept for relocation, only the unlinked .rodata slice is measured, and original bytes remain linked for the 18 unlinked functions until a bounded replacement range passes the matching-integrity and complete-build requirements.",
+      "evidence": "evidence.tsv unit row 0x80060948-0x80061F04 (src/game/StoryTournament.cpp), its exact function rows 0x80060948-0x80061520 and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact StoryTournamentPlaceDrafted stays registered here as its partial (source-form row 0x80061274-0x80061390).",
       "sections": [
         {
           "section": ".text",
@@ -2431,9 +2431,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007BA48.cpp",
+      "source": "src/game/GearDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007BA48.cpp, individual exact function extents, owned data spans, the DbTableCursor and Object_80023BBC type rows and the source-form rows recording the remaining differences. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact GearDbUpgradeItem stays registered here as its partial (source-form row 0x8007BF60-0x8007C46C).",
       "sections": [
         {
           "section": ".text",
@@ -2456,112 +2456,112 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8007BA48",
+          "symbol": "GearDbOpen",
           "start": "0x8007BA48",
           "end": "0x8007BA88"
         },
         {
-          "symbol": "fn_8007BA88",
+          "symbol": "GearDbOpenType",
           "start": "0x8007BA88",
           "end": "0x8007BB04"
         },
         {
-          "symbol": "fn_8007BB04",
+          "symbol": "GearDbClose",
           "start": "0x8007BB04",
           "end": "0x8007BB24"
         },
         {
-          "symbol": "fn_8007BB24",
+          "symbol": "GearDbGetKey",
           "start": "0x8007BB24",
           "end": "0x8007BB4C"
         },
         {
-          "symbol": "fn_8007BB4C",
+          "symbol": "GearDbSeekKey",
           "start": "0x8007BB4C",
           "end": "0x8007BB84"
         },
         {
-          "symbol": "fn_8007BB84",
+          "symbol": "GearDbSeekTypeId",
           "start": "0x8007BB84",
           "end": "0x8007BBFC"
         },
         {
-          "symbol": "fn_8007BBFC",
+          "symbol": "GearDbSeekId",
           "start": "0x8007BBFC",
           "end": "0x8007BC34"
         },
         {
-          "symbol": "fn_8007BC34",
+          "symbol": "GearDbReadRow",
           "start": "0x8007BC34",
           "end": "0x8007BDF8"
         },
         {
-          "symbol": "fn_8007BDF8",
+          "symbol": "GearDbGetGrsi",
           "start": "0x8007BDF8",
           "end": "0x8007BE20"
         },
         {
-          "symbol": "fn_8007BE20",
+          "symbol": "GearDbGetName",
           "start": "0x8007BE20",
           "end": "0x8007BE54"
         },
         {
-          "symbol": "fn_8007BE54",
+          "symbol": "GearDbGetId",
           "start": "0x8007BE54",
           "end": "0x8007BE7C"
         },
         {
-          "symbol": "fn_8007BE7C",
+          "symbol": "GearDbGetType",
           "start": "0x8007BE7C",
           "end": "0x8007BEA4"
         },
         {
-          "symbol": "fn_8007BEA4",
+          "symbol": "GearDbGetGsti",
           "start": "0x8007BEA4",
           "end": "0x8007BECC"
         },
         {
-          "symbol": "fn_8007BECC",
+          "symbol": "GearDbFindIdByGbst",
           "start": "0x8007BECC",
           "end": "0x8007BF14"
         },
         {
-          "symbol": "fn_8007BF14",
+          "symbol": "GearDbGetSlotType",
           "start": "0x8007BF14",
           "end": "0x8007BF28"
         },
         {
-          "symbol": "fn_8007BF28",
+          "symbol": "GearDbGetTypeSlot",
           "start": "0x8007BF28",
           "end": "0x8007BF3C"
         },
         {
-          "symbol": "fn_8007BF3C",
+          "symbol": "GearDbHasBoosts",
           "start": "0x8007BF3C",
           "end": "0x8007BF60"
         },
         {
-          "symbol": "fn_8007BF60",
+          "symbol": "GearDbUpgradeItem",
           "start": "0x8007BF60",
           "end": "0x8007C46C"
         },
         {
-          "symbol": "fn_8007C46C",
+          "symbol": "GearDbGetCurrentKey",
           "start": "0x8007C46C",
           "end": "0x8007C538"
         },
         {
-          "symbol": "fn_8007C538",
+          "symbol": "GearDbIsItemUnlocked",
           "start": "0x8007C538",
           "end": "0x8007C67C"
         },
         {
-          "symbol": "fn_8007C67C",
+          "symbol": "GearDbIsNumberItem",
           "start": "0x8007C67C",
           "end": "0x8007C690"
         },
         {
-          "symbol": "fn_8007C690",
+          "symbol": "GearDbReadBoosts",
           "start": "0x8007C690",
           "end": "0x8007C7E8"
         }
@@ -11287,9 +11287,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007FA48.cpp",
+      "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv player queries, cursor storage, membership and measured source-form rows; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds, PlayerRecordWriteById and PlayerQueryOpen stay registered here as its partials (their HOLDOUT source-form rows).",
       "sections": [
         {
           "section": ".text",
@@ -11312,7 +11312,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8007FA48",
+          "symbol": "PlayerRecordFindFreeIds",
           "start": "0x8007FA48",
           "end": "0x8007FC70"
         },
@@ -11322,12 +11322,12 @@
           "end": "0x8007FE04"
         },
         {
-          "symbol": "fn_8007FE04",
+          "symbol": "PlayerCursorOpenAll",
           "start": "0x8007FE04",
           "end": "0x8007FE40"
         },
         {
-          "symbol": "fn_8007FE40",
+          "symbol": "PlayerCursorOpenByTeam",
           "start": "0x8007FE40",
           "end": "0x8007FEB8"
         },
@@ -11337,17 +11337,17 @@
           "end": "0x8007FF30"
         },
         {
-          "symbol": "fn_8007FF30",
+          "symbol": "PlayerCursorOpenByPrty",
           "start": "0x8007FF30",
           "end": "0x8007FFA8"
         },
         {
-          "symbol": "fn_8007FFA8",
+          "symbol": "PlayerCursorOpenByTeamAndId",
           "start": "0x8007FFA8",
           "end": "0x80080084"
         },
         {
-          "symbol": "fn_80080084",
+          "symbol": "PlayerRecordWriteById",
           "start": "0x80080084",
           "end": "0x80080138"
         },
@@ -11357,7 +11357,7 @@
           "end": "0x8008040C"
         },
         {
-          "symbol": "fn_8008040C",
+          "symbol": "PlayerCursorOpenDefault",
           "start": "0x8008040C",
           "end": "0x8008044C"
         },
@@ -11367,27 +11367,27 @@
           "end": "0x8008056C"
         },
         {
-          "symbol": "fn_8008056C",
+          "symbol": "PlayerCursorClose",
           "start": "0x8008056C",
           "end": "0x8008058C"
         },
         {
-          "symbol": "fn_8008058C",
+          "symbol": "PlayerQueryOpen",
           "start": "0x8008058C",
           "end": "0x8008079C"
         },
         {
-          "symbol": "fn_8008079C",
+          "symbol": "PlayerQueryFetch",
           "start": "0x8008079C",
           "end": "0x8008082C"
         },
         {
-          "symbol": "fn_8008082C",
+          "symbol": "PlayerQuerySetRow",
           "start": "0x8008082C",
           "end": "0x80080874"
         },
         {
-          "symbol": "fn_80080874",
+          "symbol": "PlayerQueryClose",
           "start": "0x80080874",
           "end": "0x800808F8"
         }
@@ -29545,7 +29545,7 @@
     {
       "source": "src/game/GameOptions.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. Documented holdout at the start of .text: 0x8007F12C-0x8007F298 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (0x8007F19C is near-miss; 0x8007F12C and 0x8007F174 are exact and precede it); the rest of the file is linked through units.json",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp) and the source-form rows from 0x8007F12C. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact GameOptionsWriteRecord stays registered here as its partial (source-form row 0x8007F19C-0x8007F298), and the exact GameOptionsOpenCursor and GameOptionsCloseCursor before it are linked.",
       "sections": [
         {
           "section": ".text",

@@ -826,7 +826,7 @@ int PlyrObjsCreatePlayers(int owner, int mode) {
         PlaTexCacheSetCapFace(init.mUnknown5A, fn_80081E3C(&object) + 1,
                               fn_80082280(&object), fn_800822D4(&object), 0);
     }
-    fn_8008056C(&object);
+    PlayerCursorClose(&object);
   }
   ResTrackResume();
   return result;
@@ -846,7 +846,7 @@ void PlyrObjsResolveTeamIds(int value, int *out, int mode) {
       PlayerDbSeekOriginalId(&object, out[i], 0);
       out[i] = PlayerDbGetId(&object);
     }
-    fn_8008056C(&object);
+    PlayerCursorClose(&object);
   } else {
     for (i = 0; i < _PlyrObjs_uTeamSize; ++i)
       out[i] = 332;

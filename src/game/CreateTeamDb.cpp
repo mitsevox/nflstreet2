@@ -348,7 +348,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
         text20.mChars[19] = color19 + 0x80;
         gFMCAPPORT.SetEntry(i, 0xFFFF, unknown8, unknown12, 0xA7, &text20,
             resultIds[0], unknown52, unknown56, &text60, &values, value76);
-        fn_8008056C(&object);
+        PlayerCursorClose(&object);
         TDbTblDestroy(0x54415453, table);
     }
     if (cursor.mUnknown0) TDbSQLDestroyCursor(&cursor);

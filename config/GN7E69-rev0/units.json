@@ -1130,18 +1130,6 @@
       "address": "0x8013CC7C",
       "evidence": "evidence.tsv source-form 0x8013CC7C-0x8013CD58; original code stays in place and its literal pool now links with src/game/camreplay.cpp."
     },
-    "GameOptionsCloseCursor": {
-      "address": "0x8007F174",
-      "evidence": "evidence.tsv function/name rows for 0x8007F174; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "GameOptionsOpenCursor": {
-      "address": "0x8007F12C",
-      "evidence": "evidence.tsv function/name rows for 0x8007F12C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "GameOptionsWriteRecord": {
-      "address": "0x8007F19C",
-      "evidence": "evidence.tsv function/name rows for 0x8007F19C; part of the documented holdout 0x8007F12C-0x8007F298 at the start of src/game/GameOptions.cpp, which keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "PlyrSwapStateData": {
       "address": "0x80148424",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80148424; src/game/cu_80148424.cpp is exact but stays a comparison (probable fragment of the cu_801485B4 grouping), so its original bytes stay linked and the comparison of src/game/cu_801485B4.cpp resolves the call here."
@@ -1370,74 +1358,6 @@
       "address": "0x80216BFC",
       "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/DynObj.cpp (n1e naming wave)."
     },
-    "StoryTournamentGetTeamName": {
-      "address": "0x80060948",
-      "evidence": "evidence.tsv function and name rows for 0x80060948 (StoryTournamentGetTeamName; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentFindNextRow": {
-      "address": "0x800609EC",
-      "evidence": "evidence.tsv function and name rows for 0x800609EC (StoryTournamentFindNextRow; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentCloseDbs": {
-      "address": "0x80060A9C",
-      "evidence": "evidence.tsv function and name rows for 0x80060A9C (StoryTournamentCloseDbs; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentOpenDbs": {
-      "address": "0x80060B0C",
-      "evidence": "evidence.tsv function and name rows for 0x80060B0C (StoryTournamentOpenDbs; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentFetchSkill": {
-      "address": "0x80060BB4",
-      "evidence": "evidence.tsv function and name rows for 0x80060BB4 (StoryTournamentFetchSkill; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentPurgeRosters": {
-      "address": "0x80060BE0",
-      "evidence": "evidence.tsv function and name rows for 0x80060BE0 (StoryTournamentPurgeRosters; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentGetGameSlot": {
-      "address": "0x80060C14",
-      "evidence": "evidence.tsv function and name rows for 0x80060C14 (StoryTournamentGetGameSlot; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentGetUserTeam": {
-      "address": "0x80060C94",
-      "evidence": "evidence.tsv function and name rows for 0x80060C94 (StoryTournamentGetUserTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentDrawBracket": {
-      "address": "0x80060CD4",
-      "evidence": "evidence.tsv function and name rows for 0x80060CD4 (StoryTournamentDrawBracket; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentAdvanceRound": {
-      "address": "0x80060E7C",
-      "evidence": "evidence.tsv function and name rows for 0x80060E7C (StoryTournamentAdvanceRound; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentIsWon": {
-      "address": "0x8006102C",
-      "evidence": "evidence.tsv function and name rows for 0x8006102C (StoryTournamentIsWon; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentFindUserGame": {
-      "address": "0x80061088",
-      "evidence": "evidence.tsv function and name rows for 0x80061088 (StoryTournamentFindUserGame; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentRestoreOptions": {
-      "address": "0x80061154",
-      "evidence": "evidence.tsv function and name rows for 0x80061154 (StoryTournamentRestoreOptions; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentSetOptions": {
-      "address": "0x800611C0",
-      "evidence": "evidence.tsv function and name rows for 0x800611C0 (StoryTournamentSetOptions; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentLoadCpuTeam": {
-      "address": "0x80061390",
-      "evidence": "evidence.tsv function and name rows for 0x80061390 (StoryTournamentLoadCpuTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "StoryTournamentLoadUserTeam": {
-      "address": "0x80061408",
-      "evidence": "evidence.tsv function and name rows for 0x80061408 (StoryTournamentLoadUserTeam; registered in comparisons.json, not linked, so its original bytes stay in place and linked callers reach it by address)."
-    },
-    "PlayerCursorOpen": {
-      "address": "0x8008044C",
-      "evidence": "evidence.tsv function/name rows for 0x8008044C (target extent, inferred name); called from other files while its own file is unlinked."
-    },
     "GlowDraw": {
       "address": "0x80197FDC",
       "evidence": "evidence.tsv function/name rows for 0x80197FDC (target extent, inferred name); called from other files while its own file is unlinked."
@@ -1445,14 +1365,6 @@
     "PSysRenderCalcParticleColor": {
       "address": "0x801DF064",
       "evidence": "evidence.tsv function/name rows for 0x801DF064 (target extent, related name); called from other files while its own file is unlinked."
-    },
-    "PlayerRecordCreate": {
-      "address": "0x8007FC70",
-      "evidence": "evidence.tsv function/name rows for 0x8007FC70 (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "PlayerRecordCopyTeam": {
-      "address": "0x80080138",
-      "evidence": "evidence.tsv function/name rows for 0x80080138 (target extent, inferred name); called from other files while its own file is unlinked."
     },
     "UIGLibTextObjAction": {
       "address": "0x80222220",
@@ -8547,6 +8459,46 @@
       ]
     },
     {
+      "source": "src/game/GearDb.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout GearDbUpgradeItem keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007BA48",
+          "end": "0x8007BF60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007C46C",
+          "end": "0x8007C7E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80291BCC",
+          "end": "0x80291D18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6558",
+          "end": "0x802D6690"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GearDbUpgradeItem",
+            "evidence": "evidence.tsv source-form 0x8007BF60-0x8007C46C"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
+    },
+    {
       "source": "src/game/SpchIGSystem.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/SpchIGSystem.cpp) and its data rows.",
@@ -10016,19 +9968,25 @@
     },
     {
       "source": "src/game/StoryTournament.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80061520-0x80061F04 (src/game/StoryTournament.cpp) and its data rows.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80060948-0x80061F04 (src/game/StoryTournament.cpp) and its data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout StoryTournamentPlaceDrafted keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80061520",
+          "start": "0x80060948",
+          "end": "0x80061274"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80061390",
           "end": "0x80061F04"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8028F4D8",
+          "start": "0x8028F4C8",
           "end": "0x8028F58C"
         },
         {
@@ -10061,7 +10019,16 @@
           "start": "0x80289BD0",
           "end": "0x80289BD4"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "StoryTournamentPlaceDrafted",
+            "evidence": "evidence.tsv source-form 0x80061274-0x80061390"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
     },
     {
       "source": "src/game/PlayerLook.cpp",
@@ -19505,9 +19472,15 @@
     },
     {
       "source": "src/game/GameOptions.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; 0x8007F298-0x8007FA48 and all of the file's data are linked, the documented holdout 0x8007F12C-0x8007F298 (the cursor open/close wrappers and the record writer) keeps its original bytes and stays a comparison.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8007F12C-0x8007FA48 (src/game/GameOptions.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout GameOptionsWriteRecord keeping its original bytes.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007F12C",
+          "end": "0x8007F19C"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -19550,7 +19523,70 @@
           "start": "0x80289BEC",
           "end": "0x80289BF0"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GameOptionsWriteRecord",
+            "evidence": "evidence.tsv source-form 0x8007F19C-0x8007F298"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
+    },
+    {
+      "source": "src/game/PlayerQuery.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007FC70",
+          "end": "0x80080084"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80080138",
+          "end": "0x8008058C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8008079C",
+          "end": "0x800808F8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80292948",
+          "end": "0x80292E38"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030BC58",
+          "end": "0x8030BC88"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlayerRecordFindFreeIds",
+            "evidence": "evidence.tsv source-form 0x8007FA48-0x8007FC70"
+          },
+          {
+            "function": "PlayerRecordWriteById",
+            "evidence": "evidence.tsv source-form 0x80080084-0x80080138"
+          },
+          {
+            "function": "PlayerQueryOpen",
+            "evidence": "evidence.tsv source-form 0x8008058C-0x8008079C"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
     },
     {
       "source": "src/game/PlyrNameTag.cpp",

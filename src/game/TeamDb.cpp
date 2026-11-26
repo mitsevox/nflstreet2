@@ -688,7 +688,7 @@ void TeamDbLoadSideWithCopies(int team, int *pList, int side, int count)
         PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
 }
 
 void TeamDbLoadSide(int team, int *pList, int side, int count)
@@ -720,7 +720,7 @@ void TeamDbLoadSide(int team, int *pList, int side, int count)
         PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
         fn_80081F50(&cursor, side, 1);
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
 }
 
 int TeamDbFindDepthSlot(int id, int half, int *pList);

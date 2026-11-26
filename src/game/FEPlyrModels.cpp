@@ -383,7 +383,7 @@ void FEPlyrShutdown(void)
     fn_800EFDD8();
     fn_8008FED4();
     fn_8008FD88(1);
-    fn_8008056C(&_FEPlyr_PlayerCursor);
+    PlayerCursorClose(&_FEPlyr_PlayerCursor);
     _FEPlyr_pScene->mUnknown20 &= ~2;
     VptTrashObject((int)_FEPlyr_pScene);
     _FEPlyr_pScene = 0;

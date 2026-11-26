@@ -5,7 +5,7 @@
 
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Row_8007BC34.h"
+#include "game/GearDb.h"
 #include "game/FEPlyrLoad.h"
 #include "game/EditMenu.h"
 #include <string.h>
@@ -43,18 +43,18 @@ void PlayerLookSetBackDecalKind(int index, unsigned char value);
 void PlayerLookSetSwitchFlagsA(int index, unsigned char value);
 void PlayerLookSetSwitchFlagsB(int index, unsigned char value);
 int DbCursorGetRow(DbCursor *pObject);
-void fn_8007BA88(DbCursor *pCursor, int value);
-void fn_8007BB04(DbCursor *pCursor);
-int fn_8007BB24(DbCursor *pCursor);
-int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult);
-void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
-int fn_8007BE54(DbCursor *pCursor);
-int fn_8007BE7C(DbCursor *pCursor);
-int fn_8007BEA4(DbCursor *pCursor);
-int fn_8007BF14(int index);
-int fn_8007BF28(int index);
-int fn_8007BF3C(DbCursor *pCursor);
-int fn_8007C690(DbCursor *pCursor, short *pOut);
+void GearDbOpenType(DbCursor *pCursor, int value);
+void GearDbClose(DbCursor *pCursor);
+int GearDbGetKey(DbCursor *pCursor);
+int GearDbSeekId(DbCursor *pCursor, int key, int *pResult);
+void GearDbGetName(DbCursor *pCursor, char *pBuffer, int size);
+int GearDbGetId(DbCursor *pCursor);
+int GearDbGetType(DbCursor *pCursor);
+int GearDbGetGsti(DbCursor *pCursor);
+int GearDbGetSlotType(int index);
+int GearDbGetTypeSlot(int index);
+int GearDbHasBoosts(DbCursor *pCursor);
+int GearDbReadBoosts(DbCursor *pCursor, short *pOut);
 void GearLockOpen(DbCursor *pObject, int a);
 void GearLockClose(DbCursor *pObject);
 void GearLockGetFlags(DbCursor *pObject, int key, unsigned char *pA, unsigned char *pB);
@@ -348,15 +348,15 @@ static int _Gear_iPlayerId;
 static void _GearTakeFromOwner(int id, int index)
 {
     if (_Gear_iCategory != 14) {
-        int type = fn_8007BF14(_Gear_iCategory);
+        int type = GearDbGetSlotType(_Gear_iCategory);
         int row = DbCursorGetRow((DbCursor *)EditMenuGetPlayerCursor());
         PlayerGear_t info;
 
         PlayerDbSeekId(EditMenuGetPlayerCursor(), id, 0);
         PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
-        fn_8007BBFC(&_Gear_sItemCursor, 0, 0);
-        if (fn_8007BF28(type) != 14) {
-            info.mValues[fn_8007BF28(type)] = 0;
+        GearDbSeekId(&_Gear_sItemCursor, 0, 0);
+        if (GearDbGetTypeSlot(type) != 14) {
+            info.mValues[GearDbGetTypeSlot(type)] = 0;
         } else if (type == 6) {
             info.mValues[7] = 0;
             info.mValues[6] = 0;
@@ -380,8 +380,8 @@ static int _GearFindOwner(int type, int value)
 
             PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
             id = PlayerDbGetId(EditMenuGetPlayerCursor());
-            if (fn_8007BF28(type) != 14) {
-                if (info.mValues[fn_8007BF28(type)] == value) {
+            if (GearDbGetTypeSlot(type) != 14) {
+                if (info.mValues[GearDbGetTypeSlot(type)] == value) {
                     result = id;
                 }
             } else if (type == 6) {
@@ -397,9 +397,9 @@ static int _GearFindOwner(int type, int value)
 
 static void _GearShowOwner()
 {
-    int type = fn_8007BE7C(&_Gear_sItemCursor);
-    int id = fn_8007BE54(&_Gear_sItemCursor);
-    int unique = fn_8007BF3C(&_Gear_sItemCursor);
+    int type = GearDbGetType(&_Gear_sItemCursor);
+    int id = GearDbGetId(&_Gear_sItemCursor);
+    int unique = GearDbHasBoosts(&_Gear_sItemCursor);
     int current = PlayerDbGetId(EditMenuGetPlayerCursor());
     int owner = _GearFindOwner(type, id);
 
@@ -415,7 +415,7 @@ static void _GearMarkAffectedRatings()
     short flags[10];
 
     EditMenuClearRatingFlags();
-    if (fn_8007C690(&_Gear_sItemCursor, flags)) {
+    if (GearDbReadBoosts(&_Gear_sItemCursor, flags)) {
         int i;
 
         for (i = 0; i <= 9; i++) {
@@ -428,7 +428,7 @@ static void _GearMarkAffectedRatings()
 
 static int _GearBuildItemList()
 {
-    int type = fn_8007BF14(_Gear_iCategory);
+    int type = GearDbGetSlotType(_Gear_iCategory);
     int showUnique = 1;
     int count;
     int i;
@@ -436,17 +436,17 @@ static int _GearBuildItemList()
     if (EditMenuIsStoryTeam() || EditMenuGetMode() == 5) {
         showUnique = 0;
     }
-    fn_8007BA88(&_Gear_sItemCursor, type);
+    GearDbOpenType(&_Gear_sItemCursor, type);
     count = DbCursorGetRowCount(&_Gear_sItemCursor);
     _Gear_iItemCount = 0;
     DbCursorFirst(&_Gear_sItemCursor);
     for (i = 0; i < count; i++) {
-        int id = fn_8007BE54(&_Gear_sItemCursor);
-        int set = fn_8007BEA4(&_Gear_sItemCursor);
+        int id = GearDbGetId(&_Gear_sItemCursor);
+        int set = GearDbGetGsti(&_Gear_sItemCursor);
 
         if (id == 0 || _Gear_iItemSet == set) {
-            int key = fn_8007BB24(&_Gear_sItemCursor);
-            int unique = fn_8007BF3C(&_Gear_sItemCursor);
+            int key = GearDbGetKey(&_Gear_sItemCursor);
+            int unique = GearDbHasBoosts(&_Gear_sItemCursor);
             unsigned char locked;
             unsigned char flag;
 
@@ -470,7 +470,7 @@ static int _GearBuildItemList()
 
 static void _GearCloseItemList()
 {
-    fn_8007BB04(&_Gear_sItemCursor);
+    GearDbClose(&_Gear_sItemCursor);
 }
 
 static int _GearFindItemIndex(int id)
@@ -493,7 +493,7 @@ static int _GearCategoryHasNew(int index, int a)
     int result = 0;
 
     if (index != 14) {
-        int type = fn_8007BF14(index);
+        int type = GearDbGetSlotType(index);
 
         result = GearHasNew(type, a, EditMenuIsCreateTeam());
     }
@@ -593,15 +593,15 @@ static unsigned int _GearFindTableIndex(int value, int *pTable, unsigned int cou
 
 static int _GearGetHatKind(unsigned char *pFlag, unsigned char *pSkullcap)
 {
-    Row_8007BC34 row;
+    GearRow_t row;
     DbCursor cursor;
     int type;
 
-    fn_8007BA88(&cursor, 0);
-    fn_8007BBFC(&cursor, _Gear_sPlayerGear.mValues[0], 0);
-    fn_8007BC34(&cursor, &row);
+    GearDbOpenType(&cursor, 0);
+    GearDbSeekId(&cursor, _Gear_sPlayerGear.mValues[0], 0);
+    GearDbReadRow(&cursor, &row);
     type = PlayerLookMapHatKind(row.mUnknown64);
-    fn_8007BB04(&cursor);
+    GearDbClose(&cursor);
     if (pFlag) {
         *pFlag = row.mUnknown76;
     }
@@ -618,36 +618,36 @@ static int _GearGetHatKind(unsigned char *pFlag, unsigned char *pSkullcap)
 static int _GearShirtAllowsFrontDecal()
 {
     DbCursor cursor;
-    Row_8007BC34 row;
+    GearRow_t row;
 
-    fn_8007BA88(&cursor, 9);
-    fn_8007BBFC(&cursor, _Gear_sPlayerGear.mValues[10], 0);
-    fn_8007BC34(&cursor, &row);
-    fn_8007BB04(&cursor);
+    GearDbOpenType(&cursor, 9);
+    GearDbSeekId(&cursor, _Gear_sPlayerGear.mValues[10], 0);
+    GearDbReadRow(&cursor, &row);
+    GearDbClose(&cursor);
     return row.mUnknown71 && !row.mUnknown76;
 }
 
 static int _GearShirtAllowsBackDecal()
 {
     DbCursor cursor;
-    Row_8007BC34 row;
+    GearRow_t row;
 
-    fn_8007BA88(&cursor, 9);
-    fn_8007BBFC(&cursor, _Gear_sPlayerGear.mValues[10], 0);
-    fn_8007BC34(&cursor, &row);
-    fn_8007BB04(&cursor);
+    GearDbOpenType(&cursor, 9);
+    GearDbSeekId(&cursor, _Gear_sPlayerGear.mValues[10], 0);
+    GearDbReadRow(&cursor, &row);
+    GearDbClose(&cursor);
     return row.mUnknown70 && !row.mUnknown76;
 }
 
 static int _GearShirtAllowsShoulderPads()
 {
     DbCursor cursor;
-    Row_8007BC34 row;
+    GearRow_t row;
 
-    fn_8007BA88(&cursor, 9);
-    fn_8007BBFC(&cursor, _Gear_sPlayerGear.mValues[10], 0);
-    fn_8007BC34(&cursor, &row);
-    fn_8007BB04(&cursor);
+    GearDbOpenType(&cursor, 9);
+    GearDbSeekId(&cursor, _Gear_sPlayerGear.mValues[10], 0);
+    GearDbReadRow(&cursor, &row);
+    GearDbClose(&cursor);
     return PlayerLookItemKeepsLogo(row.mUnknown64);
 }
 
@@ -1213,7 +1213,7 @@ void GearItemList::Enter(int a, int *pCount, int *pOut)
 
     _Gear_iCategory = mUnknown8;
     _Gear_iItemSet = mUnknown12;
-    type = fn_8007BF14(_Gear_iCategory);
+    type = GearDbGetSlotType(_Gear_iCategory);
     *pCount = _GearBuildItemList();
     if (type == 6) {
         id = _Gear_sPlayerGear.mValues[6];
@@ -1240,15 +1240,15 @@ int GearItemList::Leave(int a, int b, void **pOut)
     int result = -1;
 
     if (b == 0) {
-        Row_8007BC34 row;
+        GearRow_t row;
         int index = a;
-        int type = fn_8007BF14(_Gear_iCategory);
+        int type = GearDbGetSlotType(_Gear_iCategory);
 
         if (_GearTypeHasSides(type) && index != 0) {
             index = (index - 1) / 3 + 1;
         }
         DbCursorSeek(&_Gear_sItemCursor, _Gear_aItems[index].mId);
-        fn_8007BC34(&_Gear_sItemCursor, &row);
+        GearDbReadRow(&_Gear_sItemCursor, &row);
         if (row.mUnknown76) {
             _GearGetDecalTeamList()->mUnknown8 = type;
             result = 1;
@@ -1268,7 +1268,7 @@ int GearItemList::Leave(int a, int b, void **pOut)
         }
     } else {
         PlayerDbReadGear(EditMenuGetPlayerCursor(), &_Gear_sPlayerGear);
-        if (fn_8007BF14(_Gear_iCategory) == 6) {
+        if (GearDbGetSlotType(_Gear_iCategory) == 6) {
             FEPlyrSetPairSlot(6, _Gear_sPlayerGear.mValues[6]);
             FEPlyrSetPairSlot(7, _Gear_sPlayerGear.mValues[7]);
         } else {
@@ -1304,7 +1304,7 @@ void GearItemList::Highlight(int index)
     FEPlyrSetPose(0, _Gear_aCategoryPoses[_Gear_iCategory]);
     FEPlyrSetPose(1, _Gear_aCategoryPoses[_Gear_iCategory]);
     item = index;
-    type = fn_8007BF14(_Gear_iCategory);
+    type = GearDbGetSlotType(_Gear_iCategory);
     if (_GearTypeHasSides(type) && item != 0) {
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
@@ -1343,13 +1343,13 @@ void GearItemList::GetItem(int index, MenuEntry_t *pOut)
     int side = -1;
     char name[32];
 
-    if (_GearTypeHasSides(fn_8007BF14(_Gear_iCategory)) && item != 0) {
+    if (_GearTypeHasSides(GearDbGetSlotType(_Gear_iCategory)) && item != 0) {
         side = (item - 1) % 3;
         item = (item - 1) / 3 + 1;
     }
     DbCursorSeek(&_Gear_sItemCursor, _Gear_aItems[item].mId);
     pOut->mUnknown40 = _Gear_aItems[item].mUnknown12;
-    fn_8007BE20(&_Gear_sItemCursor, name, 32);
+    GearDbGetName(&_Gear_sItemCursor, name, 32);
     if (side != -1) {
         fn_801C2D88(pOut->mName, 22, "%s-%s", _Gear_aSideNames[side], name);
     } else {

@@ -164,7 +164,7 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
     int id = 0;
     int handle = fn_800C8744(team);
     int value = 0;
-    fn_8008040C(&cursor, 0);
+    PlayerCursorOpenDefault(&cursor, 0);
     if (DepthChartGetEntry(team, 0, &id)) {
         PlayerDbSeekOriginalId(&cursor, id, 0);
         id = PlayerDbGetId(&cursor);
@@ -185,7 +185,7 @@ void fn_8014CCE8(Class_80148A58 *p, int team, Stats_8005CAE4 *pStats)
         id = PlayerDbGetId(&cursor);
     }
     ids[3] = id;
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
     for (unsigned char i = 0; i < 4; i++) {
         pStats->mpPlayers[i] = PlyrFindById(ids[i]);
     }

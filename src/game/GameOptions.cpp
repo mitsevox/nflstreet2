@@ -96,7 +96,6 @@ void GameOptionsOpenCursor(void);
 int GameOptionsCloseCursor(void);
 int GameOptionsWriteRecord(void);
 
-#if defined(DECOMP_COMPARE)
 void GameOptionsOpenCursor(void)
 {
     DbCursorOpen(&_GameOptions_sCursor, 0x5354504F, 0x554E554F, 0, 0, 0x45564153);
@@ -112,7 +111,6 @@ int GameOptionsWriteRecord(void)
 {
     return WriteRecord(&_GameOptions_sCursor, _GameOptions_aRecord);
 }
-#endif
 
 /* Fills the record with the defaults and replaces them with the stored row. */
 static int _GameOptionsReadRecord(void)

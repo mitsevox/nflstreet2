@@ -106,7 +106,7 @@ void ChalGameScaleTeamRatings(int team)
             }
         } while (DbCursorNext((DbCursor *)&cursor));
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
 }
 
 int ChalGameGenerateTeam(int *pTeam)

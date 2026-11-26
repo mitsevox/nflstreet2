@@ -698,12 +698,12 @@ int MsgGameGetPlayerPortrait(int id)
     if (FELoopIsMainFEActive()) {
         PlayerCursorOpen(&cursor, 0, 0x54415453);
     } else {
-        fn_8008040C(&cursor, 0);
+        PlayerCursorOpenDefault(&cursor, 0);
     }
     if (PlayerDbSeekId(&cursor, id, 0)) {
         result = PlayerDbGetPortraitId(&cursor);
     }
-    fn_8008056C(&cursor);
+    PlayerCursorClose(&cursor);
     return result;
 }
 }
