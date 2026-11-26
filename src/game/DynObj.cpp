@@ -1724,7 +1724,7 @@ void DynObjParseRender(void *pData, int handle, BigObj_t *pObject)
         ObjParseGetString(handle, "tideRef", name, 128);
         p->mUnknownF4 = ResFindIndexByName((int)pData, name);
         DynObjLoadAnimPal(pData, p);
-    } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
+    } else { p->mUnknownF8 = 0; p->mFlagF0 = 0; }
 }
 }
 
@@ -2579,8 +2579,9 @@ void PhysUpdatePlayers(void)
                 angles.mUnknown8 += 0x800000;
                 QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
             } else QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+            Vec3_801DE1E0 *pPos = &pBody->mPosition;
             GetBodyOrientation(pBody, &oldRotation);
-            Vec3Sub(&direction, &a, &pBody->mPosition);
+            Vec3Sub(&direction, &a, pPos);
             float length = Vec3Magnitude(&direction);
             if (!(length <= 0.5f)) Vec3Scale(&direction, &direction, 0.06f / length);
             Vec3Scale(&direction, &direction, 60.0f);
