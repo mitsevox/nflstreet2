@@ -29150,9 +29150,19 @@
           "end": "0x80266EC0"
         },
         {
+          "symbol": "SNDAEMSI_updatedestroy",
+          "start": "0x80266EC0",
+          "end": "0x80267114"
+        },
+        {
           "symbol": "fn_80267114",
           "start": "0x80267114",
           "end": "0x802671D0"
+        },
+        {
+          "symbol": "UpdateControlClass",
+          "start": "0x802671D0",
+          "end": "0x8026739C"
         },
         {
           "symbol": "fn_8026739C",
@@ -29465,14 +29475,29 @@
           "end": "0x80269084"
         },
         {
+          "symbol": "SNDAEMSI_CreateModuleInstance",
+          "start": "0x80269084",
+          "end": "0x80269260"
+        },
+        {
           "symbol": "SNDAEMSI_restore",
           "start": "0x80269260",
           "end": "0x802692B8"
         },
         {
+          "symbol": "SNDAEMS_removemodulebank",
+          "start": "0x802692B8",
+          "end": "0x80269484"
+        },
+        {
           "symbol": "SNDAEMSI_createmodulebankhandle",
           "start": "0x80269484",
           "end": "0x802694AC"
+        },
+        {
+          "symbol": "SNDAEMSI_resolvemodulebank",
+          "start": "0x802694AC",
+          "end": "0x802697D8"
         }
       ]
     },

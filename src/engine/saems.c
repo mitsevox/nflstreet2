@@ -5,21 +5,9 @@
 
 #include "engine/sndbank.h"
 #include "engine/sndaems_state.h"
+#include "engine/csis.h"
 
 extern "C" {
-
-typedef struct Range_80267114 {
-    int mMin;
-    int mMax;
-} Range_80267114;
-
-typedef struct Object_80267114 {
-    unsigned char mUnknown0[8];
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA[2];
-    Range_80267114 mUnknownC[1];
-} Object_80267114;
 
 typedef struct Object_8026739C {
     unsigned char mUnknown0[8];
@@ -229,17 +217,199 @@ typedef struct PlayerState_80268774 {
     PlayerOutput_80268774 mOutputs[1];
 } PlayerState_80268774;
 
-/* A loaded module bank on the bank list: its handle and, 20 bytes in, its list link. */
-typedef struct ModuleBank_80269260 {
-    int mHandle;
-    unsigned char mUnknown4[16];
-    void *mpLink;
-} ModuleBank_80269260;
+/* A parameter range of a call or class module, and the inputs that follow the ranges: the trigger
+   (create for a class), the release request of a class, then the parameters. */
+typedef struct AemsRange_t {
+    int mMin;
+    int mMax;
+} AemsRange_t;
 
-extern void *lbl_803A6BD0;
-extern int fn_802692B8(int handle);
+typedef struct CallFunctionInput_t {
+    int mTrigger;
+    int mParams[1];
+} CallFunctionInput_t;
+
+typedef struct CallFunctionState_t {
+    Csis::FunctionHandle mHandle;
+    unsigned char mClamp;
+    unsigned char mNumParams;
+    unsigned char unk_0xA[2];
+    AemsRange_t mRanges[1];
+} CallFunctionState_t;
+
+typedef struct ControlClassInput_t {
+    int mCreate;
+    int mRelease;
+    int mParams[1];
+} ControlClassInput_t;
+
+typedef struct ControlClassState_t {
+    Csis::ClassHandle mHandle;
+    Csis::Class *mpObject;
+    unsigned char mClamp;
+    unsigned char mNumParams;
+    unsigned char unk_0xE[2];
+    AemsRange_t mRanges[1];
+} ControlClassState_t;
+
+/* A bank player's inputs (type, last and current value, 12 bytes each, from +0x1C) and, after
+   them, its two outputs: the time left and the play position, in milliseconds. */
+typedef struct PlayerInput_t {
+    unsigned char mType;
+    unsigned char unk_0x1[3];
+    int mLast;
+    int mValue;
+} PlayerInput_t;
+
+typedef struct PlayerTimes_t {
+    int mRemaining;
+    int mPosition;
+} PlayerTimes_t;
+
+typedef struct PlayerSample_t {
+    signed char mType;
+    unsigned char unk_0x1[3];
+    int mPatch;
+    int unk_0x8;
+} PlayerSample_t;
+
+typedef struct PlayerSampleList_t {
+    int mCount;
+    PlayerSample_t mSamples[1];
+} PlayerSampleList_t;
+
+typedef struct PlayerHandle_t {
+    int mHandle;
+} PlayerHandle_t;
+
+typedef struct PlayerState_t {
+    void *mpOwner;
+    PlayerSampleList_t *mpSamples;
+    PlayerHandle_t mHandle;
+    signed char mMode : 8;
+    signed char mPrevMode : 8;
+    unsigned char mNumInputs : 8;
+    unsigned char mPlaying : 8;
+    signed char mType;
+    unsigned char unk_0x11[3];
+    int mSample;
+    int mModeInput;
+    PlayerInput_t mInputs[1];
+} PlayerState_t;
+
+typedef PlayerHandle_t (*SndAemsPlayFn_t)(...);
+typedef int (*SndAemsPlayerFn_t)(PlayerState_t *p);
+typedef int (*SndAemsPauseFn_t)(PlayerHandle_t handle);
+
+extern SndAemsPlayFn_t SNDAEMSplayerplayfn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerstopfn[4];
+extern SndAemsPauseFn_t SNDAEMSplayerpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4];
+
+/* A module class of a bank (60 bytes, then one offset word per player state and per class state
+   of an instance): its Csis class handle and constructor client, the instance count and limit,
+   the instance's global variable, function, player and class state counts and whether it has a
+   destructor and member data, the instance update callback, the instance template and its size,
+   the offset of the destroy state and the list of live instances. */
+typedef struct AemsInstance_t AemsInstance_t;
+
+typedef struct AemsClass_t {
+    int unk_0x0;
+    Csis::ClassHandle mHandle;
+    Csis::ClassConstructorClient mConstructor;
+    short mNumInstances;
+    short mMaxInstances;
+    unsigned short mNumGlobals;
+    unsigned short mNumFunctions;
+    unsigned char mNumPlayers;
+    unsigned char mHasDestructor;
+    unsigned char mHasMemberData;
+    unsigned char mNumClasses;
+    void (*mpUpdate)(void *context);
+    void *mpTemplate;
+    int mInstanceSize;
+    int mDestroyOffset;
+    AemsInstance_t *mpInstances;
+    int mStateOffsets[1];
+} AemsClass_t;
+
+/* A module instance: its link on the class's instance list, its client on the module timer list,
+   then the template's data (the Csis client records first). */
+struct AemsInstance_t {
+    AemsInstance_t *mpNext;
+    AemsInstance_t *mpPrev;
+    SndAemsTimerClient_t mTimer;
+    unsigned char mData[1];
+};
+
+/* The destroy state of an instance: its class, the instance, its Csis object and the request. */
+typedef struct DestroyState_t {
+    AemsClass_t *mpClass;
+    AemsInstance_t *mpInstance;
+    Csis::Class *mpObject;
+    int mDestroy;
+} DestroyState_t;
+
+/* A Csis client record of an instance: a handle and a function client, then (for functions and
+   member data) a count of parameter words. */
+typedef struct AemsVariableClient_t {
+    Csis::GlobalVariableHandle mHandle;
+    Csis::FunctionClient mClient;
+    int unk_0x18;
+} AemsVariableClient_t;
+
+typedef struct AemsFunctionClient_t {
+    Csis::FunctionHandle mHandle;
+    Csis::FunctionClient mClient;
+    unsigned char mNumParams;
+    unsigned char unk_0x19[3];
+    int mParams[1];
+} AemsFunctionClient_t;
+
+typedef struct AemsMemberDataClient_t {
+    Csis::FunctionClient mClient;
+    unsigned char mNumParams;
+    unsigned char unk_0x11[3];
+    int mParams[1];
+} AemsMemberDataClient_t;
+
+typedef struct AemsDestructorClient_t {
+    Csis::ClassDestructorClient mClient;
+    int unk_0x10;
+} AemsDestructorClient_t;
+
+/* A resolved module bank: its class count, code size, class table offset, fixup header offset,
+   handle, sound banks, name and user word, and its link on sndaems.mpModuleBanks. */
+typedef struct AemsModuleBank_t {
+    unsigned char unk_0x0[10];
+    unsigned short mNumClasses;
+    unsigned char unk_0xC[8];
+    int mSize;
+    unsigned char unk_0x18[4];
+    int mClassOffset;
+    unsigned char unk_0x20[16];
+    int mFixupHeaderOffset;
+    int mRelocOffset;
+    int mCsisOffset;
+    int mHandle;
+    int mBankA;
+    int mBankB;
+    char *mpName;
+    int mUser;
+    SndAemsModuleBankLink_t mLink;
+} AemsModuleBank_t;
+
+#define AEMS_BANK_FROM_LINK(link) ((AemsModuleBank_t *)((char *)(link) - 80))
+
+int SNDAEMS_removemodulebank(int handle);
+extern SndAemsModuleBankLink_t *lbl_803A6BD0;
+int SNDAEMSI_updatedestroy(DestroyState_t *p);
+void SNDAEMSI_timerupdate(void *unused);
 extern void SNDSYS_entercritical(void);
 extern void SNDSYS_leavecritical(void);
+unsigned int strlen(const char *s);
+char *strcpy(char *dst, const char *src);
 
 int fn_80266E88(int *p)
 {
@@ -267,32 +437,160 @@ int fn_80266EAC(int *p)
     return value;
 }
 
-int fn_80267114(Object_80267114 *p)
+int SNDAEMSI_updatedestroy(DestroyState_t *p)
 {
-    int *values;
-    int i;
+    if (p->mDestroy != 0) {
+        AemsClass_t *c = p->mpClass;
+        AemsInstance_t *inst = p->mpInstance;
+        SndAemsTimerClient_t *timer;
+        unsigned char *data;
+        int *offsets;
+        int i;
 
-    if (p->mUnknown8) {
-        values = (int *)&p->mUnknownC[p->mUnknown9];
-        for (i = 0; i < p->mUnknown9; i++) {
-            int value = values[i + 1];
+        if (inst == c->mpInstances)
+            c->mpInstances = inst->mpNext;
+        if (inst->mpPrev != 0)
+            inst->mpPrev->mpNext = inst->mpNext;
+        if (inst->mpNext != 0)
+            inst->mpNext->mpPrev = inst->mpPrev;
+        timer = &p->mpInstance->mTimer;
+        if (timer == sndaems.mpTimerClients)
+            sndaems.mpTimerClients = timer->mpNext;
+        if (timer->mpPrev != 0)
+            timer->mpPrev->mpNext = timer->mpNext;
+        if (timer->mpNext != 0)
+            timer->mpNext->mpPrev = timer->mpPrev;
+        inst = p->mpInstance;
+        data = inst->mData;
+        if (p->mpClass->mHasDestructor) {
+            p->mpObject->UnsubscribeDestructorFast(&((AemsDestructorClient_t *)data)->mClient);
+            data = inst->mData + sizeof(AemsDestructorClient_t);
+        }
+        for (i = 0; i < p->mpClass->mNumGlobals; i++) {
+            Csis::GlobalVariable::UnsubscribeFast(&((AemsVariableClient_t *)data)->mHandle,
+                                                  &((AemsVariableClient_t *)data)->mClient);
+            data += sizeof(AemsVariableClient_t);
+        }
+        if (p->mpClass->mHasMemberData) {
+            p->mpObject->UnsubscribeMemberDataFast(&((AemsMemberDataClient_t *)data)->mClient);
+            data += ((AemsMemberDataClient_t *)data)->mNumParams * 4 + 20;
+        }
+        for (i = 0; i < p->mpClass->mNumFunctions; i++) {
+            Csis::Function::UnsubscribeFast(&((AemsFunctionClient_t *)data)->mHandle,
+                                            &((AemsFunctionClient_t *)data)->mClient);
+            data += ((AemsFunctionClient_t *)data)->mNumParams * 4 + 28;
+        }
+        offsets = p->mpClass->mStateOffsets;
+        for (i = 0; i < p->mpClass->mNumPlayers; i++) {
+            PlayerState_t *player = (PlayerState_t *)((char *)p->mpInstance + *offsets++);
+
+            if (player->mType >= 0)
+                SNDAEMSplayerstopfn[player->mType](player);
+        }
+        for (i = 0; i < p->mpClass->mNumClasses; i++) {
+            ControlClassState_t *object = (ControlClassState_t *)((char *)p->mpInstance + *offsets++);
+
+            if (object->mpObject != 0)
+                object->mpObject->Release();
+        }
+        p->mpClass->mNumInstances--;
+        SNDMEMI_free(p->mpInstance);
+    }
+    return 0;
+}
+
+int fn_80267114(CallFunctionState_t *p)
+{
+    CallFunctionInput_t *input;
+
+    if (p->mClamp) {
+        AemsRange_t *ranges = p->mRanges;
+        int i;
+
+        input = (CallFunctionInput_t *)&ranges[p->mNumParams];
+        for (i = 0; i < p->mNumParams; i++) {
+            int value = input->mParams[i];
             int clamped;
 
-            if (value < p->mUnknownC[i].mMin) {
-                clamped = p->mUnknownC[i].mMin;
+            if (value < ranges[i].mMin) {
+                clamped = ranges[i].mMin;
             } else {
                 clamped = value;
-                if (value > p->mUnknownC[i].mMax)
-                    clamped = p->mUnknownC[i].mMax;
+                if (value > ranges[i].mMax)
+                    clamped = ranges[i].mMax;
             }
-            values[i + 1] = clamped;
+            input->mParams[i] = clamped;
         }
     } else {
-        values = (int *)p->mUnknownC;
+        input = (CallFunctionInput_t *)p->mRanges;
     }
-    if (values[0] != 0)
-        fn_801B9410(p, values + 1);
+    if (input->mTrigger != 0)
+        Csis::Function::CallFast(&p->mHandle, input->mParams);
     return 0;
+}
+
+int UpdateControlClass(ControlClassState_t *p)
+{
+    AemsRange_t *ranges = 0;
+    ControlClassInput_t *input;
+    int refs;
+    int i;
+
+    if (p->mClamp) {
+        ranges = p->mRanges;
+        input = (ControlClassInput_t *)&ranges[p->mNumParams];
+    } else {
+        input = (ControlClassInput_t *)p->mRanges;
+    }
+    if (input->mRelease != 0) {
+        if (p->mpObject == 0)
+            return 0;
+        p->mpObject->Release();
+        p->mpObject = 0;
+    } else if (input->mCreate != 0) {
+        if (p->mpObject == 0) {
+            if (p->mClamp) {
+                for (i = 0; i < p->mNumParams; i++) {
+                    int value = input->mParams[i];
+                    int clamped;
+
+                    if (value < ranges[i].mMin) {
+                        clamped = ranges[i].mMin;
+                    } else {
+                        clamped = value;
+                        if (value > ranges[i].mMax)
+                            clamped = ranges[i].mMax;
+                    }
+                    input->mParams[i] = clamped;
+                }
+            }
+            if (Csis::Class::CreateInstanceFast(&p->mHandle, input->mParams, &p->mpObject) < 0)
+                p->mpObject = 0;
+        }
+    } else {
+        if (p->mpObject == 0)
+            return 0;
+        if (p->mClamp) {
+            for (i = 0; i < p->mNumParams; i++) {
+                int value = input->mParams[i];
+                int clamped;
+
+                if (value < ranges[i].mMin) {
+                    clamped = ranges[i].mMin;
+                } else {
+                    clamped = value;
+                    if (value > ranges[i].mMax)
+                        clamped = ranges[i].mMax;
+                }
+                input->mParams[i] = clamped;
+            }
+        }
+        p->mpObject->SetMemberDataFast(input->mParams);
+    }
+    if (p->mpObject == 0)
+        return 0;
+    p->mpObject->GetRefCount(&refs);
+    return refs;
 }
 
 int fn_8026739C(Object_8026739C *p)
@@ -1024,61 +1322,6 @@ int SNDAEMSI_playerresetoutputs(PlayerState_80268774 *p)
     return 0;
 }
 
-/* A bank player's inputs (type, last and current value, 12 bytes each, from +0x1C) and, after
-   them, its two outputs: the time left and the play position, in milliseconds. */
-typedef struct PlayerInput_t {
-    unsigned char mType;
-    unsigned char unk_0x1[3];
-    int mLast;
-    int mValue;
-} PlayerInput_t;
-
-typedef struct PlayerTimes_t {
-    int mRemaining;
-    int mPosition;
-} PlayerTimes_t;
-
-typedef struct PlayerSample_t {
-    signed char mType;
-    unsigned char unk_0x1[3];
-    int mPatch;
-    int unk_0x8;
-} PlayerSample_t;
-
-typedef struct PlayerSampleList_t {
-    int mCount;
-    PlayerSample_t mSamples[1];
-} PlayerSampleList_t;
-
-typedef struct PlayerHandle_t {
-    int mHandle;
-} PlayerHandle_t;
-
-typedef struct PlayerState_t {
-    void *mpOwner;
-    PlayerSampleList_t *mpSamples;
-    PlayerHandle_t mHandle;
-    signed char mMode : 8;
-    signed char mPrevMode : 8;
-    unsigned char mNumInputs : 8;
-    unsigned char mPlaying : 8;
-    signed char mType;
-    unsigned char unk_0x11[3];
-    int mSample;
-    int mModeInput;
-    PlayerInput_t mInputs[1];
-} PlayerState_t;
-
-typedef PlayerHandle_t (*SndAemsPlayFn_t)(...);
-typedef int (*SndAemsPlayerFn_t)(PlayerState_t *p);
-typedef int (*SndAemsPauseFn_t)(PlayerHandle_t handle);
-
-extern SndAemsPlayFn_t SNDAEMSplayerplayfn[4];
-extern SndAemsPlayerFn_t SNDAEMSplayerstopfn[4];
-extern SndAemsPauseFn_t SNDAEMSplayerpausefn[4];
-extern SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4];
-extern SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4];
-
 int SNDAEMSI_playerupdatebank(PlayerState_t *p)
 {
     int i;
@@ -1314,8 +1557,73 @@ void fn_80269048(int *values, Object_80269048 *p)
     p->mUnknown19 = 1;
 }
 
-int fn_80266EC0(void *state);
-int fn_802671D0(void *state);
+void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params, void *context)
+{
+    AemsClass_t *c = (AemsClass_t *)context;
+    AemsInstance_t *inst;
+    DestroyState_t *destroy;
+    unsigned char *data;
+    int i;
+
+    SNDSYS_entercritical();
+    if (c->mNumInstances >= c->mMaxInstances || (inst = (AemsInstance_t *)SNDMEMI_allocz(c->mInstanceSize)) == 0) {
+        SNDSYS_leavecritical();
+        return;
+    }
+    SNDI_memcpy(inst, c->mpTemplate, c->mInstanceSize);
+    destroy = (DestroyState_t *)((char *)inst + c->mDestroyOffset);
+    destroy->mpClass = c;
+    destroy->mpObject = object;
+    destroy->mpInstance = inst;
+    inst->mpPrev = 0;
+    inst->mpNext = c->mpInstances;
+    if (c->mpInstances != 0)
+        c->mpInstances->mpPrev = inst;
+    c->mpInstances = inst;
+    inst->mTimer.mpCallback = c->mpUpdate;
+    inst->mTimer.mpContext = inst->mData;
+    inst->mTimer.mpNext = sndaems.mpTimerClients;
+    inst->mTimer.mpPrev = 0;
+    if (sndaems.mpTimerClients != 0)
+        sndaems.mpTimerClients->mpPrev = &inst->mTimer;
+    sndaems.mpTimerClients = &inst->mTimer;
+    data = inst->mData;
+    if (c->mHasDestructor) {
+        AemsDestructorClient_t *client = (AemsDestructorClient_t *)data;
+
+        client->mClient.mContext = client;
+        client->mClient.mCallback = (void (*)(Csis::Class *, void *))fn_80269008;
+        object->SubscribeDestructorFast(&client->mClient);
+        data = inst->mData + sizeof(AemsDestructorClient_t);
+    }
+    for (i = 0; i < c->mNumGlobals; i++) {
+        AemsVariableClient_t *client = (AemsVariableClient_t *)data;
+
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80268FFC;
+        client->mClient.mContext = client;
+        Csis::GlobalVariable::SubscribeFast(&client->mHandle, &client->mClient);
+        data += sizeof(AemsVariableClient_t);
+    }
+    if (c->mHasMemberData) {
+        AemsMemberDataClient_t *client = (AemsMemberDataClient_t *)data;
+
+        client->mClient.mContext = client;
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80269014;
+        object->SubscribeMemberDataFast(&client->mClient);
+        data += client->mNumParams * 4 + 20;
+    }
+    for (i = 0; i < c->mNumFunctions; i++) {
+        AemsFunctionClient_t *client = (AemsFunctionClient_t *)data;
+
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))fn_80269048;
+        client->mClient.mContext = client;
+        Csis::Function::SubscribeFast(&client->mHandle, &client->mClient);
+        data += client->mNumParams * 4 + 28;
+    }
+    c->mNumInstances++;
+    SNDSYS_leavecritical();
+}
+
 
 SndAemsBankSetter_t playerinterfacefn[12] = {
     fn_802680D4, fn_80268130, SNDAEMSI_bankvol, fn_80268270,
@@ -1339,7 +1647,7 @@ SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playe
 
 SndAemsUpdateFn_t sndaemsfuncs[40] = {
     (SndAemsUpdateFn_t)fn_80266E88, (SndAemsUpdateFn_t)fn_80266E9C, (SndAemsUpdateFn_t)fn_80266EA4,
-    (SndAemsUpdateFn_t)fn_80266EAC, fn_80266EC0, (SndAemsUpdateFn_t)fn_80267114,
+    (SndAemsUpdateFn_t)fn_80266EAC, (SndAemsUpdateFn_t)SNDAEMSI_updatedestroy, (SndAemsUpdateFn_t)fn_80267114,
     (SndAemsUpdateFn_t)fn_80267404, (SndAemsUpdateFn_t)fn_80267480, (SndAemsUpdateFn_t)fn_802674DC,
     (SndAemsUpdateFn_t)SNDAEMSI_updaterandomweighted, (SndAemsUpdateFn_t)fn_8026769C,
     (SndAemsUpdateFn_t)SNDAEMSI_updatedelaytrig, (SndAemsUpdateFn_t)fn_802677B4,
@@ -1351,15 +1659,65 @@ SndAemsUpdateFn_t sndaemsfuncs[40] = {
     (SndAemsUpdateFn_t)SNDAEMSI_updateramp, (SndAemsUpdateFn_t)fn_80268F54, (SndAemsUpdateFn_t)fn_80268FA0,
     (SndAemsUpdateFn_t)fn_80268FC4, (SndAemsUpdateFn_t)fn_80267E48, (SndAemsUpdateFn_t)fn_80267EA8,
     (SndAemsUpdateFn_t)SNDAEMSI_updatescale2, (SndAemsUpdateFn_t)fn_80268058,
-    (SndAemsUpdateFn_t)fn_80268FE8, fn_802671D0, (SndAemsUpdateFn_t)fn_8026739C,
+    (SndAemsUpdateFn_t)fn_80268FE8, (SndAemsUpdateFn_t)UpdateControlClass, (SndAemsUpdateFn_t)fn_8026739C,
 };
 
 void SNDAEMSI_restore(void)
 {
     SNDSYS_entercritical();
     while (lbl_803A6BD0 != 0)
-        fn_802692B8(((ModuleBank_80269260 *)((char *)lbl_803A6BD0 - 20))->mHandle);
+        SNDAEMS_removemodulebank(AEMS_BANK_FROM_LINK(lbl_803A6BD0)->mHandle);
     SNDSYS_leavecritical();
+}
+
+int SNDAEMS_removemodulebank(int handle)
+{
+    AemsModuleBank_t *bank;
+
+    if (sndaems.mpBeforeRemoveBank != 0)
+        sndaems.mpBeforeRemoveBank();
+    SNDSYS_entercritical();
+    for (bank = AEMS_BANK_FROM_LINK(sndaems.mpModuleBanks); bank != 0;
+         bank = AEMS_BANK_FROM_LINK(bank->mLink.mpNext)) {
+        if (handle == bank->mHandle) {
+            AemsClass_t *c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
+            int i;
+
+            for (i = 0; i < bank->mNumClasses; i++) {
+                AemsInstance_t *inst;
+
+                Csis::Class::UnsubscribeConstructorFast(&c->mHandle, &c->mConstructor);
+                inst = c->mpInstances;
+                while (inst != 0) {
+                    AemsInstance_t *next = inst->mpNext;
+                    DestroyState_t *destroy = (DestroyState_t *)((char *)inst + c->mDestroyOffset);
+
+                    destroy->mDestroy = 1;
+                    SNDAEMSI_updatedestroy(destroy);
+                    inst = next;
+                }
+                c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+            }
+            if (bank->mpName != 0)
+                SNDMEMI_free(bank->mpName);
+            if (bank->mBankA >= 0)
+                SNDbankremove(bank->mBankA);
+            if (bank->mBankB >= 0)
+                SNDbankremove(bank->mBankB);
+            if (&bank->mLink == sndaems.mpModuleBanks)
+                sndaems.mpModuleBanks = bank->mLink.mpNext;
+            if (bank->mLink.mpPrev != 0)
+                bank->mLink.mpPrev->mpNext = bank->mLink.mpNext;
+            if (bank->mLink.mpNext != 0)
+                bank->mLink.mpNext->mpPrev = bank->mLink.mpPrev;
+            if (sndaems.mpModuleBanks == 0)
+                Snd::gVariableTimerList.Remove((SndStreamFader_t *)&sndaems.mTimerClient);
+            SNDSYS_leavecritical();
+            return 0;
+        }
+    }
+    SNDSYS_leavecritical();
+    return -8;
 }
 
 int SNDAEMSI_createmodulebankhandle(void)
@@ -1370,5 +1728,103 @@ int SNDAEMSI_createmodulebankhandle(void)
     if (modulebankhandle < 0)
         modulebankhandle = 1;
     return modulebankhandle;
+}
+
+/* A bank's fixup header: the count and bank offsets of the module function ids to patch. */
+typedef struct AemsFixupHeader_t {
+    int mCount;
+    int mOffsets[1];
+} AemsFixupHeader_t;
+
+/* A Csis interface fixup: the handle's bank offset, the offset of its (hash, name) record and
+   the handle kind (0 global variable, 1 class, else function). */
+typedef struct AemsCsisFixup_t {
+    int mHandleOffset;
+    int mNameOffset;
+    unsigned char mKind;
+    unsigned char unk_0x9[3];
+} AemsCsisFixup_t;
+
+typedef struct AemsCsisFixups_t {
+    int mCount;
+    AemsCsisFixup_t mFixups[1];
+} AemsCsisFixups_t;
+
+void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixups, char *name, int user)
+{
+    int first;
+    int i;
+    unsigned char *base;
+    AemsFixupHeader_t *relocs;
+    AemsCsisFixups_t *csis;
+    AemsClass_t *c;
+
+    lbl_803A6C24.m1B4[0] = SNDAEMSI_restore;
+    SNDSYS_entercritical();
+    first = sndaems.mpModuleBanks == 0;
+    bank->mLink.mpNext = sndaems.mpModuleBanks;
+    bank->mLink.mpPrev = 0;
+    if (sndaems.mpModuleBanks != 0)
+        sndaems.mpModuleBanks->mpPrev = &bank->mLink;
+    sndaems.mpModuleBanks = &bank->mLink;
+    for (i = 0; i < fixups->mCount; i++) {
+        unsigned short *id = (unsigned short *)((char *)bank + fixups->mOffsets[i]);
+        unsigned short *fn = (unsigned short *)&sndaemsfuncs[(id[0] << 16) | id[2]];
+
+        id[0] = fn[0];
+        id[2] = fn[1];
+    }
+    base = (unsigned char *)fixups - bank->mFixupHeaderOffset;
+    relocs = (AemsFixupHeader_t *)(base + bank->mRelocOffset);
+    for (i = 0; i < relocs->mCount; i++)
+        *(int *)((char *)bank + relocs->mOffsets[i]) += (int)bank;
+    csis = (AemsCsisFixups_t *)(base + bank->mCsisOffset);
+    for (i = 0; i < csis->mCount; i++) {
+        Csis::InterfaceId id;
+        unsigned short *record = (unsigned short *)(base + csis->mFixups[i].mNameOffset);
+
+        ((unsigned short *)&id.mHash)[0] = record[0];
+        ((unsigned short *)&id.mHash)[1] = record[1];
+        id.mName = (const char *)(record + 2);
+        if (csis->mFixups[i].mKind == 0)
+            ((Csis::GlobalVariableHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+        else if (csis->mFixups[i].mKind == 1)
+            ((Csis::ClassHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+        else
+            ((Csis::FunctionHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+    }
+    c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
+    for (i = 0; i < bank->mNumClasses; i++) {
+        int j;
+
+        c->mConstructor.mCallback = SNDAEMSI_CreateModuleInstance;
+        c->mConstructor.mContext = c;
+        c->mpTemplate = (char *)bank + (int)c->mpTemplate;
+        c->mpUpdate = (void (*)(void *))((char *)bank + (int)c->mpUpdate);
+        Csis::Class::SubscribeConstructorFast(&c->mHandle, &c->mConstructor);
+        for (j = 0; j < c->mNumPlayers; j++)
+            *(AemsModuleBank_t **)((char *)c->mpTemplate + c->mStateOffsets[j]) = bank;
+        c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+    }
+    if (name != 0 && name[0] != 0) {
+        bank->mpName = (char *)SNDMEMI_allocz(strlen(name) + 1);
+        strcpy(bank->mpName, name);
+        bank->mUser = user;
+    } else {
+        bank->mpName = 0;
+    }
+    if (first) {
+        SndAemsTimerClient_t *client = &sndaems.mTimerClient;
+
+        client->mpCallback = SNDAEMSI_timerupdate;
+        client->mpNext = (SndAemsTimerClient_t *)Snd::gVariableTimerList.mpHead;
+        client->mpPrev = 0;
+        if (Snd::gVariableTimerList.mpHead != 0)
+            Snd::gVariableTimerList.mpHead->mpPrev = (SndStreamFader_t *)client;
+        Snd::gVariableTimerList.mpHead = (SndStreamFader_t *)client;
+    }
+    ICInvalidateRange(bank, bank->mSize);
+    DCFlushRange(bank, bank->mSize);
+    SNDSYS_leavecritical();
 }
 }
