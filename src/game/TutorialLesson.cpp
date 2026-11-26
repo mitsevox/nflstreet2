@@ -19,7 +19,7 @@
 #include "game/SndgCrowd.h"
 #include "game/PauseMenu.h"
 #include "game/GameCamera.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/InGame.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
@@ -144,7 +144,7 @@ public:
 
 class TutorialPreGame : public PreGamePhase {
 public:
-    virtual void OnEnter();
+    virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
     virtual void ShowIntroScreen();
     virtual void HideIntroScreen();
@@ -167,7 +167,7 @@ public:
 
 class TutorialLivePlay : public LivePlayPhase {
 public:
-    virtual void OnEnter();
+    virtual void OnEnter(float dt);
     virtual void OnUpdate(float dt);
 };
 
@@ -354,8 +354,8 @@ void fn_801485EC(int mode);
 int fn_801485F4(void);
 void fn_80148644(void);
 int fn_801486A0(void);
-Class_80148A58 * fn_80148A58(void);
-void fn_80149040(Object_80039F5C *pObject);
+MiniGameC * MiniGameGetCurrent(void);
+void MiniGameReloadPlayer(Object_80039F5C *pObject);
 void fn_8014F3DC(int a);
 void RouteArrowSetEnabled(int a);
 void PlayBookLoadCurrentPlay(int team);
@@ -577,7 +577,7 @@ void TutorialSetupRosters(void)
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
             pObject->mUnknown2908 = records[team].mUnknown[i];
-            fn_80149040(pObject);
+            MiniGameReloadPlayer(pObject);
         }
     }
     for (i = 0; i < 14; i++) {
@@ -977,8 +977,8 @@ int TutorialFinishCategory(void)
             switch (mode) {
             case 2:
                 SpchIGSetCommentaryOn(0);
-                fn_80148A58()->vfn_07(0, 1);
-                fn_80148A58()->vfn_07(1, 5);
+                MiniGameGetCurrent()->vfn_07(0, 1);
+                MiniGameGetCurrent()->vfn_07(1, 5);
                 break;
             case 0:
                 ClockRuleClearFlags(0x800);
@@ -991,7 +991,7 @@ int TutorialFinishCategory(void)
                 if (fn_800B65A0(fn_80178320()) == 0xFF) {
                     fn_80177C50(0);
                 }
-                fn_80148A58()->vfn_07(0, 21);
+                MiniGameGetCurrent()->vfn_07(0, 21);
                 PlayBookSetFormationType(1, 1);
                 PlayBookSetIndices(1, 0, 0, 0);
                 PlayBookLoadCurrentPlay(1);
@@ -1707,7 +1707,7 @@ void TutorialReloadRatings(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
-            fn_80149040(PlyrGet(team, i));
+            MiniGameReloadPlayer(PlyrGet(team, i));
         }
     }
 }
@@ -1788,9 +1788,9 @@ void TutorialPostPlay::ShowResults()
 static unsigned char _Tutorial_bAwaitCamera = 0;
 static unsigned char _Tutorial_bKeyPromptShown = 0;
 
-void TutorialPreGame::OnEnter()
+void TutorialPreGame::OnEnter(float dt)
 {
-    PreGamePhase::OnEnter();
+    PreGamePhase::OnEnter(dt);
     StyleTrackerSetEnabled(1);
     mUnknown4 = 1;
     TutorialSetupSession();
@@ -1963,11 +1963,11 @@ int TutorialPreSnap::CanSnap()
     return result;
 }
 
-void TutorialLivePlay::OnEnter()
+void TutorialLivePlay::OnEnter(float dt)
 {
     TutorialStep_t *pEntry;
 
-    LivePlayPhase::OnEnter();
+    LivePlayPhase::OnEnter(dt);
     TutorialSetStepDone(0);
     CamMainWarpToDest(CamGameGetCamera(5));
     pEntry = TutorialGetLessonObject()->GetStep();

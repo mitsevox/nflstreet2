@@ -9,7 +9,7 @@
 #include <string.h>
 #include "game/ResLoad.h"
 #include "game/PlayCallScript.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/DbCursor.h"
 #include "game/PlayBookDb.h"
@@ -248,8 +248,8 @@ void PlayBookOpenDatabases(int a, int b, int c, int d, int e, int f)
         first = 2;
         second = 1;
         if (fn_801485D4()) {
-            first = fn_80148A58()->mUnknown0;
-            second = fn_80148A58()->mUnknown4;
+            first = MiniGameGetCurrent()->mUnknown0;
+            second = MiniGameGetCurrent()->mUnknown4;
         }
         PlayBookDbOpen(0x31544250, first, 4, 0, 0, 1);
         PlayBookDbOpen(0x31444250, second, 4, 0, 0, 1);
@@ -786,7 +786,7 @@ int PlayCallGetPlaybookId(void)
     switch (fn_801486A0()) {
     case 4: return 1;
     case 3: return 4;
-    case 2: return fn_80148A58()->vfn_05(0) == 1 ? 2 : 3;
+    case 2: return MiniGameGetCurrent()->vfn_05(0) == 1 ? 2 : 3;
     }
     return 0;
 }
@@ -1608,7 +1608,7 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
     PlayTrackGetRatingBias(team, &group1Bias, &group2Bias);
     PlayTrackGetGainTendency(team, &kind, &flags);
     if (fn_801485D4())
-        preferred = fn_80148A58()->vfn_08(1);
+        preferred = MiniGameGetCurrent()->vfn_08(1);
 
     for (unsigned short i = 0; i < count; i++) {
         float scale = 1.0f;

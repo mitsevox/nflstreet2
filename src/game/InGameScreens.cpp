@@ -10,7 +10,7 @@
 #include "game/Cheat.h"
 #include "game/GameOptions.h"
 #include "game/fn_8009D990.h"
-#include "game/Class_80148A58.h"
+#include "game/MiniGameC.h"
 #include "game/StyleTracker.h"
 #include "game/Object_8008044C.h"
 #include "game/DbCursor.h"
@@ -249,7 +249,7 @@ void fn_8021D7B8(void *p, int id, int count, void *pArgs);
 int fn_80178320(void);
 int fn_80177F7C(void);
 int fn_80177F70(void);
-int fn_800B65A0(int side);
+unsigned char fn_800B65A0(int side);
 void fn_80177D78(void);
 void fn_8009D964(int index, int value);
 int GameInfoGet(int index);
@@ -268,7 +268,7 @@ unsigned int SyncRandGetRange(int stream, int count);
 void fn_800B41BC(int a, int b, int c);
 int FormationLineupApplyUser(int formation, int team);
 void fn_800B4184(int a);
-int fn_800B65D0(int team);
+unsigned char fn_800B65D0(int team);
 unsigned char RumbleIsEnabled(void);
 void RumbleEnable(unsigned char enabled);
 void RumbleStart(int a, int b, int c);
@@ -665,7 +665,7 @@ void InGameJumpBallGetSlot(int index, char *pOut, int b, char *pText0, int size0
     Object_80056584 *pObject = info.mpObject;
     if (pObject) {
         GameTextFormatInitialAndName(pObject, pOut, b);
-        fn_80148A58()->vfn_18(1, index, pText, length);
+        MiniGameGetCurrent()->GetPlayerAwardsText(1, index, pText, length);
         *pId = MsgGameGetPlayerPortrait(pObject->mUnknownB5C);
     } else {
         *pOut = 0;
@@ -988,7 +988,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
             }
         }
     } else if (fn_801485D4() && fn_800B65A0(fn_80178308()) != 0xFF) {
-        switch (fn_80148A58()->vfn_08(0)) {
+        switch (MiniGameGetCurrent()->vfn_08(0)) {
         case 0:
             break;
         case 1:
@@ -2625,15 +2625,15 @@ int TeamPairHandleMessage(int,TeamPairArgs_t *,int,int *);
 void PauseOpenScreenArgs(unsigned short,unsigned short,int,unsigned int,int *,int);
 int fn_80178EE0(int team);
 int fn_80178EA0(int team);
-int fn_80155130(Class_80148A58 *,int,int);
+int MiniGameOpenFieldGetPlayerColor(MiniGameC *,int,int);
 int fn_80178D70(int team);
 int GameInfoGet(int team);
-void fn_8014F3E4(Class_80148A58 *,int,Stats_8005C4A4 *);
-void fn_8014BA20(Class_80148A58 *,int,Stats_8005C844 *);
-void fn_8014CCE8(Class_80148A58 *,int,Stats_8005CAE4 *);
-void fn_80155CF0(Class_80148A58 *,int,int *,int *);
-void fn_80155C44(Class_80148A58 *,int,int,Record_8005CE10 *);
-int fn_80155D38(Class_80148A58 *,int);
+void fn_8014F3E4(MiniGameC *,int,Stats_8005C4A4 *);
+void fn_8014BA20(MiniGameC *,int,Stats_8005C844 *);
+void fn_8014CCE8(MiniGameC *,int,Stats_8005CAE4 *);
+void fn_80155CF0(MiniGameC *,int,int *,int *);
+void fn_80155C44(MiniGameC *,int,int,Record_8005CE10 *);
+int fn_80155D38(MiniGameC *,int);
 
 void InGameRewardSetNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
 void InGameRewardSetOtherNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
@@ -2714,16 +2714,16 @@ int InGameResetMsg(unsigned int id,MenuArg_t *,int,int *) {
 }
 void InGameFormatCompletions(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
 void InGameGetPlayerColor(int team,unsigned char index,int *color) {
-    HudLookupColor(fn_80155130(fn_80148A58(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
+    HudLookupColor(MiniGameOpenFieldGetPlayerColor(MiniGameGetCurrent(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
 int InGameGetPlayerStats(int team,unsigned char index,char *name,int nameSize,char *text,int size,char *first,char *second,char *third,char *fourth,int firstSize,int secondSize) {
     int result=0;Object_80039F5C *p=PlyrGet(team,index);
     *name=0;*first=0;*second=0;*third=0;*fourth=0;*text=0;
     if(p && p->mUnknown9[2]) {
         GameTextFormatInitialAndName((Object_80056584 *)p,name,nameSize);
-        fn_80148A58()->vfn_20(team,index,0,first,(unsigned char)firstSize,second,(unsigned char)secondSize);
-        fn_80148A58()->vfn_20(team,index,1,third,(unsigned char)firstSize,fourth,(unsigned char)secondSize);
-        fn_80148A58()->vfn_18(team,index,text,size);
+        MiniGameGetCurrent()->GetPlayerStatText(team,index,0,first,(unsigned char)firstSize,second,(unsigned char)secondSize);
+        MiniGameGetCurrent()->GetPlayerStatText(team,index,1,third,(unsigned char)firstSize,fourth,(unsigned char)secondSize);
+        MiniGameGetCurrent()->GetPlayerAwardsText(team,index,text,size);
         result=MsgGameGetPlayerPortrait(p->mUnknown2908);
     }
     return result;
@@ -2741,7 +2741,7 @@ int InGamePlayerStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
 }
 void InGameGetTimedStats(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,int textSize,int *result) {
     unsigned char foundTeam=0,foundIndex=0;bool found=false;
-    Stats_8005C4A4 stats;fn_8014F3E4(fn_80148A58(),team,&stats);
+    Stats_8005C4A4 stats;fn_8014F3E4(MiniGameGetCurrent(),team,&stats);
     unsigned int minutes=stats.mTime/60,seconds=stats.mTime%60;
     fn_801C2D88(first,firstSize,"%d",stats.mUnknown4);
     if(seconds<10)fn_801C2D88(time,timeSize,"%d:0%d",minutes,seconds);else fn_801C2D88(time,timeSize,"%d:%d",minutes,seconds);
@@ -2753,7 +2753,7 @@ void InGameGetTimedStats(int team,char *name,int nameSize,char *first,int firstS
             Object_80039F5C *p=PlyrGet(t,i);
             if((unsigned short)pPlayer->mUnknown2908==(unsigned short)p->mUnknown2908) {found=true;foundIndex=i;foundTeam=t;}
         }
-        fn_80148A58()->vfn_18(foundTeam,foundIndex,text,textSize);
+        MiniGameGetCurrent()->GetPlayerAwardsText(foundTeam,foundIndex,text,textSize);
         *result=MsgGameGetPlayerPortrait(pPlayer->mUnknown2908);
     } else {*name=0;*result=0;}
     unsigned char r=0,g=0,b=0;HudLookupColor(stats.mColor,&r,&g,&b);color[0]=r;color[1]=g;color[2]=b;
@@ -2768,10 +2768,10 @@ int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     }return 1;
 }
 void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
-    Stats_8005C844 stats;fn_8014BA20(fn_80148A58(),team,&stats);
+    Stats_8005C844 stats;fn_8014BA20(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
     fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
-    fn_80148A58()->vfn_19(team,0,first,textSize);fn_80148A58()->vfn_19(team,1,second,textSize);fn_80148A58()->vfn_19(team,2,third,textSize);
+    MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
 }
 int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
@@ -2791,9 +2791,9 @@ int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) 
 void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
     Stats_8005CAE4 stats;
     DbCursor cursor;
-    fn_8014CCE8(fn_80148A58(),team,&stats);
+    fn_8014CCE8(MiniGameGetCurrent(),team,&stats);
     fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
-    fn_80148A58()->vfn_19(team,0,first,textSize);fn_80148A58()->vfn_19(team,1,second,textSize);fn_80148A58()->vfn_19(team,2,third,textSize);
+    MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }
 int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
@@ -2811,10 +2811,10 @@ int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) 
     return 1;
 }
 void InGameFormatPossessionCount(int team,int *other,char *text,int size) {
-    DbCursor query; int value;fn_80155CF0(fn_80148A58(),team,other,&value);fn_801C2D88(text,size,"%d",value);
+    DbCursor query; int value;fn_80155CF0(MiniGameGetCurrent(),team,other,&value);fn_801C2D88(text,size,"%d",value);
 }
 void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
-    Record_8005CE10 record;fn_80155C44(fn_80148A58(),team,index,&record);
+    Record_8005CE10 record;fn_80155C44(MiniGameGetCurrent(),team,index,&record);
     unsigned int value=record.mOrdinal;
     Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;}
@@ -2836,7 +2836,7 @@ void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,cha
 }
 int InGameScoringSummaryMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000002:InGameFormatPossessionCount((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(fn_80148A58(),(unsigned char)p[0].i);break;
+    case 0x80000002:InGameFormatPossessionCount((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(MiniGameGetCurrent(),(unsigned char)p[0].i);break;
     case 0x80000003:InGameFormatPossession((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
     case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     default:return 0;
