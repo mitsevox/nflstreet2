@@ -8,7 +8,7 @@
 #include <string.h>
 
 extern "C" {
-float fn_80088FFC(Vector_80039F5C *pA0, Vector_80039F5C *pA1, Vector_80039F5C *pB0, Vector_80039F5C *pB1, Vector_80039F5C *pOut);
+float CollideSegmentClosestPoints(Vector_80039F5C *pA0, Vector_80039F5C *pA1, Vector_80039F5C *pB0, Vector_80039F5C *pB1, Vector_80039F5C *pOut);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void Vec3ScaleAcc(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -20,7 +20,7 @@ int BallSegmentsTouch(BallSegment_t *pA, BallSegment_t *pB, float limit)
 {
     Vector_80039F5C point;
 
-    return fn_80088FFC(&pA->mUnknown0, &pA->mUnknown10, &pB->mUnknown0, &pB->mUnknown10, &point) < limit;
+    return CollideSegmentClosestPoints(&pA->mUnknown0, &pA->mUnknown10, &pB->mUnknown0, &pB->mUnknown10, &point) < limit;
 }
 
 int BallSweepLinear(Vector_80039F5C *pOut, BallSegment_t *pA, BallSegment_t *pB, Vector_80039F5C *pStep, float limit)

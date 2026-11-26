@@ -6,7 +6,7 @@
 #include "game/Vec3Magnitude.h"
 
 extern "C" {
-float fn_80088FFC(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut);
+float CollideSegmentClosestPoints(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut);
 void Vec3Normalize(float *pOut, float *pIn);
 void Vec3Lerp(float *pOut, float *pA, float *pB, float t);
 }
@@ -20,7 +20,7 @@ void CollideAddCapsuleContact(float *pCapsuleA, float *pCapsuleB, unsigned int i
     int n;
 
     radius = radius * radius;
-    if (fn_80088FFC(pCapsuleA, pCapsuleA + 4, pCapsuleB, pCapsuleB + 4, point) < radius) {
+    if (CollideSegmentClosestPoints(pCapsuleA, pCapsuleA + 4, pCapsuleB, pCapsuleB + 4, point) < radius) {
         n = _Collide_ContactList.mCount;
         _Collide_ContactList.mpContacts[n].mUnknown0 = point[0];
         _Collide_ContactList.mpContacts[n].mUnknown4 = point[1];

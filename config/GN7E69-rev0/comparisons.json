@@ -20459,7 +20459,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80088FFC",
+          "symbol": "CollideSegmentClosestPoints",
           "start": "0x80088FFC",
           "end": "0x80089330"
         }
