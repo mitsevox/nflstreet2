@@ -24400,15 +24400,46 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021A438.c",
+      "source": "src/Common/UIStudio/UISStack.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021A438-0x8021DE9C (src/engine/cu_8021A438.c), its exact whole-function rows and neutral name rows (UISGetActionPtrValue keeps its existing name row), and the file compiler row. The draft bodies use no compiled static data; the other functions of the range, its .rodata 0x802B1E78-0x802B1EF8 and its small data remain original and unmeasured.",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021A45C as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E78-0x802B1E88).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8021A438",
-          "end": "0x8021DE9C"
+          "end": "0x8021C5EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E78",
+          "end": "0x802B1E88"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "fn_8021A438",
+          "start": "0x8021A438",
+          "end": "0x8021A45C"
+        },
+        {
+          "symbol": "fn_8021A45C",
+          "start": "0x8021A45C",
+          "end": "0x8021C5EC"
+        }
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISUtils.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021CB68, fn_8021CE48, fn_8021CF38 as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021C5EC",
+          "end": "0x8021D880"
         },
         {
           "section": ".rodata",
@@ -24418,11 +24449,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "fn_8021A438",
-          "start": "0x8021A438",
-          "end": "0x8021A45C"
-        },
         {
           "symbol": "fn_8021C5EC",
           "start": "0x8021C5EC",
@@ -24542,12 +24568,22 @@
           "symbol": "fn_8021D828",
           "start": "0x8021D828",
           "end": "0x8021D880"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISActionProcess.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts fn_8021D888 as partials (HOLDOUT source-form rows) and keep the exact functions measured.",
+      "sections": [
         {
-          "symbol": "fn_8021D880",
-          "start": "0x8021D880",
-          "end": "0x8021D888"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021D888",
+          "end": "0x8021DE9C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_8021D888",
           "start": "0x8021D888",

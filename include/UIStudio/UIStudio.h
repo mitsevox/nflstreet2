@@ -78,10 +78,19 @@ typedef struct UISObjectRef_t {
     Int32 *pOffset; /* 0x04 */
 } UISObjectRefT;
 
+/* 12-byte string record of a screen file's string table. */
+typedef struct UISString_t {
+    Uint32 ID;     /* 0x00 */
+    Uint32 Length; /* 0x04 */
+    char *pText;   /* 0x08 */
+} UISStringT;
+
 typedef struct UISScreenData_t {
     Uint32 NumControls;      /* 0x00 */
     UISControlT *pControls;  /* 0x04 */
-    Uint8 unk_08[0x10];
+    Uint32 NumStrings;       /* 0x08 */
+    UISStringT *pStrings;    /* 0x0C */
+    Uint8 unk_10[0x08];
     Uint32 NumObjects;       /* 0x18 */
     UISObjectRefT *pObjects; /* 0x1C */
 } UISScreenDataT;
@@ -91,7 +100,8 @@ typedef struct UISScreen_t {
     Int32 unk_00;               /* 0x00 */
     Uint16 GroupID;             /* 0x04 */
     Uint16 ScreenID;            /* 0x06 */
-    Uint8 unk_08[0x04];
+    Uint16 ParentGroupID;       /* 0x08 */
+    Uint16 ParentScreenID;      /* 0x0A */
     Int32 bWaitingToBeUnloaded; /* 0x0C */
     UISScreenDataT *pData;      /* 0x10 */
 } UISScreenT;
@@ -143,20 +153,27 @@ typedef struct UISRateFnc_t {
     UISAnimateDataT AnimationData;  /* 0x20 */
 } UISRateFncT;
 
-/* 40-byte record holding a screen pointer at 0x18. */
-typedef struct UISScreenRef_t {
-    Uint8 unk_00[0x18];
-    UISScreenT *pScreen; /* 0x18 */
-    Uint8 unk_1C[0x0C];
-} UISScreenRefT;
-
-/* Word stack used when calling into screen code; pTop is stored to and then
-   advanced. Only the accessed prefix is declared. */
+/* Word stack used when calling into screen code (20 bytes); pTop is stored to
+   and then advanced, pCode is the script byte code being run. */
 typedef struct UISRunState_t {
-    Uint8 unk_00[0x0C];
-    Int32 *pTop;  /* 0x0C */
-    Int32 unk_10; /* 0x10 */
+    Int32 *pStackStart;   /* 0x00 */
+    Int32 *pStackCurrent; /* 0x04 */
+    Int32 *pStackEnd;     /* 0x08 */
+    Int32 *pTop;          /* 0x0C */
+    Uint8 *pCode;         /* 0x10 */
 } UISRunStateT;
+
+/* 40-byte modal record: the screen a modal screen was loaded over and the
+   script state paused there. */
+typedef struct UISScreenRef_t {
+    UISRunStateT StackState;         /* 0x00: copy of *pRestoreState taken when the script paused */
+    UISControlStateT *pControlState; /* 0x14: the screen's first control's */
+    UISScreenT *pScreen;             /* 0x18 */
+    Int32 *pRestoreStack;            /* 0x1C */
+    UISRunStateT *pRestoreState;     /* 0x20: the live state */
+    Uint16 ScreenID;                 /* 0x24 */
+    Uint16 GroupID;                  /* 0x26 */
+} UISScreenRefT;
 
 /* Thread actions are pushed downwards from pTop; pStart is the first
    (highest) record. */
@@ -176,8 +193,8 @@ typedef struct UISInfo_t {
     UISControlFncT *pControlFnc;    /* 0x1C */
     Uint8 unk_20[0x04];
     void *pCallback24;              /* 0x24 */
-    Uint8 unk_28[0x04];
-    void (*pCallback2C)(void);              /* 0x2C: called before the screens are drawn */
+    void (*pCallback28)(Uint16, Uint16, char *); /* 0x28: (group, screen, text) */
+    void (*pCallback2C)(void);             /* 0x2C: called before the screens are drawn */
     void (*pCallback30)(void);              /* 0x30: called after the screens are drawn */
     void (*pCallback34)(Uint16, Uint16);    /* 0x34: called before each screen (group, screen) */
     void (*pCallback38)(Uint16, Uint16);    /* 0x38: called after each screen (group, screen) */
@@ -192,8 +209,8 @@ typedef struct UISInfo_t {
     Uint8 unk_5C[0x04];
     Int32 NumRateFncs;              /* 0x60 */
     UISRateFncT *RateFncs;          /* 0x64 */
-    Uint8 unk_68[0x04];
-    Uint32 NumScreenRefs;           /* 0x6C */
+    Uint32 MaxScreenRefs;           /* 0x68 */
+    Uint32 NumScreenRefs;          /* 0x6C */
     UISScreenRefT *ScreenRefs;      /* 0x70 */
     UISRunStateT RunState;          /* 0x74: passed by address to 0x802180A0 */
     Uint8 unk_88[0x34];
@@ -233,9 +250,18 @@ void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, 
 void fn_80219BA0(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
                  Uint16 Arg6);
 void fn_80219E18(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
+void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID);
+void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
 
 /* UI Studio functions outside UIStudio.c whose names are not yet established. */
+Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
+                  UISControlStateT *pControlState);
 Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
+Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
+                  UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
+                  Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult);
+void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
+void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
 void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
                  UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6);
 void fn_8021DDF4(UISInfoT *pInfo, Int32 Arg1);
