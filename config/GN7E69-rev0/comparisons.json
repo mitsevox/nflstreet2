@@ -19290,13 +19290,25 @@
     {
       "source": "src/engine/dbcache.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The whole native unit includes its .data and .sdata and compares the four holdouts, whose original bytes remain linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022F80C",
           "end": "0x802311C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB310",
+          "end": "0x802FB368"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0E0",
+          "end": "0x803EC0E4"
         }
       ],
       "functions": [
@@ -19316,9 +19328,29 @@
           "end": "0x8022F8A8"
         },
         {
+          "symbol": "fn_8022F8A8",
+          "start": "0x8022F8A8",
+          "end": "0x8022FBAC"
+        },
+        {
           "symbol": "fn_8022FBAC",
           "start": "0x8022FBAC",
           "end": "0x8022FC8C"
+        },
+        {
+          "symbol": "fn_8022FC8C",
+          "start": "0x8022FC8C",
+          "end": "0x8022FEF8"
+        },
+        {
+          "symbol": "DbCacheWriteColumnKeys",
+          "start": "0x8022FEF8",
+          "end": "0x8022FFD0"
+        },
+        {
+          "symbol": "fn_8022FFD0",
+          "start": "0x8022FFD0",
+          "end": "0x802303A0"
         },
         {
           "symbol": "fn_802303A0",
@@ -19331,6 +19363,11 @@
           "end": "0x80230400"
         },
         {
+          "symbol": "fn_80230400",
+          "start": "0x80230400",
+          "end": "0x80230CC8"
+        },
+        {
           "symbol": "fn_80230CC8",
           "start": "0x80230CC8",
           "end": "0x80230CEC"
@@ -19341,14 +19378,9 @@
           "end": "0x80230D8C"
         },
         {
-          "symbol": "DbCacheWriteColumnKeys",
-          "start": "0x8022FEF8",
-          "end": "0x8022FFD0"
-        },
-        {
-          "symbol": "fn_8022F8A8",
-          "start": "0x8022F8A8",
-          "end": "0x8022FBAC"
+          "symbol": "fn_80230D8C",
+          "start": "0x80230D8C",
+          "end": "0x802311C8"
         }
       ]
     },

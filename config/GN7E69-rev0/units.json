@@ -4702,6 +4702,70 @@
       ]
     },
     {
+      "source": "src/engine/dbcache.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the four holdouts, whose ranges keep the original bytes. The file's .data 0x802FB310-0x802FB368 (the three table tag records and the two cached-column records) and .sdata 0x803EC0E0-0x803EC0E4 (the cache list head) link from this file.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022F80C",
+          "end": "0x8022FC8C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022FEF8",
+          "end": "0x8022FFD0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802303A0",
+          "end": "0x80230400"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80230CC8",
+          "end": "0x80230D8C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB310",
+          "end": "0x802FB368"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0E0",
+          "end": "0x803EC0E4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8022FC8C",
+            "evidence": "evidence.tsv source-form 0x8022FC8C-0x8022FEF8"
+          },
+          {
+            "function": "fn_8022FFD0",
+            "evidence": "evidence.tsv source-form 0x8022FFD0-0x802303A0"
+          },
+          {
+            "function": "fn_80230400",
+            "evidence": "evidence.tsv source-form 0x80230400-0x80230CC8"
+          },
+          {
+            "function": "fn_80230D8C",
+            "evidence": "evidence.tsv source-form 0x80230D8C-0x802311C8"
+          }
+        ],
+        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out fn_8022FC8C, fn_8022FFD0, fn_80230400 and fn_80230D8C."
+      }
+    },
+    {
       "source": "src/engine/dbmanager.c",
       "profile": "engine_c_fastmath_holdouts",
       "evidence": "evidence.tsv provisional unit row 0x802328A8-0x802336C4 (src/engine/dbmanager.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The SQL strings (.rodata 0x802B6E10-0x802B7120) and handler and mode tables (.data 0x802FB38C-0x802FB3F8) link from this file.",

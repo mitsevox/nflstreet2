@@ -8,6 +8,7 @@
 #include "engine/dbutil.h"
 #include "engine/TDbLoad.h"
 #include "engine/t3db_cols.h"
+#include "engine/t3db.h"
 
 #include <dolphin/gx/GXGeometry.h>
 #include <dolphin/gx/GXTev.h>
@@ -199,9 +200,9 @@ typedef struct Cache_8022F8A8 {
     char mUnknown2[2];
     int mUnknown4;
     int mUnknown8;
-    void *mpUnknown12[2];
-    void *mpUnknown20[2];
-    void *mpUnknown28[2];
+    int *mpUnknown12[2];
+    int *mpUnknown20[2];
+    int *mpUnknown28[2];
     union {
         int mWord;
         unsigned char mBytes[4];
@@ -212,8 +213,7 @@ typedef struct Cache_8022F8A8 {
         int mUnknown4;
         int mUnknown8;
         int mUnknown12;
-    } mUnknown48[2];
-    char mUnknown80[16];
+    } mUnknown48[3];
     struct Cache_8022F8A8 *mpUnknown96;
     struct Cache_8022F8A8 *mpUnknown100;
 } Cache_8022F8A8;
@@ -225,7 +225,7 @@ typedef struct CacheCol_802FB340 {
     int mTable;
     int mFill;
     int mUnknown12;
-    void (*mpFill)(int key, int table, void *pValues, unsigned short *pCount);
+    int (*mpFill)(int key, int table, int *pValues, unsigned short *pCount);
 } CacheCol_802FB340;
 
 typedef struct Entry_802FB310 {
@@ -234,6 +234,18 @@ typedef struct Entry_802FB310 {
     int mUnknown8;
     int mUnknown12;
 } Entry_802FB310;
+
+/* Index column list element passed to TDbIdxCreate (src/engine/t3db.c TDbIdxCol_801F9E84). */
+typedef struct DbCacheIdxCol_t {
+    int mTable;
+    int mCol;
+    int mUnknown8;
+    unsigned char mIdx;
+} DbCacheIdxCol_t;
+
+/* Bit i of the bit set at p, tested and set one byte at a time. */
+#define DBCACHE_BIT(i) (1 << ((i) & 7))
+#define DBCACHE_BIT_IS_SET(p, i) ((((unsigned char *)(p))[(i) >> 3] & DBCACHE_BIT(i)) == DBCACHE_BIT(i))
 
 extern char lbl_802B5D88[];
 extern char lbl_802B5DB0[];
@@ -260,8 +272,17 @@ extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern DbUserEntry_t _DbUser_aEntries[];
-extern Entry_802FB310 lbl_802FB310[];
-extern CacheCol_802FB340 lbl_802FB340[];
+int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+
+Entry_802FB310 lbl_802FB310[3] = {
+    { 0x54484344, 0x54484344, 0x44494754, 0x31494454 },
+    { 0x59414C50, 0x59414C50, 0x44494754, 0x33494454 },
+    { 0x4D414554, 0x4D414554, 0x44494754, 0x35494454 },
+};
+CacheCol_802FB340 lbl_802FB340[2] = {
+    { 0x44494754, 0x4D414554, 0x3FF, 0x3F1, 0 },
+    { 0x44494750, 0x59414C50, 0x7FFF, 0x7F15, fn_80229AA4 },
+};
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
@@ -270,7 +291,7 @@ extern char *_DbUser_pFileName;
 extern int _DbUser_iMode;
 extern int _DbUser_iCurrent;
 extern unsigned char _DbUser_iCount;
-extern Cache_8022F8A8 *lbl_803EC0E0;
+Cache_8022F8A8 *lbl_803EC0E0 = 0;
 extern int lbl_803EC0E4;
 extern int lbl_803EC0E8;
 extern int lbl_803EC0F0;
@@ -299,6 +320,21 @@ extern int TDbTblDefaultDbPush(int a, int *pTable4, int *pTable8);
 extern int TDbTblDefaultDbPop(void);
 extern int TDbTblFindUnusedId(int handle, int *pTable);
 extern int TDbTblExists(int handle, int table);
+extern int TDbTblColExists(int db, int tbl, int col);
+extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
+extern int TDbTblColGetInfo(int db, int tbl, int col, TDbColInfo_801F9AB8 *pInfo);
+extern int TDbTblDestroy(int db, int tbl);
+extern int TDbTblRowCopyTrig(int db, int tbl, int dstDb, int dstTbl, void *pRes, int cb);
+extern int TDbIdxExists(int db, int tbl, int idx);
+extern int TDbIdxCreate(int db, int tbl, int idx, DbCacheIdxCol_t *pCols, TDbExpr_t *pWhere, int b);
+extern int TDbIdxDestroy(int db, int tbl, int idx);
+extern int _TDbQrySelect(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere, void *pOrder, int *pCursor,
+                         void *pResult);
+extern int TDbQryCreateTbl(int db, int tbl, int cursor, unsigned long long *pKeys, void *pResult);
+extern int TDbQryDestroy(int cursor);
+extern int TDbQryDeleteRow(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere, void *pResult, int cb);
+extern int TDbQryUpdateWithHandler(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere, int tag,
+                                   struct CacheRec_8022F8A8 *pRecs, int id, void *pRes, int cb);
 extern int TDbTblInfoGetFixedRows(int db, int tbl, unsigned char *pFlag, unsigned short *pValue);
 extern int TDbTblInfoGetMaxRows(int db, int tbl, unsigned short *pOut);
 extern int MemFill(void *pDst, unsigned int size, int value, unsigned int width);
@@ -392,7 +428,11 @@ extern int DbTatsCopyAllTables(int a, int b, int c);
 extern signed char DbUserFindIndex(int key);
 extern int DbUserGetDb(int key);
 extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
-extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
+extern int fn_80230400(unsigned short id, int key, int value, int db, int mode, unsigned int tableMask,
+                       unsigned int colMask);
+void fn_8022FC8C(int ready, unsigned short id, unsigned char *pDone);
+int fn_8022FFD0(int key, unsigned short index, int db, int *pTable);
+int fn_80230D8C(int key, int db, unsigned int tableMask);
 extern void ScaleBlockReset(void *p);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
@@ -775,9 +815,10 @@ int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache)
                 pCache->mpUnknown28[i] = DbUtilAlloc((count + 1) * 4, 0);
                 MemFill(pCache->mpUnknown28[i], (count + 1) * 4, lbl_802FB340[i].mFill, 4);
                 if (lbl_802FB340[i].mpFill != 0) {
-                    lbl_802FB340[i].mpFill(key, lbl_802FB340[i].mTable, pCache->mpUnknown28[i], &size);
+                    // FAKEMATCH: pointer spelling of lbl_802FB340[i].mpFill, so the call reloads it
+                    (lbl_802FB340 + i)->mpFill(key, lbl_802FB340[i].mTable, pCache->mpUnknown28[i], &size);
                 }
-                pCache->mUnknown36.mBytes[i >> 3] |= 1 << (i & 7);
+                ((unsigned char *)&pCache->mUnknown36)[i >> 3] |= DBCACHE_BIT(i);
             }
             if (err != 0) {
                 break;
@@ -811,7 +852,7 @@ int fn_8022FBAC(Cache_8022F8A8 *pCache)
 
     if (pCache->mUnknown36.mWord != 0) {
         for (i = 0; i <= 1; i++) {
-            if ((pCache->mUnknown36.mBytes[i >> 3] & (1 << (i & 7))) == (1 << (i & 7))) {
+            if (DBCACHE_BIT_IS_SET(&pCache->mUnknown36, i)) {
                 DbUtilFree(pCache->mpUnknown12[i]);
                 DbUtilFree(pCache->mpUnknown20[i]);
                 DbUtilFree(pCache->mpUnknown28[i]);
@@ -825,10 +866,66 @@ int fn_8022FBAC(Cache_8022F8A8 *pCache)
         pCache->mpUnknown100->mpUnknown96 = pCache->mpUnknown96;
     }
     if (lbl_803EC0E0 == pCache) {
-        lbl_803EC0E0 = pCache->mpUnknown100;
+        if (pCache->mpUnknown100 != 0) {
+            lbl_803EC0E0 = pCache->mpUnknown100;
+        } else {
+            lbl_803EC0E0 = 0;
+        }
     }
     DbUtilFree(pCache);
     return 0;
+}
+
+void fn_8022FC8C(int ready, unsigned short id, unsigned char *pDone)
+{
+    Cache_8022F8A8 *pCache;
+    unsigned short i;
+    unsigned short j;
+    unsigned short k;
+
+    if (ready == 0) {
+        if (pDone != 0) {
+            *pDone = 0;
+        }
+        return;
+    }
+    if (pDone == 0) {
+        return;
+    }
+    pCache = fn_8022F858(id);
+    for (i = 0; pCache->mUnknown48[i].mUnknown8 != -1; i++) {
+        for (j = 0; j <= 1; j++) {
+            if (lbl_802FB340[j].mCol == pCache->mUnknown48[i].mUnknown8) {
+                break;
+            }
+        }
+        if ((unsigned int)pCache->mUnknown48[i].mUnknown0 < (unsigned int)lbl_802FB340[j].mUnknown12) {
+            for (;;) {
+                for (k = pCache->mUnknown40[j]; pCache->mpUnknown20[j][k] != lbl_802FB340[j].mFill; k++) {
+                    if (pCache->mpUnknown12[j][k] == pCache->mUnknown8
+                        && pCache->mpUnknown20[j][k] == pCache->mUnknown48[i].mUnknown0) {
+                        break;
+                    }
+                }
+                if (pCache->mpUnknown20[j][k] != lbl_802FB340[j].mFill || pCache->mUnknown40[j] == 0) {
+                    break;
+                }
+                pCache->mUnknown40[j] = 0;
+            }
+            pCache->mUnknown40[j] = k;
+            if (pCache->mpUnknown20[j][k] == lbl_802FB340[j].mFill) {
+                pCache->mpUnknown20[j][k] = pCache->mUnknown48[i].mUnknown0;
+                pCache->mpUnknown12[j][k] = pCache->mUnknown8;
+                if (j == 0) {
+                    pCache->mpUnknown28[j][k] = pCache->mUnknown8;
+                    pCache->mUnknown48[i].mUnknown0 = pCache->mUnknown8;
+                    continue;
+                }
+            }
+            pCache->mUnknown48[i].mUnknown0 = pCache->mpUnknown28[j][k];
+        }
+    }
+    *pDone = 1;
 }
 
 /* Writes one 64-bit column key (owner word, column id) per column of pInfo, the 'DIGT'
@@ -848,6 +945,146 @@ void DbCacheWriteColumnKeys(unsigned int key, unsigned int digtKey, TDbColInfo_8
     pKeys[i] = -1;
 }
 
+static inline unsigned long long _DbCacheColKey(unsigned int table, unsigned int col)
+{
+    return ((unsigned long long)table << 32) | col;
+}
+
+/* Ends a column list: type 18, no column. */
+static inline void _DbCacheSetColEnd(TDbColInfo_801F9AB8 *pCol)
+{
+    pCol->mCol = -1;
+    pCol->mType = 18;
+    pCol->mSize = 0;
+    pCol->mUnk4 = -1;
+}
+
+static inline void _DbCacheSetTable(TDbSQLTableRef_801FDC18 *pRef, unsigned int id, unsigned int join,
+                                    TDbExpr_t *pExpr)
+{
+    pRef->mExpr = pExpr;
+    pRef->mId = id;
+    pRef->mJoinType = join;
+}
+
+static inline void _DbCacheSetIdxCol(DbCacheIdxCol_t *pCol, int table, int col, int flags)
+{
+    pCol->mTable = table;
+    pCol->mCol = col;
+    pCol->mUnknown8 = flags;
+}
+
+/* column == value */
+static inline void _DbCacheSetValueExpr(TDbExpr_t *pExpr, unsigned long long col, int value)
+{
+    pExpr->mOp = 0x10003;
+    pExpr->mLeft.mType = 6;
+    pExpr->mLeft.mValue.l = col;
+    pExpr->mRight.mType = 3;
+    pExpr->mRight.mValue.i = value;
+}
+
+/* column == column */
+static inline void _DbCacheSetJoinExpr(TDbExpr_t *pExpr, unsigned long long colA, unsigned long long colB)
+{
+    pExpr->mOp = 0x10003;
+    pExpr->mLeft.mType = 6;
+    pExpr->mLeft.mValue.l = colA;
+    pExpr->mRight.mType = 6;
+    pExpr->mRight.mValue.l = colB;
+}
+
+/* a && b */
+static inline void _DbCacheSetAndExpr(TDbExpr_t *pExpr, TDbExpr_t *pA, TDbExpr_t *pB)
+{
+    pExpr->mOp = 0x20009;
+    pExpr->mLeft.mType = 11;
+    pExpr->mLeft.mValue.p = pA;
+    pExpr->mRight.mType = 11;
+    pExpr->mRight.mValue.p = pB;
+}
+
+int fn_8022FFD0(int key, unsigned short index, int db, int *pTable)
+{
+    TDbColInfo_801F9AB8 aCols[254];
+    unsigned long long aKeys[254];
+    TDbSQLTableRef_801FDC18 aTables[3];
+    TDbExpr_t where;
+    TDbExpr_t join;
+    TDbExpr_t match;
+    int table;
+    unsigned int count;
+    int cursor;
+    int hasTeam;
+    int found;
+    int ok;
+    int err;
+
+    cursor = 0;
+    hasTeam = TDbTblColExists(db, lbl_802FB310[index].mUnknown0, 0x44494754) == 0;
+    err = TDbTblFindUnusedId(db, &table);
+    count = 0;
+    if (err == 0) {
+        count = 254;
+        err = TDbTblColEnum(db, lbl_802FB310[index].mUnknown0, aCols, &count);
+        if (err == 0 && key != 1023 && hasTeam == 0) {
+            err = TDbTblColGetInfo(db, 0x4D414554, 0x44494754, &aCols[count]);
+            count++;
+        }
+    }
+    _DbCacheSetColEnd(&aCols[count]);
+    if (err == 0) {
+        DbCacheWriteColumnKeys(lbl_802FB310[index].mUnknown0, lbl_802FB310[index].mUnknown4, aCols, aKeys,
+                               count);
+        if (key == 1023) {
+            _DbCacheSetTable(&aTables[0], lbl_802FB310[index].mUnknown0, 2, 0);
+            _DbCacheSetTable(&aTables[1], -1, 2, 0);
+        } else if (hasTeam == 1) {
+            _DbCacheSetValueExpr(&where, _DbCacheColKey(lbl_802FB310[index].mUnknown0, 0x44494754), key);
+            _DbCacheSetTable(&aTables[0], lbl_802FB310[index].mUnknown0, 2, &where);
+            _DbCacheSetTable(&aTables[1], -1, 2, 0);
+        } else {
+            _DbCacheSetAndExpr(&where, &join, &match);
+            _DbCacheSetJoinExpr(&join, _DbCacheColKey(lbl_802FB310[index].mUnknown0, lbl_802FB310[index].mUnknown8),
+                                _DbCacheColKey(lbl_802FB310[index].mUnknown4, lbl_802FB310[index].mUnknown8));
+            _DbCacheSetValueExpr(&match, _DbCacheColKey(lbl_802FB310[index].mUnknown4, 0x44494754), key);
+            _DbCacheSetTable(&aTables[0], lbl_802FB310[index].mUnknown0, 2, 0);
+            _DbCacheSetTable(&aTables[1], lbl_802FB310[index].mUnknown4, 0, &where);
+            _DbCacheSetTable(&aTables[2], -1, 2, 0);
+        }
+    }
+    found = 0;
+    if (err == 0) {
+        err = _TDbQrySelect(db, aTables, 0, 0, &cursor, 0);
+        ok = 0;
+        if (err == 0 || err == 23 || err == 21 || err == 20) {
+            ok = 1;
+        }
+        if (ok == 1) {
+            found = 1;
+        }
+    }
+    if (found == 1) {
+        err = TDbQryCreateTbl(db, table, cursor, aKeys, 0);
+        if (err == 0 || err == 23) {
+            found = 1;
+        }
+    }
+    if (found == 1) {
+        ok = 0;
+        if (err == 0 || err == 23 || err == 21 || err == 20) {
+            ok = 1;
+        }
+        if (ok == 1) {
+            err = TDbQryDestroy(cursor);
+        } else {
+            TDbQryDestroy(cursor);
+        }
+    }
+    *pTable = err == 0 ? table : -1;
+    return err;
+}
+
 int fn_802303A0(int index)
 {
     return lbl_802FB310[index].mUnknown0;
@@ -862,6 +1099,197 @@ int fn_802303B4(int key, unsigned short *pId)
         *pId = pCache->mUnknown0;
     } else {
         *pId = 0xFFFF;
+    }
+    return err;
+}
+
+int fn_80230400(unsigned short id, int key, int value, int db, int mode, unsigned int tableMask,
+                unsigned int colMask)
+{
+    int aNew[3];
+    TDbSQLTableRef_801FDC18 aTables[2];
+    DbCacheIdxCol_t aCols[2];
+    TDbExpr_t where;
+    int aCreated[3];
+    unsigned int aColMask[3];
+    Cache_8022F8A8 *pCache;
+    unsigned short i;
+    unsigned short j;
+    unsigned short n;
+    int tag;
+    int registered;
+    int ok;
+    int err;
+
+    err = 0;
+    i = 0;
+    pCache = fn_8022F858(id);
+    pCache->mUnknown8 = value;
+    for (; i <= 2; i++) {
+        if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+            if (TDbTblExists(db, lbl_802FB310[i].mUnknown0) != 0
+                || TDbTblExists(pCache->mUnknown4, lbl_802FB310[i].mUnknown0) != 0) {
+                ((unsigned char *)&tableMask)[i >> 3] &= ~DBCACHE_BIT(i);
+            }
+        }
+    }
+    if (tableMask != 0) {
+    if (key != 1023) {
+        for (i = 0; i <= 2; i++) {
+            aCreated[i] = 0;
+            if (err == 0 && DBCACHE_BIT_IS_SET(&tableMask, i)
+                && TDbTblExists(db, lbl_802FB310[i].mUnknown4) == 0
+                && TDbIdxExists(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12) == 13) {
+                _DbCacheSetIdxCol(&aCols[0], lbl_802FB310[i].mUnknown4, 0x44494754, err);
+                n = 1;
+                if (TDbTblColExists(db, lbl_802FB310[i].mUnknown4, 0x44494750) == 0) {
+                    n = 2;
+                    _DbCacheSetIdxCol(&aCols[1], lbl_802FB310[i].mUnknown4, 0x44494750, err);
+                }
+                _DbCacheSetIdxCol(&aCols[n], -1, -1, 3);
+                _DbCacheSetValueExpr(&where, _DbCacheColKey(lbl_802FB310[i].mUnknown4, 0x44494754), key);
+                err = TDbIdxCreate(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12, aCols, &where, 0);
+                if (err == 0) {
+                    aCreated[i] = 1;
+                }
+            }
+        }
+    }
+    if (err == 0 && colMask != 0) {
+        for (j = 0; j <= 1; j++) {
+            if (DBCACHE_BIT_IS_SET(&colMask, j) && TDbTblExists(pCache->mUnknown4, lbl_802FB340[j].mTable) != 0) {
+                ((unsigned char *)&colMask)[j >> 3] &= ~DBCACHE_BIT(j);
+            }
+        }
+        for (i = 0; i <= 2; i++) {
+            aColMask[i] = 0;
+            if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+                for (j = 0; j <= 1; j++) {
+                    if (DBCACHE_BIT_IS_SET(&colMask, j)
+                        && TDbTblColExists(db, lbl_802FB310[i].mUnknown0, lbl_802FB340[j].mCol) == 0) {
+                        ((unsigned char *)&aColMask[i])[j >> 3] |= DBCACHE_BIT(j);
+                    }
+                }
+            }
+        }
+    }
+    MemFill(aNew, sizeof(aNew), -1, 4);
+    if (err == 0) {
+        if (key != 1023) {
+            for (i = 0; i <= 2; i++) {
+                if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+                    err = fn_8022FFD0(key, i, db, &aNew[i]);
+                    if (err != 0) {
+                        goto cleanup;
+                    }
+                }
+            }
+        }
+        if (err != 0) {
+            goto cleanup;
+        }
+        if (colMask != 0 && mode == 1) {
+            for (i = 0; i <= 2; i++) {
+                if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1 && aColMask[i] != 0) {
+                    err = fn_8022FFD0(key, i, db, &aNew[i]);
+                    if (err != 0) {
+                        goto cleanup;
+                    }
+                }
+            }
+        }
+        if (err == 0) {
+            for (i = 0; i <= 2; i++) {
+                if (DBCACHE_BIT_IS_SET(&tableMask, i) && aNew[i] == -1) {
+                    aNew[i] = lbl_802FB310[i].mUnknown0;
+                }
+            }
+        }
+        if (err != 0) {
+            goto cleanup;
+        }
+        if (colMask != 0) {
+            tag = ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 % 10 + '0' : pCache->mUnknown0 + '0') << 24)
+                | ((pCache->mUnknown0 > 9 ? pCache->mUnknown0 / 10 + '0' : '0') << 16) | ('D' << 8) | 'T';
+            err = TDbRegisterHandler(fn_8022FC8C, tag);
+            registered = err == 0;
+            if (err == 0) {
+                for (i = 0; i <= 2; i++) {
+                    if (aColMask[i] != 0) {
+                        _DbCacheSetTable(&aTables[0], aNew[i], 2, 0);
+                        _DbCacheSetTable(&aTables[1], -1, 2, 0);
+                        n = 0;
+                        for (j = 0; j <= 1; j++) {
+                            if (DBCACHE_BIT_IS_SET(&aColMask[i], j)) {
+                                pCache->mUnknown48[n].mUnknown8 = lbl_802FB340[j].mCol;
+                                pCache->mUnknown48[n].mUnknown4 = aNew[i];
+                                n++;
+                            }
+                        }
+                        pCache->mUnknown48[n].mUnknown0 = 0;
+                        pCache->mUnknown48[n].mUnknown8 = -1;
+                        pCache->mUnknown48[n].mUnknown4 = -1;
+                        err = TDbQryUpdateWithHandler(db, aTables, 0, tag, pCache->mUnknown48, pCache->mUnknown0, 0,
+                                                      0);
+                        ok = 0;
+                        if (err == 0 || err == 23 || err == 21 || err == 20) {
+                            ok = 1;
+                        }
+                        if (ok == 1) {
+                            err = 0;
+                        }
+                    }
+                    if (err != 0) {
+                        break;
+                    }
+                }
+            }
+            if (registered == 1) {
+                if (err == 0) {
+                    err = TDbUnregisterHandler(tag);
+                } else {
+                    TDbUnregisterHandler(tag);
+                }
+            }
+        }
+        if (err == 0) {
+            for (i = 0; i <= 2; i++) {
+                if (DBCACHE_BIT_IS_SET(&tableMask, i)) {
+                    err = TDbTblRowCopyTrig(db, aNew[i], pCache->mUnknown4, lbl_802FB310[i].mUnknown0, 0, 0);
+                    ok = 0;
+                    if (err == 0 || err == 23 || err == 21 || err == 20) {
+                        ok = 1;
+                    }
+                    if (ok != 1) {
+                        break;
+                    }
+                    err = 0;
+                }
+            }
+        }
+    }
+cleanup:
+    for (i = 0; i <= 2; i++) {
+        if (aNew[i] != -1 && aNew[i] != lbl_802FB310[i].mUnknown0) {
+            if (err == 0) {
+                err = TDbTblDestroy(db, aNew[i]);
+            } else {
+                TDbTblDestroy(db, aNew[i]);
+            }
+        }
+    }
+    if (key != 1023) {
+        for (i = 0; i <= 2; i++) {
+            if (aCreated[i] == 1) {
+                if (err == 0) {
+                    err = TDbIdxDestroy(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12);
+                } else {
+                    TDbIdxDestroy(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12);
+                }
+            }
+        }
+    }
+    pCache->mUnknown8 = 1023;
     }
     return err;
 }
@@ -884,6 +1312,73 @@ int fn_80230CEC(int a, int b, int c, int key, int e, int f)
             err = fn_80230CC8(id);
         } else {
             fn_80230CC8(id);
+        }
+    }
+    return err;
+}
+
+int fn_80230D8C(int key, int db, unsigned int tableMask)
+{
+    TDbSQLTableRef_801FDC18 aTables[3];
+    TDbExpr_t where;
+    TDbExpr_t match;
+    TDbExpr_t join;
+    DbCacheIdxCol_t aCols[2];
+    int aCreated[3];
+    unsigned int *pMask = &tableMask;
+    unsigned short i;
+    int err;
+
+    err = 0;
+    if (key != 1023) {
+        for (i = 0; i <= 2; i++) {
+            aCreated[i] = 0;
+            if (err == 0 && DBCACHE_BIT_IS_SET(pMask, i) && TDbTblExists(db, lbl_802FB310[i].mUnknown4) == 0
+                && TDbIdxExists(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12) == 13) {
+                _DbCacheSetIdxCol(&aCols[0], lbl_802FB310[i].mUnknown4, 0x44494754, err);
+                _DbCacheSetIdxCol(&aCols[1], -1, -1, 3);
+                _DbCacheSetValueExpr(&where, _DbCacheColKey(lbl_802FB310[i].mUnknown4, 0x44494754), key);
+                err = TDbIdxCreate(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12, aCols, &where, 0);
+                if (err == 0) {
+                    aCreated[i] = 1;
+                }
+            }
+        }
+    }
+    for (i = 0; i <= 2; i++) {
+        if (DBCACHE_BIT_IS_SET(pMask, i) && TDbTblExists(db, lbl_802FB310[i].mUnknown0) == 0) {
+            if (key == 1023) {
+                _DbCacheSetTable(&aTables[0], lbl_802FB310[i].mUnknown0, 2, 0);
+                _DbCacheSetTable(&aTables[1], -1, 2, 0);
+            } else if (TDbTblColExists(db, lbl_802FB310[i].mUnknown0, 0x44494754) == 0) {
+                _DbCacheSetValueExpr(&where, _DbCacheColKey(lbl_802FB310[i].mUnknown0, 0x44494754), key);
+                _DbCacheSetTable(&aTables[0], lbl_802FB310[i].mUnknown0, 2, &where);
+                _DbCacheSetTable(&aTables[1], -1, 2, 0);
+            } else {
+                _DbCacheSetAndExpr(&where, &match, &join);
+                _DbCacheSetValueExpr(&match, _DbCacheColKey(lbl_802FB310[i].mUnknown4, 0x44494754), key);
+                _DbCacheSetJoinExpr(&join, _DbCacheColKey(lbl_802FB310[i].mUnknown0, lbl_802FB310[i].mUnknown8),
+                                    _DbCacheColKey(lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown8));
+                _DbCacheSetTable(&aTables[0], lbl_802FB310[i].mUnknown0, 2, 0);
+                _DbCacheSetTable(&aTables[1], lbl_802FB310[i].mUnknown4, 0, &where);
+                _DbCacheSetTable(&aTables[2], -1, 2, 0);
+            }
+            if (err == 0) {
+                err = TDbQryDeleteRow(db, aTables, 0, 0, 0);
+            } else {
+                TDbQryDeleteRow(db, aTables, 0, 0, 0);
+            }
+        }
+    }
+    if (key != 1023) {
+        for (i = 0; i <= 2; i++) {
+            if (aCreated[i] == 1) {
+                if (err == 0) {
+                    err = TDbIdxDestroy(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12);
+                } else {
+                    TDbIdxDestroy(db, lbl_802FB310[i].mUnknown4, lbl_802FB310[i].mUnknown12);
+                }
+            }
         }
     }
     return err;
