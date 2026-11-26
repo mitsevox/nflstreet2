@@ -65,8 +65,8 @@ int PATH_status(int id, PathfinderStatus_t *pInfo);
 void PATH_stop(int a);
 int PATH_event(int id, int a);
 void *PATHI_gettrackimp(int flags);
-void fn_8027D3AC(void);
-void fn_8027ECD8(void *p, int b);
+void PATHI_streamlowpass(void *track, int value);
+extern "C++" void PATH_vectortosnd(void);
 extern "C++" void PATH_vectortoreal5(void);
 
 static int _PathfinderMatchMap(void *p, void *key, void *result)
@@ -118,7 +118,7 @@ int PathfinderInit(PathfinderInitDesc_t *pDesc)
     TagValuePair config;
     PATH_setallocator(_Pathfinder_pAllocator, &config);
     PATH_vectortoreal5();
-    fn_8027D3AC();
+    PATH_vectortosnd();
     memset(&_Pathfinder_State, 0, sizeof(_Pathfinder_State));
     _Pathfinder_State.mpPool0 = (DSList_t *)DSNewList(pDesc->mHeap, 0, 4, sizeof(PathfinderMap_t), 0, 0);
     _Pathfinder_State.mpPool8 = (DSList_t *)DSNewList(pDesc->mHeap, 0, pDesc->mCount, sizeof(PathfinderTrack_t), 0, 0);
@@ -285,7 +285,7 @@ void PathfinderSetStreamValue(int a, int b)
     void *p = PATHI_gettrackimp(a);
 
     if (p) {
-        fn_8027ECD8(p, b);
+        PATHI_streamlowpass(p, b);
     }
 }
 

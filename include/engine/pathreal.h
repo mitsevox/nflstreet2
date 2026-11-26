@@ -31,9 +31,10 @@ public:
 
 class IPathToSnd {
 public:
-    virtual ~IPathToSnd();
+    virtual ~IPathToSnd() {}
     virtual int CreateStreamTrack(IPathTrack **track, int flags, float rate, int value) = 0;
     virtual int CreateBankTrack(IPathTrack **track, int bank) = 0;
+    virtual void GetDefaultPlayOpts(void *opts) = 0;
 
     static IPathToSnd *sndimp;
 };
