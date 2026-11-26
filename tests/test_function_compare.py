@@ -1132,6 +1132,16 @@ class SectionBaseReferences(unittest.TestCase):
         # stores only r28-r29.
         self.assertEqual(self.fragment(self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x7F8145AA]),
                          {'__comparison_reference_803B8D60': 0x803B8D60})
+        # Branches are followed: a loop back to the use (bne -4), a forward branch over a use
+        # (beq +8), and an address derived by an addi inside the section (addi r3,r31,-0x61D0:
+        # snddrv's transfer records, 0x9E50), as SNDPLATFORM_init forms them.
+        blr = 0x4E800020
+        for uses in ([self.lwz(-0x3FB8), 0x4082FFFC, blr], [0x41820008, self.lwz(-0x3FB8), self.lbz(-0x3FB0), blr],
+                     [0x387F9E30, blr], [0x387F9E30, self.lwz(-0x3FB8), blr],
+                     # slwi r31,r10,6 overwrites the base, so the lwz after it is not a use.
+                     [0x387F9E30, 0x555F3032, self.lwz(0), blr]):
+            with self.subTest(uses=[hex(word) for word in uses]):
+                self.assertEqual(self.fragment(self.pair(0x10020), uses=uses), {'__comparison_reference_803B8D60': 0x803B8D60})
 
     def test_references_outside_every_placement_still_fail_closed(self):
         refused = 'Same-file data reference lacks target placement'
@@ -1153,7 +1163,12 @@ class SectionBaseReferences(unittest.TestCase):
             'a base whose use lands past the end': dict(relocations=self.pair(self.BSS + 0x7000), uses=[self.lwz(0)]),
             'one use inside, one past the end': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), self.lwz(-0x3F40)]),
             'a base passed on cannot be bounded': dict(relocations=self.pair(0x10020), uses=[mr, self.lwz(-0x3FB8)]),
-            'a base live across a branch cannot be bounded': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), beq, self.lwz(0)]),
+            'a base live across a branch, used past the end': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), beq, self.lwz(0)]),
+            'a branch that leaves the function': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x48000100]),
+            'a path around the branch that uses past the end': dict(relocations=self.pair(0x10020), uses=[beq, self.lwz(0), blr]),
+            'a derived address past the end': dict(relocations=self.pair(0x10020), uses=[0x387F7000, blr]),
+            'a conditional return cannot be followed': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x4D820020, blr]),
+            'a callee-saved base live past a call': dict(relocations=self.pair(0x10020), uses=[0x48000001, self.lwz(-0x3FB8), blr]),
             'a base stored to memory is passed on': dict(relocations=self.pair(0x10020), uses=[0x93FF0000 | -0x3FB8 & 0xFFFF]),
             'a base with no use': dict(relocations=self.pair(0x10020), uses=[blr]),
             'a high half without its low half': dict(relocations=[(2, 6, 0x10020)]),

@@ -287,7 +287,7 @@ extern int MPEGuse_MMX;
 
 extern "C" {
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
-extern State_803A8D60 lbl_803A8D60;
+extern State_803A8D60 snddrv;
 extern int sndmixwritelog;
 extern void (*MIXoutputfn)(void **outputs, int count);
 extern int _Mix_iUnused;

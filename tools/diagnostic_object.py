@@ -72,28 +72,121 @@ def base_uses(code, at, register, strict=False):
     return uses
 
 
+def flow_uses(code, at, register, branches=None):
+    """register_base's uses of the address the instruction at `at` sets in `register`, following
+    the function's branches: every path from `at` is walked (each instruction once) while the
+    register still holds the address, with base_uses(strict=True)'s rules for each instruction.
+    A branch that carries a relocation goes where `branches` maps its position (a position in
+    `code`, or None for a target outside it); in a relocatable object its field is not the
+    displacement.
+    A path ends where the register is overwritten (an li, lis or a load into it, or an addi whose
+    target is the register), at a return, or at a call when the register is volatile. An addi from
+    the register forms a derived address, returned as a one-byte use at its immediate: it must lie
+    in the section like any address formed there. None when any path uses the address any other
+    way (passed on, stored, indexed, moved by an update form), leaves the function's bytes, runs
+    through a computed or conditional-return branch, or keeps a callee-saved base past a call."""
+    if register == 0:  # r0 as rA reads as zero: an address in r0 is never a base.
+        return None
+    branches = branches or {}
+
+    def destination(position, field):
+        to = branches[position] if position in branches else position + field
+        return to if to is not None and 0 <= to <= len(code) - 4 and to % 4 == 0 else None
+
+    uses, seen, pending = [], set(), [at + 4]
+    while pending:
+        position = pending.pop()
+        while True:
+            # The end of the bytes ends a path, as in base_uses; a branch out of them is refused.
+            if position in seen or position > len(code) - 4:
+                break
+            seen.add(position)
+            word = struct.unpack_from('>I', code, position)[0]
+            opcode, target, base = word >> 26, (word >> 21) & 31, (word >> 16) & 31
+            if stores_register(word, register):
+                return None
+            if opcode in ACCESS_WIDTH and base == register:
+                if opcode in UPDATES or opcode in STORES and target == register:
+                    return None
+                displacement = word & 0xFFFF
+                uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
+                if opcode not in STORES and (target == register or opcode == 46 and target <= register):
+                    break
+                position += 4
+                continue
+            if opcode == 14 and base == register:  # addi rD, base, imm: an address derived from the base.
+                immediate = word & 0xFFFF
+                uses.append((immediate - 0x10000 if immediate & 0x8000 else immediate, 1))
+                if target == register:
+                    break
+                position += 4
+                continue
+            if word == BLR:
+                break
+            if opcode == 18:  # b / bl
+                if word & 2:  # absolute
+                    return None
+                if word & 1:
+                    if register in VOLATILE:
+                        break
+                    return None
+                displacement = word & 0x03FFFFFC
+                position = destination(position, displacement - 0x04000000 if displacement & 0x02000000 else displacement)
+                if position is None:
+                    return None
+                continue
+            if opcode == 16:  # bc
+                if word & 3:  # absolute or bcl
+                    return None
+                displacement = word & 0xFFFC
+                taken = destination(position, displacement - 0x10000 if displacement & 0x8000 else displacement)
+                if taken is None:
+                    return None
+                pending.append(taken)
+                if target & 0x14 == 0x14:  # branch always
+                    break
+                position += 4
+                continue
+            if opcode == 19:  # bclr, bcctr and the condition-register operations
+                return None
+            if opcode in (14, 15) and base == 0 and target == register or opcode in ACCESS_WIDTH and \
+                    opcode not in STORES and (target == register or opcode == 46 and target <= register):
+                break  # li, lis, or a load (lmw from a lower register) into the register: the address is gone.
+            if opcode in (21, 23, 24, 25, 26, 27, 28, 29) and base == register and target != register and not (
+                    opcode == 23 and (word >> 11) & 31 == register):
+                break  # rlwinm, rlwnm, ori, oris, xori, xoris, andi., andis. write rA from rS (and rB): gone.
+            if register in (base, (word >> 11) & 31) or target == register:
+                return None
+            position += 4
+    return uses
+
+
 # R_PPC_ADDR16_LO, and R_PPC_ADDR16_HI/_HA: the low and high halves of an address formed in a register (lis/addi).
 ADDRESS_LOW = 4
 ADDRESS_HIGH = (5, 6)
+# R_PPC_REL24 and R_PPC_REL14 (plain, BRTAKEN, BRNTAKEN): a branch's destination.
+BRANCH_RELOCATIONS = (10, 11, 12, 13)
 
 
-def register_base(code, at, value, size):
+def register_base(code, at, value, size, branches=None):
     """Whether the R_PPC_ADDR16_LO at byte `at` of `code` forms a base register whose every use lands
     in the compiled section's [0, size): the relocation must sit in the low half of an addi, and
     every displacement load or store through the register it sets must lie inside the section,
     until a load redefines the register, a call clobbers it (a volatile register) or the function
-    returns. GCC forms object+0x10000 for an object
+    returns, on every path through the function's branches (flow_uses); an address derived from it
+    by an addi must lie in the section too. GCC forms object+0x10000 for an object
     larger than 32 KiB and addresses its fields with negative displacements, so such a base lies
     past the section's end. A low half on a load or store is the accessed address itself, not a
     base, and a base that is passed on, stored (also by an stmw, stswi or stswx through any register
     whose range can cover it), indexed, moved by an update form, overwritten any
-    other way or live across a branch, or a callee-saved base live past a call, cannot be bounded."""
+    other way or live into a branch that leaves the function or cannot be followed, or a
+    callee-saved base live past a call, cannot be bounded."""
     if at % 4 != 2 or not 0 <= at - 2 <= len(code) - 4:
         return False
     word = struct.unpack_from('>I', code, at - 2)[0]
     if word >> 26 != 14:  # addi rD, rA, symbol@l
         return False
-    uses = base_uses(code, at - 2, (word >> 21) & 31, strict=True)
+    uses = flow_uses(code, at - 2, (word >> 21) & 31, branches)
     return bool(uses) and all(0 <= value + d and value + d + w <= size for d, w in uses)
 
 
@@ -115,6 +208,14 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
                 native_relocations.append((position, info, addend))
     # Only code holds a register base (register_base); a data fragment's offsets stay inside the section.
     code = section['data'][offset:offset + size] if section['flags'] & sb.SHF_EXECINSTR else b''
+    # Where each relocated branch of the fragment goes, as a position in `code` (None: outside it).
+    branches = {}
+    for position, info, addend in native_relocations:
+        if info & 255 in BRANCH_RELOCATIONS and 0 < info >> 8 <= len(symbols):
+            symbol = symbols[(info >> 8) - 1]
+            destination = symbol['value'] + addend - offset
+            inside = symbol['shndx'] == section['index'] and 0 <= destination < size
+            branches[position - offset] = destination if inside else None
     for position, info, addend in native_relocations:
         index, kind = info >> 8, info & 255
         if not 0 < index <= len(symbols):
@@ -166,10 +267,10 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
                 # land in the compiled section, placed whole; a high half needs such a low half on
                 # the same symbol and addend.
                 if extent is None or not (0 <= value < extent or owned['size'] <= extent and (
-                        kind == ADDRESS_LOW and register_base(code, position - offset, value, owned['size'])
+                        kind == ADDRESS_LOW and register_base(code, position - offset, value, owned['size'], branches)
                         or kind in ADDRESS_HIGH and any(
                             other >> 8 == index and other & 255 == ADDRESS_LOW and more == addend
-                            and register_base(code, at - offset, value, owned['size'])
+                            and register_base(code, at - offset, value, owned['size'], branches)
                             for at, other, more in native_relocations))):
                     raise ValueError('Same-file data reference lacks target placement')
                 address = placement['start'] + value
