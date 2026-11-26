@@ -638,7 +638,7 @@ int fn_800C1180(Object_80039F5C *p);
 }
 
 extern "C" {
-float fn_800CA9B4(int kind, Object_80039F5C *p);
+float PlayerGetActionScale(int kind, Object_80039F5C *p);
 }
 
 extern "C" {
@@ -1071,19 +1071,19 @@ extern float lbl_802DB004[];
 }
 
 extern "C" {
-int fn_80165098(PlayBookPlay_t *pRecord);
+int PlayAlignIsPlayType2Or17(PlayBookPlay_t *pRecord);
 }
 
 extern "C" {
-int fn_801650BC(PlayBookPlay_t *pRecord);
+int PlayAlignIsPlayType11To18(PlayBookPlay_t *pRecord);
 }
 
 extern "C" {
-int fn_801650DC(PlayBookPlay_t *pRecord);
+int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 }
 
 extern "C" {
-int fn_801650FC(PlayBookPlay_t *pRecord);
+int PlayAlignIsPlayType21(PlayBookPlay_t *pRecord);
 }
 
 extern "C" {
@@ -1385,7 +1385,7 @@ int fn_8009F258(Object_80039F5C *p);
 extern float gPlyrMoveFwdSpeed;
 
 extern "C" {
-unsigned char fn_80164B78(void);
+unsigned char PlayAlignGetKeyPlayer(void);
 }
 
 extern float lbl_803EAE64;
@@ -4801,8 +4801,8 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
         }
         speed = 1.0f;
         if (fn_800CA5CC(p, 1, 1) != 0) {
-            a *= fn_800CA9B4(1, p);
-            b *= fn_800CA9B4(0, p);
+            a *= PlayerGetActionScale(1, p);
+            b *= PlayerGetActionScale(0, p);
         }
         if (pRatings[4] > 85) {
             short excess = pRatings[4] - 85;
@@ -4861,8 +4861,8 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
             float speed = 1.0f;
 
             if (fn_800CA5CC(p, 1, 1) != 0) {
-                a = fn_800CA9B4(1, p) * a;
-                b = fn_800CA9B4(0, p) * b;
+                a = PlayerGetActionScale(1, p) * a;
+                b = PlayerGetActionScale(0, p) * b;
             }
             if (pRatings[4] > 85) {
                 short excess = pRatings[4] - 85;
@@ -8483,7 +8483,7 @@ extern "C" void fn_800FAD2C(void) {
     for (; i <= 2; i++) {
         pRecord->mUnknown8[i] = ((Block_800FAD2C *)fn_8011F4EC())->mUnknown409[i];
         if (mode == 2 && PlyrGet(fn_80178308(), pRecord->mUnknown8[i])->mUnknown2914 == 0) {
-            pRecord->mUnknown8[i] = fn_80164B78();
+            pRecord->mUnknown8[i] = PlayAlignGetKeyPlayer();
         }
     }
     do {
@@ -8558,7 +8558,7 @@ extern "C" void fn_800FAECC(void) {
         }
         pRoutes = (Message_800F01CC *)fn_800AEE20(PlyrGet(team, index));
         if (!pRoutes) {
-            pRoutes = (Message_800F01CC *)fn_80164EC8(pInfoTeam, team, index);
+            pRoutes = (Message_800F01CC *)PlayAlignGetRoute(pInfoTeam, team, index);
         }
         slot = fn_800F06F4(0, pRoutes, 0x16, 0);
         if (slot != 0xFFFF) {
@@ -8924,10 +8924,10 @@ extern "C" void fn_800FBB70(void) {
 
             if (!pInfo) {
                 if (pTeam->mUnknown8.mUnknownF == 0) {
-                    pInfo = fn_80164EC8(PlayBookGetPlay((*pp)->mIdBytes[2]), ((*pp)->mId >> 8) & 0xFF, ((*pp)->mId >> 16) & 0xFF);
+                    pInfo = PlayAlignGetRoute(PlayBookGetPlay((*pp)->mIdBytes[2]), ((*pp)->mId >> 8) & 0xFF, ((*pp)->mId >> 16) & 0xFF);
                 } else {
                     unsigned char index = PlaySetGetEntry(pTeam, (*pp)->mIdBytes[1], 0)->mUnknownB;
-                    pInfo = fn_80164EC8(PlayBookGetPlay((*pp)->mIdBytes[2]), (*pp)->mIdBytes[2], index);
+                    pInfo = PlayAlignGetRoute(PlayBookGetPlay((*pp)->mIdBytes[2]), (*pp)->mIdBytes[2], index);
                 }
             }
             if (fn_800F06F4(0, pInfo, 21, 0xFFFF) != 0xFFFF) {
@@ -17234,8 +17234,8 @@ extern "C" void fn_801104E4(Object_80039F5C *p, Block_8011067C *pBlock)
     short rating;
 
     if (fn_800CA5CC(p, 1, 1)) {
-        scale *= fn_800CA9B4(3, p);
-        fn_800CA9B4(2, p);
+        scale *= PlayerGetActionScale(3, p);
+        PlayerGetActionScale(2, p);
     }
     pBlock->mUnknown16 = 1.0f;
     pBlock->mUnknown20 = 1.0f;
@@ -20859,12 +20859,12 @@ extern "C" void fn_801187CC(Object_80039F5C *p, Object_80039F5C *pOther)
 extern "C" void fn_80118894(Record_80118894 *pA, Record_80118894 *pB, int a, int b, Object_80039F5C *pPlayerA, Object_80039F5C *pPlayerB)
 {
     if (a != 0) {
-        pA->mUnknown64 *= fn_800CA9B4(9, pPlayerA);
-        pA->mUnknown76 *= fn_800CA9B4(9, pPlayerA);
+        pA->mUnknown64 *= PlayerGetActionScale(9, pPlayerA);
+        pA->mUnknown76 *= PlayerGetActionScale(9, pPlayerA);
     }
     if (b != 0) {
-        pB->mUnknown64 *= fn_800CA9B4(9, pPlayerB);
-        pB->mUnknown76 *= fn_800CA9B4(9, pPlayerB);
+        pB->mUnknown64 *= PlayerGetActionScale(9, pPlayerB);
+        pB->mUnknown76 *= PlayerGetActionScale(9, pPlayerB);
     }
 }
 
@@ -23664,14 +23664,14 @@ void fn_8011F174(void)
 extern "C" {
 int fn_8011F1A4(void)
 {
-    return fn_801650BC(PlayBookGetPlay(fn_80178308()));
+    return PlayAlignIsPlayType11To18(PlayBookGetPlay(fn_80178308()));
 }
 }
 
 extern "C" {
 int fn_8011F1CC(void)
 {
-    return fn_801650DC(PlayBookGetPlay(fn_80178308()));
+    return PlayAlignHasSlots(PlayBookGetPlay(fn_80178308()));
 }
 }
 
@@ -23720,14 +23720,14 @@ int fn_8011F2F8(void)
 extern "C" {
 int fn_8011F32C(void)
 {
-    return fn_801650FC(PlayBookGetPlay(fn_80178308()));
+    return PlayAlignIsPlayType21(PlayBookGetPlay(fn_80178308()));
 }
 }
 
 extern "C" {
 int fn_8011F354(void)
 {
-    return fn_801650FC(PlayBookGetPlay(fn_80178348()));
+    return PlayAlignIsPlayType21(PlayBookGetPlay(fn_80178348()));
 }
 }
 
@@ -23825,7 +23825,7 @@ Record_8011F518 *fn_8011F518(void)
 extern "C" {
 int fn_8011F524(void)
 {
-    return fn_80165098(PlayBookGetPlay(fn_80178348()));
+    return PlayAlignIsPlayType2Or17(PlayBookGetPlay(fn_80178348()));
 }
 }
 

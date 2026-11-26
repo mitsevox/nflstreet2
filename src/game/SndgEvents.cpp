@@ -49,7 +49,7 @@ void SndgSituationReset(void);
 unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800A9680(void);
 int SndgMusicGetMode(void);
-int fn_801650DC(PlayBookPlay_t *pRecord);
+int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int fn_80178348(void);
 static const unsigned int _SndgEvent_aCrowdEvents[4] = {5, 10, 12, 15};
 extern float gPlyrMoveFwdSpeed;
@@ -521,7 +521,7 @@ void SndgEventProcess(AudmonEvent_t *p)
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
                 Point_8017886C point = fn_80177FE0();
-                if (!(player->mMotion.mPos.mY >= point.mY) && fn_801650DC(PlayBookGetPlay(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
+                if (!(player->mMotion.mPos.mY >= point.mY) && PlayAlignHasSlots(PlayBookGetPlay(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
             }
             if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }

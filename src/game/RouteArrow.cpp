@@ -76,7 +76,7 @@ int fn_80178308(void);
 PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
-int fn_801650DC(PlayBookPlay_t *pRecord);
+int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
 int fn_800FC014(Object_80039F5C *, void *);
@@ -222,7 +222,7 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
             for (unsigned char i = 0; i < count; ++i) {
                 Object_80039F5C *pCandidate = PlyrGet(fn_80178308(), i);
                 PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
-                void *pCommands = fn_80164EC8(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
+                void *pCommands = PlayAlignGetRoute(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
                 if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
                     pOther = pCandidate;
                     break;
@@ -557,7 +557,7 @@ void RouteArrowBuild(RouteArrow_t *p)
     } while (more);
     RouteArrowSetStyle(p, &command.mType, hasOther);
     PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
-    if (fn_801650DC(pRecord)) {
+    if (PlayAlignHasSlots(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
             if (pPlayer->mIdBytes[1] == *pRecord->mUnknown1C[i]) {
                 int index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);

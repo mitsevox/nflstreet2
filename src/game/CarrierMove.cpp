@@ -47,7 +47,7 @@ void AnimSeqSetSpeed(void *p, float value);
 float MathInverse(float value);
 int fn_800A7EF4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
-float fn_800CA9B4(int kind, Object_80039F5C *p);
+float PlayerGetActionScale(int kind, Object_80039F5C *p);
 float LevelGetWallHeight(LevelWall_t *pRecord);
 int fn_800B83A0(Object_80039F5C *p);
 int fn_800A8444(int team);
@@ -107,7 +107,7 @@ extern "C" void CarrierMoveStartWallAnim(Object_80039F5C *p) {
                 speed *= _CarrierMove_fRatedAnimScale;
             }
             if (fn_800CA5CC(p, 11, 1))
-                speed *= fn_800CA9B4(12, p);
+                speed *= PlayerGetActionScale(12, p);
             AnimChannel_t *pEntry = &pRecords[entry];
             AnimSeqSetSpeed(&pEntry->mUnknown4C, MathInverse(speed));
             pEntry->mUnknown2C = _CarrierMove_fAnimWeight;
@@ -192,7 +192,7 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
             speed *= _CarrierMove_fRatedAnimScale;
         }
         if (fn_800CA5CC(p, 11, 1))
-            speed *= fn_800CA9B4(12, p);
+            speed *= PlayerGetActionScale(12, p);
         AnimChannel_t *pRecord = &pRecords[index];
         AnimSeqSetSpeed(&pRecord->mUnknown4C, MathInverse(speed));
         pRecord->mUnknown2C = _CarrierMove_fAnimWeight;

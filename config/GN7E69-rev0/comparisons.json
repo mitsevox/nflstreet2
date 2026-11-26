@@ -2568,84 +2568,6 @@
       ]
     },
     {
-      "source": "src/game/cu_800D77F0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D77F0 and its string-literal slice 0x8029D6BC-0x8029D6C8; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D77F0",
-          "end": "0x800D782C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D6BC",
-          "end": "0x8029D6C8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D77F0",
-          "start": "0x800D77F0",
-          "end": "0x800D782C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800D78C4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D78C4 and its literal-pool slice 0x8029D758-0x8029D75C; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D78C4",
-          "end": "0x800D7A0C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D758",
-          "end": "0x8029D75C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D78C4",
-          "start": "0x800D78C4",
-          "end": "0x800D7A0C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800D7A4C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D7A4C and its literal-pool slice 0x8029D77C-0x8029D790; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D7A4C",
-          "end": "0x800D7BC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D77C",
-          "end": "0x8029D790"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D7A4C",
-          "start": "0x800D7A4C",
-          "end": "0x800D7BC4"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlyrTackle.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/PlyrTackle.cpp) and its data rows. The 14 comparison sources of the range are merged into this one translation unit (all 62 functions in address order, the four previously unwritten bodies included); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
@@ -3456,7 +3378,7 @@
     {
       "source": "src/game/cu_8018C344.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv cu_8018C344 bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. All four bodies are comparisons; original bytes remain linked.",
+      "evidence": "evidence.tsv cu_8018C344 bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -11956,7 +11878,7 @@
           "end": "0x8008EBBC"
         },
         {
-          "symbol": "fn_8008EBBC",
+          "symbol": "PlayerAnimUserOpcodeCallback",
           "start": "0x8008EBBC",
           "end": "0x8008F78C"
         },
@@ -13756,7 +13678,7 @@
           "end": "0x800A06F4"
         },
         {
-          "symbol": "fn_800A06F4",
+          "symbol": "PlayResultApplyEvents",
           "start": "0x800A06F4",
           "end": "0x800A0EB8"
         },
@@ -18446,7 +18368,7 @@
           "end": "0x800CA9B4"
         },
         {
-          "symbol": "fn_800CA9B4",
+          "symbol": "PlayerGetActionScale",
           "start": "0x800CA9B4",
           "end": "0x800CAA6C"
         },
@@ -20789,7 +20711,7 @@
     {
       "source": "src/game/cu_800D760C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, exact function rows of its eight registered bodies, and exact .rodata data row 0x8029D790-0x8029D7B8 (literals of fn_800D7BC4, fn_800D7D78 and fn_800D7E9C). The other three bodies 0x800D77F0, 0x800D78C4 and 0x800D7A4C are measured in the comparison fragments src/game/cu_800D77F0.cpp, src/game/cu_800D78C4.cpp and src/game/cu_800D7A4C.cpp with their literal slices; all static storage remains original and unmeasured.",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
       "sections": [
         {
           "section": ".text",
@@ -20800,7 +20722,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D790",
+          "start": "0x8029D678",
           "end": "0x8029D7B8"
         }
       ],
@@ -20816,9 +20738,19 @@
           "end": "0x800D77F0"
         },
         {
+          "symbol": "fn_800D77F0",
+          "start": "0x800D77F0",
+          "end": "0x800D782C"
+        },
+        {
           "symbol": "fn_800D782C",
           "start": "0x800D782C",
           "end": "0x800D78C4"
+        },
+        {
+          "symbol": "fn_800D78C4",
+          "start": "0x800D78C4",
+          "end": "0x800D7A0C"
         },
         {
           "symbol": "fn_800D7A0C",
@@ -20829,6 +20761,11 @@
           "symbol": "fn_800D7A18",
           "start": "0x800D7A18",
           "end": "0x800D7A4C"
+        },
+        {
+          "symbol": "PlyrAnimTurnComputeStep",
+          "start": "0x800D7A4C",
+          "end": "0x800D7BC4"
         },
         {
           "symbol": "fn_800D7BC4",
@@ -20845,6 +20782,12 @@
           "start": "0x800D7E9C",
           "end": "0x800D8140"
         }
+      ],
+      "discarded": [
+        "_StrippedFramesToTime",
+        "_StrippedPrintBlankName",
+        "_StrippedCheckDownOpcodes",
+        "_StrippedGetHoldWeight"
       ]
     },
     {
@@ -20876,7 +20819,7 @@
     {
       "source": "src/game/cu_8015D3EC.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. Comparison only: the .rodata holds a string no code references whose user is not recovered, and six functions do not compile exactly; the original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -21182,7 +21125,7 @@
           "end": "0x8015F6E8"
         },
         {
-          "symbol": "fn_8015F6E8",
+          "symbol": "PlayerHeadGetHairModels",
           "start": "0x8015F6E8",
           "end": "0x8015F82C"
         },
@@ -21216,6 +21159,9 @@
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
+      ],
+      "discarded": [
+        "_PlayerHeadFindCapModel"
       ]
     },
     {
@@ -21683,135 +21629,168 @@
       ]
     },
     {
-      "source": "src/game/cu_80164B78.cpp",
+      "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "Target surveyed grouping and complete25-body/fullreadonly/storage/context evidence. Original source boundaries unknown; complete scratch target context retained without native storage definitions, unrepresented and uncredited, no padding.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); the six non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80164B78",
-          "end": "0x80167094"
+          "start": "0x80164568",
+          "end": "0x80166110"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802A4624",
-          "end": "0x802A4908"
+          "start": "0x802A4610",
+          "end": "0x802A4850"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB3B0",
+          "end": "0x803EB3B8"
         },
         {
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8031D2B8",
-          "end": "0x8031D360"
+          "end": "0x8031D370"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80164B78",
+          "symbol": "PlayAlignGetKeyPlayer",
           "start": "0x80164B78",
           "end": "0x80164C4C"
         },
         {
-          "symbol": "fn_80164C4C",
+          "symbol": "PlayAlignIssueTeamRoutes",
           "start": "0x80164C4C",
           "end": "0x80164CE4"
         },
         {
-          "symbol": "fn_80164CE4",
+          "symbol": "PlayAlignIssuePlayerRoute",
           "start": "0x80164CE4",
           "end": "0x80164E30"
         },
         {
-          "symbol": "fn_80164E30",
+          "symbol": "PlayAlignRouteHasCommand",
           "start": "0x80164E30",
           "end": "0x80164EC8"
         },
         {
-          "symbol": "fn_80164EC8",
+          "symbol": "PlayAlignGetRoute",
           "start": "0x80164EC8",
           "end": "0x80164ED8"
         },
         {
-          "symbol": "fn_80164ED8",
+          "symbol": "PlayAlignGetSlotPlayer",
           "start": "0x80164ED8",
           "end": "0x80165000"
         },
         {
-          "symbol": "fn_80165000",
+          "symbol": "PlayAlignSetSlotValue",
           "start": "0x80165000",
           "end": "0x80165098"
         },
         {
-          "symbol": "fn_80165098",
+          "symbol": "PlayAlignIsPlayType2Or17",
           "start": "0x80165098",
           "end": "0x801650BC"
         },
         {
-          "symbol": "fn_801650BC",
+          "symbol": "PlayAlignIsPlayType11To18",
           "start": "0x801650BC",
           "end": "0x801650DC"
         },
         {
-          "symbol": "fn_801650DC",
+          "symbol": "PlayAlignHasSlots",
           "start": "0x801650DC",
           "end": "0x801650FC"
         },
         {
-          "symbol": "fn_801650FC",
+          "symbol": "PlayAlignIsPlayType21",
           "start": "0x801650FC",
           "end": "0x80165110"
         },
         {
-          "symbol": "fn_80165110",
+          "symbol": "PlayAlignSwapOuterSlots",
           "start": "0x80165110",
           "end": "0x801651E0"
         },
         {
-          "symbol": "fn_801651E0",
+          "symbol": "PlayAlignLoadSetPlayers",
           "start": "0x801651E0",
           "end": "0x80165464"
         },
         {
-          "symbol": "fn_80165464",
+          "symbol": "PlayAlignLoadPlayRoutes",
           "start": "0x80165464",
           "end": "0x80165770"
         },
         {
-          "symbol": "fn_80165770",
+          "symbol": "PlayAlignBuildSlotRects",
           "start": "0x80165770",
           "end": "0x80165890"
         },
         {
-          "symbol": "fn_80165890",
+          "symbol": "PlayAlignLoadRouteSteps",
           "start": "0x80165890",
           "end": "0x80165C50"
         },
         {
-          "symbol": "fn_80165C50",
+          "symbol": "PlayAlignCurvePoint",
           "start": "0x80165C50",
           "end": "0x80165D18"
         },
         {
-          "symbol": "fn_80165D18",
+          "symbol": "PlayAlignSampleCurve",
           "start": "0x80165D18",
           "end": "0x80165DF8"
         },
         {
-          "symbol": "fn_80165DF8",
+          "symbol": "PlayAlignStripEdge",
           "start": "0x80165DF8",
           "end": "0x80165F78"
         },
         {
-          "symbol": "fn_80165F78",
+          "symbol": "PlayAlignBuildCurveStrip",
           "start": "0x80165F78",
           "end": "0x801660A0"
         },
         {
-          "symbol": "fn_801660A0",
+          "symbol": "PlayAlignBuildSegmentStrip",
           "start": "0x801660A0",
           "end": "0x80166110"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayArt.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp). Draft comparisons of the unlinked functions 0x80166110-0x80167094 behind DECOMP_COMPARE; the linked tail 0x80167094-0x80167910 keeps its units.json placement and the original bytes stay linked for the drafts.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80166110",
+          "end": "0x80167910"
         },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4850",
+          "end": "0x802A4908"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031D38C",
+          "end": "0x8036167C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80166110",
           "start": "0x80166110",

@@ -1815,6 +1815,136 @@
       }
     },
     {
+      "source": "src/game/cu_8015D3EC.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the five holdouts keeping their original bytes; every data section linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015D4E0",
+          "end": "0x8015D550"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015D68C",
+          "end": "0x8015DA80"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015DD3C",
+          "end": "0x8015E0B8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015E1F0",
+          "end": "0x8015F484"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8015F5BC",
+          "end": "0x8015FFA8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A3F10",
+          "end": "0x802A4010"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802DF180",
+          "end": "0x802E32B0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB330",
+          "end": "0x803EB364"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8031C098",
+          "end": "0x8031C864"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECA6C",
+          "end": "0x803ECAE8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8015D3EC",
+            "evidence": "evidence.tsv source-form 0x8015D3EC-0x8015D4E0"
+          },
+          {
+            "function": "fn_8015D550",
+            "evidence": "evidence.tsv source-form 0x8015D550-0x8015D68C"
+          },
+          {
+            "function": "fn_8015DA80",
+            "evidence": "evidence.tsv source-form 0x8015DA80-0x8015DD3C"
+          },
+          {
+            "function": "fn_8015E0B8",
+            "evidence": "evidence.tsv source-form 0x8015E0B8-0x8015E1F0"
+          },
+          {
+            "function": "fn_8015F484",
+            "evidence": "evidence.tsv source-form 0x8015F484-0x8015F5BC"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "_PlayerHeadFindCapModel"
+        ],
+        "evidence": "evidence.tsv linker row cu_8015D3EC discarded cap head model lookup"
+      }
+    },
+    {
+      "source": "src/game/cu_8018C344.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/cu_8018C344.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; the .rodata linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018C3EC",
+          "end": "0x8018C48C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AA1FC",
+          "end": "0x802AA334"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8018C344",
+            "evidence": "evidence.tsv source-form 0x8018C344-0x8018C3EC"
+          },
+          {
+            "function": "fn_8018C48C",
+            "evidence": "evidence.tsv source-form 0x8018C48C-0x8018C688"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
+      }
+    },
+    {
       "source": "src/game/Loading.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80193FB0-0x80194B6C (src/game/Loading.cpp) and its data rows.",
@@ -4140,6 +4270,131 @@
           }
         ],
         "evidence": "merge notes of the pull request linking the exact InGameGroup.cpp functions"
+      }
+    },
+    {
+      "source": "src/game/cu_80086C10.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/cu_80086C10.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80086C10",
+          "end": "0x80086D0C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800872E8",
+          "end": "0x8008736C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800876C0",
+          "end": "0x8008775C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80087880",
+          "end": "0x80087BE4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80294B38",
+          "end": "0x80294F0C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6B8C",
+          "end": "0x802D6BD8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA808",
+          "end": "0x803EA80C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80086D0C",
+            "evidence": "evidence.tsv source-form 0x80086D0C-0x80087128"
+          },
+          {
+            "function": "fn_80087128",
+            "evidence": "evidence.tsv source-form 0x80087128-0x800872E8"
+          },
+          {
+            "function": "fn_8008736C",
+            "evidence": "evidence.tsv source-form 0x8008736C-0x80087460"
+          },
+          {
+            "function": "fn_80087460",
+            "evidence": "evidence.tsv source-form 0x80087460-0x8008754C"
+          },
+          {
+            "function": "fn_8008754C",
+            "evidence": "evidence.tsv source-form 0x8008754C-0x80087600"
+          },
+          {
+            "function": "fn_80087600",
+            "evidence": "evidence.tsv source-form 0x80087600-0x800876C0"
+          },
+          {
+            "function": "fn_8008775C",
+            "evidence": "evidence.tsv source-form 0x8008775C-0x80087880"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 3 holdout table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "StoreGetStringById"
+        ],
+        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (StoreGetStringById, discarded; only its query string survives)"
+      }
+    },
+    {
+      "source": "src/game/cu_800D760C.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/cu_800D760C.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D760C",
+          "end": "0x800D7E9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D678",
+          "end": "0x8029D7B8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_800D7E9C",
+            "evidence": "evidence.tsv source-form 0x800D7E9C-0x800D8140"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 3 holdout table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "_StrippedFramesToTime",
+          "_StrippedPrintBlankName",
+          "_StrippedCheckDownOpcodes",
+          "_StrippedGetHoldWeight"
+        ],
+        "evidence": "evidence.tsv linker rows 0x8029D678-0x8029D684, 0x8029D684-0x8029D6BC, 0x8029D6C8-0x8029D758 and 0x8029D75C-0x8029D77C: file-static functions SN linker discarded; only their pools and strings remain"
       }
     },
     {
@@ -12902,12 +13157,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8008EB18",
-          "end": "0x8008EBBC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8008F78C",
           "end": "0x8008FF44"
         },
         {
@@ -13022,12 +13271,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800A0230",
-          "end": "0x800A06F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A0EB8",
           "end": "0x800A46D8"
         },
         {
@@ -13214,12 +13457,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800CA14C",
-          "end": "0x800CA9B4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800CAA6C",
           "end": "0x800CDE50"
         },
         {
@@ -13282,10 +13519,6 @@
           {
             "function": "fn_8008E9B0",
             "evidence": "evidence.tsv source-form 0x8008E9B0-0x8008EB18"
-          },
-          {
-            "function": "fn_8008EBBC",
-            "evidence": "evidence.tsv source-form 0x8008EBBC-0x8008F78C"
           },
           {
             "function": "fn_8008FF44",
@@ -13374,10 +13607,6 @@
           {
             "function": "fn_800A0134",
             "evidence": "evidence.tsv source-form 0x800A0134-0x800A0230"
-          },
-          {
-            "function": "fn_800A06F4",
-            "evidence": "evidence.tsv source-form 0x800A06F4-0x800A0EB8"
           },
           {
             "function": "fn_800A46D8",
@@ -13516,10 +13745,6 @@
             "evidence": "evidence.tsv source-form 0x800C9FC0-0x800CA14C"
           },
           {
-            "function": "fn_800CA9B4",
-            "evidence": "evidence.tsv source-form 0x800CA9B4-0x800CAA6C"
-          },
-          {
             "function": "fn_800CDE50",
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
           },
@@ -13528,7 +13753,7 @@
             "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 62 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 59 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
@@ -13936,20 +14161,50 @@
     },
     {
       "source": "src/game/PlayAlign.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x801660A0 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624 and 0x803EB3B0-0x803EB3B8.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the six holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80164568",
-          "end": "0x80164B78"
+          "end": "0x80164CE4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80164E30",
+          "end": "0x80164ED8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80165098",
+          "end": "0x80165110"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801651E0",
+          "end": "0x80165464"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80165770",
+          "end": "0x80165890"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80165C50",
+          "end": "0x80166110"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A4610",
-          "end": "0x802A4624"
+          "end": "0x802A4850"
         },
         {
           "section": ".sdata",
@@ -13960,10 +14215,39 @@
         {
           "section": ".bss",
           "placement": ".bss",
-          "start": "0x8031D360",
+          "start": "0x8031D2B8",
           "end": "0x8031D370"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PlayAlignIssuePlayerRoute",
+            "evidence": "evidence.tsv source-form 0x80164CE4-0x80164E30"
+          },
+          {
+            "function": "PlayAlignGetSlotPlayer",
+            "evidence": "evidence.tsv source-form 0x80164ED8-0x80165000"
+          },
+          {
+            "function": "PlayAlignSetSlotValue",
+            "evidence": "evidence.tsv source-form 0x80165000-0x80165098"
+          },
+          {
+            "function": "PlayAlignSwapOuterSlots",
+            "evidence": "evidence.tsv source-form 0x80165110-0x801651E0"
+          },
+          {
+            "function": "PlayAlignLoadPlayRoutes",
+            "evidence": "evidence.tsv source-form 0x80165464-0x80165770"
+          },
+          {
+            "function": "PlayAlignLoadRouteSteps",
+            "evidence": "evidence.tsv source-form 0x80165890-0x80165C50"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
+      }
     },
     {
       "source": "src/game/UISModel.cpp",
