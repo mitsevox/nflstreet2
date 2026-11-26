@@ -6630,7 +6630,7 @@
     {
       "source": "src/game/ScrmRules.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row for src/game/cu_80176F18.cpp (replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, file-static in the source and unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed. The source is linked with holdouts (units.json, with the same three .sbss statics in its storage map); the non-exact function stays registered here as its partial.",
+      "evidence": "evidence.tsv provisional unit row for src/game/ScrmRules.cpp (was src/game/cu_80176F18.cpp, replacing candidate cu_80176F18), individual exact function extents, exact data rows for its .rodata literals and vtables, its .data table 0x802E9ADC-0x802E9AF4 (_ScrmStat_aTeamBaseline), .sdata, .bss and .sbss objects and .ctors word, the compiler, type, source-form, name and linker rows (the linker rows record the two functions the target discarded, file-static in the source and unregistered). The .sbss entry 0x803ECB24-0x803ECB38 is a bounding range for the storage list, which places the unit's three .sbss objects individually; its words 0x803ECB2C and 0x803ECB30 belong to src/game/Possession.cpp and are not claimed. The source is linked with holdouts (units.json, with the same three .sbss statics in its storage map); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -7397,7 +7397,7 @@
           "end": "0x8017C4B8"
         },
         {
-          "symbol": "ScrmStatBeginPlay",
+          "symbol": "ScrmStatBeginTally",
           "start": "0x8017C4B8",
           "end": "0x8017C5A0"
         },

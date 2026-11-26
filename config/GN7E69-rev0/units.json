@@ -27152,7 +27152,7 @@
     {
       "source": "src/game/ScrmRules.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80176F18-0x8017CB40 for src/game/cu_80176F18.cpp, its exact function extents, the exact data rows of its .rodata, .sdata, .bss and .ctors, and the exact .sbss data rows 0x803ECB24-0x803ECB28, 0x803ECB28-0x803ECB2C and 0x803ECB34-0x803ECB38 of the storage map; linked with holdouts (owner ruling of 2026-11-20). Its three .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target interleaves them with src/game/Possession.cpp's words 0x803ECB2C and 0x803ECB30; the two discarded file-static functions keep only their constant pools.",
+      "evidence": "evidence.tsv provisional unit row 0x80176F18-0x8017CB40 for src/game/ScrmRules.cpp (was src/game/cu_80176F18.cpp), its exact function extents, the exact data rows of its .rodata, .data (0x802E9ADC-0x802E9AF4, _ScrmStat_aTeamBaseline), .sdata, .bss and .ctors, and the exact .sbss data rows 0x803ECB24-0x803ECB28, 0x803ECB28-0x803ECB2C and 0x803ECB34-0x803ECB38 of the storage map; linked with holdouts (owner ruling of 2026-11-20). Its three .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target interleaves them with src/game/Possession.cpp's words 0x803ECB2C and 0x803ECB30; the two discarded file-static functions keep only their constant pools.",
       "sections": [
         {
           "section": ".text",

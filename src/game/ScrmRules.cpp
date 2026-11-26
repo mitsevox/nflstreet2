@@ -102,7 +102,7 @@ struct ScrmStatSaved_t {
     signed char mKind;
 };
 
-/* Per-team stat values read back in ScrmStatBeginPlay. */
+/* Per-team stat values that ScrmStatBeginTally reads before the play tallies. */
 struct ScrmStatBaseline_t {
     int mTp;
     int mSp;
@@ -291,7 +291,7 @@ void ScrmStatAddDriveStart(unsigned short team, short value);
 void ScrmStatAddLongPlay(unsigned short team);
 void ScrmStatAddLongScore(unsigned short team, int play);
 void ScrmStatAddPenalty(unsigned short team, short yards, int handle);
-void ScrmStatBeginPlay(void);
+void ScrmStatBeginTally(void);
 void ScrmStatAddTeamStyleGain(unsigned short team, int value);
 void ScrmStatAddTeamStylePoints(unsigned short team, int value);
 void ScrmStatAddTeamPitches(unsigned short team, int value);
@@ -2653,7 +2653,7 @@ extern "C" void ScrmStatEndPlay(ScrmPlayResult_t *pResult)
     int kind;
 
     _Drive_pPlayResult = pResult;
-    ScrmStatBeginPlay();
+    ScrmStatBeginTally();
     ScrmStatPlayHook();
     _ScrmStat_bStopAtIncomplete = 0;
     if (ScrmGetPlayDown() != 6) {
@@ -2721,7 +2721,7 @@ extern "C" void ScrmStatAddPenalty(unsigned short team, short yards, int handle)
     }
 }
 
-extern "C" void ScrmStatBeginPlay(void)
+extern "C" void ScrmStatBeginTally(void)
 {
     _Drive_aStatEvents[0].mKind = -1;
     _ScrmStat_iNumSaved = 0;
