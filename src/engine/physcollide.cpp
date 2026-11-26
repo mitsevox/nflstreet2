@@ -6,6 +6,7 @@
 #include <math.h>
 #include "engine/physworld.h"
 #include "engine/physcollide.h"
+#include "engine/physbroadphase.h"
 #include "engine/physcollection.h"
 #include "engine/physshape.h"
 #include "engine/TibNew.h"
@@ -20,30 +21,6 @@ float ComputeBodyRotationalResponse(RigidBody *pBody, Vec3_801DE1E0 *pPoint,
 
 #define _CLAMP(value, low, high) ((value) < (low) ? (low) : ((value) > (high) ? (high) : (value)))
 
-/* View of the sweep-and-prune broad phase of src/engine/cu_801E9F70.cpp: 44 bytes of state,
-   then its vtable pointer (slot 1 is the deleting destructor). */
-class BroadPhase {
-public:
-    virtual ~BroadPhase();
-
-    unsigned char mState[44];
-};
-
-/* An overlapping pair of broad-phase objects. */
-struct BroadPhasePair {
-    unsigned short mObjectA;
-    unsigned short mObjectB;
-    BroadPhasePair *mpNext;
-};
-
-extern "C" {
-BroadPhase *fn_801E9F70(void *pMemory, unsigned int maxObjects, unsigned int maxPairs);
-void fn_801EA1D8(BroadPhase *pBroadPhase, void *pBox, unsigned int mask, RigidBody *pBody);
-void fn_801EA284(BroadPhase *pBroadPhase, void *pBox);
-BroadPhasePair *fn_801EA428(BroadPhase *pBroadPhase);
-RigidBody *fn_801EA470(BroadPhase *pBroadPhase, unsigned short object);
-}
-
 int ShapeCollide(CollisionShape *pA, float (*pMatrixA)[4], CollisionShape *pB,
                  float (*pMatrixB)[4], Vec3_801DE1E0 *pContact);
 
@@ -52,7 +29,7 @@ ContactSystem::ContactSystem(unsigned int maxBodies, unsigned int maxContacts, f
     : mMaxContacts(maxContacts), mDepthLimit(depthLimit), mMinTestLength(minTestLength),
       mpHandler(pHandler)
 {
-    mpBroadPhase = fn_801E9F70(operator new(48, 0), maxBodies, maxContacts);
+    mpBroadPhase = new (0) BroadPhase(maxBodies, maxContacts);
     mpContacts = new (0) BodyContact[maxContacts];
     mCorrectionMin.x = -1000000.0f;
     mCorrectionMin.y = -1000000.0f;
@@ -80,14 +57,14 @@ void ContactSystem::AddBody(RigidBody *pBody)
 
     if (pShapes) {
         pShapes->UpdateWorldBounds(pBody->mTransform);
-        fn_801EA1D8(mpBroadPhase, &pShapes->mWorldBounds, pShapes->mMask, pBody);
+        mpBroadPhase->AddObject((BroadPhaseBox *)&pShapes->mWorldBounds, pShapes->mMask, pBody);
     }
 }
 
 void ContactSystem::RemoveBody(RigidBody *pBody)
 {
     if (pBody->mpShapes) {
-        fn_801EA284(mpBroadPhase, &pBody->mpShapes->mWorldBounds);
+        mpBroadPhase->RemoveObject((BroadPhaseBox *)&pBody->mpShapes->mWorldBounds);
     }
 }
 
@@ -96,9 +73,9 @@ int ContactSystem::Update(float dt)
     unsigned char touched = 0;
     BroadPhasePair *pPair;
 
-    for (pPair = fn_801EA428(mpBroadPhase); pPair; pPair = pPair->mpNext) {
-        RigidBody *pA = fn_801EA470(mpBroadPhase, pPair->mObjectA);
-        RigidBody *pB = fn_801EA470(mpBroadPhase, pPair->mObjectB);
+    for (pPair = mpBroadPhase->UpdatePairs(); pPair; pPair = pPair->mpNext) {
+        RigidBody *pA = (RigidBody *)mpBroadPhase->GetObjectUser(pPair->mObjectA);
+        RigidBody *pB = (RigidBody *)mpBroadPhase->GetObjectUser(pPair->mObjectB);
 
         if (!mpHandler->IgnorePair(pA, pB)) {
             touched |= CollidePair(pA, pB, dt);

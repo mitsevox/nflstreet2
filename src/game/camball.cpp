@@ -71,7 +71,7 @@ void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, f
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
 int CamLerp(float *pValue, float *pVel, float target, float a, float b);
 void CamSetFieldOfView(BallCamera_t *pCamera, float a, float b);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 
 void CamBallStart(BallCamera_t *pCamera);
 void CamBallProcess(BallCamera_t *pCamera);
@@ -324,7 +324,7 @@ void CamBallSetAngles(BallCamera_t *pCamera, int *pAngles, int smooth)
 
 float CamBallCalcFov(BallCamera_t *pCamera, float a, float b)
 {
-    return 2.0f * ((float)fn_801CFE40(a / (pCamera->mUnknown24 + pCamera->mUnknown24), b + b) * (360.0f / 16777216.0f));
+    return 2.0f * ((float)MathArcTan2(a / (pCamera->mUnknown24 + pCamera->mUnknown24), b + b) * (360.0f / 16777216.0f));
 }
 
 void CamBallMsgFunc(BallCamera_t *pCamera, int msg)

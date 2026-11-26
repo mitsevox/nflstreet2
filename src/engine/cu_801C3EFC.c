@@ -43,7 +43,7 @@ extern float lbl_803EBBE4;
 extern float lbl_802F489C[3];
 extern float lbl_802F48A8[3];
 
-int fn_801CFD78(float x);
+int MathArcCos(float x);
 void QuatMultiply(float *pDst, float *pA, float *pB);
 void QuatFromAxisAngle(float *pQuat, float *pAxis, int angle);
 void QuatFromEuler(float *pQuat, int z, int y, int x);
@@ -144,7 +144,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
             if (!(c >= 1.0f)) {
                 Vec3CrossProduct(axis, toTarget, toEnd);
                 Vec3Normalize(axis, axis);
-                rot[0] = -fn_801CFD78(c);
+                rot[0] = -MathArcCos(c);
                 QuatFromAxisAngle(q, axis, rot[0]);
                 QuatFromEuler(cur, angles[bone][2], angles[bone][1], angles[bone][0]);
                 QuatMultiply(q, cur, q);

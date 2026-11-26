@@ -103,7 +103,7 @@ float Vec2Distance(void *, void *);
 int PlyrTackleStart(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void PlyrClearPendingMsg(Object_80039F5C *, int);
@@ -329,7 +329,7 @@ int PlyrEngageInput(Object_80039F5C *p)
             if (input.mUnknown0 & 8) dir.mX = 1.0f;
         }
         if (dir.mX != 0.0f || dir.mY != 0.0f)
-            p->mUnknown512.mUnknown4 = fn_801CFE40(dir.mY, dir.mX);
+            p->mUnknown512.mUnknown4 = MathArcTan2(dir.mY, dir.mX);
         if (s->mUnknown8Bytes[3]) {
             int result = fn_800B7248(&input, BallGetCurrent(), p, p);
             if (result == 1)

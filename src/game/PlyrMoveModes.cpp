@@ -14,9 +14,9 @@ void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
 void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
 void PlyrMoveSteerByHeading(Object_80039F5C *pObject);
 void PlyrMoveTurnLimited(Object_80039F5C *pObject);
-float fn_801CFB18(int angle);
-float fn_801CFB94(int angle);
-int fn_801CFE40(float y, float x);
+float MathSin(int angle);
+float MathCos(int angle);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
@@ -80,7 +80,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
     float distance;
 
     Vec2Sub(&delta, &pTarget->mMotion.mPos, pMotion);
-    angle = fn_801CFE40(delta.mY, delta.mX);
+    angle = MathArcTan2(delta.mY, delta.mX);
     distance = Vec2Magnitude(&delta);
     if (pObject->mUnknown545 == 0) {
         if (pBlock->mUnknown20 != 0) {
@@ -90,7 +90,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
 
             fn_8009BF5C(pTarget, 11, &joint, &extra);
             Vec2Sub(&delta, &joint, pMotion);
-            facing = fn_801CFE40(delta.mY, delta.mX);
+            facing = MathArcTan2(delta.mY, delta.mX);
             if (MathAngleDiff(facing, pMotion->mFacing) > 0x38E38) {
                 if (((facing - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
                     pMotion->mFacing = (pMotion->mFacing - 0x38E38) & 0xFFFFFF;
@@ -110,7 +110,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
             float limit;
 
             if (apart > 0x400000) {
-                limit = fabsf(fn_801CFB94(apart) * (1.7f - 1.25f)) + 1.25f;
+                limit = fabsf(MathCos(apart) * (1.7f - 1.25f)) + 1.25f;
             } else {
                 limit = 1.25f;
             }
@@ -199,7 +199,7 @@ void PlyrMoveSteerByHeading(Object_80039F5C *pObject)
             float weight;
 
             if (angle <= 0x3FFFFF) {
-                turn = fn_801CFB18(angle);
+                turn = MathSin(angle);
             } else {
                 turn = 1.0f;
             }
@@ -245,7 +245,7 @@ void PlyrMoveSteerByFacing(Object_80039F5C *pObject)
             float ratio;
 
             if (angle <= 0x3FFFFF) {
-                turn = fn_801CFB18(angle);
+                turn = MathSin(angle);
             } else {
                 turn = 1.0f;
             }
@@ -282,7 +282,7 @@ void PlyrMoveSteerScaled(Object_80039F5C *pObject)
             float ratio;
 
             if (angle <= 0x3FFFFF) {
-                turn = fn_801CFB18(angle);
+                turn = MathSin(angle);
             } else {
                 turn = 1.0f;
             }

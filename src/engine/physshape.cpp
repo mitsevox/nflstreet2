@@ -10,8 +10,8 @@
 extern "C" {
 float Vec3Magnitude(void *pV);
 void Vec3Sub(void *pOut, void *pA, void *pB);
-float fn_801CFB74(float x);
-float fn_801CFBF4(float x);
+float MathSinf(float x);
+float MathCosf(float x);
 void DispatchCollisionDebugLine(Vec3_801DE1E0 *pA, Vec3_801DE1E0 *pB, int red, int green,
                                 int blue);
 }
@@ -1264,13 +1264,13 @@ void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
     Vec3_801DE1E0 b;
     float step = 0.31415927f;
     float angle = step;
-    float prevSin = fn_801CFB74(0.0f) * mRadius;
-    float prevCos = fn_801CFBF4(0.0f) * mRadius;
+    float prevSin = MathSinf(0.0f) * mRadius;
+    float prevCos = MathCosf(0.0f) * mRadius;
     float end = angle + 6.2831855f;
 
     do {
-        float s = fn_801CFB74(angle) * mRadius;
-        float c = fn_801CFBF4(angle) * mRadius;
+        float s = MathSinf(angle) * mRadius;
+        float c = MathCosf(angle) * mRadius;
 
         angle += step;
         a = mCenter;
@@ -1357,11 +1357,11 @@ void CapsuleShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
     Vec3CrossProduct(&side, &mHalfAxis, &up);
     Vec3Normalize(&side, &side);
     Vec3Normalize(&up, &up);
-    prevSin = fn_801CFB74(0.0f) * mRadius;
-    prevCos = fn_801CFBF4(0.0f) * mRadius;
+    prevSin = MathSinf(0.0f) * mRadius;
+    prevCos = MathCosf(0.0f) * mRadius;
     while (angle <= step + 6.2831855f) {
-        float s = fn_801CFB74(angle) * mRadius;
-        float c = fn_801CFBF4(angle) * mRadius;
+        float s = MathSinf(angle) * mRadius;
+        float c = MathCosf(angle) * mRadius;
 
         angle += step;
         Vec3Scale(&sideOffset, &side, s);

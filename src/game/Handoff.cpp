@@ -70,7 +70,7 @@ static unsigned char _Handoff_auHuddleSlots[8] = {0, 1, 2, 3, 4, 5, 6, 0};
 static float _Handoff_fHuddleWalkSpeed = 0.3f;
 extern float gPlyrMoveFwdSpeed;
 void Vec2Sub(void *pOut, void *pA, void *pB);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 Object_80039F5C *fn_800B6544(int index);
@@ -109,7 +109,7 @@ extern float _Handoff_fTurnCloseRange;
 extern unsigned char _Handoff_auTurnDirections[8];
 void HuddleSetSpot(HuddleBlock_t *pState, Object_80039F5C *p, Point_8017886C *pPoint, int value);
 void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState);
-float fn_801CFB94(int angle);
+float MathCos(int angle);
 void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value);
 int PassIconsAreShown(void);
 int fn_8011F2C4(void);
@@ -212,12 +212,12 @@ extern "C" unsigned char TurnToPlayPickDirection(Object_80039F5C *p) {
         BallGetPosition(BallGetCurrent(), &pos);
         Vec2Sub(&delta, &pos, &p->mMotion.mPos);
     }
-    angle = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+    angle = (MathArcTan2(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
     sector = ((angle + 0x100000) >> 21) & 7;
     goto lookup;
 facing:
     if (!fn_801486A0())
-        angle = (fn_801CFE40(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
+        angle = (MathArcTan2(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
     else
         angle = (0x400000 - p->mMotion.mFacing) & 0xFFFFFF;
     sector = ((angle + 0x100000) >> 21) & 7;
@@ -371,7 +371,7 @@ extern "C" float HandoffPickSide(Object_80039F5C *p, HandoffBlock_t *state) {
         int wideFlag = 0;
         Point_8017886C delta;
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        int angle = fn_801CFE40(delta.mY, delta.mX);
+        int angle = MathArcTan2(delta.mY, delta.mX);
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             float x = fn_8011F4D4();
             sideFlag = x > p->mMotion.mPos.mX;
@@ -543,7 +543,7 @@ extern "C" int HandoffTryPairAnim(Object_80039F5C *p, Object_80039F5C *pOther, H
         if (state->mUnknown8 == 15) {
             Point_8017886C delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-            int heading = (fn_801CFE40(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
+            int heading = (MathArcTan2(delta.mY, delta.mX) - p->mMotion.mFacing) & 0xFFFFFF;
             speed = 0.9f;
             if (heading > 0x800000) {
                 state->mUnknown6 = 6;
@@ -619,7 +619,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
         Point_8017886C delta;
         BallGetPosition(pBall, &ballPos);
         Vec2Sub(&delta, &pOther->mMotion.mPos, &ballPos);
-        int angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        int angle = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         float distance = Vec2Magnitude(&delta);
         if (fn_8011F1A4() && p->mUnknown2914 == 0) {
             id = p->mpState->mUnknown2;
@@ -628,7 +628,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
                 point.mX = fn_8011F4D4();
                 point.mY = fn_80177FE0().mY;
                 Vec2Sub(&point, &point, &p->mMotion.mPos);
-                int pointAngle = fn_801CFE40(point.mY, point.mX) & 0xFFFFFF;
+                int pointAngle = MathArcTan2(point.mY, point.mX) & 0xFFFFFF;
                 if (state->mUnknown8 == 12) {
                     adjust = 0;
                     if (state->mUnknown7 == 6) {
@@ -644,7 +644,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
                 }
                 if (adjust) {
                     turn = MathAngleDiff(angle, pointAngle);
-                    turn = (int)(turn * fn_801CFB94(turn / 2));
+                    turn = (int)(turn * MathCos(turn / 2));
                     if (turn > 0x38E38) {
                         if (p->mMotion.mFacing - angle <= 0x38E37) {
                             if ((otherX <= x + 0.2f && otherVelX > 0.0f)
@@ -698,7 +698,7 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
                     scale = 0.0f;
                     break;
                 }
-                scale *= fn_801CFB94(turn - 0x400000);
+                scale *= MathCos(turn - 0x400000);
                 speed -= scale;
             }
             PlyrCollideAddExempt(p, pOther);
@@ -733,7 +733,7 @@ static void _HandoffSteerClear(Object_80039F5C *p, Object_80039F5C *pOther, Hand
     if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
         Point_8017886C delta;
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        fn_801CFE40(delta.mY, delta.mX);
+        MathArcTan2(delta.mY, delta.mX);
         float distance = Vec2Magnitude(&delta);
         if (distance < 2.0f) {
             float speed = distance * 0.5f;
@@ -934,7 +934,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
         } else {
             Point_8017886C delta;
             Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-            if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pOther->mMotion.mUnknown32) > 0x400000
+            if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), pOther->mMotion.mUnknown32) > 0x400000
                 && p->mMotion.mPos.mY < pOther->mMotion.mPos.mY) {
                 switch (state->mUnknown8) {
                 case 12:
@@ -1264,7 +1264,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
             Vec2FromAngle(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
             Vec2Rotate(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             Vec2Sub(&offset, &offset, pOut);
-            *pFacing = fn_801CFE40(offset.mY, offset.mX);
+            *pFacing = MathArcTan2(offset.mY, offset.mX);
             if (origin.mY < 3.0f - fn_80178A2C())
                 pOut->mY -= 7.0f;
             else
@@ -1280,7 +1280,7 @@ extern "C" void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5
             Vec2FromAngle(pOut, 0, SyncRandGetRange(0, 100) * 0.003f + base);
             Vec2Rotate(pOut, pOut, ((_Handoff_auHuddleSlots[p->mIdBytes[1]] << 24) / count + 0x400000) & 0xFFFFFF);
             Vec2Sub(&offset, &offset, pOut);
-            *pFacing = fn_801CFE40(offset.mY, offset.mX);
+            *pFacing = MathArcTan2(offset.mY, offset.mX);
             pOut->mY += 3.0f;
             Vec2Add(pOut, pOut, &origin);
         }

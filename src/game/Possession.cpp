@@ -169,7 +169,7 @@ void BannerSetText(int a, int b, const char *pText);
 void HudShowAlert(const char *pText);
 void HudShowCallout(const char *pText);
 int CharSkelGetJointByName(void *p, const char *pName);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2FromAngle(Point2_t *pOut, int angle, float length);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
@@ -553,7 +553,7 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
                     ReplayEventInWindow(gpReplay, 0x2A);
                 }
             }
-            int ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
+            int ballAngle = MathArcTan2(velocity.mY, velocity.mX);
             int backAngle = p->mMotion.mFacing - 0x800000;
 
             *pAngle = ballAngle - backAngle;
@@ -566,7 +566,7 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
     case 0x44:
         if ((fn_80178320() != (p->mId >> 8 & 0xFF) || fn_801783AC(0)) && p->mpState->mUnknown2 == 1) {
             *pFlags = 0x10;
-            *pAngle = MathAngleDiff(fn_801CFE40(velocity.mY, velocity.mX) + 0x800000, p->mMotion.mFacing);
+            *pAngle = MathAngleDiff(MathArcTan2(velocity.mY, velocity.mX) + 0x800000, p->mMotion.mFacing);
         } else {
             *pFlags = 0x100;
         }
@@ -940,8 +940,8 @@ void PossTryJarBall(Object_80039F5C *p)
                     BallGetPosition(pBall, &toBall);
                     toBall.mZ = 0.0f;
                     Vec2Sub(&toBall, &toBall, &p->mMotion.mPos);
-                    ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
-                    if (MathAngleDiff(ballAngle, fn_801CFE40(toHitter.mY, toHitter.mX)) <= 0x300000) {
+                    ballAngle = MathArcTan2(toBall.mY, toBall.mX);
+                    if (MathAngleDiff(ballAngle, MathArcTan2(toHitter.mY, toHitter.mX)) <= 0x300000) {
                         chance *= 3.0f;
                     }
                 }
@@ -1055,8 +1055,8 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
                 BallGetPosition(pBall, &toBall);
                 toBall.mZ = 0.0f;
                 Vec2Sub(&toBall, &toBall, &p->mMotion.mPos);
-                ballAngle = fn_801CFE40(toBall.mY, toBall.mX);
-                angle = MathAngleDiff(ballAngle, fn_801CFE40(toTackler.mY, toTackler.mX));
+                ballAngle = MathArcTan2(toBall.mY, toBall.mX);
+                angle = MathAngleDiff(ballAngle, MathArcTan2(toTackler.mY, toTackler.mX));
             }
             style = PlayerMoveGetKind(p);
             styling = style == 1 || style == 2;

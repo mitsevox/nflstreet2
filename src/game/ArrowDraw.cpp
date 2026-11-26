@@ -37,7 +37,7 @@ struct ArrowFanVertex {
 };
 
 extern "C" {
-int fn_801CFC14(int angle, float *pFirst, float *pSecond);
+int MathSinCos(int angle, float *pFirst, float *pSecond);
 float MathInvSqrt(float value);
 void MatStore(Mtx44 m);
 void TMRenderReset(void);
@@ -244,7 +244,7 @@ int ArrowDrawEllipseEnd(int unused, ArrowPath *pTrail, unsigned int index)
     GXColor4u8(color[0], color[1], color[2], 50);
     for (angle = 0.0f; angle <= steps; angle += 1.0f) {
         phase = angle * 360.0f / steps * (16777216.0f / 360.0f);
-        fn_801CFC14(phase, &first, &second);
+        MathSinCos(phase, &first, &second);
         radius = b * a * MathInvSqrt(a * a * second * second + b * b * first * first);
         Vec2FromAngle(&vertex.mXY, phase + offset, radius);
         Vec2Add(&vertex.mXY, &vertex.mXY, &center);

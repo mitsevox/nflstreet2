@@ -9,7 +9,7 @@
 extern float gPlyrMoveFwdSpeed;
 
 extern "C" {
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void MatRotVecToVec(Vector_80039F5C *pFrom, Vector_80039F5C *pTo);
 void MatSetStack(int mode);
 void MatResetStack(void);
@@ -49,13 +49,13 @@ void PlyrCollideResolve2D(Object_80039F5C *pA, Object_80039F5C *pB)
         pA->mMotion.mUnknown40 = bodyA.mUnknown12.mX;
         pA->mMotion.mUnknown44 = bodyA.mUnknown12.mY;
         pA->mMotion.mUnknown28 = Vec2Magnitude(&bodyA.mUnknown12);
-        pA->mMotion.mUnknown32 = fn_801CFE40(bodyA.mUnknown12.mY, bodyA.mUnknown12.mX);
+        pA->mMotion.mUnknown32 = MathArcTan2(bodyA.mUnknown12.mY, bodyA.mUnknown12.mX);
     }
     if (!(pB->mFlags & 8) && !PlyrCollideIsExempt(pB, pA)) {
         pB->mMotion.mUnknown40 = bodyB.mUnknown12.mX;
         pB->mMotion.mUnknown44 = bodyB.mUnknown12.mY;
         pB->mMotion.mUnknown28 = Vec2Magnitude(&bodyB.mUnknown12);
-        pB->mMotion.mUnknown32 = fn_801CFE40(bodyB.mUnknown12.mY, bodyB.mUnknown12.mX);
+        pB->mMotion.mUnknown32 = MathArcTan2(bodyB.mUnknown12.mY, bodyB.mUnknown12.mX);
     }
     PlyrCollideRecordImpulse(pA, pB, &bodyA.mUnknown24.mX);
     PlyrCollideRecordImpulse(pB, pA, &bodyB.mUnknown24.mX);
@@ -131,7 +131,7 @@ void CollideWithPoint(Object_80039F5C *p, float *pPoint)
     p->mMotion.mUnknown40 = body.mUnknown12.mX;
     p->mMotion.mUnknown44 = body.mUnknown12.mY;
     p->mMotion.mUnknown28 = Vec2Magnitude(&body.mUnknown12);
-    p->mMotion.mUnknown32 = fn_801CFE40(body.mUnknown12.mY, body.mUnknown12.mX);
+    p->mMotion.mUnknown32 = MathArcTan2(body.mUnknown12.mY, body.mUnknown12.mX);
     zero.mX = 0.0f;
     zero.mY = 0.0f;
     zero.mZ = 0.0f;
@@ -335,12 +335,12 @@ void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_
         if (!(pA->mFlags & 8) && !PlyrCollideIsExempt(pA, pB)) {
             Vec2Add(&pA->mMotion.mUnknown40, &pA->mMotion.mUnknown40, deltaA);
             pA->mMotion.mUnknown28 = Vec2Magnitude(&pA->mMotion.mUnknown40);
-            pA->mMotion.mUnknown32 = fn_801CFE40(pA->mMotion.mUnknown44, pA->mMotion.mUnknown40);
+            pA->mMotion.mUnknown32 = MathArcTan2(pA->mMotion.mUnknown44, pA->mMotion.mUnknown40);
         }
         if (!(pB->mFlags & 8) && !PlyrCollideIsExempt(pB, pA)) {
             Vec2Add(&pB->mMotion.mUnknown40, &pB->mMotion.mUnknown40, deltaB);
             pB->mMotion.mUnknown28 = Vec2Magnitude(&pB->mMotion.mUnknown40);
-            pB->mMotion.mUnknown32 = fn_801CFE40(pB->mMotion.mUnknown44, pB->mMotion.mUnknown40);
+            pB->mMotion.mUnknown32 = MathArcTan2(pB->mMotion.mUnknown44, pB->mMotion.mUnknown40);
         }
         Vec2Add(totalA, totalA, &bodyA.mUnknown24);
         Vec2Add(totalB, totalB, &bodyB.mUnknown24);

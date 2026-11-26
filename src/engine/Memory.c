@@ -14,7 +14,7 @@ typedef struct MemRange_801D134C {
 typedef struct Struct_801D1ED8 {
     char mUnknown0[0x4];
     int mSerial;
-    char mUnknown8[0xC - 0x8];
+    unsigned int mSize;
     char mFile[0x2C - 0xC];
     char mLabel[16];
     char mName[16];
@@ -53,15 +53,17 @@ extern int (*lbl_803EBCF4)(int ident, int flags, const char *pMessage, int d);
 extern SysCriticalSection_t lbl_803E92AC;
 extern const char lbl_802AF9BC[];
 extern const char lbl_802AF628[];
+extern const char lbl_802AF9A4[];
+extern const char lbl_802AF9B0[];
 
 extern void *memset(void *pDst, int value, unsigned int size);
 extern void *memcpy();
 extern int sprintf(char *pDst, const char *pFormat, ...);
 
-extern void *fn_801D28A8(int a, int size, int ident, int flags);
-extern void *fn_801D2E5C(int a, void *pAddr, int size, int ident, int flags);
+static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset);
+void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset);
 extern int SysGetSystemTime(void);
-extern int fn_801D2130(Struct_801D2130 *pParams);
+int fn_801D2130(Struct_801D2130 *pParams);
 extern int fn_801D2570(int ident);
 
 static MemHeap_801D134C *fn_801D134C(int id)
@@ -238,14 +240,15 @@ static int fn_801D177C(MemBlock_801D134C *pBlock, int size)
     MemBlock_801D134C *pFree;
     MemNode_801D134C *pNode;
     unsigned int rem;
+    int need;
 
     if (size < 16) {
         size = 16;
     }
     size = (size + 15) & ~15;
     pTail = pBlock->mpTail;
-    n = (char *)pTail - (char *)*pTail;
-    n -= size + 4;
+    need = size + 4;
+    n = (char *)pTail - (char *)*pTail - need;
     if (n < 32) {
         return -1;
     }
@@ -618,6 +621,121 @@ int fn_801D20C8(void)
     return 0;
 }
 
+int fn_801D2130(Struct_801D2130 *pParams)
+{
+    int ownsMemory = 0;
+    int ident = pParams->mId;
+    unsigned int align = pParams->mAlign;
+    char *pStart = pParams->mStart;
+    unsigned int size = pParams->mSize;
+    MemHeap_801D134C *pScan;
+    MemHeap_801D134C *pHeap;
+    MemHeap_801D134C *pParent;
+    MemBlock_801D134C *pBlock;
+    Struct_801D1ED8 *pInfo;
+    unsigned int misalign;
+    char *pEnd;
+    char *pData;
+
+    for (pScan = lbl_803EBCC8; pScan != 0; pScan = pScan->mpNext) {
+        if (ident == pScan->mId) {
+            return 0x10004;
+        }
+    }
+    if (pStart == (char *)-1) {
+        ownsMemory = 1;
+        pStart = MemGetMemLL(size);
+        if (pStart == 0) {
+            size = 0;
+        }
+    }
+    pParent = fn_801D134C((int)pStart);
+    if (pParent != 0) {
+        pStart = fn_801D2BB0(pParent->mId, size, 0, 0);
+        if (pStart == 0) {
+            size = 0;
+        }
+    } else {
+        for (pScan = lbl_803EBCC8; pScan != 0; pScan = pScan->mpNext) {
+            if (pStart < pScan->mpEnd && pStart + size > pScan->mpStart) {
+                size = 0;
+                break;
+            }
+        }
+    }
+    misalign = (unsigned int)pStart & 15;
+    if (misalign != 0 || size <= 0xFF) {
+        if (pParent != 0 && pStart != 0) {
+            fn_801D2BD0(pStart);
+        }
+        return 0x10009;
+    }
+    memset(pStart, 0, size);
+    pEnd = pStart + size;
+    pBlock = (MemBlock_801D134C *)(pEnd - 0x10);
+    pBlock->mOffset = 12;
+    pBlock->mState = 3;
+    pBlock->mpTail = (void **)(pEnd - 4);
+    *(void ***)(pEnd - 4) = &pBlock->mpTail;
+    pBlock = (MemBlock_801D134C *)pStart;
+    pBlock->mOffset = 12;
+    pBlock->mState = 2;
+    pBlock->mpTail = (void **)(pEnd - 0x14);
+    *(void ***)(pEnd - 0x14) = &pBlock->mpTail;
+    if (fn_801D18A0(pBlock, 16, 0, sizeof(MemHeap_801D134C)) == 0) {
+        return 0x10006;
+    }
+    pHeap = (MemHeap_801D134C *)(pStart + pBlock->mOffset);
+    pBlock = (MemBlock_801D134C *)pHeap - 1;
+    pBlock->mState = 2;
+    pBlock->mpHeap = pHeap;
+    pHeap->mId = ident;
+    pHeap->mAlign = (align + 15) & ~15;
+    pHeap->mpStart = pStart;
+    pHeap->mpEnd = pEnd;
+    pHeap->mDebugBytes = 0;
+    pHeap->mUnk74 = 0x7FFFFFFF;
+    pHeap->mDebugSize = lbl_803EBCD8;
+    pHeap->mpSelf = pHeap;
+    pHeap->mSize = size;
+    pHeap->mDebug = lbl_803EBCDA;
+    pHeap->mMinLargestFree = size;
+    pHeap->mOwnsMemory = ownsMemory;
+    pHeap->mFill = lbl_803EBCDB;
+    strcpy(pHeap->mName, pParams->mName);
+    if (pBlock->mOffset > 0x6B) {
+        pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+    } else {
+        pInfo = 0;
+    }
+    if (pInfo != 0) {
+        memset(pInfo->mGuard, '*', sizeof(pInfo->mGuard));
+        memcpy(pInfo->mLabel, lbl_802AF9A4, 11);
+        memcpy(pInfo->mName, lbl_802AF9A4, 11);
+        memcpy(pInfo->mFile, lbl_802AF9B0, 11);
+    }
+    pData = (char *)pBlock->mpTail + (*(short *)((char *)pBlock->mpTail + 4) + 4);
+    pBlock = (MemBlock_801D134C *)(pData - 0xC);
+    pBlock->mpHeap = pHeap;
+    fn_801D1588(pHeap, (MemNode_801D134C *)pData);
+    pHeap->mUsedBytes = pHeap->mSize - pHeap->mFreeBytes;
+    ((MemBlock_801D134C *)((char *)pBlock->mpTail + 4 + *(short *)((char *)pBlock->mpTail + 4)) - 1)->mpHeap = pHeap;
+    pHeap->mpNext = lbl_803EBCC8;
+    lbl_803EBCC8 = pHeap;
+    if (pParent != 0) {
+        pHeap->mpSub = pParent->mpSub;
+        pParent->mpSub = pHeap;
+    } else {
+        pHeap->mpSub = 0;
+    }
+    pHeap->mpParent = pParent;
+    _BuildHeapAddrTable();
+    if (lbl_803EBCCC == 0) {
+        lbl_803EBCCC = pHeap;
+    }
+    return 0;
+}
+
 void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
                   MemHeapFuncs_t *pFuncs)
 {
@@ -697,7 +815,7 @@ int fn_801D2570(int ident)
     return 0;
 }
 
-void fn_801D2694(void)
+void fn_801D2694(int ident)
 {
     if (lbl_803EBCEC != 0) {
         lbl_803EBCEC();
@@ -789,19 +907,273 @@ int fn_801D2874(int a, void *pAddr)
     return 0;
 }
 
+static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset)
+{
+    MemHeap_801D134C *pHeap = fn_801D134C(ident);
+    const char *pName = lbl_802AF9BC;
+    const char *pContext = pName;
+    const char *pFile = pContext;
+    MemBlock_801D134C *pBlock;
+    Struct_801D1ED8 *pInfo;
+    void *pResult;
+    unsigned int align;
+    unsigned int used;
+    unsigned int largest;
+
+    if (pHeap == 0 || size > pHeap->mSize) {
+        goto fail;
+    }
+    if (size == 0) {
+        size = 1;
+    }
+    pName = pHeap->mLabels[pHeap->mLabelDepth];
+    if (pHeap->mpFuncs != 0) {
+        pResult = pHeap->mpFuncs->mAlloc(pHeap + 1, size, flags, pName, pContext, pContext, 0);
+        if (pResult == 0 && pHeap->mpFailHook != 0) {
+            pHeap->mpFailHook(pHeap->mId, size);
+        }
+        return pResult;
+    }
+    if (pHeap->mDebug) {
+        fn_801D2694(pHeap->mId);
+    }
+    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    align = 16;
+    if (flags & 0x20) {
+        align = 32;
+    }
+    if (flags & 0x40) {
+        align = 64;
+    }
+    if (flags & 0x80) {
+        align = 128;
+    }
+    if (flags & 0x100) {
+        align = 256;
+    }
+    if (align < pHeap->mAlign) {
+        align = pHeap->mAlign;
+    }
+    if (flags & 2) {
+        pBlock = fn_801D1B64(pHeap, align, offset, size);
+    } else if (flags & 4) {
+        pBlock = fn_801D1E30(pHeap, align, offset, size);
+    } else {
+        pBlock = fn_801D1ACC(&pHeap->mRoot, align, offset, size);
+    }
+    if (pBlock == 0) {
+        if (lbl_803EBCF4 != 0) {
+            lbl_803EBCF4(pHeap->mId, 18, 0, size);
+        }
+        SysExitCriticalSectionFunc(&lbl_803E92AC);
+    fail:
+        if (pHeap->mpFailHook != 0) {
+            pHeap->mpFailHook(pHeap->mId, size);
+        }
+        return 0;
+    }
+    used = ((char *)pBlock->mpTail - (char *)*pBlock->mpTail) + pBlock->mOffset;
+    pHeap->mUsedBytes += used;
+    pHeap->mNumUsed++;
+    if (pHeap->mUsedBytes > pHeap->mMaxUsedBytes) {
+        pHeap->mMaxUsedBytes = pHeap->mUsedBytes;
+    }
+    if (pHeap->mNumUsed > pHeap->mMaxUsed) {
+        pHeap->mMaxUsed = pHeap->mNumUsed;
+    }
+    largest = fn_801D27F4(pHeap->mId);
+    if (pHeap->mMinLargestFree > largest) {
+        pHeap->mMinLargestFree = largest;
+    }
+    pHeap->mAllocCount++;
+    if (pBlock->mOffset > 0x6B) {
+        pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+    } else {
+        pInfo = 0;
+    }
+    if (pInfo != 0) {
+        fn_801D1ED8(pInfo, pFile, 0, pContext, pName, pHeap->mDebugExtra);
+        pInfo->mSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail + 12;
+        pHeap->mDebugBytes += pInfo->mSize;
+        if (pHeap->mDebugBytes > pHeap->mMaxDebugBytes) {
+            pHeap->mMaxDebugBytes = pHeap->mDebugBytes;
+        }
+    }
+    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    return pBlock + 1;
+}
+
 void *fn_801D2B7C(int size, int a, int b)
 {
-    return fn_801D28A8(0, size, a, b);
+    return _MemAllocInternal(0, size, a, b);
 }
 
 void *fn_801D2BB0(int a, int size, int ident, int flags)
 {
-    return fn_801D28A8(a, size, ident, flags);
+    return _MemAllocInternal(a, size, ident, flags);
+}
+
+int fn_801D2BD0(void *pAddr)
+{
+    MemHeap_801D134C *pHeap = fn_801D13A4(pAddr);
+    MemBlock_801D134C *pBlock;
+    MemBlock_801D134C *pNext;
+    MemBlock_801D134C *pPrev;
+    char *pData;
+    void **pLink;
+    Struct_801D1ED8 *pInfo;
+
+    if (pHeap == 0) {
+        return 0;
+    }
+    if (pHeap->mpFuncs != 0) {
+        return pHeap->mpFuncs->mFree(pHeap + 1, pAddr);
+    }
+    pBlock = (MemBlock_801D134C *)((char *)pAddr - 0xC);
+    if (pBlock->mState != 1) {
+        return 0x10009;
+    }
+    if (pBlock->mpHeap != pHeap) {
+        return 0x10003;
+    }
+    if (pHeap->mDebug) {
+        fn_801D2874(pHeap->mId, pAddr);
+        fn_801D2694(pHeap->mId);
+    }
+    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    pHeap->mUsedBytes -= ((char *)pBlock->mpTail - (char *)*pBlock->mpTail) + pBlock->mOffset;
+    pHeap->mNumUsed--;
+    pHeap->mFreeCount++;
+    if (pBlock->mOffset > 0x6B) {
+        pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+    } else {
+        pInfo = 0;
+    }
+    if (pInfo != 0) {
+        pHeap->mDebugBytes -= pInfo->mSize;
+    }
+    if (pHeap->mFill != 0x80) {
+        memset(pBlock + 1, pHeap->mFill, (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4);
+    }
+    pData = (char *)pBlock->mpTail + (*(short *)((char *)pBlock->mpTail + 4) + 4);
+    pNext = (MemBlock_801D134C *)(pData - 0xC);
+    if (pNext->mState == 0) {
+        fn_801D1620(pHeap, (MemNode_801D134C *)pData);
+        pBlock->mpTail = pNext->mpTail;
+        *pBlock->mpTail = &pBlock->mpTail;
+        memset((char *)pNext - pNext->mOffset + 0xC, pHeap->mFill, pNext->mOffset);
+    }
+    pLink = ((MemBlock_801D134C *)((char *)pBlock - pBlock->mOffset))->mpTail;
+    pPrev = (MemBlock_801D134C *)((char *)pLink - 8);
+    if (pPrev->mState == 0) {
+        fn_801D1620(pHeap, (MemNode_801D134C *)(pLink + 1));
+        pPrev->mpTail = pBlock->mpTail;
+        *pPrev->mpTail = pLink;
+        memset((char *)pBlock - pBlock->mOffset + 0xC, pHeap->mFill, pBlock->mOffset);
+        pBlock = pPrev;
+    }
+    if (pBlock->mOffset > 0x6B) {
+        pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+    } else {
+        pInfo = 0;
+    }
+    if (pInfo != 0) {
+        memset(pInfo->mGuard, '*', sizeof(pInfo->mGuard));
+        if (pInfo->mLabel[0] != 0) {
+            pInfo->mLabel[0] = '*';
+        }
+        if (pInfo->mName[0] != 0) {
+            pInfo->mName[0] = '*';
+        }
+        if (pInfo->mFile[0] != 0) {
+            pInfo->mFile[0] = '*';
+        }
+    }
+    pBlock->mState = 0;
+    ((MemNode_801D134C *)(pBlock + 1))->mSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
+    fn_801D1588(pHeap, (MemNode_801D134C *)(pBlock + 1));
+    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    return 0;
+}
+
+void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
+{
+    MemHeap_801D134C *pHeap = fn_801D13A4(pAddr);
+    MemBlock_801D134C *pBlock;
+    MemBlock_801D134C *pNext;
+    Struct_801D1ED8 *pInfo;
+    void *pNew;
+    int oldSize;
+    int avail;
+    int need;
+
+    if (pHeap == 0) {
+        return 0;
+    }
+    if (pHeap->mpFuncs != 0) {
+        return pHeap->mpFuncs->mResize(pHeap + 1, pAddr, size, flags);
+    }
+    pBlock = (MemBlock_801D134C *)((char *)pAddr - 0xC);
+    if (pBlock->mState != 1 || pBlock->mpHeap != pHeap) {
+        return 0;
+    }
+    if (pHeap->mDebug) {
+        fn_801D2874(ident, pAddr);
+        fn_801D2694(pHeap->mId);
+    }
+    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    pNext = (MemBlock_801D134C *)((char *)pBlock->mpTail + 4 + *(short *)((char *)pBlock->mpTail + 4)) - 1;
+    oldSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
+    if (pNext->mState == 0) {
+        if (pBlock->mOffset > 0x6B) {
+            pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+        } else {
+            pInfo = 0;
+        }
+        if (pInfo != 0) {
+            pInfo->mSize += ((char *)pNext->mpTail - (char *)*pNext->mpTail) + pNext->mOffset;
+            pHeap->mDebugBytes += ((char *)pNext->mpTail - (char *)*pNext->mpTail) + pNext->mOffset;
+        }
+        pHeap->mUsedBytes += ((char *)pNext->mpTail - (char *)*pNext->mpTail) + pNext->mOffset;
+        fn_801D1620(pHeap, (MemNode_801D134C *)(pNext + 1));
+        pBlock->mpTail = pNext->mpTail;
+        *pBlock->mpTail = &pBlock->mpTail;
+        memset((char *)pNext - pNext->mOffset + 0xC, 0, pNext->mOffset);
+    }
+    avail = (char *)pBlock->mpTail - (char *)*pBlock->mpTail;
+    need = size + 4;
+    if (avail - need < 0) {
+        pNew = _MemAllocInternal(ident, size, flags, offset);
+        if (pNew == 0) {
+            fn_801D2BD0(pAddr);
+            SysExitCriticalSectionFunc(&lbl_803E92AC);
+            return 0;
+        }
+        memcpy(pNew, pAddr, oldSize);
+        fn_801D2BD0(pAddr);
+        pAddr = pNew;
+    } else {
+        pHeap->mUsedBytes -= avail + pBlock->mOffset;
+        fn_801D177C(pBlock, size);
+        pHeap->mUsedBytes += ((char *)pBlock->mpTail - (char *)*pBlock->mpTail) + pBlock->mOffset;
+        if (pBlock->mOffset > 0x6B) {
+            pInfo = (Struct_801D1ED8 *)((char *)pBlock - (pBlock->mOffset - 0xC));
+        } else {
+            pInfo = 0;
+        }
+        if (pInfo != 0) {
+            pHeap->mDebugBytes -= pInfo->mSize;
+            pInfo->mSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail + 12;
+            pHeap->mDebugBytes += pInfo->mSize;
+        }
+    }
+    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    return pAddr;
 }
 
 void *fn_801D310C(void *pAddr, int size, int ident, int flags)
 {
-    return fn_801D2E5C(0, pAddr, size, ident, flags);
+    return MemHReallocMem(0, pAddr, size, ident, flags);
 }
 
 int fn_801D3148(int a, void *pAddr)

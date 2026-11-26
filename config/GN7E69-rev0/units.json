@@ -1950,6 +1950,100 @@
       ]
     },
     {
+      "source": "src/engine/llangle.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x801CF944-0x801CFF34 (src/engine/llangle.c), its compiler, function and name rows and the exact data rows of all its storage: .rodata 0x802AF548-0x802AF5D0, .data _Math_ArcTanTable 0x802F7B0C-0x802F7B30, the file-static .bss _Math_TaylorConst 0x803847A0-0x803847C0 and the uninitialized global _Math_Taylor (COMMON) placed by the storage map at 0x803E9288-0x803E92AC. All 15 functions exact; the two paired-single routines _MathSin and _MathSinCos16 are C functions whose bodies are asm blocks.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801CF944",
+          "end": "0x801CFF34"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF548",
+          "end": "0x802AF5D0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B0C",
+          "end": "0x802F7B30"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803847A0",
+          "end": "0x803847C0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Math_Taylor",
+          "start": "0x803E9288",
+          "end": "0x803E92AC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/Memory.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 34 of 39 functions exact, the holdouts fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D134C",
+          "end": "0x801D177C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D1ACC",
+          "end": "0x801D1C14"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D1E30",
+          "end": "0x801D2130"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D2570",
+          "end": "0x801D34C4"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801D177C",
+            "evidence": "evidence.tsv source-form 0x801D177C-0x801D18A0"
+          },
+          {
+            "function": "fn_801D18A0",
+            "evidence": "evidence.tsv source-form 0x801D18A0-0x801D1ACC"
+          },
+          {
+            "function": "fn_801D1C14",
+            "evidence": "evidence.tsv source-form 0x801D1C14-0x801D1E30"
+          },
+          {
+            "function": "fn_801D2130",
+            "evidence": "evidence.tsv source-form 0x801D2130-0x801D2478"
+          },
+          {
+            "function": "fn_801D2478",
+            "evidence": "evidence.tsv source-form 0x801D2478-0x801D2570"
+          }
+        ],
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478."
+      }
+    },
+    {
       "source": "src/engine/TibNew.cpp",
       "profile": "engine_cpp_nosda",
       "evidence": "evidence.tsv unit row 0x801D3BD0-0x801D3C68 (src/engine/TibNew.cpp) and its function rows; every function exact, promoted from comparison-only.",
@@ -3348,6 +3442,12 @@
         {
           "section": ".text",
           "placement": ".text",
+          "start": "0x800E3CC0",
+          "end": "0x800E3DCC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
           "start": "0x800E4120",
           "end": "0x800E4264"
         },
@@ -3366,19 +3466,13 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E67AC",
+          "start": "0x800E6328",
           "end": "0x800E6984"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800E6F48",
-          "end": "0x800E705C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E7330",
           "end": "0x800E7588"
         },
         {
@@ -3409,12 +3503,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E96EC",
-          "end": "0x800E9FD8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800EA1D0",
           "end": "0x800EA6F0"
         },
         {
@@ -3445,10 +3533,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "PlyrAlignCheckSpot",
-            "evidence": "evidence.tsv source-form 0x800E3CC0-0x800E3DCC"
-          },
-          {
             "function": "PlyrAlignGetCallTarget",
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
           },
@@ -3469,20 +3553,12 @@
             "evidence": "evidence.tsv source-form 0x800E5EA4-0x800E6328"
           },
           {
-            "function": "PlyrEngagePickMove",
-            "evidence": "evidence.tsv source-form 0x800E6328-0x800E67AC"
-          },
-          {
             "function": "PlyrEngageGetInputDir",
             "evidence": "evidence.tsv source-form 0x800E6984-0x800E6AC8"
           },
           {
             "function": "PlyrEngageTryShed",
             "evidence": "evidence.tsv source-form 0x800E6AC8-0x800E6F48"
-          },
-          {
-            "function": "PlyrWaitUpdate",
-            "evidence": "evidence.tsv source-form 0x800E705C-0x800E7330"
           },
           {
             "function": "PlyrTackleStartAnim",
@@ -3511,10 +3587,6 @@
           {
             "function": "PlyrContactSendHitFrom",
             "evidence": "evidence.tsv source-form 0x800E954C-0x800E96EC"
-          },
-          {
-            "function": "CarrierMomentumUpdate",
-            "evidence": "evidence.tsv source-form 0x800E9FD8-0x800EA1D0"
           },
           {
             "function": "PlyrContactHitWall",
@@ -4297,9 +4369,9 @@
       }
     },
     {
-      "source": "src/game/cu_80086C10.cpp",
+      "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/cu_80086C10.cpp), its function, name and data rows and the linker row of the discarded StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded _StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -4347,31 +4419,31 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80086D0C",
+            "function": "StoreGetItem",
             "evidence": "evidence.tsv source-form 0x80086D0C-0x80087128"
           },
           {
-            "function": "fn_80087128",
+            "function": "StoreCountItems",
             "evidence": "evidence.tsv source-form 0x80087128-0x800872E8"
           },
           {
-            "function": "fn_8008736C",
+            "function": "StoreIsItemLocked",
             "evidence": "evidence.tsv source-form 0x8008736C-0x80087460"
           },
           {
-            "function": "fn_80087460",
+            "function": "StoreIsItemNew",
             "evidence": "evidence.tsv source-form 0x80087460-0x8008754C"
           },
           {
-            "function": "fn_8008754C",
+            "function": "StoreClearItemNew",
             "evidence": "evidence.tsv source-form 0x8008754C-0x80087600"
           },
           {
-            "function": "fn_80087600",
+            "function": "StoreUnlockItem",
             "evidence": "evidence.tsv source-form 0x80087600-0x800876C0"
           },
           {
-            "function": "fn_8008775C",
+            "function": "StoreTeamCreate",
             "evidence": "evidence.tsv source-form 0x8008775C-0x80087880"
           }
         ],
@@ -4379,9 +4451,9 @@
       },
       "link_roots": {
         "discarded": [
-          "StoreGetStringById"
+          "_StoreGetStringById"
         ],
-        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (StoreGetStringById, discarded; only its query string survives)"
+        "evidence": "evidence.tsv linker row 0x80294C1C-0x80294C50 (_StoreGetStringById, discarded; only its query string survives)"
       }
     },
     {
@@ -10351,7 +10423,7 @@
     {
       "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 105 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .bss (0x803084B8-0x8030865C), .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): 109 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -10374,31 +10446,19 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8004CB98",
+          "start": "0x8004CAA8",
           "end": "0x8004CBEC"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004CE6C",
-          "end": "0x8004D144"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004D2F8",
           "end": "0x8004D3A8"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8004D498",
-          "end": "0x8004DC88"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004DF68",
           "end": "0x8004E4D0"
         },
         {
@@ -10423,12 +10483,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800508A0",
-          "end": "0x80050964"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80050CCC",
           "end": "0x80051E14"
         },
         {
@@ -10471,24 +10525,12 @@
             "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
           },
           {
-            "function": "BigObjHitStatic",
-            "evidence": "evidence.tsv source-form 0x8004CAA8-0x8004CB98"
-          },
-          {
             "function": "BigObjEmitParticles",
             "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
           },
           {
-            "function": "DynObjChildSpawn",
-            "evidence": "evidence.tsv source-form 0x8004D144-0x8004D2F8"
-          },
-          {
             "function": "ObjParseOpen",
             "evidence": "evidence.tsv source-form 0x8004D3A8-0x8004D498"
-          },
-          {
-            "function": "DynObjParseRender",
-            "evidence": "evidence.tsv source-form 0x8004DC88-0x8004DF68"
           },
           {
             "function": "PhysPushPlayer",
@@ -10517,13 +10559,9 @@
           {
             "function": "PhysInit",
             "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
-          },
-          {
-            "function": "PhysUpdatePlayers",
-            "evidence": "evidence.tsv source-form 0x80050964-0x80050CCC"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 16 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 12 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv (16 until round 3 lane 2, PR #1451, made BigObjHitStatic, DynObjChildSpawn, DynObjParseRender and PhysUpdatePlayers exact and linked them)."
       }
     },
     {
@@ -13469,12 +13507,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C7084",
-          "end": "0x800C7118"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C73E0",
           "end": "0x800C9FC0"
         },
         {
@@ -13761,10 +13793,6 @@
             "evidence": "evidence.tsv source-form 0x800C6DF8-0x800C7084"
           },
           {
-            "function": "fn_800C7118",
-            "evidence": "evidence.tsv source-form 0x800C7118-0x800C73E0"
-          },
-          {
             "function": "fn_800C9FC0",
             "evidence": "evidence.tsv source-form 0x800C9FC0-0x800CA14C"
           },
@@ -13777,7 +13805,7 @@
             "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 59 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 58 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
@@ -14510,9 +14538,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800EFC68.cpp",
+      "source": "src/game/Assign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/cu_800EFC68.cpp) and its data rows; holdouts approved by the owner ruling of 2026-11-19 (holdouts_approved).",
+      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/Assign.cpp) and its data rows; holdouts approved by the owner ruling of 2026-11-19 (holdouts_approved).",
       "sections": [
         {
           "section": ".text",
@@ -15018,7 +15046,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_800EFC68.cpp: the 52 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 50 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
@@ -25636,12 +25664,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DE51C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DE910",
           "end": "0x800DEAB0"
         },
         {
@@ -25702,10 +25724,6 @@
           {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimFindAlignTarget",
-            "evidence": "evidence.tsv source-form 0x800DE51C-0x800DE910"
           },
           {
             "function": "PlayerActionAnimBuildAlignCommand",
@@ -27170,9 +27188,9 @@
       }
     },
     {
-      "source": "src/game/cu_8000DCD8.cpp",
+      "source": "src/game/CreatePlayerShop.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8000DCD8-0x8000F870 for src/game/cu_8000DCD8.cpp, its exact function extents, the data row 0x8000EE78-0x8000F870 of the .rodata that follows the code, the exact data rows 0x803EB948-0x803EB950 (.sdata) and 0x8036AD78-0x8036ADB0 (its own .bss object), and the exact data rows of its storage map: the COMMON function-local statics 0x8036AD28-0x8036AD78 (.bss) and its .sbss 0x803ECDE0-0x803ECE38, where the target interleaves the eight guard words and two file statics with the COMMON sInstance objects (source-form row cu_8000DCD8 storage layout). The .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206); linked with holdouts (owner ruling of 2026-11-20), the one holdout keeping its original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x8000DCD8-0x8000F870 for src/game/CreatePlayerShop.cpp, its exact function extents, the data row 0x8000EE78-0x8000F870 of the .rodata that follows the code, the exact data rows 0x803EB948-0x803EB950 (.sdata) and 0x8036AD78-0x8036ADB0 (its own .bss object), and the exact data rows of its storage map: the COMMON function-local statics 0x8036AD28-0x8036AD78 (.bss) and its .sbss 0x803ECDE0-0x803ECE38, where the target interleaves the eight guard words and two file statics with the COMMON sInstance objects (source-form row CreatePlayerShop storage layout). The .sbss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206); linked with holdouts (owner ruling of 2026-11-20), the one holdout keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -27208,12 +27226,12 @@
       ],
       "storage": [
         {
-          "symbol": "_17fn_8000EC44__Fv.0.sRecord",
+          "symbol": "_18ShopGetState__Fv.0.sRecord",
           "start": "0x8036AD28",
           "end": "0x8036AD64"
         },
         {
-          "symbol": "_17fn_8000ED34__Fv.0.sInstance",
+          "symbol": "_21ShopGetItemList__Fv.0.sInstance",
           "start": "0x8036AD64",
           "end": "0x8036AD78"
         },
@@ -27228,7 +27246,7 @@
           "end": "0x803ECDE8"
         },
         {
-          "symbol": "_17fn_8000ED64__Fv.0.sInstance",
+          "symbol": "_27ShopGetDepartmentMenu__Fv.0.sInstance",
           "start": "0x803ECDE8",
           "end": "0x803ECDF0"
         },
@@ -27238,7 +27256,7 @@
           "end": "0x803ECDF4"
         },
         {
-          "symbol": "_17fn_8000ED8C__Fv.0.sInstance",
+          "symbol": "_31ShopGetScreenPrintingMenu__Fv.0.sInstance",
           "start": "0x803ECDF4",
           "end": "0x803ECDFC"
         },
@@ -27248,7 +27266,7 @@
           "end": "0x803ECE00"
         },
         {
-          "symbol": "_17fn_8000EDB4__Fv.0.sInstance",
+          "symbol": "_30ShopGetSportingGoodsMenu__Fv.0.sInstance",
           "start": "0x803ECE00",
           "end": "0x803ECE08"
         },
@@ -27258,7 +27276,7 @@
           "end": "0x803ECE0C"
         },
         {
-          "symbol": "_17fn_8000EDDC__Fv.0.sInstance",
+          "symbol": "_23ShopGetTattooMenu__Fv.0.sInstance",
           "start": "0x803ECE0C",
           "end": "0x803ECE14"
         },
@@ -27268,7 +27286,7 @@
           "end": "0x803ECE18"
         },
         {
-          "symbol": "_17fn_8000EE04__Fv.0.sInstance",
+          "symbol": "_24ShopGetJewelryMenu__Fv.0.sInstance",
           "start": "0x803ECE18",
           "end": "0x803ECE20"
         },
@@ -27278,7 +27296,7 @@
           "end": "0x803ECE24"
         },
         {
-          "symbol": "_17fn_8000EE2C__Fv.0.sInstance",
+          "symbol": "_22ShopGetStoreMenu__Fv.0.sInstance",
           "start": "0x803ECE24",
           "end": "0x803ECE2C"
         },
@@ -27288,12 +27306,12 @@
           "end": "0x803ECE30"
         },
         {
-          "symbol": "_Appear_iSavedHairStyle",
+          "symbol": "_Shop_iSavedHairStyle",
           "start": "0x803ECE30",
           "end": "0x803ECE34"
         },
         {
-          "symbol": "_Appear_iLastItem",
+          "symbol": "_Shop_iLastStore",
           "start": "0x803ECE34",
           "end": "0x803ECE38"
         }
@@ -27301,7 +27319,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "Enter__14Class_8000F540iPiT2",
+            "function": "Enter__13ShopStoreMenuiPiT2",
             "evidence": "evidence.tsv source-form 0x8000DFB0-0x8000E07C"
           }
         ],
@@ -28688,6 +28706,50 @@
           }
         ],
         "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out fn_802822E0, fn_802824A8, fn_80282654, fn_80282740, fn_8028291C, fn_80282D70, fn_80282F24, fn_802830F0, fn_802832CC, fn_80283660, fn_80283E48, fn_80284030, fn_8028410C, fn_80284E70, fn_80284FB8, fn_802855EC."
+      }
+    },
+    {
+      "source": "src/engine/physbroadphase.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its compiler, type, function and name rows and the exact data row of its whole .rodata, the BroadPhase vtable 0x802B1708-0x802B1720; linked with holdouts (owner ruling of 2026-11-20): 20 of 22 functions exact, the holdouts BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E9F70",
+          "end": "0x801EA668"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EA6C0",
+          "end": "0x801EAB60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801EAC98",
+          "end": "0x801EADD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1708",
+          "end": "0x802B1720"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "GetOverlapIndex__10BroadPhaseUsUs",
+            "evidence": "evidence.tsv source-form 0x801EA668-0x801EA6C0"
+          },
+          {
+            "function": "InsertEndpoint__10BroadPhaseiUs",
+            "evidence": "evidence.tsv source-form 0x801EAB60-0x801EAC98"
+          }
+        ],
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/physbroadphase.cpp holds out BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint."
       }
     }
   ]

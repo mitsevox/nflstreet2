@@ -50,12 +50,12 @@ void CreatePlayerResetOriginals(void);
 int CreatePlayerGetNextCost(void);
 int CreatePlayerGetPlayerId(void);
 void CreatePlayerApplyPreset(int a);
-MenuScreen *fn_8000EB3C(void);
-int fn_8000EB5C(void);
-int fn_8000EB80(void);
-void fn_8000EBA4(int a);
-int fn_8000EC14(void);
-int fn_8000EC38(void);
+MenuScreen *ShopGetMenu(void);
+int ShopGetPoints(void);
+int ShopGetPrice(void);
+void ShopBuyItem(int a);
+int ShopIsBought(void);
+int ShopGetPreviewLogo(void);
 void FEPlyrShow(void);
 void FEPlyrHide(void);
 void FEPlyrSetPosition(int index, float x, float y, float z);
@@ -90,8 +90,8 @@ void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pV
 void PlayerGetGearBonuses(Object_8008044C *pObject, short *pValues);
 void fn_80082534(int a, int b);
 void fn_80082558(int a, int b);
-int fn_8008775C(void);
-void fn_80087880(int a);
+int StoreTeamCreate(void);
+void StoreTeamDelete(int a);
 void PositionAbbrevFormat(int a, char *pText);
 int ColorPickCellToIndex(int a, int b);
 void ColorPickIndexToCell(int value, int *pQuotient, int *pRemainder);
@@ -369,7 +369,7 @@ void EditMenuOpen(int a, int *pCount, int *pValue)
         }
         break;
     case 0x384:
-        EditMenuPushScreen(fn_8000EB3C());
+        EditMenuPushScreen(ShopGetMenu());
         break;
     }
     *pValue = 0;
@@ -1263,7 +1263,7 @@ void EditMenuBegin(int mode, int value)
         EditMenuSetChanged();
         break;
     case 2:
-        _EditMenu_iTeam = fn_8008775C();
+        _EditMenu_iTeam = StoreTeamCreate();
         break;
     default:
         if (CreateTeamExists(_EditMenu_cTeamSlot)) {
@@ -1293,7 +1293,7 @@ void EditMenuEnd(void)
             }
         } else if (!EditMenuIsPlayerCopy()) {
             if (_EditMenu_iMode == 2) {
-                fn_80087880(_EditMenu_iTeam);
+                StoreTeamDelete(_EditMenu_iTeam);
             } else {
                 fn_8018C48C(0x54415453);
             }
@@ -1449,7 +1449,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
                     pArgs[7].pi, pArgs[8].pi);
         break;
     case 0x138:
-        fn_8000EBA4(pArgs[0].i);
+        ShopBuyItem(pArgs[0].i);
         break;
     case 0x17:
         EditMenuGetColor(pArgs[0].i, pArgs[1].pi, pArgs[2].pi);
@@ -1498,8 +1498,8 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
     case 0x10A:
         switch (_EditMenu_iMode) {
         case 2:
-            pResult->i = fn_8000EB5C();
-            *pArgs[0].pi = fn_8000EB80();
+            pResult->i = ShopGetPoints();
+            *pArgs[0].pi = ShopGetPrice();
             break;
         case 5:
             pResult->i = -1;
@@ -1536,7 +1536,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         pResult->i = 0;
         if (_EditMenu_bActive) {
             if (_EditMenu_iView == 0x384) {
-                pResult->i = fn_8000EC14();
+                pResult->i = ShopIsBought();
             } else {
                 pResult->i = _EditMenu_bChanged;
             }
@@ -1602,7 +1602,7 @@ int EditMenuHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, MenuArg
         *pArgs[0].pi = -1;
         *pArgs[1].pi = -1;
         if (_EditMenu_iMode == 2) {
-            *pArgs[0].pi = fn_8000EC38();
+            *pArgs[0].pi = ShopGetPreviewLogo();
         }
         break;
     case 0x19F:

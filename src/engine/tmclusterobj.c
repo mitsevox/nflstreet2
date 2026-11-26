@@ -7,11 +7,11 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/llquat.h"
 
-extern void fn_801CFC58(int angle, void *pTable, float *pSin, float *pCos);
+extern void _MathSinCos16(int angle, void *pTable, float *pSin, float *pCos);
 void QuatFromEuler(float *pQuat, int z, int y, int x);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 
-extern unsigned char lbl_803E9288[];
+extern float _Math_Taylor[];
 
 /* The two matrix buffers used in turn, the one in use, their capacity and the matrices used. */
 static Mtx *_TMClusterObj_pMatrixBuffer[2];
@@ -70,9 +70,9 @@ static inline void _TMClusterObjBuildBoneMatrix(Mtx *pParent, Mtx *pOut, int rx,
     float sxsy, cxsy;
     Mtx44 mtx;
 
-    fn_801CFC58(rx, lbl_803E9288, &sx, &cx);
-    fn_801CFC58(ry, lbl_803E9288, &sy, &cy);
-    fn_801CFC58(rz, lbl_803E9288, &sz, &cz);
+    _MathSinCos16(rx, _Math_Taylor, &sx, &cx);
+    _MathSinCos16(ry, _Math_Taylor, &sy, &cy);
+    _MathSinCos16(rz, _Math_Taylor, &sz, &cz);
     cxsy = cx * sy;
     sxsy = sx * sy;
     mtx[0][0] = cz * cy;

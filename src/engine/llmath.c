@@ -2,11 +2,11 @@
 
 #include <math.h>
 
-void fn_801CF998(void);
+void MathLLAngleInit(void);
 
 void MathLLInit(void)
 {
-    fn_801CF998();
+    MathLLAngleInit();
 }
 
 float MathInvSqrt(float x)

@@ -2979,9 +2979,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8000DCD8.cpp",
+      "source": "src/game/CreatePlayerShop.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/cu_8000DCD8.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects. The source is linked with holdouts (units.json, whose storage map places the same COMMON and .sbss statics); the non-exact function stays registered here as its partial.",
+      "evidence": "evidence.tsv unit row src/game/CreatePlayerShop.cpp, the function rows 0x8000DCD8-0x8000EE78, the data row 0x8000EE78-0x8000F870 and the data rows of its .sdata, .sbss and .bss objects. The source is linked with holdouts (units.json, whose storage map places the same COMMON and .sbss statics); the non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -3022,274 +3022,274 @@
           "end": "0x8000DD04"
         },
         {
-          "symbol": "Enter__14Class_8000F500iPiT2",
+          "symbol": "Enter__12ShopItemListiPiT2",
           "start": "0x8000DD04",
           "end": "0x8000DDC0"
         },
         {
-          "symbol": "Leave__14Class_8000F500iiPPv",
+          "symbol": "Leave__12ShopItemListiiPPv",
           "start": "0x8000DDC0",
           "end": "0x8000DE24"
         },
         {
-          "symbol": "GetItemId__14Class_8000F500iPi",
+          "symbol": "GetItemId__12ShopItemListiPi",
           "start": "0x8000DE24",
           "end": "0x8000DE2C"
         },
         {
-          "symbol": "GetItem__14Class_8000F500iP11MenuEntry_t",
+          "symbol": "GetItem__12ShopItemListiP11MenuEntry_t",
           "start": "0x8000DE2C",
           "end": "0x8000DEEC"
         },
         {
-          "symbol": "Highlight__14Class_8000F500i",
+          "symbol": "Highlight__12ShopItemListi",
           "start": "0x8000DEEC",
           "end": "0x8000DFB0"
         },
         {
-          "symbol": "Enter__14Class_8000F540iPiT2",
+          "symbol": "Enter__13ShopStoreMenuiPiT2",
           "start": "0x8000DFB0",
           "end": "0x8000E07C"
         },
         {
-          "symbol": "GetItem__14Class_8000F540iP11MenuEntry_t",
+          "symbol": "GetItem__13ShopStoreMenuiP11MenuEntry_t",
           "start": "0x8000E07C",
           "end": "0x8000E0CC"
         },
         {
-          "symbol": "GetItem__14Class_8000F4B0iP11MenuEntry_t",
+          "symbol": "GetItem__18ShopDepartmentMenuiP11MenuEntry_t",
           "start": "0x8000E0CC",
           "end": "0x8000E11C"
         },
         {
-          "symbol": "GetItem__14Class_8000F410iP11MenuEntry_t",
+          "symbol": "GetItem__22ShopScreenPrintingMenuiP11MenuEntry_t",
           "start": "0x8000E11C",
           "end": "0x8000E16C"
         },
         {
-          "symbol": "GetItem__14Class_8000F460iP11MenuEntry_t",
+          "symbol": "GetItem__21ShopSportingGoodsMenuiP11MenuEntry_t",
           "start": "0x8000E16C",
           "end": "0x8000E1BC"
         },
         {
-          "symbol": "GetItem__14Class_8000F3C0iP11MenuEntry_t",
+          "symbol": "GetItem__14ShopTattooMenuiP11MenuEntry_t",
           "start": "0x8000E1BC",
           "end": "0x8000E20C"
         },
         {
-          "symbol": "GetItem__14Class_8000F370iP11MenuEntry_t",
+          "symbol": "GetItem__15ShopJewelryMenuiP11MenuEntry_t",
           "start": "0x8000E20C",
           "end": "0x8000E25C"
         },
         {
-          "symbol": "Leave__14Class_8000F540iiPPv",
+          "symbol": "Leave__13ShopStoreMenuiiPPv",
           "start": "0x8000E25C",
           "end": "0x8000E390"
         },
         {
-          "symbol": "Leave__14Class_8000F4B0iiPPv",
+          "symbol": "Leave__18ShopDepartmentMenuiiPPv",
           "start": "0x8000E390",
           "end": "0x8000E478"
         },
         {
-          "symbol": "Leave__14Class_8000F460iiPPv",
+          "symbol": "Leave__21ShopSportingGoodsMenuiiPPv",
           "start": "0x8000E478",
           "end": "0x8000E588"
         },
         {
-          "symbol": "Leave__14Class_8000F410iiPPv",
+          "symbol": "Leave__22ShopScreenPrintingMenuiiPPv",
           "start": "0x8000E588",
           "end": "0x8000E600"
         },
         {
-          "symbol": "Leave__14Class_8000F3C0iiPPv",
+          "symbol": "Leave__14ShopTattooMenuiiPPv",
           "start": "0x8000E600",
           "end": "0x8000E694"
         },
         {
-          "symbol": "Leave__14Class_8000F370iiPPv",
+          "symbol": "Leave__15ShopJewelryMenuiiPPv",
           "start": "0x8000E694",
           "end": "0x8000E70C"
         },
         {
-          "symbol": "fn_8000E70C__Fv",
+          "symbol": "_ShopResetView__Fv",
           "start": "0x8000E70C",
           "end": "0x8000E744"
         },
         {
-          "symbol": "fn_8000E744__FPcPCcT1",
+          "symbol": "_ShopSetTexts__FPcPCcT1",
           "start": "0x8000E744",
           "end": "0x8000E784"
         },
         {
-          "symbol": "fn_8000E784__FP15Record_8036AD78",
+          "symbol": "_ShopSaveLook__FP15ShopSavedLook_t",
           "start": "0x8000E784",
           "end": "0x8000E834"
         },
         {
-          "symbol": "fn_8000E834__FP15Record_8036AD78",
+          "symbol": "_ShopRestoreLook__FP15ShopSavedLook_t",
           "start": "0x8000E834",
           "end": "0x8000E8FC"
         },
         {
-          "symbol": "fn_8000E8FC__Fii",
+          "symbol": "_ShopPreviewItem__Fii",
           "start": "0x8000E8FC",
           "end": "0x8000EB3C"
         },
         {
-          "symbol": "fn_8000EB3C",
+          "symbol": "ShopGetMenu",
           "start": "0x8000EB3C",
           "end": "0x8000EB5C"
         },
         {
-          "symbol": "fn_8000EB5C",
+          "symbol": "ShopGetPoints",
           "start": "0x8000EB5C",
           "end": "0x8000EB80"
         },
         {
-          "symbol": "fn_8000EB80",
+          "symbol": "ShopGetPrice",
           "start": "0x8000EB80",
           "end": "0x8000EBA4"
         },
         {
-          "symbol": "fn_8000EBA4",
+          "symbol": "ShopBuyItem",
           "start": "0x8000EBA4",
           "end": "0x8000EC14"
         },
         {
-          "symbol": "fn_8000EC14",
+          "symbol": "ShopIsBought",
           "start": "0x8000EC14",
           "end": "0x8000EC38"
         },
         {
-          "symbol": "fn_8000EC38",
+          "symbol": "ShopGetPreviewLogo",
           "start": "0x8000EC38",
           "end": "0x8000EC44"
         },
         {
-          "symbol": "fn_8000EC44__Fv",
+          "symbol": "ShopGetState__Fv",
           "start": "0x8000EC44",
           "end": "0x8000EC94"
         },
         {
-          "symbol": "_._15Record_8036AD28",
+          "symbol": "_._9ShopState",
           "start": "0x8000EC94",
           "end": "0x8000ECBC"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F540",
+          "symbol": "GetEntryCount__13ShopStoreMenu",
           "start": "0x8000ECBC",
           "end": "0x8000ECC4"
         },
         {
-          "symbol": "GetEntries__14Class_8000F540",
+          "symbol": "GetEntries__13ShopStoreMenu",
           "start": "0x8000ECC4",
           "end": "0x8000ECD0"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F4B0",
+          "symbol": "GetEntryCount__18ShopDepartmentMenu",
           "start": "0x8000ECD0",
           "end": "0x8000ECD8"
         },
         {
-          "symbol": "GetEntries__14Class_8000F4B0",
+          "symbol": "GetEntries__18ShopDepartmentMenu",
           "start": "0x8000ECD8",
           "end": "0x8000ECE4"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F460",
+          "symbol": "GetEntryCount__21ShopSportingGoodsMenu",
           "start": "0x8000ECE4",
           "end": "0x8000ECEC"
         },
         {
-          "symbol": "GetEntries__14Class_8000F460",
+          "symbol": "GetEntries__21ShopSportingGoodsMenu",
           "start": "0x8000ECEC",
           "end": "0x8000ECF8"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F410",
+          "symbol": "GetEntryCount__22ShopScreenPrintingMenu",
           "start": "0x8000ECF8",
           "end": "0x8000ED00"
         },
         {
-          "symbol": "GetEntries__14Class_8000F410",
+          "symbol": "GetEntries__22ShopScreenPrintingMenu",
           "start": "0x8000ED00",
           "end": "0x8000ED0C"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F3C0",
+          "symbol": "GetEntryCount__14ShopTattooMenu",
           "start": "0x8000ED0C",
           "end": "0x8000ED14"
         },
         {
-          "symbol": "GetEntries__14Class_8000F3C0",
+          "symbol": "GetEntries__14ShopTattooMenu",
           "start": "0x8000ED14",
           "end": "0x8000ED20"
         },
         {
-          "symbol": "GetEntryCount__14Class_8000F370",
+          "symbol": "GetEntryCount__15ShopJewelryMenu",
           "start": "0x8000ED20",
           "end": "0x8000ED28"
         },
         {
-          "symbol": "GetEntries__14Class_8000F370",
+          "symbol": "GetEntries__15ShopJewelryMenu",
           "start": "0x8000ED28",
           "end": "0x8000ED34"
         },
         {
-          "symbol": "fn_8000ED34__Fv",
+          "symbol": "ShopGetItemList__Fv",
           "start": "0x8000ED34",
           "end": "0x8000ED64"
         },
         {
-          "symbol": "fn_8000ED64__Fv",
+          "symbol": "ShopGetDepartmentMenu__Fv",
           "start": "0x8000ED64",
           "end": "0x8000ED8C"
         },
         {
-          "symbol": "fn_8000ED8C__Fv",
+          "symbol": "ShopGetScreenPrintingMenu__Fv",
           "start": "0x8000ED8C",
           "end": "0x8000EDB4"
         },
         {
-          "symbol": "fn_8000EDB4__Fv",
+          "symbol": "ShopGetSportingGoodsMenu__Fv",
           "start": "0x8000EDB4",
           "end": "0x8000EDDC"
         },
         {
-          "symbol": "fn_8000EDDC__Fv",
+          "symbol": "ShopGetTattooMenu__Fv",
           "start": "0x8000EDDC",
           "end": "0x8000EE04"
         },
         {
-          "symbol": "fn_8000EE04__Fv",
+          "symbol": "ShopGetJewelryMenu__Fv",
           "start": "0x8000EE04",
           "end": "0x8000EE2C"
         },
         {
-          "symbol": "fn_8000EE2C__Fv",
+          "symbol": "ShopGetStoreMenu__Fv",
           "start": "0x8000EE2C",
           "end": "0x8000EE54"
         },
         {
-          "symbol": "__15Record_8036AD28",
+          "symbol": "__9ShopState",
           "start": "0x8000EE54",
           "end": "0x8000EE78"
         }
       ],
       "storage": [
         {
-          "symbol": "_17fn_8000EC44__Fv.0.sRecord",
+          "symbol": "_18ShopGetState__Fv.0.sRecord",
           "start": "0x8036AD28",
           "end": "0x8036AD64"
         },
         {
-          "symbol": "_17fn_8000ED34__Fv.0.sInstance",
+          "symbol": "_21ShopGetItemList__Fv.0.sInstance",
           "start": "0x8036AD64",
           "end": "0x8036AD78"
         },
         {
-          "symbol": "lbl_8036AD78",
+          "symbol": "_Shop_sSavedLook",
           "start": "0x8036AD78",
           "end": "0x8036ADB0"
         },
@@ -3304,7 +3304,7 @@
           "end": "0x803ECDE8"
         },
         {
-          "symbol": "_17fn_8000ED64__Fv.0.sInstance",
+          "symbol": "_27ShopGetDepartmentMenu__Fv.0.sInstance",
           "start": "0x803ECDE8",
           "end": "0x803ECDF0"
         },
@@ -3314,7 +3314,7 @@
           "end": "0x803ECDF4"
         },
         {
-          "symbol": "_17fn_8000ED8C__Fv.0.sInstance",
+          "symbol": "_31ShopGetScreenPrintingMenu__Fv.0.sInstance",
           "start": "0x803ECDF4",
           "end": "0x803ECDFC"
         },
@@ -3324,7 +3324,7 @@
           "end": "0x803ECE00"
         },
         {
-          "symbol": "_17fn_8000EDB4__Fv.0.sInstance",
+          "symbol": "_30ShopGetSportingGoodsMenu__Fv.0.sInstance",
           "start": "0x803ECE00",
           "end": "0x803ECE08"
         },
@@ -3334,7 +3334,7 @@
           "end": "0x803ECE0C"
         },
         {
-          "symbol": "_17fn_8000EDDC__Fv.0.sInstance",
+          "symbol": "_23ShopGetTattooMenu__Fv.0.sInstance",
           "start": "0x803ECE0C",
           "end": "0x803ECE14"
         },
@@ -3344,7 +3344,7 @@
           "end": "0x803ECE18"
         },
         {
-          "symbol": "_17fn_8000EE04__Fv.0.sInstance",
+          "symbol": "_24ShopGetJewelryMenu__Fv.0.sInstance",
           "start": "0x803ECE18",
           "end": "0x803ECE20"
         },
@@ -3354,7 +3354,7 @@
           "end": "0x803ECE24"
         },
         {
-          "symbol": "_17fn_8000EE2C__Fv.0.sInstance",
+          "symbol": "_22ShopGetStoreMenu__Fv.0.sInstance",
           "start": "0x803ECE24",
           "end": "0x803ECE2C"
         },
@@ -3364,12 +3364,12 @@
           "end": "0x803ECE30"
         },
         {
-          "symbol": "_Appear_iSavedHairStyle",
+          "symbol": "_Shop_iSavedHairStyle",
           "start": "0x803ECE30",
           "end": "0x803ECE34"
         },
         {
-          "symbol": "_Appear_iLastItem",
+          "symbol": "_Shop_iLastStore",
           "start": "0x803ECE34",
           "end": "0x803ECE38"
         }
@@ -3417,9 +3417,9 @@
       ]
     },
     {
-      "source": "src/game/cu_800EFC68.cpp",
+      "source": "src/game/Assign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/cu_800EFC68.cpp), its data rows and the linker/source-form rows of its three discarded stand-ins. The 79 comparison fragments of the range are merged into this one translation unit (all 631 functions in address order); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/Assign.cpp), its data rows and the linker/source-form rows of its three discarded stand-ins. The 79 comparison fragments of the range are merged into this one translation unit (all 631 functions in address order); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -11611,7 +11611,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80086C10.cpp",
+      "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit/source-form/type/data rows for 80086C10\u201380087BE4 and existing exact function extents. Complete twenty-two-body comparison scope; original bytes remain linked. The native readonly section lacks the unidentified 52-byte query literal at 80294C1C, so the full original readonly extent remains a partial comparison without patched symbol offsets. Original unit edges and names are unresolved.",
       "sections": [
@@ -11642,118 +11642,118 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80086C10",
+          "symbol": "StoreTeamAddPlayer",
           "start": "0x80086C10",
           "end": "0x80086CE8"
         },
         {
-          "symbol": "fn_80086CE8",
+          "symbol": "StoreGetCategory",
           "start": "0x80086CE8",
           "end": "0x80086D0C"
         },
         {
-          "symbol": "fn_80086D0C",
+          "symbol": "StoreGetItem",
           "start": "0x80086D0C",
           "end": "0x80087128"
         },
         {
-          "symbol": "fn_80087128",
+          "symbol": "StoreCountItems",
           "start": "0x80087128",
           "end": "0x800872E8"
         },
         {
-          "symbol": "fn_800872E8",
+          "symbol": "StoreGetItemCount",
           "start": "0x800872E8",
           "end": "0x8008731C"
         },
         {
-          "symbol": "fn_8008731C",
+          "symbol": "StoreGetItemByRow",
           "start": "0x8008731C",
           "end": "0x8008736C"
         },
         {
-          "symbol": "fn_8008736C",
+          "symbol": "StoreIsItemLocked",
           "start": "0x8008736C",
           "end": "0x80087460"
         },
         {
-          "symbol": "fn_80087460",
+          "symbol": "StoreIsItemNew",
           "start": "0x80087460",
           "end": "0x8008754C"
         },
         {
-          "symbol": "fn_8008754C",
+          "symbol": "StoreClearItemNew",
           "start": "0x8008754C",
           "end": "0x80087600"
         },
         {
-          "symbol": "fn_80087600",
+          "symbol": "StoreUnlockItem",
           "start": "0x80087600",
           "end": "0x800876C0"
         },
         {
-          "symbol": "fn_800876C0",
+          "symbol": "StoreClose",
           "start": "0x800876C0",
           "end": "0x80087704"
         },
         {
-          "symbol": "fn_80087704",
+          "symbol": "StoreOpen",
           "start": "0x80087704",
           "end": "0x8008775C"
         },
         {
-          "symbol": "fn_8008775C",
+          "symbol": "StoreTeamCreate",
           "start": "0x8008775C",
           "end": "0x80087880"
         },
         {
-          "symbol": "fn_80087880",
+          "symbol": "StoreTeamDelete",
           "start": "0x80087880",
           "end": "0x800878D8"
         },
         {
-          "symbol": "fn_800878D8",
+          "symbol": "StoreGetRowItemId",
           "start": "0x800878D8",
           "end": "0x80087938"
         },
         {
-          "symbol": "fn_80087938",
+          "symbol": "StoreFindUnlockedRow",
           "start": "0x80087938",
           "end": "0x800879E8"
         },
         {
-          "symbol": "fn_800879E8",
+          "symbol": "StoreIsRowItemNew",
           "start": "0x800879E8",
           "end": "0x80087A30"
         },
         {
-          "symbol": "fn_80087A30",
+          "symbol": "StoreClearRowItemNew",
           "start": "0x80087A30",
           "end": "0x80087A78"
         },
         {
-          "symbol": "fn_80087A78",
+          "symbol": "StoreGetUnlockedOrdinal",
           "start": "0x80087A78",
           "end": "0x80087B00"
         },
         {
-          "symbol": "fn_80087B00",
+          "symbol": "StoreCountUnlocked",
           "start": "0x80087B00",
           "end": "0x80087B5C"
         },
         {
-          "symbol": "fn_80087B5C",
+          "symbol": "StoreTattooLocationToKind",
           "start": "0x80087B5C",
           "end": "0x80087BA0"
         },
         {
-          "symbol": "fn_80087BA0",
+          "symbol": "StoreGetTattooLocation",
           "start": "0x80087BA0",
           "end": "0x80087BE4"
         }
       ],
       "discarded": [
-        "StoreGetStringById"
+        "_StoreGetStringById"
       ]
     },
     {
@@ -18048,7 +18048,7 @@
           "end": "0x800C7118"
         },
         {
-          "symbol": "fn_800C7118",
+          "symbol": "PlyrContactTryBreakTackle",
           "start": "0x800C7118",
           "end": "0x800C73E0"
         },
@@ -25357,9 +25357,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801E9F70.cpp",
+      "source": "src/engine/physbroadphase.cpp",
       "profile": "game_cpp",
-      "evidence": "E3 lane draft of cu_801E9F70.cpp over 0x801E9F70-0x801EADD8 (neutral name: no NASCAR/Madden name evidence for this unit); evidence.tsv function rows and the game_cpp compiler row for this range, plus the exact data row 0x802B1708-0x802B1720. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its function rows and the game_cpp compiler row, plus the exact data row 0x802B1708-0x802B1720. Registered for its two holdouts; the exact functions link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -25376,112 +25376,112 @@
       ],
       "functions": [
         {
-          "symbol": "__14Class_801E9F70UiUi",
+          "symbol": "__10BroadPhaseUiUi",
           "start": "0x801E9F70",
           "end": "0x801EA100"
         },
         {
-          "symbol": "_._14Class_801E9F70",
+          "symbol": "_._10BroadPhase",
           "start": "0x801EA100",
           "end": "0x801EA1D8"
         },
         {
-          "symbol": "fn_801EA1D8__14Class_801E9F70P12Box_801E9F70Uii",
+          "symbol": "AddObject__10BroadPhaseP13BroadPhaseBoxUiPv",
           "start": "0x801EA1D8",
           "end": "0x801EA284"
         },
         {
-          "symbol": "fn_801EA284__14Class_801E9F70P12Box_801E9F70",
+          "symbol": "RemoveObject__10BroadPhaseP13BroadPhaseBox",
           "start": "0x801EA284",
           "end": "0x801EA428"
         },
         {
-          "symbol": "fn_801EA428__14Class_801E9F70",
+          "symbol": "UpdatePairs__10BroadPhase",
           "start": "0x801EA428",
           "end": "0x801EA470"
         },
         {
-          "symbol": "fn_801EA470__14Class_801E9F70Us",
+          "symbol": "GetObjectUser__10BroadPhaseUs",
           "start": "0x801EA470",
           "end": "0x801EA480"
         },
         {
-          "symbol": "fn_801EA480__14Class_801E9F70i",
+          "symbol": "SortAxis__10BroadPhasei",
           "start": "0x801EA480",
           "end": "0x801EA5C0"
         },
         {
-          "symbol": "fn_801EA5C0__14Class_801E9F70UsUsi",
+          "symbol": "SwapEndpoints__10BroadPhaseUsUsi",
           "start": "0x801EA5C0",
           "end": "0x801EA668"
         },
         {
-          "symbol": "fn_801EA668__14Class_801E9F70UsUs",
+          "symbol": "GetOverlapIndex__10BroadPhaseUsUs",
           "start": "0x801EA668",
           "end": "0x801EA6C0"
         },
         {
-          "symbol": "fn_801EA6C0__14Class_801E9F70iUsPUc",
+          "symbol": "GetEndpointValue__10BroadPhaseiUsPUc",
           "start": "0x801EA6C0",
           "end": "0x801EA708"
         },
         {
-          "symbol": "fn_801EA708__14Class_801E9F70UsUsUs",
+          "symbol": "TestAxisOverlap__10BroadPhaseUsUsUs",
           "start": "0x801EA708",
           "end": "0x801EA818"
         },
         {
-          "symbol": "fn_801EA818__14Class_801E9F70UsUsP16Overlap_801E9F70",
+          "symbol": "AddPair__10BroadPhaseUsUsP17BroadPhaseOverlap",
           "start": "0x801EA818",
           "end": "0x801EA8A0"
         },
         {
-          "symbol": "fn_801EA8A0__14Class_801E9F70Us",
+          "symbol": "RemovePair__10BroadPhaseUs",
           "start": "0x801EA8A0",
           "end": "0x801EA908"
         },
         {
-          "symbol": "fn_801EA908__14Class_801E9F70iUs",
+          "symbol": "InsertObjectOnAxis__10BroadPhaseiUs",
           "start": "0x801EA908",
           "end": "0x801EAA5C"
         },
         {
-          "symbol": "fn_801EAA5C__14Class_801E9F70iUs",
+          "symbol": "RemoveObjectFromAxis__10BroadPhaseiUs",
           "start": "0x801EAA5C",
           "end": "0x801EAB60"
         },
         {
-          "symbol": "fn_801EAB60__14Class_801E9F70iUs",
+          "symbol": "InsertEndpoint__10BroadPhaseiUs",
           "start": "0x801EAB60",
           "end": "0x801EAC98"
         },
         {
-          "symbol": "fn_801EAC98__14Class_801E9F70",
+          "symbol": "AllocPair__10BroadPhase",
           "start": "0x801EAC98",
           "end": "0x801EACF0"
         },
         {
-          "symbol": "fn_801EACF0__14Class_801E9F70P13Pair_801E9F70",
+          "symbol": "FreePair__10BroadPhaseP14BroadPhasePair",
           "start": "0x801EACF0",
           "end": "0x801EAD00"
         },
         {
-          "symbol": "fn_801EAD00__14Class_801E9F70",
+          "symbol": "AllocEndpoint__10BroadPhase",
           "start": "0x801EAD00",
           "end": "0x801EAD50"
         },
         {
-          "symbol": "fn_801EAD50__14Class_801E9F70Us",
+          "symbol": "FreeEndpoint__10BroadPhaseUs",
           "start": "0x801EAD50",
           "end": "0x801EAD6C"
         },
         {
-          "symbol": "fn_801EAD6C__14Class_801E9F70",
+          "symbol": "AllocObject__10BroadPhase",
           "start": "0x801EAD6C",
           "end": "0x801EADBC"
         },
         {
-          "symbol": "fn_801EADBC__14Class_801E9F70Us",
+          "symbol": "FreeObject__10BroadPhaseUs",
           "start": "0x801EADBC",
           "end": "0x801EADD8"
         }
@@ -25490,7 +25490,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. Draft comparisons only; original assembly remains linked. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9BC stay external; no .rodata or .data is emitted. MemInitHeap 0x801D2130 and three other large bodies have no draft yet.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the five holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
       "sections": [
         {
           "section": ".text",
@@ -25576,6 +25576,11 @@
           "end": "0x801D2130"
         },
         {
+          "symbol": "fn_801D2130",
+          "start": "0x801D2130",
+          "end": "0x801D2478"
+        },
+        {
           "symbol": "fn_801D2478",
           "start": "0x801D2478",
           "end": "0x801D2570"
@@ -25631,6 +25636,11 @@
           "end": "0x801D28A8"
         },
         {
+          "symbol": "_MemAllocInternal",
+          "start": "0x801D28A8",
+          "end": "0x801D2B7C"
+        },
+        {
           "symbol": "fn_801D2B7C",
           "start": "0x801D2B7C",
           "end": "0x801D2BB0"
@@ -25639,6 +25649,16 @@
           "symbol": "fn_801D2BB0",
           "start": "0x801D2BB0",
           "end": "0x801D2BD0"
+        },
+        {
+          "symbol": "fn_801D2BD0",
+          "start": "0x801D2BD0",
+          "end": "0x801D2E5C"
+        },
+        {
+          "symbol": "MemHReallocMem",
+          "start": "0x801D2E5C",
+          "end": "0x801D310C"
         },
         {
           "symbol": "fn_801D310C",
@@ -27174,102 +27194,6 @@
       ],
       "discarded": [
         "_FontLLTexelToUV"
-      ]
-    },
-    {
-      "source": "src/engine/cu_801CF98C.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801CF944-0x801CFF34 (src/engine/cu_801CF98C.c, llangle.c), its compiler row and function rows and the exact data row for its .rodata 0x802AF548-0x802AF5D0; the paired-single assembly routine 0x801CFC58-0x801CFCCC is a gap of this comparison. Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CF98C",
-          "end": "0x801CFF34"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF548",
-          "end": "0x802AF5D0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_801CF98C",
-          "start": "0x801CF98C",
-          "end": "0x801CF998"
-        },
-        {
-          "symbol": "fn_801CF998",
-          "start": "0x801CF998",
-          "end": "0x801CFB18"
-        },
-        {
-          "symbol": "fn_801CFB18",
-          "start": "0x801CFB18",
-          "end": "0x801CFB74"
-        },
-        {
-          "symbol": "fn_801CFB74",
-          "start": "0x801CFB74",
-          "end": "0x801CFB94"
-        },
-        {
-          "symbol": "fn_801CFB94",
-          "start": "0x801CFB94",
-          "end": "0x801CFBF4"
-        },
-        {
-          "symbol": "fn_801CFBF4",
-          "start": "0x801CFBF4",
-          "end": "0x801CFC14"
-        },
-        {
-          "symbol": "fn_801CFC14",
-          "start": "0x801CFC14",
-          "end": "0x801CFC58"
-        },
-        {
-          "symbol": "fn_801CFCCC",
-          "start": "0x801CFCCC",
-          "end": "0x801CFCD0"
-        },
-        {
-          "symbol": "fn_801CFCD0",
-          "start": "0x801CFCD0",
-          "end": "0x801CFD28"
-        },
-        {
-          "symbol": "fn_801CFD28",
-          "start": "0x801CFD28",
-          "end": "0x801CFD78"
-        },
-        {
-          "symbol": "fn_801CFD78",
-          "start": "0x801CFD78",
-          "end": "0x801CFDB0"
-        },
-        {
-          "symbol": "fn_801CFDB0",
-          "start": "0x801CFDB0",
-          "end": "0x801CFDD0"
-        },
-        {
-          "symbol": "fn_801CFDD0",
-          "start": "0x801CFDD0",
-          "end": "0x801CFE08"
-        },
-        {
-          "symbol": "fn_801CFE08",
-          "start": "0x801CFE08",
-          "end": "0x801CFE40"
-        },
-        {
-          "symbol": "fn_801CFE40",
-          "start": "0x801CFE40",
-          "end": "0x801CFF34"
-        }
       ]
     },
     {

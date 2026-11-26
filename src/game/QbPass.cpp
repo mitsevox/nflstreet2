@@ -92,7 +92,7 @@ Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned cha
 int fn_80178308(void);
 void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
 
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 void SndgSpchSetPlayFlags(int);
 unsigned int fn_800ABDA4(int);
 Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
@@ -145,7 +145,7 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
             float delta[2];
             Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (!(Vec2Magnitude(delta) >= 3.0f)) {
-                int angle = fn_801CFE40(delta[1], delta[0]);
+                int angle = MathArcTan2(delta[1], delta[0]);
                 float *cost = &values[((angle + 0x100000) >> 21) & 7];
                 *cost += 4.0f;
                 s->mUnknown3 = 1;

@@ -1,7 +1,7 @@
 /* Builds and samples the color ramps used over a particle's lifetime. */
 #include "engine/particleLib.h"
 
-float fn_801CFB94(int angle);
+float MathCos(int angle);
 
 void ColorRampSetInterp(ColorRamp_t *pRamp, int interp);
 unsigned short ColorRampInsertColor(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor);
@@ -45,7 +45,7 @@ static void _colorRampInterp(Vec3_801DE1E0 *pOut, Vec3_801DE1E0 *pA, Vec3_801DE1
         Vec3Lerp(pOut, pB, pA, t);
         break;
     case 2:
-        Vec3Lerp(pOut, pB, pA, -fn_801CFB94((int)(t * 8388608.0f)) * 0.5f + 0.5f);
+        Vec3Lerp(pOut, pB, pA, -MathCos((int)(t * 8388608.0f)) * 0.5f + 0.5f);
         break;
     }
 }

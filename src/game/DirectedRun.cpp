@@ -26,7 +26,7 @@ extern "C" {
 int fn_800ABDA4(int team);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int fn_8010A2DC(Object_80039F5C *p, int a, short b);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8011F1CC(void);
@@ -185,8 +185,8 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             Vector_80039F5C direction;
             BallGetVelocity(pBall, &direction);
             Vec2Sub(&position, &p->mMotion.mPos, &position);
-            int directionAngle = fn_801CFE40(direction.mY, direction.mX);
-            int deltaAngle = fn_801CFE40(position.mY, position.mX);
+            int directionAngle = MathArcTan2(direction.mY, direction.mX);
+            int deltaAngle = MathArcTan2(position.mY, position.mX);
             if (MathAngleDiff(directionAngle, deltaAngle) <= 0x155554
                 && SyncRandGetRange(0, 100) <= 4 && fn_800F2C1C(p, 0)) {
                 return 0;

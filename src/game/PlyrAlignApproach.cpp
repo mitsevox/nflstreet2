@@ -26,7 +26,7 @@ extern float lbl_803EAD38, lbl_803EAD3C, lbl_803EAD40, lbl_803EAD44,
     lbl_803EAD48;
 Point_8017886C fn_80177FFC(int);
 void Vec2Sub(void *, void *, void *);
-int fn_801CFE40(float, float);
+int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
 int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
@@ -50,7 +50,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int 
   int value;
   Vec2Sub(&delta, target, &player->mMotion.mPos);
   float distance = Vec2Magnitude(&delta);
-  int direction = fn_801CFE40(delta.mY, delta.mX);
+  int direction = MathArcTan2(delta.mY, delta.mX);
   if (!(player->mMotion.mUnknown28 <= 0.006f)) {
     int beyond = target->mY > goal.mY + 2.0f;
     if (!state->unk_0x24) {
@@ -64,7 +64,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int 
   if ((!(distance <= 0.65f) && !state->unk_0x24) ||
       (!(distance <= lbl_803EAD44) && state->unk_0x24) || state->unk_0x3) {
     PlayerReleaseJointCtrls(player);
-    int facing = fn_801CFE40(delta.mY, delta.mX);
+    int facing = MathArcTan2(delta.mY, delta.mX);
     if (PlayerActionIsFacingPoint(player, target, distance)) {
       PlyrAlignStartShuffle(player, state, facing,
                   fabsf(player->mMotion.mPos.mX - target->mX));
@@ -205,7 +205,7 @@ void PlyrAlignUpdateLane(Object_80039F5C *player) {
     Vec2Sub(&delta, &state->mLaneTargets[state->mLaneTargetIndex],
                 &player->mMotion.mPos);
     Vec2Magnitude(&delta);
-    fn_801CFE40(delta.mY, delta.mX);
+    MathArcTan2(delta.mY, delta.mX);
     state->mLanePhase = 2;
     break;
   }
@@ -233,7 +233,7 @@ void PlyrAlignUpdateLane(Object_80039F5C *player) {
       Vec2Sub(&delta, &state->mLaneTargets[state->mLaneTargetIndex],
                   &player->mMotion.mPos);
       float distance = Vec2Magnitude(&delta);
-      int direction = fn_801CFE40(delta.mY, delta.mX);
+      int direction = MathArcTan2(delta.mY, delta.mX);
       if (!(distance <= 0.3f) && MathAngleDiff(direction, 0xC00000) <= 0x2AAAA9) {
         if (player->mUnknown560.mFlags.mBytes[0] ||
             !(player->mMotion.mPos.mY >=
@@ -254,7 +254,7 @@ void PlyrAlignUpdateLane(Object_80039F5C *player) {
         Point_8017886C offset;
         point.mY -= 5.0f;
         Vec2Sub(&offset, &point, &player->mMotion.mPos);
-        state->mLaneApproachHeading = fn_801CFE40(offset.mY, offset.mX);
+        state->mLaneApproachHeading = MathArcTan2(offset.mY, offset.mX);
         PlayerPathStartSideAnim(player, 1, 2);
         state->mLanePhase = 1;
       }

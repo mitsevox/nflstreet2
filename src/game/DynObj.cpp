@@ -194,7 +194,7 @@ int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, BigObjAnimHandlerSet_t *pTable);
 void fn_801BE040(void *p);
 AnimSeqncrStatic_t *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 void Vec2Scale(void *pOut, void *p, float scale);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float SyncRandGetFloat(int stream);
@@ -710,7 +710,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                 if (!pObject->mUnknown381) {
                     if (pNode->mId != -1 && fn_801BE648(pObject->mUnknown428->mUnknown1300) == pObject->mUnknown196) {
                         pExtra->mUnknown1704 = pObject->mUnknown424;
-                        pExtra->mUnknown1705 = lbl_803EA4DC[(((fn_801CFE40(pObject->mUnknown352, pObject->mUnknown348) -
+                        pExtra->mUnknown1705 = lbl_803EA4DC[(((MathArcTan2(pObject->mUnknown352, pObject->mUnknown348) -
                                                                (pObject->mState.mUnknown24 + 0x400000)) &
                                                               0xFFFFFF) +
                                                              0x100000) >>
@@ -1254,11 +1254,15 @@ void BigObjHitStatic(BigObj_t *pItem, float *pPos, float *pDir, const char *pNam
     }
     pObject->mUnknown372 = strength;
     BigObjHit(pItem, pPos, pDir, pName, type, pHitter);
-    for (i = 0; i < 8 && ppLinked[i]; i++) {
-        if (pHitter) {
-            ppLinked[i]->mUnknown472->mUnknown372 = strength;
+    for (i = 0; i < 8; i++) {
+        if (ppLinked[i]) {
+            if (pHitter) {
+                ppLinked[i]->mUnknown472->mUnknown372 = strength;
+            }
+            BigObjHit(ppLinked[i], pPos, pDir, pName, type, pHitter);
+        } else {
+            break;
         }
-        BigObjHit(ppLinked[i], pPos, pDir, pName, type, pHitter);
     }
 }
 
@@ -1379,8 +1383,8 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
                 direction.mX = -pObject->mUnknown348;
                 direction.mY = -pObject->mUnknown352;
                 direction.mZ = -pObject->mUnknown356;
-                int angle = fn_801CFE40(direction.mZ, direction.mX);
-                int heading = fn_801CFE40(direction.mY, direction.mX);
+                int angle = MathArcTan2(direction.mZ, direction.mX);
+                int heading = MathArcTan2(direction.mY, direction.mX);
                 QuatFromEulerYZX(&rotation, angle, heading, 0);
                 position = pObject->mUnknown360;
             } else {
@@ -1494,16 +1498,17 @@ void DynObjChildSpawn(BigObjDesc_t *pDesc, int handle, int first)
     p->mUnknown20.mY = p->mRotation3C.mY;
     p->mUnknown20.mZ = p->mRotation3C.mZ;
     p->mUnknown20.mW = p->mRotation3C.mW;
-    p->mpOwner50 = 0;
     p->mAngle4C = (int)((pDesc->mUnknown132.mUnknown24 - 90.0f) * 46603.3789f);
+    p->mpOwner50 = 0;
     p->mpOwner50 = BigObjFindByKey(pDesc->mUnknown176, first);
     if (!p->mpOwner50) {
         p->mpObject54 = 0;
     } else {
         p->mpObject54 = p->mpOwner50->mUnknown472;
-        DynObjChild *pLast = (DynObjChild *)p->mpOwner50->mUnknown480;
-        if (!pLast) p->mpOwner50->mUnknown480 = (int)p;
+        DynObjChild *pFirst = (DynObjChild *)p->mpOwner50->mUnknown480;
+        if (!pFirst) p->mpOwner50->mUnknown480 = (int)p;
         else {
+            DynObjChild *pLast = pFirst;
             while (pLast->mpUnknown5C) pLast = pLast->mpUnknown5C;
             pLast->mpUnknown5C = p;
         }
@@ -1535,9 +1540,9 @@ int ObjParseOpen(void *pData, char *pName)
     if (index == -1) {
         strcpy(lbl_803EA4F8[lbl_803EC7D4].mName, pName);
         void *p = ResLoadToBuffer(pData, id, lbl_803EC7DC);
-        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
         lbl_803EA4F8[lbl_803EC7D4].mpData = p;
-        lbl_803EC7DC += ResGetSize(pData, id) + 4;
+        lbl_803EA4F8[lbl_803EC7D4].mpCursor = p;
+        lbl_803EC7DC = lbl_803EC7DC + ResGetSize(pData, id) + 4;
         lbl_803EA4F8[lbl_803EC7D4].mId = id;
         index = lbl_803EC7D4++;
     } else lbl_803EA4F8[index].mpCursor = lbl_803EA4F8[index].mpData;
@@ -1719,7 +1724,7 @@ void DynObjParseRender(void *pData, int handle, BigObj_t *pObject)
         ObjParseGetString(handle, "tideRef", name, 128);
         p->mUnknownF4 = ResFindIndexByName((int)pData, name);
         DynObjLoadAnimPal(pData, p);
-    } else { p->mFlagF0 = 0; p->mUnknownF8 = 0; }
+    } else { p->mUnknownF8 = 0; p->mFlagF0 = 0; }
 }
 }
 
@@ -1997,7 +2002,7 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
                 p->mMotion.mPos.mY = p->mMotion.mUnknown12.mY;
             else p->mMotion.mPos.mY += direction.mY * distance;
         }
-        int angle = fn_801CFE40(direction.mY, direction.mX);
+        int angle = MathArcTan2(direction.mY, direction.mX);
         int facing = (angle + 0x800000) & 0xFFFFFF;
         if (code != 0xB5 && code != 0xBA && code != 0xC5 && code != 0xC3 && code != 0xC4 &&
             code != 0xD2 && code != 0xE0 && code != 0xE5 && code != 0xE4 && code != 0xE6 && code != 0xED) {
@@ -2574,8 +2579,9 @@ void PhysUpdatePlayers(void)
                 angles.mUnknown8 += 0x800000;
                 QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
             } else QuatFromEuler(&rotation, angles.mUnknown8, angles.mUnknown4, angles.mUnknown0);
+            Vec3_801DE1E0 *pPos = &pBody->mPosition;
             GetBodyOrientation(pBody, &oldRotation);
-            Vec3Sub(&direction, &a, &pBody->mPosition);
+            Vec3Sub(&direction, &a, pPos);
             float length = Vec3Magnitude(&direction);
             if (!(length <= 0.5f)) Vec3Scale(&direction, &direction, 0.06f / length);
             Vec3Scale(&direction, &direction, 60.0f);

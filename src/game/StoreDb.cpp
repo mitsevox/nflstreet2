@@ -1,10 +1,14 @@
+/* The store's item database: looks up the gear, decal, logo, hair and tattoo items of a store
+   category with their names and prices, counts and walks the ones the user has unlocked, reads and
+   clears their lock and new flags in the user's profile, and creates or deletes the store's own
+   team. */
 #include "game/DbCursor.h"
 #include "game/DbQueryTable.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
 #include "game/TDbCompilePerformOp.h"
 
-struct Descriptor_80086CE8 {
+struct StoreCategory_t {
     unsigned int mTable;
     unsigned int mIdColumn;
     unsigned int mNameColumn;
@@ -14,10 +18,10 @@ struct Descriptor_80086CE8 {
     unsigned int mProfileTable;
     unsigned int mLockedColumn;
     int mLockedValue;
-    unsigned int mFlagColumn36;
+    unsigned int mNewColumn;
 };
 
-struct Sort_80086D0C {
+struct StoreSortKey_t {
     void Set(int table, int column, int mode)
     {
         mColumn = column;
@@ -39,7 +43,7 @@ struct Sort_80086D0C {
 };
 
 extern "C" {
-int fn_80087BA0(int index);
+int StoreGetTattooLocation(int index);
 int TDbTblDestroy(int handle, int table);
 void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int flags);
 int TDbTblFindUnusedId(int handle, int *pTable);
@@ -53,25 +57,25 @@ int DbUserGetDb(int handle);
 int DbUserGetCurrent(void);
 }
 
-static int sTeamColumns[16] = {
+static int _StoreDb_aTeamColumns[16] = {
     0x44494754, 0x44494F54, 0x50595454, 0x44524F54,
     0x45445254, 0x464F5254, 0x564F5254, 0x4C474C54,
     0x49524454, 0x31434D54, 0x32434D54, 0x33434D54,
     0x4C445443, 0x414E5354, 0x414E4C54, 0x414E4454
 };
-static const char *sTeamNames[3] = { "STO", "Store Team", "Store Team" };
-static const int sTeamDefaults[13] = { 0, 0, 5, 0, 0, 0, 0, 132, 0, 49, 42, 126, 1 };
-static const Descriptor_80086CE8 sDescriptors[5] = {
+static const char *_StoreDb_apszTeamNames[3] = { "STO", "Store Team", "Store Team" };
+static const int _StoreDb_aTeamDefaults[13] = { 0, 0, 5, 0, 0, 0, 0, 132, 0, 49, 42, 126, 1 };
+static const StoreCategory_t _StoreDb_aCategories[5] = {
     { 0x52414547, 0x594B5047, 0x4D4E5247, 32, 0x43525047, 0x594B5047, 0x5245474C, 0x4B434C47, 1, 0x574E5247 },
     { 0x4C414344, 0x494C4344, 0x4E4C4344, 21, 0x504C4344, 0x494C4344, 0x4C43444C, 0x4C4C4344, 1, 0x574E5247 },
     { 0x4F474F4C, 0x4C474C54, 0x4D4E474C, 21, 0x50474F4C, 0x524F474C, 0x474C4B4C, 0x4B4C474C, 1, 0x574E5247 },
     { 0x52494148, 0x52414850, 0x4D4E5248, 26, 0x43525048, 0x524F5248, 0x4B434C48, 0x4B434C48, 1, 0x574E5247 },
     { 0x4F544154, 0x49544154, 0x4E544154, 21, 0x43525054, 0x524F5454, 0x4B434C54, 0x4B434C54, 1, 0x574E5247 }
 };
-static const signed char sDescriptorIndex[22] = {
+static const signed char _StoreDb_aCategoryIndex[22] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 3, 4, 4, 4
 };
-static unsigned char sActive = 0;
+static unsigned char _StoreDb_bOpen = 0;
 
 static inline unsigned long long MakeColumnKey(unsigned int table, unsigned int column)
 {
@@ -80,7 +84,7 @@ static inline unsigned long long MakeColumnKey(unsigned int table, unsigned int 
 
 extern "C" {
 
-void fn_80086C10(int team)
+void StoreTeamAddPlayer(int team)
 {
     QueryResult result;
     unsigned short count = 1;
@@ -96,12 +100,12 @@ void fn_80086C10(int team)
     TDbTblDestroy(0x54415453, table);
 }
 
-const Descriptor_80086CE8 *fn_80086CE8(int index)
+const StoreCategory_t *StoreGetCategory(int index)
 {
-    return &sDescriptors[sDescriptorIndex[index]];
+    return &_StoreDb_aCategories[_StoreDb_aCategoryIndex[index]];
 }
 
-int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
+int StoreGetItem(int index, int id, int byRow, int *pId, int *pPrice,
                 char *pName, int nameSize)
 {
     DbQueryTable tables[2];
@@ -109,10 +113,10 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     DbFilter both;
     DbFilter categoryFilter;
     DbColumnValue columns[4];
-    Sort_80086D0C sort[2];
+    StoreSortKey_t sort[2];
     QueryResult queryResult;
     int cursor;
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int result = 0;
     char *pBuffer = 0;
     DbFilter *pFilter = &priceFilter;
@@ -140,7 +144,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
             both.Set(11, &priceFilter, &categoryFilter);
             categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x49525453), 3, index);
         } else if (pDescriptor->mTable == 0x4F544154) {
-            int category = fn_80087BA0(index);
+            int category = StoreGetTattooLocation(index);
             pFilter = &both;
             both.Set(11, &priceFilter, &categoryFilter);
             categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x4C544154), 3, category);
@@ -183,7 +187,7 @@ int fn_80086D0C(int index, int id, int byRow, int *pId, int *pPrice,
     return result;
 }
 
-static int StoreGetStringById(int id, char *pName, int nameSize)
+static int _StoreGetStringById(int id, char *pName, int nameSize)
 {
     char name[36];
     int result = 0;
@@ -194,13 +198,13 @@ static int StoreGetStringById(int id, char *pName, int nameSize)
     return result;
 }
 
-int fn_80087128(int index)
+int StoreCountItems(int index)
 {
     DbFilter priceFilter;
     DbFilter both;
     DbFilter categoryFilter;
     unsigned short count;
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int result = 0;
     DbFilter *pFilter = &priceFilter;
     priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
@@ -210,7 +214,7 @@ int fn_80087128(int index)
         both.Set(11, &priceFilter, &categoryFilter);
         categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x49525453), 3, index);
     } else if (pDescriptor->mTable == 0x4F544154) {
-        int category = fn_80087BA0(index);
+        int category = StoreGetTattooLocation(index);
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);
         categoryFilter.Set(6, MakeColumnKey(pDescriptor->mTable, 0x4C544154), 3, category);
@@ -221,29 +225,29 @@ int fn_80087128(int index)
     return result;
 }
 
-int fn_800872E8(int index)
+int StoreGetItemCount(int index)
 {
     int result;
-    if (!sActive) result = 0;
-    else result = fn_80087128(index);
+    if (!_StoreDb_bOpen) result = 0;
+    else result = StoreCountItems(index);
     return result;
 }
 
-int fn_8008731C(int index, int id, int *pId, int *pPrice, char *pName, int nameSize)
+int StoreGetItemByRow(int index, int id, int *pId, int *pPrice, char *pName, int nameSize)
 {
     int result;
-    if (!sActive) result = 0;
-    else result = fn_80086D0C(index, id, 1, pId, pPrice, pName, nameSize);
+    if (!_StoreDb_bOpen) result = 0;
+    else result = StoreGetItem(index, id, 1, pId, pPrice, pName, nameSize);
     return result;
 }
 
-int fn_8008736C(int index, int id)
+int StoreIsItemLocked(int index, int id)
 {
     int count;
     int result = 1;
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int db = DbUserGetDb(DbUserGetCurrent());
-    int category = fn_80087BA0(index);
+    int category = StoreGetTattooLocation(index);
     int status;
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
@@ -258,20 +262,20 @@ int fn_8008736C(int index, int id)
     return result;
 }
 
-int fn_80087460(int index, int id)
+int StoreIsItemNew(int index, int id)
 {
     int count;
     int result = 1;
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int db = DbUserGetDb(DbUserGetCurrent());
-    int category = fn_80087BA0(index);
+    int category = StoreGetTattooLocation(index);
     int status;
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
-                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1, 0x4C544154, category);
     } else {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
-                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mFlagColumn36, 1);
+                pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1);
     }
     if (status == 0) {
         if (count == 0) result = 0;
@@ -279,83 +283,83 @@ int fn_80087460(int index, int id)
     return result;
 }
 
-void fn_8008754C(int index, int id)
+void StoreClearItemNew(int index, int id)
 {
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int db = DbUserGetDb(DbUserGetCurrent());
-    int category = fn_80087BA0(index);
+    int category = StoreGetTattooLocation(index);
     if (category != 3) {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
+                pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id);
     }
 }
 
-void fn_80087600(int index, int id)
+void StoreUnlockItem(int index, int id)
 {
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int db = DbUserGetDb(DbUserGetCurrent());
-    int category = fn_80087BA0(index);
+    int category = StoreGetTattooLocation(index);
     if (category != 3) {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id, 0x4C544154, category);
+                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
     } else {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mFlagColumn36, pDescriptor->mIdColumn, id);
+                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id);
     }
 }
 
-int fn_800876C0(void)
+int StoreClose(void)
 {
-    if (sActive) {
+    if (_StoreDb_bOpen) {
         DbFileTblDestroy(0, 0x4D4E5453);
-        sActive = 0;
+        _StoreDb_bOpen = 0;
     }
     return 1;
 }
 
-int fn_80087704(void)
+int StoreOpen(void)
 {
     int result = 1;
     if (DbFileTblLoad(0, 0x4D4E5453) == 0) {
-        sActive = 1;
+        _StoreDb_bOpen = 1;
     } else {
-        sActive = 0;
+        _StoreDb_bOpen = 0;
         result = 0;
     }
     return result;
 }
 
-int fn_8008775C(void)
+int StoreTeamCreate(void)
 {
     DbColumnValue columns[17];
     unsigned short count = 1;
     int team;
     fn_8022C628(0x54415453, 0x4D414554, &team, &count);
     for (int i = 0; i < 13; i++) {
-        columns[i].Set(0x4D414554, sTeamColumns[i], sTeamDefaults[i]);
+        columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i], _StoreDb_aTeamDefaults[i]);
     }
     for (int i = 0; i < 3; i++) {
-        columns[i + 13].Set(0x4D414554, sTeamColumns[i + 13], (int)sTeamNames[i]);
+        columns[i + 13].Set(0x4D414554, _StoreDb_aTeamColumns[i + 13], (int)_StoreDb_apszTeamNames[i]);
     }
     columns[0].mValue = team;
     columns[16].SetEnd();
     TDbInsertRow(0x54415453, 0x4D414554, columns, 0, 0);
-    fn_80086C10(team);
+    StoreTeamAddPlayer(team);
     return team;
 }
 
-void fn_80087880(int team)
+void StoreTeamDelete(int team)
 {
     TDbCompilePerformOp(0, "use 'TATS' delete from 'YALP' where 'DIGT' = \x82\n", team);
     TDbCompilePerformOp(0, "use 'TATS' delete from 'MAET' where 'DIGT' = \x85\n", team);
 }
 
-int fn_800878D8(int index, DbCursor *pCursor, int row)
+int StoreGetRowItemId(int index, DbCursor *pCursor, int row)
 {
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int id = -1;
     if (DbCursorSeek(pCursor, row)) {
         id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
@@ -363,14 +367,14 @@ int fn_800878D8(int index, DbCursor *pCursor, int row)
     return id;
 }
 
-int fn_80087938(int index, DbCursor *pCursor, int ordinal, int *pRow)
+int StoreFindUnlockedRow(int index, DbCursor *pCursor, int ordinal, int *pRow)
 {
     int result = 0;
     int row = 0;
     int available = 0;
     for (; DbCursorSeek(pCursor, row); row++) {
-        int id = fn_800878D8(index, pCursor, row);
-        if (!fn_8008736C(index, id)) {
+        int id = StoreGetRowItemId(index, pCursor, row);
+        if (!StoreIsItemLocked(index, id)) {
             if (available == ordinal) {
                 if (pRow) {
                     *pRow = row;
@@ -384,27 +388,27 @@ int fn_80087938(int index, DbCursor *pCursor, int ordinal, int *pRow)
     return result;
 }
 
-int fn_800879E8(int index, DbCursor *pCursor)
+int StoreIsRowItemNew(int index, DbCursor *pCursor)
 {
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
-    return fn_80087460(index, id);
+    return StoreIsItemNew(index, id);
 }
 
-void fn_80087A30(int index, DbCursor *pCursor)
+void StoreClearRowItemNew(int index, DbCursor *pCursor)
 {
-    const Descriptor_80086CE8 *pDescriptor = fn_80086CE8(index);
+    const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int id = DbCursorGetInt(pCursor, pDescriptor->mIdColumn);
-    fn_8008754C(index, id);
+    StoreClearItemNew(index, id);
 }
 
-int fn_80087A78(int index, DbCursor *pCursor, int id, int *pOrdinal)
+int StoreGetUnlockedOrdinal(int index, DbCursor *pCursor, int id, int *pOrdinal)
 {
     int result = 0;
     int ordinal = 0;
     int row;
-    for (; fn_80087938(index, pCursor, ordinal, &row); ordinal++) {
-        if (fn_800878D8(index, pCursor, row) == id) {
+    for (; StoreFindUnlockedRow(index, pCursor, ordinal, &row); ordinal++) {
+        if (StoreGetRowItemId(index, pCursor, row) == id) {
             *pOrdinal = ordinal;
             result = 1;
             break;
@@ -413,17 +417,17 @@ int fn_80087A78(int index, DbCursor *pCursor, int id, int *pOrdinal)
     return result;
 }
 
-int fn_80087B00(int index, DbCursor *pCursor)
+int StoreCountUnlocked(int index, DbCursor *pCursor)
 {
     int count = 0;
     int row;
-    while (fn_80087938(index, pCursor, count, &row)) {
+    while (StoreFindUnlockedRow(index, pCursor, count, &row)) {
         count++;
     }
     return count;
 }
 
-int fn_80087B5C(int type)
+int StoreTattooLocationToKind(int type)
 {
     int index = 31;
     switch (type) {
@@ -440,7 +444,7 @@ int fn_80087B5C(int type)
     return index;
 }
 
-int fn_80087BA0(int index)
+int StoreGetTattooLocation(int index)
 {
     int type = 3;
     switch (index) {

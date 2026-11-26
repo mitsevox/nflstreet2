@@ -623,7 +623,7 @@ extern "C" int PlayerActionIsShallowPath(Object_80039F5C *p)
     Block_800E11C0 *pBlock = p->mpUnknown3092->mpUnknown32;
     float distance = Vec2Distance(&pBlock->mUnknown32, &pBlock->mUnknown16);
     if (distance > 0.0f) {
-        result = fn_801CFE08(fabsf(pBlock->mUnknown32.mZ - pBlock->mUnknown16.mZ) / distance) <= 0x155555;
+        result = MathArcTan(fabsf(pBlock->mUnknown32.mZ - pBlock->mUnknown16.mZ) / distance) <= 0x155555;
     }
     return result;
 }
@@ -1042,7 +1042,7 @@ extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, Point_8017886C *pOu
         if (pOther) {
             Point_8017886C delta;
             Vec2Sub(&delta, &p->mMotion, &pOther->mMotion);
-            fn_801CFE40(delta.mY, delta.mX);
+            MathArcTan2(delta.mY, delta.mX);
             switch (p->mUnknown2914) {
             case 17:
             case 18:

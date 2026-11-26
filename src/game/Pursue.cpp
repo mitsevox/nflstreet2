@@ -76,8 +76,8 @@ int fn_801787A0(void);
 float fn_80178A08(void);
 float fn_80178A2C(void);
 float fn_80178A5C(void);
-float fn_801CFB94(int angle);
-int fn_801CFE40(float y, float x);
+float MathCos(int angle);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 float Vec2MagnitudeSqr(void *pV);
 void Vec2FromAngle(Vec2_t *pOut, int angle, float length);
@@ -90,9 +90,9 @@ extern "C" {
 int BallStateGet(Ball_t *ball, int *pOut);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 float Vec2Magnitude(void *p);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
-float fn_801CFB94(int angle);
+float MathCos(int angle);
 int fn_801787A0(void);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
@@ -199,9 +199,9 @@ extern "C" int PursueShouldPlayBall(Object_80039F5C *p)
             BallGetPosition(ball, &position);
             Vec2Sub(ballDelta, &position, &other->mMotion.mPos);
             Vec2Sub(playerDelta, &p->mMotion.mPos, &other->mMotion.mPos);
-            int ballAngle = fn_801CFE40(ballDelta[1], ballDelta[0]);
+            int ballAngle = MathArcTan2(ballDelta[1], ballDelta[0]);
             float ballDistance = Vec2Magnitude(ballDelta);
-            int playerAngle = fn_801CFE40(playerDelta[1], playerDelta[0]);
+            int playerAngle = MathArcTan2(playerDelta[1], playerDelta[0]);
             float playerDistance = Vec2Distance(&p->mMotion.mPos, &position);
             short rating = p->mRatings[5] >= p->mRatings[8] ? p->mRatings[5] : p->mRatings[8];
             unsigned int threshold = rating;
@@ -237,7 +237,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
     Block_8011E240 *block = &p->mBlock1032;
     float delta[2];
     Vec2Sub(delta, &position, &motion->mPos);
-    int heading = fn_801CFE40(delta[1], delta[0]);
+    int heading = MathArcTan2(delta[1], delta[0]);
     PursueState_t *state = (PursueState_t *)&p->mUnknown336;
     if (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
         state->mUnknown13 = 0;
@@ -311,27 +311,27 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
             position.mZ = 6.0f;
             Object_80039F5C *target = PlyrGet(other->mIdBytes[2], record->mUnknownAByte);
             Vec2Sub(offset, &target->mMotion.mPos, &other->mMotion.mPos);
-            ballAngle = fn_801CFE40(offset[1], offset[0]);
+            ballAngle = MathArcTan2(offset[1], offset[0]);
         } else {
             BallGetPosition(ball, &position);
             Vector_80039F5C velocity;
             BallGetVelocity(ball, &velocity);
-            ballAngle = fn_801CFE40(velocity.mY, velocity.mX);
+            ballAngle = MathArcTan2(velocity.mY, velocity.mX);
         }
         if (!(position.mZ >= 7.0f) && !(position.mZ <= 1.5f) &&
             !(position.mY >= fn_80177FE0().mY + 2.0f)) {
             if (block->mUnknown0 != 4 && motion->mPos.mY >= fn_80177FE0().mY) return;
             Vec2Sub(offset, &position, &motion->mPos);
-            if (MathAngleDiff(ballAngle, fn_801CFE40(offset[1], offset[0])) > 0x78E38E) {
+            if (MathAngleDiff(ballAngle, MathArcTan2(offset[1], offset[0])) > 0x78E38E) {
                 int facing = motion->mFacing;
-                if (MathAngleDiff(facing, fn_801CFE40(offset[1], offset[0])) <= 0x3FFFFF &&
+                if (MathAngleDiff(facing, MathArcTan2(offset[1], offset[0])) <= 0x3FFFFF &&
                     !(Vec2Magnitude(offset) >= 6.0f) && SyncRandGetRange(0, 100) <= 49) fn_800F2C1C(p, 0);
             }
         }
     } else if (block->mUnknown0 == 4 && other) {
         reference = fn_8009BCE8(&block->mUnknown4);
         Vec2Sub(delta, &reference->mMotion.mPos, &motion->mPos);
-        int angle = MathAngleDiff(heading, fn_801CFE40(delta[1], delta[0]));
+        int angle = MathAngleDiff(heading, MathArcTan2(delta[1], delta[0]));
         if (angle > 0x471C72) {
             int mode = ((state->mUnknown8 - motion->mFacing) & 0xFFFFFF) > 0x800000;
             if (angle <= 0x5FFFFF) PlyrEngageTryShed(p, mode);
@@ -365,9 +365,9 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
         target.mX = (other->mMotion.mPos.mX + reference->mMotion.mPos.mX) * 0.5f;
         target.mY = (other->mMotion.mPos.mY + reference->mMotion.mPos.mY) * 0.5f;
         Vec2Sub(delta, &other->mMotion.mPos, &motion->mPos);
-        a = fn_801CFE40(delta[1], delta[0]);
+        a = MathArcTan2(delta[1], delta[0]);
         Vec2Sub(delta, &reference->mMotion.mPos, &motion->mPos);
-        b = fn_801CFE40(delta[1], delta[0]);
+        b = MathArcTan2(delta[1], delta[0]);
         int span = (a - b) & 0xFFFFFF;
         if ((span <= 0x7FFFFF && ((state->mUnknown8 - b) & 0xFFFFFF) <= 0x7FFFFF) ||
             (span > 0x800000 && ((state->mUnknown8 - b) & 0xFFFFFF) > 0x800000)) {
@@ -381,7 +381,7 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
         target.mY += other->mMotion.mUnknown44 * 15.0f;
     }
     Vec2Sub(delta, &target, &motion->mPos);
-    int heading = fn_801CFE40(delta[1], delta[0]);
+    int heading = MathArcTan2(delta[1], delta[0]);
     float weight = distance * 0.4f;
     if (!(weight <= 1.0f)) weight = 1.0f;
     BallGetCurrentHolder();
@@ -401,7 +401,7 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
         }
         int difference = MathAngleDiff(state->mUnknown8 + step, motion->mFacing);
         if (difference > 0x11C71C) {
-            float scale = fn_801CFB94(difference / 2);
+            float scale = MathCos(difference / 2);
             state->mUnknown16 = 0;
             state->mUnknown0 = scale * 0.72f;
         } else if (!(distance >= 2.1f) && MathAngleDiff(heading, motion->mFacing) <= 0x1FFFFF) {
@@ -420,7 +420,7 @@ extern "C" void PursueCloseOnTarget(Object_80039F5C *p, PursueState_t *pState, f
         int angle;
 
         Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
-        angle = fn_801CFE40(delta.mY, delta.mX);
+        angle = MathArcTan2(delta.mY, delta.mX);
         if (MathAngleDiff(angle, pOther->mMotion.mUnknown32) <= 0x1FFFFF) {
             float scale;
 
@@ -461,7 +461,7 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     int turn;
 
     Vec2Sub(&delta, &pos, pMotion);
-    target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
     diff = MathAngleDiff(angle, target);
     if (pMotion->mPos.mY < pos.mY || distance > 5.5f
         || (pOther != 0 && (pOther->mUnknown528.mUnknown15 == 1 || pOther->mUnknown528.mUnknown15 == 5))) {
@@ -515,7 +515,7 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     }
     if (pOther != 0 && pMotion->mPos.mY < pos.mY && MathAngleDiff(angle2, 0xC00000) <= 0x271C70) {
         Vec2Sub(&delta, &pos, pMotion);
-        target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         diff = MathAngleDiff(angle, target);
         if (((angle - target) & 0xFFFFFF) > 0x800000) {
             angle = (angle + diff / 2) & 0xFFFFFF;
@@ -562,7 +562,7 @@ extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, Pur
             int diff;
 
             Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
-            target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+            target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
             diff = MathAngleDiff(angle, target);
             if (((angle - target) & 0xFFFFFF) > 0x800000) {
                 angle = (angle + diff / 2) & 0xFFFFFF;
@@ -583,7 +583,7 @@ extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, Pur
             }
             if (MathAngleDiff(pOther->mMotion.mUnknown32, 0xC00000) <= 0x1FFFFF) {
                 Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
-                angle = fn_801CFE40(delta.mY, delta.mX);
+                angle = MathArcTan2(delta.mY, delta.mX);
                 pState->mUnknown16 = 0;
             }
         }
@@ -609,7 +609,7 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         }
         Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
         turn = 0;
-        target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         if (distance > 3.0f) {
             if (pMotion->mPos.mY < fn_80177FE0().mY + 2.0f) {
                 if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
@@ -693,7 +693,7 @@ extern "C" int PursueSteerKind4(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         int diff;
 
         Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
-        target = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+        target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         diff = MathAngleDiff(angle, target);
         if (((angle - target) & 0xFFFFFF) > 0x800000) {
             angle = (angle + diff / 2) & 0xFFFFFF;
@@ -740,7 +740,7 @@ extern "C" int PursueSteerKind6(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         }
         target.mY = pMotion->mPos.mY - 10.0f;
         Vec2Sub(&dir, &target, pMotion);
-        angle = fn_801CFE40(dir.mY, dir.mX);
+        angle = MathArcTan2(dir.mY, dir.mX);
         pState->mUnknown16 = 1;
     }
     return angle;
@@ -757,9 +757,9 @@ extern "C" void PursueAdjustHeading(Object_80039F5C *p, PursueState_t *pState, O
         && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 1.0f) {
         Vec2Sub(&delta, &pos, pMotion);
         if (p->mMotion.mPos.mX > 0.0f) {
-            *pAngle -= MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
+            *pAngle -= MathAngleDiff(MathArcTan2(delta.mY, delta.mX), *pAngle) / 4;
         } else {
-            *pAngle += MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), *pAngle) / 4;
+            *pAngle += MathAngleDiff(MathArcTan2(delta.mY, delta.mX), *pAngle) / 4;
         }
     }
     if (pOther != 0) {
@@ -779,7 +779,7 @@ extern "C" void PursueAdjustHeading(Object_80039F5C *p, PursueState_t *pState, O
             int diff;
 
             Vec2Sub(&delta, &pos, pMotion);
-            angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+            angle = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
             diff = MathAngleDiff(*pAngle, angle);
             if (((*pAngle - angle) & 0xFFFFFF) > 0x800000) {
                 *pAngle = (*pAngle + diff / 2) & 0xFFFFFF;
@@ -837,13 +837,13 @@ extern "C" int PursueIsInCarrierWindow(Object_80039F5C *p, Object_80039F5C *pOth
             float distance;
 
             Vec2Sub(&delta, &p->mMotion.mPos, &pCarrier->mMotion.mPos);
-            angle = fn_801CFE40(delta.mY, delta.mX);
+            angle = MathArcTan2(delta.mY, delta.mX);
             if (MathAngleDiff(pCarrier->mMotion.mUnknown32, 0) <= 0x3FFFFF) {
-                low = (int)(low - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
-                high = (int)(high - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                low = (int)(low - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * MathCos(pCarrier->mMotion.mUnknown32));
+                high = (int)(high - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * MathCos(pCarrier->mMotion.mUnknown32));
             } else {
-                low = (int)(low - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
-                high = (int)(high - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * fn_801CFB94(pCarrier->mMotion.mUnknown32));
+                low = (int)(low - (int)(_Pursue_fWindowSkewFarDeg * 46603.38f) * MathCos(pCarrier->mMotion.mUnknown32));
+                high = (int)(high - (int)(_Pursue_fWindowSkewNearDeg * 46603.38f) * MathCos(pCarrier->mMotion.mUnknown32));
             }
             distance = Vec2MagnitudeSqr(&delta);
             if (angle >= low - widen && angle <= high + widen && distance >= _Pursue_sWindowMinDist - reach
@@ -883,14 +883,14 @@ extern "C" void PursueUpdateSpeed(Object_80039F5C *p, PursueState_t *pState, Obj
     if (diff > 0x177777) {
         if (pOther != 0 && !(pOther->mFlags & 0x200000) && PlayerActionAnimIsPassReady(pOther) == 0) {
             if (distance < 4.0f) {
-                pState->mUnknown0 = fn_801CFB94(diff / 2) * 0.4f;
+                pState->mUnknown0 = MathCos(diff / 2) * 0.4f;
             } else if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
                 float scale = 0.4f;
-                scale += fn_801CFB94(MathAngleDiff(pMotion->mFacing, angle2) / 2) * (0.72f - 0.4f);
-                pState->mUnknown0 = scale * fn_801CFB94(diff / 2);
+                scale += MathCos(MathAngleDiff(pMotion->mFacing, angle2) / 2) * (0.72f - 0.4f);
+                pState->mUnknown0 = scale * MathCos(diff / 2);
             }
         } else {
-            pState->mUnknown0 = fn_801CFB94(diff / 2) * 0.72f;
+            pState->mUnknown0 = MathCos(diff / 2) * 0.72f;
         }
         pState->mUnknown16 = 0;
     }
@@ -898,7 +898,7 @@ extern "C" void PursueUpdateSpeed(Object_80039F5C *p, PursueState_t *pState, Obj
         && pMotion->mPos.mY > pOther->mMotion.mPos.mY
         && MathAngleDiff(pOther->mMotion.mFacing, 0xC00000) <= 0x3C71C6) {
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
-        if (MathAngleDiff(pMotion->mUnknown32, fn_801CFE40(delta.mY, delta.mX)) > 0x200000
+        if (MathAngleDiff(pMotion->mUnknown32, MathArcTan2(delta.mY, delta.mX)) > 0x200000
             && MathAngleDiff(pMotion->mUnknown32, pOther->mpState->mUnknown2 == 1 ? 0x800000 : 0) > 0x400000) {
             if (pState->mUnknown0 > 0.72f) {
                 pState->mUnknown0 = 0.4f;
@@ -1012,12 +1012,12 @@ extern "C" void PursueTryBlockReaction(Object_80039F5C *p, Object_80039F5C *pOth
     }
     if (SyncRandGetRange(0, 100) < 75) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
-        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
+        if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             fn_80111354(p);
         }
     } else if (SyncRandGetRange(0, 100) < 50) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
-        if (MathAngleDiff(fn_801CFE40(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
+        if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
             PlyrContactSendPush(p, pTarget);
         }
     }
@@ -1086,7 +1086,7 @@ extern "C" void PursueAimAtTarget(Object_80039F5C *p, Object_80039F5C *pOther, f
     pMotion = &p->mMotion;
     flag = 0;
     Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
-    angle = fn_801CFE40(delta.mY, delta.mX) & 0xFFFFFF;
+    angle = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
     if (MathAngleDiff(angle, pMotion->mFacing) > 0x51C71B && distance >= 1.0f) {
         return;
     }
@@ -1136,7 +1136,7 @@ extern "C" int PursueClipHeading(Object_800B26B0 *pMotion, int angle, Vector_800
                     dir.mX = CLAMP(dir.mX, _Pursue_fSidelineMargin - fn_80178A08(), fn_80178A08() - _Pursue_fSidelineMargin);
                     dir.mY = target.mY;
                     Vec2Sub(&dir, &dir, pMotion);
-                    angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
+                    angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
                 }
             }
             if (target.mY < fn_80178A2C() && BallGetCurrentHolder() != 0) {
@@ -1150,7 +1150,7 @@ extern "C" int PursueClipHeading(Object_800B26B0 *pMotion, int angle, Vector_800
                         dir.mX = target.mX;
                         dir.mY = fn_80178A2C();
                         Vec2Sub(&dir, &dir, pMotion);
-                        angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
+                        angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
                     }
                 }
             }
@@ -1165,7 +1165,7 @@ extern "C" int PursueClipHeading(Object_800B26B0 *pMotion, int angle, Vector_800
             dir.mX = target.mX;
             dir.mY = fn_80178A2C();
             Vec2Sub(&dir, &dir, pMotion);
-            angle = fn_801CFE40(dir.mY, dir.mX) & 0xFFFFFF;
+            angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
         }
     }
     return angle;
@@ -1183,7 +1183,7 @@ extern "C" void PursueLeadTarget(Object_800B26B0 *pMotion, Vector_80039F5C targe
     dx = fabsf(target.mX - pMotion->mPos.mX);
     if (pCarrier != 0 && _Pursue_bLeadTarget != 0 && PlayerMoveGetKind(pCarrier) == 0 && pMotion->mUnknown44 > 0.0f
         && dx > _Pursue_fLeadMinGap) {
-        int angle = MathAngleDiff(fn_801CFE40(dir.mY, dir.mX), 0x400000);
+        int angle = MathAngleDiff(MathArcTan2(dir.mY, dir.mX), 0x400000);
         float scale;
         float length;
 
@@ -1361,7 +1361,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             BallGetVelocity(pBall, &velocity);
         }
         speed = Vec3Magnitude(&velocity);
-        angle = fn_801CFE40(velocity.mY, velocity.mX);
+        angle = MathArcTan2(velocity.mY, velocity.mX);
         distance = Vec2Distance(pMotion, &pos);
     }
     pLookup = fn_8012078C();
@@ -1403,7 +1403,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             PursueLeadTarget(pMotion, pos, velocity, &dir);
             ok = 1;
             dirLength = Vec2Magnitude(&dir);
-            dirAngle = fn_801CFE40(dir.mY, dir.mX);
+            dirAngle = MathArcTan2(dir.mY, dir.mX);
             if (pOther != 0) {
                 if (fn_801486A0() == 2) {
                     if (dirLength < PlyrMoveGetRatedSpeed(pOther, 0.4f, 1.0f)) {
@@ -1419,7 +1419,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                 Vec2_t delta;
 
                 Vec2Sub(&delta, pMotion, &pOther->mMotion.mPos);
-                facing = (fn_801CFE40(delta.mY, delta.mX) - 0x800000) & 0xFFFFFF;
+                facing = (MathArcTan2(delta.mY, delta.mX) - 0x800000) & 0xFFFFFF;
             }
             PursueChooseHeading(p, pState, pLookup, facing, pos, distance, angle & 0xFFFFFF);
             PursueAvoidPlayers(p, pState, distance);

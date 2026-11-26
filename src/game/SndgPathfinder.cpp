@@ -559,7 +559,7 @@ void DSDelListNode(void *pool, void *item);
 void *DSNextListNode(void *pool, void *item);
 int DSSearchList(void *pool, int a, int key, void *pResult, int (*match)(SndgPathCallbackKey_t *, int, SndgPathCallbackKey_t **));
 void GlibVsync(int a);
-int fn_801CFE40(float y, float x);
+int MathArcTan2(float y, float x);
 unsigned int fn_801D27F4(int a);
 int MemFill(void *p, int size, int value, int align);
 int ResGetSize(void *a, int b);
@@ -2180,7 +2180,7 @@ extern "C" void SndgCalcPan(Vector_80039F5C *a, Vector_80039F5C *b, int angle, u
     int rot;
 
     Vec2Sub(&delta, b, a);
-    rot = (fn_801CFE40(delta.y, delta.x) - angle + 0x400000) & 0xFFFFFF;
+    rot = (MathArcTan2(delta.y, delta.x) - angle + 0x400000) & 0xFFFFFF;
     *pOut0 = -(((rot - 0x400000) & 0xFFFFFF) / 256);
 
     Vec3Sub(&dir, b, a);

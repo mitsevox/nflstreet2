@@ -5,9 +5,9 @@
 #include "game/Vec3Magnitude.h"
 #include "engine/llmatrix.h"
 
-float fn_801CFB18(int angle);
-float fn_801CFB94(int angle);
-int fn_801CFD78(float value);
+float MathSin(int angle);
+float MathCos(int angle);
+int MathArcCos(float value);
 
 void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
 {
@@ -88,11 +88,11 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         int theta;
         Vec3_801DE1E0 dir;
 
-        phi = fn_801CFD78(1.0f - 2.0f * fn_801DE1B8());
+        phi = MathArcCos(1.0f - 2.0f * fn_801DE1B8());
         theta = (int)(fn_801DE1B8() * 16777216.0f);
-        dir.x = fn_801CFB94(theta) * fn_801CFB18(phi);
-        dir.y = fn_801CFB18(theta) * fn_801CFB18(phi);
-        dir.z = fn_801CFB94(phi);
+        dir.x = MathCos(theta) * MathSin(phi);
+        dir.y = MathSin(theta) * MathSin(phi);
+        dir.z = MathCos(phi);
         pOut->x = dir.x;
         pOut->y = dir.y;
         pOut->z = dir.z;
@@ -110,11 +110,11 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         Vec3_801DE1E0 dir;
 
         pCase2 = &pObj->mEmitter.mCase2;
-        phi = (int)(pCase2->mUnknown0C * 3.7450704e-07f * (float)fn_801CFD78(1.0f - fn_801DE1B8()) * 2670176.8f);
+        phi = (int)(pCase2->mUnknown0C * 3.7450704e-07f * (float)MathArcCos(1.0f - fn_801DE1B8()) * 2670176.8f);
         theta = (int)(fn_801DE1B8() * 16777216.0f);
-        dir.x = fn_801CFB94(theta) * fn_801CFB18(phi);
-        dir.y = fn_801CFB18(theta) * fn_801CFB18(phi);
-        dir.z = fn_801CFB94(phi);
+        dir.x = MathCos(theta) * MathSin(phi);
+        dir.y = MathSin(theta) * MathSin(phi);
+        dir.z = MathCos(phi);
         pOut->x = dir.x;
         pOut->y = dir.y;
         pOut->z = dir.z;

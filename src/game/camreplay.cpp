@@ -100,8 +100,8 @@ int CamLerp(float *pValue, float *pVel, float target, float a, float b);
 void CamSetFieldOfView(CamReplayCamera_t *pCamera, float a, float b);
 int GlibGetLetterBoxMode(void);
 int GlibGetWidescreenMode(void);
-float fn_801CFB74(float x);
-int fn_801CFE40(float y, float x);
+float MathSinf(float x);
+int MathArcTan2(float y, float x);
 void Vec3ScaleLength(float *pOut, float *pIn, float scale);
 void Vec3RotateXYZ(float *pOut, float *pIn, int a0, int a1, int a2);
 void Vec3RotateZYX(float *pOut, float *pIn, int a0, int a1, int a2);
@@ -167,7 +167,7 @@ extern "C" void CamInterpUpdateSine(CamInterp_t *pInterp, int steps)
         if (pInterp->mValue != pInterp->mTarget) {
             pInterp->mTime += pInterp->mRate;
             if (pInterp->mTime < 1.0f) {
-                float ease = (fn_801CFB74(pInterp->mTime * 3.14159265f - 1.57079633f) + 1.0f) * 0.5f;
+                float ease = (MathSinf(pInterp->mTime * 3.14159265f - 1.57079633f) + 1.0f) * 0.5f;
                 pInterp->mValue = pInterp->mStart + (pInterp->mTarget - pInterp->mStart) * ease;
             } else {
                 pInterp->mValue = pInterp->mTarget;
@@ -209,9 +209,9 @@ extern "C" float CamCalcLookAngles(float *pFrom, float *pTo, int *pAngles)
     int pitch;
 
     Vec3Sub(v, pTo, pFrom);
-    yaw = -fn_801CFE40(v[1], v[0]) + 0x400000;
+    yaw = -MathArcTan2(v[1], v[0]) + 0x400000;
     Vec3RotateZYX(v, v, yaw, 0, 0);
-    pitch = -(fn_801CFE40(v[2], v[1]) + 0x400000);
+    pitch = -(MathArcTan2(v[2], v[1]) + 0x400000);
     Vec3RotateZYX(v, v, 0, 0, pitch);
     pAngles[1] = 0;
     pAngles[2] = yaw;
@@ -566,8 +566,8 @@ extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, floa
     lenFrom = Vec3Magnitude(from);
     len = t * Vec3Magnitude(to) + (1.0f - t) * lenFrom;
 
-    yawFrom = fn_801CFE40(from[1], from[0]) & 0xffffff;
-    yawTo = fn_801CFE40(to[1], to[0]) & 0xffffff;
+    yawFrom = MathArcTan2(from[1], from[0]) & 0xffffff;
+    yawTo = MathArcTan2(to[1], to[0]) & 0xffffff;
     if (pRecord->mUnknown1C.mUnknown3C == 1) {
         while (yawTo < yawFrom) {
             yawTo += 0x1000000;
@@ -579,8 +579,8 @@ extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, floa
     }
     yaw = (int)(t * yawTo + (1.0f - t) * yawFrom);
 
-    pitchFrom = fn_801CFE40(from[2], sqrtf(from[0] * from[0] + from[1] * from[1])) & 0xffffff;
-    pitchTo = fn_801CFE40(to[2], sqrtf(to[0] * to[0] + to[1] * to[1])) & 0xffffff;
+    pitchFrom = MathArcTan2(from[2], sqrtf(from[0] * from[0] + from[1] * from[1])) & 0xffffff;
+    pitchTo = MathArcTan2(to[2], sqrtf(to[0] * to[0] + to[1] * to[1])) & 0xffffff;
     pitch = (int)(t * pitchTo + (1.0f - t) * pitchFrom - pitchFrom);
 
     Vec3RotateXYZ(v, from, 0, 0, -yawFrom);
@@ -730,9 +730,9 @@ extern "C" float CamReplayCalcAngles(float *pFrom, float *pTo, int *pAngles)
     int yaw, pitch;
 
     Vec3Sub(d, pTo, pFrom);
-    yaw = -fn_801CFE40(d[1], d[0]) + 0x400000;
+    yaw = -MathArcTan2(d[1], d[0]) + 0x400000;
     Vec3RotateZYX(d, d, yaw, 0, 0);
-    pitch = -(fn_801CFE40(d[2], d[1]) + 0x400000);
+    pitch = -(MathArcTan2(d[2], d[1]) + 0x400000);
     Vec3RotateZYX(d, d, 0, 0, pitch);
     pAngles[1] = 0;
     pAngles[2] = yaw;
