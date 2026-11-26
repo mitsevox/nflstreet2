@@ -126,7 +126,7 @@ struct Score_801531C4 {
 class Record_8005CE10 {
 public:
     Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
-    virtual ~Record_8005CE10();
+    virtual ~Record_8005CE10() {}
     unsigned int mOrdinal;
     unsigned int mEvent;
     int mPlayer;
@@ -905,7 +905,7 @@ void CamGameSetModeAll(int a);
 void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
 void CamPlaySetYOffset(float value);
-void fn_8014D67C(void);
+void PlaceSixPlayerFormation(void);
 void PlyrStarSetShown(int a, int b);
 float fn_80178A44(void);
 void fn_801780A8(Point_8017886C pos);
@@ -931,7 +931,7 @@ void fn_801783D0(int bit, int on);
 void PossFumble(Object_80039F5C *p);
 void fn_8014D210(Object_80039F5C *p, int a, int b);
 void fn_80177C44(int value);
-void fn_8014D948(void *p);
+void RefreshSixPlayerScoreRows(void *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
 float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void PauseBlock(void);
@@ -3384,7 +3384,7 @@ void MiniGameCrushCarrierPreGameC::OnExit()
     CamGameSelectCamera(0);
     CamMainWarpToDest(CamGameGetCamera(5));
     CamPlaySetYOffset(2.5f);
-    fn_8014D67C();
+    PlaceSixPlayerFormation();
 }
 
 void MiniGameCrushCarrierPreGameC::OnUpdate(float dt)
@@ -3565,7 +3565,7 @@ void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
         }
     }
     MiniGameGetCurrent()->vfn_15();
-    fn_8014D948(this);
+    RefreshSixPlayerScoreRows(this);
     if (BallStateGet(BallGetCurrent(), 0) == 1 && !lbl_803EB2E0) {
         int time = fn_8009D990(1);
         lbl_803EB2E0 = BallGetCurrentHolder();
@@ -3639,7 +3639,7 @@ void MiniGameCrushCarrierPostPlayC::OnExit()
         fn_801488D4(PlyrGet(1, 0), mpUnknown4);
         if (mUnknown12) {
             PlyrMgrClearStates();
-            fn_8014D67C();
+            PlaceSixPlayerFormation();
             InGameOverlayShow();
         }
     } else {
