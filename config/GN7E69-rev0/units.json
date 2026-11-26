@@ -27991,18 +27991,12 @@
     {
       "source": "src/engine/cu_801BDA30.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801BDA30.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 18 of 21 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/cu_801BDA30.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BDA30",
-          "end": "0x801BDAC0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BDBD4",
           "end": "0x801BE068"
         },
         {
@@ -28027,10 +28021,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801BDAC0",
-            "evidence": "evidence.tsv source-form 0x801BDAC0-0x801BDBD4"
-          },
-          {
             "function": "fn_801BE068",
             "evidence": "evidence.tsv source-form 0x801BE068-0x801BE3C0"
           },
@@ -28039,7 +28029,7 @@
             "evidence": "evidence.tsv source-form 0x801BE420-0x801BE594"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_801BDA30.c holds out fn_801BDAC0, fn_801BE068, fn_801BE420."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_801BDA30.c holds out fn_801BE068, fn_801BE420."
       }
     },
     {
