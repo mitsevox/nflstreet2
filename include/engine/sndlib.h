@@ -71,6 +71,14 @@ public:
 
 struct MpegScaleFactorBandIndex_t;
 
+/* Count-1 (quadruple) codebook descriptor of src/engine/mpeghufftables.cpp: the codebook and
+   two halfwords whose use is not established (no retained code reads them). */
+struct MpegHuffCountTable_t {
+    const short *mpTable;
+    unsigned short mUnknown4;
+    unsigned short mUnknown6;
+};
+
 class CMpegLayer3Base : public CMpegBase {
 public:
     unsigned char mUnknown54[0x15C];
@@ -86,6 +94,9 @@ public:
     static const float sAntiAliasCoefficients[2][8];
     static const float sStereoFactors[6];
     static const float sImdctFactors[37];
+    static const short *const sHuffTables[32];
+    static const unsigned char sHuffTableLinearBits[32];
+    static const MpegHuffCountTable_t sHuffCountTables[2];
 };
 
 struct SndDrvMixChannel_t {
