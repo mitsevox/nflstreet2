@@ -15,8 +15,8 @@
    slot is free) and the edit state (0 in the playlist, 1 to remove, 2 to
    add, 3 free). */
 struct MsgEATraxEntry_t {
-    int mUnknown0;
-    int mUnknown4;
+    int mCategory;
+    int mRow;
     int mState;
 };
 
@@ -68,8 +68,8 @@ void MsgEATraxLoadPlaylist(void)
     unsigned char i;
 
     for (i = 0; i <= 20; i++) {
-        _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = -1;
-        _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 = -1;
+        _MsgEATrax_pPlaylist->mEntries[i].mCategory = -1;
+        _MsgEATrax_pPlaylist->mEntries[i].mRow = -1;
         _MsgEATrax_pPlaylist->mEntries[i].mState = 3;
     }
     PlaylistDbOpen(&cursor, 0);
@@ -83,11 +83,11 @@ void MsgEATraxLoadPlaylist(void)
             if (PlaylistDbGetIstx(&cursor) == 0) {
                 PlaylistDbGetStationId(&cursor);
                 PlaylistDbGetSongId(&cursor);
-                _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = 1;
-                _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 = 0;
+                _MsgEATrax_pPlaylist->mEntries[i].mCategory = 1;
+                _MsgEATrax_pPlaylist->mEntries[i].mRow = 0;
             } else {
-                _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = 0;
-                EATraxDbFindSong(&table, PlaylistDbGetSongId(&cursor), &_MsgEATrax_pPlaylist->mEntries[i].mUnknown4);
+                _MsgEATrax_pPlaylist->mEntries[i].mCategory = 0;
+                EATraxDbFindSong(&table, PlaylistDbGetSongId(&cursor), &_MsgEATrax_pPlaylist->mEntries[i].mRow);
             }
             i++;
             _MsgEATrax_pPlaylist->mCount--;
@@ -110,22 +110,22 @@ void MsgEATraxSavePlaylist(void)
         int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
         if (state == 1 || state == 2) {
-            int found;
+            int isEATrax;
             int value;
 
-            if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == 0) {
-                found = 1;
-                DbCursorSeek(&table, _MsgEATrax_pPlaylist->mEntries[i].mUnknown4);
+            if (_MsgEATrax_pPlaylist->mEntries[i].mCategory == 0) {
+                isEATrax = 1;
+                DbCursorSeek(&table, _MsgEATrax_pPlaylist->mEntries[i].mRow);
                 value = EATraxDbGetSongId(&table);
             } else {
-                found = 0;
+                isEATrax = 0;
                 value = 0;
             }
             if (_MsgEATrax_pPlaylist->mEntries[i].mState == 1) {
-                PlaylistDbFindEntry(&cursor, found, 0, value);
+                PlaylistDbFindEntry(&cursor, isEATrax, 0, value);
                 PlaylistDbDeleteRow(&cursor);
             } else {
-                PlaylistDbAddEntry(&cursor, found, 0, value);
+                PlaylistDbAddEntry(&cursor, isEATrax, 0, value);
             }
             changed = 1;
         }
@@ -177,7 +177,7 @@ int MsgEATraxGetSongInfo(int mode, int key, MenuText_t **ppTexts)
             EATraxDbGetAlbum(&table, ppTexts[2]->mpText, ppTexts[2]->mLength);
             EATraxDbGetSongId(&table);
             for (i = 0; i <= 20; i++) {
-                if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == mode && _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 == key) {
+                if (_MsgEATrax_pPlaylist->mEntries[i].mCategory == mode && _MsgEATrax_pPlaylist->mEntries[i].mRow == key) {
                     int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
                     if (state == 0 || state == 2) {
@@ -190,7 +190,7 @@ int MsgEATraxGetSongInfo(int mode, int key, MenuText_t **ppTexts)
         EATraxDbClose(&table);
     } else if (mode - 1 < 0) {
         for (i = 0; i <= 20; i++) {
-            if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == mode && _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 == key) {
+            if (_MsgEATrax_pPlaylist->mEntries[i].mCategory == mode && _MsgEATrax_pPlaylist->mEntries[i].mRow == key) {
                 int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
                 if (state == 0 || state == 2) {
@@ -248,7 +248,7 @@ int MsgEATraxToggleSong(int a, int b)
     unsigned char i;
 
     for (i = 0; i <= 20; i++) {
-        if (pTable->mEntries[i].mUnknown0 == a && pTable->mEntries[i].mUnknown4 == b) {
+        if (pTable->mEntries[i].mCategory == a && pTable->mEntries[i].mRow == b) {
             int state = pTable->mEntries[i].mState;
 
             if (state == 0) {
@@ -260,24 +260,24 @@ int MsgEATraxToggleSong(int a, int b)
                 pTable->mCount--;
                 break;
             } else if (state == 2) {
-                pTable->mEntries[i].mUnknown0 = -1;
+                pTable->mEntries[i].mCategory = -1;
                 result = 1;
-                pTable->mEntries[i].mUnknown4 = -1;
+                pTable->mEntries[i].mRow = -1;
                 pTable->mEntries[i].mState = 3;
             } else {
                 continue;
             }
             pTable->mCount++;
             break;
-        } else if (pTable->mEntries[i].mUnknown0 == -1 && pTable->mEntries[i].mUnknown4 == -1 && free == 21) {
+        } else if (pTable->mEntries[i].mCategory == -1 && pTable->mEntries[i].mRow == -1 && free == 21) {
             free = i;
         }
     }
     if (result == 0 && free != 21) {
         result = 1;
         _MsgEATrax_pPlaylist->mEntries[free].mState = 2;
-        _MsgEATrax_pPlaylist->mEntries[free].mUnknown0 = a;
-        _MsgEATrax_pPlaylist->mEntries[free].mUnknown4 = b;
+        _MsgEATrax_pPlaylist->mEntries[free].mCategory = a;
+        _MsgEATrax_pPlaylist->mEntries[free].mRow = b;
         _MsgEATrax_pPlaylist->mCount--;
     }
     return result;
