@@ -4550,7 +4550,32 @@
     {
       "source": "src/engine/dbniom.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text, .rodata 0x802B238C-0x802B23AC (its query literal) and .sdata 0x803EBFD8-0x803EC00C (data row 0x803EBFD8) linked. The 'MTTS'/'ASCM' queries 0x802B23AC-0x802B2430 after it keep their original bytes (rule 8, data row 0x802B23AC).",
+      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function, name and data rows, the linker rows 0x802B23AC-0x802B240C and 0x802B240C-0x802B2430 and the compiler and source-form rows of the range it was split from; every kept function exact, complete .text, .rodata 0x802B238C-0x802B2430 (its query literal and the queries of the two discarded functions) and .sdata 0x803EBFD8-0x803EC00C (data row 0x803EBFD8) linked.",
+      "link_roots": {
+        "symbols": [
+          "DbNiomInit",
+          "DbNiomShutdown",
+          "DbNiomSetHandlers",
+          "DbNiomIsModeActive",
+          "DbNiomBeginMode",
+          "DbNiomEndMode",
+          "DbNiomRunCallback",
+          "DbNiomOpenCursor",
+          "DbNiomReadCursor",
+          "DbNiomCloseCursor",
+          "DbNiomReadOnce",
+          "DbNiomSetModeFuncs",
+          "DbNiomClearModeFuncs",
+          "DbNiomModeLoad",
+          "DbNiomModeReset",
+          "DbNiomModeResume"
+        ],
+        "discarded": [
+          "DbNiomUpdateMtts",
+          "DbNiomGetAscm"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802B23AC-0x802B240C and 0x802B240C-0x802B2430: the target keeps the sixteen listed functions (the whole .text range 0x80229470-0x802297D8 is their compiled code); DbNiomUpdateMtts and DbNiomGetAscm have no code in the target while their query strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -4562,7 +4587,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B238C",
-          "end": "0x802B23AC"
+          "end": "0x802B2430"
         },
         {
           "section": ".sdata",
@@ -18174,7 +18199,18 @@
     {
       "source": "src/engine/sn_malloc.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80262440-0x8026247C (src/engine/sn_malloc.c), its function, name, source-form and data rows; the one function and its .rodata string 0x802B733C-0x802B73BC are exact.",
+      "evidence": "evidence.tsv unit row 0x80262440-0x8026247C (src/engine/sn_malloc.c), its function, name, source-form and data rows and the linker row 0x802B73BC-0x802B7538; the one kept function and its .rodata 0x802B733C-0x802B7538 are exact, including the three strings of the discarded free, realloc and calloc stubs.",
+      "link_roots": {
+        "symbols": [
+          "malloc"
+        ],
+        "discarded": [
+          "free",
+          "realloc",
+          "calloc"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B73BC-0x802B7538: the target keeps malloc (0x80262440, called by atexit at 0x8026234C); free, realloc and calloc have no code in the target while their library-error strings remain in .rodata after malloc's."
+      },
       "sections": [
         {
           "section": ".text",
@@ -18186,7 +18222,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B733C",
-          "end": "0x802B73BC"
+          "end": "0x802B7538"
         }
       ]
     },
