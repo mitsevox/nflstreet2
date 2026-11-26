@@ -24409,6 +24409,12 @@
           "placement": ".text",
           "start": "0x8021A438",
           "end": "0x8021DE9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E88",
+          "end": "0x802B1EB0"
         }
       ],
       "functions": [
@@ -24473,6 +24479,11 @@
           "end": "0x8021CB68"
         },
         {
+          "symbol": "fn_8021CB68",
+          "start": "0x8021CB68",
+          "end": "0x8021CDAC"
+        },
+        {
           "symbol": "fn_8021CDAC",
           "start": "0x8021CDAC",
           "end": "0x8021CE48"
@@ -24481,6 +24492,11 @@
           "symbol": "fn_8021CE48",
           "start": "0x8021CE48",
           "end": "0x8021CF38"
+        },
+        {
+          "symbol": "fn_8021CF38",
+          "start": "0x8021CF38",
+          "end": "0x8021D1FC"
         },
         {
           "symbol": "fn_8021D1FC",
