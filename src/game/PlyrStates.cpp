@@ -87,7 +87,7 @@ extern "C" {
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_80178320(void);
 
-int fn_8010A2DC(Object_80039F5C *, int, short);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 
 int fn_80178308(void);
 void fn_8011E3EC(Object_80039F5C *, int);
@@ -341,7 +341,7 @@ int PlyrEngageInput(Object_80039F5C *p)
 
 int PlyrStateUpdateDefault(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     return 0;
 }
 

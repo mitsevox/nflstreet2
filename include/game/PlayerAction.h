@@ -291,7 +291,7 @@ int MathArcTan2(float y, float x);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void PlyrObjsSetDrawFlag(int a);
 int FELoopIsMainFEActive(void);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);

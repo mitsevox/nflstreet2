@@ -14739,12 +14739,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80109F34",
-          "end": "0x8010A2DC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8010A4E8",
           "end": "0x8010BED4"
         },
         {
@@ -14999,10 +14993,6 @@
           {
             "function": "fn_80109E48",
             "evidence": "evidence.tsv source-form 0x80109E48-0x80109F34"
-          },
-          {
-            "function": "fn_8010A2DC",
-            "evidence": "evidence.tsv source-form 0x8010A2DC-0x8010A4E8"
           },
           {
             "function": "fn_8010BED4",

@@ -186,7 +186,7 @@ extern "C" int PlayerActionCharAnimExit(Object_80039F5C *p)
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
             if (mode == 4) {
-                fn_8010A2DC(p, 0, -1);
+                PlyrTryQueueMsg62(p, 0, -1);
             }
             break;
         }

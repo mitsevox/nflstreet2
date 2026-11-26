@@ -3602,7 +3602,7 @@ extern "C" int fn_80109E48(Object_80039F5C *p, int kind, int *pOut);
 extern "C" int fn_80109F34(Object_80039F5C *p);
 extern "C" int fn_8010A07C(Object_80039F5C *p);
 extern "C" int fn_8010A0A0(Object_80039F5C *p, int index);
-extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+extern "C" int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 extern "C" void fn_8010AECC(Object_80039F5C *p, unsigned char a, unsigned char b, unsigned char c);
 extern "C" void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 extern "C" int fn_8010B224(Object_80039F5C *p);
@@ -6580,7 +6580,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
         fn_800F053C(0, p->mpState, &message, p);
         result = 1;
     } else {
-        fn_8010A2DC(p, 0, -1);
+        PlyrTryQueueMsg62(p, 0, -1);
         fn_800F60BC(p);
         if (!(p->mFlags & 0x4000)) {
             if (fn_800F5208(p, pRecord)) {
@@ -8185,7 +8185,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
     Message_800F01CC message;
     int active = 0;
 
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pBlock = (Block_800FA300 *)&p->mUnknown336;
     if (--pBlock->mUnknown20 & 0x80) {
         int range = 255 - p->mRatings[8];
@@ -9516,7 +9516,7 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
     Vector_80039F5C *pPos;
     int result;
 
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pBlock = (Block_800FD650 *)&p->mUnknown336;
     pPos = &p->mMotion.mPos;
     result = 0;
@@ -10491,7 +10491,7 @@ extern "C" int fn_800FF7A8(Object_80039F5C *p)
 extern "C" {
 int fn_800FF7F4(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (p->mUnknown560.mUnknown53 != 0) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
@@ -10678,7 +10678,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
     Message_800F01CC message;
     Point_8017886C point;
 
-    if (fn_8010A2DC(p, 0, -1) != 0) {
+    if (PlyrTryQueueMsg62(p, 0, -1) != 0) {
         pState->mUnknown0 = 1;
     }
     if (*PlyrGetPendingMsg(p) == 57 && p->mUnknown3040 > 30) {
@@ -14673,7 +14673,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
     return result;
 }
 
-extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
+extern "C" int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b) {
     int result = 0;
     int mode = fn_800AD9B4();
 
@@ -14694,10 +14694,17 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
                 BallGetPosition(BallGetCurrent(), &toBall);
                 Vec3Sub(&toBall, &toBall, &p->mMotion.mPos);
                 if (b == -1) {
-                    if (fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 3.0f &&
-                        fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 5.0f && !(p->mFlags & 0x400)) {
-                        b = (short)Vec2Magnitude(&toBall);
-                        b += SyncRandGetRange(0, 100);
+                    if (fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 3.0f) {
+                        if (fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 5.0f) {
+                            if (!(p->mFlags & 0x400)) {
+                                b = (short)Vec2Magnitude(&toBall);
+                                b += SyncRandGetRange(0, 100);
+                            } else {
+                                b = 0;
+                            }
+                        } else {
+                            b = 0;
+                        }
                     } else {
                         b = 0;
                     }
@@ -14993,7 +15000,7 @@ extern "C" int fn_8010AFB8(Object_80039F5C *p) {
     Block_8010AFB8 *pBlock = (Block_8010AFB8 *)&p->mUnknown336;
     int team;
 
-    fn_8010A2DC(p, 0, 5);
+    PlyrTryQueueMsg62(p, 0, 5);
     if (!(p->mFlags & 0x40000) && fn_801BE648(p->mpUnknown792) != 0x5B) {
         if (p->mFlags & 4) {
             p->mFlags |= 0x40000;
@@ -15496,7 +15503,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
 
     ball = fn_80177FE0();
     PlayTrackGetResult5Rate();
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pState->mUnknown52++;
     pCarrier = BallGetCurrentHolder();
     BallGetPosition(BallGetCurrent(), &ballPos);
@@ -15960,7 +15967,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
 
     fn_800B8344(p);
     pCarrier = BallGetCurrentHolder();
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     if (*PlyrGetPendingMsg(p) == 0x39) {
         p->mUnknown3040 = 0;
     }
@@ -16763,7 +16770,7 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
         pState->mUnknown20 = 1;
     }
     pState->mUnknown21 = 0;
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     if (!(p->mFlags & 0x4000)) {
         if (!fn_80178C9C() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
             pState->mUnknown12 = SyncRandGetRange(0, 45) + 45;
@@ -16850,7 +16857,7 @@ extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
             message.mId = 31;
             fn_800F053C(0, p->mpState, &message, p);
         } else {
-            fn_8010A2DC(p, 0, -1);
+            PlyrTryQueueMsg62(p, 0, -1);
             if (fn_801787A0()) {
                 if ((pBlock->mUnknown0 != 4 && pBlock->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
                     fn_8011E3EC(p, 0);
@@ -18683,7 +18690,7 @@ extern "C" int fn_80113604(Object_80039F5C *p)
         return 1;
     }
     if (pState->mUnknown3[0] != 0) {
-        fn_8010A2DC(p, 0, -1);
+        PlyrTryQueueMsg62(p, 0, -1);
     }
     return 0;
 }
@@ -20188,7 +20195,7 @@ int fn_80116B98(Object_80039F5C *p)
 extern "C" {
 int fn_80116C34(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
     int update = 0;
     state->mUnknown0++;
@@ -20727,7 +20734,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     int update = 0;
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     state->mUnknown0++;
     state->mUnknown2 = (signed char)(state->mUnknown2 - 1);
     if (state->mUnknown2 < 0) {

@@ -46,7 +46,7 @@ int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
 int fn_800FD2AC(Object_80039F5C *p);
 int fn_800FD41C(Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80112928(Object_80039F5C *p);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
@@ -338,7 +338,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
     int result;
 
     BallGetCurrent();
-    if (fn_8010A2DC(p, 0, -1) == 1) {
+    if (PlyrTryQueueMsg62(p, 0, -1) == 1) {
         pBlock->mUnknown61 = 1;
         pBlock->mUnknown60 = 0;
         p->mUnknown512.mUnknown15 = 0;
