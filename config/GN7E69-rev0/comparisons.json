@@ -26199,6 +26199,11 @@
           "end": "0x801D6F58"
         },
         {
+          "symbol": "fn_801D6F58",
+          "start": "0x801D6F58",
+          "end": "0x801D83F0"
+        },
+        {
           "symbol": "fn_801D83F0",
           "start": "0x801D83F0",
           "end": "0x801D8428"

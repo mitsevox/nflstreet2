@@ -45,7 +45,9 @@ typedef struct Struct_80398DFC {
     int mUnknown8;
     int mUnknownC;
     int mReadLength;
-    char mUnknown14[0x20 - 0x14];
+    int mSeekOffset;
+    int mSeekWhence;
+    unsigned char *mpData;
     char mCode[8];
     int mUnknown28;
     char mTitle[17];
@@ -103,6 +105,38 @@ typedef struct Str6_t {
     char mText[6];
 } Str6_t;
 
+typedef struct Str1_t {
+    char mText[1];
+} Str1_t;
+
+typedef struct Str5_t {
+    char mText[5];
+} Str5_t;
+
+typedef struct Str7_t {
+    char mText[7];
+} Str7_t;
+
+extern const char lbl_802AFEE4[];
+extern const char lbl_802AFEEC[];
+extern const char lbl_802AFEF4[];
+extern const char lbl_802AFEFC[];
+extern const char lbl_802AFF00[];
+extern const char lbl_802AFF08[];
+extern int lbl_803EBD14;
+extern unsigned int lbl_803ECF10;
+
+extern int MemCAsyncFormat(int port);
+extern int MemCAsyncMount(int port);
+extern int MemCAsyncMountAlt(int port, const char *pCode);
+extern int MemCAsyncCheck(int port);
+extern int MemCAsyncGetFreeSpace(int port);
+extern int MemCAsyncGetFreeEntries(int port);
+extern int MemCAsyncSeek(int handle, int offset, int whence);
+extern int MemCAsyncGetSysInfo(int port, const char *pName, int size);
+extern int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
+                           unsigned int maxEntries);
+
 extern const char lbl_802AFEC8[];
 extern const char lbl_802AFEE0[];
 extern const char lbl_802AFF20[];
@@ -118,6 +152,22 @@ extern int sprintf(char *pBuffer, const char *pFormat, ...);
 void fn_801D5D30(int state);
 int fn_801D673C(int port);
 void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused);
+void fn_801D8428(char *pBuffer, int size, const char *pName);
+void fn_801D8460(char *pBuffer, int size, const char *pName);
+int fn_801D85B0(int handle);
+int fn_801D85DC(int handle, int arg, char *pName, int size, Struct_801D4848 *pEntry, Func_803EBD30 pFunc);
+int fn_801D85E4(int handle, int type, char *pTitle, int slot, Func_803EBD34 pFunc);
+void fn_801D6294(int result);
+void fn_801D6318(void);
+void fn_801D6340(void);
+void fn_801D6368(const char *pName, const char *pExtra);
+void fn_801D63B0(void);
+void fn_801D63E8(int size);
+int fn_801D6DA8(int slot, int type);
+void MemCardMgrBuildSlotTables(int count);
+void MemCardMgrUpdateProbe(void);
+void fn_801D5D38(const char *pName, int *pIndex);
+void fn_801D5E08(const char *pName, char *pOut);
 void fn_801D8498(char *pDst, const char *pSrc);
 int fn_801D84B8(const char *pA, const char *pB);
 void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry);
@@ -665,17 +715,775 @@ void fn_801D6EFC(void)
     }
 }
 
+void fn_801D6F58(void)
+{
+    int error;
+    Struct_803ECF18 *pSlot;
+    char name[65];
+    int poll = -1;
+    int result = -1;
+    unsigned int size;
+    unsigned int writeSize;
+    unsigned int headerSize;
+    Str1_t pattern;
+    int type;
+
+    SysCheckReset();
+    switch (lbl_803EBD00) {
+    case 0x1000:
+        if (lbl_803EBD08 == 0) {
+            poll = MemCAsyncPoll(&result);
+            if (!lbl_803EBD19 && poll == 1) {
+                poll = -1;
+            }
+            if (poll == 1) {
+                if (lbl_803ECF14 >= 0 && lbl_803ECF14 <= 1) {
+                    lbl_803EBD19 = poll;
+                    MemCAsyncProbe(lbl_803ECF14);
+                }
+            } else if (poll == -1) {
+                if (lbl_803ECF14 >= 0 && lbl_803ECF14 <= 1) {
+                    lbl_803EBD19 = 1;
+                    MemCAsyncProbe(lbl_803ECF14);
+                }
+            }
+            lbl_803EBD08 = 6;
+        } else if (lbl_803EBD08 > 0) {
+            lbl_803EBD08--;
+        }
+        break;
+    case 0x1001:
+        *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+        if (lbl_803EBD08 == 0) {
+            poll = MemCAsyncPoll(&result);
+            if (!lbl_803EBD18 && poll == 1) {
+                poll = -1;
+            }
+            if (poll == 1) {
+                if (result >= 0) {
+                    lbl_80398DE0.mCardType[lbl_803ECF10] = result;
+                    if (lbl_803ECF14 == -1) {
+                        lbl_803ECF14 = lbl_803ECF10;
+                    }
+                } else {
+                    lbl_80398DE0.mCardType[lbl_803ECF10] = 0;
+                }
+                lbl_803ECF10++;
+                if (lbl_803ECF10 > 1) {
+                    lbl_803ECF10 = 0;
+                }
+                lbl_803EBD18 = 1;
+                MemCAsyncProbe(lbl_803ECF10);
+            } else if (poll == -1) {
+                lbl_803ECF10 = 0;
+                lbl_803EBD18 = 1;
+                MemCAsyncProbe(0);
+            }
+            lbl_803EBD08 = 1;
+        } else if (lbl_803EBD08 > 0) {
+            lbl_803EBD08--;
+        }
+        break;
+    case 0x1002:
+        if (MemCAsyncPoll(&result)) {
+            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)lbl_802AFEE4;
+            lbl_803EBD0C = 0;
+            MemCAsyncFormat(lbl_803ECF14);
+            fn_801D5D30(0x1003);
+        }
+        break;
+    case 0x1003:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                lbl_803EBD10 = 1;
+                lbl_803EBD0C = 1;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1004:
+        if (MemCAsyncPoll(&result)) {
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEEC;
+            lbl_803EBD0C = 0;
+            fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
+                        lbl_80398DFC.mDescription);
+            fn_801D63B0();
+            fn_801D5D30(0x1005);
+        }
+        break;
+    case 0x1005:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DFC.mHandle = result;
+                lbl_80398DFC.mUnknown28 = 0;
+                size = 0;
+                if (lbl_80398DFC.mUnknownF0) {
+                    lbl_803EBD38(lbl_80398DFC.mUnknown4, 0, &size);
+                }
+                if (lbl_80398DFC.mUnknownEF) {
+                    size += 0x40;
+                }
+                if ((int)size > 0) {
+                    lbl_80398DFC.mSeekWhence = 0;
+                    lbl_80398DFC.mSeekOffset = size;
+                    fn_801D6318();
+                    fn_801D5D30(0x1008);
+                } else {
+                    fn_801D5D30(0x1006);
+                }
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1006:
+        break;
+    case 0x1007:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                if (result == lbl_80398DFC.mReadLength) {
+                    fn_801D5D30(0x1006);
+                    break;
+                }
+                lbl_803EBD2C[lbl_80398DFC.mUnknown4].mSlots[lbl_80398DFC.mUnknownC].mFlag = poll;
+                fn_801D6318();
+                fn_801D5D30(0x100A);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x100B);
+            }
+        }
+        break;
+    case 0x1008:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                MemCAsyncSeek(lbl_80398DFC.mHandle, lbl_80398DFC.mSeekOffset, lbl_80398DFC.mSeekWhence);
+                fn_801D5D30(0x1009);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x100B);
+            }
+        }
+        break;
+    case 0x1009:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D5D30(0x1006);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x100B);
+            }
+        }
+        break;
+    case 0x100A:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0) {
+                lbl_803EBD0C = result;
+            }
+            fn_801D6340();
+            fn_801D5D30(0x100B);
+        }
+        break;
+    case 0x100B:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                    break;
+                }
+                if (lbl_80398DFC.mUnknown28 != 0) {
+                    fn_801D6294(lbl_80398DFC.mUnknown28);
+                    break;
+                }
+                if (fn_801D6DA8(lbl_80398DFC.mUnknownC, lbl_80398DFC.mUnknown4) == 0) {
+                    lbl_803EBD0C = error;
+                } else {
+                    lbl_803EBD0C = -100;
+                }
+                lbl_803EBD10 = 1;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                } else {
+                    fn_801D6294(result);
+                }
+            }
+        }
+        break;
+    case 0x100C:
+        if (MemCAsyncPoll(&result)) {
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEF4;
+            lbl_803EBD0C = 0;
+            SysEnableReset(0);
+            fn_801D6368(lbl_80398DFC.mDescription, lbl_802AFEFC);
+            fn_801D5D30(0x100D);
+        }
+        break;
+    case 0x100D:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
+                            lbl_80398DFC.mDescription);
+                fn_801D63E8(lbl_80398DFC.mUnknown8);
+                fn_801D5D30(0x1010);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x100E:
+        if (MemCAsyncPoll(&result)) {
+            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)lbl_802AFEF4;
+            lbl_803EBD0C = 0;
+            SysEnableReset(0);
+            fn_801D5D30(0x100F);
+        }
+        break;
+    case 0x100F:
+        result = 0;
+        fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
+                    lbl_80398DFC.mDescription);
+        fn_801D63E8(lbl_80398DFC.mUnknown8);
+        fn_801D5D30(0x1010);
+        break;
+    case 0x1010:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DFC.mHandle = result;
+                lbl_80398DFC.mUnknown28 = 0;
+                if (lbl_80398DFC.mUnknownEF) {
+                    MemCAsyncWrite(lbl_80398DFC.mHandle, lbl_80398DFC.mInfo, sizeof(lbl_80398DFC.mInfo));
+                    fn_801D5D30(0x101B);
+                } else {
+                    fn_801D5D30(0x1011);
+                }
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1011:
+        break;
+    case 0x1012:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D5D30(0x1011);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x1016);
+            }
+        }
+        break;
+    case 0x1013:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                MemCAsyncSeek(lbl_80398DFC.mHandle, lbl_80398DFC.mSeekOffset, lbl_80398DFC.mSeekWhence);
+                fn_801D5D30(0x1014);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x1016);
+            }
+        }
+        break;
+    case 0x1014:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D5D30(0x1011);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x1016);
+            }
+        }
+        break;
+    case 0x1015:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D85E4(lbl_80398DFC.mHandle, lbl_80398DFC.mUnknown4, lbl_80398DFC.mTitle, lbl_80398DFC.mUnknownC,
+                            lbl_803EBD34);
+                fn_801D5D30(0x101F);
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x1016);
+            }
+        }
+        break;
+    case 0x1016:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                    break;
+                }
+                if (lbl_80398DFC.mUnknown28 != 0) {
+                    fn_801D6294(lbl_80398DFC.mUnknown28);
+                    break;
+                }
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                } else {
+                    fn_801D6294(result);
+                }
+            }
+        }
+        break;
+    case 0x1017:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DFC.mHandle = result;
+                lbl_803EBD38(lbl_80398DFC.mUnknown4, &lbl_80398DFC.mpData, &writeSize);
+                MemCAsyncWrite(lbl_80398DFC.mHandle, (char *)lbl_80398DFC.mpData, writeSize);
+                fn_801D5D30(0x1018);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1018:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                if (lbl_80398DFC.mUnknownF0) {
+                    lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
+                    lbl_80398DFC.mpData = 0;
+                    fn_801D5D30(0x1011);
+                } else {
+                    fn_801D6318();
+                    fn_801D5D30(0x1019);
+                }
+            } else {
+                lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
+                lbl_80398DFC.mpData = 0;
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                if (lbl_80398DFC.mUnknownF0) {
+                    fn_801D5D30(0x1016);
+                } else {
+                    fn_801D5D30(0x101A);
+                }
+            }
+        }
+        break;
+    case 0x1019:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0) {
+                lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
+                lbl_80398DFC.mpData = 0;
+                lbl_803EBD0C = result;
+            }
+            fn_801D6340();
+            fn_801D5D30(0x101A);
+        }
+        break;
+    case 0x101A:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                error = lbl_803EBD0C;
+                if (error == 0) {
+                    lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
+                    lbl_80398DFC.mpData = (unsigned char *)error;
+                    SysEnableReset(1);
+                    lbl_803EBD10 = poll;
+                    lbl_803EBD0C = poll;
+                    strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                    fn_801D5D30(lbl_803EBD04);
+                    break;
+                }
+            }
+            lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
+            lbl_80398DFC.mpData = 0;
+            if (lbl_803EBD0C != 0) {
+                fn_801D6294(lbl_803EBD0C);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x101C:
+        fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
+                    lbl_80398DFC.mDescription);
+        MemCAsyncGetSysInfo(lbl_803ECF14, lbl_80398DFC.mFileName, 11);
+        fn_801D5D30(0x101D);
+        break;
+    case 0x101D:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                fn_801D8428(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription);
+                fn_801D63E8(0);
+                fn_801D5D30(0x101E);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x101E:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DFC.mHandle = result;
+                fn_801D85E4(lbl_80398DFC.mHandle, lbl_80398DFC.mUnknown4, lbl_80398DFC.mTitle, lbl_80398DFC.mUnknownC,
+                            lbl_803EBD34);
+                fn_801D5D30(0x101F);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x101F:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0) {
+                lbl_803EBD0C = result;
+            }
+            fn_801D6340();
+            fn_801D5D30(0x1016);
+        }
+        break;
+    case 0x101B:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                if (lbl_80398DFC.mUnknownF0) {
+                    lbl_803EBD38(lbl_80398DFC.mUnknown4, &lbl_80398DFC.mpData, &headerSize);
+                    MemCAsyncWrite(lbl_80398DFC.mHandle, (char *)lbl_80398DFC.mpData, headerSize);
+                    fn_801D5D30(0x1018);
+                } else {
+                    fn_801D5D30(0x1011);
+                }
+            } else {
+                lbl_803EBD0C = result;
+                fn_801D6340();
+                fn_801D5D30(0x1016);
+            }
+        }
+        break;
+    case 0x1020:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0) {
+                lbl_803EBD0C = result;
+            }
+            fn_801D6340();
+            fn_801D5D30(0x1021);
+        }
+        break;
+    case 0x1021:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                    break;
+                }
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                if ((error = lbl_803EBD0C) != 0) {
+                    fn_801D6294(error);
+                } else {
+                    fn_801D6294(result);
+                }
+            }
+        }
+        break;
+    case 0x1022:
+        if (MemCAsyncPoll(&result)) {
+            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)lbl_802AFF00;
+            lbl_803EBD0C = 0;
+            SysEnableReset(0);
+            fn_801D6368(lbl_80398DFC.mDescription, lbl_80398DFC.mDescription);
+            fn_801D5D30(0x1025);
+        }
+        break;
+    case 0x1023:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0 && result != -3) {
+                fn_801D6294(result);
+                break;
+            }
+            fn_801D6368(lbl_80398DFC.mDescription, lbl_802AFEFC);
+            fn_801D5D30(0x1024);
+        }
+        break;
+    case 0x1024:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0 && result != -3) {
+                fn_801D6294(result);
+                break;
+            }
+            fn_801D6368(lbl_80398DFC.mDescription, lbl_80398DFC.mDescription);
+            fn_801D5D30(0x1025);
+        }
+        break;
+    case 0x1025:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else if (result == -3) {
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1026:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            if (result >= 0) {
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else if (result == -3) {
+                SysEnableReset(1);
+                lbl_803EBD10 = poll;
+                lbl_803EBD0C = poll;
+                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+                fn_801D5D30(lbl_803EBD04);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1027:
+    case 0x102D:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(Struct_801D4848));
+            fn_801D8460(name, sizeof(name), lbl_80398DFC.mCode);
+            if (lbl_803EBD00 == 0x1027) {
+                MemCAsyncGetDir(lbl_803ECF14, name, name, lbl_803EBD28, lbl_803EBD24);
+                fn_801D5D30(0x1028);
+            } else {
+                pattern = *(const Str1_t *)lbl_802AFF08;
+                MemCAsyncGetDir(lbl_803ECF14, name, pattern.mText, lbl_803EBD28, lbl_803EBD24);
+                fn_801D5D30(0x102E);
+            }
+        }
+        break;
+    case 0x1028:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                MemCardMgrBuildSlotTables(result);
+                lbl_803EBD10 = 0;
+                lbl_803EBD0C = result;
+                lbl_803EBD14 = 0;
+                fn_801D5D30(0x1029);
+            } else {
+                fn_801D6294(result);
+            }
+        }
+        break;
+    case 0x1029:
+        if (lbl_803EBD14 < lbl_803EBD0C) {
+            pSlot = lbl_803ECF18[lbl_803EBD14];
+            if (pSlot != 0) {
+                pSlot->mFlag = 1;
+                fn_801D5E08(lbl_803EBD28[lbl_803EBD14].mName, pSlot->mName);
+                fn_801D8428(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_803EBD28[lbl_803EBD14].mName);
+                fn_801D63B0();
+                fn_801D5D30(0x102A);
+            } else {
+                lbl_803EBD14++;
+                fn_801D5D30(0x1029);
+            }
+        } else {
+            lbl_803EBD10 = 1;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x102A:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DFC.mHandle = result;
+                fn_801D85B0(result);
+                fn_801D5D30(0x102B);
+                break;
+            }
+            if (result == -2) {
+                fn_801D6294(-2);
+                break;
+            }
+            lbl_803EBD14++;
+            fn_801D5D30(0x1029);
+        }
+        break;
+    case 0x102B:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                type = 0;
+                pSlot = lbl_803ECF18[lbl_803EBD14];
+                fn_801D5D38(pSlot->mEntry->mName, &type);
+                pSlot->mFlag = fn_801D85DC(result, lbl_803EBD20[type].mUnknown4, pSlot->mName, 17, pSlot->mEntry,
+                                           lbl_803EBD30);
+            }
+            fn_801D6340();
+            fn_801D5D30(0x102C);
+        }
+        break;
+    case 0x102C:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result < 0) {
+                if (result == -2) {
+                    fn_801D6294(-2);
+                    break;
+                }
+            }
+            lbl_803EBD14++;
+            fn_801D5D30(0x1029);
+        }
+        break;
+    case 0x102E:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            lbl_803EBD0C = result;
+            lbl_803EBD10 = poll;
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x102F:
+    case 0x1030:
+        MemCardMgrUpdateProbe();
+        break;
+    case 0x1031:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncMount(lbl_803ECF14);
+            fn_801D5D30(0x1032);
+        }
+        break;
+    case 0x1032:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            fn_801D868C(fn_801D673C(lbl_803ECF14), lbl_803ECF14, lbl_80398DE0.mTypeName, sizeof(lbl_80398DE0.mTypeName));
+            lbl_803EBD10 = poll;
+            lbl_803EBD0C = result;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x1033:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncMountAlt(lbl_803ECF14, lbl_80398DFC.mCode);
+            fn_801D5D30(0x1034);
+        }
+        break;
+    case 0x1034:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            lbl_803EBD10 = poll;
+            lbl_803EBD0C = result;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x1035:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncCheck(lbl_803ECF14);
+            fn_801D5D30(0x1036);
+        }
+        break;
+    case 0x1036:
+        poll = MemCAsyncPoll(&result);
+        if (poll == 1) {
+            lbl_803EBD10 = poll;
+            lbl_803EBD0C = result;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x1037:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncGetFreeSpace(lbl_803ECF14);
+            fn_801D5D30(0x1038);
+        }
+        break;
+    case 0x1038:
+        if (MemCAsyncPoll(&result) == 1) {
+            lbl_803EBD0C = result;
+            if (result >= 0) {
+                lbl_80398DE0.mUnknown0 = result;
+            } else {
+                lbl_80398DE0.mUnknown0 = 0;
+            }
+            lbl_803EBD10 = 1;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    case 0x1039:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncGetFreeEntries(lbl_803ECF14);
+            fn_801D5D30(0x103A);
+        }
+        break;
+    case 0x103A:
+        if (MemCAsyncPoll(&result) == 1) {
+            lbl_803EBD0C = result;
+            if (result >= 0) {
+                lbl_80398DE0.mUnknown4 = result;
+            } else {
+                lbl_80398DE0.mUnknown4 = 0;
+            }
+            lbl_803EBD10 = 1;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
+    }
+}
+
 void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused)
 {
     sprintf(pBuffer, lbl_802AFF0C, lbl_802AFF14, pName);
 }
 
-void fn_801D8428(char *pBuffer, int size, const char *pName, const char *pUnused)
+void fn_801D8428(char *pBuffer, int size, const char *pName)
 {
     sprintf(pBuffer, lbl_802AFF0C, lbl_802AFF14, pName);
 }
 
-void fn_801D8460(char *pBuffer, int size, const char *pName, const char *pUnused)
+void fn_801D8460(char *pBuffer, int size, const char *pName)
 {
     sprintf(pBuffer, lbl_802AFF18, lbl_802AFF14, pName);
 }
@@ -725,12 +1533,12 @@ int fn_801D85B0(int handle)
     return MemCAsyncRead(handle, lbl_80398F00, sizeof(lbl_80398F00));
 }
 
-int fn_801D85DC(void)
+int fn_801D85DC(int handle, int arg, char *pName, int size, Struct_801D4848 *pEntry, Func_803EBD30 pFunc)
 {
     return 0;
 }
 
-int fn_801D85E4(int handle)
+int fn_801D85E4(int handle, int type, char *pTitle, int slot, Func_803EBD34 pFunc)
 {
     unsigned int info[2];
 
