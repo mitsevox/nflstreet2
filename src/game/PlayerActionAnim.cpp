@@ -1390,7 +1390,9 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
             if (!pRecords->mEntries[j].mUnknown2) {
                 pChosen = &pRecords->mEntries[j];
                 if (pChosen->mUnknown0 == id) break;
-            } else if (pRecords->mEntries[j].mUnknown2 == 1 && pRecords->mEntries[j].mUnknown0 == id) {
+            } else if (pRecords->mEntries[j].mUnknown2 == 1) {
+                Entry_800DE51C *pEntry = &pRecords->mEntries[j];
+                if (pEntry->mUnknown0 != id) continue;
                 fallbackKey = key;
                 for (signed char k = 0; k < pRecords->mCount; k++) {
                     if (!pRecords->mEntries[k].mUnknown2) pFallback = &pRecords->mEntries[k];
