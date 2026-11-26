@@ -1628,13 +1628,34 @@
     {
       "source": "src/game/StatGen.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80003C94-0x80003CF0 (src/game/StatGen.cpp), its function and name rows and its .sdata data row 0x803EB8D8-0x803EB8DC; every function and data placement exact, promoted from comparison-only; .bss data row 0x80367590-0x80369D64 (_StatGen_sGame, the simulated-game record whose users the linker discards).",
+      "evidence": "evidence.tsv unit row 0x80003C94-0x80003F10 (src/game/StatGen.cpp), its function and name rows, its .sdata data row 0x803EB8D8-0x803EB8DC, the linker row 0x80003CF0-0x80003F10 for the in-text query strings of the discarded simulation functions, and the .bss data row 0x80367590-0x80369D64 (_StatGen_sGame, the simulated-game record whose users the linker discards).",
+      "link_roots": {
+        "symbols": [
+          "StatGenCreateRandomStream",
+          "StatGenDestroyRandomStream"
+        ],
+        "discarded": [
+          "StatGenTeamInit__FP13StatGenTeam_tiUc",
+          "StatGenSaveQuarterScores__FiUcUc",
+          "StatGenSaveFinalScore__FP13StatGenGame_t",
+          "StatGenGetWeek__Fv",
+          "StatGenGetFirstPlayoffWeek__Fv"
+        ],
+        "evidence": "evidence.tsv linker row 0x80003CF0-0x80003F10: the target keeps the two random-stream functions, each called from src/game/FEModules.cpp; the five simulation functions rebuilt from the NFL Street 2 Xbox prototype have no code in the target, while their six query strings remain in the in-text rodata after the code."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80003C94",
           "end": "0x80003CF0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x80003CF0",
+          "end": "0x80003F10",
+          "follows": ".text"
         },
         {
           "section": ".sdata",
@@ -10948,6 +10969,51 @@
           "end": "0x803EBA8C"
         }
       ]
+    },
+    {
+      "source": "src/game/MsgEATrax.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8001F56C-0x8001FFE4 (src/game/MsgEATrax.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001F704",
+          "end": "0x8001FC08"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8001FD48",
+          "end": "0x8001FFD8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".text",
+          "start": "0x8001FFD8",
+          "end": "0x8001FFE4",
+          "follows": ".text"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBA90",
+          "end": "0x803EBA98"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "MsgEATraxLoadPlaylist",
+            "evidence": "evidence.tsv source-form 0x8001F56C-0x8001F704"
+          },
+          {
+            "function": "MsgEATraxToggleSong",
+            "evidence": "evidence.tsv source-form 0x8001FC08-0x8001FD48"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round-2 lane 1 tracking table)"
+      }
     },
     {
       "source": "src/game/MemPool.cpp",

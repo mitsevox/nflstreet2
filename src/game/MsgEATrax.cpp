@@ -1,3 +1,8 @@
+/* EA Trax playlist screen of the front-end options: loads the player's
+   playlist into a 21-song table, lets the menu list the EA Trax songs with
+   their title, artist and album, preview a song, add or remove songs (40
+   slots), and writes the changes back to the playlist database when the
+   screen is saved. */
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
 #include <string.h>
@@ -6,17 +11,19 @@
 #include "game/SndgMusic.h"
 #include "game/GameOptions.h"
 
-/* One slot of the 21-entry table that lbl_803EBA94 points to. */
-struct Entry_803EBA94 {
+/* One song of the playlist table: category and EA Trax row (-1 when the
+   slot is free) and the edit state (0 in the playlist, 1 to remove, 2 to
+   add, 3 free). */
+struct MsgEATraxEntry_t {
     int mUnknown0;
     int mUnknown4;
     int mState;
 };
 
-/* 256-byte block allocated by fn_8001FD48. */
-struct Table_803EBA94 {
+/* The playlist table MsgEATraxEnter allocates: free slots, then the songs. */
+struct MsgEATraxPlaylist_t {
     int mCount;
-    Entry_803EBA94 mEntries[21];
+    MsgEATraxEntry_t mEntries[21];
 };
 
 extern "C" {
@@ -49,48 +56,48 @@ void PlaylistDbDeleteRow(DbCursor *pObject);
 void PlaylistDbAddEntry(DbCursor *pObject, int a, int b, int c);
 }
 
-static void *lbl_803EBA90 = (void *)-1;
-static Table_803EBA94 *lbl_803EBA94 = 0;
+static void *_MsgEATrax_hSoundRes = (void *)-1;
+static MsgEATraxPlaylist_t *_MsgEATrax_pPlaylist = 0;
 
 extern "C" {
 
-void fn_8001F56C(void)
+void MsgEATraxLoadPlaylist(void)
 {
     DbCursor cursor;
     DbCursor table;
     unsigned char i;
 
     for (i = 0; i <= 20; i++) {
-        lbl_803EBA94->mEntries[i].mUnknown0 = -1;
-        lbl_803EBA94->mEntries[i].mUnknown4 = -1;
-        lbl_803EBA94->mEntries[i].mState = 3;
+        _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = -1;
+        _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 = -1;
+        _MsgEATrax_pPlaylist->mEntries[i].mState = 3;
     }
     PlaylistDbOpen(&cursor, 0);
     i = 0;
     PlaylistDbRemoveStationEntries(&cursor);
     EATraxDbOpen(&table);
-    lbl_803EBA94->mCount = 40;
+    _MsgEATrax_pPlaylist->mCount = 40;
     if (PlaylistDbFirst(&cursor)) {
         do {
-            lbl_803EBA94->mEntries[i].mState = 0;
+            _MsgEATrax_pPlaylist->mEntries[i].mState = 0;
             if (PlaylistDbGetIstx(&cursor) == 0) {
                 PlaylistDbGetStationId(&cursor);
                 PlaylistDbGetSongId(&cursor);
-                lbl_803EBA94->mEntries[i].mUnknown0 = 1;
-                lbl_803EBA94->mEntries[i].mUnknown4 = 0;
+                _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = 1;
+                _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 = 0;
             } else {
-                lbl_803EBA94->mEntries[i].mUnknown0 = 0;
-                EATraxDbFindSong(&table, PlaylistDbGetSongId(&cursor), &lbl_803EBA94->mEntries[i].mUnknown4);
+                _MsgEATrax_pPlaylist->mEntries[i].mUnknown0 = 0;
+                EATraxDbFindSong(&table, PlaylistDbGetSongId(&cursor), &_MsgEATrax_pPlaylist->mEntries[i].mUnknown4);
             }
             i++;
-            lbl_803EBA94->mCount--;
+            _MsgEATrax_pPlaylist->mCount--;
         } while (PlaylistDbNext(&cursor));
     }
     EATraxDbClose(&table);
     PlaylistDbClose(&cursor);
 }
 
-void fn_8001F704(void)
+void MsgEATraxSavePlaylist(void)
 {
     DbCursor cursor;
     DbCursor table;
@@ -100,21 +107,21 @@ void fn_8001F704(void)
     PlaylistDbOpen(&cursor, 0);
     EATraxDbOpen(&table);
     for (i = 0; i <= 20; i++) {
-        int state = lbl_803EBA94->mEntries[i].mState;
+        int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
         if (state == 1 || state == 2) {
             int found;
             int value;
 
-            if (lbl_803EBA94->mEntries[i].mUnknown0 == 0) {
+            if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == 0) {
                 found = 1;
-                DbCursorSeek(&table, lbl_803EBA94->mEntries[i].mUnknown4);
+                DbCursorSeek(&table, _MsgEATrax_pPlaylist->mEntries[i].mUnknown4);
                 value = EATraxDbGetSongId(&table);
             } else {
                 found = 0;
                 value = 0;
             }
-            if (lbl_803EBA94->mEntries[i].mState == 1) {
+            if (_MsgEATrax_pPlaylist->mEntries[i].mState == 1) {
                 PlaylistDbFindEntry(&cursor, found, 0, value);
                 PlaylistDbDeleteRow(&cursor);
             } else {
@@ -130,7 +137,7 @@ void fn_8001F704(void)
     }
 }
 
-void fn_8001F850(int mode, int *pResult, MenuText_t *pText)
+void MsgEATraxGetCategory(int mode, int *pResult, MenuText_t *pText)
 {
     int count = 0;
 
@@ -150,12 +157,12 @@ void fn_8001F850(int mode, int *pResult, MenuText_t *pText)
     }
 }
 
-int fn_8001F900(void)
+int MsgEATraxGetFreeSlots(void)
 {
-    return lbl_803EBA94->mCount;
+    return _MsgEATrax_pPlaylist->mCount;
 }
 
-int fn_8001F90C(int mode, int key, MenuText_t **ppTexts)
+int MsgEATraxGetSongInfo(int mode, int key, MenuText_t **ppTexts)
 {
     int result = 0;
     unsigned char i;
@@ -170,8 +177,8 @@ int fn_8001F90C(int mode, int key, MenuText_t **ppTexts)
             EATraxDbGetAlbum(&table, ppTexts[2]->mpText, ppTexts[2]->mLength);
             EATraxDbGetSongId(&table);
             for (i = 0; i <= 20; i++) {
-                if (lbl_803EBA94->mEntries[i].mUnknown0 == mode && lbl_803EBA94->mEntries[i].mUnknown4 == key) {
-                    int state = lbl_803EBA94->mEntries[i].mState;
+                if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == mode && _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 == key) {
+                    int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
                     if (state == 0 || state == 2) {
                         result = 1;
@@ -183,8 +190,8 @@ int fn_8001F90C(int mode, int key, MenuText_t **ppTexts)
         EATraxDbClose(&table);
     } else if (mode - 1 < 0) {
         for (i = 0; i <= 20; i++) {
-            if (lbl_803EBA94->mEntries[i].mUnknown0 == mode && lbl_803EBA94->mEntries[i].mUnknown4 == key) {
-                int state = lbl_803EBA94->mEntries[i].mState;
+            if (_MsgEATrax_pPlaylist->mEntries[i].mUnknown0 == mode && _MsgEATrax_pPlaylist->mEntries[i].mUnknown4 == key) {
+                int state = _MsgEATrax_pPlaylist->mEntries[i].mState;
 
                 if (state == 0 || state == 2) {
                     result = 1;
@@ -196,7 +203,7 @@ int fn_8001F90C(int mode, int key, MenuText_t **ppTexts)
     return result;
 }
 
-void fn_8001FA90(int mode, int key, MenuText_t *pText1, MenuText_t *pText2, MenuText_t *pText3)
+void MsgEATraxGetSongNames(int mode, int key, MenuText_t *pText1, MenuText_t *pText2, MenuText_t *pText3)
 {
     if (mode == 0) {
         DbCursor table;
@@ -211,7 +218,7 @@ void fn_8001FA90(int mode, int key, MenuText_t *pText1, MenuText_t *pText2, Menu
     }
 }
 
-void fn_8001FB3C(int mode, int key)
+void MsgEATraxPlaySong(int mode, int key)
 {
     if (mode == 0) {
         DbCursor table;
@@ -228,14 +235,14 @@ void fn_8001FB3C(int mode, int key)
     }
 }
 
-void fn_8001FBE8(void)
+void MsgEATraxStopSong(void)
 {
     SndgMusicStop();
 }
 
-int fn_8001FC08(int a, int b)
+int MsgEATraxToggleSong(int a, int b)
 {
-    Table_803EBA94 *pTable = lbl_803EBA94;
+    MsgEATraxPlaylist_t *pTable = _MsgEATrax_pPlaylist;
     int result = 0;
     int free = 21;
     unsigned char i;
@@ -268,74 +275,74 @@ int fn_8001FC08(int a, int b)
     }
     if (result == 0 && free != 21) {
         result = 1;
-        lbl_803EBA94->mEntries[free].mState = 2;
-        lbl_803EBA94->mEntries[free].mUnknown0 = a;
-        lbl_803EBA94->mEntries[free].mUnknown4 = b;
-        lbl_803EBA94->mCount--;
+        _MsgEATrax_pPlaylist->mEntries[free].mState = 2;
+        _MsgEATrax_pPlaylist->mEntries[free].mUnknown0 = a;
+        _MsgEATrax_pPlaylist->mEntries[free].mUnknown4 = b;
+        _MsgEATrax_pPlaylist->mCount--;
     }
     return result;
 }
 
-void fn_8001FD48(void)
+void MsgEATraxEnter(void)
 {
-    lbl_803EBA90 = ResOpenDevice(lbl_802EBFCC, 44);
+    _MsgEATrax_hSoundRes = ResOpenDevice(lbl_802EBFCC, 44);
     SndgSetVolumeOption(2, 100);
     if (SndgMusicIsPaused()) {
         SndgMusicResume();
     }
     SndgMusicStop();
     SndgMusicSetHold(1);
-    lbl_803EBA94 = (Table_803EBA94 *)fn_801D2B7C(256, 0, 0);
-    fn_8001F56C();
+    _MsgEATrax_pPlaylist = (MsgEATraxPlaylist_t *)fn_801D2B7C(256, 0, 0);
+    MsgEATraxLoadPlaylist();
 }
 
-void fn_8001FDB8(void)
+void MsgEATraxExit(void)
 {
     SndgSetVolumeOption(2, (unsigned char)(GameOptionsGet(5) * 10));
     SndgMusicSetHold(0);
-    ResClose(lbl_803EBA90);
-    fn_801D2BD0(lbl_803EBA94);
-    lbl_803EBA94 = 0;
+    ResClose(_MsgEATrax_hSoundRes);
+    fn_801D2BD0(_MsgEATrax_pPlaylist);
+    _MsgEATrax_pPlaylist = 0;
     SndgMusicContinue();
 }
 
-int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
+int MsgEATraxHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
 {
     switch (id) {
     case 0x80000001:
         *pResult = 0;
         break;
     case 0x80000002:
-        fn_8001F850(pArgs[0].i, pArgs[1].pi, pArgs[2].pParams);
+        MsgEATraxGetCategory(pArgs[0].i, pArgs[1].pi, pArgs[2].pParams);
         break;
     case 0x80000003:
-        *pResult = fn_8001F900();
+        *pResult = MsgEATraxGetFreeSlots();
         break;
     case 0x80000004:
-        *pResult = fn_8001F90C(pArgs[0].i, pArgs[1].i,
+        *pResult = MsgEATraxGetSongInfo(pArgs[0].i, pArgs[1].i,
                                (MenuText_t **)(pArgs[2].i + (*pArgs[2].pi + 1) * 4));
         break;
     case 0x80000005:
-        fn_8001FA90(pArgs[0].i, pArgs[1].i, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams);
+        MsgEATraxGetSongNames(pArgs[0].i, pArgs[1].i, pArgs[2].pParams, pArgs[3].pParams, pArgs[4].pParams);
         break;
     case 0x80000006:
-        fn_8001FB3C(pArgs[0].i, pArgs[1].i);
+        MsgEATraxPlaySong(pArgs[0].i, pArgs[1].i);
         break;
     case 0x80000007:
-        fn_8001FBE8();
+        MsgEATraxStopSong();
         break;
     case 0x80000008:
-        *pResult = fn_8001FC08(pArgs[0].i, pArgs[1].i);
+        *pResult = MsgEATraxToggleSong(pArgs[0].i, pArgs[1].i);
         break;
     case 0x80000009:
-        fn_8001FD48();
+        MsgEATraxEnter();
         break;
     case 0x8000000A:
-        fn_8001FDB8();
+        MsgEATraxExit();
         break;
     case 0x8000000B:
-        fn_8001F704();
-        fn_8001F56C();
+        MsgEATraxSavePlaylist();
+        MsgEATraxLoadPlaylist();
         break;
     default:
         return 0;
