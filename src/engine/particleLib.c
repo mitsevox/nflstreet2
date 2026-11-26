@@ -86,7 +86,7 @@ typedef struct ParticleHeapDef_t {
 
 static ParticleLibState_t partLibState;
 static ParticlePoolManager_t worldPoolMan;
-ParticleHeapDef_t gPoolHeapDef = {"PSYSLIB", 0, 1, 0, 0x100, 0xA000};
+ParticleHeapDef_t gPoolHeapDef = {"PSYSLIB", 0, 1, 0, 0x10, 0xA00};
 Vec3_801DE1E0 gGravNorm = {0.0f, -1.0f, 0.0f};
 unsigned char gPartLibIsInit = 0;
 char *gPartLibVersion = "1.0b";
