@@ -43,10 +43,8 @@ float SyncRandGetFloat(int stream);
 
 }
 
-#if defined(DECOMP_COMPARE)
 static PlayArtVertex_t lbl_8031D2B8[10];
 static PlayArtVertex_t lbl_8031D308[11];
-#endif
 
 static const char *_PlayAlign_apSetNames[4];
 
@@ -211,7 +209,6 @@ const char *PlayAlignGetSetName(int index)
 }
 }
 
-#if defined(DECOMP_COMPARE)
 
 extern "C" {
 void Vec2Normalize(void *, void *);
@@ -632,4 +629,3 @@ void fn_801660A0(PlayArtVertex_t *points, PlayArtVertex_t *out, int width)
 }
 
 }
-#endif

@@ -349,62 +349,100 @@ void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *
 {
     unsigned char r = 130, g = 130, b = 130;
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
-    unsigned char primaryR, primaryG, primaryB;
+    int found = 0;
+
     if (!fn_80177F70() && !PauseIsOpen()) {
-        primaryR = lbl_803EB3D3; primaryG = lbl_803EB3D7; primaryB = lbl_803EB3DB;
+        r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
     } else {
-        void *queue = fn_80164EC8(record, team, (unsigned short)index);
-        int found = 0;
-        for (unsigned char i = 0; i < 4; ++i) {
+        int inherited = 1;
+        void *queue = fn_80164EC8(record, (unsigned char)team, (unsigned short)index);
+        for (unsigned char i = 0; i <= 3; ++i) {
             if (fn_800F06F4(0, queue, lbl_802E98E0[i][3], 0xFFFF) != 0xFFFF) {
-                secondaryR = lbl_802E98F0[i][0]; secondaryG = lbl_802E98F0[i][1]; secondaryB = lbl_802E98F0[i][2];
+                secondaryR = lbl_802E98F0[i][0];
+                secondaryG = lbl_802E98F0[i][1];
+                secondaryB = lbl_802E98F0[i][2];
                 found = 1;
                 break;
             }
         }
         if (!found) secondaryR = secondaryG = secondaryB = 255;
-        unsigned int kind = entry->mUnknown14Word;
-        int inherited = 1;
-        if (kind >= 5 && kind <= 9) {r = lbl_803EB3BB;g = lbl_803EB3C3;b = lbl_803EB3BF; inherited = 0;}
-        else if (kind >= 10 && kind <= 15) {r = lbl_803EB3DF;g = lbl_803EB3E3;b = lbl_803EB3E7; inherited = 0;}
-        else if (kind >= 16 && kind <= 18) {r = lbl_803EB3C7;g = lbl_803EB3CB;b = lbl_803EB3CF; inherited = 0;}
-        primaryR = r; primaryG = g; primaryB = b;
         if (inherited) {
-            unsigned int play = record->mUnknown14;
-            int base = 0;
-            int select = 0;
-            if (play == 21) {
-                if (kind >= 19 && kind <= 20) {primaryR = lbl_803EB3D3;primaryG = lbl_803EB3D7;primaryB = lbl_803EB3DB;}
-                else base = 1;
-            } else if (play == 11 || play == 37) {if (!kind) base = 1;}
-            else if ((play >= 1 && play <= 5) || play == 38) select = 1;
-            else if (play >= 12 && play <= 18) {
-                primaryR = lbl_803EB3D3;primaryG = lbl_803EB3D7;primaryB = lbl_803EB3DB;
-                if (record->mUnknownC != index) base = 1;
+            switch (entry->mUnknown14Word) {
+            case 5: case 6: case 7: case 8: case 9:
+                r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                inherited = 0;
+                break;
+            case 10: case 11: case 12: case 13: case 14: case 15:
+                r = lbl_803EB3DF; g = lbl_803EB3E3; b = lbl_803EB3E7;
+                inherited = 0;
+                break;
+            case 16: case 17: case 18:
+                r = lbl_803EB3C7; g = lbl_803EB3CB; b = lbl_803EB3CF;
+                inherited = 0;
+                break;
             }
-            if (select) {
-                int matched = 0;
-                for (unsigned char i = 0; i < 3; ++i) {
-                    if (record->mUnknown1C[i][0] == index) {
-                        int highlight = !kind;
-                        if (kind) highlight = fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF;
-                        if (highlight) {
-                            if (!i) {primaryR = lbl_803EB3EB;primaryG = lbl_803EB3EF;primaryB = lbl_803EB3F3;}
-                            else if (i == 1) {primaryR = lbl_803EB3F7;primaryG = lbl_803EB3FB;primaryB = lbl_803EB3FF;}
-                            else {primaryR = lbl_803EB403;primaryG = lbl_803EB407;primaryB = lbl_803EB40B;}
-                        } else base = 1;
-                        matched = 1;
-                        break;
+        }
+        if (inherited) {
+            unsigned int kind = entry->mUnknown14Word;
+            switch (record->mUnknown14) {
+            case 21:
+                if (kind >= 19 && kind <= 20) {
+                    r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
+                } else {
+                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                }
+                break;
+            case 11: case 37:
+                if (!kind) {
+                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                }
+                break;
+            case 12: case 13: case 14: case 15: case 16: case 17: case 18:
+                if (record->mUnknownC == index) {
+                    r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
+                } else {
+                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                }
+                break;
+            case 1: case 2: case 3: case 4: case 5: case 38:
+                if (!kind) {
+                    int matched = 0;
+                    for (unsigned char i = 0; i <= 2; ++i) {
+                        if (record->mUnknown1C[i][0] == index) {
+                            switch (i) {
+                            case 0: r = lbl_803EB3EB; g = lbl_803EB3EF; b = lbl_803EB3F3; break;
+                            case 1: r = lbl_803EB3F7; g = lbl_803EB3FB; b = lbl_803EB3FF; break;
+                            case 2: r = lbl_803EB403; g = lbl_803EB407; b = lbl_803EB40B; break;
+                            }
+                            matched = 1;
+                            break;
+                        }
+                    }
+                    if (!matched) {
+                        r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                    }
+                } else {
+                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
+                    for (unsigned char i = 0; i <= 2; ++i) {
+                        if (record->mUnknown1C[i][0] == index) {
+                            if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF) {
+                                switch (i) {
+                                case 0: r = lbl_803EB3EB; g = lbl_803EB3EF; b = lbl_803EB3F3; break;
+                                case 1: r = lbl_803EB3F7; g = lbl_803EB3FB; b = lbl_803EB3FF; break;
+                                case 2: r = lbl_803EB403; g = lbl_803EB407; b = lbl_803EB40B; break;
+                                }
+                            }
+                            break;
+                        }
                     }
                 }
-                if (!matched) base = 1;
+                break;
             }
-            if (base) {primaryR = lbl_803EB3BB;primaryG = lbl_803EB3C3;primaryB = lbl_803EB3BF;}
         }
     }
-    state->mUnknown2020[index].r = primaryR;
-    state->mUnknown2020[index].g = primaryG;
-    state->mUnknown2020[index].b = primaryB;
+    state->mUnknown2020[index].r = r;
+    state->mUnknown2020[index].g = g;
+    state->mUnknown2020[index].b = b;
     state->mUnknown2020[index].a = 255;
     state->mUnknown204C[index].r = secondaryR;
     state->mUnknown204C[index].g = secondaryG;
