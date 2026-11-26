@@ -6271,7 +6271,7 @@
           "end": "0x80120384"
         },
         {
-          "symbol": "fn_80120384",
+          "symbol": "AssignFlagsByBallHeading",
           "start": "0x80120384",
           "end": "0x8012055C"
         },

@@ -3722,7 +3722,7 @@ extern "C" int fn_8011FB80(void *pA, void *pB);
 extern "C" void fn_8011FCA4(void);
 extern "C" int fn_8011FD64(unsigned short index);
 extern "C" void fn_8011FE0C(void);
-extern "C" void fn_80120384(void);
+extern "C" void AssignFlagsByBallHeading(void);
 extern "C" int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir, float speed, float dist, int, float range);
 extern "C" int PursuitGetInterceptAngle(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir);
 extern "C" int fn_80120A50(Point_8017886C *p, Point_8017886C *pA, Point_8017886C *pB, Point_8017886C *pC);
@@ -24301,7 +24301,7 @@ void fn_8011FE0C(void)
 }
 
 extern "C" {
-void fn_80120384(void)
+void AssignFlagsByBallHeading(void)
 {
     short i;
     int count;
@@ -24336,7 +24336,11 @@ void fn_80120384(void)
         lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
     }
     for (i = 0; i < count; i++) {
-        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f || lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
+        // FAKEMATCH: the two range tests are separate arms that each clear the entry (jump2 merges the
+        // identical stores); the || form gives count r30 and &delta r29. See the evidence.tsv FAKEMATCH row.
+        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f) {
+            lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
+        } else if (lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
             lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
         }
     }
@@ -24405,7 +24409,7 @@ void fn_80120720(int value)
             fn_8011FE0C();
             break;
         case 3:
-            fn_80120384();
+            AssignFlagsByBallHeading();
             break;
         }
     }
