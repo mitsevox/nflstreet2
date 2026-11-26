@@ -1286,7 +1286,7 @@ extern "C" {
 extern float lbl_803EAE48;
 }
 
-/* View of the block at player +336 used by fn_800F8D2C and fn_800F9024. */
+/* View of the block at player +336 used by AssignBlockApproachUpdate and fn_800F9024. */
 struct Block_800F8D2C {
     int mRef;
     int mUnknown4;
@@ -3488,9 +3488,9 @@ extern "C" void fn_800F6AD8(float *p);
 extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
 extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
+extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
 extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
+extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
 extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
@@ -3498,7 +3498,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_800F8D24(Object_80039F5C *p);
-extern "C" int fn_800F8D2C(Object_80039F5C *p);
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p);
 extern "C" int fn_800F9024(Object_80039F5C *p);
 extern "C" int fn_800F930C(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p);
@@ -3791,7 +3791,7 @@ Input_800B6D34 lbl_802DAAD0 = {0};
 }
 
 static int (*lbl_802DAB38[4])(Object_80039F5C *p) = {
-    fn_800F8D24, fn_800F8D2C, fn_800F9024, fn_800F930C,
+    fn_800F8D24, AssignBlockApproachUpdate, fn_800F9024, fn_800F930C,
 };
 
 extern "C" {
@@ -6845,18 +6845,20 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
-extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
+extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *pOther, Point_8017886C *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Point_8017886C origin = fn_80177FE0();
         Vector_80039F5C ball;
         Point_8017886C delta;
         int side;
         int flag;
+        // FAKEMATCH: a zero held in a local makes the then-arm an EQ compare against a non-constant operand, so expand emits beq <true>; b <false> as the target does (see evidence.tsv).
+        int zero = 0;
 
         BallGetPosition(BallGetCurrent(), &ball);
         Vec2Sub(&delta, pTarget, &p->mMotion.mPos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
-        if (pTarget->mX > ball.mX ? side == 0 : side != 0) {
+        if (pTarget->mX > ball.mX ? side == zero : side != 0) {
             flag = 1;
         } else {
             flag = 0;
@@ -6925,16 +6927,19 @@ extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, Point_8
     }
 }
 
-extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut) {
+extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut) {
     if (p && pOther && pOut) {
         Vector_80039F5C pos;
         int side;
         int flag;
         float distance;
 
+        // FAKEMATCH: a zero held in a local makes the then-arm an EQ compare against a non-constant operand, so expand emits beq <true>; b <false> as the target does (see evidence.tsv).
+        int zero = 0;
+
         BallGetPosition(BallGetCurrent(), &pos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
-        if (*pX > pos.mX ? side == 0 : side != 0) {
+        if (*pX > pos.mX ? side == zero : side != 0) {
             flag = 1;
         } else {
             flag = 0;
@@ -6973,7 +6978,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F6D40(p, pOther, &spot, pOut);
-        fn_800F6E30(p, pOther, &spot, pOut);
+        AssignSteerLateralToTarget(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
@@ -7065,7 +7070,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F70D0(p, pOther, &spot, pOut);
-        fn_800F722C(p, pOther, &spot.mX, &pOut->mX);
+        AssignSteerLateralByGap(p, pOther, &spot.mX, &pOut->mX);
         fn_800F6B2C(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
@@ -7274,7 +7279,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, pPos);
         fn_800F6C90(p, pOther, &spot, pOut);
-        fn_800F6E30(p, pOther, &spot, pOut);
+        AssignSteerLateralToTarget(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
         direction = MathArcTan2(pOut->mY, pOut->mX) & 0xFFFFFF;
         if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
@@ -7507,7 +7512,7 @@ extern "C" int fn_800F8D24(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F8D2C(Object_80039F5C *p) {
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p) {
     Block_800F8D2C *pBlock = (Block_800F8D2C *)&p->mUnknown336;
     Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mRef);
 
@@ -7561,24 +7566,47 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
                 if (pBlock->mUnknown16 > 60) {
                     return 0;
                 }
-            } else if (side == 1 ? angle < 0x400000 : angle > 0x400000) {
-                if (pBlock->mUnknown16 > 30) {
-                    return 0;
-                }
-            } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
-                if (fabsf(delta.mX) < 2.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (pBlock->mUnknown16 > 45) {
-                    return 0;
+            } else if (side == 1) {
+                if (angle < 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             } else {
-                if (fabsf(delta.mX) < 1.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (delta.mY > -5.0f) {
-                    pBlock->mUnknown22 = 2;
-                    return 1;
+                if (angle > 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             }
         } else {
