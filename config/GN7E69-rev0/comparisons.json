@@ -19082,7 +19082,7 @@
           "end": "0x80219854"
         },
         {
-          "symbol": "fn_80218AF0",
+          "symbol": "UISInternalLoadScreen",
           "start": "0x80218AF0",
           "end": "0x80218CB8"
         },
@@ -19097,17 +19097,17 @@
           "end": "0x802191F0"
         },
         {
-          "symbol": "fn_802191F0",
+          "symbol": "UISInternalUnloadScreen",
           "start": "0x802191F0",
           "end": "0x8021956C"
         },
         {
-          "symbol": "fn_80219E18",
+          "symbol": "UISInternalActivateScreen",
           "start": "0x80219E18",
           "end": "0x80219F84"
         },
         {
-          "symbol": "fn_80219BA0",
+          "symbol": "UISInternalActivateControl",
           "start": "0x80219BA0",
           "end": "0x80219E18"
         }

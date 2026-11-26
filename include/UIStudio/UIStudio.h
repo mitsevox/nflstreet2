@@ -33,7 +33,6 @@ typedef struct UISControlInfo_t {
     Float32 f58; /* 0x58 */
 } UISControlInfoT;
 
-/* Per-control state block; only the enable word is established. */
 /* Draw colour factors (r, g, b, a). */
 typedef struct UISColorVector_t {
     Float32 r; /* 0x00 */
@@ -42,6 +41,7 @@ typedef struct UISColorVector_t {
     Float32 a; /* 0x0C */
 } UISColorVectorT;
 
+/* Per-control state block. */
 typedef struct UISControlState_t {
     void *pOwner;   /* 0x00: the control or node that owns it; 0 while hidden */
     Int32 bEnabled; /* 0x04 */
@@ -287,14 +287,14 @@ void UISUnloadRateFnc(UISInfoT *pInfo, UISControlInfoT *pControlInfo, Uint32 Rat
 void UISRemoveUnNessaryRateFncs(UISInfoT *pInfo);
 
 /* UIStudio.c functions called from other files; names not yet established. */
-Int32 fn_80218AF0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
+Int32 UISInternalLoadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
                   Uint16 ParentScreenID, Uint8 Count, Int32 *pArgs);
-Int32 fn_802191F0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
+Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
 void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
                  Int32 *pArgs, Int32 bAll);
-void fn_80219BA0(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
+void UISInternalActivateControl(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
                  Uint16 Arg6);
-void fn_80219E18(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
+void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
 
 /* UI Studio functions outside UIStudio.c whose names are not yet established. */
 Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);

@@ -658,7 +658,7 @@ void UISRegisterPluginFnc(UISInfoT *pInfo, Uint32 Fnc, UISActionFncT *pFnc)
    its initializers and transforms and sends it event -2 with the arguments. A
    loaded screen is set up again instead. Returns 0 when it was already loaded or
    the load callback gave nothing. */
-Int32 fn_80218AF0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
+Int32 UISInternalLoadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
                   Uint16 ParentScreenID, Uint8 Count, Int32 *pArgs)
 {
     Uint32 Screen;
@@ -705,8 +705,9 @@ Int32 fn_80218AF0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 Paren
     return 1;
 }
 
-/* Sets the cursor target; a target that fails the 0x8021861C test is cleared.
-   Returns 1 when pTarget was nonzero. */
+/* Sets the cursor target; a new target is patched first (PatchScrData). The
+   clear-on-failure test can never fire: PatchScrData returns 1 or -1, and its
+   low byte (1 or 0xFF) is never 0. Returns 1 when pTarget was nonzero. */
 Int32 UISSetGlobalScript(UISInfoT *pInfo, void *pTarget)
 {
     Int32 Result;
@@ -722,6 +723,9 @@ Int32 UISSetGlobalScript(UISInfoT *pInfo, void *pTarget)
     return Result;
 }
 
+/* Sets up an already loaded screen again: its rate functions are dropped, its
+   first control is enabled and it gets event -2 with the arguments (Count 255
+   takes the count from pArgs[10]). The parent IDs are not used. Returns 1. */
 static Int32 _UISInternalReInitScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, Int32 Arg4,
                   Int32 Count, Int32 *pArgs)
 {
@@ -743,7 +747,7 @@ static Int32 _UISInternalReInitScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 Sc
 
 /* Goes to a screen: loaded (or set up again) unless it is already loaded; a
    modal record is pushed for it while modal screens are up. Returns what
-   fn_80218AF0 returned. */
+   UISInternalLoadScreen returned. */
 static Int32 _UISInternalLoad(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bModal, Uint8 Count,
                   Int32 *pArgs)
 {
@@ -782,7 +786,7 @@ static Int32 _UISInternalLoad(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
         pModal->ScreenID = ScreenID;
         pInfo->NumScreenRefs++;
     }
-    rVal = fn_80218AF0(pInfo, GroupID, ScreenID, iActiveGroup, iActiveScreen, Count, pArgs);
+    rVal = UISInternalLoadScreen(pInfo, GroupID, ScreenID, iActiveGroup, iActiveScreen, Count, pArgs);
     if (bModal) {
         Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
         if (Screen < pInfo->NumScreens) {
@@ -877,7 +881,7 @@ static Uint8 UISInternalUnloadModal(UISInfoT *pInfo, Uint16 GroupID, Uint16 Scre
    frees its data and the table closes up. With no current screen left, its
    parent (or the last screen) is activated. Returns 0 when UISInternalUnloadModal says the
    screen cannot go yet. */
-Int32 fn_802191F0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 iRetVal)
+Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 iRetVal)
 {
     UISScreenT *pScreen;
     UISScreenT *pOther;
@@ -1000,7 +1004,7 @@ void fn_802195E4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
     }
 }
 
-/* Returns the group and screen IDs of the active screen (-1 when none). */
+/* Returns the group and screen IDs of the active screen (0xFFFF when none). */
 void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID)
 {
     if (pGroupID != 0) {
@@ -1018,8 +1022,10 @@ void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID)
 }
 
 /* Runs the queued thread actions, makes the screen of the last modal record
-   current, then sends event Channel to it (or to every screen when AllScreens)
-   unless the screen has taken it already; a negative Message is sent again. */
+   current, then sends Message on Channel to it (or to every screen when
+   AllScreens). A screen whose unk_00 bit (1 << Channel) is set is skipped, except
+   that on channel 0 (where the bit equals 1) negative (studio) messages still go
+   through. */
 void UISProcessEvent(UISInfoT *pInfo, Uint32 Channel, Int32 Message, Int32 nParam, Int32 *pParam,
                  Int32 AllScreens)
 {
@@ -1172,7 +1178,7 @@ void *UISFindStaticObject(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint
    control has for it. Switching one on first switches off the sibling that is
    on. The scripts get iDir and the block's place in the table TableEntry (a
    count, a word, then file offsets; -1 when it is not there). */
-void fn_80219BA0(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, Int32 ControlInfo,
+void UISInternalActivateControl(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, Int32 ControlInfo,
                  Int32 TableEntry, Uint16 ScreenID, Uint16 GroupID)
 {
     UISControlStateT *pControlInfo;
@@ -1225,7 +1231,7 @@ void fn_80219BA0(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, Int32 ControlInfo
     if (bActivate == 1) {
         pOldEnabled = fn_8021D37C(pScreen, pControlInfo);
         if (pOldEnabled != 0) {
-            fn_80219BA0(pInfo, 0, 0, (Int32)pOldEnabled, 0, ScreenID, GroupID);
+            UISInternalActivateControl(pInfo, 0, 0, (Int32)pOldEnabled, 0, ScreenID, GroupID);
         }
     }
     pcEvent = fn_8021C654(pTarget, nEvent);
@@ -1258,7 +1264,7 @@ void fn_80219BA0(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, Int32 ControlInfo
    first gets event -5; then, unless the studio is shutting down, the screen
    becomes current, its first control is enabled, the game hears of it and it
    gets event -4. A screen waiting to be unloaded is refused with a warning. */
-void fn_80219E18(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID, Uint16 ScreenID)
+void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID, Uint16 ScreenID)
 {
     char strBuffer[512];
     UISScreenT *pScreen;
