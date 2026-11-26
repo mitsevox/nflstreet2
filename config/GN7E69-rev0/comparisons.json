@@ -2433,7 +2433,7 @@
     {
       "source": "src/game/GearDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact fn_8007BF60 stays registered here as its partial (source-form row 0x8007BF60-0x8007C46C).",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact GearDbUpgradeItem stays registered here as its partial (source-form row 0x8007BF60-0x8007C46C).",
       "sections": [
         {
           "section": ".text",
@@ -11289,7 +11289,7 @@
     {
       "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact fn_8007FA48, fn_80080084 and fn_8008058C stay registered here as its partials (their HOLDOUT source-form rows).",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds, PlayerRecordWriteById and PlayerQueryOpen stay registered here as its partials (their HOLDOUT source-form rows).",
       "sections": [
         {
           "section": ".text",

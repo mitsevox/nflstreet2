@@ -26,9 +26,6 @@ void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index);
 void CreateTeamPlayerCursorClose(DbCursor *pCursor);
 }
 
-extern "C" {
-}
-
 static int _GearDb_aColumnTags[33] = {
     0x48545247, 0x54485447, 0x4C475447, 0x52545447, 0x50535447, 0x43425447, 0x424C5447,
     0x42455447, 0x41465447, 0x52575447, 0x44485447, 0x48545447, 0x4E4B5447, 0x53555447,

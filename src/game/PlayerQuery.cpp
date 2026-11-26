@@ -37,7 +37,7 @@ QueryCursor _PlayerQuery_sTeam34Cursor;
 QueryCursor _PlayerQuery_sPrtyCursor;
 }
 
-extern "C" int PlayerRecordFindFreeIds(int table, int column, int *out, unsigned short *count, int start)
+extern "C" int PlayerRecordFindFreeIds(int db, int table, int *out, unsigned short *count, int start)
 {
     QueryCursor cursor;
     cursor.mUnknown8 = -1;
@@ -47,9 +47,9 @@ extern "C" int PlayerRecordFindFreeIds(int table, int column, int *out, unsigned
     int row;
     int result;
     if (start < 0)
-        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", table, &cursor, &row, column);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", db, &cursor, &row, table);
     else
-        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", table, &cursor, &row, column, start);
+        result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c where 'DIGP' >= \x82 order by 'DIGP' asc\n", db, &cursor, &row, table, start);
     int previous = start;
     int high = 0x7FFF;
     int next = -1;

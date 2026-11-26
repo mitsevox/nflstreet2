@@ -8440,7 +8440,7 @@
     {
       "source": "src/game/GearDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout fn_8007BF60 keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout GearDbUpgradeItem keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
