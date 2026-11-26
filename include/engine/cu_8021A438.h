@@ -24,6 +24,14 @@ typedef struct UIGTextBuffer_t {
     char *pText;    /* 0x08 */
 } UIGTextBuffer_t;
 
+/* Corner data of an image or colour node: colours, texture coordinates
+   (8.8 fixed point) and positions (12.4 fixed point) of its four corners. */
+typedef struct UIGNodeQuad_t {
+    GXColor Colors[4];      /* 0x00 */
+    Uint16 Coords[4][2];    /* 0x10 */
+    Int16 Pos[4][3];        /* 0x20 */
+} UIGNodeQuad_t;
+
 /* Only the accessed members are declared; the size is not established.
    Bit 15 of Flags selects the display-list form of the +0x10 member. */
 typedef struct UIGNode_t {
@@ -39,9 +47,7 @@ typedef struct UIGNode_t {
         UIGDispList_t List;
         struct {
             Uint16 Scale[2];       /* 0x10 */
-            GXColor Colors[4];     /* 0x14 */
-            Uint16 Coords[4][2];   /* 0x24 */
-            Int16 Pos[4][3];       /* 0x34 */
+            UIGNodeQuad_t Quad;    /* 0x14 */
         } v;
         struct {
             Uint16 unk_10;         /* 0x10 */

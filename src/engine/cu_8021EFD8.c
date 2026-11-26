@@ -98,7 +98,6 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
     Int32 i;
     Uint16 Index;
     Uint16 Item;
-    Float32 Value;
 
     switch (Msg) {
     case -1:
@@ -126,37 +125,58 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
         }
         break;
     case 0:
-        i = ((Int32 *)pData)[0];
-        pNode->u.v.Pos[i][0] = ((Float32 *)pData)[1] * 16.0f;
-        pNode->u.v.Pos[i][1] = ((Float32 *)pData)[2] * 16.0f;
-        pNode->u.v.Pos[i][2] = ((Float32 *)pData)[3] * 16.0f;
+        {
+            Float32 x = ((Float32 *)pData)[1] * 16.0f;
+            Float32 y = ((Float32 *)pData)[2] * 16.0f;
+            Float32 z = ((Float32 *)pData)[3] * 16.0f;
+
+            i = ((Int32 *)pData)[0];
+            pNode->u.v.Quad.Pos[i][0] = x;
+            pNode->u.v.Quad.Pos[i][1] = y;
+            pNode->u.v.Quad.Pos[i][2] = z;
+        }
         break;
     case 1:
-        i = ((Int32 *)pData)[0];
-        pNode->u.v.Coords[i][0] = ((Float32 *)pData)[1] * 256.0f;
-        pNode->u.v.Coords[i][1] = ((Float32 *)pData)[2] * 256.0f;
+        {
+            Float32 s = ((Float32 *)pData)[1] * 256.0f;
+            Float32 t = ((Float32 *)pData)[2] * 256.0f;
+
+            i = ((Int32 *)pData)[0];
+            pNode->u.v.Quad.Coords[i][0] = s;
+            pNode->u.v.Quad.Coords[i][1] = t;
+        }
         break;
     case 2:
+        {
+        Uint8 b = ((Int32 *)pData)[3];
+        Uint8 r = ((Int32 *)pData)[1];
+        Uint8 g = ((Int32 *)pData)[2];
+
         if (((Int32 *)pData)[0] == -1) {
-            for (i = 0; i < 4; i++) {
-                pNode->u.v.Colors[i].r = ((Int32 *)pData)[1];
-                pNode->u.v.Colors[i].g = ((Int32 *)pData)[2];
-                pNode->u.v.Colors[i].b = ((Int32 *)pData)[3];
+            for (i = 3; i >= 0; i--) {
+                pNode->u.v.Quad.Colors[i].r = r;
+                pNode->u.v.Quad.Colors[i].g = g;
+                pNode->u.v.Quad.Colors[i].b = b;
             }
         } else {
             i = ((Int32 *)pData)[0];
-            pNode->u.v.Colors[i].r = ((Int32 *)pData)[1];
-            pNode->u.v.Colors[i].g = ((Int32 *)pData)[2];
-            pNode->u.v.Colors[i].b = ((Int32 *)pData)[3];
+            pNode->u.v.Quad.Colors[i].r = r;
+            pNode->u.v.Quad.Colors[i].g = g;
+            pNode->u.v.Quad.Colors[i].b = b;
+        }
         }
         break;
     case 3:
+        {
+        Uint8 a = ((Int32 *)pData)[1];
+
         if (((Int32 *)pData)[0] == -1) {
-            for (i = 0; i < 4; i++) {
-                pNode->u.v.Colors[i].a = ((Int32 *)pData)[1];
+            for (i = 3; i >= 0; i--) {
+                pNode->u.v.Quad.Colors[i].a = a;
             }
         } else {
-            pNode->u.v.Colors[((Int32 *)pData)[0]].a = ((Int32 *)pData)[1];
+            pNode->u.v.Quad.Colors[((Int32 *)pData)[0]].a = a;
+        }
         }
         break;
     case 4:
@@ -186,32 +206,40 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
                 }
                 UIGTexNodeSwap(pObject, &pNode->unk_06, &pNode->unk_04, Index, Item);
             }
-            pNode->unk_0E = -1;
             pNode->unk_0C = -1;
+            pNode->unk_0E = -1;
         }
         break;
     case 6:
-        Value = ((Float32 *)pData)[0];
-        if (Value > 1.0f) {
-            Value = 1.0f;
+        {
+        Float32 x = ((Float32 *)pData)[0];
+        Float32 y = ((Float32 *)pData)[1];
+
+        if (!(x <= 1.0f)) {
+            x = 1.0f;
         }
-        if (Value < 0.0f) {
-            Value = 0.0f;
+        if (!(x >= 0.0f)) {
+            x = 0.0f;
         }
-        pNode->u.v.Scale[0] = Value * 65535.0f;
-        Value = ((Float32 *)pData)[1];
-        if (Value > 1.0f) {
-            Value = 1.0f;
+        pNode->u.v.Scale[0] = x * 65535.0f;
+        if (!(y <= 1.0f)) {
+            y = 1.0f;
         }
-        if (Value < 0.0f) {
-            Value = 0.0f;
+        if (!(y >= 0.0f)) {
+            y = 0.0f;
         }
-        pNode->u.v.Scale[1] = Value * 65535.0f;
+        pNode->u.v.Scale[1] = y * 65535.0f;
+        }
         break;
     case 7:
-        if ((pNode->Flags & 0x10) || (((Int16 *)pData)[0] != -1 && ((Int16 *)pData)[1] != -1)) {
-            pNode->unk_08 = ((Int16 *)pData)[1];
-            pNode->unk_0A = ((Int16 *)pData)[0];
+        {
+            Int16 Lib = ((Int16 *)pData)[0];
+            Int16 Entry = ((Int16 *)pData)[1];
+
+            if ((pNode->Flags & 0x10) || (Lib != -1 && Entry != -1)) {
+                pNode->unk_08 = Entry;
+                pNode->unk_0A = Lib;
+            }
         }
         break;
     case 8:
@@ -227,20 +255,27 @@ void fn_8021EFD8(UIGNode_t *pNode, Uint32 Msg, Int32 Unused, void *pData, void *
         }
         break;
     case 10:
+        {
+        Uint8 r = ((Int32 *)pData)[1];
+
         if (((Int32 *)pData)[0] == -1) {
-            for (i = 0; i < 4; i++) {
-                pNode->u.v.Colors[i].r = ((Int32 *)pData)[1];
+            for (i = 3; i >= 0; i--) {
+                pNode->u.v.Quad.Colors[i].r = r;
             }
         } else {
-            pNode->u.v.Colors[((Int32 *)pData)[0]].r = ((Int32 *)pData)[1];
+            pNode->u.v.Quad.Colors[((Int32 *)pData)[0]].r = r;
+        }
         }
         break;
     case 11:
-        pObject = UIGLibraryGetGlobal(1);
-        if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
-            *(Int32 *)pOut = UIGLibraryIsItemLoading(pObject, pNode->unk_06, pNode->unk_04) == 0;
-        } else {
-            *(Int32 *)pOut = 0;
+        {
+            UIGLibrary_t *pLib = UIGLibraryGetGlobal(1);
+
+            if (pNode->unk_06 != -1 && pNode->unk_04 != -1) {
+                *(Int32 *)pOut = UIGLibraryIsItemLoading(pLib, pNode->unk_06, pNode->unk_04) == 0;
+            } else {
+                *(Int32 *)pOut = 0;
+            }
         }
         break;
     }
@@ -327,9 +362,9 @@ void fn_8021F8DC(UIGNode_t *pNode)
     } else if ((pNode->Flags & 3) == 2) {
         pNode->Flags |= 1;
         for (i = 0; i < 4; i++) {
-            pNode->u.v.Colors[i].r = 255;
-            pNode->u.v.Colors[i].g = 255;
-            pNode->u.v.Colors[i].b = 255;
+            pNode->u.v.Quad.Colors[i].r = 255;
+            pNode->u.v.Quad.Colors[i].g = 255;
+            pNode->u.v.Quad.Colors[i].b = 255;
         }
     }
 }
@@ -416,36 +451,33 @@ void fn_8021FB30(UIGNode_t *pNode)
     Float32 aS[4];
     Float32 aT[4];
     UIGNodePalette_t *pPalette = NULL;
-    Float32 Value;
     Float32 S;
     Float32 T;
     Int32 i;
+    UIGNodeQuad_t *pQuad;
 
     fn_80220D34();
+    pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
     }
     for (i = 0; i < 4; i++) {
-        aVtx[i].Color = pNode->u.v.Colors[i];
+        aVtx[i].Color = pQuad->Colors[i];
         if (pPalette != NULL && !(pNode->Flags & 0x10)) {
             if (aVtx[i].Color.r > pPalette->Count) {
                 aVtx[i].Color.r = pPalette->Count - 1;
             }
             aVtx[i].Color = pPalette->Colors[aVtx[i].Color.r];
         }
-        Value = aVtx[i].Color.r;
-        aVtx[i].Color.r = Value;
-        Value = aVtx[i].Color.g;
-        aVtx[i].Color.g = Value;
-        Value = aVtx[i].Color.b;
-        aVtx[i].Color.b = Value;
-        Value = aVtx[i].Color.a;
-        aVtx[i].Color.a = Value;
-        aVtx[i].St[0] = pNode->u.v.Coords[i][0];
-        aVtx[i].St[1] = pNode->u.v.Coords[i][1];
-        aVtx[i].Pos[0] = pNode->u.v.Pos[i][0];
-        aVtx[i].Pos[1] = pNode->u.v.Pos[i][1];
-        aVtx[i].Pos[2] = pNode->u.v.Pos[i][2];
+        aVtx[i].Color.r = (Float32)aVtx[i].Color.r;
+        aVtx[i].Color.g = (Float32)aVtx[i].Color.g;
+        aVtx[i].Color.b = (Float32)aVtx[i].Color.b;
+        aVtx[i].Color.a = (Float32)aVtx[i].Color.a;
+        aVtx[i].St[0] = pQuad->Coords[i][0];
+        aVtx[i].St[1] = pQuad->Coords[i][1];
+        aVtx[i].Pos[0] = pQuad->Pos[i][0];
+        aVtx[i].Pos[1] = pQuad->Pos[i][1];
+        aVtx[i].Pos[2] = pQuad->Pos[i][2];
     }
     if (pNode->Flags & 8) {
         S = pNode->u.v.Scale[0] * (1.0f / 131070.0f);
@@ -495,34 +527,31 @@ void fn_80220310(UIGNode_t *pNode)
     Float32 aS[4];
     Float32 aT[4];
     UIGNodePalette_t *pPalette = NULL;
-    Float32 Value;
     Float32 S;
     Float32 T;
     Int32 i;
+    UIGNodeQuad_t *pQuad;
 
     fn_80220D34();
+    pQuad = &pNode->u.v.Quad;
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
         pPalette = (UIGNodePalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
     }
     for (i = 0; i < 4; i++) {
-        aVtx[i].Color = pNode->u.v.Colors[i];
+        aVtx[i].Color = pQuad->Colors[i];
         if (pPalette != NULL) {
             if (aVtx[i].Color.r > pPalette->Count) {
                 aVtx[i].Color.r = pPalette->Count - 1;
             }
             aVtx[i].Color = pPalette->Colors[aVtx[i].Color.r];
         }
-        Value = aVtx[i].Color.r;
-        aVtx[i].Color.r = Value;
-        Value = aVtx[i].Color.g;
-        aVtx[i].Color.g = Value;
-        Value = aVtx[i].Color.b;
-        aVtx[i].Color.b = Value;
-        Value = aVtx[i].Color.a;
-        aVtx[i].Color.a = Value;
-        aVtx[i].Pos[0] = pNode->u.v.Pos[i][0];
-        aVtx[i].Pos[1] = pNode->u.v.Pos[i][1];
-        aVtx[i].Pos[2] = pNode->u.v.Pos[i][2];
+        aVtx[i].Color.r = (Float32)aVtx[i].Color.r;
+        aVtx[i].Color.g = (Float32)aVtx[i].Color.g;
+        aVtx[i].Color.b = (Float32)aVtx[i].Color.b;
+        aVtx[i].Color.a = (Float32)aVtx[i].Color.a;
+        aVtx[i].Pos[0] = pQuad->Pos[i][0];
+        aVtx[i].Pos[1] = pQuad->Pos[i][1];
+        aVtx[i].Pos[2] = pQuad->Pos[i][2];
     }
     if (pNode->Flags & 8) {
         S = pNode->u.v.Scale[0] * (1.0f / 131070.0f);
@@ -607,10 +636,10 @@ void fn_80220AD0(UIGNode_t *pNode, Int32 a, Int32 Item)
         Second = 1;
     } else {
         for (i = 0; i < 4; i++) {
-            if (pNode->u.v.Coords[i][0] > 256) {
+            if (pNode->u.v.Quad.Coords[i][0] > 256) {
                 First = 1;
             }
-            if (pNode->u.v.Coords[i][1] > 256) {
+            if (pNode->u.v.Quad.Coords[i][1] > 256) {
                 Second = 1;
             }
         }
