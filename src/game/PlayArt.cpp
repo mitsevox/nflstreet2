@@ -30,8 +30,8 @@ int PlayAlignLoadSetPlayers(void *, int, signed char, int, PlayArtPlayer_t *);
 int PlayAlignLoadPlayRoutes(void *, int, int, PlayArtPlayer_t *);
 int PlayAlignLoadRouteSteps(void *, PlayArtPlayer_t *, int, unsigned char);
 void PlayAlignSwapOuterSlots(PlayArtPlay_t *, int);
-void fn_80166BE8(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *, int, int, unsigned char);
-int fn_8016631C(PlayArtPlayer_t *, int, void *, void *, void *, void *, int);
+void PlayArtSetPlayerColors(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *, int, int, unsigned char);
+int PlayArtBuildRoute(PlayArtPlayer_t *, int, void *, void *, void *, void *, int);
 int PlayAlignBuildSlotRects(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *);
 PlayBookTeam_t *PlayBookGetTeam(int);
 void UISGameSetDrawMode(int);
@@ -88,10 +88,10 @@ void PlayArtBuild(void *p, PlayArtPlay_t *object, int, int, int, int group, int 
         state->mUnknown2084[i][2] = x + dx;
         state->mUnknown2084[i][3] = y + dy;
         unsigned char value = PlayBookGetTeam((unsigned char)group)->mUnknown20.mUnknown10;
-        fn_80166BE8(object, state, record, group, i, value);
+        PlayArtSetPlayerColors(object, state, record, group, i, value);
         state->mUnknown2134[i] = record->mUnknown10;
         memset(state->mUnknown19F0[i], 0, 0x30);
-        int size = fn_8016631C(record, remaining, state->mUnknown0 + used * 8,
+        int size = PlayArtBuildRoute(record, remaining, state->mUnknown0 + used * 8,
             state->mUnknown970[i], state->mUnknown19F0[i], state->mUnknown1E10[i], flag);
         used += size;
         remaining -= size;
@@ -208,7 +208,7 @@ int fn_800AD9B4(void);
 int PlayAlignHasSlots(PlayBookPlay_t *);
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
 
-void fn_80166110(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
+void PlayArtBuildArrowQuad(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
 {
     PlayArtVertex_t direction;
     direction.mY = points[0].mY - points[1].mY;
@@ -241,7 +241,7 @@ int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
     return count;
 }
 
-int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
+int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
                 void *kindBuffer, void *colorBuffer, int extend)
 {
     PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
@@ -336,7 +336,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
                 arrows[i][1].mX = axis[0].mX + x;
                 arrows[i][2].mY = axis[0].mY - y;
             } else {
-                fn_80166110(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
+                PlayArtBuildArrowQuad(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
                 for (int j = 0; j < 4; ++j) arrows[i][j] = strip[j];
             }
         }
@@ -345,7 +345,7 @@ int fn_8016631C(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void 
     return count;
 }
 
-void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
+void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
 {
     unsigned char r = 130, g = 130, b = 130;
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
