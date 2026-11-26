@@ -267,7 +267,9 @@ void PlayAlignIssueTeamRoutes(PlayBookFormation_t *object, PlayBookPlay_t *recor
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
     short count = 0;
-    if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
+    Record_8011F4E0 *info = fn_8011F4E0();
+    int kind = p->mUnknown2914;
+    if (info->mUnknown6 && (unsigned int)(kind - 17) <= 1) remap = !remap;
     unsigned char index;
     if (!remap) index = p->mIdBytes[1];
     else index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;

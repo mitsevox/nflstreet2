@@ -526,10 +526,6 @@
       "address": "0x8016631C",
       "evidence": "evidence.tsv function and name rows at 0x8016631C. PlayArtBuild in the linked PlayArt.cpp range calls the original-byte PlayArtBuildRoute (a PlayArt.cpp holdout registered in comparisons.json)."
     },
-    "PlayArtSetPlayerColors": {
-      "address": "0x80166BE8",
-      "evidence": "evidence.tsv function and name rows at 0x80166BE8. PlayArtBuild in the linked PlayArt.cpp range calls the original-byte PlayArtSetPlayerColors (a PlayArt.cpp holdout registered in comparisons.json)."
-    },
     "YUV_convert": {
       "address": "0x801DB900",
       "evidence": "evidence.tsv function and related name rows at 0x801DB900. render.c calls the original-byte YUV_convert provider (yuvconv.c is a registered comparison)."
@@ -14516,7 +14512,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80167094",
+          "start": "0x80166BE8",
           "end": "0x80167910"
         },
         {

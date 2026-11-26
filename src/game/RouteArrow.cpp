@@ -559,7 +559,8 @@ void RouteArrowBuild(RouteArrow_t *p)
     PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (PlayAlignHasSlots(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
-            if (pPlayer->mIdBytes[1] == *pRecord->mUnknown1C[i]) {
+            // FAKEMATCH: slot byte addressed as pRecord + (i << 2) + 0x1C, not *pRecord->mUnknown1C[i]
+            if (pPlayer->mIdBytes[1] == *((unsigned char *)pRecord + (i << 2) + 0x1C)) {
                 int index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
                 if (index == 0xffff && fn_800F06F4(0, p->mpCommands, 21, 0xffff) == index) continue;
                 switch (i) {

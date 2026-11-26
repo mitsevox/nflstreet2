@@ -45,6 +45,138 @@ int ResSetMemFlags(int);
 void PlayArtRenderLoadTextures(int);
 void PlayArtRenderUnloadTextures(void);
 
+extern int lbl_802E98E0[];
+extern unsigned char lbl_802E98F0[][3];
+extern int lbl_803EB3B8, lbl_803EB3BC, lbl_803EB3C0, lbl_803EB3C4, lbl_803EB3C8, lbl_803EB3CC, lbl_803EB3D0, lbl_803EB3D4, lbl_803EB3D8, lbl_803EB3DC, lbl_803EB3E0, lbl_803EB3E4, lbl_803EB3E8, lbl_803EB3EC, lbl_803EB3F0, lbl_803EB3F4, lbl_803EB3F8, lbl_803EB3FC, lbl_803EB400, lbl_803EB404, lbl_803EB408;
+int fn_80177F70(void);
+int PauseIsOpen(void);
+
+void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
+{
+    unsigned char (*slots)[4] = record->mUnknown1C;
+    int found = 0;
+    unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
+    unsigned char r = 130, g = 130, b = 130;
+
+    if (!fn_80177F70() && !PauseIsOpen()) {
+        r = (unsigned char)lbl_803EB3D0; g = (unsigned char)lbl_803EB3D4; b = (unsigned char)lbl_803EB3D8;
+    } else {
+        int inherited = 1;
+        void *queue = PlayAlignGetRoute(record, (unsigned char)team, (unsigned short)index);
+        unsigned char i;
+        for (i = 0; i <= 3; ++i) {
+            if (fn_800F06F4(0, queue, (unsigned char)lbl_802E98E0[i], 0xFFFF) != 0xFFFF) {
+                secondaryR = lbl_802E98F0[i][0];
+                secondaryG = lbl_802E98F0[i][1];
+                secondaryB = lbl_802E98F0[i][2];
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            secondaryR = 255;
+            secondaryG = 255;
+            secondaryB = 255;
+        }
+        if (inherited) {
+            switch ((unsigned int)entry->mUnknown14Word) {
+            case 10: case 11: case 12:
+                r = (unsigned char)lbl_803EB3DC; g = (unsigned char)lbl_803EB3E0; b = (unsigned char)lbl_803EB3E4;
+                inherited = 0;
+                break;
+            case 13: case 14: case 15:
+                r = (unsigned char)lbl_803EB3DC; g = (unsigned char)lbl_803EB3E0; b = (unsigned char)lbl_803EB3E4;
+                inherited = 0;
+                break;
+            case 16: case 17: case 18:
+                r = (unsigned char)lbl_803EB3C4; g = (unsigned char)lbl_803EB3C8; b = (unsigned char)lbl_803EB3CC;
+                inherited = 0;
+                break;
+            case 5: case 6: case 7: case 8: case 9:
+                r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                inherited = 0;
+                break;
+            }
+        }
+        if (inherited) {
+            unsigned int kind = entry->mUnknown14Word;
+            switch (record->mUnknown14) {
+            case 12: case 13: case 14: case 15: case 16: case 17: case 18:
+                if (record->mUnknownC == index) {
+                    r = (unsigned char)lbl_803EB3D0; g = (unsigned char)lbl_803EB3D4; b = (unsigned char)lbl_803EB3D8;
+                } else {
+                    r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                }
+                break;
+            case 1: case 2: case 3: case 4: case 5: case 38:
+                if (!kind) {
+                    int matched = 0;
+                    for (i = 0; i <= 2; ++i) {
+                        if (slots[i][0] == index) {
+                            switch (i) {
+                            case 0: r = (unsigned char)lbl_803EB3E8; g = (unsigned char)lbl_803EB3EC; b = (unsigned char)lbl_803EB3F0; break;
+                            case 1: r = (unsigned char)lbl_803EB3F4; g = (unsigned char)lbl_803EB3F8; b = (unsigned char)lbl_803EB3FC; break;
+                            case 2: r = (unsigned char)lbl_803EB400; g = (unsigned char)lbl_803EB404; b = (unsigned char)lbl_803EB408; break;
+                            }
+                            matched = 1;
+                            break;
+                        }
+                    }
+                    if (!matched) {
+                        r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                    }
+                } else {
+                    r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                    for (i = 0; i <= 2; ++i) {
+                        if (slots[i][0] == index) {
+                            if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF) {
+                                switch (i) {
+                                case 0: r = (unsigned char)lbl_803EB3E8; g = (unsigned char)lbl_803EB3EC; b = (unsigned char)lbl_803EB3F0; break;
+                                case 1: r = (unsigned char)lbl_803EB3F4; g = (unsigned char)lbl_803EB3F8; b = (unsigned char)lbl_803EB3FC; break;
+                                case 2: r = (unsigned char)lbl_803EB400; g = (unsigned char)lbl_803EB404; b = (unsigned char)lbl_803EB408; break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                break;
+            case 11: case 37:
+                if (!kind) {
+                    r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                }
+                break;
+            // FAKEMATCH: no-op cases 23-35 and 36 (a dead store keeps its label apart); they only shape the compare tree
+
+            case 23: case 24: case 25: case 26: case 27: case 28:
+            case 29: case 30: case 31: case 32: case 33: case 34: case 35:
+                break;
+            case 36:
+                inherited = 0;
+                break;
+            case 21:
+                switch (kind) {
+                case 19: case 20:
+                    r = (unsigned char)lbl_803EB3D0; g = (unsigned char)lbl_803EB3D4; b = (unsigned char)lbl_803EB3D8;
+                    break;
+                default:
+                    r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
+                    break;
+                }
+                break;
+            }
+        }
+    }
+    state->mUnknown2020[index].r = r;
+    state->mUnknown2020[index].g = g;
+    state->mUnknown2020[index].b = b;
+    state->mUnknown2020[index].a = 255;
+    state->mUnknown204C[index].r = secondaryR;
+    state->mUnknown204C[index].g = secondaryG;
+    state->mUnknown204C[index].b = secondaryB;
+    state->mUnknown204C[index].a = 255;
+}
+
 void PlayArtReadPositions(void *p, unsigned char *input, void *, int a, int b, signed char c, int group, int index)
 {
     PlayAlignLoadSetPlayers(p, a, c, b, _PlayArt_aPlayers[index]);
@@ -185,12 +317,6 @@ void PlayAlignBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
 
 extern int lbl_802E9964[];
 extern PlayArtVertex_t lbl_802E98FC[];
-extern unsigned char lbl_802E98E0[][4], lbl_802E98F0[][3];
-extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803EB3CB,lbl_803EB3CF;
-extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
-extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
-int fn_80177F70(void);
-int PauseIsOpen(void);
 void Vec2Add(void *, void *, void *);
 float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
@@ -343,111 +469,6 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
         if (stop) break;
     }
     return count;
-}
-
-void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
-{
-    unsigned char r = 130, g = 130, b = 130;
-    unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
-    int found = 0;
-
-    if (!fn_80177F70() && !PauseIsOpen()) {
-        r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
-    } else {
-        int inherited = 1;
-        void *queue = PlayAlignGetRoute(record, (unsigned char)team, (unsigned short)index);
-        for (unsigned char i = 0; i <= 3; ++i) {
-            if (fn_800F06F4(0, queue, lbl_802E98E0[i][3], 0xFFFF) != 0xFFFF) {
-                secondaryR = lbl_802E98F0[i][0];
-                secondaryG = lbl_802E98F0[i][1];
-                secondaryB = lbl_802E98F0[i][2];
-                found = 1;
-                break;
-            }
-        }
-        if (!found) secondaryR = secondaryG = secondaryB = 255;
-        if (inherited) {
-            switch (entry->mUnknown14Word) {
-            case 5: case 6: case 7: case 8: case 9:
-                r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                inherited = 0;
-                break;
-            case 10: case 11: case 12: case 13: case 14: case 15:
-                r = lbl_803EB3DF; g = lbl_803EB3E3; b = lbl_803EB3E7;
-                inherited = 0;
-                break;
-            case 16: case 17: case 18:
-                r = lbl_803EB3C7; g = lbl_803EB3CB; b = lbl_803EB3CF;
-                inherited = 0;
-                break;
-            }
-        }
-        if (inherited) {
-            unsigned int kind = entry->mUnknown14Word;
-            switch (record->mUnknown14) {
-            case 21:
-                if (kind >= 19 && kind <= 20) {
-                    r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
-                } else {
-                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                }
-                break;
-            case 11: case 37:
-                if (!kind) {
-                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                }
-                break;
-            case 12: case 13: case 14: case 15: case 16: case 17: case 18:
-                if (record->mUnknownC == index) {
-                    r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
-                } else {
-                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                }
-                break;
-            case 1: case 2: case 3: case 4: case 5: case 38:
-                if (!kind) {
-                    int matched = 0;
-                    for (unsigned char i = 0; i <= 2; ++i) {
-                        if (record->mUnknown1C[i][0] == index) {
-                            switch (i) {
-                            case 0: r = lbl_803EB3EB; g = lbl_803EB3EF; b = lbl_803EB3F3; break;
-                            case 1: r = lbl_803EB3F7; g = lbl_803EB3FB; b = lbl_803EB3FF; break;
-                            case 2: r = lbl_803EB403; g = lbl_803EB407; b = lbl_803EB40B; break;
-                            }
-                            matched = 1;
-                            break;
-                        }
-                    }
-                    if (!matched) {
-                        r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                    }
-                } else {
-                    r = lbl_803EB3BB; g = lbl_803EB3C3; b = lbl_803EB3BF;
-                    for (unsigned char i = 0; i <= 2; ++i) {
-                        if (record->mUnknown1C[i][0] == index) {
-                            if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF) {
-                                switch (i) {
-                                case 0: r = lbl_803EB3EB; g = lbl_803EB3EF; b = lbl_803EB3F3; break;
-                                case 1: r = lbl_803EB3F7; g = lbl_803EB3FB; b = lbl_803EB3FF; break;
-                                case 2: r = lbl_803EB403; g = lbl_803EB407; b = lbl_803EB40B; break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }
-    state->mUnknown2020[index].r = r;
-    state->mUnknown2020[index].g = g;
-    state->mUnknown2020[index].b = b;
-    state->mUnknown2020[index].a = 255;
-    state->mUnknown204C[index].r = secondaryR;
-    state->mUnknown204C[index].g = secondaryG;
-    state->mUnknown204C[index].b = secondaryB;
-    state->mUnknown204C[index].a = 255;
 }
 
 }
