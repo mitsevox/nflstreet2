@@ -30688,21 +30688,21 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021EFD8.c",
+      "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80221314 (src/engine/cu_8021EFD8.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections (.rodata 0x802B1EF8-0x802B1F78, .data 0x802F9FA0-0x802F9FE0, .sdata 0x803EBF48-0x803EBF60, .bss 0x8039F878-0x8039F9B8, .sbss 0x803ECFF0-0x803ED010). Draft comparisons only; original assembly remains linked. The former comparison fragments src/engine/cu_8021F77C.c, src/engine/cu_80220D3C.c and src/engine/cu_80221154.c are merged into this file (lane e1b, 2026-11-26).",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8021EFD8",
-          "end": "0x80221314"
+          "end": "0x80220B4C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B1EF8",
-          "end": "0x802B1F78"
+          "end": "0x802B1F58"
         },
         {
           "section": ".data",
@@ -30711,22 +30711,10 @@
           "end": "0x802F9FE0"
         },
         {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039F878",
-          "end": "0x8039F9B8"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EBF48",
-          "end": "0x803EBF60"
-        },
-        {
           "section": ".sbss",
           "placement": ".sbss",
           "start": "0x803ECFF0",
-          "end": "0x803ED010"
+          "end": "0x803ECFFC"
         }
       ],
       "functions": [
@@ -30799,7 +30787,28 @@
           "symbol": "fn_80220AD0",
           "start": "0x80220AD0",
           "end": "0x80220B4C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/UIGColorStyle.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80220B4C-0x80220BFC (src/engine/UIGColorStyle.c), its function and name rows, the file compiler row and the exact data rows of its .sbss; the file is linked with holdouts and its holdout 0x80220B4C (HOLDOUT source-form row) is measured here.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220B4C",
+          "end": "0x80220BFC"
         },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFFC",
+          "end": "0x803ED00C"
+        }
+      ],
+      "functions": [
         {
           "symbol": "fn_80220B4C",
           "start": "0x80220B4C",
@@ -30809,81 +30818,6 @@
           "symbol": "fn_80220BE0",
           "start": "0x80220BE0",
           "end": "0x80220BFC"
-        },
-        {
-          "symbol": "fn_80220BFC",
-          "start": "0x80220BFC",
-          "end": "0x80220C4C"
-        },
-        {
-          "symbol": "fn_80220C4C",
-          "start": "0x80220C4C",
-          "end": "0x80220CA4"
-        },
-        {
-          "symbol": "fn_80220CA4",
-          "start": "0x80220CA4",
-          "end": "0x80220CDC"
-        },
-        {
-          "symbol": "fn_80220CDC",
-          "start": "0x80220CDC",
-          "end": "0x80220CE4"
-        },
-        {
-          "symbol": "fn_80220CE4",
-          "start": "0x80220CE4",
-          "end": "0x80220CFC"
-        },
-        {
-          "symbol": "fn_80220CFC",
-          "start": "0x80220CFC",
-          "end": "0x80220D04"
-        },
-        {
-          "symbol": "fn_80220D04",
-          "start": "0x80220D04",
-          "end": "0x80220D34"
-        },
-        {
-          "symbol": "fn_80220D34",
-          "start": "0x80220D34",
-          "end": "0x80220D3C"
-        },
-        {
-          "symbol": "fn_80220D3C",
-          "start": "0x80220D3C",
-          "end": "0x80220DA4"
-        },
-        {
-          "symbol": "fn_80220DA4",
-          "start": "0x80220DA4",
-          "end": "0x80221118"
-        },
-        {
-          "symbol": "fn_80221118",
-          "start": "0x80221118",
-          "end": "0x80221154"
-        },
-        {
-          "symbol": "fn_80221154",
-          "start": "0x80221154",
-          "end": "0x80221198"
-        },
-        {
-          "symbol": "fn_80221198",
-          "start": "0x80221198",
-          "end": "0x80221294"
-        },
-        {
-          "symbol": "fn_80221294",
-          "start": "0x80221294",
-          "end": "0x802212C8"
-        },
-        {
-          "symbol": "fn_802212C8",
-          "start": "0x802212C8",
-          "end": "0x80221314"
         }
       ]
     },
