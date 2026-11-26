@@ -14,7 +14,7 @@ struct ParticleSource_t {
 struct AnimTex_t;
 struct Particle_t;
 
-/* Object returned by ParticleSysSpawnEmitter (from fn_801DEEF8), drawn by ParticleRenderEmitter
+/* Object returned by ParticleSysSpawnEmitter (from ParticlePoolBorrow), drawn by ParticleRenderEmitter
    (the callback of its descriptor _ParticleSys_EmitterDesc) and released by
    ParticleSysReleaseEmitter. */
 struct PsysEmitter_t {

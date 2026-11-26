@@ -65,7 +65,7 @@ typedef struct PsysColGround_t {
 } PsysColGround_t;
 
 /* Collision parameters (0x24 bytes at +0x208 of a particle system). A
-   parameter file holds three vectors for a plane (read by fn_801DF578); at
+   parameter file holds three vectors for a plane (read by PartReadCollision); at
    run time the distance computed by PsysColPrecalcDependantVals replaces the third. */
 typedef union PsysColParms_t {
     unsigned int mWord;
@@ -87,7 +87,7 @@ typedef struct PsysColExt_t {
 } PsysColExt_t;
 
 /* Particle record (0x54 bytes). */
-typedef struct Particle_801DE1E0 {
+typedef struct PsysParticle_t {
     Vec3_801DE1E0 mPrevPos;
     Vec3_801DE1E0 mPos;
     Vec3_801DE1E0 mVel;
@@ -103,11 +103,11 @@ typedef struct Particle_801DE1E0 {
     float mAgeRatio;
     float mUnknown4C;
     float mUnknown50;
-} Particle_801DE1E0;
+} PsysParticle_t;
 
 /* Particle system object (0x3D4 bytes). A template in a loaded parameter
    file has the same layout and is followed by its colour ramp. */
-typedef struct PartObj_801DE1E0 {
+typedef struct ParticleSysObj_t {
     char mPad000[0x14];
     char mUnknown014[8];
     char mUnknown01C[0x20];
@@ -190,26 +190,26 @@ typedef struct PartObj_801DE1E0 {
     int mUnknown3B4;
     unsigned int mCount;
     unsigned int mMax;
-    Particle_801DE1E0 **mppParticles;
-    Particle_801DE1E0 *mpParticles;
+    PsysParticle_t **mppParticles;
+    PsysParticle_t *mpParticles;
     float mUnknown3C8;
     float mUnknown3CC;
     float mUnknown3D0;
-} PartObj_801DE1E0;
+} ParticleSysObj_t;
 
 /* Particle system template as loaded from a parameter file. */
-typedef struct Template_801DE1E0 {
-    PartObj_801DE1E0 mObj;
+typedef struct ParticleTemplate_t {
+    ParticleSysObj_t mObj;
     ColorRamp_t mRamp;
-} Template_801DE1E0;
+} ParticleTemplate_t;
 
 /* Calls between the files of the particle library. */
-float fn_801DE1B8(void);
-int fn_801DFD40(void);
-void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc);
-void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj);
-void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle);
+float ParticleGetRandom(void);
+int ParticleLibGetOrientation(void);
+void EmitterInitParms(ParticleSysObj_t *pDst, ParticleSysObj_t *pSrc);
+void PsysColInitParms(ParticleSysObj_t *pDst, ParticleSysObj_t *pSrc);
+void PsysColPrecalcDependantVals(ParticleSysObj_t *pObj);
+void PsysColCalcCollision(ParticleSysObj_t *pObj, PsysParticle_t *pParticle);
 ColorRamp_t *ColorRampCopy(ColorRamp_t *pSrc, ColorRamp_t *pDst);
 
 #endif

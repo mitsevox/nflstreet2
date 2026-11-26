@@ -4,9 +4,9 @@
 #include "engine/particleLib.h"
 
 
-static void _calcGroundCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float height)
+static void _calcGroundCollision(ParticleSysObj_t *pObj, PsysParticle_t *pParticle, float height)
 {
-    if (fn_801DFD40() == 0) {
+    if (ParticleLibGetOrientation() == 0) {
         if (pParticle->mPos.y >= height) {
             return;
         }
@@ -23,7 +23,7 @@ static void _calcGroundCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pPar
     }
 }
 
-static void _calcPlaneCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, Vec3_801DE1E0 *pNormal, float distance)
+static void _calcPlaneCollision(ParticleSysObj_t *pObj, PsysParticle_t *pParticle, Vec3_801DE1E0 *pNormal, float distance)
 {
     Vec3_801DE1E0 push;
     Vec3_801DE1E0 bounce;
@@ -45,7 +45,7 @@ static void _calcPlaneCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pPart
 }
 
 /* Copy only the payload selected by the destination collision type. */
-void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
+void PsysColInitParms(ParticleSysObj_t *pDst, ParticleSysObj_t *pSrc)
 {
     switch (pDst->mCollisionType) {
     case 0:
@@ -59,7 +59,7 @@ void PsysColInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
     }
 }
 
-void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj)
+void PsysColPrecalcDependantVals(ParticleSysObj_t *pObj)
 {
     PsysColPlane_t *pPlane;
 
@@ -69,7 +69,7 @@ void PsysColPrecalcDependantVals(PartObj_801DE1E0 *pObj)
     }
 }
 
-void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
+void PsysColCalcCollision(ParticleSysObj_t *pObj, PsysParticle_t *pParticle)
 {
     unsigned char i;
     PsysColPlane_t *pPlane;
@@ -99,7 +99,7 @@ void PsysColCalcCollision(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
     }
 }
 
-void PsysColExtClearAll(PartObj_801DE1E0 *pObj)
+void PsysColExtClearAll(ParticleSysObj_t *pObj)
 {
     pObj->mColExtCount = 0;
 }
