@@ -1284,11 +1284,13 @@ void MiniGameC::vfn_15()
 
 int MiniGameC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
 {
-    unsigned int index = 0;
-    while (index < mState.mCount && mState.mpRecords[index].mUnknown2C) {
-        ++index;
+    unsigned int index;
+    for (index = 0; index < mState.mCount && mState.mpRecords[index].mUnknown2C; ++index) {
     }
-    return index == mState.mCount ? 0 : index;
+    if (index == mState.mCount) {
+        index = 0;
+    }
+    return index;
 }
 
 int MiniGameC::vfn_24(int team, unsigned int tag)
@@ -1484,8 +1486,8 @@ void MiniGameC::vfn_16(const int *pKinds)
             if(player->mUnknown9[2]) {
                 unsigned int count=vfn_25(team,index);
                 if(count<=2 && CheckAward(team,index,player,pKinds[k])) {
-                    lbl_8031BEAC[k]++;
                     lbl_8031BE04[i][count]=pKinds[k];
+                    lbl_8031BEAC[k]++;
                 }
             }
         }
@@ -1501,8 +1503,8 @@ void MiniGameC::vfn_17(const int *pKinds)
         for(unsigned char team=0;team<2;team++) {
             unsigned int count=vfn_25(0,team);
             if(count<=2 && vfn_32(team,pKinds[k])) {
-                lbl_8031BEAC[k]++;
                 lbl_8031BE04[team][count]=pKinds[k];
+                lbl_8031BEAC[k]++;
             }
         }
     }
@@ -1533,7 +1535,7 @@ void MiniGameC::vfn_19(int team, int column, char *text, int capacity)
 
 unsigned char MiniGameC::vfn_25(int team, int index)
 {
-    unsigned char row=team*7+index,count=0;
+    unsigned char row=index+team*7,count=0;
     while(count<3 && lbl_8031BE04[row][count])count++;
     return count;
 }
@@ -1542,24 +1544,24 @@ int MiniGameC::CheckAward(int team, int index, Object_80039F5C *player, int kind
 {
     int result=0;
     switch(kind) {
-    case 1:result=vfn_31(1,team,index,player,1,0);break;
-    case 2:result=vfn_31(2,team,index,player,0,0);break;
-    case 3:result=vfn_31(3,team,index,player,10,0);break;
-    case 4:result=vfn_31(4,team,index,player,2,0);break;
-    case 5:result=vfn_31(5,team,index,player,2,0);break;
-    case 6:result=vfn_31(6,team,index,player,1,0);break;
-    case 7:result=vfn_31(7,team,index,player,3,0);break;
-    case 8:result=vfn_31(8,team,index,player,1,1);break;
+    case 1:result=vfn_31(kind,team,index,player,1,0);break;
+    case 2:result=vfn_31(kind,team,index,player,0,0);break;
+    case 3:result=vfn_31(kind,team,index,player,10,0);break;
+    case 4:result=vfn_31(kind,team,index,player,2,0);break;
+    case 5:result=vfn_31(kind,team,index,player,2,0);break;
+    case 6:result=vfn_31(kind,team,index,player,1,0);break;
+    case 7:result=vfn_31(kind,team,index,player,3,0);break;
+    case 8:result=vfn_31(kind,team,index,player,1,1);break;
     case 9:
-        result=vfn_31(9,team,index,player,2,1);
+        result=vfn_31(kind,team,index,player,2,1);
         if(result && vfn_28(8))result=0;
         break;
     case 10:result=vfn_25(team,index)==0;break;
-    case 11:result=vfn_31(11,team,index,player,3,0);break;
-    case 12:result=vfn_31(12,team,index,player,0,0);break;
-    case 13:result=vfn_31(13,team,index,player,1,0);break;
-    case 14:result=vfn_31(14,team,index,player,1,0);break;
-    case 15:result=vfn_31(15,team,index,player,1,0);break;
+    case 11:result=vfn_31(kind,team,index,player,3,0);break;
+    case 12:result=vfn_31(kind,team,index,player,0,0);break;
+    case 13:result=vfn_31(kind,team,index,player,1,0);break;
+    case 14:result=vfn_31(kind,team,index,player,1,0);break;
+    case 15:result=vfn_31(kind,team,index,player,1,0);break;
     }
     return result;
 }
@@ -1588,44 +1590,64 @@ int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int result=0;
     unsigned short id=pPlayer->mUnknown2908;
-    int value;
     switch(kind) {
     case 1:case 9:fn_8022B414(id,0x61746467,&result);break;
-    case 2:
+    case 2: {
+        int value;
         fn_8022B414(id,0x64747567,&result);
-        fn_8022B414(id,0x64746167,&value);result+=value;break;
-    case 3:
+        fn_8022B414(id,0x64746167,&value);result+=value;
+        break;
+    }
+    case 3: {
+        int value;
         fn_8022B414(id,0x74627567,&result);
         fn_8022B7A4(lbl_803ECA24[team],0x61737374,&value);
-        result+=value*10;break;
-    case 4:
+        result+=value*10;
+        break;
+    }
+    case 4: {
+        int value;
         fn_8022B7A4(lbl_803ECA24[team],0x68647374,&result);
         fn_8022B7A4(lbl_803ECA24[team],0x68777374,&value);result+=value;
         fn_8022B7A4(lbl_803ECA24[team],0x68737374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x68327374,&value);result+=value;break;
-    case 5:
+        fn_8022B7A4(lbl_803ECA24[team],0x68327374,&value);result+=value;
+        break;
+    }
+    case 5: {
+        int value;
         fn_8022B7A4(lbl_803ECA24[team],0x6A737374,&result);
         fn_8022B7A4(lbl_803ECA24[team],0x6A777374,&value);result+=value;
         fn_8022B7A4(lbl_803ECA24[team],0x73737374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x73327374,&value);result+=value;break;
+        fn_8022B7A4(lbl_803ECA24[team],0x73327374,&value);result+=value;
+        break;
+    }
     case 6:fn_8022B414(id,0x72666C67,&result);break;
-    case 7:
+    case 7: {
+        int value;
         fn_8022B7A4(lbl_803ECA24[team],0x68777374,&result);
         fn_8022B7A4(lbl_803ECA24[team],0x6A777374,&value);result+=value;
         fn_8022B7A4(lbl_803ECA24[team],0x70777374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x63777374,&value);result+=value;break;
-    case 8:
+        fn_8022B7A4(lbl_803ECA24[team],0x63777374,&value);result+=value;
+        break;
+    }
+    case 8: {
+        int second,third,fourth,fifth;
         fn_8022B414(id,0x64747567,&result);
-        fn_8022B414(id,0x64746167,&value);result+=value;
-        fn_8022B414(id,0x61746467,&value);result+=value;
-        fn_8022B414(id,0x66666C67,&value);result+=value;
-        fn_8022B414(id,0x6E696167,&value);result+=value;break;
+        fn_8022B414(id,0x64746167,&second);result+=second;
+        fn_8022B414(id,0x61746467,&third);result+=third;
+        fn_8022B414(id,0x66666C67,&fourth);result+=fourth;
+        fn_8022B414(id,0x6E696167,&fifth);result+=fifth;
+        break;
+    }
     case 10:break;
     case 11:fn_8022B414(id,0x75667567,&result);break;
     case 12:result=StyleTrackerGetTotal(team);break;
-    case 13:
+    case 13: {
+        int value;
         fn_8022B414(id,0x72666C67,&result);
-        fn_8022B414(id,0x6E696167,&value);result+=value;break;
+        fn_8022B414(id,0x6E696167,&value);result+=value;
+        break;
+    }
     case 14:fn_8022B414(id,0x6B736C67,&result);break;
     case 15:fn_8022B414(id,0x6E696167,&result);break;
     }
@@ -1634,14 +1656,15 @@ int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
 
 int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, int threshold, int mode)
 {
+    int best=0,result=0,found=0;
     int value=vfn_30(kind,team,index,player);
     int count;
     switch(fn_801486A0()) {
     case 1:count=4;break;
     case 0:count=6;break;
+    case 2:count=7;break;
     default:count=7;break;
     }
-    int best=0,found=0,result=0;
     for(unsigned char t=0;t<2;t++) {
         for(unsigned char i=0;i<(unsigned int)count;i++) {
             Object_80039F5C *other=PlyrGet(t,i);
@@ -1664,84 +1687,90 @@ int MiniGameC::vfn_32(int team, int kind)
     int result=0;
     if(kind!=21 && PlayerHasAward(0,team,8))return 0;
     switch(kind) {
-    case 1:result=vfn_34(1,team,1,0);break;
-    case 2:result=vfn_34(2,team,1,0);break;
-    case 3:result=vfn_34(3,team,10,0);break;
-    case 4:result=vfn_34(4,team,4,0);break;
-    case 5:result=vfn_34(5,team,2,0);break;
-    case 6:result=vfn_34(6,team,1,0);break;
-    case 7:result=vfn_34(7,team,3,0);break;
-    case 8:result=vfn_33(8,team)==0;break;
+    case 15:result=vfn_34(kind,team,1,0);break;
+    case 14:result=vfn_34(kind,team,1,0);break;
+    case 13:result=vfn_34(kind,team,1,0);break;
+    case 12:result=vfn_34(kind,team,1,0);break;
+    case 11:result=vfn_34(kind,team,3,0);break;
     case 9:
-        if(!vfn_28(8) && vfn_34(9,team,100,1))result=1;
+        result=!vfn_28(8) && vfn_34(kind,team,100,1);
         break;
+    case 8:result=vfn_33(8,team)==0;break;
+    case 7:result=vfn_34(kind,team,3,0);break;
+    case 6:result=vfn_34(kind,team,1,0);break;
+    case 5:result=vfn_34(kind,team,2,0);break;
+    case 4:result=vfn_34(kind,team,4,0);break;
+    case 3:result=vfn_34(kind,team,10,0);break;
+    case 2:result=vfn_34(kind,team,1,0);break;
+    case 1:result=vfn_34(kind,team,1,0);break;
     case 10:result=vfn_25(0,team)==0;break;
-    case 11:result=vfn_34(11,team,3,0);break;
-    case 12:result=vfn_34(12,team,1,0);break;
-    case 13:result=vfn_34(13,team,1,0);break;
-    case 14:result=vfn_34(14,team,1,0);break;
-    case 15:result=vfn_34(15,team,1,0);break;
     }
     return result;
 }
 
 int MiniGameC::vfn_33(int kind, int team)
 {
-    int result=0,value;
+    int result=0;
     int handle=fn_800C8744(team);
     switch(kind) {
-    case 1:case 9:result=vfn_24(team,0x61746467);break;
-    case 2:
-        fn_8022B7A4(handle,0x74727374,&result);
-        fn_8022B7A4(handle,0x74507374,&value);result+=value;
-        fn_8022B7A4(handle,0x64647374,&value);result+=value;break;
-    case 3: {
-        int a=StyleTrackerGetEventCount(team,30),b=StyleTrackerGetEventCount(team,31);
-        int c=StyleTrackerGetEventCount(team,29);result=a+b+c;break;
+    case 15: {
+        int a=StyleTrackerGetEventCount(team,74),b=StyleTrackerGetEventCount(team,75);
+        int c=StyleTrackerGetEventCount(team,105);result=a+b+c;break;
     }
-    case 4: {
-        int a=StyleTrackerGetEventCount(team,57),b=StyleTrackerGetEventCount(team,63);result=a+b;break;
+    case 14: {
+        int a=StyleTrackerGetEventCount(team,77),b=StyleTrackerGetEventCount(team,103);result=a+b;break;
     }
-    case 5: {
-        int a=StyleTrackerGetEventCount(team,34),b=StyleTrackerGetEventCount(team,46);
-        int c=StyleTrackerGetEventCount(team,42);result=a+b+c;break;
+    case 13:
+        fn_8022B7A4(handle,0x69447374,&result);
+        result+=vfn_24(team,0x72666C67);break;
+    case 12:result=StyleTrackerGetTotal(team);break;
+    case 11: {
+        int value;
+        fn_8022B7A4(handle,0x75667374,&value);result+=value*5;
+        fn_8022B7A4(handle,0x70447374,&value);result+=value;break;
     }
-    case 6:fn_8022B7A4(handle,0x72667374,&result);break;
-    case 7: {
-        int a=StyleTrackerGetEventCount(team,63),b=StyleTrackerGetEventCount(team,11);
-        int c=StyleTrackerGetEventCount(team,42),d=StyleTrackerGetEventCount(team,113);
-        int e=StyleTrackerGetEventCount(team,110);result=a+b+c+d+e;break;
-    }
-    case 8:
+    case 8: {
+        int value;
         fn_8022B7A4(handle,0x74727374,&value);result+=value;
         fn_8022B7A4(handle,0x74507374,&value);result+=value;
         fn_8022B7A4(handle,0x64647374,&value);result+=value;
         fn_8022B7A4(handle,0x69707374,&value);result+=value;
         result+=vfn_24(team,0x61746467);
         result+=vfn_24(team,0x72666C67);break;
+    }
+    case 7: {
+        int a=StyleTrackerGetEventCount(team,63),b=StyleTrackerGetEventCount(team,11);
+        int c=StyleTrackerGetEventCount(team,42),d=StyleTrackerGetEventCount(team,113);
+        int e=StyleTrackerGetEventCount(team,110);result=a+b+c+d+e;break;
+    }
+    case 6:fn_8022B7A4(handle,0x72667374,&result);break;
+    case 5: {
+        int a=StyleTrackerGetEventCount(team,34),b=StyleTrackerGetEventCount(team,46);
+        int c=StyleTrackerGetEventCount(team,42);result=a+b+c;break;
+    }
+    case 4: {
+        int a=StyleTrackerGetEventCount(team,57),b=StyleTrackerGetEventCount(team,63);result=a+b;break;
+    }
+    case 3: {
+        int a=StyleTrackerGetEventCount(team,30),b=StyleTrackerGetEventCount(team,31);
+        int c=StyleTrackerGetEventCount(team,29);result=a+b+c;break;
+    }
+    case 2: {
+        int value;
+        fn_8022B7A4(handle,0x74727374,&result);
+        fn_8022B7A4(handle,0x74507374,&value);result+=value;
+        fn_8022B7A4(handle,0x64647374,&value);result+=value;break;
+    }
+    case 1:case 9:result=vfn_24(team,0x61746467);break;
     case 10:break;
-    case 11:
-        fn_8022B7A4(handle,0x75667374,&value);result+=value*5;
-        fn_8022B7A4(handle,0x70447374,&value);result+=value;break;
-    case 12:result=StyleTrackerGetTotal(team);break;
-    case 13:
-        fn_8022B7A4(handle,0x69447374,&result);
-        result+=vfn_24(team,0x72666C67);break;
-    case 14: {
-        int a=StyleTrackerGetEventCount(team,77),b=StyleTrackerGetEventCount(team,103);result=a+b;break;
-    }
-    case 15: {
-        int a=StyleTrackerGetEventCount(team,74),b=StyleTrackerGetEventCount(team,75);
-        int c=StyleTrackerGetEventCount(team,105);result=a+b+c;break;
-    }
     }
     return result;
 }
 
 int MiniGameC::vfn_34(int kind, int team, int threshold, int mode)
 {
-    int value=vfn_33(kind,team);
     int other=(team+1)&1;
+    int value=vfn_33(kind,team);
     int result=1;
     if((mode==0 && value<vfn_33(kind,other)) || (mode==1 && value>vfn_33(kind,other)))result=0;
     if((mode==0 && value<threshold) || (mode==1 && value>threshold))result=0;
@@ -3295,7 +3324,11 @@ void MiniGameCrushCarrierPreGameC::OnEnter(float dt)
         int ids[2][7];
         int others[2][7];
         for (unsigned char team = 0; team <= 1; team++) {
-            QueryCursor cursor = {0, 0, -1, 0};
+            QueryCursor cursor;
+            cursor.mUnknown0 = 0;
+            cursor.mUnknown4 = 0;
+            cursor.mUnknown8 = -1;
+            cursor.mUnknown12 = 0;
             TDbCompilePerformOp(0, "declare \212 cursor for select * from 'YALP' where ('DIGT' = \203) order by 'DIGP'\n",
                                 &cursor, team);
             for (unsigned short i = 0; i <= 6; i++) {
@@ -3312,9 +3345,9 @@ void MiniGameCrushCarrierPreGameC::OnEnter(float dt)
             }
         }
         if (!keepIds) {
-            for (unsigned short i = 0; i <= 2; i++) {
+            for (unsigned short i = 0, j = 2; i <= 2; i++, j++) {
                 Object_80039F5C *pFirst = PlyrGet(1, i);
-                Object_80039F5C *pSecond = PlyrGet(0, i + 2);
+                Object_80039F5C *pSecond = PlyrGet(0, j);
                 unsigned short id = pSecond->mUnknown2908;
                 pSecond->mUnknown2908 = pFirst->mUnknown2908;
                 pFirst->mUnknown2908 = id;
@@ -4181,7 +4214,11 @@ void MiniGameJumpBallPreGameC::OnEnter(float dt)
         int ids[2][7];
         int others[2][7];
         for (unsigned char team = 0; team <= 1; team++) {
-            QueryCursor cursor = {0, 0, -1, 0};
+            QueryCursor cursor;
+            cursor.mUnknown0 = 0;
+            cursor.mUnknown4 = 0;
+            cursor.mUnknown8 = -1;
+            cursor.mUnknown12 = 0;
             TDbCompilePerformOp(0, "declare \212 cursor for select * from 'YALP' where ('DIGT' = \203)\n", &cursor, team);
             for (unsigned short i = 0; i <= 6; i++) {
                 TDbCompilePerformOp(0, "fetch from \212 'DIGP' into \202 and 'DIOP' into \202\n", &cursor,
@@ -4192,9 +4229,9 @@ void MiniGameJumpBallPreGameC::OnEnter(float dt)
                 TDbSQLDestroyCursor(&cursor);
             }
         }
-        for (unsigned short i = 0; i <= 1; i++) {
+        for (unsigned short i = 0, j = 2; i <= 1; i++, j++) {
             Object_80039F5C *pFirst = PlyrGet(0, i);
-            Object_80039F5C *pSecond = PlyrGet(1, i + 2);
+            Object_80039F5C *pSecond = PlyrGet(1, j);
             unsigned short id = pSecond->mUnknown2908;
             pSecond->mUnknown2908 = pFirst->mUnknown2908;
             pFirst->mUnknown2908 = id;
