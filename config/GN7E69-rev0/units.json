@@ -518,7 +518,7 @@
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "TEMP"
+      "evidence": "evidence.tsv compiler rows for 0x801D9634-0x801D9A88 (rcmpbase.cpp) and 0x801D9A88-0x801DA4F8 (rcmp_mad_codec.cpp): -O2 C++ with -fno-weak (the vtables, inline destructors and static-init stubs sit in the plain .text/.rodata runs of the target, not in link-once sections) and -fno-implement-inlines (the target has no out-of-line copies of the classes' inline members); complete-output comparison of both units confirms."
     }
   },
   "externals": {
