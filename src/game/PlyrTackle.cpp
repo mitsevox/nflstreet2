@@ -1491,7 +1491,14 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
     int result = 8;
     float rating = 0.0f;
     fn_800B6D34(p, &input);
-    if (pBlock->mUnknown0 == 4 || pBlock->mUnknown0 == 6) {
+    int kind;
+    // FAKEMATCH: identical arms on the human-player test reproduce the target's dead lbz/cmpwi 255/andi. 0x4000 (cross-jumped in jump2); kind is the block word either way.
+    if (p->mUnknown8 != 255 && (p->mFlags & 0x4000)) {
+        kind = pBlock->mUnknown0;
+    } else {
+        kind = pBlock->mUnknown0;
+    }
+    if (kind == 4 || kind == 6) {
         if (fn_8011F1CC() && !fn_801783AC(0)) {
             if (pCarrier && (pCarrier->mFlags & 0x8000)) {
                 result = SyncRandGetRange(0, 5);
@@ -1528,7 +1535,8 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
                 }
             }
             if ((unsigned int)result <= 1) {
-                result = ((p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF;
+                int turn = (p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF;
+                result = turn <= 0x7FFFFF;
             } else if ((unsigned int)(result - 2) <= 1) {
                 result = 2;
                 if (((p->mMotion.mFacing - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF) {
@@ -1548,21 +1556,22 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
             if (pCarrier->mpState->mId == 26) {
                 Point_8017886C goal;
                 goal.mX = fn_8011F4D4();
-                Point_8017886C origin = fn_80177FE0();
-                goal.mY = origin.mY;
+                goal.mY = fn_80177FE0().mY;
                 int target = goal.Heading();
-                if (SyncRandGetFloat(0) <= 0.5f) {
-                    return 4;
+                if (SyncRandGetFloat(0) > 0.5f) {
+                    diff = (target - angle) & 0xFFFFFF;
+                    result = diff > 0x800000;
+                } else {
+                    result = 4;
                 }
-                diff = target - angle;
             } else {
                 if (pCarrier->mMotion.mUnknown28 != 0.0f &&
                     MathAngleDiff(p->mMotion.mFacing, heading) <= 0x155554) {
                     heading = pCarrier->mMotion.mUnknown32;
                 }
-                diff = heading - angle;
+                diff = (heading - angle) & 0xFFFFFF;
+                result = diff > 0x800000;
             }
-            result = (diff & 0xFFFFFF) > 0x800000;
         } else {
             float ratio = (float)pRatings[0] / (float)pRatings[9] * 128.0f;
             if (ratio >= 0.0f) {
@@ -3055,10 +3064,18 @@ extern "C" int CarrierMomentumUpdate(Object_80039F5C *p) {
         p->mFlags &= ~0x80000;
         if (p->mUnknown9[0] != 8) {
             Message_800F01CC message;
-            memset(&message, 0, 4);
-            message.mId = 11;
-            message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            // FAKEMATCH: identical arms on state word +0 reproduce the target's dead lwz/cmplwi 10 (cross-jumped in jump2); the message sent is the same either way.
+            if ((unsigned int)state->mUnknown0 > 10) {
+                memset(&message, 0, 4);
+                message.mId = 11;
+                message.mUnknown1[0] = p->mUnknown9[0];
+                fn_800F05E4(0, p->mpState, &message, p);
+            } else {
+                memset(&message, 0, 4);
+                message.mId = 11;
+                message.mUnknown1[0] = p->mUnknown9[0];
+                fn_800F05E4(0, p->mpState, &message, p);
+            }
         } else {
             p->mFlags &= ~0x4000000;
         }
