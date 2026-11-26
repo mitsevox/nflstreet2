@@ -38,9 +38,10 @@ typedef struct UIGNode_t {
     union {
         UIGDispList_t List;
         struct {
-            Uint8 unk_00[0x04];
+            Uint16 Scale[2];       /* 0x10 */
             GXColor Colors[4];     /* 0x14 */
             Uint16 Coords[4][2];   /* 0x24 */
+            Int16 Pos[4][3];       /* 0x34 */
         } v;
         struct {
             Uint16 unk_10;         /* 0x10 */

@@ -25797,94 +25797,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021F77C.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x8021F77C-0x8021F8DC and their literal-pool slice 0x802B1F10-0x802B1F28 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8021F77C",
-          "end": "0x8021F8DC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F10",
-          "end": "0x802B1F28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8021F77C",
-          "start": "0x8021F77C",
-          "end": "0x8021F82C"
-        },
-        {
-          "symbol": "fn_8021F82C",
-          "start": "0x8021F82C",
-          "end": "0x8021F8DC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80220D3C.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80220D3C-0x80221118 and their literal-pool slice 0x802B1F58-0x802B1F6C (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80220D3C",
-          "end": "0x80221118"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F58",
-          "end": "0x802B1F6C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80220D3C",
-          "start": "0x80220D3C",
-          "end": "0x80220DA4"
-        },
-        {
-          "symbol": "fn_80220DA4",
-          "start": "0x80220DA4",
-          "end": "0x80221118"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80221154.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80221154-0x80221198 and their literal-pool slice 0x802B1F6C-0x802B1F70 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221154",
-          "end": "0x80221198"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F6C",
-          "end": "0x802B1F70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80221154",
-          "start": "0x80221154",
-          "end": "0x80221198"
-        }
-      ]
-    },
-    {
       "source": "src/engine/t3db_io.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv whole-file unit, function, data, type and source-form rows; complete bodies compared at full original extents under the unchanged engine_c_fastmath profile. Remaining partials stay measured and their original bytes linked.",
@@ -30778,7 +30690,7 @@
     {
       "source": "src/engine/cu_8021EFD8.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80221314 (src/engine/cu_8021EFD8.c), its function and name rows, the file compiler row and the exact data row 0x802B1F70-0x802B1F74 (the literal of fn_80221198, the only draft body that loads a constant). Draft comparisons only; original assembly remains linked. The comparison fragments src/engine/cu_8021F77C.c, src/engine/cu_80220D3C.c and src/engine/cu_80221154.c hold the drafts that share the other pools of the range.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80221314 (src/engine/cu_8021EFD8.c), its function and name rows, the file compiler row and the exact data row 0x802B1EF8-0x802B1F74 (the literal pools of the whole file, now that every function has a body). Draft comparisons only; original assembly remains linked. The former comparison fragments src/engine/cu_8021F77C.c, src/engine/cu_80220D3C.c and src/engine/cu_80221154.c are merged into this file (lane e1b, 2026-11-26).",
       "sections": [
         {
           "section": ".text",
@@ -30789,11 +30701,16 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B1F70",
+          "start": "0x802B1EF8",
           "end": "0x802B1F74"
         }
       ],
       "functions": [
+        {
+          "symbol": "fn_8021EFD8",
+          "start": "0x8021EFD8",
+          "end": "0x8021F550"
+        },
         {
           "symbol": "fn_8021F550",
           "start": "0x8021F550",
@@ -30810,6 +30727,16 @@
           "end": "0x8021F77C"
         },
         {
+          "symbol": "fn_8021F77C",
+          "start": "0x8021F77C",
+          "end": "0x8021F82C"
+        },
+        {
+          "symbol": "fn_8021F82C",
+          "start": "0x8021F82C",
+          "end": "0x8021F8DC"
+        },
+        {
           "symbol": "fn_8021F8DC",
           "start": "0x8021F8DC",
           "end": "0x8021F954"
@@ -30823,6 +30750,16 @@
           "symbol": "fn_8021F984",
           "start": "0x8021F984",
           "end": "0x8021FB30"
+        },
+        {
+          "symbol": "fn_8021FB30",
+          "start": "0x8021FB30",
+          "end": "0x80220310"
+        },
+        {
+          "symbol": "fn_80220310",
+          "start": "0x80220310",
+          "end": "0x80220988"
         },
         {
           "symbol": "fn_80220988",
@@ -30890,9 +30827,24 @@
           "end": "0x80220D3C"
         },
         {
+          "symbol": "fn_80220D3C",
+          "start": "0x80220D3C",
+          "end": "0x80220DA4"
+        },
+        {
+          "symbol": "fn_80220DA4",
+          "start": "0x80220DA4",
+          "end": "0x80221118"
+        },
+        {
           "symbol": "fn_80221118",
           "start": "0x80221118",
           "end": "0x80221154"
+        },
+        {
+          "symbol": "fn_80221154",
+          "start": "0x80221154",
+          "end": "0x80221198"
         },
         {
           "symbol": "fn_80221198",
