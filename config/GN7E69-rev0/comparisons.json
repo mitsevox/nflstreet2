@@ -11956,7 +11956,7 @@
           "end": "0x8008EBBC"
         },
         {
-          "symbol": "fn_8008EBBC",
+          "symbol": "PlayerAnimUserOpcodeCallback",
           "start": "0x8008EBBC",
           "end": "0x8008F78C"
         },
