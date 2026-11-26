@@ -2490,10 +2490,10 @@ extern "C" int PlyrTackleContest(Object_80039F5C *p, Object_80039F5C **ppLast) {
                         short rating = p->mRatings[5];
                         short ratingMax = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
                         short otherRollBase = (short)pOther->mUnknown2904Float;
-                        short otherLimit = (short)(ratingMax * _PlyrTackle_fOtherRatingScale + otherRollBase * _PlyrTackle_fOtherRollScale);
+                        short otherRoll = (short)(ratingMax * _PlyrTackle_fOtherRatingScale + otherRollBase * _PlyrTackle_fOtherRollScale);
                         short limit = (short)(rating * _PlyrTackle_fRatingScale + rollBase * _PlyrTackle_fRollScale);
                         short roll = SyncRandGetRange(0, limit);
-                        short otherRoll = SyncRandGetRange(0, otherLimit);
+                        otherRoll = SyncRandGetRange(0, otherRoll);
                         if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
                             roll = (short)(roll * _PlyrTackle_fRollDamp);
                         if (roll > otherRoll) {

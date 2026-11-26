@@ -3287,7 +3287,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E8420",
-          "end": "0x800E8898"
+          "end": "0x800E8BE8"
         },
         {
           "section": ".text",
@@ -3363,10 +3363,6 @@
           {
             "function": "PlyrTackleStart",
             "evidence": "evidence.tsv source-form 0x800E815C-0x800E8420"
-          },
-          {
-            "function": "PlyrTackleContest",
-            "evidence": "evidence.tsv source-form 0x800E8898-0x800E8BE8"
           },
           {
             "function": "PlyrTurnEnter",
