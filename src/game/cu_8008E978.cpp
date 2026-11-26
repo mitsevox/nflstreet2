@@ -14206,6 +14206,7 @@ extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id)
         Animation_8009C630 *pRec = &((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i];
 
         if (pRec->mUnknown4 == id) {
+            // FAKEMATCH: the float is re-indexed instead of read through pRec, for the target's addi/lfsx order
             result = ((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i].mUnknown80;
             break;
         }
@@ -25939,6 +25940,7 @@ extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode)
         Vec2Sub(&delta, &pNearest->mMotion, pMotion);
         angle = MathArcTan2(delta.mY, delta.mX);
         turn = MathAngleDiff(angle, pMotion->mFacing);
+        // FAKEMATCH: unused comparison on the kept second MathAngleDiff call; it makes cse build 0x1FFFFF early as the target does
         int facingCarrier = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing) <= 0x1FFFFF;
         if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && CarrierMoveStart(p, mode) != 0) {
             return 1;
@@ -32410,6 +32412,7 @@ extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3
     for (i = 0; i < pTable->mCount; i++) {
         Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(fn_801BE648(p->mpUnknown792), p->mpUnknown796->mUnknown2);
 
+        // FAKEMATCH: one row spelled as mEntries[i] and (mEntries + i) in one condition for the target's shared row pointer
         if (pRecords->mEntries[i].mUnknown2 == 1 && (pRecords->mEntries + i)->mUnknown0 == (key & ~0x8000)) {
             pRecord = &pRecords->mEntries[i];
             break;
