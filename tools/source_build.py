@@ -793,11 +793,13 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
     checks that none of the holdouts is exact. Read-only data may follow the code (`follows`
     .text), linked whole after the last run, when the code ends with that run.
 
-    The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, file-static
-    functions SN's linker discarded (the existing discarded-function practice): compiled, their
-    code is dropped like a holdout's, but they have no target range and are never measured.
-    Each must not be a function comparisons.json registers or a neutral label; holdout_object
-    checks that each is one compiled local function that nothing kept references."""
+    The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, functions
+    SN's linker discarded (the existing discarded-function practice): compiled, their code is
+    dropped like a holdout's, but they have no target range and are never measured. Each must not
+    be a function comparisons.json registers or a neutral label; holdout_object checks that each is
+    one compiled function that nothing kept references, and plan() that no other unit references
+    a global one (an out-of-line inline function that -fno-weak emits as a global, such as an
+    implicit constructor nothing calls)."""
     source, spec = unit["source"], unit["holdouts"]
     if not isinstance(spec, dict) or set(spec) != {"functions", "evidence"} \
             or not isinstance(spec["evidence"], str) or not spec["evidence"].strip() \
@@ -811,11 +813,15 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
                               or not link_root_names(roots["discarded"])):
         raise ValueError(f"{source}: a holdouts unit's link_roots are a non-empty list of distinct discarded "
                          "functions and evidence, without symbols")
-    # kept_locals may go with holdouts (each use needs its own owner approval); folded may not.
-    if "folded" in unit:
-        raise ValueError(f"{source}: holdouts cannot be combined with folded")
+    # kept_locals and folded may go with holdouts (each use needs its own owner approval). A folded
+    # name is a local duplicate with no code of its own in the target, so it is never a holdout or
+    # a discarded function; holdout_object drops a folded function's body (fold_object has already
+    # redirected its references) and the folded object's bytes stay in their whole data section.
+    folded = set(unit.get("folded", {}).get("symbols", {})) if isinstance(unit.get("folded"), dict) else set()
     rows = [row for entry in comparisons.get("units", []) if entry.get("source") == source
             for row in entry.get("functions", [])]
+    if folded & ({row["symbol"] for row in rows} | set((roots or {}).get("discarded", ()))):
+        raise ValueError(f"{source}: a folded symbol cannot be a registered function or a discarded function")
     result = []
     for entry in spec["functions"]:
         if not isinstance(entry, dict) or set(entry) != {"function", "evidence"}:
@@ -890,11 +896,15 @@ def holdout_object(native, unit, output):
       original bytes there. A global holdout name is reported in `globals`, so other units'
       references to it resolve to the same address;
     - drops each listed discarded function's code section, its relocations and the symbols defined
-      in it, without an address: the compiled order skips it. Each must be one compiled local
-      function, and a relocation that reaches it from any kept section or a holdout (whose code
-      the target has) fails, as the target's linker could not have discarded it then. An
+      in it, without an address: the compiled order skips it. Each must be one compiled function
+      (a global one is reported in `discarded_globals`, for plan() to check that no other unit
+      references it), and a relocation that reaches it from any kept section or a holdout (whose
+      code the target has) fails, as the target's linker could not have discarded it then. An
       undefined symbol that only discarded functions reference is dropped too, so plan() need
       not resolve it; one that anything else references stays;
+    - drops each folded function (unit["folds"], from fold_object, which ran on `native` first
+      and redirected every other reference to it to `__folded_<name>`) the same way: it has no
+      code of its own in the target. A folded object stays in its whole data section;
     Data sections and their relocations are unchanged apart from those redirections. The native
     object stays the receipt."""
     source = unit["source"]
@@ -925,10 +935,15 @@ def holdout_object(native, unit, output):
             raise ValueError(f"{source}: holdout {name} is not one compiled function of the unit")
     discarded = set((unit.get("link_roots") or {}).get("discarded", ()))
     for name in discarded:
-        if names.count(name) != 1 or name in held \
-                or next(f for f in owner.values() if f["name"] == name)["bind"] != STB_LOCAL:
-            raise ValueError(f"{source}: discarded function {name} is not one compiled local (file-static) "
-                             "function of the unit")
+        if names.count(name) != 1 or name in held:
+            raise ValueError(f"{source}: discarded function {name} is not one compiled function of the unit")
+    # A folded function (fold_object ran first and redirected every reference to it) has no code
+    # of its own in the target either: its body is dropped like a discarded function's.
+    folded = {name for name, (symbol, _) in (unit.get("folds") or {}).items() if symbol["type"] == STT_FUNC}
+    for name in folded:
+        if names.count(name) != 1 or name in held or name in discarded:
+            raise ValueError(f"{source}: folded function {name} is not one compiled function of the unit")
+    discarded |= folded
     runs = sorted((entry for entry in unit["sections"] if entry.get("input")), key=lambda entry: entry["start"])
     starts = [entry["start"] for entry in runs] + [row["start"] for row in held.values()]
     cursor, end = min(starts), max([entry["end"] for entry in runs] + [row["end"] for row in held.values()])
@@ -938,7 +953,8 @@ def holdout_object(native, unit, output):
         function = owner[section["index"]]
         if function["name"] in discarded:
             place[section["index"]] = ("discarded", function["name"])
-            gone[function["name"]] = section["size"]
+            if function["name"] not in folded:
+                gone[function["name"]] = section["size"]
             continue
         if function["name"] in held:
             row = held[function["name"]]
@@ -1105,6 +1121,9 @@ def holdout_object(native, unit, output):
                          "size": len(strings), "link": 0, "info": 0, "align": 1, "entsize": 0})
     write_elf(data, new_sections, output)
     return {"dropped": dropped, "discarded": gone,
+            "discarded_globals": sorted(owner[index]["name"] for index, kind in place.items()
+                                        if kind[0] == "discarded" and owner[index]["bind"] != STB_LOCAL),
+            "folded": sorted(folded),
             "globals": {owner[index]["name"]: kind[1] for index, kind in place.items()
                         if kind[0] == "holdout" and owner[index]["bind"] == STB_GLOBAL},
             "linked": dict(linked)}
@@ -1341,6 +1360,19 @@ def plan(sections, units, objects, externals):
             if name in defined or name in held or (name in externals and externals[name] != value):
                 raise ValueError(f"{unit['source']}: holdout {name} is already defined elsewhere")
             held[name] = value
+    # A global function a holdouts unit discards has no target code, so the target's linker could
+    # have dropped it only if no file referenced it: no other unit may reference it, and it is
+    # neither an external (a target address) nor defined anywhere else.
+    for unit in units:
+        for name in (unit.get("held") or {}).get("discarded_globals") or ():
+            if name in externals or name in defined or name in held:
+                raise ValueError(f"{unit['source']}: discarded global function {name} has a definition "
+                                 "or an address elsewhere")
+            for other in units:
+                if other is not unit and any(symbol["name"] == name and symbol["shndx"] == SHN_UNDEF
+                                             for symbol in objects[other["source"]][1]):
+                    raise ValueError(f"{unit['source']}: discarded global function {name} is referenced "
+                                     f"by {other['source']}")
     resolved = {}
     for unit in units:
         folds = {folded_reference(name): value for name, value in (unit.get("folded") or {}).items()}
@@ -1645,12 +1677,21 @@ def retention_roots(unit):
 def link_object(unit, aliases=()):
     """Set the object the unit links: the native object, or its holdouts, folded and/or kept derivative."""
     unit["link_object"], unit["folds"] = unit["object"], {}
+    unit["folded_object"] = None
     if unit.get("holdouts"):
+        native = unit["object"].read_bytes()
+        if unit["folded"]:
+            # Fold first, so every reference to a folded name names __folded_<name>; holdout_object
+            # then drops the folded functions' bodies, which no run may keep.
+            unit["folded_object"] = unit["object"].with_suffix(".folded.o")
+            unit["folds"] = fold_object(native, unit["folded"], unit["folded_object"])
+            native = unit["folded_object"].read_bytes()
         unit["link_object"] = unit["object"].with_suffix(".holdouts.o")
-        unit["held"] = holdout_object(unit["object"].read_bytes(), unit, unit["link_object"])
-    if unit["folded"]:
+        unit["held"] = holdout_object(native, unit, unit["link_object"])
+    elif unit["folded"]:
         unit["link_object"] = unit["object"].with_suffix(".folded.o")
         unit["folds"] = fold_object(unit["object"].read_bytes(), unit["folded"], unit["link_object"])
+        unit["folded_object"] = unit["link_object"]
         if not unit["link_roots"] and any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
             raise ValueError(f"{unit['source']}: a folded function needs link_roots so the linker drops its body")
     if unit.get("storage"):
@@ -1964,16 +2005,32 @@ def check_folded_functions(unit, target, sections, binary, references, compiler,
     """A folded function has no code of its own in the target. Linked alone at the address it
     folds into, its compiled body must reproduce the target bytes there."""
     import diagnostic_object
-    placements = {entry["section"]: entry for entry in unit["sections"]}
+    if not any(symbol["type"] == STT_FUNC for symbol, _ in unit["folds"].values()):
+        return
+    # A holdouts unit maps .text once per run, and its folded bodies are gone from the link object:
+    # the body is read from the folded object (fold_object's output), and a call from it to another
+    # function of the file resolves to where that function is linked, or to a holdout's target.
+    held = unit.get("holdouts")
+    placements = {entry["section"]: entry for entry in unit["sections"] if not entry.get("input")}
+    folded_object = (unit["folded_object"] if held else unit["link_object"]).read_bytes()
+    functions, targets = {}, {}
+    if held:
+        functions = {s["name"]: s for s in read_elf(folded_object)[1]
+                     if s["type"] == STT_FUNC and s["shndx"] != SHN_UNDEF and s["size"]}
+        targets = {name: (at, at + functions[name]["size"]) for name, at in unit["held"]["linked"].items()}
+        targets.update({row["symbol"]: (row["start"], row["end"]) for row in held})
     for name, (symbol, section) in unit["folds"].items():
         if symbol["type"] != STT_FUNC:
             continue
         start, size = unit["folded"][name], symbol["size"]
+        if held:
+            # Its own -ffunction-sections section, linked as .text as a lone holdout is.
+            section = dict(section, name=".text")
         directory = BUILD / "folded" / re.sub(r"[^A-Za-z0-9]+", "_", f"{unit['source']}_{name}").strip("_")
         directory.mkdir(parents=True)
         fragment = directory / "fragment.o"
         label, objects, script = diagnostic_object.fragment(
-            unit["link_object"].read_bytes(), section, symbol["value"], size, start, {}, {}, placements,
+            folded_object, section, symbol["value"], size, start, functions, targets, placements,
             references, fragment, sections)
         (directory / "link.ld").write_text(
             f"SECTIONS {{\n_SDA_BASE_ = {target['sda_base']};\n_SDA2_BASE_ = {target['sda2_base']};\n"
