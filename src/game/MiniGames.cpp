@@ -1515,7 +1515,7 @@ void Class_80148A58::vfn_18(int team, unsigned char index, char *text, unsigned 
         if(i)length+=2;
         if(capacity>length) {
             if(i) {
-                text[0]=',';text[1]=' ';text+=2;capacity-=2;length-=2;
+                text[0]=',';text[1]=' ';text+=2;length-=2;capacity-=2;
             }
             strncpy(text,name,capacity);
             text+=length;
@@ -1564,9 +1564,9 @@ int Class_80148A58::vfn_26(int team, int index, Object_80039F5C *player, int kin
 
 int Class_80148A58::vfn_27(int team, int index, int value)
 {
-    unsigned char row=team*7+index;
     int found=0;
-    for(unsigned char i=0;i<3;i++)if(lbl_8031BE04[row][i]==value)found=1;
+    index=(unsigned char)(index+team*7);
+    for(unsigned char i=0;i<3;i++)if(lbl_8031BE04[index][i]==value)found=1;
     return found;
 }
 
