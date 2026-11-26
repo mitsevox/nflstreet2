@@ -1,662 +1,121 @@
-/* Partial source for the player statistics queries of the game database. */
+/* The game database's player statistics queries: the 'OCCP' update handler that fills the
+   computed columns of a statistics row (passer rating, completion percentage, yards per
+   attempt), one query per statistics category that copies the matching rows of a player
+   statistics table into a scratch table, computes its derived columns and opens a cursor over
+   it, and the NFL passer rating formula. */
 
-#include "engine/TDbCreate.h"
-#include "engine/tdbext.h"
-#include "engine/dbutil.h"
-#include "engine/TDbLoad.h"
-
-#include <dolphin/gx/GXGeometry.h>
-#include <dolphin/gx/GXTev.h>
-#include <dolphin/mtx.h>
-#include <dolphin/os.h>
-#include <string.h>
-#include "engine/DbNiomModeFuncs.h"
-#include "game/DbUserSetCurrent.h"
-#include "game/fn_80233CBC.h"
+#include "engine/t3db.h"
+#include "engine/t3db_cols.h"
 #include "game/TDbCompilePerformOp.h"
-#include "engine/texfile.h"
-#include "game/Object_80233EAC.h"
-#include "game/Object_80235588.h"
-#include "game/QueryStatus.h"
 
-#include "engine/DbUserEntry.h"
+typedef int (*DbOccpQueryFunc)(const char *pWhere, int b, int orderTable, int orderCol, int orderDir,
+                               struct QueryCursor *pCursor);
 
-#include "engine/DbNiomHandlers.h"
-#include "game/Request_802329F0.h"
-
-typedef struct Block_80233588 {
-    int mUnknown0;
-    char *mpUnknown4;
-    int mUnknown8;
-} Block_80233588;
-
-int DbManagerCreateGameDb(Block_80233588 *p);
-int DbManagerInitHook(void);
-
-typedef struct Block_802336C4 {
-    void *mpUnknown0;
-    unsigned int mUnknown4;
-    char mUnknown8[8];
-    char mUnknown10[0x34];
-} Block_802336C4;
-
-typedef struct Model_802337D4 {
-    char mUnknown0[12];
-    int *mpUnknown12;
-    void *mpUnknown16;
-} Model_802337D4;
-
-typedef struct Joints_802337D4 {
-    int mUnknown0;
-    int mUnknown4;
-} Joints_802337D4;
-
-typedef struct Values_80233C7C {
-    unsigned int mUnknown0[2];
-    unsigned char mUnknown8[64];
-} Values_80233C7C;
-
-typedef struct List_80233BE4 {
-    unsigned int mUnknown0;
-} List_80233BE4;
-
-typedef struct Model_80233BE4 {
-    char mUnknown0[20];
-    List_80233BE4 *mpUnknown20;
-} Model_80233BE4;
-
-typedef struct Box_80234070 {
-    float mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    char mUnknown12[4];
-    float mUnknown16;
-    float mUnknown20;
-    char mUnknown24[8];
-} Box_80234070;
-
-/* Record updated by 0x8023424C and searched by 0x80234394; partial layout. */
-typedef struct Instance_8023424C {
-    int mUnknown0;
-    float mUnknown4;
-    float mUnknown8;
-    float mUnknown12;
-    float mUnknown16;
-    unsigned int mUnknown20;
-    Object_80233EAC *mpUnknown24;
-    float *mpUnknown28;
-    void *mpUnknown32;
-    void *mpUnknown36;
-} Instance_8023424C;
-
-typedef struct Desc_802345F8 {
-    const char *mpUnknown0;
-    char mUnknown4[16];
-    void *mpUnknown20;
-    struct Resource_802347EC *mpUnknown24;
-    void *mpUnknown28;
-} Desc_802345F8;
-
-typedef struct Resource_802347EC {
-    char mUnknown0[36];
-    void *mpUnknown36;
-} Resource_802347EC;
-
-typedef struct Entry_8023465C {
-    char mUnknown0[8];
-    short mUnknown8;
-    char mUnknown10[2];
-    const char *mpUnknown12;
-    char mUnknown16[32];
-} Entry_8023465C;
-
-typedef struct List_8023465C {
-    int mUnknown0;
-    Entry_8023465C *mpUnknown4;
-} List_8023465C;
-
-typedef struct Model_8023465C {
-    char mUnknown0[24];
-    List_8023465C *mpUnknown24;
-} Model_8023465C;
-
-typedef struct Object_8023465C {
-    unsigned int mUnknown0;
-} Object_8023465C;
-
-typedef struct Array_8023491C {
-    unsigned int mUnknown0;
-    float *mpUnknown4;
-    int mUnknown8;
-} Array_8023491C;
-
-typedef struct Part_80234A30 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    void *mpUnknown12;
-    int mUnknown16;
-    Values_80233C7C mUnknown20;
-    int mUnknown92;
-    short mUnknown96[64];
-    void *mpUnknown224;
-    void *mpUnknown228;
-    void *mpUnknown232[2];
-} Part_80234A30;
-
-typedef struct Object_80234B20 {
-    char mUnknown0[64];
-    Mtx44 mUnknown64;
-} Object_80234B20;
-
-typedef struct Header_80234DFC {
-    char mUnknown0[8];
-    int mUnknown8;
-} Header_80234DFC;
-
-typedef struct Sprite_80234DFC {
-    char mUnknown0[40];
-    void *mpUnknown40;
-    void *mpUnknown44;
-} Sprite_80234DFC;
-
-typedef struct Holder_80234EEC {
-    char mUnknown0[88];
-    Sprite_80234DFC *mpUnknown88;
-} Holder_80234EEC;
-
-typedef struct Table_803E96E8 {
-    char mUnknown0[12];
-    struct Group_803E96E8 *mpUnknown12;
-} Table_803E96E8;
-
-typedef struct Group_803E96E8 {
-    char mUnknown0[12];
-    unsigned short *mpUnknown12;
-} Group_803E96E8;
-
-typedef struct Range_80216190 {
-    char mUnknown0[16];
-    unsigned short mUnknown16;
-    unsigned short mUnknown18;
-} Range_80216190;
-
-typedef struct Source_80235328 {
-    char *mpUnknown0;
-} Source_80235328;
-
-typedef struct Owner_80235328 {
-    char mUnknown0[8];
-    Source_80235328 *mpUnknown8;
-} Owner_80235328;
-
-typedef struct Cache_8022F8A8 {
-    unsigned short mUnknown0;
-    char mUnknown2[2];
-    int mUnknown4;
-    int mUnknown8;
-    void *mpUnknown12[2];
-    void *mpUnknown20[2];
-    void *mpUnknown28[2];
-    union {
-        int mWord;
-        unsigned char mBytes[4];
-    } mUnknown36;
-    char mUnknown40[56];
-    struct Cache_8022F8A8 *mpUnknown96;
-    struct Cache_8022F8A8 *mpUnknown100;
-} Cache_8022F8A8;
-
-typedef struct Entry_802FB310 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    int mUnknown12;
-} Entry_802FB310;
-
-extern char lbl_802B5D88[];
-extern char lbl_802B5DB0[];
-extern char lbl_802B6520[];
-extern char lbl_802B6E10[];
-extern char lbl_802B6E34[];
-extern char lbl_802B6E74[];
-extern char lbl_802B6E90[];
-extern char lbl_802B6EA0[];
-extern char lbl_802B6EE0[];
-extern char lbl_802B6F00[];
-extern char lbl_802B6F30[];
-extern char lbl_802B6F54[];
-extern char lbl_802B6F78[];
-extern char lbl_802B6FB0[];
-extern char lbl_802B6FF4[];
-extern char lbl_802B7050[];
-extern char lbl_802B706C[];
-extern char lbl_802B709C[];
-extern char lbl_802B70DC[];
-extern char lbl_802B70FC[];
-extern char lbl_802B7128[];
-extern char lbl_802B7130[];
-extern char lbl_802B7154[];
-extern char lbl_802B715C[];
-extern DbUserEntry_t _DbUser_aEntries[];
-extern Entry_802FB310 lbl_802FB310[];
-extern int lbl_802FB3F8[];
-extern void *lbl_803A2648[];
-extern Table_803E96E8 lbl_803E96E8;
-extern int _DbUser_iSize;
-extern char *_DbUser_pFileName;
-extern int _DbUser_iMode;
-extern int _DbUser_iCurrent;
-extern unsigned char _DbUser_iCount;
-extern Cache_8022F8A8 *lbl_803EC0E0;
-extern int lbl_803EC0E4;
-extern int lbl_803EC0E8;
-extern int lbl_803EC0F0;
-extern void *lbl_803EC0F4;
-extern int lbl_803ED020;
-extern int lbl_803ED024;
-extern const int _DbUser_aDbIds[2];
-
-double fabs(double);
-
-extern void MatPush(void);
-extern void MatPushUnit(void);
-extern void MatPop(void);
-extern void MatCat(Mtx44 m);
-extern void MatStore(Mtx44 m);
-extern void MatLoadSlot(int a);
-extern void *fn_801D2B7C(int size, int a, int b);
-extern int fn_801D2BD0(void *p);
-extern int ResLoad(void *pData, int index, int a);
-extern int ResCopyToBuffer(void *pArchive, int id, void *pDest);
-extern int ResUnLoad(void *pData, int index);
-extern int ResIsLoaded(void *pData, int index);
-extern int TDbExists(int handle);
-extern int TDbSave(int handle, int a, int b);
-extern int TDbTblDefaultDbPush(int a, int *pTable4, int *pTable8);
-extern int TDbTblDefaultDbPop(void);
-extern int TDbTblFindUnusedId(int handle, int *pTable);
-extern int TDbTblExists(int handle, int table);
-extern int TDbTblInfoSetPersistent(int handle, int table, int a);
+extern int TDbTblFindUnusedId(int db, int *pTable);
 extern int TDbRegisterHandler(void *pCallback, int tag);
 extern int TDbUnregisterHandler(int tag);
-extern void LLTexCopyFlush(void *pDst, void *pSrc, unsigned int size);
-extern void TMModelResRelocate(void *p);
-extern void *TMModelResGetChunk(void *p, unsigned int tag, void *pOut);
-extern void TMModelReset(void *p);
-extern void TMModelClone(void *pDst, void *pSrc);
-extern void TMModelBindModelRes(void *p, void *pData);
-extern void TMModelRemapMaterials(void *p, void *pRef);
-extern void TMModelRemapClusters(void *p, void *q);
-extern void TMModelResetChannels(void *p);
-extern void TMModelAllocChannels(void *p);
-extern void TMModelFreeChannels(void *p);
-extern void TMModelAddExtent(void *p, void *q, int a, int b);
-extern void TMMaterialBindTextureClut(const char *pName, void *pTexture, void *pPalette);
-extern void TMMaterialBindShader(int handle);
-extern void TMMaterialListAlloc(void *p, int a);
-extern void TMMaterialListFree(void *p);
-extern void TMMaterialListSelect(void *p, int a);
-extern void TMRenderBindModel(void *p);
-extern void TMRenderBindClusterObj(void *p);
-extern void TMRenderBindMaterialList(void *p);
-extern void TMRenderGeomList(short *pValues, int count);
-extern void TMRenderGeomListDirect(short *pValues, int count);
-extern int TMShaderLibGetShader(const char *pName);
-extern void TMTexLibLoad(void *p, int a);
-extern void TMTexLibUnload(void *p);
-extern void *TMTexLibGetTextureByTexNode(void *p);
-extern void *TMTexLibGetClutByTexNode(void *p, int a);
-extern void TMClusterObjInitObj(void *p);
-extern void TMClusterObjAllocMatrices(Joints_802337D4 *pJoints, int a);
-extern void TMClusterObjSynthesizeMatrices(Joints_802337D4 *pJoints, void *p, int *q, void *pPose);
-extern void TMClusterObjSynthesizeMatricesSlerp(Joints_802337D4 *pJoints, void *p, int *q, void *pPose, unsigned char *pFlags);
-extern void TMTevSetTevOp(int a, int b, int c);
-extern void TMClipProjection(int a);
-extern void TMClipMatrix(int a);
-extern void TMClipMatrixWorld(int a, void *p, void *q);
-extern unsigned int TMClipBBox(void *p, void *q, int a);
-extern void TMClipResetExtent(void *p);
-extern void TMBufferNew(void *p, int a, int b);
-extern void TMBufferDelete(void *p);
-extern void TMBufferReset(void *p);
-extern void TMBlendSetWeights(short *pValues, int count);
-extern void TMBlendBegin(void *p);
-extern void TMBlendEnd(void);
-extern void TMBlendBindModel(void *p);
-extern void TMBlendGeomAll(void);
-extern Range_80216190 *TMSwapGetState(Group_803E96E8 *pGroup, int a, int key);
-extern int TMSwapGetGeomRefs(List_80233BE4 *pList, short *pOut, unsigned int index, int value);
-extern int DbOcmtModuleInit(void);
-extern void DbOcmtModuleShutdown(void);
-extern int DbOptionsModuleInit(void);
-extern void DbOptionsModuleShutdown(void);
-extern int DbNiomEndMode(void);
-extern int DbNiomReadOnce(int a, int b);
-extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
-extern void DbNiomClearModeFuncs(void);
-extern int DbNiomModeLoad(void **ppData, void *p);
-extern int DbNiomModeReset(int a, int b);
-extern int fn_802299FC(void);
-extern int fn_80229A70(void);
-extern int fn_80229E88(void);
-extern void fn_8022A304(void);
-extern int fn_8022B02C(int a);
-extern void fn_8022B200(void);
-extern int fn_8022C214(int a);
-extern void fn_8022C3C8(void);
-extern int fn_8022C410(int a);
-extern int fn_8022C518(int a);
-extern int fn_8022D154(void);
-extern int fn_8022D1B8(void);
-extern int fn_8022D6E8(void);
-extern void fn_8022D6F0(void);
-extern int fn_8022DA90(int *p);
-extern void fn_8022DB08(void);
-extern int DbResetGameInfo(void);
-extern int fn_8022DBF4(int a);
-extern int fn_8022DC38(int a);
-extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
-extern int DbRunLoadChain(void);
-extern int fn_8022E9A4(void);
-extern void fn_8022E9C4(void);
-extern int fn_8022E9E4(void);
-extern int DbEvasModuleInit(void);
-extern void DbEvasModuleShutdown(void);
-extern int DbTatsCopyAllTables(int a, int b, int c);
-extern signed char DbUserFindIndex(int key);
-extern int DbUserGetDb(int key);
-extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
-extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
-extern void ScaleBlockReset(void *p);
-extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
-extern void fn_80236F00(void);
-
-void fn_8023123C(void *p, int mode, unsigned char *pDone);
-int DbManagerEnterMode0(void);
-int DbManagerEnterMode1(void);
-int DbManagerMode1Leave(void);
-int DbManagerMode2Leave(void);
-void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
-int DbManagerLoadGameDb(void **ppData, void *p);
-int DbManagerSaveGameDb(int a, int b);
-int DbManagerDestroyGameDb(void);
-int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
-void fn_80233C7C(Values_80233C7C *pValues);
-float fn_80234070(Box_80234070 *pBox);
-unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
-extern int TMClipVertex(float *pNdc, float *pClip, float *pPos);
-void fn_80234094(Box_80234070 *pBox);
-int fn_80234098(Object_80233EAC *pObject, float value);
-Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
-void fn_8023472C(void *p, int a, int b, Desc_802345F8 *pA, Desc_802345F8 *pB, int c);
-void fn_80234A14(Part_80234A30 *pPart, int mask);
-void fn_80234A94(Part_80234A30 *pPart, void *pRecord);
-void fn_80234B88(Part_80234A30 *pPart);
-void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pName, int e);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* prototypes of the db functions in 0x8022F428-0x802355E4 (dbuser.c to cu_802336C4.c) */
-int DbUserFindIdByDb(int key);
-int DbUserSetCurrent(int value);
-int DbUserSelect(int value);
-int DbUserGetCurrent(void);
-int DbUserOpenDatabases(void);
-int DbUserPostLoad(int a);
-int DbUserCloseDatabases(void);
-int DbUserSetName(int value, char *pName);
-unsigned short fn_8022F80C(void);
-Cache_8022F8A8 *fn_8022F858(unsigned short id);
-Cache_8022F8A8 *fn_8022F880(int key);
-int fn_8022FBAC(Cache_8022F8A8 *pCache);
-int fn_802303A0(int index);
-int fn_802303B4(int key, unsigned short *pId);
-int fn_80230CC8(unsigned short id);
-int fn_80230CEC(int a, int b, int c, int key, int e, int f);
-int fn_802311C8(int handle);
+extern int TDbQryUpdateWithHandler(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere, int tag,
+                                   TDbCol_801F9718 *pCols, int id, void *pRes, int cb);
+extern int TDbQryUpdateExpr(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere,
+                            unsigned long long *pKeys, TDbExpr_t *pTerms, void *pRes, int cb);
+extern float floorf(float x);
+
+int fn_802311C8(int db);
 void fn_80231208(void);
-int fn_80231A84(void);
-int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
-int DbManagerInitModules(void);
-void DbManagerShutdownModules(void);
-int DbManagerPushGameDb(void);
-int DbManagerPopGameDb(void);
-int DbManagerInit(struct Request_802329F0 *p);
-int DbManagerShutdown(void);
-int DbManagerLoad(void **ppData, void *p);
-int DbManagerSave(int a, int b);
-int DbManagerEnterMode0(void);
-int DbManagerMode0Leave(void);
-int DbManagerMode0Load(void);
-int DbManagerMode0Save(void);
-int DbManagerMode0Finish(void);
-int DbManagerMode0Abort(void);
-int DbManagerEnterMode1(void);
-int DbManagerMode1Leave(void);
-int DbManagerMode1Load(void);
-int DbManagerMode1Save(void);
-int DbManagerMode1Finish(void);
-int DbManagerMode1Abort(void);
-int DbManagerEnterMode2(int *pRecord0, int *pRecord1);
-int DbManagerMode2Leave(void);
-int DbManagerMode2Load(void);
-int DbManagerMode2Save(int a, int b);
-int DbManagerMode2Finish(void);
-int DbManagerMode2Abort(void);
-void DbManagerGetModeFuncs(int mode, DbNiomModeFuncs_t *pFuncs);
-int DbManagerResultAccept(int a, int b, unsigned char *pDone);
-int DbManagerResultRecord(void);
-int DbManagerResultFinish(void);
-int DbManagerCreateGameDb(Block_80233588 *p);
-int DbManagerLoadGameDb(void **ppData, void *p);
-int DbManagerSaveGameDb(int a, int b);
-int DbManagerDestroyGameDb(void);
-int DbManagerInitHook(void);
-void fn_802336C4(Block_802336C4 *pBlock, void *pSource, int a);
-void fn_80233728(Block_802336C4 *pBlock);
-void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count);
-void fn_802337D4(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, unsigned int mask);
-void fn_80233850(Model_802337D4 *pModel, Joints_802337D4 *pJoints, void *pPose, unsigned int mask, unsigned char *pFlags);
-void fn_80233BB8(void *pJoints, int a, int b);
-void fn_80233BD8(void *pJoints);
-void fn_80233BDC(void *pJoints, void *pSkeleton);
-void fn_80233BE0(void);
-int fn_80233BE4(short *pOut, Model_80233BE4 *pModel, Values_80233C7C *pValues);
-void fn_80233C7C(Values_80233C7C *pValues);
-void fn_80233CBC(void *p, int index, int value);
-void fn_80233CF0(ModelLod_802DF190 *pLod, void *pData, void *p);
-void fn_80233D64(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pData, void *p);
-void fn_80233EAC(Object_80233EAC *pObject, ModelLod_802DF190 *pLods, const char *pName, int a, void *pArchive, AnimSkeleton_t *pSkeleton, void **ppData, int load);
-void fn_80233FCC(Object_80233EAC *pObject);
-float fn_80234070(Box_80234070 *pBox);
-void fn_80234094(Box_80234070 *pBox);
-int fn_80234098(Object_80233EAC *pObject, float value);
-int fn_80234144(Object_80233EAC *pObject, void *pBox);
-Object_8023417C *fn_8023417C(Object_80233EAC *pObject, int index);
-void fn_802341AC(void);
-void fn_802341B8(void);
-void fn_802341C4(void *p);
-void fn_802341E8(void *p);
-void fn_8023424C(Instance_8023424C *p, int *pCounts, Box_80234070 *pClip);
-int fn_80234394(Instance_8023424C **ppList, unsigned int count, int key);
-void fn_802345BC(void *p);
-void fn_802345C4(void *pSource, int count);
-Desc_802345F8 *fn_802345F8(Desc_802345F8 *pDescs, const char *pName);
-void fn_8023465C(Object_8023465C *pObject, Model_8023465C *pModel, Desc_802345F8 *pDescs);
-void fn_8023472C(void *p, int a, int b, Desc_802345F8 *pA, Desc_802345F8 *pB, int c);
-void fn_802347EC(void *pData, Desc_802345F8 *pDesc, int a, int b);
-void fn_80234844(Desc_802345F8 *pDesc);
-void fn_8023488C(void *p, int a);
-void fn_802348AC(void *p);
-void fn_802348CC(int a);
-void fn_80234908(void);
-void fn_80234994(Array_8023491C *pArray);
-void fn_802349B8(Array_8023491C *pArray, int value);
-void fn_80234A14(Part_80234A30 *pPart, int mask);
-void fn_80234A30(Part_80234A30 *pPart, int a);
-void fn_80234A90(Part_80234A30 *pPart);
-void fn_80234A94(Part_80234A30 *pPart, void *pRecord);
-void fn_80234AD8(Part_80234A30 *pPart, Block_802336C4 *pBlock);
-void fn_80234AFC(void *p);
-void fn_80234B1C(void *p);
-void fn_80234B20(Object_80234B20 *pObject, Mtx44 a, Mtx44 b);
-int fn_80234B80(void *p);
-void fn_80234B88(Part_80234A30 *pPart);
-void fn_80234BF4(int a, Part_80234A30 *pPart, int mode);
-void fn_80234CA4(Part_80234A30 *pPart, void *p);
-void fn_80234CAC(Part_80234A30 *pPart, void *p);
-void fn_80234CF0(Part_80234A30 *pPart, int index, void *p);
-void fn_80234D00(void *pIn, void *pOut);
-unsigned int fn_80234D4C(float *pBox, void *m, void *p, void *q);
-void fn_80234DC0(void *p, int a);
-void fn_80234DC4(void *p, int a);
-void fn_80234DC8(void *p, unsigned int a);
-void fn_80234DCC(int a, Sprite_80234DFC *pSprite, const char *pName, int b);
-void fn_80234DFC(int a, Sprite_80234DFC *pSprite, int c, int d, const char *pName, int e);
-void fn_80234EA0(Sprite_80234DFC *pSprite, int keep);
-void fn_80234EEC(Holder_80234EEC *pHolder, int index, void *pData, unsigned char sourceIndex);
-void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char sourceIndex, int offset);
-void fn_80235328(Owner_80235328 *pOwner, int key);
-void fn_802353CC(void *p);
-void fn_802353D0(void *p);
-void fn_802353D4(Object_80235588 *p, int flags);
-void fn_802353D8(Object_80235588 *p, int flags);
-void fn_802353E8(Object_80235588 *p, int flags);
-void fn_802353F8(Object_80235588 *p, int flags);
-void fn_80235510(Object_80235588 *p, int mode);
-void fn_80235588(Object_80235588 *p, int a);
+void fn_8023123C(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone);
+float fn_80232628(int att, int yds, int comp, int td, int ints);
 
-int fn_802311C8(int handle)
+int lbl_803EC0E4 = 0;
+int lbl_803EC0E8 = -1;
+
+/* 1 when a query status counts as success (0, 23, 21 or 20). */
+static inline int _DbOccpAccepted(int err)
 {
-    lbl_803EC0E8 = handle;
+    if (err == 0 || err == 23 || err == 21 || err == 20) {
+        return 1;
+    }
+    return 0;
+}
+
+static inline unsigned long long _DbOccpKey(unsigned int table, unsigned int col)
+{
+    return ((unsigned long long)table << 32) | col;
+}
+
+static inline void _DbOccpSetCol(TDbCol_801F9718 *pCol, int table, int col)
+{
+    pCol->mUnk0 = 0;
+    pCol->mUnk4 = table;
+    pCol->mCol = col;
+}
+
+static inline void _DbOccpSetColEnd(TDbCol_801F9718 *pCol)
+{
+    pCol->mCol = -1;
+    pCol->mUnk4 = -1;
+    pCol->mUnk0 = 0;
+}
+
+static inline void _DbOccpSetTable(TDbSQLTableRef_801FDC18 *pRef, unsigned int id, unsigned int join,
+                                   TDbExpr_t *pExpr)
+{
+    pRef->mExpr = pExpr;
+    pRef->mId = id;
+    pRef->mJoinType = join;
+}
+
+/* integer result of a sub-expression */
+static inline void _DbOccpSetTrunc(TDbExpr_t *pExpr, TDbExpr_t *pSub)
+{
+    pExpr->mOp = 0;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_TRUNC;
+    pExpr->mLeft.mValue.p = pSub;
+    pExpr->mRight.mType = 16;
+}
+
+/* column op column */
+static inline void _DbOccpSetColCol(TDbExpr_t *pExpr, int op, unsigned long long colA, unsigned long long colB)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = colA;
+    pExpr->mRight.mType = TDB_TYPE_COLUMN;
+    pExpr->mRight.mValue.l = colB;
+}
+
+/* column op integer */
+static inline void _DbOccpSetColInt(TDbExpr_t *pExpr, int op, unsigned long long col, int value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = col;
+    pExpr->mRight.mType = TDB_TYPE_INT;
+    pExpr->mRight.mValue.i = value;
+}
+
+/* sub-expression op column */
+static inline void _DbOccpSetSubCol(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub, unsigned long long col)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_TRUNC;
+    pExpr->mLeft.mValue.p = pSub;
+    pExpr->mRight.mType = TDB_TYPE_COLUMN;
+    pExpr->mRight.mValue.l = col;
+}
+
+/* float sub-expression op float */
+static inline void _DbOccpSetSubFloat(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub, float value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_FLOAT;
+    pExpr->mLeft.mValue.p = pSub;
+    pExpr->mRight.mType = TDB_TYPE_FLOAT;
+    pExpr->mRight.mValue.f = value;
+}
+
+int fn_802311C8(int db)
+{
+    lbl_803EC0E8 = db;
     lbl_803EC0E4 = 0x4F434350;
     return TDbRegisterHandler(fn_8023123C, 0x4F434350);
 }
@@ -668,15 +127,413 @@ void fn_80231208(void)
     lbl_803EC0E4 = 0;
 }
 
+void fn_8023123C(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
+{
+    if (pCols == 0) {
+        if (pDone != 0) {
+            *pDone = 0;
+        }
+        return;
+    }
+    pCols[5].mUnk0 = fn_80232628(pCols[0].mUnk0, pCols[1].mUnk0, pCols[2].mUnk0, pCols[3].mUnk0, pCols[4].mUnk0) * 10.0f;
+    if (mode == 2) {
+        pCols[6].mUnk0 = pCols[2].mUnk0 * 100 / pCols[0].mUnk0;
+        pCols[7].mUnk0 = (float)pCols[1].mUnk0 / (float)pCols[0].mUnk0 * 10.0f;
+    }
+    *pDone = 1;
+}
+
+/* Discarded: the handler of the second statistics table, never registered. */
+void DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
+{
+    int att;
+    int plays;
+
+    if (pCols == 0) {
+        if (pDone != 0) {
+            *pDone = 0;
+        }
+        return;
+    }
+    if (mode == 0) {
+        plays = pCols[1].mUnk0;
+        att = pCols[0].mUnk0;
+        pCols[20].mUnk0 = att + plays;
+        pCols[21].mUnk0 = pCols[3].mUnk0 ? (int)((float)pCols[2].mUnk0 / pCols[3].mUnk0 * 10.0f) : 0;
+        pCols[22].mUnk0 = pCols[5].mUnk0 ? (int)((float)pCols[4].mUnk0 / pCols[5].mUnk0 * 10.0f) : 0;
+        pCols[23].mUnk0 = att ? pCols[6].mUnk0 * 100 / att : 0;
+        pCols[24].mUnk0 = pCols[6].mUnk0 ? (int)((float)pCols[7].mUnk0 / pCols[6].mUnk0 * 10.0f) : 0;
+        pCols[25].mUnk0 = plays ? (int)((float)pCols[8].mUnk0 / plays * 10.0f) : 0;
+        pCols[26].mUnk0 = pCols[11].mUnk0
+                              ? (int)((float)(pCols[10].mUnk0 + pCols[9].mUnk0) / pCols[11].mUnk0 * 100.0f)
+                              : 0;
+        pCols[27].mUnk0 = pCols[13].mUnk0 ? pCols[12].mUnk0 * 100 / pCols[13].mUnk0 : 0;
+        pCols[28].mUnk0 = pCols[15].mUnk0 ? pCols[114].mUnk0 * 100 / pCols[15].mUnk0 : 0;
+        pCols[29].mUnk0 = pCols[17].mUnk0 ? pCols[16].mUnk0 * 100 / pCols[17].mUnk0 : 0;
+        pCols[30].mUnk0 = pCols[18].mUnk0 - pCols[19].mUnk0;
+    }
+    *pDone = 1;
+}
+
+int fn_8023133C(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    TDbCol_801F9718 aCols[11];
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'mcag' and 'FOGP'.'taag' and "
+                              "'FOGP'.'ayag' and 'FOGP'.'dtag' and 'FOGP'.'niag' and 'FOGP'.'asag' and 'FOGP'.'Nlag' and "
+                              "'OCCP'.'ppcp' and 'OCCP'.'ypcp' and 'OCCP'.'tpcp' and 'OCCP'.'rpcp' from 'FOGP' inner join "
+                              "'YALP' on 'YALP'.'DIGP' = 'FOGP'.'DIGP' left outer join 'OCCP' on 'OCCP'.'DIGP' = "
+                              "'YALP'.'DIGP' where 'FOGP'.'taag' != 0 and \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        _DbOccpSetCol(&aCols[0], table, 0x74616167);
+        _DbOccpSetCol(&aCols[1], table, 0x61796167);
+        _DbOccpSetCol(&aCols[2], table, 0x6D636167);
+        _DbOccpSetCol(&aCols[3], table, 0x64746167);
+        _DbOccpSetCol(&aCols[4], table, 0x6E696167);
+        _DbOccpSetCol(&aCols[5], table, 0x72706370);
+        _DbOccpSetCol(&aCols[6], table, 0x70706370);
+        _DbOccpSetCol(&aCols[7], table, 0x74706370);
+        _DbOccpSetCol(&aCols[8], table, 0x79706370);
+        _DbOccpSetColEnd(&aCols[9]);
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateWithHandler(0, aTables, 0, lbl_803EC0E4, aCols, 2, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+int fn_80231570(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[3];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t scale;
+    TDbExpr_t ratio;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'ayug' and 'FOGP'.'taug' and "
+                              "'FOGP'.'dtug' and 'FOGP'.'ufug' and 'FOGP'.'Nlug' and 'FOGP'.'tbug' and 'FOGP'.'y2ug' and "
+                              "'FOGP'.'hyug' and 'OCCP'.'cscp' and 'OCCP'.'gscp' from 'FOGP' inner join 'YALP' on "
+                              "'YALP'.'DIGP' = 'FOGP'.'DIGP' left outer join 'OCCP' on 'OCCP'.'DIGP' = 'YALP'.'DIGP' "
+                              "where 'FOGP'.'taug' != 0 and \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x63736370);
+        _DbOccpSetTrunc(&aTerms[0], &scale);
+        _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
+        _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x61797567), _DbOccpKey(table, 0x74617567));
+        aKeys[1] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+int fn_80231798(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[4];
+    TDbExpr_t aTerms[3];
+    TDbExpr_t scale0;
+    TDbExpr_t ratio0;
+    TDbExpr_t scale1;
+    TDbExpr_t ratio1;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'aycg' and 'FOGP'.'accg' and "
+                              "'FOGP'.'cycg' and 'FOGP'.'dtcg' and 'FOGP'.'rdcg' and 'FOGP'.'Lrcg' and 'OCCP'.'crcp' and "
+                              "'OCCP'.'grcp' and 'OCCP'.'arcp' from 'FOGP' inner join 'YALP' on 'YALP'.'DIGP' = "
+                              "'FOGP'.'DIGP' left outer join 'OCCP' on 'OCCP'.'DIGP' = 'YALP'.'DIGP' where "
+                              "('FOGP'.'accg' > 0 or 'FOGP'.'rdcg' > 0) and \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x61726370);
+        _DbOccpSetTrunc(&aTerms[0], &scale0);
+        _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
+        _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x61796367), _DbOccpKey(table, 0x61636367));
+        aKeys[1] = _DbOccpKey(table, 0x63726370);
+        _DbOccpSetTrunc(&aTerms[1], &scale1);
+        _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
+        _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x63796367), _DbOccpKey(table, 0x61636367));
+        aKeys[2] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
 int fn_80231A84(void)
 {
     return 3;
 }
 
-int fn_80231A8C(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor)
+int fn_80231A8C(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     int table;
 
     TDbTblFindUnusedId(lbl_803EC0E8, &table);
-    return TDbCompilePerformOp(0, lbl_802B6520, pCursor, table, pWhere, c, d, e);
+    return TDbCompilePerformOp(0,
+                               "declare \x8a cursor for select into \x8c 'LOGP'.'DIGP' and 'YALP'.'DIGT' and 'LOGP'.'apog' "
+                               "and 'LOGP'.'asog' from 'LOGP' inner join 'YALP' on 'YALP'.'DIGP' = 'LOGP'.'DIGP' where "
+                               "\x8f order by \x8c.\x8c \x8e\n",
+                               pCursor, table, pWhere, orderTable, orderCol, orderDir);
 }
+
+int fn_80231B04(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[3];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t scale;
+    TDbExpr_t ratio;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'EDGP'.'yisg' and 'EDGP'.'nisg' and "
+                              "'EDGP'.'tisg' and 'EDGP'.'tflg' and 'EDGP'.'atdg' and 'EDGP'.'ltdg' and 'EDGP'.'kslg' and "
+                              "'EDGP'.'fflg' and 'EDGP'.'rflg' and 'EDGP'.'yflg' and 'EDGP'.'lblg' and 'EDGP'.'aslg' and "
+                              "'EDGP'.'Rlsg' and 'EDGP'.'dpdg' and 'DCCP'.'aicp' and 'DCCP'.'tdcp' from 'EDGP' inner join "
+                              "'YALP' on 'YALP'.'DIGP' = 'EDGP'.'DIGP' left outer join 'DCCP' on 'DCCP'.'DIGP' = "
+                              "'YALP'.'DIGP' where \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x61696370);
+        _DbOccpSetTrunc(&aTerms[0], &scale);
+        _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
+        _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x79697367), _DbOccpKey(table, 0x6E697367));
+        aKeys[1] = _DbOccpKey(table, 0x74646370);
+        _DbOccpSetColCol(&aTerms[1], 0x4000D, _DbOccpKey(table, 0x74697367), _DbOccpKey(table, 0x74666C67));
+        aKeys[2] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+int fn_80231DAC(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[3];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t made0;
+    TDbExpr_t made1;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'IKGP'.'Lfkg' and 'IKGP'.'mfkg' and "
+                              "'IKGP'.'afkg' and 'IKGP'.'mekg' and 'IKGP'.'aekg' and 'IKGP'.'bfkg' and 'IKGP'.'bekg' and "
+                              "'IKGP'.'btkg' and 'IKGP'.COL_PLYRSTAT_KICKFGMADE29ORLESS and 'IKGP'.'cmkg' and "
+                              "'IKGP'.'dmkg' and 'IKGP'.'emkg' and 'IKGP'.COL_PLYRSTAT_KICKFGATTEMPTS29ORLESS and "
+                              "'IKGP'.'cakg' and 'IKGP'.'dakg' and 'IKGP'.'eakg' and 'IKGP'.'knkg' and 'KCCP'.'pfcp' and "
+                              "'KCCP'.'pxcp' from 'IKGP' inner join 'YALP' on 'YALP'.'DIGP' = 'IKGP'.'DIGP' left outer "
+                              "join 'KCCP' on 'KCCP'.'DIGP' = 'YALP'.'DIGP' where ('IKGP'.'aekg' != 0 or 'IKGP'.'afkg' "
+                              "!= 0 or 'IKGP'.'knkg' != 0) and \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x70666370);
+        _DbOccpSetSubCol(&aTerms[0], 0x4000F, &made0, _DbOccpKey(table, 0x61666B67));
+        _DbOccpSetColInt(&made0, 0x40010, _DbOccpKey(table, 0x6D666B67), 100);
+        aKeys[1] = _DbOccpKey(table, 0x70786370);
+        _DbOccpSetSubCol(&aTerms[1], 0x4000F, &made1, _DbOccpKey(table, 0x61656B67));
+        _DbOccpSetColInt(&made1, 0x40010, _DbOccpKey(table, 0x6D656B67), 100);
+        aKeys[2] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+int fn_80232054(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[3];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t scale0;
+    TDbExpr_t ratio0;
+    TDbExpr_t scale1;
+    TDbExpr_t ratio1;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'IKGP'.'aypg' and 'IKGP'.'tapg' and "
+                              "'IKGP'.'ynpg' and 'IKGP'.'tppg' and 'IKGP'.'lbpg' and 'IKGP'.'Nlpg' and 'IKGP'.'btpg' and "
+                              "'KCCP'.'aucp' and 'KCCP'.'nucp' from 'IKGP' inner join 'YALP' on 'YALP'.'DIGP' = "
+                              "'IKGP'.'DIGP' left outer join 'KCCP' on 'KCCP'.'DIGP' = 'YALP'.'DIGP' where "
+                              "'IKGP'.'tapg' != 0 and \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x61756370);
+        _DbOccpSetTrunc(&aTerms[0], &scale0);
+        _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
+        _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x61797067), _DbOccpKey(table, 0x74617067));
+        aKeys[1] = _DbOccpKey(table, 0x6E756370);
+        _DbOccpSetTrunc(&aTerms[1], &scale1);
+        _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
+        _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x796E7067), _DbOccpKey(table, 0x74617067));
+        aKeys[2] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+int fn_80232340(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+{
+    unsigned long long aKeys[3];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t scale0;
+    TDbExpr_t ratio0;
+    TDbExpr_t scale1;
+    TDbExpr_t ratio1;
+    TDbSQLTableRef_801FDC18 aTables[2];
+    int table;
+    int err;
+
+    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    err = TDbCompilePerformOp(0,
+                              "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'PKGP'.'ykrg' and 'PKGP'.'akrg' and "
+                              "'PKGP'.'yprg' and 'PKGP'.'aprg' and 'PKGP'.'tkrg' and 'PKGP'.'tprg' and 'PKGP'.'Lprg' and "
+                              "'PKGP'.'Lkrg' and 'RCCP'.'akcp' and 'RCCP'.'apcp' from 'PKGP' inner join 'YALP' on "
+                              "'YALP'.'DIGP' = 'PKGP'.'DIGP' left outer join 'RCCP' on 'RCCP'.'DIGP' = 'YALP'.'DIGP' "
+                              "where \x8f\n",
+                              table, pWhere);
+    if (_DbOccpAccepted(err)) {
+        aKeys[0] = _DbOccpKey(table, 0x616B6370);
+        _DbOccpSetTrunc(&aTerms[0], &scale0);
+        _DbOccpSetSubFloat(&scale0, 0x40010, &ratio0, 10.0f);
+        _DbOccpSetColCol(&ratio0, 0x100018, _DbOccpKey(table, 0x796B7267), _DbOccpKey(table, 0x616B7267));
+        aKeys[1] = _DbOccpKey(table, 0x61706370);
+        _DbOccpSetTrunc(&aTerms[1], &scale1);
+        _DbOccpSetSubFloat(&scale1, 0x40010, &ratio1, 10.0f);
+        _DbOccpSetColCol(&ratio1, 0x100018, _DbOccpKey(table, 0x79707267), _DbOccpKey(table, 0x61707267));
+        aKeys[2] = -1;
+        _DbOccpSetTable(&aTables[0], table, 2, 0);
+        _DbOccpSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        if (_DbOccpAccepted(err)) {
+            err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
+                                      pCursor, table, orderTable, orderCol, orderDir);
+        }
+    }
+    return err;
+}
+
+/* Discarded: recomputes the stored passer rating of every row of a statistics table. */
+int DbOccpUpdatePasserRatings(int tbl, int colAtt, int colYds, int colComp, int colTd, int colInts)
+{
+    struct QueryCursor cursor;
+    int id;
+    int att;
+    int yds;
+    int comp;
+    int td;
+    int ints;
+    float rating;
+    int err;
+
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
+    err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c\n", &cursor, tbl);
+    if (_DbOccpAccepted(err)) {
+        err = TDbCompilePerformOp(0,
+                                  "fetch from \x8a 'DIGP' into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c into "
+                                  "\x82 and \x8c into \x82 and \x8c into \x82\n",
+                                  &cursor, &id, colAtt, &att, colYds, &yds, colComp, &comp, colTd, &td, colInts, &ints);
+        while (err == 0) {
+            rating = 0.0f;
+            if (att != 0) {
+                rating = fn_80232628(att, yds, comp, td, ints) * 10.0f;
+            }
+            err = TDbCompilePerformOp(0, "update \x8c set 'rpcp' = \x82 where 'DIGP' = \x82\n", tbl, (int)rating,
+                                      id);
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0,
+                                      "fetch from \x8a 'DIGP' into \x82 and \x8c into \x82 and \x8c into \x82 and \x8c "
+                                      "into \x82 and \x8c into \x82 and \x8c into \x82\n",
+                                      &cursor, &id, colAtt, &att, colYds, &yds, colComp, &comp, colTd, &td, colInts,
+                                      &ints);
+        }
+        if (cursor.mUnknown0 != 0) {
+            TDbSQLDestroyCursor(&cursor);
+        }
+    }
+    return err;
+}
+
+float fn_80232628(int att, int yds, int comp, int td, int ints)
+{
+    float rating = 0.0f;
+    float a;
+    float b;
+    float c;
+    float d;
+
+    if (att != 0) {
+        rating = (float)comp / (float)att * 5.0f - 1.5f;
+        rating = rating < 0.0f ? 0.0f : (rating > 2.375f ? 2.375f : rating);
+        b = ((float)yds / (float)att - 3.0f) * 0.25f;
+        rating += b < 0.0f ? 0.0f : (b > 2.375f ? 2.375f : b);
+        c = (float)td / (float)att * 19.958f;
+        rating += c < 0.0f ? 0.0f : (c > 2.375f ? 2.375f : c);
+        d = 2.375f - (float)ints / (float)att * 25.0f;
+        rating += d < 0.0f ? 0.0f : d;
+        rating = floorf((rating * 16.666668f + 0.05) * 10.0) * 0.1f + 0.005;
+    }
+    return rating;
+}
+
+DbOccpQueryFunc gDbOccpQueries[9] = {
+    fn_8023133C, fn_80231570, fn_80231798, (DbOccpQueryFunc)fn_80231A84, fn_80231A8C,
+    fn_80231B04, fn_80231DAC, fn_80232054, fn_80232340,
+};

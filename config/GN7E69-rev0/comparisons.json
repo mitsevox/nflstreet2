@@ -19362,6 +19362,24 @@
           "placement": ".text",
           "start": "0x802311C8",
           "end": "0x802328A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6038",
+          "end": "0x802B6E10"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB368",
+          "end": "0x802FB38C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0E4",
+          "end": "0x803EC0EC"
         }
       ],
       "functions": [
@@ -19376,6 +19394,26 @@
           "end": "0x8023123C"
         },
         {
+          "symbol": "fn_8023123C",
+          "start": "0x8023123C",
+          "end": "0x8023133C"
+        },
+        {
+          "symbol": "fn_8023133C",
+          "start": "0x8023133C",
+          "end": "0x80231570"
+        },
+        {
+          "symbol": "fn_80231570",
+          "start": "0x80231570",
+          "end": "0x80231798"
+        },
+        {
+          "symbol": "fn_80231798",
+          "start": "0x80231798",
+          "end": "0x80231A84"
+        },
+        {
           "symbol": "fn_80231A84",
           "start": "0x80231A84",
           "end": "0x80231A8C"
@@ -19384,7 +19422,36 @@
           "symbol": "fn_80231A8C",
           "start": "0x80231A8C",
           "end": "0x80231B04"
+        },
+        {
+          "symbol": "fn_80231B04",
+          "start": "0x80231B04",
+          "end": "0x80231DAC"
+        },
+        {
+          "symbol": "fn_80231DAC",
+          "start": "0x80231DAC",
+          "end": "0x80232054"
+        },
+        {
+          "symbol": "fn_80232054",
+          "start": "0x80232054",
+          "end": "0x80232340"
+        },
+        {
+          "symbol": "fn_80232340",
+          "start": "0x80232340",
+          "end": "0x80232628"
+        },
+        {
+          "symbol": "fn_80232628",
+          "start": "0x80232628",
+          "end": "0x802328A8"
         }
+      ],
+      "discarded": [
+        "DbOccpUpdateTeamHandler",
+        "DbOccpUpdatePasserRatings"
       ]
     },
     {
