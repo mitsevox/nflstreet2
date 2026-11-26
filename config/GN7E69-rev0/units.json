@@ -28527,6 +28527,82 @@
       }
     },
     {
+      "source": "src/engine/cu_8021EFD8.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/cu_8021EFD8.c (0x8021EFD8-0x80221314) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 27 of 31 functions exact, the holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021EFD8",
+          "end": "0x8021F984"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220988",
+          "end": "0x80220B4C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220BE0",
+          "end": "0x80221314"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1EF8",
+          "end": "0x802B1F78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FA0",
+          "end": "0x802F9FE0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F878",
+          "end": "0x8039F9B8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF48",
+          "end": "0x803EBF60"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFF0",
+          "end": "0x803ED010"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8021F984",
+            "evidence": "evidence.tsv source-form 0x8021F984-0x8021FB30"
+          },
+          {
+            "function": "fn_8021FB30",
+            "evidence": "evidence.tsv source-form 0x8021FB30-0x80220310"
+          },
+          {
+            "function": "fn_80220310",
+            "evidence": "evidence.tsv source-form 0x80220310-0x80220988"
+          },
+          {
+            "function": "fn_80220B4C",
+            "evidence": "evidence.tsv source-form 0x80220B4C-0x80220BE0"
+          }
+        ],
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/cu_8021EFD8.c holds out fn_8021F984, fn_8021FB30, fn_80220310, fn_80220B4C."
+      }
+    },
+    {
       "source": "src/engine/uigtext.c",
       "profile": "engine_c_fastmath_holdouts",
       "evidence": "evidence.tsv unit row of src/engine/cu_80221BF0.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 8 of 9 functions exact, the holdout keeps the original bytes.",

@@ -41,21 +41,28 @@ typedef struct Transform_80221198 {
 } Transform_80221198;
 
 extern GXLightObj lbl_803E9880;
-extern unsigned short *lbl_803EBF48;
-extern UIGMaterialColorState_t *lbl_803EBF50;
-extern Int32 lbl_803EBF54;
-extern Int32 lbl_803EBF58;
-extern Uint8 lbl_803EBF5C;
-extern Float32 lbl_802F9FA0[4][4];
-extern Uint32 lbl_803ECFF0;
-extern Uint32 lbl_803ECFF4;
-extern Int32 lbl_803ECFF8;
-extern Int32 lbl_803ECFFC;
-extern Int32 lbl_803ED000;
-extern UIGLibrary_t *lbl_803ED004;
-extern Int32 lbl_803ED008;
-extern Int32 lbl_803ED00C;
-extern UIGMaterialColorState_t lbl_8039F878[];
+
+static Float32 lbl_802F9FA0[4][4] = {
+    { 1.0f, 0.0f, 0.0f, 0.0f },
+    { 0.0f, 1.0f, 0.0f, 0.0f },
+    { 0.0f, 0.0f, 0.0f, 1.0f },
+    { 0.0f, 0.0f, 0.0f, 1.0f },
+};
+static UIGMaterialColorState_t lbl_8039F878[8];
+static unsigned short *lbl_803EBF48 = NULL;
+static Int32 lbl_803EBF4C = 0;
+static UIGMaterialColorState_t *lbl_803EBF50 = lbl_8039F878;
+static Int32 lbl_803EBF54 = 0;
+static Int32 lbl_803EBF58 = 0;
+static Uint8 lbl_803EBF5C = 0;
+static Uint32 lbl_803ECFF0;
+static Uint32 lbl_803ECFF4;
+static Int32 lbl_803ECFF8;
+static Int32 lbl_803ECFFC;
+static Int32 lbl_803ED000;
+static UIGLibrary_t *lbl_803ED004;
+static Int32 lbl_803ED008;
+static Int32 lbl_803ED00C;
 
 void fn_8021F8DC(UIGNode_t *pNode);
 void fn_8021F954(UIGNode_t *pNode);
@@ -656,7 +663,6 @@ Int32 fn_80220B4C(Int32 a, Int32 b)
     pObject = UIGLibraryGetGlobal(1);
     Result = 0;
     if (pObject != NULL) {
-        // FAKEMATCH: cache word read into Result first and stored last (same logic as reading lbl_803ED008 after the if)
         Result = lbl_803ED008;
         if (Result == 0 || lbl_803ED004 != pObject || lbl_803ECFFC != a || lbl_803ED000 != b) {
             Result = UIGLibraryLoadItem(pObject, a, b);
