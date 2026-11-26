@@ -13484,19 +13484,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C3610",
-          "end": "0x800C38C4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C39E0",
           "end": "0x800C3BEC"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800C4184",
-          "end": "0x800C5BF0"
+          "end": "0x800C5DE4"
         },
         {
           "section": ".text",
@@ -13526,12 +13520,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800CE158",
-          "end": "0x800CE218"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800CE2B8",
           "end": "0x800CF84C"
         },
         {
@@ -13760,16 +13748,8 @@
             "evidence": "evidence.tsv source-form 0x800C34B0-0x800C3610"
           },
           {
-            "function": "fn_800C38C4",
-            "evidence": "evidence.tsv source-form 0x800C38C4-0x800C39E0"
-          },
-          {
             "function": "fn_800C3BEC",
             "evidence": "evidence.tsv source-form 0x800C3BEC-0x800C4184"
-          },
-          {
-            "function": "fn_800C5BF0",
-            "evidence": "evidence.tsv source-form 0x800C5BF0-0x800C5DE4"
           },
           {
             "function": "fn_800C5DE4",
@@ -13790,13 +13770,9 @@
           {
             "function": "fn_800CDE50",
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
-          },
-          {
-            "function": "fn_800CE218",
-            "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 58 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 55 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

@@ -7652,7 +7652,7 @@ extern "C" void fn_800C3678(void);
 
 extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle);
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
 
 extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 
@@ -7736,7 +7736,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance);
 
 extern "C" void fn_800C5B20(Object_80039F5C *p, int value);
 
-extern "C" int fn_800C5BF0(Object_80039F5C *p, int value);
+extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value);
 
 extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther);
 
@@ -8000,7 +8000,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
 
 extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800CE608 *pA, Record_800CE608 *pB, int index);
 
-extern "C" void fn_800CE218(Group_800CC98C *p);
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p);
 
 extern "C" int fn_800CE2B8(Query_800CE770 *p);
 
@@ -32400,7 +32400,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
     return result;
 }
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
 {
     Entry_800DE51C *pRecord = 0;
     Table_80089904 *pTable = fn_801BE72C(p->mpUnknown796->mUnknown2, fn_801BE648(p->mpUnknown792));
@@ -32410,7 +32410,7 @@ extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
     for (i = 0; i < pTable->mCount; i++) {
         Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(fn_801BE648(p->mpUnknown792), p->mpUnknown796->mUnknown2);
 
-        if (pRecords->mEntries[i].mUnknown2 == 1 && pRecords->mEntries[i].mUnknown0 == (key & ~0x8000)) {
+        if (pRecords->mEntries[i].mUnknown2 == 1 && (pRecords->mEntries + i)->mUnknown0 == (key & ~0x8000)) {
             pRecord = &pRecords->mEntries[i];
             break;
         }
@@ -32454,7 +32454,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
                                          index & 0x7FFF, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         p->mFlags |= 0x200;
-        fn_800C38C4(p, pBlock, index);
+        PlayerActionAnimStartStateAlign(p, pBlock, index);
         if (pBlock->mUnknown1F) {
             AnimChannel_t *pEntry = &pEntries[pBlock->mUnknown1D];
 
@@ -33258,7 +33258,7 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
         p->mFlags &= ~0x80000;
         fn_800C8688(p, pOther, 0, 0);
     }
-    if (pOther != 0 && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && PlyrContactIsKnockable(pOther, value)) {
         PlyrContactSendCarrierHit(pOther);
     }
 }
@@ -33280,7 +33280,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
     Record_800B15FC *pRecord;
     int ok;
 
-    if (pOther != 0 && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && PlyrContactIsKnockable(pOther, value)) {
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         canStrip = 0;
         canKnock = 0;
@@ -33339,7 +33339,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
-            if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
+            if (knockChance > 0 && knockChance > roll && canKnock && !stripped && PlyrContactIsKnockable(pOther, value)) {
                 if (!contactApplied) {
                     fn_800C51DC(p, pOther);
                     contactApplied = 1;
@@ -33378,12 +33378,27 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
         pRecord->mUnknown16 = 0;
         fn_800B1508();
     }
-    if (pOther != 0 && SyncRandGetRange(0, 255) > pOther->mRatings[0] && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && SyncRandGetRange(0, 255) > pOther->mRatings[0] && PlyrContactIsKnockable(pOther, value)) {
         fn_80111354(pOther);
     }
 }
 
-extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
+static inline int _ContactNotFlag800(Object_80039F5C *p)
+{
+    return !(p->mFlags & 0x800);
+}
+
+static inline int _ContactStateNot14(Object_80039F5C *p)
+{
+    return p->mUnknown344Word != 14;
+}
+
+static inline int _ContactPlayKindNot8(void)
+{
+    return fn_8011F518()->mUnknown4 != 8;
+}
+
+extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
 {
     State_80039F5C *pState = p->mpState;
     int result = 1;
@@ -33449,18 +33464,18 @@ extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = p->mUnknown344Word != 14;
+                result = _ContactStateNot14(p);
             }
             break;
         case 25:
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = fn_8011F518()->mUnknown4 != 8;
+                result = _ContactPlayKindNot8();
             }
             break;
         default:
-            result = !(p->mFlags & 0x800);
+            result = _ContactNotFlag800(p);
             break;
         }
     }
@@ -33567,7 +33582,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             pTarget = pOther;
         }
         if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
-            && pTarget != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pTarget, p)) {
+            && pTarget != 0 && PlyrContactIsKnockable(p, value) && fn_800C5DE4(pTarget, p)) {
             if (fn_800C769C(pTarget, p)) {
                 return pTarget->mUnknown1221;
             }
@@ -33654,7 +33669,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
     if (pSource != 0 && pOther == 0) {
         pOther = fn_8009BCE8(&pSource->mUnknown40);
     }
-    if (pOther != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pOther, p)) {
+    if (pOther != 0 && PlyrContactIsKnockable(p, value) && fn_800C5DE4(pOther, p)) {
         if (PlayerMoveGetKind(p) || (pOther != 0 && PlayerActionDiveIsActive(pOther))) {
             return 0;
         }
@@ -33705,7 +33720,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
         }
         break;
     }
-    if (!fn_800C5DE4(p, pOther) || !fn_800C5BF0(pOther, pOther->mUnknown2914)) {
+    if (!fn_800C5DE4(p, pOther) || !PlyrContactIsKnockable(pOther, pOther->mUnknown2914)) {
         return 0;
     }
     fn_8011E188();
@@ -33756,19 +33771,27 @@ extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
             return 0;
         case 6:
         case 8:
-            if (pOwner == 0) {
-                return 1;
+            {
+                int result = 1;
+
+                if (pOwner != 0 && (pOwner->mFlags & 0x800)) {
+                    result = 0;
+                }
+                return result;
             }
-            return !(pOwner->mFlags & 0x800);
         }
         break;
-    case 0:
+    case 0: {
+        int result = 1;
+
         switch (pSource->mUnknown54) {
         case 9:
         case 10:
-            return 0;
+            result = 0;
+            break;
         }
-        break;
+        return result;
+    }
     }
     return 1;
 }
@@ -37128,20 +37151,20 @@ extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800C
     pA->mUnknown14 = 0;
 }
 
-extern "C" void fn_800CE218(Group_800CC98C *p)
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p)
 {
     Block_800C8330 *pBlock = &p->mpUnknown0->mUnknown1160Wide;
+    Block_800C8330 *pOther;
+    Object_80039F5C *pB;
     unsigned char i;
 
     if (p->mUnknown60 != 0) {
         pBlock->mUnknown56[0] = 1;
         pBlock->mBlock.mUnknown55[0] = p->mUnknown57;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 1;
                 pOther->mBlock.mUnknown55[0] = p->mUnknown57;
             }
@@ -37149,11 +37172,9 @@ extern "C" void fn_800CE218(Group_800CC98C *p)
     } else {
         pBlock->mUnknown56[0] = 0;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 0;
             }
         }
@@ -37181,7 +37202,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
         Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
         if (pFound != 0) {
             result = 1;
-            fn_800CE218(p);
+            PlyrContactSetGroupMirror(p);
             fn_800CDD98(p, pFound, index);
         }
     }
@@ -37191,7 +37212,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
             Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
             if (pFound != 0) {
                 result = 1;
-                fn_800CE218(p);
+                PlyrContactSetGroupMirror(p);
                 fn_800CDD98(p, pFound, index);
             }
         }
