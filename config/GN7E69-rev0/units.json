@@ -1126,10 +1126,6 @@
       "address": "0x80273DF8",
       "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
     },
-    "SndHalSetVol": {
-      "address": "0x802747D8",
-      "evidence": "evidence.tsv function and name rows for 0x802747D8 (SndHalSetVol, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/sserver.c, src/engine/sstvol.c, src/engine/svol.c (n1e naming wave)."
-    },
     "TDbSQLDestroyCursor": {
       "address": "0x801FCFA0",
       "evidence": "evidence.tsv function and name rows for 0x801FCFA0 (TDbSQLDestroyCursor, a registered holdout of src/engine/T3DB_Compiler.c, original bytes linked); called by name from src/engine/dbmanager.c, src/engine/dbocmt.c, src/engine/dbtatscopy.c, src/game/ChalGameSetup.cpp, src/game/Cheat.cpp, src/game/CreateTeamDb.cpp, src/game/CreditsTable.cpp, src/game/ExpLevel.cpp, src/game/FormationLineup.cpp, src/game/GameText.cpp, src/game/InGameScreens.cpp, src/game/PlayBookDb.cpp, src/game/ProfileUnlocks.cpp, src/game/Records.cpp, src/game/StevTable.cpp, src/game/StoryEvents.cpp, src/game/StoryTeam.cpp, src/game/TournamentDb.cpp, src/game/TutorialLesson.cpp, src/game/TeamDb.cpp, src/game/cu_8008E978.cpp (n1e naming wave)."
@@ -26041,7 +26037,7 @@
     {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 6 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 5 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -26077,12 +26073,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8027474C",
-          "end": "0x802747D8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80274924",
           "end": "0x802753F0"
         },
         {
@@ -26125,10 +26115,6 @@
           {
             "function": "SNDPLATFORM_packetplay",
             "evidence": "evidence.tsv source-form 0x80274464-0x8027474C"
-          },
-          {
-            "function": "SndHalSetVol",
-            "evidence": "evidence.tsv source-form 0x802747D8-0x80274924"
           }
         ],
         "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."

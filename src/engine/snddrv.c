@@ -463,12 +463,15 @@ int SNDPLATFORM_init(int mode)
     }
     if (mode == 0) {
         if (lbl_803A6C24.mB8 == 0 || lbl_803A6C24.mBC == 0) {
-            unsigned int count = lbl_803A6C24.m1C.m22;
+            unsigned int count;
 
-            if (count > lbl_803A6C24.m1C.m12) {
+            if (lbl_803A6C24.m1C.m22 > lbl_803A6C24.m1C.m12) {
                 count = lbl_803A6C24.m1C.m12;
+            } else {
+                count = lbl_803A6C24.m1C.m22;
             }
-            SNDARAM_init(lbl_803A6C24.m1C.m8 + (count + 2));
+            count += 2;
+            SNDARAM_init(lbl_803A6C24.m1C.m8 + count);
             SNDARAM_setpool(lbl_803A6C24.m1C.m38, lbl_803A6C24.m1C.m3C);
         }
         snddrv.m1404 = SNDPLATFORM_memalloc(0, 1280);
@@ -490,12 +493,12 @@ int SNDPLATFORM_init(int mode)
     for (i = 0; i < 48; i++) {
         Channel_803A8D60 *channel = &snddrv.m0[i];
 
-        channel->m18 = -1;
         channel->m24 = 0;
+        channel->m25 = 1;
         channel->m1F = 0;
+        channel->m18 = -1;
         channel->m1C = -1;
         channel->m3C = 0;
-        channel->m25 = 1;
     }
     for (i = 0; i < lbl_803A6C24.m1C.m28; i++) {
         if ((lbl_803A6C24.m1C.m2A[i] & 4) && snddrv.mC048 == 0) {
@@ -903,9 +906,10 @@ void SndHalSetVol(int index)
         SNDDRV_DSPMixerSetVol(snddrv.m0[index].m3C, (int)(volume * 258.0f));
     } else {
         volume = record->m48 * (float)record->m5F * (1.0f / 127.0f);
-        count = lbl_803A6C24.m1C.m23;
-        if (count == 1) {
+        if (lbl_803A6C24.m1C.m23 == 1) {
             count = 2;
+        } else {
+            count = lbl_803A6C24.m1C.m23;
         }
         for (i = 0; i < count; i++) {
             SNDMIX_setdrygain(index - lbl_803A6C24.m1C.m12, i, volume * channel->m0[i]);
