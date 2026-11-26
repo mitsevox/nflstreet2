@@ -25791,12 +25791,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8005AC18",
-          "end": "0x8005AEC8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005B128",
           "end": "0x8005B610"
         },
         {
@@ -25809,18 +25803,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8005BE54",
-          "end": "0x8005C844"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005C994",
-          "end": "0x8005CAE4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005CC50",
           "end": "0x8005D60C"
         },
         {
@@ -25885,24 +25867,12 @@
             "evidence": "evidence.tsv source-form 0x8005AB04-0x8005AC18"
           },
           {
-            "function": "InGameEndGameGetChoices",
-            "evidence": "evidence.tsv source-form 0x8005AEC8-0x8005B128"
-          },
-          {
             "function": "InGameRewardFormatLogo",
             "evidence": "evidence.tsv source-form 0x8005B610-0x8005B6AC"
           },
           {
             "function": "InGameRewardMsg",
             "evidence": "evidence.tsv source-form 0x8005BCA8-0x8005BE54"
-          },
-          {
-            "function": "InGameGetOffenseTotals",
-            "evidence": "evidence.tsv source-form 0x8005C844-0x8005C994"
-          },
-          {
-            "function": "InGameGetDefenseTotals",
-            "evidence": "evidence.tsv source-form 0x8005CAE4-0x8005CC50"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"

@@ -2408,12 +2408,9 @@ void InGameEndGameApplyChoice(int index)
 void InGameEndGameGetChoices(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed)
 {
     fn_800C1E50();InGamePauseClearForfeit();
-    int enabled;
-    if(GameModeTypeIsSpecial()) enabled=0;
-    else if(ChallengeIsPairingGame() && !ChallengeEvaluateGoals()) enabled=0;
-    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(fn_80178AE0())!=255) enabled=0;
-    else enabled=1;
-    *pEnabled=enabled;
+    if(GameModeTypeIsSpecial() || (ChallengeIsPairingGame() && !ChallengeEvaluateGoals())) *pEnabled=0;
+    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(fn_80178AE0())!=255) *pEnabled=0;
+    else *pEnabled=1;
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
@@ -2770,7 +2767,7 @@ int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
 void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
     Stats_8005C844 stats;fn_8014BA20(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
+    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
 }
 int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
@@ -2792,7 +2789,7 @@ void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *se
     Stats_8005CAE4 stats;
     DbCursor cursor;
     fn_8014CCE8(MiniGameGetCurrent(),team,&stats);
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
+    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }
