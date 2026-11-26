@@ -14721,6 +14721,7 @@ extern "C" int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b) {
                 message.mId = 62;
                 BallGetPosition(BallGetCurrent(), &toBall);
                 Vec3Sub(&toBall, &toBall, &p->mMotion.mPos);
+                // FAKEMATCH: the three nested tests each repeat else b = 0; jump2 merges them into the target's single li r30,0, and the extra references only raise the delay pseudo's global-alloc priority (see evidence.tsv).
                 if (b == -1) {
                     if (fabsf(p->mMotion.mPos.mY) < fn_80178A2C() - 3.0f) {
                         if (fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 5.0f) {
