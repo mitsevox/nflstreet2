@@ -144,11 +144,25 @@ void fn_80165000(PlayBookFormation_t *object, PlayBookPlay_t *record, unsigned i
     }
 }
 
-int fn_80165098(PlayBookPlay_t *record) {return record->mUnknown14 == 2 || record->mUnknown14 == 17;}
+int fn_80165098(PlayBookPlay_t *record) {if (record->mUnknown14 == 2 || record->mUnknown14 == 17) return 1; return 0;}
 
-int fn_801650BC(PlayBookPlay_t *record) {unsigned int n = record->mUnknown14; return n >= 11 && n <= 18;}
+int fn_801650BC(PlayBookPlay_t *record)
+{
+    switch ((unsigned int)record->mUnknown14) {
+    case 11: case 12: case 13: case 14: case 15: case 16: case 17: case 18:
+        return 1;
+    }
+    return 0;
+}
 
-int fn_801650DC(PlayBookPlay_t *record) {unsigned int n = record->mUnknown14; return n >= 1 && n <= 5;}
+int fn_801650DC(PlayBookPlay_t *record)
+{
+    switch ((unsigned int)record->mUnknown14) {
+    case 1: case 2: case 3: case 4: case 5:
+        return 1;
+    }
+    return 0;
+}
 
 int fn_801650FC(PlayBookPlay_t *record) {return record->mUnknown14 == 21;}
 
