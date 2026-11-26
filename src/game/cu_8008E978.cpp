@@ -7192,7 +7192,7 @@ extern "C" int fn_800B5448(void *p, void *pBuffer);
 
 extern "C" int fn_800B54C0(void *p);
 
-extern "C" int fn_800B54D4(Object_80039F5C *p, int mode);
+extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode);
 
 extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a);
 
@@ -25916,7 +25916,7 @@ extern "C" int fn_800B54C0(void *p)
     return lbl_803EAB60->mCount * sizeof(Entry_800B5224) + sizeof(Block_800B62D8);
 }
 
-extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
+extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     Object_80039F5C *pNearest;
@@ -25939,7 +25939,7 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         Vec2Sub(&delta, &pNearest->mMotion, pMotion);
         angle = MathArcTan2(delta.mY, delta.mX);
         turn = MathAngleDiff(angle, pMotion->mFacing);
-        MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
+        int facingCarrier = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing) <= 0x1FFFFF;
         if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && CarrierMoveStart(p, mode) != 0) {
             return 1;
         }
@@ -26827,7 +26827,7 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
         if (fn_800B56C4(p, &input, mode) == 0) {
             return 0;
         }
-        if ((input.mUnknown92 & 1) && fn_800B54D4(p, mode) != 0) {
+        if ((input.mUnknown92 & 1) && CarrierTryMoveOrDive(p, mode) != 0) {
             p->mFlags |= 0x4000;
             return 0;
         }
