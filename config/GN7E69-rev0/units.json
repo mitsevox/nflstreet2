@@ -18495,6 +18495,31 @@
       ]
     },
     {
+      "source": "src/engine/impure.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802FF4D8-0x802FF7DC (src/engine/impure.c) and its data and name rows: the code-less C library file of the reentrancy block impure_data (.data 0x802FF4D8-0x802FF7DC), its \"C\" locale string (.rodata 0x802B77A8-0x802B77AC) and the pointer _impure_ptr (.sdata 0x803EC56C-0x803EC570).",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B77A8",
+          "end": "0x802B77AC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4D8",
+          "end": "0x802FF7DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC56C",
+          "end": "0x803EC570"
+        }
+      ]
+    },
+    {
       "source": "src/engine/mbtowc_r.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv whole-file provisional unit row0x80266640-0x8026696C, function/name/compiler/source-form/type/field rows, exact24-byte locale-string pool and864-byte JIS table containers. Complete812-byte function and all888 native data bytes verified together.",

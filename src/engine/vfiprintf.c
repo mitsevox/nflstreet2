@@ -214,7 +214,7 @@ _vfiprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	 */
 	for (;;) {
 	        cp = fmt;
-	        while ((n = _mbtowc_r(lbl_803EC56C, &wc, fmt, lbl_803EC558, &state)) > 0) {
+	        while ((n = _mbtowc_r(_impure_ptr, &wc, fmt, lbl_803EC558, &state)) > 0) {
 			fmt += n;
 			if (wc == '%') {
 				fmt--;
@@ -551,5 +551,5 @@ struct RuntimeLocaleConv_t *_localeconv_r(void *data)
 /* Uses the shared runtime context for the conventional locale accessor. */
 struct RuntimeLocaleConv_t *localeconv(void)
 {
-    return _localeconv_r(lbl_803EC56C);
+    return _localeconv_r(_impure_ptr);
 }

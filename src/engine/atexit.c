@@ -11,15 +11,15 @@ atexit (void (*fn) (void))
 {
   RuntimeExitBlock_t *p;
 
-  if ((p = lbl_803EC56C->mExitBlock) == NULL)
-    lbl_803EC56C->mExitBlock = p = &lbl_803EC56C->mEmbeddedExitBlock;
+  if ((p = _impure_ptr->mExitBlock) == NULL)
+    _impure_ptr->mExitBlock = p = &_impure_ptr->mEmbeddedExitBlock;
   if (p->mCount >= 32)
     {
       if ((p = malloc (sizeof *p)) == NULL)
 	return -1;
       p->mCount = 0;
-      p->mPrevious = lbl_803EC56C->mExitBlock;
-      lbl_803EC56C->mExitBlock = p;
+      p->mPrevious = _impure_ptr->mExitBlock;
+      _impure_ptr->mExitBlock = p;
     }
   p->mCallbacks[p->mCount++] = fn;
   return 0;

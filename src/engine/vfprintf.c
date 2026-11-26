@@ -499,7 +499,7 @@ _vfprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	 */
 	for (;;) {
 	        cp = fmt;
-	        while ((n = _mbtowc_r(lbl_803EC56C, &wc, fmt, lbl_803EC558, &state)) > 0) {
+	        while ((n = _mbtowc_r(_impure_ptr, &wc, fmt, lbl_803EC558, &state)) > 0) {
 			fmt += n;
 			if (wc == '%') {
 				fmt--;
