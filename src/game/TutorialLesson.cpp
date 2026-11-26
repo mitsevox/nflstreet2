@@ -15,7 +15,7 @@
 #include <string.h>
 #include "game/GameModeType.h"
 #include "game/MsgGame.h"
-#include "game/ModuleGroup_8003450C.h"
+#include "game/InGameModules.h"
 #include "game/SndgCrowd.h"
 #include "game/PauseMenu.h"
 #include "game/GameCamera.h"
