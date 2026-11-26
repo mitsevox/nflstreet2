@@ -20,13 +20,13 @@ extern int TDbQryUpdateExpr(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t 
                             unsigned long long *pKeys, TDbExpr_t *pTerms, void *pRes, int cb);
 extern float floorf(float x);
 
-int fn_802311C8(int db);
-void fn_80231208(void);
-void fn_8023123C(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone);
-float fn_80232628(int att, int yds, int comp, int td, int ints);
+int DbOccpModuleInit(int db);
+void DbOccpModuleShutdown(void);
+void DbOccpUpdateHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone);
+float DbOccpPasserRating(int att, int yds, int comp, int td, int ints);
 
-int lbl_803EC0E4 = 0;
-int lbl_803EC0E8 = -1;
+int _DbOccp_iHandlerTag = 0;
+int _DbOccp_iDb = -1;
 
 /* 1 when a query status counts as success (0, 23, 21 or 20). */
 static inline int _DbOccpAccepted(int err)
@@ -113,21 +113,21 @@ static inline void _DbOccpSetSubFloat(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub,
     pExpr->mRight.mValue.f = value;
 }
 
-int fn_802311C8(int db)
+int DbOccpModuleInit(int db)
 {
-    lbl_803EC0E8 = db;
-    lbl_803EC0E4 = 0x4F434350;
-    return TDbRegisterHandler(fn_8023123C, 0x4F434350);
+    _DbOccp_iDb = db;
+    _DbOccp_iHandlerTag = 0x4F434350;
+    return TDbRegisterHandler(DbOccpUpdateHandler, 0x4F434350);
 }
 
-void fn_80231208(void)
+void DbOccpModuleShutdown(void)
 {
-    lbl_803EC0E8 = -1;
-    TDbUnregisterHandler(lbl_803EC0E4);
-    lbl_803EC0E4 = 0;
+    _DbOccp_iDb = -1;
+    TDbUnregisterHandler(_DbOccp_iHandlerTag);
+    _DbOccp_iHandlerTag = 0;
 }
 
-void fn_8023123C(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
+void DbOccpUpdateHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
 {
     if (pCols == 0) {
         if (pDone != 0) {
@@ -135,7 +135,7 @@ void fn_8023123C(TDbCol_801F9718 *pCols, int mode, unsigned char *pDone)
         }
         return;
     }
-    pCols[5].mUnk0 = fn_80232628(pCols[0].mUnk0, pCols[1].mUnk0, pCols[2].mUnk0, pCols[3].mUnk0, pCols[4].mUnk0) * 10.0f;
+    pCols[5].mUnk0 = DbOccpPasserRating(pCols[0].mUnk0, pCols[1].mUnk0, pCols[2].mUnk0, pCols[3].mUnk0, pCols[4].mUnk0) * 10.0f;
     if (mode == 2) {
         pCols[6].mUnk0 = pCols[2].mUnk0 * 100 / pCols[0].mUnk0;
         pCols[7].mUnk0 = (float)pCols[1].mUnk0 / (float)pCols[0].mUnk0 * 10.0f;
@@ -175,14 +175,14 @@ void DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned char *pD
     *pDone = 1;
 }
 
-int fn_8023133C(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     TDbCol_801F9718 aCols[11];
     TDbSQLTableRef_801FDC18 aTables[2];
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'mcag' and 'FOGP'.'taag' and "
                               "'FOGP'.'ayag' and 'FOGP'.'dtag' and 'FOGP'.'niag' and 'FOGP'.'asag' and 'FOGP'.'Nlag' and "
@@ -203,7 +203,7 @@ int fn_8023133C(const char *pWhere, int b, int orderTable, int orderCol, int ord
         _DbOccpSetColEnd(&aCols[9]);
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateWithHandler(0, aTables, 0, lbl_803EC0E4, aCols, 2, 0, 0);
+        err = TDbQryUpdateWithHandler(0, aTables, 0, _DbOccp_iHandlerTag, aCols, 2, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -212,7 +212,7 @@ int fn_8023133C(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80231570(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -222,7 +222,7 @@ int fn_80231570(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'ayug' and 'FOGP'.'taug' and "
                               "'FOGP'.'dtug' and 'FOGP'.'ufug' and 'FOGP'.'Nlug' and 'FOGP'.'tbug' and 'FOGP'.'y2ug' and "
@@ -238,7 +238,7 @@ int fn_80231570(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[1] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -247,7 +247,7 @@ int fn_80231570(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80231798(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[4];
     TDbExpr_t aTerms[3];
@@ -259,7 +259,7 @@ int fn_80231798(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'FOGP'.'aycg' and 'FOGP'.'accg' and "
                               "'FOGP'.'cycg' and 'FOGP'.'dtcg' and 'FOGP'.'rdcg' and 'FOGP'.'Lrcg' and 'OCCP'.'crcp' and "
@@ -279,7 +279,7 @@ int fn_80231798(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -288,24 +288,28 @@ int fn_80231798(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80231A84(void)
+int DbOccpQueryNone(void)
 {
     return 3;
 }
 
-int fn_80231A8C(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryBlocking(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     int table;
+    int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
-    return TDbCompilePerformOp(0,
-                               "declare \x8a cursor for select into \x8c 'LOGP'.'DIGP' and 'YALP'.'DIGT' and 'LOGP'.'apog' "
-                               "and 'LOGP'.'asog' from 'LOGP' inner join 'YALP' on 'YALP'.'DIGP' = 'LOGP'.'DIGP' where "
-                               "\x8f order by \x8c.\x8c \x8e\n",
-                               pCursor, table, pWhere, orderTable, orderCol, orderDir);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
+    err = TDbCompilePerformOp(0,
+                              "declare \x8a cursor for select into \x8c 'LOGP'.'DIGP' and 'YALP'.'DIGT' and 'LOGP'.'apog' "
+                              "and 'LOGP'.'asog' from 'LOGP' inner join 'YALP' on 'YALP'.'DIGP' = 'LOGP'.'DIGP' where "
+                              "\x8f order by \x8c.\x8c \x8e\n",
+                              pCursor, table, pWhere, orderTable, orderCol, orderDir);
+    if (_DbOccpAccepted(err)) {
+    }
+    return err;
 }
 
-int fn_80231B04(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -315,7 +319,7 @@ int fn_80231B04(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'EDGP'.'yisg' and 'EDGP'.'nisg' and "
                               "'EDGP'.'tisg' and 'EDGP'.'tflg' and 'EDGP'.'atdg' and 'EDGP'.'ltdg' and 'EDGP'.'kslg' and "
@@ -334,7 +338,7 @@ int fn_80231B04(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -343,7 +347,7 @@ int fn_80231B04(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80231DAC(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -353,7 +357,7 @@ int fn_80231DAC(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'IKGP'.'Lfkg' and 'IKGP'.'mfkg' and "
                               "'IKGP'.'afkg' and 'IKGP'.'mekg' and 'IKGP'.'aekg' and 'IKGP'.'bfkg' and 'IKGP'.'bekg' and "
@@ -374,7 +378,7 @@ int fn_80231DAC(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -383,7 +387,7 @@ int fn_80231DAC(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80232054(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -395,7 +399,7 @@ int fn_80232054(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'IKGP'.'aypg' and 'IKGP'.'tapg' and "
                               "'IKGP'.'ynpg' and 'IKGP'.'tppg' and 'IKGP'.'lbpg' and 'IKGP'.'Nlpg' and 'IKGP'.'btpg' and "
@@ -415,7 +419,7 @@ int fn_80232054(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -424,7 +428,7 @@ int fn_80232054(const char *pWhere, int b, int orderTable, int orderCol, int ord
     return err;
 }
 
-int fn_80232340(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -436,7 +440,7 @@ int fn_80232340(const char *pWhere, int b, int orderTable, int orderCol, int ord
     int table;
     int err;
 
-    TDbTblFindUnusedId(lbl_803EC0E8, &table);
+    TDbTblFindUnusedId(_DbOccp_iDb, &table);
     err = TDbCompilePerformOp(0,
                               "select into \x8c 'YALP'.'DIGP' and 'YALP'.'DIGT' and 'PKGP'.'ykrg' and 'PKGP'.'akrg' and "
                               "'PKGP'.'yprg' and 'PKGP'.'aprg' and 'PKGP'.'tkrg' and 'PKGP'.'tprg' and 'PKGP'.'Lprg' and "
@@ -456,7 +460,7 @@ int fn_80232340(const char *pWhere, int b, int orderTable, int orderCol, int ord
         aKeys[2] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
         _DbOccpSetTable(&aTables[1], -1, 2, 0);
-        err = TDbQryUpdateExpr(lbl_803EC0E8, aTables, 0, aKeys, aTerms, 0, 0);
+        err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
                                       pCursor, table, orderTable, orderCol, orderDir);
@@ -491,7 +495,7 @@ int DbOccpUpdatePasserRatings(int tbl, int colAtt, int colYds, int colComp, int 
         while (err == 0) {
             rating = 0.0f;
             if (att != 0) {
-                rating = fn_80232628(att, yds, comp, td, ints) * 10.0f;
+                rating = DbOccpPasserRating(att, yds, comp, td, ints) * 10.0f;
             }
             err = TDbCompilePerformOp(0, "update \x8c set 'rpcp' = \x82 where 'DIGP' = \x82\n", tbl, (int)rating,
                                       id);
@@ -511,7 +515,7 @@ int DbOccpUpdatePasserRatings(int tbl, int colAtt, int colYds, int colComp, int 
     return err;
 }
 
-float fn_80232628(int att, int yds, int comp, int td, int ints)
+float DbOccpPasserRating(int att, int yds, int comp, int td, int ints)
 {
     float rating = 0.0f;
     float a;
@@ -534,6 +538,6 @@ float fn_80232628(int att, int yds, int comp, int td, int ints)
 }
 
 DbOccpQueryFunc gDbOccpQueries[9] = {
-    fn_8023133C, fn_80231570, fn_80231798, (DbOccpQueryFunc)fn_80231A84, fn_80231A8C,
-    fn_80231B04, fn_80231DAC, fn_80232054, fn_80232340,
+    DbOccpQueryPassing, DbOccpQueryRushing, DbOccpQueryReceiving, (DbOccpQueryFunc)DbOccpQueryNone, DbOccpQueryBlocking,
+    DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns,
 };

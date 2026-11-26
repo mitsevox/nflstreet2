@@ -1156,7 +1156,7 @@
     },
     "TDbTblDefaultDbPush": {
       "address": "0x801F9430",
-      "evidence": "evidence.tsv function and name rows for 0x801F9430 (TDbTblDefaultDbPush, a registered holdout of src/engine/t3db.c, original bytes linked); called by name from src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbmanager.c, src/engine/dbuser.c, src/game/SysModules.cpp (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801F9430 (TDbTblDefaultDbPush, a registered holdout of src/engine/t3db.c, original bytes linked); called by name from src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbmanager.c, src/engine/dbuser.c, src/game/SysModules.cpp (n1e naming wave)."
     },
     "TDbIdxCreate": {
       "address": "0x801F9E84",
@@ -1168,11 +1168,11 @@
     },
     "DbManagerMode2Leave": {
       "address": "0x802331BC",
-      "evidence": "evidence.tsv function and name rows for 0x802331BC (DbManagerMode2Leave, a registered holdout of src/engine/dbmanager.c, original bytes linked); called by name from src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbuser.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x802331BC (DbManagerMode2Leave, a registered holdout of src/engine/dbmanager.c, original bytes linked); called by name from src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbuser.c (n1e naming wave)."
     },
     "DbTatsCopyAllTables": {
       "address": "0x8022ED50",
-      "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802311C8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
     },
     "XmlFindInElement": {
       "address": "0x80216BFC",
@@ -4700,6 +4700,93 @@
           "end": "0x803A2628"
         }
       ]
+    },
+    {
+      "source": "src/engine/dboccp.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function, name, data and linker rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file's .rodata 0x802B6038-0x802B6E10 (its query literals and float pools, with those of the two discarded functions), .data 0x802FB368-0x802FB38C (the query table) and .sdata 0x803EC0E4-0x803EC0EC (handler tag and database handle) link from this file.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802311C8",
+          "end": "0x8023133C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80231A84",
+          "end": "0x80231A8C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80232628",
+          "end": "0x802328A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6038",
+          "end": "0x802B6E10"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB368",
+          "end": "0x802FB38C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0E4",
+          "end": "0x803EC0EC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "DbOccpQueryPassing",
+            "evidence": "evidence.tsv source-form 0x8023133C-0x80231570"
+          },
+          {
+            "function": "DbOccpQueryRushing",
+            "evidence": "evidence.tsv source-form 0x80231570-0x80231798"
+          },
+          {
+            "function": "DbOccpQueryReceiving",
+            "evidence": "evidence.tsv source-form 0x80231798-0x80231A84"
+          },
+          {
+            "function": "DbOccpQueryBlocking",
+            "evidence": "evidence.tsv source-form 0x80231A8C-0x80231B04"
+          },
+          {
+            "function": "DbOccpQueryDefense",
+            "evidence": "evidence.tsv source-form 0x80231B04-0x80231DAC"
+          },
+          {
+            "function": "DbOccpQueryKicking",
+            "evidence": "evidence.tsv source-form 0x80231DAC-0x80232054"
+          },
+          {
+            "function": "DbOccpQueryPunting",
+            "evidence": "evidence.tsv source-form 0x80232054-0x80232340"
+          },
+          {
+            "function": "DbOccpQueryReturns",
+            "evidence": "evidence.tsv source-form 0x80232340-0x80232628"
+          }
+        ],
+        "evidence": "w2b merge notes (PR #1488 holdouts table): src/engine/dboccp.c holds out DbOccpQueryPassing, DbOccpQueryRushing, DbOccpQueryReceiving, DbOccpQueryBlocking, DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns."
+      },
+      "link_roots": {
+        "discarded": [
+          "DbOccpUpdateTeamHandler",
+          "DbOccpUpdatePasserRatings"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802B6048-0x802B6058 and 0x802B6D08-0x802B6DC4: functions SN linker discarded; only their pools and literals remain"
+      }
     },
     {
       "source": "src/engine/dbmanager.c",
