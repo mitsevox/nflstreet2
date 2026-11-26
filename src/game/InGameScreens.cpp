@@ -245,7 +245,7 @@ void PlayArtReadRoutes(int tag, PlayBookPlay_t *pRecord, int a, int b, int team,
 void PlayArtBuild(int tag, PlayBookPlay_t *pRecord, int a, int b, int c, int team, int index, int first,
                  unsigned char count, Info_8006719C *pInfo);
 void PlayArtSetFlip(signed char team, int value, int index);
-void fn_8021D7B8(void *p, int id, int count, void *pArgs);
+void UISProcessHint(void *p, int id, int count, void *pArgs);
 int fn_80178320(void);
 int fn_80177F7C(void);
 int fn_80177F70(void);
@@ -889,7 +889,7 @@ void InGamePlayCallShowSlot(int team, int a, int b)
     } else {
         args.mLocked = a + b >= _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     }
-    fn_8021D7B8(gUISMainInfo, 0x80000011, 5, &args);
+    UISProcessHint(gUISMainInfo, 0x80000011, 5, &args);
 }
 
 int InGamePlayCallGetUserTeam(void)
@@ -1616,7 +1616,7 @@ void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
     _InGameScreens_bForfeitChosen = 0;
     int pad = PauseGetValue();
     int value = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
+    UISProcessHint(gUISMainInfo, 0x8000000E, 1, &value);
     if (pad != -1) {
         fn_801C2E18(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
         int active = 1;
@@ -1656,7 +1656,7 @@ void InGamePauseClose(void)
         AudmonEventPostArgs(0x72, 0, PauseGetQuitFlag(), 0, 0);
         if (PauseGetSavedMode() != 5) {
             int value = 1;
-            fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
+            UISProcessHint(gUISMainInfo, 0x8000000E, 1, &value);
         }
         if (GameModeTypeGet() == 6 && fn_800AD9B4() == 2) {
             ChallengeSendGoalList(1);
@@ -2683,9 +2683,9 @@ int InGameOverlayOpen(int value) {
     } else ok=0;
     return ok;
 }
-void InGameOverlayReset(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);_InGameScreens_iOverlayState=4;_InGameScreens_iOverlayScreen=3;}
-void InGameOverlayShow(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);_InGameScreens_iOverlayState=2;}
-void InGameOverlayHide(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);_InGameScreens_iOverlayState=0;}
+void InGameOverlayReset(void) {UISProcessHint(gUISMainInfo,0x8000001C,0,0);_InGameScreens_iOverlayState=4;_InGameScreens_iOverlayScreen=3;}
+void InGameOverlayShow(void) {UISProcessHint(gUISMainInfo,0x80000029,0,0);_InGameScreens_iOverlayState=2;}
+void InGameOverlayHide(void) {UISProcessHint(gUISMainInfo,0x8000002A,0,0);_InGameScreens_iOverlayState=0;}
 int InGameOverlayGetState(void) {return _InGameScreens_iOverlayState;}
 int InGameOverlayMsg(int group,unsigned int id,MenuArg_t *p,int unused,int *result) {
     int ret=1;

@@ -254,16 +254,16 @@ void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID);
 void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
 
 /* UI Studio functions outside UIStudio.c whose names are not yet established. */
-Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
+Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState);
-Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
-Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
+Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
+Int32 UISExecuteFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
                   UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
                   Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult);
-void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
-void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
-void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
+void UISMoveScreenDrawPosition(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
+void UISDoHint(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
+void UISAddThreadAction(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
                  UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6);
-void fn_8021DDF4(UISInfoT *pInfo, Int32 Arg1);
+void UISProcessThreadAction(UISInfoT *pInfo, Int32 Arg1);
 
 #endif

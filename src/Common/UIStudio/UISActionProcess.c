@@ -3,10 +3,10 @@
 
 #include "UIStudio/UIStudio.h"
 
-Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
+Int32 *UISAddThreadActionAt(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
                    Int16 ScreenID, Uint32 Type, Int32 Count, Int32 *pArgs);
 
-Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
+Int32 *UISAddThreadActionAt(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
                    Int16 ScreenID, Uint32 Type, Int32 Count, Int32 *pArgs)
 {
     Int32 i;
@@ -28,19 +28,19 @@ Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 G
     return p;
 }
 
-void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
+void UISAddThreadAction(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
                  UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6)
 {
     UISActionStackT *pStack;
 
     pStack = &pInfo->ActionStack;
     pStack->pTop =
-        fn_8021D888(pInfo, pStack->pTop, pAction, GroupID, ScreenID, Type, Arg5, pArg6);
+        UISAddThreadActionAt(pInfo, pStack->pTop, pAction, GroupID, ScreenID, Type, Arg5, pArg6);
 }
 
 /* Returns 0 when a queued action of a type above 1 for the given screen
    lies below p in the thread-action stack. */
-Int32 fn_8021D968(Uint16 GroupID, Uint16 ScreenID, UISInfoT *pInfo, Int32 *p)
+Int32 _UISCanDoUnloadAction(Uint16 GroupID, Uint16 ScreenID, UISInfoT *pInfo, Int32 *p)
 {
     Uint32 Type;
     Uint16 Group;
@@ -60,7 +60,7 @@ Int32 fn_8021D968(Uint16 GroupID, Uint16 ScreenID, UISInfoT *pInfo, Int32 *p)
     return 1;
 }
 
-Int32 fn_8021D9D4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
+Int32 UISThreadProcessHints(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
     UISActionStackT *pStack;
     Int32 *p;
@@ -84,15 +84,15 @@ Int32 fn_8021D9D4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
             pArgs = p;
             p--;
             if (Group == GroupID && Screen == ScreenID && Type == 9 &&
-                fn_8021C5EC(pInfo, GroupID, ScreenID) < pInfo->NumScreens) {
-                fn_8021D718(pInfo, pAction->Words[0], Count, pArgs);
+                UISFindScreen(pInfo, GroupID, ScreenID) < pInfo->NumScreens) {
+                UISDoHint(pInfo, pAction->Words[0], Count, pArgs);
             }
         }
     }
     return 1;
 }
 
-Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
+Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
 {
     Uint32 Type;
     Uint16 GroupID;
@@ -122,18 +122,18 @@ Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
     case 1:
         Group = pAction->s.GroupID;
         Screen = pAction->s.ScreenID;
-        Index = fn_8021C5EC(pInfo, Group, Screen);
+        Index = UISFindScreen(pInfo, Group, Screen);
         if (Index < (Uint32)pInfo->NumScreens) {
             pScreen = &pInfo->Screens[Index];
             pScreen->bWaitingToBeUnloaded = 1;
         }
-        if (fn_8021D968(Group, Screen, pInfo, p) == 0 ||
+        if (_UISCanDoUnloadAction(Group, Screen, pInfo, p) == 0 ||
             fn_802191F0(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
-            *ppTop = fn_8021D888(pInfo, *ppTop, pAction, GroupID, ScreenID, 1, Count, pArgs);
+            *ppTop = UISAddThreadActionAt(pInfo, *ppTop, pAction, GroupID, ScreenID, 1, Count, pArgs);
         }
         break;
     case 9:
-        fn_8021D718(pInfo, pAction->Words[0], Count, pArgs);
+        UISDoHint(pInfo, pAction->Words[0], Count, pArgs);
         break;
     case 2:
         pInfo->Flags |= 2;
@@ -167,13 +167,13 @@ Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
         pInfo->Flags &= ~2;
         break;
     case 8:
-        fn_8021D404(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->Words[3]);
+        UISMoveScreenDrawPosition(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->Words[3]);
         break;
     }
     return p;
 }
 
-Int32 *fn_8021DD50(UISInfoT *pInfo, Int32 *p)
+Int32 *_UISDoThreadControlAction(UISInfoT *pInfo, Int32 *p)
 {
     Uint32 Type;
     UISThreadActionT *pAction;
@@ -202,7 +202,7 @@ Int32 *fn_8021DD50(UISInfoT *pInfo, Int32 *p)
     return p;
 }
 
-void fn_8021DDF4(UISInfoT *pInfo, Int32 bControlOnly)
+void UISProcessThreadAction(UISInfoT *pInfo, Int32 bControlOnly)
 {
     UISActionStackT *pStack;
     Int32 *p;
@@ -215,11 +215,11 @@ void fn_8021DDF4(UISInfoT *pInfo, Int32 bControlOnly)
         pTop = p;
         if (bControlOnly) {
             while (p > pStack->pTop) {
-                p = fn_8021DD50(pInfo, p);
+                p = _UISDoThreadControlAction(pInfo, p);
             }
         } else {
             while (p > pStack->pTop) {
-                p = fn_8021DAA4(pInfo, p, &pTop);
+                p = _UISDoThreadAction(pInfo, p, &pTop);
             }
             pStack->pTop = pTop;
         }

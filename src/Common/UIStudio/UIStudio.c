@@ -15,8 +15,8 @@ Int32 fn_80218DDC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bArg3,
 void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProcess);
 void fn_80217D30(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Arg2, Int32 Arg3);
 void fn_80218364(UISInfoT *pInfo, Uint32 MS);
-void fn_8021CA54(Float32 a, Float32 b, Float32 c, Float32 d);
-void fn_8021CA70(Float32 a, Float32 b, Float32 c, Float32 d);
+void UISSetColorMultipler(Float32 a, Float32 b, Float32 c, Float32 d);
+void UISSetColorAdditive(Float32 a, Float32 b, Float32 c, Float32 d);
 
 /* Draw-pass word cleared before each screen; neutral label, owner not established. */
 extern Int32 lbl_803ECFE8;
@@ -150,7 +150,7 @@ Int32 fn_80218D20(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3, 
     UISScreenT *pScreen;
     Uint8 Done;
 
-    pScreen = &pInfo->Screens[fn_8021C5EC(pInfo, GroupID, ScreenID)];
+    pScreen = &pInfo->Screens[UISFindScreen(pInfo, GroupID, ScreenID)];
     fn_802182E4(pInfo, pScreen);
     pScreen->pData->pControls[0].pState->bEnabled = 1;
     Done = 0;
@@ -172,7 +172,7 @@ Int32 fn_80218FC4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, 
         Action.s.ScreenID = ScreenID;
         Action.s.unk_04 = -1;
         Action.s.unk_06 = -1;
-        fn_8021D904(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
+        UISAddThreadAction(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
         return 1;
     }
     return fn_80218DDC(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
@@ -191,9 +191,9 @@ void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProces
     Action.s.GroupID = GroupID;
     Action.s.ScreenID = ScreenID;
     Arg = 0;
-    fn_8021D904(GroupID, ScreenID, pInfo, 1, &Action, 1, &Arg);
+    UISAddThreadAction(GroupID, ScreenID, pInfo, 1, &Action, 1, &Arg);
     if (bProcess) {
-        fn_8021DDF4(pInfo, 0);
+        UISProcessThreadAction(pInfo, 0);
     }
 }
 
@@ -203,9 +203,9 @@ void fn_802195E4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 
     Action.s.GroupID = GroupID;
     Action.s.ScreenID = ScreenID;
-    fn_8021D904(GroupID, ScreenID, pInfo, 3, &Action, 0, 0);
+    UISAddThreadAction(GroupID, ScreenID, pInfo, 3, &Action, 0, 0);
     if (!(pInfo->Flags & 2)) {
-        fn_8021DDF4(pInfo, 0);
+        UISProcessThreadAction(pInfo, 0);
     }
 }
 
@@ -263,8 +263,8 @@ void fn_8021992C(UISInfoT *pInfo, Uint32 Ticks)
     UISScreenT *pScreen;
 
     Tick = 0;
-    fn_8021CA54(lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0]);
-    fn_8021CA70(lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0]);
+    UISSetColorMultipler(lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0], lbl_802B1D5C[0]);
+    UISSetColorAdditive(lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0], lbl_802B1D60[0]);
     for (; Tick < Ticks; Tick++) {
         fn_80218364(pInfo, pInfo->MSPerTick);
     }
@@ -294,7 +294,7 @@ void fn_80219A54(UISInfoT *pInfo, Int32 Arg1)
     Int32 NumScreens;
     Uint8 Done;
 
-    fn_8021DDF4(pInfo, 0);
+    UISProcessThreadAction(pInfo, 0);
     NumScreens = pInfo->NumScreens;
     for (Screen = 0; Screen < NumScreens; Screen++) {
         pInfo->Flags |= 2;
@@ -315,7 +315,7 @@ void *fn_80219AF8(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 Objec
     Uint32 Object;
 
     pObject = 0;
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     if (Screen < pInfo->NumScreens) {
         pScreen = &pInfo->Screens[Screen];
         pData = pScreen->pData;

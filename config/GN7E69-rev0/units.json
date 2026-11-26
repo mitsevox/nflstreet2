@@ -28803,7 +28803,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8021A45C",
+            "function": "UISStackProcess",
             "evidence": "evidence.tsv source-form 0x8021A45C-0x8021C5EC"
           }
         ],
@@ -28843,15 +28843,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8021CB68",
+            "function": "_WriteFloat",
             "evidence": "evidence.tsv source-form 0x8021CB68-0x8021CDAC"
           },
           {
-            "function": "fn_8021CE48",
+            "function": "_WriteString",
             "evidence": "evidence.tsv source-form 0x8021CE48-0x8021CF38"
           },
           {
-            "function": "fn_8021CF38",
+            "function": "UISSprintf",
             "evidence": "evidence.tsv source-form 0x8021CF38-0x8021D1FC"
           }
         ],
@@ -28892,7 +28892,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8021D888",
+            "function": "UISAddThreadActionAt",
             "evidence": "evidence.tsv source-form 0x8021D888-0x8021D904"
           }
         ],

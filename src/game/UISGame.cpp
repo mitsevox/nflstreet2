@@ -118,8 +118,8 @@ void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
 void fn_80219A54(void *p, int a);
 int fn_80219AF8(void *p, int a, int b, int c);
 int fn_8021A020(void *p);
-int fn_8021D828(void *p, unsigned short a, unsigned short b);
-void fn_8021D880(void (*pCallback)());
+int UISAreEventsEnabled(void *p, unsigned short a, unsigned short b);
+void UISRegisterRuntimeErrorFnc(void (*pCallback)());
 void UIGLibraryShutdown(void *p);
 void *UIGLibraryGetGlobal(int index);
 void UIGLibraryProcess(void *p);
@@ -584,7 +584,7 @@ void UISGameInit(void)
     int result = 0;
 
     _UISGame_iDrawMask = 0;
-    fn_8021D880(UISGameRuntimeError);
+    UISRegisterRuntimeErrorFnc(UISGameRuntimeError);
     ObjNewType_(21, 20, 4, UISGameObjNew, UISGameObjDelete);
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 15;
@@ -777,7 +777,7 @@ void UISGameHandleInput(int a, unsigned int id, float value)
         if (id == 8) {
             if (value == 1.0f && UISHeldObjIsEnabled()) {
                 fn_80219650(gUISMainInfo, &unknown0, &unknown1);
-                if (fn_8021D828(gUISMainInfo, unknown0, unknown1) && fn_8021A020(gUISMainInfo)) {
+                if (UISAreEventsEnabled(gUISMainInfo, unknown0, unknown1) && fn_8021A020(gUISMainInfo)) {
                     int result;
 
                     fn_80219A54(gUISMainInfo, 1);

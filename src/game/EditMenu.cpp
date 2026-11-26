@@ -11,7 +11,7 @@
 #include "game/PaletteColor.h"
 #include "game/EditMenu.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/UISGameMsg.h"
 
 /* One entry of the screen stack _EditMenu_aScreenStack. */
@@ -1123,7 +1123,7 @@ void EditMenuSendOwnerText(const char *pText)
             sText.mLength = 27;
             sText.mpText = _EditMenu_szOwnerText;
             args[1].pParams = &sText;
-            fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
+            UISProcessHint(gUISMainInfo, 0x80000088, 2, args);
         }
     } else {
         MenuArg_t args[2];
@@ -1134,7 +1134,7 @@ void EditMenuSendOwnerText(const char *pText)
         sText.mLength = 27;
         sText.mpText = _EditMenu_szOwnerText;
         args[1].pParams = &sText;
-        fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
+        UISProcessHint(gUISMainInfo, 0x80000088, 2, args);
     }
 }
 

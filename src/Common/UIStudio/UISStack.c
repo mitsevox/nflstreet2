@@ -6,7 +6,7 @@
 #include "UIStudio/UIStudio.h"
 #include "engine/cu_8021A438.h"
 
-void *fn_8021A438(UISInfoT *pInfo, Uint8 *pBase, Int32 Offset)
+void *_UISPatchFncPC(UISInfoT *pInfo, Uint8 *pBase, Int32 Offset)
 {
     void *p;
 
@@ -24,14 +24,14 @@ double fabs(double);
 typedef void UISMessageFncT(Int32 Message, Uint16 GroupID, Uint16 ScreenID, Int32 Count,
                             Int32 *pArgs, Int32 *pResult);
 
-void fn_8021D1FC(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs);
+void UISStringFormat(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs);
 
 extern Int32 lbl_8039F808[20];
 
 #define UIS_FLOAT(Word) (*(Float32 *)&(Word))
 #define UIS_EPSILON 1e-7f
 
-Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
+Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState)
 {
     UISThreadActionT Action;
@@ -68,7 +68,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Action.s.ScreenID = ID >> 16;
             Action.s.unk_04 = pScreen->GroupID;
             Action.s.unk_06 = pScreen->ScreenID;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs, pArgs);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs, pArgs);
             while (NumArgs-- != 0) {
                 (*ppTop)--;
             }
@@ -92,7 +92,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Action.s.GroupID = Group;
             Action.s.ScreenID = Screen;
             Action.s.unk_08 = Value;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 1, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 1, &Action, 0, NULL);
             break;
         }
         case 8: {
@@ -109,7 +109,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             }
             Action.s.GroupID = Group;
             Action.s.ScreenID = Screen;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
             break;
         }
         case 88: {
@@ -134,14 +134,14 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                 if (NumArgs > 5) {
                     Offset = *--*ppTop;
                     if (Offset != 0) {
-                        pAcelFnc = fn_8021A438(pInfo, (Uint8 *)pScreen->pData, Offset);
+                        pAcelFnc = _UISPatchFncPC(pInfo, (Uint8 *)pScreen->pData, Offset);
                     } else {
                         pAcelFnc = NULL;
                     }
                 }
                 Offset = *--*ppTop;
                 if (Offset != 0) {
-                    pEndFnc = fn_8021A438(pInfo, (Uint8 *)pScreen->pData, Offset);
+                    pEndFnc = _UISPatchFncPC(pInfo, (Uint8 *)pScreen->pData, Offset);
                 } else {
                     pEndFnc = NULL;
                 }
@@ -161,7 +161,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
 
             pControlInfo = (UISControlInfoT *)*--*ppTop;
             MSRate = *--*ppTop;
-            pFnc = fn_8021A438(pInfo, (Uint8 *)pScreen->pData, *--*ppTop);
+            pFnc = _UISPatchFncPC(pInfo, (Uint8 *)pScreen->pData, *--*ppTop);
             UISLoadRateFnc(pInfo, pScreen, pControlInfo, *--*ppTop, pFnc, MSRate);
             break;
         }
@@ -201,7 +201,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             (*ppTop)--;
             pArgs = *ppTop - Count;
             Action.Words[0] = *pArgs;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 9, &Action, Count, pArgs + 1);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 9, &Action, Count, pArgs + 1);
             break;
         }
         case 11: {
@@ -224,7 +224,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Count = *--*ppTop;
             Action.Words[0] = *--*ppTop;
             Action.Words[1] = *--*ppTop;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 7, &Action, Count,
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 7, &Action, Count,
                         *ppTop - Count);
             break;
         }
@@ -528,7 +528,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             pState->pCode++;
             *pState->pTop = (Int32)pState->pCode;
             pState->pTop++;
-            pState->pCode = fn_8021A438(pInfo, (Uint8 *)pScreen->pData, Offset);
+            pState->pCode = _UISPatchFncPC(pInfo, (Uint8 *)pScreen->pData, Offset);
             break;
         }
         case 68:
@@ -548,9 +548,9 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                 Action.s.ScreenID = ID >> 16;
                 Action.s.unk_04 = pScreen->GroupID;
                 Action.s.unk_06 = pScreen->ScreenID;
-                fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs,
+                UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs,
                             *ppTop - NumArgs);
-                fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
+                UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
                 while (NumArgs-- != 0) {
                     (*ppTop)--;
                 }
@@ -567,7 +567,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Action.Words[2] = Value;
             Action.s.unk_0E = pScreen->GroupID;
             Action.s.unk_0C = pScreen->ScreenID;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 6, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 6, &Action, 0, NULL);
             break;
         }
         case 71: {
@@ -589,7 +589,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                     Action.Words[2] = (Int32)pObject;
                     Action.s.unk_0E = pScreen->GroupID;
                     Action.s.unk_0C = pScreen->ScreenID;
-                    fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 1, &Index);
+                    UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 1, &Index);
                 }
             }
             break;
@@ -597,7 +597,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
         case 72:
             Action.s.GroupID = pScreen->ParentGroupID;
             Action.s.ScreenID = pScreen->ParentScreenID;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, NULL);
             break;
         case 73: {
             UISStringT *pString;
@@ -651,7 +651,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                 }
             }
             pFormat = (Buffer_80222E54 *)*--*ppTop;
-            fn_8021D1FC(pScreen->pData, (Buffer_80222E54 *)*--*ppTop, pFormat, Count, lbl_8039F808);
+            UISStringFormat(pScreen->pData, (Buffer_80222E54 *)*--*ppTop, pFormat, Count, lbl_8039F808);
             break;
         }
         case 119: {
@@ -672,7 +672,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
         case 77:
             Param = *--*ppTop;
             Action.Words[0] = *--*ppTop;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 2, &Action, 1, &Param);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 2, &Action, 1, &Param);
             break;
         case 78:
             *ppCode += 4;
@@ -709,7 +709,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
                 Action.s.ScreenID = ID >> 16;
                 Action.s.unk_04 = pScreen->GroupID;
                 Action.s.unk_06 = pScreen->ScreenID;
-                fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs, pArgs);
+                UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 0, &Action, NumArgs, pArgs);
                 while (NumArgs-- != 0) {
                     (*ppTop)--;
                 }
@@ -746,7 +746,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Action.Words[2] = Value;
             Action.s.unk_0E = pScreen->GroupID;
             Action.s.unk_0C = pScreen->ScreenID;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 0, NULL);
             break;
         }
         case 85:
@@ -1102,7 +1102,7 @@ Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScree
             Action.s.unk_04 = pScreen->GroupID;
             Action.s.unk_06 = pScreen->ScreenID;
             Action.Words[3] = Value;
-            fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 8, &Action, 0, NULL);
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 8, &Action, 0, NULL);
             break;
         }
         case 116: {

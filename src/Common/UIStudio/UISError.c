@@ -5,7 +5,7 @@
 
 UISRuntimeErrorFncT *RuntimeErrorFnc = NULL;
 
-void fn_8021D880(UISRuntimeErrorFncT *pFnc)
+void UISRegisterRuntimeErrorFnc(UISRuntimeErrorFncT *pFnc)
 {
     RuntimeErrorFnc = pFnc;
 }
