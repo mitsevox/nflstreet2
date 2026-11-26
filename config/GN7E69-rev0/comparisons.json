@@ -12583,7 +12583,7 @@
           "end": "0x80096954"
         },
         {
-          "symbol": "fn_80096954",
+          "symbol": "AnimPlaybackSysInit",
           "start": "0x80096954",
           "end": "0x80096A24"
         },

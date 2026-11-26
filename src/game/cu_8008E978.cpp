@@ -276,7 +276,7 @@ struct Cell_80094B34 {
     signed short mValue : 13;
 };
 
-/* Block allocated by fn_80096954 with fn_801D2B7C (112 bytes). */
+/* Block allocated by AnimPlaybackSysInit with fn_801D2B7C (112 bytes). */
 struct Block_80096954 {
     Table_80093BAC *mpUnknown0[2];
     void *mpUnknown8;
@@ -5730,7 +5730,7 @@ extern "C" int fn_8009679C(unsigned int index);
 
 extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag);
 
-extern "C" void fn_80096954(void *pData);
+extern "C" void AnimPlaybackSysInit(void *pData);
 
 extern "C" void fn_80096A24(void);
 
@@ -11660,7 +11660,7 @@ extern "C" void fn_80096850(int index, Point_8017886C *pOut, int *pFlag)
     *pFlag = 0;
 }
 
-extern "C" void fn_80096954(void *pData)
+extern "C" void AnimPlaybackSysInit(void *pData)
 {
     unsigned int i;
 
@@ -11669,9 +11669,13 @@ extern "C" void fn_80096954(void *pData)
     AnimSeqncrRelocateSeqFile((struct AnimSeqncrFile_t *)lbl_803EA920->mpUnknown0[0]);
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
+        Playback_80096DA8 *pEntry;
+
         memset(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
-        lbl_803EA920->mUnknown10[i].mUnknown2A = 0xFFFF;
-        lbl_803EA920->mUnknown10[i].mUnknown28 = 0xFFFF;
+        // FAKEMATCH: &mUnknown10[i] spelled as integer arithmetic (offset + block, then +0x10) for the target's address order
+        pEntry = (Playback_80096DA8 *)(i * sizeof(Playback_80096DA8) + (unsigned int)lbl_803EA920 + 0x10);
+        pEntry->mUnknown28 = 0xFFFF;
+        pEntry->mUnknown2A = 0xFFFF;
         lbl_803EA920->mUnknown10[i].mUnknown0 = -1;
         lbl_8030C2A8[i].mUnknown0 = 0;
         lbl_8030C2A8[i].mUnknown4 = 0;
