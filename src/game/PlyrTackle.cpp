@@ -2242,47 +2242,58 @@ extern "C" int PlyrTackleAiTry(Object_80039F5C *p, void *pArg)
 extern "C" {
 int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
 {
-    if (!PlyrTackleCanStart(p) || !PlayerIsFreeOfBall(p)) return 0;
+    if (!PlyrTackleCanStart(p)) return 0;
+    if (!PlayerIsFreeOfBall(p)) return 0;
     Message_800F01CC message;
     memset(&message, 0, 4);
     message.mId = 12;
     Object_80039F5C *carrier = BallGetCurrentHolder();
     unsigned char choice;
     unsigned char kind;
+    Vector_80039F5C point;
+    Vector_80039F5C spot;
+    float range;
+    Point_8017886C delta;
     if (p == carrier) {
         float distance = fn_80178298() - p->mMotion.mPos.mY;
         choice = 2;
         kind = 1;
-        if (distance <= 0.0f || !(distance < 4.0f)) fn_80178A2C();
-        int team = fn_80178320();
-        unsigned char count = fn_80178D18(fn_80178320());
-        float range;
-        Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
-        if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
+        if (distance <= 0.0f || !(distance < 4.0f)) {
+            // FAKEMATCH: the unused clamp stands in for the target's dead test of this distance against 0.0f (0x800E8200), which keeps 0.0f in f31 across the call; the function stays a holdout.
+            distance = fn_80178A2C() - p->mMotion.mPos.mY;
+            if (distance < 0.0f) distance = 0.0f;
+        }
+        if (kind == 1) {
+            int team = fn_80178320();
+            unsigned char count = fn_80178D18(fn_80178320());
+            Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
+            if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
+        }
     } else if (carrier && p->mIdBytes[2] == fn_80178320()) {
-        Vector_80039F5C delta;
         Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
         kind = 3;
         choice = 1;
-        int heading = fn_801CFE40(delta.mY, delta.mX);
+        int heading = delta.Heading();
         if (MathAngleDiff(heading, p->mMotion.mFacing) <= 0x3FFFFF) Vec2Magnitude(&delta);
     } else {
-        Vector_80039F5C point;
         BallGetLandingPoint(BallGetCurrent(), &point);
-        Vector_80039F5C delta;
         Vec2Sub(&delta, &point, &p->mMotion.mPos);
         if (!(Vec2Magnitude(&delta) >= 8.0f) && BallStateGet(BallGetCurrent(), 0) == 4) {
-            Vector_80039F5C spot = p->mMotion.mPos;
+            spot = p->mMotion.mPos;
             spot.mZ = (float)p->mMotion.mUnknown32;
+            choice = 2;
+            kind = 4;
+        } else {
+            choice = 2;
+            kind = 4;
         }
-        choice = 2;
-        kind = 4;
     }
     if (choice == 0) choice = SyncRandGetRange(0, 3) + 1;
     PlayerMoveBegin(p, mode, 12);
     message.mUnknown1[0] = kind;
     message.mUnknown1[1] = choice;
-    message.mUnknown1[2] = mode == 0 ? 0 : _PlyrTackle_aButtonKinds[SyncRandGetRange(0, 5)];
+    if (mode == 0) message.mUnknown1[2] = 0;
+    else message.mUnknown1[2] = _PlyrTackle_aButtonKinds[SyncRandGetRange(0, 5)];
     fn_800F00D4(0, p->mpState, &message, p);
     return 1;
 }
