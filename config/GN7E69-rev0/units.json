@@ -8450,6 +8450,46 @@
       ]
     },
     {
+      "source": "src/game/GearDb.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout fn_8007BF60 keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007BA48",
+          "end": "0x8007BF60"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8007C46C",
+          "end": "0x8007C7E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80291BCC",
+          "end": "0x80291D18"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802D6558",
+          "end": "0x802D6690"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_8007BF60",
+            "evidence": "evidence.tsv source-form 0x8007BF60-0x8007C46C"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
+      }
+    },
+    {
       "source": "src/game/SpchIGSystem.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80073830-0x80074684 (src/game/SpchIGSystem.cpp) and its data rows.",

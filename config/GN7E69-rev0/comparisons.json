@@ -2431,9 +2431,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8007BA48.cpp",
+      "source": "src/game/GearDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_8007BA48.cpp, individual exact function extents, owned data spans, the DbTableCursor and Object_80023BBC type rows and the source-form rows recording the remaining differences. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv unit row 0x8007BA48-0x8007C7E8 (src/game/GearDb.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact fn_8007BF60 stays registered here as its partial (source-form row 0x8007BF60-0x8007C46C).",
       "sections": [
         {
           "section": ".text",
