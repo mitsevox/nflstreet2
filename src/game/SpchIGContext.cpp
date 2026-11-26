@@ -9,24 +9,24 @@
 extern "C" {
 int fn_800A8444(int team);
 int fn_800A8468(int team);
-int fn_80177F70(void);
-int fn_801787DC(int team);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_80178348(void);
-int fn_80178360(void);
-int fn_801788D8(int *pValue);
+int ScrmGetDown(void);
+int ScrmGetTeamScore(int team);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetSnapOffense(void);
+int ScrmGetSnapDefense(void);
+int ScrmGetScoreGoal(int *pValue);
 
 void SpchIGGetScoreSituation(int *pResult)
 {
     int limit = 0;
 
     *pResult = 8;
-    switch (fn_801788D8(&limit)) {
+    switch (ScrmGetScoreGoal(&limit)) {
     case 0:
     case 2: {
-        unsigned short own = fn_801787DC(fn_80178348());
-        unsigned short other = fn_801787DC(fn_80178360());
+        unsigned short own = ScrmGetTeamScore(ScrmGetSnapOffense());
+        unsigned short other = ScrmGetTeamScore(ScrmGetSnapDefense());
         unsigned short gap = own - other < 0 ? other - own : own - other;
         if (own == other) {
             if (own > 13) {
@@ -51,7 +51,7 @@ void SpchIGGetScoreSituation(int *pResult)
                 *pResult |= 0x400;
             }
         }
-        if (fn_80177F70() == 6) {
+        if (ScrmGetDown() == 6) {
             if (own + 2 >= (unsigned int)limit && own < (unsigned int)limit) {
                 *pResult |= 0x10;
             }
@@ -63,8 +63,8 @@ void SpchIGGetScoreSituation(int *pResult)
         break;
     }
     case 1: {
-        int own = StyleTrackerGetTotal(fn_80178348());
-        int other = StyleTrackerGetTotal(fn_80178360());
+        int own = StyleTrackerGetTotal(ScrmGetSnapOffense());
+        int other = StyleTrackerGetTotal(ScrmGetSnapDefense());
 
         if (own == other) {
             if (own > 99999) {
@@ -102,11 +102,11 @@ void SpchIGGetScoreMargin(int *pResult)
     int limit = 0;
 
     *pResult = 8;
-    switch (fn_801788D8(&limit)) {
+    switch (ScrmGetScoreGoal(&limit)) {
     case 0:
     case 2: {
-        unsigned short own = fn_801787DC(fn_80178348());
-        unsigned short other = fn_801787DC(fn_80178360());
+        unsigned short own = ScrmGetTeamScore(ScrmGetSnapOffense());
+        unsigned short other = ScrmGetTeamScore(ScrmGetSnapDefense());
         unsigned short gap = own < other ? other - own : own - other;
 
         if (gap > 23) {
@@ -116,7 +116,7 @@ void SpchIGGetScoreMargin(int *pResult)
         } else if (gap > 7) {
             *pResult |= 2;
         }
-        if (fn_80177F70() == 6) {
+        if (ScrmGetDown() == 6) {
             if (own + 2 >= (unsigned int)limit && own < (unsigned int)limit) {
                 *pResult |= 0x10;
             }
@@ -128,8 +128,8 @@ void SpchIGGetScoreMargin(int *pResult)
         break;
     }
     case 1: {
-        unsigned short own = StyleTrackerGetTotal(fn_80178348());
-        unsigned short other = StyleTrackerGetTotal(fn_80178360());
+        unsigned short own = StyleTrackerGetTotal(ScrmGetSnapOffense());
+        unsigned short other = StyleTrackerGetTotal(ScrmGetSnapDefense());
         unsigned short gap = own < other ? other - own : own - other;
 
         if (gap > 49999) {
@@ -177,13 +177,13 @@ void SpchIGGetTargetCategory(int *pResult, int ref)
 void SpchIGGetGamebreakerState(int *pResult)
 {
     *pResult = 0;
-    if (fn_800A8444(fn_80178308())) {
+    if (fn_800A8444(ScrmGetOffenseTeam())) {
         *pResult |= 1;
     }
-    if (fn_800A8444(fn_80178320())) {
+    if (fn_800A8444(ScrmGetDefenseTeam())) {
         *pResult |= 2;
     }
-    if (fn_800A8468(fn_80178320()) || fn_800A8468(fn_80178308())) {
+    if (fn_800A8468(ScrmGetDefenseTeam()) || fn_800A8468(ScrmGetOffenseTeam())) {
         *pResult |= 8;
     }
     if (*pResult) {

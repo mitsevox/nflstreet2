@@ -33,7 +33,7 @@ float ObjParseGetFloat(int handle, const char *pKey);
 int ObjParseGetCursor(int handle);
 void ObjParseSetCursor(int handle, int value);
 int BigObjGetNameNumber(BigObj_t *pObject);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void QuatSlerp(float *pOut, float *pA, float *pB, float t);
 void Vec3Scale(void *pOut, void *pV, float scale);
 void Vec3Add(void *pOut, void *pA, void *pB);
@@ -116,7 +116,7 @@ int BigObjPathedUpdate(BigObjInst *pObject, BigObj_t *pOwner, int mode)
     pos.mX = pObject->mState.mUnknown0;
     pos.mY = pObject->mState.mUnknown4;
     pos.mZ = pObject->mState.mUnknown8;
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         pos.mX = -pos.mX;
         pos.mY = -pos.mY;
     }

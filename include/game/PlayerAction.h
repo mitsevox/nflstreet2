@@ -9,7 +9,7 @@
 #include "game/AnimMomentumActor.h"
 #include "game/fn_801BE60C.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Record_800DB60C.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_8011F4F8.h"
@@ -30,10 +30,10 @@ int PlayerLocoGetLowerAnkle(Object_80039F5C *p);
 int PlayerLocoFindTableEntry(Table_80089904 *pTable, int value, int a, unsigned char b);
 float fn_8012506C(Object_80039F5C *p, int value);
 int fn_800ACFA8(Object_80039F5C *p);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, Point_8017886C *pOut);
-int OptionRunCanPitchTo(Object_80039F5C *p, Point_8017886C *pPoint, Object_80039F5C *pOther);
+Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, FieldPoint_t *pOut);
+int OptionRunCanPitchTo(Object_80039F5C *p, FieldPoint_t *pPoint, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int value);
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 unsigned int fn_800ABDA4(int team);
 unsigned char fn_8011F59C(int index);
 void fn_8011F5AC(int index);
@@ -50,7 +50,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 
 float AnimSeqGetKeyTime(void *p, int flags);
 float AnimSeqGetTime(AnimSeq_t *p);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 int SyncTimeGetGameTime(void);
 void PlayerActionAnimArmPitch(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall);
 }
@@ -102,7 +102,7 @@ int fn_801486A0(void);
 void TutorialSetMoveDone(int index, int value);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-int fn_801783AC(int bit);
+int ScrmTestPlayFlag(int bit);
 void AnimSeqSetSpeed(void *p, float value);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float value, void *p);
 
@@ -123,7 +123,7 @@ int MathAngleDiff(int a, int b);
 #include "game/fn_800AD9B4.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include <string.h>
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Add.h"
@@ -265,7 +265,7 @@ int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, fl
 int fn_801486A0(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void PossReleaseBall(Object_80039F5C *p);
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 int MathArcTan(float value);
 int MathAngleDiff(int a, int b);
 void Vec2Normalize(Vector_80039F5C *pOut, Vector_80039F5C *p);
@@ -276,7 +276,7 @@ float Vec3DistanceSqrToSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_
 
 extern float gPlyrMoveFwdSpeed;
 
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/PostPlayPhase.h"
 #include "game/cu_8008E978.h"
 
@@ -285,8 +285,8 @@ struct Block_800DFCEC {
     unsigned char mUnknown8, mUnknown9, mUnknown10, mUnknown11, mUnknown12, mUnknown13;
 };
 extern "C" {
-float fn_80178A2C(void);
-Point_8017886C fn_80177FFC(int team);
+float ScrmGetGoalLineY(void);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 int MathArcTan2(float y, float x);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 void PlyrObjsSetDrawFlag(int a);
@@ -296,7 +296,7 @@ void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
-int fn_80178348(void);
+int ScrmGetSnapOffense(void);
 float SyncRandGetFloat(int a);
 int PlayerActionCharAnimLoad(Object_80039F5C *p, float *pValue);
 int fn_800B9A90(PostPlayPhase *p);
@@ -367,9 +367,9 @@ void PlayerLocoFadeOldPair(Block_801BE60C *p, void *pA, AnimChannel_t *pEntries)
 }
 
 extern "C" {
-int fn_80177F70(void);
-int fn_801787A0(void);
-int fn_80178320(void);
+int ScrmGetDown(void);
+int ScrmIsNotReplay(void);
+int ScrmGetDefenseTeam(void);
 }
 struct Record_800DD2E8 {
     unsigned short mUnknown0, mUnknown2, mUnknown4;
@@ -413,12 +413,12 @@ extern float lbl_803EAD30;
 struct Block_800E1954 {
     unsigned char mUnknown0, mUnknown1;
     char mUnknown2[2];
-    Point_8017886C mUnknown4, mUnknown12;
+    FieldPoint_t mUnknown4, mUnknown12;
     unsigned short mUnknown20;
     unsigned char mUnknown22, mUnknown23, mUnknown24;
     char mUnknown25[11];
     Object_80039F5C *mpUnknown36;
-    Point_8017886C mUnknown40;
+    FieldPoint_t mUnknown40;
     char mUnknown48[1];
     unsigned char mUnknown49;
     char mUnknown50[28];
@@ -429,18 +429,18 @@ struct Record_80168EBC { char mUnknown0[48]; unsigned char mUnknown48; };
 extern "C" {
 Record_8011F4E0 *fn_8011F4E0(void);
 Record_80168EBC *PlayBookGetTeam(int team);
-float fn_80178A08(void);
-float fn_80178A44(void);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 int fn_8009FE24(Object_80039F5C *p);
 int fn_800B0F98(void);
 int fn_800B146C(void);
-void fn_800FE03C(Object_80039F5C *p, Point_8017886C *pOut);
+void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut);
 int fn_8009F780(void);
 int ScrmOffenseAnyPlaced(void);
-void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut);
-void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
-void PlyrAlignAvoidTeammates(Object_80039F5C *p, Point_8017886C *pPoint);
-int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pPoint);
+void PlyrAlignGetCallTarget(Object_80039F5C *p, FieldPoint_t *pOut);
+void Vec2FromAngle(FieldPoint_t *pOut, int angle, float magnitude);
+void PlyrAlignAvoidTeammates(Object_80039F5C *p, FieldPoint_t *pPoint);
+int PlayerPathIsLaneClear(Object_80039F5C *p, FieldPoint_t *pPoint);
 }
 
 #include "game/Command_800CEE74.h"
@@ -484,9 +484,9 @@ int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
 void PlayerActionAnimUpdatePairAlign(Object_80039F5C *, Block_800DE3B0 *);
 }
 
-extern "C" int fn_801784C4(void);
+extern "C" int ScrmIsFieldFlipped(void);
 
-extern "C" int fn_801784C4(void);
+extern "C" int ScrmIsFieldFlipped(void);
 extern "C" void *BigObjFindNearestOfType(Vector_80039F5C *, int, float *);
 extern "C" void HotspotFrameTouch(void *, Object_80039F5C *);
 
@@ -524,7 +524,7 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
 extern "C" void PlayerActionAnimBlendAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock);
 extern "C" void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key, void *pData, int angle, Entry_800DE51C *pRecord);
 extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock);
-extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, Point_8017886C offset, int angle, int key);
+extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, FieldPoint_t offset, int angle, int key);
 extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned short key, void *pData, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int mode);
 extern "C" void PlayerActionAnimMirrorAlign(Object_80039F5C *p, Block_801BE60C *pRecord);
 extern "C" int PlayerActionTakeFlag1000(Object_80039F5C *p);
@@ -567,9 +567,9 @@ extern "C" int PlayerActionAiConsiderDive(Object_80039F5C *p);
 extern "C" int PlayerActionRollAlignChange(Object_80039F5C *p);
 extern "C" int PlayerActionIsNearLine(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
-extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle);
+extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut, int *pAngle);
 extern "C" int PlayerActionFindGap(Object_80039F5C *p, int count, float *pValues, float *pOut, float direction, float target);
 extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p);
-extern "C" int PlayerActionIsFacingPoint(Object_80039F5C *p, Point_8017886C *pPoint);
+extern "C" int PlayerActionIsFacingPoint(Object_80039F5C *p, FieldPoint_t *pPoint);
 
 #endif

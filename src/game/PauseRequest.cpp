@@ -24,10 +24,10 @@ int fn_8009D86C(void);
 int fn_800A7FD8(void);
 int fn_800B6644(int a);
 int fn_800BA6F8(void);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_801788D8(int *pValue);
-int fn_80178AE0(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetScoreGoal(int *pValue);
+int ScrmGetWinner(void);
 
 static PauseRequest_t _PauseRequest_Request;
 
@@ -57,7 +57,7 @@ int PauseRequestIsAllowed(int a)
 {
     int result = 0;
 
-    if ((fn_800B65A0(fn_80178308()) == 0xFF && fn_800B65A0(fn_80178320()) == 0xFF) || fn_800B6644(a) != 0xFF || a == 8) {
+    if ((fn_800B65A0(ScrmGetOffenseTeam()) == 0xFF && fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) || fn_800B6644(a) != 0xFF || a == 8) {
         if (MiniGameGetCurrent()) {
             result = MiniGameGetCurrent()->vfn_22(a);
         } else {
@@ -113,7 +113,7 @@ void PauseRequestHandleInput(int a, int b, float c)
         }
         break;
     }
-    if (fn_80178AE0() == 2 || fn_800BA6F8() || (fn_801788D8(&value) == 1 && mode == 3)) {
+    if (ScrmGetWinner() == 2 || fn_800BA6F8() || (ScrmGetScoreGoal(&value) == 1 && mode == 3)) {
         _PauseRequest_Request.mUnknown0 = 3;
         _PauseRequest_Request.mUnknown2 = 1;
         _PauseRequest_Request.mUnknown4 = a;

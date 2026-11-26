@@ -8,11 +8,11 @@
 #include "game/PlyrSlot.h"
 #include "game/Message_800F01CC.h"
 #include "game/Collide.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec2Distance.h"
 #include "game/LevelSurface.h"
 #include "game/fn_800AD9B4.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Object_8003DEC4.h"
 #include "game/LightTracker.h"
 #include <string.h>
@@ -25,7 +25,7 @@
 #include "game/PreSnapPhase.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Vec2Add.h"
 
 /* Block that +4 of the manager points to (28 bytes). */
@@ -109,14 +109,14 @@ static unsigned char _PlyrMgr_aCapsuleBonePairs[11][2] = {
 
 extern "C" {
 
-Point_8017886C fn_80177FFC(int team);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 int fn_800A7FD8(void);
 int fn_801486A0(void);
-int fn_80178320(void);
-int fn_801784C4(void);
-int fn_80178508(Vector_80039F5C *pPos, float *pOut, int a);
-float fn_80178A08(void);
-float fn_80178A44(void);
+int ScrmGetDefenseTeam(void);
+int ScrmIsFieldFlipped(void);
+int ScrmClassifyPosition(Vector_80039F5C *pPos, float *pOut, int a);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 void PlyrRouteShow(int a, int team, int index);
 void PlyrAnimUpdateOverlay(Object_80039F5C *p, PlyrModelView_t *pBlock, float f);
 void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock, float f);
@@ -178,7 +178,7 @@ void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsig
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void fn_8009C158(Object_80039F5C *p, int a);
 void PlyrInitAnimChannels(Object_80039F5C *p);
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 Object_8003DEC4 *PlyrObjsFindByKey(int value);
 void fn_8009CF30(void *pDst, AnimPose_t *pPose);
 void PlyrCollideResetBlock(Block_80170374 *pBlock);
@@ -216,7 +216,7 @@ int PassIconsAreShown(void);
 int PassIconsAreLocked(void);
 int PassIconGetSlot(int index, int force);
 unsigned char fn_800B65A0(int team);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 void fn_800F1700(void);
 void fn_800C11B8(void);
 void fn_800C845C(void);
@@ -232,7 +232,7 @@ void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
-void *RouteArrowShow(Object_80039F5C *p, Point_8017886C *pPos, void *pRecord, unsigned char flag);
+void *RouteArrowShow(Object_80039F5C *p, FieldPoint_t *pPos, void *pRecord, unsigned char flag);
 void RouteArrowHide(void *p);
 }
 
@@ -465,7 +465,7 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     p->mUnknown9[0] = 1;
     p->mUnknown8 = 0xFF;
     p->mFlags = 16;
-    p->mUnknown9[2] = index < (unsigned int)fn_80178D70(team);
+    p->mUnknown9[2] = index < (unsigned int)ScrmGetActivePlayerCount(team);
     p->mpState = &pPlayer->mObject.mQueue[0];
     p->mpUnknown792 = pPlayer->mObject.mUnknown1244 + 1252;
     p->mpUnknown796 = (AnimHeader_t *)pPlayer->mObject.mUnknown1244;
@@ -580,9 +580,9 @@ extern "C" void PlyrAnimPostUpdate(Object_80039F5C *p, PlyrModelView_t *pBlock)
 extern "C" void PlyrClampBehindLine(Object_80039F5C *p)
 {
     if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && fn_800A7FD8() == 0) {
-        int team = fn_80178320();
+        int team = ScrmGetDefenseTeam();
         if (team == p->mIdBytes[2]) {
-            float limit = fn_80177FFC(team).mY + 0.15625f + 1.1f;
+            float limit = ScrmGetTeamSetupSpot(team).mY + 0.15625f + 1.1f;
             if (p->mMotion.mPos.mY < limit) {
                 p->mMotion.mPos.mY = limit;
             }
@@ -596,19 +596,19 @@ extern "C" void PlyrKeepInBounds(Object_80039F5C *p)
 
     if (p->mUnknown9[2] != 0
         && ((mode == 3 && fn_800A7FD8() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
-        && fn_80178508(&p->mMotion.mPos, 0, 0) > 2) {
+        && ScrmClassifyPosition(&p->mMotion.mPos, 0, 0) > 2) {
         if (++p->mUnknown3090 > 299) {
-            if (p->mMotion.mPos.mX >= fn_80178A08()) {
-                p->mMotion.mPos.mX = fn_80178A08() - 1.0f;
+            if (p->mMotion.mPos.mX >= ScrmGetSidelineX()) {
+                p->mMotion.mPos.mX = ScrmGetSidelineX() - 1.0f;
             }
-            if (p->mMotion.mPos.mX <= -fn_80178A08()) {
-                p->mMotion.mPos.mX = 1.0f - fn_80178A08();
+            if (p->mMotion.mPos.mX <= -ScrmGetSidelineX()) {
+                p->mMotion.mPos.mX = 1.0f - ScrmGetSidelineX();
             }
-            if (p->mMotion.mPos.mY >= fn_80178A44()) {
-                p->mMotion.mPos.mY = fn_80178A44() - 1.0f;
+            if (p->mMotion.mPos.mY >= ScrmGetEndLineY()) {
+                p->mMotion.mPos.mY = ScrmGetEndLineY() - 1.0f;
             }
-            if (p->mMotion.mPos.mY <= -fn_80178A44()) {
-                p->mMotion.mPos.mY = 1.0f - fn_80178A44();
+            if (p->mMotion.mPos.mY <= -ScrmGetEndLineY()) {
+                p->mMotion.mPos.mY = 1.0f - ScrmGetEndLineY();
             }
         }
     } else {
@@ -628,7 +628,7 @@ extern "C" void PlyrUpdateControlFlag(Object_80039F5C *p, int flag)
     // FAKEMATCH: the unsigned char casts give the target's clrlwi after each call; the result is 0 or 1 either way.
     if (flag == 0 && ((unsigned char)lbl_803EABA4->fn_800C0420(0) || (unsigned char)lbl_803EABA4->fn_800C0420(1))
         && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF) && PlyrStarGetRingsShown() == 1
-        && (((PlyrModelView_t *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && fn_80178308() == p->mIdBytes[2]) {
+        && (((PlyrModelView_t *)p->mpUnknown4)->mFlags & 1) && PassIconsAreShown() && ScrmGetOffenseTeam() == p->mIdBytes[2]) {
         unsigned char i;
 
         for (i = 0; i <= 2; i++) {
@@ -690,8 +690,8 @@ extern "C" int PlyrMgrExists(void)
 extern "C" void PlyrMgrUpdate(void)
 {
     int count = _PlyrMgr_pManager->mCount;
-    int replay = fn_801787A0();
-    int team = fn_80178320();
+    int replay = ScrmIsNotReplay();
+    int team = ScrmGetDefenseTeam();
     int i;
 
     fn_800F1700();
@@ -792,7 +792,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
         Vector_80039F5C pos;
 
         fn_8009BEA8(p);
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             pos.mX = -p->mMotion.mPos.mX;
             pos.mY = -p->mMotion.mPos.mY;
             pos.mZ = p->mMotion.mPos.mZ;
@@ -904,7 +904,7 @@ extern "C" int PlyrGetIndex(Object_80039F5C *p)
 
 extern "C" Object_80039F5C *PlyrFindByRole(int team, int a, unsigned char n)
 {
-    unsigned int count = fn_80178D18(team);
+    unsigned int count = ScrmGetTeamPlayerCount(team);
     Object_80039F5C *pResult = 0;
     unsigned short i;
 
@@ -982,19 +982,19 @@ extern "C" void PlyrRouteShow(int on, int team, int index)
         if (pBlock->mpUnknown984 == 0) {
             PlayBookFormation_t *pPlay = PlayBookGetFormation((unsigned char)team);
             PlayBookPosition_t *pEntry = (PlayBookPosition_t *)PlaySetGetEntry(pPlay, (unsigned char)index, 0);
-            Point_8017886C offset;
-            Point_8017886C pos;
+            FieldPoint_t offset;
+            FieldPoint_t pos;
             unsigned char flip;
             void *pRecord;
 
-            offset = fn_80177FE0();
-            if (fn_80178308() == ((p->mId >> 8) & 0xFF)) {
+            offset = ScrmGetBallSpot();
+            if (ScrmGetOffenseTeam() == ((p->mId >> 8) & 0xFF)) {
                 pos.mX = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
-                Point_8017886C *pPos = &pos;
+                FieldPoint_t *pPos = &pos;
                 pPos->mY = (pPlay->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
                 Vec2Add(pPos, pPos, &offset);
             } else {
-                Point_8017886C *pPos = &pos;
+                FieldPoint_t *pPos = &pos;
 
                 pPos->mX = p->mMotion.mPos.mX;
                 pPos->mY = p->mMotion.mPos.mY;
@@ -1323,7 +1323,7 @@ extern "C" void PlyrMgrRefreshModels(void)
 extern "C" Object_80039F5C *PlyrFindById(int id)
 {
     Object_80039F5C *pResult = 0;
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     unsigned int i;
 
     for (i = 0; i < 7; i++) {
@@ -1334,7 +1334,7 @@ extern "C" Object_80039F5C *PlyrFindById(int id)
         }
     }
     if (pResult == 0) {
-        team = fn_80178320();
+        team = ScrmGetDefenseTeam();
         for (i = 0; i < 7; i++) {
             Object_80039F5C *p = PlyrGet((unsigned char)team, i);
             if (id == p->mUnknown2908) {
@@ -1360,7 +1360,7 @@ extern "C" Object_80039F5C *PlyrFindByPoid(int id)
     if (status != 23) {
         Object_8003DEC4 *pObject = PlyrObjsFindByKey(value);
         if (pObject != 0) {
-            int team = fn_80178308();
+            int team = ScrmGetOffenseTeam();
             unsigned int i;
 
             for (i = 0; i < 7; i++) {
@@ -1371,7 +1371,7 @@ extern "C" Object_80039F5C *PlyrFindByPoid(int id)
                 }
             }
             if (pResult == 0) {
-                team = fn_80178320();
+                team = ScrmGetDefenseTeam();
                 for (i = 0; i < 7; i++) {
                     Object_80039F5C *p = PlyrGet((unsigned char)team, i);
                     if (p != 0 && p->mpUnknown4 == (Block_80170E64 *)pObject) {

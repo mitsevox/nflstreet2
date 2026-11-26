@@ -1,10 +1,10 @@
 /* Sub module helpers: write a team's seven-player depth chart (position and player pairs) to the game database, read the chart back by position, and release the query. */
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/PlayBookDb.h"
 
 extern "C" {
-int fn_80177F70(void);
-float fn_80178298(void);
+int ScrmGetDown(void);
+float ScrmGetLineToGain(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 int fn_8022D23C(void);
 int fn_8022D25C(int value);
@@ -20,13 +20,13 @@ void SubDepthWriteTeam(int team, PlayBookFormation_t *pTeam);
 
 int SubDepthIsThirdAndLong(void)
 {
-    float y = fn_80178298();
-    Point_8017886C point;
+    float y = ScrmGetLineToGain();
+    FieldPoint_t point;
     signed char distance;
 
-    point = fn_80177FE0();
+    point = ScrmGetBallSpot();
     distance = (signed char)(y - point.mY + 0.001f);
-    if (fn_80177F70() == 3 && distance > 3) {
+    if (ScrmGetDown() == 3 && distance > 3) {
         return 1;
     }
     return 0;

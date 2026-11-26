@@ -1,6 +1,6 @@
 #ifndef GAME_STATE_800FDA58_H
 #define GAME_STATE_800FDA58_H
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 struct State_800FDA58 {
     union { short mUnknown0; unsigned char mUnknown0Bytes[2]; };
@@ -10,7 +10,7 @@ struct State_800FDA58 {
     float mUnknown8;
     float mUnknown12;
     int mUnknown16;
-    union { char mUnknown20[28]; struct { float mUnknown20Float, mUnknown24, mUnknown28; Point_8017886C mUnknown32; float mUnknown40, mUnknown44; }; };
+    union { char mUnknown20[28]; struct { float mUnknown20Float, mUnknown24, mUnknown28; FieldPoint_t mUnknown32; float mUnknown40, mUnknown44; }; };
     int mUnknown48;
     unsigned char mUnknown52;
     unsigned char mUnknown53;

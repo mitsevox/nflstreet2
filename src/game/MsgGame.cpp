@@ -48,7 +48,7 @@ int UserProfileGetOldest(int a);
 void UserProfileCreate(int a, char *pText, int c);
 int fn_801486A0(void);
 void fn_80152940(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 void PerCheckConnectAll(void);
 void PortDbOpenSides(DbCursor *pObject);
 void PortDbCloseSides(DbCursor *pObject);
@@ -216,7 +216,7 @@ int MsgGameStreetEventCheckSide(void)
     if (fn_801486A0() != 15) {
         return MiniGameGetCurrent()->IsWinnerUserTeam();
     }
-    return fn_800B65A0(fn_80178AE0()) != 0xFF;
+    return fn_800B65A0(ScrmGetWinner()) != 0xFF;
 }
 
 int MsgGameFindActivePort(void)

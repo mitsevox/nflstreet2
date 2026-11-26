@@ -1,14 +1,14 @@
 /* Commentary for a pass that a player touched but did not catch away from the quarterback:
    remembers the player and has the commentator call it. */
 
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Object_80039F5C.h"
 #include "engine/spchevnt.h"
 
 extern "C" {
 void SpchIGGetPlayerCategory(int *pResult, int value);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 float Vec3Distance(Vector_80039F5C *pPosition, Vector_80039F5C *pOther);
 }
 
@@ -23,8 +23,8 @@ extern "C" void SpchIGSayMissedCatch(Vector_80039F5C *pOther)
     int result;
 
     position.mX = position.mY = position.mZ = 0.0f;
-    a = fn_80178308();
-    count = fn_80178D18(a);
+    a = ScrmGetOffenseTeam();
+    count = ScrmGetTeamPlayerCount(a);
     for (i = 0; i < count; i++) {
         Object_80039F5C *pObject = PlyrGet(a, i);
         if (pObject->mFlags & 0x10000000) {
@@ -38,7 +38,7 @@ extern "C" void SpchIGSayMissedCatch(Vector_80039F5C *pOther)
         return;
     }
     SpchIGGetPlayerCategory(&result, _SpchIG_iMissedCatchPlayer);
-    if (fn_80178320() == 0) {
+    if (ScrmGetDefenseTeam() == 0) {
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2020), 1, result);
     } else {
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4020), 1, result);

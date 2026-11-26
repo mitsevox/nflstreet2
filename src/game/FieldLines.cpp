@@ -3,7 +3,7 @@
    and fades them in or out; the list callback draws each visible strip with a
    pulsing alpha and keeps a minimum on-screen size. */
 #include "game/Vec2Distance.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Replay.h"
 #include "game/PauseMenu.h"
 #include "game/fn_800AD9B4.h"
@@ -46,13 +46,13 @@ extern "C" {
 unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800BA6F8(void);
 void *fn_800C47C4(void);
-int fn_80177F70(void);
-Point_8017886C fn_80177FFC(int team);
-float fn_80178298(void);
-int fn_80178320(void);
-int fn_801784C4(void);
-float fn_80178A08(void);
-float fn_80178A2C(void);
+int ScrmGetDown(void);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
+float ScrmGetLineToGain(void);
+int ScrmGetDefenseTeam(void);
+int ScrmIsFieldFlipped(void);
+float ScrmGetSidelineX(void);
+float ScrmGetGoalLineY(void);
 int fn_801486A0(void);
 void MatPush(void);
 void MatPop(void);
@@ -107,7 +107,7 @@ float FieldLineGetScale(FieldLine_t *p)
 
 int FieldLineDraw(FieldLine_t *p)
 {
-    if (fn_80177F70() && !fn_800BA6F8() && !ReplayIsShowing(gpReplay) &&
+    if (ScrmGetDown() && !fn_800BA6F8() && !ReplayIsShowing(gpReplay) &&
         _FieldLines_abDrawEnable[p->mUnknownF4] == 1 && !PauseIsOpen() && fn_800AD9B4() != 7) {
         float zero = 0.0f;
         if (p->mUnknownE4 > zero) {
@@ -143,25 +143,25 @@ int FieldLineDraw(FieldLine_t *p)
             MatPop();
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, 4);
             {
-                float x = fn_80178A08();
+                float x = ScrmGetSidelineX();
                 float y = (1.0f - _FieldLines_fHeight) * 0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
             GXTexCoord2f32(0.9f, 1.0f - _FieldLines_fHeight * 0.5f);
             {
-                float x = fn_80178A08();
+                float x = ScrmGetSidelineX();
                 float y = (1.0f - _FieldLines_fHeight) * -0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
             GXTexCoord2f32(0.9f, _FieldLines_fHeight * 0.5f);
             {
-                float x = -fn_80178A08();
+                float x = -ScrmGetSidelineX();
                 float y = (1.0f - _FieldLines_fHeight) * 0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
             GXTexCoord2f32(0.1f, 1.0f - _FieldLines_fHeight * 0.5f);
             {
-                float x = -fn_80178A08();
+                float x = -ScrmGetSidelineX();
                 float y = (1.0f - _FieldLines_fHeight) * -0.55556f;
                 GXPosition3f32(x, scale * y, zero);
             }
@@ -269,7 +269,7 @@ void FieldLinesUpdate(void)
             enabled = AtLeast(mode, 2);
         }
         int ready = 0;
-        if (enabled && fn_80177F70() && !fn_800BA6F8()) {
+        if (enabled && ScrmGetDown() && !fn_800BA6F8()) {
             ready = !ReplayIsShowing(gpReplay);
         }
         enabled = ready;
@@ -278,9 +278,9 @@ void FieldLinesUpdate(void)
         case 0: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
             FieldLine_t *q0 = _FieldLines_apLines[i];
-            q0->mUnknown4.mY = fn_801784C4() ? -fn_80178298() : fn_80178298();
+            q0->mUnknown4.mY = ScrmIsFieldFlipped() ? -ScrmGetLineToGain() : ScrmGetLineToGain();
             _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
-            if (!(fn_80178298() < fn_80178A2C()) || !(fn_80178298() > -fn_80178A2C())) {
+            if (!(ScrmGetLineToGain() < ScrmGetGoalLineY()) || !(ScrmGetLineToGain() > -ScrmGetGoalLineY())) {
                 enabled = 0;
             }
             break;
@@ -288,28 +288,28 @@ void FieldLinesUpdate(void)
         case 1: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
             FieldLine_t *q1 = _FieldLines_apLines[i];
-            q1->mUnknown4.mY = fn_801784C4() ? -fn_80178A2C() : fn_80178A2C();
+            q1->mUnknown4.mY = ScrmIsFieldFlipped() ? -ScrmGetGoalLineY() : ScrmGetGoalLineY();
             _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 2: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
             FieldLine_t *q2 = _FieldLines_apLines[i];
-            q2->mUnknown4.mY = fn_801784C4() ? fn_80178A2C() : -fn_80178A2C();
+            q2->mUnknown4.mY = ScrmIsFieldFlipped() ? ScrmGetGoalLineY() : -ScrmGetGoalLineY();
             _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 3: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
             FieldLine_t *q3 = _FieldLines_apLines[i];
-            q3->mUnknown4.mY = fn_801784C4() ? -fn_80177FE0().mY : fn_80177FE0().mY;
+            q3->mUnknown4.mY = ScrmIsFieldFlipped() ? -ScrmGetBallSpot().mY : ScrmGetBallSpot().mY;
             _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             break;
         }
         case 4: {
             _FieldLines_apLines[i]->mUnknown4.mX = 0.0f;
             FieldLine_t *q4 = _FieldLines_apLines[i];
-            q4->mUnknown4.mY = fn_801784C4() ? -fn_80177FFC(fn_80178320()).mY : fn_80177FFC(fn_80178320()).mY;
+            q4->mUnknown4.mY = ScrmIsFieldFlipped() ? -ScrmGetTeamSetupSpot(ScrmGetDefenseTeam()).mY : ScrmGetTeamSetupSpot(ScrmGetDefenseTeam()).mY;
             _FieldLines_apLines[i]->mUnknown4.mZ = 0.0f;
             if (fn_800AD9B4() != 2) {
                 enabled = 0;

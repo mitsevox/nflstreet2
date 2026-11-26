@@ -2,13 +2,13 @@
 #define GAME_COMMAND_800CEE74_H
 
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 struct Table_80089904;
 
 struct Anchor_800CE804 {
     int mAngle;
-    Point_8017886C mPoint;
+    FieldPoint_t mPoint;
     unsigned char mUnknown12;
     char mUnknown13[3];
 };
@@ -28,11 +28,11 @@ struct Command_800CEE74 {
             union {
                 struct {
                     int mUnknown28;
-                    Point_8017886C mUnknown32;
+                    FieldPoint_t mUnknown32;
                     unsigned char mUnknown40;
                     char mUnknown41[3];
                     int mUnknown44;
-                    Point_8017886C mUnknown48;
+                    FieldPoint_t mUnknown48;
                     unsigned char mUnknown56;
                     char mUnknown57[3];
                 };

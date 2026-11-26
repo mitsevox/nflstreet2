@@ -1,10 +1,10 @@
-#ifndef GAME_OBJECT_8017886C_H
-#define GAME_OBJECT_8017886C_H
+#ifndef GAME_SCRMPLAYRESULT_H
+#define GAME_SCRMPLAYRESULT_H
 
 extern "C" int MathArcTan2(float y, float x);
 
 /* Position on the field: mX across, mY along it. */
-struct Point_8017886C {
+struct FieldPoint_t {
     float mX;
     float mY;
 
@@ -12,12 +12,12 @@ struct Point_8017886C {
     int Heading() const { return MathArcTan2(mY, mX); }
 };
 
-/* The object whose address fn_8017886C returns; fn_8017C1F0 receives one
+/* The object whose address ScrmGetPlayResult returns; ScrmStatEndPlay receives one
    for the play just finished. Only the accessed fields are declared. */
-struct Object_8017886C {
+struct ScrmPlayResult_t {
     int mUnknown00;
     int mUnknown04;
-    Point_8017886C mUnknown08;
+    FieldPoint_t mUnknown08;
     float mUnknown10;
     float mUnknown14;
     int mUnknown18;
@@ -25,6 +25,6 @@ struct Object_8017886C {
     signed char mUnknown1D;
 };
 
-extern "C" Object_8017886C *fn_8017886C(void);
+extern "C" ScrmPlayResult_t *ScrmGetPlayResult(void);
 
 #endif

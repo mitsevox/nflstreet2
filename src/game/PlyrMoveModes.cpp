@@ -4,7 +4,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/PlayerActionAnimShiftPartner.h"
 
 extern "C" {
@@ -18,8 +18,8 @@ float MathSin(int angle);
 float MathCos(int angle);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
-void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
+void Vec2Rotate(FieldPoint_t *pOut, FieldPoint_t *pIn, int angle);
+void Vec2FromAngle(FieldPoint_t *pOut, int angle, float length);
 int Vec3Equal(void *pA, void *pB, float epsilon);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 }
@@ -75,7 +75,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
     Object_80039F5C *pTarget = fn_8009BCE8(&pObject->mUnknown1036);
     PlyrMoveCmd_t *pControl = &pObject->mUnknown528;
     Block_8011E240 *pBlock = &pObject->mBlock1032;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     int angle;
     float distance;
 
@@ -123,8 +123,8 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
     } else {
         Vec2FromAngle(&delta, angle, distance * 0.5f);
         if (MathAngleDiff(pBlock->mUnknown60, pMotion->mFacing) > 0x16C16) {
-            Point_8017886C center;
-            Point_8017886C turned;
+            FieldPoint_t center;
+            FieldPoint_t turned;
 
             if (((pBlock->mUnknown60 - pMotion->mFacing) & 0xFFFFFF) > 0x800000) {
                 angle = -0x16C16;

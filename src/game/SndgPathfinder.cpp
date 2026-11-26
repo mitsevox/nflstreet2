@@ -14,7 +14,7 @@
 #include "game/Replay.h"
 #include "game/GameCamera.h"
 #include "game/SndgHandles.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/PlayBookGetPlay.h"
@@ -541,14 +541,14 @@ int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
 int CamGameGetHeading(int index);
 unsigned int TutorialGetLesson(void);
-int fn_80177F70(void);
-Vec2 fn_80177FE0(void);
-Point_8017886C fn_80178070(void);
-float fn_80178298(void);
-int fn_80178308(void);
+int ScrmGetDown(void);
+Vec2 ScrmGetBallSpot(void);
+FieldPoint_t ScrmGetPlayStartSpot(void);
+float ScrmGetLineToGain(void);
+int ScrmGetOffenseTeam(void);
 void GetScores(int *pHome, int *pAway);
-int fn_80178348(void);
-int fn_801784C4(void);
+int ScrmGetSnapOffense(void);
+int ScrmIsFieldFlipped(void);
 unsigned long long fn_80190F18(void *pStream, int bits);
 void fn_80191068(void *pStream, unsigned long long value, int bits);
 void PATH_seteventcallbacks(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
@@ -1254,7 +1254,7 @@ extern "C" void SndgAmbCalcPan(Vector_80039F5C *pPos, unsigned short *pPan, shor
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
     angle = CamGameGetHeading(CamGameGetCurrentSlot());
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         angle = (angle + 0x800000) & 0xFFFFFF;
         position.mX = -position.mX;
         position.mY = -position.mY;
@@ -1271,7 +1271,7 @@ extern "C" float SndgAmbCameraDistance(Vector_80039F5C *pPos)
     position.mX = pCamera->mHeader.mUnknown04[0];
     position.mY = pCamera->mHeader.mUnknown04[1];
     position.mZ = pCamera->mHeader.mUnknown04[2];
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         position.mX = -position.mX;
         position.mY = -position.mY;
     }
@@ -1305,7 +1305,7 @@ extern "C" int SndgAmbType4CalcParams(Sound0 *pEntry, void *pObject, int index, 
     distance = Vec3Distance(&position, &other);
     if (init) {
         _SndgAmb_afType4Range[index] = distance;
-        if (fn_800A8444(fn_80178308()) == 0) {
+        if (fn_800A8444(ScrmGetOffenseTeam()) == 0) {
             pEntry->mUnknown4 = ClampVolume(MIN((int)(MIN(distance, 50.0f) * (127.0f / 50.0f)), 124));
         } else {
             pEntry->mUnknown4 = 127;
@@ -2287,12 +2287,12 @@ extern "C" void SndgListenerUpdate(SndgListener_t *src)
         src->mOrigin.mX = obj->mHeader.mUnknown04[0];
         src->mOrigin.mY = obj->mHeader.mUnknown04[1];
         src->mOrigin.mZ = obj->mHeader.mUnknown04[2];
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             src->mOrigin.mX = -src->mOrigin.mX;
             src->mOrigin.mY = -src->mOrigin.mY;
         }
         angle = CamGameGetHeading(CamGameGetCurrentSlot());
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             angle = (angle + 0x800000) & 0xFFFFFF;
         }
         src->mAngle = angle;
@@ -2760,7 +2760,7 @@ extern "C" void SndgPathRemoveCallback(int value)
 
 extern "C" void SndgSituationReset(void)
 {
-    _SndgSituation_pState->mUnknown34 = PlayBookGetPlay(fn_80178308())->mUnknown17;
+    _SndgSituation_pState->mUnknown34 = PlayBookGetPlay(ScrmGetOffenseTeam())->mUnknown17;
     _SndgSituation_pState->mUnknown30 = 0;
     _SndgSituation_pState->mFlags = 0;
     _SndgSituation_pState->mUnknown24.mX = 0.0f;
@@ -2769,13 +2769,13 @@ extern "C" void SndgSituationReset(void)
 
 extern "C" void UpdateGameSituation(void)
 {
-    Vec2 spot = fn_80177FE0();
-    Point_8017886C prevSpot = fn_80178070();
+    Vec2 spot = ScrmGetBallSpot();
+    FieldPoint_t prevSpot = ScrmGetPlayStartSpot();
     int home;
     int away;
 
     _SndgSituation_pState->mUnknownF = _SndgSituation_pState->mUnknownE;
-    _SndgSituation_pState->mUnknownE = fn_80178308();
+    _SndgSituation_pState->mUnknownE = ScrmGetOffenseTeam();
     _SndgSituation_pState->mUnknown4 = _SndgSituation_pState->mUnknown0;
     _SndgSituation_pState->mUnknown6 = _SndgSituation_pState->mUnknown2;
     GetScores(&home, &away);
@@ -2790,8 +2790,8 @@ extern "C" void UpdateGameSituation(void)
     _SndgSituation_pState->mUnknown10 = (char)spot.y;
     _SndgSituation_pState->mUnknown12 = _SndgSituation_pState->mUnknown10 - _SndgSituation_pState->mUnknown11;
     _SndgSituation_pState->mUnknown15 = _SndgSituation_pState->mUnknown14;
-    _SndgSituation_pState->mUnknown14 = fn_80177F70();
-    _SndgSituation_pState->mUnknown13 = (char)(fn_80178298() - spot.y + 0.001f);
+    _SndgSituation_pState->mUnknown14 = ScrmGetDown();
+    _SndgSituation_pState->mUnknown13 = (char)(ScrmGetLineToGain() - spot.y + 0.001f);
 }
 
 extern "C" void SndgSituationUpdate(int unknown)
@@ -2826,7 +2826,7 @@ extern "C" void SndgSituationHandleEvent(AudmonEvent_t *pEvent)
         break;
     case 0x8C: {
         Vec2 v;
-        v = fn_80177FE0();
+        v = ScrmGetBallSpot();
         _SndgSituation_pState->mUnknown1C = v.x;
         _SndgSituation_pState->mUnknown20 = v.y;
         _SndgSituation_pState->mFlags = 0;
@@ -3001,7 +3001,7 @@ extern "C" void SndgReplayQueueEntry(SndgReplaySfx_t *pEntry)
 {
     if (ReplayIsRecording(gpReplay) && _SndgReplay_pQueue->mCount < 12) {
         _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount] = *pEntry;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX = -_SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mX;
             _SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mY = -_SndgReplay_pQueue->mEntries[_SndgReplay_pQueue->mCount].mPos.mY;
         }
@@ -3156,7 +3156,7 @@ extern "C" void SndgSpchHandleEvent(AudmonEvent_t *pEvent)
                     SpchIGSayDownAndDistance();
                     break;
                 case 0x75:
-                    SpchIGSayPreSnap(fn_80178348());
+                    SpchIGSayPreSnap(ScrmGetSnapOffense());
                     break;
                 case 0x78:
                     if (!_SndgSpch_bDefenseShiftSaid) {

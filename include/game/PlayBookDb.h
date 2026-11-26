@@ -1,7 +1,7 @@
 #ifndef GAME_PLAYBOOKDB_H
 #define GAME_PLAYBOOKDB_H
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 struct PlayBookTeam_t;
 
@@ -38,8 +38,8 @@ struct PlayBookPosition_t {
     unsigned char mUnknownB;
     unsigned short mUnknownC;
     unsigned short mUnknownE;
-    Point_8017886C mUnknown10;
-    Point_8017886C mUnknown18;
+    FieldPoint_t mUnknown10;
+    FieldPoint_t mUnknown18;
     int mUnknown20;
     int mUnknown24;
 };

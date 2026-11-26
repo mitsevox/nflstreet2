@@ -1,7 +1,7 @@
 #ifndef GAME_RECORD_800A0624_H
 #define GAME_RECORD_800A0624_H
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 /* 24 bytes cleared by fn_800A0624. */
 struct Record_800A0624 {
@@ -18,7 +18,7 @@ struct Record_800A0624 {
 struct Record_800A0684 {
     int mUnknown0;
     int mUnknown4;
-    Point_8017886C mUnknown8;
+    FieldPoint_t mUnknown8;
     unsigned char mUnknown10[12];
     unsigned char mUnknown1C;
 };

@@ -189,16 +189,16 @@ extern unsigned char lbl_802E98E0[][4], lbl_802E98F0[][3];
 extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803EB3CB,lbl_803EB3CF;
 extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
 extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
-int fn_80177F70(void);
+int ScrmGetDown(void);
 int PauseIsOpen(void);
 void Vec2Add(void *, void *, void *);
 float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
 int DbTextToTag(const char *);
-int fn_80178308(void);
-unsigned int fn_80178D18(int);
-int fn_80178D70(int);
+int ScrmGetOffenseTeam(void);
+unsigned int ScrmGetTeamPlayerCount(int);
+int ScrmGetActivePlayerCount(int);
 PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
@@ -351,7 +351,7 @@ void fn_80166BE8(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
     int found = 0;
 
-    if (!fn_80177F70() && !PauseIsOpen()) {
+    if (!ScrmGetDown() && !PauseIsOpen()) {
         r = lbl_803EB3D3; g = lbl_803EB3D7; b = lbl_803EB3DB;
     } else {
         int inherited = 1;

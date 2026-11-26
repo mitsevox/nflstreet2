@@ -19,7 +19,7 @@ BigObj_t *BigObjFindLinkedByGroup(int key);
 void BigObjClearFlag(BigObj_t *pItem);
 void BigObjSetFlag(BigObj_t *pItem);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 int fn_801BE068(void *pA, void *pB, void *pC, unsigned short key, float value, void *p);
 unsigned short fn_801BE648(void *p);
 void fn_801BE67C(void *pA, void *pB, void *pC, void *p);
@@ -84,7 +84,7 @@ int BigObjBirdUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
             pos.mX = pObject->mUnknown360.mX;
             pos.mY = pObject->mUnknown360.mY;
             pos.mZ = pObject->mUnknown360.mZ;
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
             }
@@ -202,7 +202,7 @@ int BigObjFenceUpdate(BigObjInst *pObject, BigObj_t *pItem, int mode)
             pos.mY = y;
             pos.mZ = z;
             float value = pObject->mUnknown372;
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
             }

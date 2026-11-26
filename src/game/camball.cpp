@@ -5,7 +5,7 @@
    of view toward the new values. View 2 also clears the banner once and keeps
    a frame-driven offset for its source position. */
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 
@@ -23,7 +23,7 @@ struct BallCameraState_t {
     int mUnknown50;
     float mUnknown54[3];
     char mPad60[8];
-    Point_8017886C mUnknown68;
+    FieldPoint_t mUnknown68;
     float mUnknown70;
     int mUnknown74;
 };
@@ -62,10 +62,10 @@ struct BallCameraJoint_t {
 extern "C" {
 int BallStateGet(Ball_t *pBall, int *pOut);
 float CamCalcLookAngles(float *pFrom, float *pTo, int *pAngles);
-int fn_80177F70(void);
-Point_8017886C fn_80177FE0(void);
-float fn_80178298(void);
-int fn_801784C4(void);
+int ScrmGetDown(void);
+FieldPoint_t ScrmGetBallSpot(void);
+float ScrmGetLineToGain(void);
+int ScrmIsFieldFlipped(void);
 void BannerClear(int a);
 void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
@@ -109,9 +109,9 @@ void CamBallStart(BallCamera_t *pCamera)
 
     BallGetPosition(pBall, &ballPos);
     BallStateGet(pBall, info);
-    pState->mUnknown68 = fn_80177FE0();
-    pState->mUnknown70 = fn_80178298();
-    pState->mUnknown74 = fn_80177F70();
+    pState->mUnknown68 = ScrmGetBallSpot();
+    pState->mUnknown70 = ScrmGetLineToGain();
+    pState->mUnknown74 = ScrmGetDown();
     pState->mUnknown38 = 0.0f;
     /* FAKEMATCH: the view word is read into a local so that case 1 can store it as the restart flag
        (it equals 1 there) and the target reuses that register for the 0x803EB200 store. */
@@ -158,7 +158,7 @@ void CamBallProcess(BallCamera_t *pCamera)
     pBall = BallGetCurrent();
     BallStateGet(pBall, info);
     pPlayer = BallGetHolder(pBall);
-    fn_80177F70();
+    ScrmGetDown();
     BallGetPosition(pBall, &ballPos);
     _CamBall_iCleared = a;
     changed = 0;
@@ -205,10 +205,10 @@ void CamBallProcess(BallCamera_t *pCamera)
             _CamBall_vDriftOffset[2] = t * _CamBall_fDriftRateZ + 0.5f;
             if (a != 0) {
                 mode = 4;
-                pState->mUnknown18[0] = _CamBall_vDriftOffset[0] + fn_80177FE0().mX;
-                pState->mUnknown18[1] = _CamBall_vDriftOffset[1] + fn_80177FE0().mY;
+                pState->mUnknown18[0] = _CamBall_vDriftOffset[0] + ScrmGetBallSpot().mX;
+                pState->mUnknown18[1] = _CamBall_vDriftOffset[1] + ScrmGetBallSpot().mY;
                 pState->mUnknown18[2] = _CamBall_vDriftOffset[2];
-                if (fn_801784C4()) {
+                if (ScrmIsFieldFlipped()) {
                     pState->mUnknown18[0] = -pState->mUnknown18[0];
                     pState->mUnknown18[1] = -pState->mUnknown18[1];
                 }
@@ -246,7 +246,7 @@ void CamBallProcess(BallCamera_t *pCamera)
     mirrored.mY = pState->mUnknown54[1];
     mirrored.mZ = pState->mUnknown54[2];
     pState->mUnknown50 = mode;
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         mirrored.mX = -mirrored.mX;
         mirrored.mY = -mirrored.mY;
     }

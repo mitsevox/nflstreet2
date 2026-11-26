@@ -28,7 +28,7 @@ extern "C" int PlayerActionAnimDirectionPhase(Table_80089904 *pTable, int key, v
     if (phase != 0) {
         return 0;
     }
-    Point_8017886C direction;
+    FieldPoint_t direction;
     direction.mX = (signed char)p->mUnknown1008.mUnknown1 * 0.1f;
     direction.mY = (signed char)p->mUnknown1008.mUnknown2 * 0.1f;
     int angle = (direction.Heading() - p->mMotion.mFacing) & 0xFFFFFF;
@@ -46,7 +46,7 @@ extern "C" void PlayerActionAnimReleasePitch(Object_80039F5C *p, Ball_t *pBall, 
     pRecord8011F518->mUnknown8 = pRecord->mUnknown16;
     Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown12);
     if (pOther) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
         Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
         pRecord8011F518->mUnknown12 = MathArcTan2(delta.mY, delta.mX);
     } else {
@@ -74,7 +74,7 @@ extern "C" void PlayerActionAnimAdjustToss(Object_80039F5C *p, Ball_t *pBall, Re
     }
     pRequest->mUnknown8 = (pRequest->mUnknown8 - 5) / 3 + 5;
     pRequest->mUnknownC = pRecord->mUnknown16;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     delta.mX = 0.2f;
     delta.mY = pRecord->mUnknown8 - ball.mZ;
     delta.mY = delta.mY < 0.0f ? 0.0f : delta.mY;
@@ -208,7 +208,7 @@ extern "C" void PlayerActionAnimPitchUpdate(Record_800DB074 *pRecord, Object_800
     int done = 0;
 
     if (pRecord->mUnknown1 == 1) {
-        int busy = fn_801787A0();
+        int busy = ScrmIsNotReplay();
         if (!busy) {
             Ball_t *pBall = BallFindHeldBy(p);
             if (!pBall) {
@@ -266,7 +266,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
     if (failed && (unsigned int)SyncRandGetRange(0, 100) < (unsigned int)lbl_803EAD19) {
         allow = allow == 0;
     }
-    Point_8017886C point;
+    FieldPoint_t point;
     Object_80039F5C *pOther = fn_80105384(p, 0, &point);
     if (!pOther) {
         return;
@@ -286,13 +286,13 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
     if (!allow) {
         return;
     }
-    if (fn_800ABDA4(fn_80178308()) == 0) {
+    if (fn_800ABDA4(ScrmGetOffenseTeam()) == 0) {
         int count = fn_8011F59C(0);
         count += fn_8011F59C(1);
         if (count > 0) {
             allow = 0;
         }
-    } else if (fn_800ABDA4(fn_80178308()) == 1) {
+    } else if (fn_800ABDA4(ScrmGetOffenseTeam()) == 1) {
         int count = fn_8011F59C(0);
         count += fn_8011F59C(1);
         if (count > 1) {
@@ -346,7 +346,7 @@ extern "C" int PlayerActionAnimIsAiPasser(Object_80039F5C *p, unsigned char *pOu
     if (p->mUnknown8 == 255 || !(p->mFlags & 0x4000)) {
         int mode = fn_800AD9B4();
         result = 1;
-        if (!fn_801783AC(0)) {
+        if (!ScrmTestPlayFlag(0)) {
             unsigned char kind = p->mUnknown2914;
             if ((kind == 0 || kind == 20 || kind == 1 || kind == 3)
                 && (fn_8011F1CC() || fn_8011F1F4())
@@ -490,7 +490,7 @@ extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
     if (p->mIdBytes[3] == 1) {
         int mode = fn_800AD9B4();
         PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
-        if (!fn_801783AC(0) && BallFindHeldBy(p)
+        if (!ScrmTestPlayFlag(0) && BallFindHeldBy(p)
             && (p == PlaySetGetKeyPlayer(pTeam)
                 || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
                     && (PassIconsAreShown() || !(p->mFlags & 0x400))))
@@ -527,7 +527,7 @@ extern "C" int PlayerActionAnimIsPassPending(Object_80039F5C *p)
     int mode = fn_800AD9B4();
     PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
 
-    if (!fn_801783AC(0) && BallFindHeldBy(p)
+    if (!ScrmTestPlayFlag(0) && BallFindHeldBy(p)
         && (p == PlaySetGetKeyPlayer(pTeam)
             || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
                 && (PassIconsAreShown() || !(p->mFlags & 0x400))))
@@ -794,7 +794,7 @@ extern "C" int PlayerActionAnimSpeedBlendPhase(Table_80089904 *pTable, unsigned 
     return 0;
 }
 
-static inline int _PlayerActionAnimIsReactionValid(Object_80039F5C *p, unsigned char kind, unsigned char role, Point_8017886C *pPoint)
+static inline int _PlayerActionAnimIsReactionValid(Object_80039F5C *p, unsigned char kind, unsigned char role, FieldPoint_t *pPoint)
 {
     switch (kind) {
     // FAKEMATCH: the empty case 1 leaves no compare in this switch of the target (it tests 2, 3 and 7);
@@ -823,8 +823,8 @@ static inline int _PlayerActionAnimIsReactionValid(Object_80039F5C *p, unsigned 
 
 extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *pInfo)
 {
-    Point_8017886C point;
-    point = fn_80177FE0();
+    FieldPoint_t point;
+    point = ScrmGetBallSpot();
     int result = 0;
     unsigned int chance;
     switch (pInfo[3]) {
@@ -838,7 +838,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
     if ((unsigned int)SyncRandGetRange(0, 100) < chance) {
         unsigned char role = p->mUnknown2914;
         int check = 0;
-        if (fn_80177F70()) {
+        if (ScrmGetDown()) {
             switch (pInfo[0]) {
             case 1: result = 1; check = 1; break;
             case 12:
@@ -847,7 +847,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
                     check = 1;
                 }
                 if ((unsigned int)(role - 13) <= 2) {
-                    if (fn_80178308() == p->mIdBytes[2]) {
+                    if (ScrmGetOffenseTeam() == p->mIdBytes[2]) {
                         result = 0; check = 0;
                     } else {
                         result = 2; check = 1;
@@ -858,7 +858,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
                 }
                 break;
             case 7:
-                if (p->mIdBytes[2] == fn_80178320()) { result = 2; check = 1; }
+                if (p->mIdBytes[2] == ScrmGetDefenseTeam()) { result = 2; check = 1; }
                 break;
             case 4:
                 if (role == 5 || role == 9 || role == 6 || role == 8 || role == 7 || role == 4 || role == 24) {
@@ -877,7 +877,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
                 if (role == 7 || role == 24) { result = 3; check = 1; }
                 break;
             }
-        } else if (p->mIdBytes[2] == fn_80178308() && fn_801787A0()) {
+        } else if (p->mIdBytes[2] == ScrmGetOffenseTeam() && ScrmIsNotReplay()) {
             if (pInfo[0] == 8) {
                 result = 3;
                 switch (pInfo[2]) {
@@ -902,7 +902,7 @@ extern "C" int PlayerActionAnimScoreReaction(Object_80039F5C *p, unsigned char *
             result = 3; check = 1;
         }
         if (check == 1) {
-            fn_80178308();
+            ScrmGetOffenseTeam();
             if (!_PlayerActionAnimIsReactionValid(p, pInfo[2], role, &point)) result = 0;
         }
     }
@@ -924,7 +924,7 @@ extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned sh
         update = 1;
     case 2:
         if (p->mFlags & 4) {
-            if (fn_80177F70()) p->mFlags |= 0x40000;
+            if (ScrmGetDown()) p->mFlags |= 0x40000;
             p->mFlags &= ~0x10;
             update = 1;
         }
@@ -935,7 +935,7 @@ extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned sh
     }
     if (update == 1) {
         unsigned char category = 1;
-        if (p->mUnknown16 != 2 && p->mUnknown108 != 2 && p->mUnknown200 != 2 && fn_801787A0() == 1) {
+        if (p->mUnknown16 != 2 && p->mUnknown108 != 2 && p->mUnknown200 != 2 && ScrmIsNotReplay() == 1) {
             --pRecord->mUnknown0;
             if (pRecord->mUnknown0 & 0x8000) {
                 pRecord->mUnknown0 = 5;
@@ -1003,8 +1003,8 @@ extern "C" int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short
 {
     if (mode == 0) {
         fn_8009BD60(p);
-        Point_8017886C point;
-        point = fn_80177FE0();
+        FieldPoint_t point;
+        point = ScrmGetBallSpot();
         if (point.mY - p->mMotion.mPos.mY > 2.5f || fn_801486A0() == 3 || fn_801486A0() == 2) {
             p->mUnknown1008.mUnknown0 = 2;
         } else {
@@ -1021,7 +1021,7 @@ extern "C" int PlayerActionAnimIsVariantFree(Object_80039F5C *p, int value, unsi
     int result = 1;
     if (InGameIsPlaying()) {
         unsigned char i;
-        unsigned int count = fn_80178D18(p->mIdBytes[2]);
+        unsigned int count = ScrmGetTeamPlayerCount(p->mIdBytes[2]);
         for (i = 0; i < count; i++) {
             Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
             if (pOther != p) {
@@ -1047,7 +1047,7 @@ extern "C" int PlayerActionAnimGetIdleMask(Object_80039F5C *p)
         switch (fn_800AD9B4()) {
         case 5:
             result = 30;
-            if (p->mIdBytes[2] == fn_80178308() && p->mUnknown2914 == 0 && p->mIdBytes[1] == 0) {
+            if (p->mIdBytes[2] == ScrmGetOffenseTeam() && p->mUnknown2914 == 0 && p->mIdBytes[1] == 0) {
                 result = 94;
             } else {
                 result |= 32;
@@ -1535,7 +1535,7 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
     }
     if (pBlock->mUnknown3E > 0) {
         Pair_802270A4 rotated;
-        Point_8017886C delta;
+        FieldPoint_t delta;
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
             Vec2Rotate(&rotated, &pBlock->mUnknownC, pBlock->mUnknown38);
@@ -1560,9 +1560,9 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown38) & 0xFFFFFF;
         p->mpUnknown800[pBlock->mUnknown1D].mUnknownC = (pEntry->mUnknownC + pBlock->mUnknown38) & 0xFFFFFF;
         if (index != 0xFFFF) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Pair_802270A4 rotated;
-            Point_8017886C offset;
+            FieldPoint_t offset;
             Vec2Sub(&delta, &pOther->mMotion, &p->mMotion);
             Vec2Rotate(&rotated, &delta, pBlock->mUnknown38);
             Vec2Add(&pOther->mMotion, &rotated, &p->mMotion);
@@ -1577,7 +1577,7 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
         --pBlock->mUnknown3E;
         if (pState->mUnknown12 == 1) {
             Pair_802270A4 rotated;
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Rotate(&rotated, (char *)pEntry + 36, pState->mUnknown1C);
             Vec2Sub(&delta, &p->mMotion, &pState->mUnknown14);
             Vec2Sub(&delta, &delta, &rotated);
@@ -1595,7 +1595,7 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
         Vec2Add(&p->mMotion, &p->mMotion, &pBlock->mUnknownC);
         if (index != 0xFFFF) {
             Vec2Add(&pOther->mMotion, &pOther->mMotion, &pBlock->mUnknownC);
-            PlayerActionAnimShiftPartner(pOther, *(Point_8017886C *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
+            PlayerActionAnimShiftPartner(pOther, *(FieldPoint_t *)&pBlock->mUnknownC, 0, pBlock->mUnknown18);
         }
     }
     if (pBlock->mUnknown3F == 0) {
@@ -1604,7 +1604,7 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
         position.mX = pBlock->mUnknown4.mUnknown0;
         position.mY = pBlock->mUnknown4.mUnknown4;
         position.mZ = pBlock->mUnknownC.mUnknown0;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             position.mX = -position.mX;
             position.mY = -position.mY;
         }
@@ -1614,7 +1614,7 @@ extern "C" void PlayerActionAnimUpdatePairAlign(Object_80039F5C *p, Block_800DE3
     }
 }
 
-extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, Point_8017886C offset, int angle, int key)
+extern "C" void PlayerActionAnimShiftPartner(Object_80039F5C *p, FieldPoint_t offset, int angle, int key)
 {
     if (key == fn_801BE648(p->mpUnknown792)) {
         Block_801BE60C *pRecord = fn_801BE60C(p->mpUnknown792, key);
@@ -1680,12 +1680,12 @@ extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned sho
             pBlock->mUnknown1F = AnimChanIsMirrored(&pEntries[pBlock->mUnknown1D]);
         }
         AnimMomentumInit(&pBlock->mUnknown20, p, pBlock->mUnknown1D);
-        pBlock->mUnknown1E = fn_801784C4();
+        pBlock->mUnknown1E = ScrmIsFieldFlipped();
         break;
     }
     case 2:
         if (fn_801BE648(p->mpUnknown792) == key) {
-            int orientation = fn_801784C4();
+            int orientation = ScrmIsFieldFlipped();
             if (orientation != pBlock->mUnknown1E) {
                 pBlock->mUnknown1E = orientation;
                 if (pBlock->mUnknown1C) {

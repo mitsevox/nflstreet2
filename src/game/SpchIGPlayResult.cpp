@@ -4,9 +4,9 @@
    records here which players took part in the play (tackler, pass target, catcher, ball carrier,
    turnover player, scorer) so the right player speaks. */
 
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "engine/spchevnt.h"
 
 extern "C" {
@@ -18,15 +18,15 @@ void SpchIGGetScoreSituation(int *pResult);
 void SpchIGGetScoreMargin(int *pResult);
 void SpchIGGetPlayerCategory(int *pResult, int value);
 int fn_800A21A8(int bit);
-int fn_80177F7C(void);
-Point_8017886C fn_80177FE0(void);
-float fn_801782A4(void);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_80178348(void);
-int fn_80178360(void);
-int fn_801783AC(int bit);
-int fn_80179138(void);
+int ScrmGetPlayDown(void);
+FieldPoint_t ScrmGetBallSpot(void);
+float ScrmGetPrevLineToGain(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetSnapOffense(void);
+int ScrmGetSnapDefense(void);
+int ScrmTestPlayFlag(int bit);
+int ScrmGetConversionKind(void);
 int SysGetSystemTime(void);
 float SyncRandGetFloat(int stream);
 
@@ -50,24 +50,24 @@ static int _SpchIG_iDownedCarrier = 0;
 
 extern "C" int SpchIGGetResultFirstSide(void)
 {
-    int result = fn_80178320();
-    Object_8017886C *p = fn_8017886C();
+    int result = ScrmGetDefenseTeam();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     if (p->mUnknown18 & 8) {
-        if (fn_80177F7C() == 6) {
+        if (ScrmGetPlayDown() == 6) {
             if (p->mUnknown1D == 0) {
-                result = fn_80178360();
+                result = ScrmGetSnapDefense();
             } else {
                 result = ((_SpchIG_iScorer >> 8) & 0xFF) ^ 1;
             }
         } else if (p->mUnknown18 & 0x400) {
-            result = fn_80178348();
+            result = ScrmGetSnapOffense();
         } else if (p->mUnknown18 & 0x200) {
-            result = fn_80178348();
+            result = ScrmGetSnapOffense();
         } else if (p->mUnknown1D == -2) {
-            result = fn_80178360();
+            result = ScrmGetSnapDefense();
         } else if (p->mUnknown18 & 0x800) {
-            result = fn_80178360();
+            result = ScrmGetSnapDefense();
         }
     }
     return result;
@@ -75,19 +75,19 @@ extern "C" int SpchIGGetResultFirstSide(void)
 
 extern "C" int SpchIGClassifyPlayResult(void)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     if (p->mUnknown1D != 0) {
         SpchIGFindNearestOpponent(SpchIGGetScorer());
         return 1;
     }
-    if (fn_80177F7C() == 6) {
+    if (ScrmGetPlayDown() == 6) {
         return 2;
     }
-    if ((p->mUnknown18 & 8) && fn_80177F7C() != 6) {
+    if ((p->mUnknown18 & 8) && ScrmGetPlayDown() != 6) {
         return 3;
     }
-    if (fn_80177F7C() == 4 && (p->mUnknown18 & 0x1000)) {
+    if (ScrmGetPlayDown() == 4 && (p->mUnknown18 & 0x1000)) {
         return 4;
     }
     if (SndgSpchGetPlayFlags() & 1) {
@@ -129,7 +129,7 @@ extern "C" int SpchIGClassifyPlayResult(void)
 
 extern "C" void SpchIGGetGainFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 0;
     if (p->mUnknown1D == 6 || p->mUnknown1D == 9) {
@@ -158,13 +158,13 @@ extern "C" void SpchIGGetGainFlags(int *pResult)
 
 extern "C" void SpchIGGetScorerSideFlags(int *pResult)
 {
-    Object_8017886C *p;
+    ScrmPlayResult_t *p;
     int team;
     int side;
 
     *pResult = 0;
-    p = fn_8017886C();
-    team = fn_80178348();
+    p = ScrmGetPlayResult();
+    team = ScrmGetSnapOffense();
     side = (_SpchIG_iScorer >> 8) & 0xFF;
     if (p->mUnknown1D == -2) {
         *pResult = 2;
@@ -185,10 +185,10 @@ extern "C" void SpchIGGetScorerSideFlags(int *pResult)
 
 extern "C" void SpchIGGetTurnoverFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 0;
-    if ((p->mUnknown18 & 8) && fn_80177F7C() != 6) {
+    if ((p->mUnknown18 & 8) && ScrmGetPlayDown() != 6) {
         *pResult = 16;
         if (p->mUnknown18 & 0x400) {
             *pResult = 17;
@@ -209,20 +209,20 @@ extern "C" void SpchIGGetFourthDownFlags(int *pResult)
 {
     float value;
 
-    if (fn_8017886C()->mUnknown18 & 0x10000) {
+    if (ScrmGetPlayResult()->mUnknown18 & 0x10000) {
         *pResult = 1;
     } else {
         *pResult = 2;
     }
-    value = fn_801782A4();
-    if (fn_80177FE0().mY - value < 2.0f) {
+    value = ScrmGetPrevLineToGain();
+    if (ScrmGetBallSpot().mY - value < 2.0f) {
         *pResult |= 4;
     }
 }
 
 extern "C" void SpchIGGetTackleForLossFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 8;
     if (p->mUnknown14 < 0.0f) {
@@ -239,13 +239,13 @@ extern "C" void SpchIGGetTackleForLossFlags(int *pResult)
 extern "C" void SpchIGGetIncompletionFlags(int *pResult)
 {
     *pResult = 4;
-    if (fn_801783AC(12)) {
+    if (ScrmTestPlayFlag(12)) {
         *pResult |= 1;
     }
-    if (fn_801783AC(11)) {
+    if (ScrmTestPlayFlag(11)) {
         *pResult |= 2;
     }
-    if (fn_801783AC(23)) {
+    if (ScrmTestPlayFlag(23)) {
         *pResult |= 8;
     }
     if (SndgSpchGetPlayFlags() & 0x10) {
@@ -258,11 +258,11 @@ extern "C" void SpchIGGetIncompletionFlags(int *pResult)
 
 extern "C" void SpchIGGetScoreTypeFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 0;
     if (p->mUnknown1D == 6 || p->mUnknown1D == 9) {
-        if (fn_80178308() == fn_80178348()) {
+        if (ScrmGetOffenseTeam() == ScrmGetSnapOffense()) {
             *pResult |= 1;
         } else {
             *pResult |= 2;
@@ -270,7 +270,7 @@ extern "C" void SpchIGGetScoreTypeFlags(int *pResult)
     } else if (p->mUnknown1D == -2) {
         *pResult |= 4;
     } else if (p->mUnknown1D == 2) {
-        if (fn_80179138() == 2) {
+        if (ScrmGetConversionKind() == 2) {
             *pResult |= 8;
         } else {
             *pResult |= 32;
@@ -285,7 +285,7 @@ extern "C" void SpchIGGetScoreTypeFlags(int *pResult)
 
 extern "C" void SpchIGGetPlayTypeFlags(int *pResult)
 {
-    if (fn_8017886C()->mUnknown18 & 0x8000) {
+    if (ScrmGetPlayResult()->mUnknown18 & 0x8000) {
         *pResult |= 1;
     } else {
         *pResult |= 2;
@@ -294,7 +294,7 @@ extern "C" void SpchIGGetPlayTypeFlags(int *pResult)
 
 extern "C" void SpchIGGetScoredFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 0;
     if (p->mUnknown1D != 0) {
@@ -308,7 +308,7 @@ extern "C" void SpchIGSayHighlightCatch(void)
 {
     int result;
 
-    if (fn_80178308() == 0) {
+    if (ScrmGetOffenseTeam() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x402B), 1, result);
     } else {
@@ -321,7 +321,7 @@ extern "C" void SpchIGSayHighlightNoCatch(void)
 {
     int result;
 
-    if (fn_80178308() == 0) {
+    if (ScrmGetOffenseTeam() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x402C), 1, result);
     } else {
@@ -334,7 +334,7 @@ extern "C" void SpchIGSayHighlightHitCatch(void)
 {
     int result;
 
-    if (fn_80178308() == 0) {
+    if (ScrmGetOffenseTeam() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x402D), 1, result);
     } else {
@@ -347,7 +347,7 @@ extern "C" void SpchIGSayHighlightPass(void)
 {
     int result;
 
-    if (fn_80178308() == 0) {
+    if (ScrmGetOffenseTeam() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x402E), 1, result);
     } else {
@@ -409,7 +409,7 @@ extern "C" void SpchIGSayPlayResult(void)
         SpchIGGetPlayTypeFlags(&result5);
         SpchIGGetScoredFlags(&result6);
         if (_SpchIG_bResultSide == 0) {
-            if ((result3 & 1) && fn_80178348() == 0) {
+            if ((result3 & 1) && ScrmGetSnapOffense() == 0) {
                 if (_SpchIG_iScorer != 0) {
                     SpchIGGetPlayerCategory(&result7, _SpchIG_iScorer);
                 } else {
@@ -421,7 +421,7 @@ extern "C" void SpchIGSayPlayResult(void)
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2016), 4, result1, result3, result4, result7);
             }
         } else {
-            if ((result3 & 1) && fn_80178348() == 0) {
+            if ((result3 & 1) && ScrmGetSnapOffense() == 0) {
                 SpchIGGetPlayerCategory(&result7, SpchIGGetTeamPlayer(1));
                 gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4016), 4, result1, result3, result4, result7);
             } else {
@@ -445,7 +445,7 @@ extern "C" void SpchIGSayPlayResult(void)
         SpchIGGetTurnoverFlags(&result2);
         SpchIGGetScoreMargin(&result3);
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 SpchIGGetPlayerCategory(&result4, SpchIGGetTeamPlayer(_SpchIG_bResultSide));
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x200B), 3, result2, result1, result4);
             } else {
@@ -457,7 +457,7 @@ extern "C" void SpchIGSayPlayResult(void)
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2017), 4, result2, result1, result3, result4);
             }
         } else {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 if (_SpchIG_iTurnoverPlayer != 0) {
                     SpchIGGetPlayerCategory(&result4, _SpchIG_iTurnoverPlayer);
                 } else {
@@ -478,13 +478,13 @@ extern "C" void SpchIGSayPlayResult(void)
         SpchIGGetFourthDownFlags(&result1);
         SpchIGGetPlayerCategory(&result2, SpchIGGetTeamPlayer(_SpchIG_bResultSide));
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2009), 2, result1, result2);
             } else {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2018), 2, result1, result2);
             }
         } else {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4018), 2, result1, result2);
             } else {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4009), 2, result1, result2);
@@ -497,11 +497,11 @@ extern "C" void SpchIGSayPlayResult(void)
 
         SpchIGGetPlayerCategory(&result, SpchIGGetTackler());
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178360() == 0) {
+            if (ScrmGetSnapDefense() == 0) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2010), 1, result);
             }
         } else {
-            if (fn_80178360() == 1) {
+            if (ScrmGetSnapDefense() == 1) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4010), 1, result);
             }
         }
@@ -515,36 +515,36 @@ extern "C" void SpchIGSayPlayResult(void)
         if (_SpchIG_iTackler != 0) {
             SpchIGGetPlayerCategory(&result2, _SpchIG_iTackler);
         } else {
-            SpchIGGetPlayerCategory(&result2, SpchIGGetTeamPlayer(fn_80178360()));
+            SpchIGGetPlayerCategory(&result2, SpchIGGetTeamPlayer(ScrmGetSnapDefense()));
         }
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178360() == 0) {
+            if (ScrmGetSnapDefense() == 0) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x200F), 2, result1, result2);
             }
         } else {
-            if (fn_80178360() == 1) {
+            if (ScrmGetSnapDefense() == 1) {
                 gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x400F), 2, result1, result2);
             }
         }
         break;
     }
     case 14:
-        if (fn_80178348() == _SpchIG_bResultSide) {
+        if (ScrmGetSnapOffense() == _SpchIG_bResultSide) {
             SpchIGSayHighlightPass();
         }
         break;
     case 13:
-        if (fn_80178348() == _SpchIG_bResultSide) {
+        if (ScrmGetSnapOffense() == _SpchIG_bResultSide) {
             SpchIGSayHighlightHitCatch();
         }
         break;
     case 11:
-        if (fn_80178348() == _SpchIG_bResultSide) {
+        if (ScrmGetSnapOffense() == _SpchIG_bResultSide) {
             SpchIGSayHighlightCatch();
         }
         break;
     case 12:
-        if (fn_80178348() == _SpchIG_bResultSide) {
+        if (ScrmGetSnapOffense() == _SpchIG_bResultSide) {
             SpchIGSayHighlightNoCatch();
         }
         break;
@@ -554,7 +554,7 @@ extern "C" void SpchIGSayPlayResult(void)
 
         SpchIGGetGainFlags(&result1);
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 SpchIGGetPlayerCategory(&result2, _SpchIG_iPassCatcher);
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2005), 2, result1, result2);
             } else {
@@ -566,7 +566,7 @@ extern "C" void SpchIGSayPlayResult(void)
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2013), 2, result1, result2);
             }
         } else {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 if (_SpchIG_iTackler != 0) {
                     SpchIGGetPlayerCategory(&result2, _SpchIG_iTackler);
                 } else {
@@ -586,10 +586,10 @@ extern "C" void SpchIGSayPlayResult(void)
 
         SpchIGGetIncompletionFlags(&result1);
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 if (result1 & 0x20) {
                     unsigned short i;
-                    unsigned int count = fn_80178D18(0);
+                    unsigned int count = ScrmGetTeamPlayerCount(0);
 
                     for (i = 0; i < count; i++) {
                         Object_80039F5C *player = PlyrGet(0, i);
@@ -613,7 +613,7 @@ extern "C" void SpchIGSayPlayResult(void)
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2014), 2, result1, result2);
             }
         } else {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 if (_SpchIG_iPassTarget != 0 && SpchIGGetNearestOpponent(1) != 0) {
                     SpchIGGetPlayerCategory(&result2, SpchIGGetNearestOpponent(1));
                 } else {
@@ -623,7 +623,7 @@ extern "C" void SpchIGSayPlayResult(void)
             } else {
                 if (result1 & 0x20) {
                     unsigned short i;
-                    unsigned int count = fn_80178D18(1);
+                    unsigned int count = ScrmGetTeamPlayerCount(1);
 
                     for (i = 0; i < count; i++) {
                         Object_80039F5C *player = PlyrGet(1, i);
@@ -643,12 +643,12 @@ extern "C" void SpchIGSayPlayResult(void)
         break;
     }
     case 10: {
-        int team = fn_80178360();
+        int team = ScrmGetSnapDefense();
 
         if (_SpchIG_bResultSide == team) {
             int result;
 
-            if (fn_80178360() == 0) {
+            if (ScrmGetSnapDefense() == 0) {
                 SpchIGGetPlayerCategory(&result, SpchIGGetNearestOpponent(0));
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2019), 1, result);
             } else {
@@ -665,7 +665,7 @@ extern "C" void SpchIGSayPlayResult(void)
 
         SpchIGGetGainFlags(&result1);
         if (_SpchIG_bResultSide == 0) {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 SpchIGGetPlayerCategory(&result2, _SpchIG_iBallCarrier);
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2007), 2, result1, result2);
             } else {
@@ -677,7 +677,7 @@ extern "C" void SpchIGSayPlayResult(void)
                 gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2015), 2, result1, result2);
             }
         } else {
-            if (fn_80178348() == 0) {
+            if (ScrmGetSnapOffense() == 0) {
                 if (_SpchIG_iTackler != 0) {
                     SpchIGGetPlayerCategory(&result2, _SpchIG_iTackler);
                 } else {

@@ -165,7 +165,7 @@ void InGameRewardSetAlt(unsigned char value);
 void StoryTournamentClearEvent(void);
 void StoryTournamentBegin(void);
 int MsgGameGetSetupState(void);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 }
 
 Object_8008044C _StoryEvents_PlayerCursor;
@@ -1422,7 +1422,7 @@ int StoryEventsRecordGameResult(void)
     if (!_StoryEvents_pEvent) {
         active = 0;
     } else {
-        int result = fn_80178AE0();
+        int result = ScrmGetWinner();
         active = 1;
         switch (result) {
         case 0:

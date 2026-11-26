@@ -21,9 +21,9 @@ Object_80039F5C *fn_800B6544(int index);
 int fn_800B6644(int index);
 int fn_801486A0(void);
 int TutorialIsActive(void);
-int fn_80177F70(void);
-int fn_80178308(void);
-int fn_80179138(void);
+int ScrmGetDown(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetConversionKind(void);
 int GameTextFindPlayerPad(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
@@ -118,7 +118,7 @@ void HudUpdateMashPrompt(unsigned char id)
     if (p == 0) {
         return;
     }
-    own = (p->mId >> 8 & 0xFF) == fn_80178308();
+    own = (p->mId >> 8 & 0xFF) == ScrmGetOffenseTeam();
     args[2] = _Hud_uMashArg;
     _Hud_MashText.mpText = _Hud_szMash;
     args[3] = (int)&_Hud_MashText;
@@ -265,10 +265,10 @@ void HudSetScore(int a, int b)
 void HudSetDown(void)
 {
     int args[1];
-    int count = fn_80177F70();
+    int count = ScrmGetDown();
 
     if (count > 4) {
-        count = fn_80177F70() + fn_80179138();
+        count = ScrmGetDown() + ScrmGetConversionKind();
     }
     args[0] = count;
     fn_8021D7B8(gUISMainInfo, 0x80000010, 1, args);

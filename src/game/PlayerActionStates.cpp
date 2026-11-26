@@ -304,7 +304,7 @@ extern "C" void PlayerActionDropBallStart(Object_80039F5C *p, Block_800E0230 *pB
         pBlock->mUnknown0 = PlayerActionDropBallGetSpeed(p);
         pBlock->mUnknown4 = p->mMotion.mFacing;
         float y = fabsf(p->mMotion.mPos.mY);
-        if (!(y <= fn_80178A2C())) {
+        if (!(y <= ScrmGetGoalLineY())) {
             if (MathAngleDiff(p->mMotion.mFacing, 0) > 0x400000) {
                 pBlock->mUnknown4 = 0x800000;
             } else {
@@ -745,7 +745,7 @@ extern "C" int PlayerActionAiConsiderDive(Object_80039F5C *p)
     Object_80039F5C *pOther = BallGetCurrentHolder();
     if (pOther && MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
         fn_800ACDE4(p, &chance, &angle);
-        int special = fn_80178308() == fn_80178348() && !(p->mMotion.mPos.mY >= fn_80177FE0().mY) &&
+        int special = ScrmGetOffenseTeam() == ScrmGetSnapOffense() && !(p->mMotion.mPos.mY >= ScrmGetBallSpot().mY) &&
             (pOther->mpState->mId == 1 || pOther->mpState->mId == 18);
         if (special) {
             if (!(Vec2Distance(&p->mMotion, &pOther->mMotion) >= 3.0f) &&
@@ -799,8 +799,8 @@ extern "C" int PlayerActionRollAlignChange(Object_80039F5C *p)
 extern "C" int PlayerActionIsNearLine(Object_80039F5C *p)
 {
     int result = 0;
-    int inArea = !(p->mMotion.mPos.mY >= fn_80177FFC(p->mIdBytes[2]).mY + 2.0f) &&
-        !(p->mMotion.mPos.mY <= fn_80177FFC(p->mIdBytes[2]).mY + 1.0f) &&
+    int inArea = !(p->mMotion.mPos.mY >= ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.0f) &&
+        !(p->mMotion.mPos.mY <= ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 1.0f) &&
         !(fabsf(p->mMotion.mPos.mX) >= 8.0f) && (unsigned int)(p->mUnknown2914 - 4) <= 8;
     if (inArea) {
         result = 1;
@@ -819,16 +819,16 @@ static inline void _PlayerActionDebugSlot(Object_80039F5C *, const char *)
 
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
 {
-    Point_8017886C marked;
+    FieldPoint_t marked;
     marked.mY = 0.0f;
     marked.mX = 0.0f;
     Record_8011F4E0 *pTactics = fn_8011F4E0();
-    Point_8017886C goal;
-    goal = fn_80177FFC(p->mIdBytes[2]);
+    FieldPoint_t goal;
+    goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     Object_80039F5C *pLeft = 0, *pRight = 0, *pSpecial = 0, *pMarked = 0;
-    unsigned int count = fn_80178D18(fn_80178320());
+    unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
     for (unsigned char i = 0; i < count; i++) {
-        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
         Block_800E1954 *pOtherBlock = (Block_800E1954 *)&pOther->mUnknown336;
         if (pOther->mUnknown2914 >= 17 && pOther->mUnknown2914 <= 18) {
             if (!(pOther->mMotion.mPos.mX <= goal.mX)) pRight = pOther;
@@ -839,9 +839,9 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
         if (fn_8009F778(pOther) && fn_8009F6B4() == 1 && !pOtherBlock->mpUnknown36) PlayAlignGetSetName(2);
     }
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178320());
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(ScrmGetDefenseTeam());
     PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
-    Point_8017886C own;
+    FieldPoint_t own;
     own.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     own.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     Vec2Add(&own, &own, &goal);
@@ -849,11 +849,11 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     pBlock->mUnknown49 = 0;
     if (pTactics->mUnknown4) {
         unsigned char slot = pTactics->mUnknown32[p->mIdBytes[1]];
-        if (slot <= 3) pMarked = PlyrGet(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
+        if (slot <= 3) pMarked = PlyrGet(ScrmGetOffenseTeam(), ((unsigned char *)pTactics)[7 + slot]);
     }
     if (pMarked) {
         {
-            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(ScrmGetOffenseTeam());
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
@@ -907,7 +907,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
                         pBlock->mUnknown49 = 1;
                         pBlock->mUnknown40.mY = own.mY;
                         float y = own.mY + 2.5f;
-                        if (y > fn_80178A44() - 5.0f) y = fn_80178A44() - 5.0f;
+                        if (y > ScrmGetEndLineY() - 5.0f) y = ScrmGetEndLineY() - 5.0f;
                         pBlock->mUnknown40.mY = y;
                     }
                 } else if (!(marked.mX <= own.mX + 2.0f)) {
@@ -915,14 +915,14 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
                     pBlock->mUnknown49 = 1;
                     pBlock->mUnknown40.mY = own.mY;
                     float y = own.mY + 2.5f;
-                    if (y > fn_80178A44() - 5.0f) y = fn_80178A44() - 5.0f;
+                    if (y > ScrmGetEndLineY() - 5.0f) y = ScrmGetEndLineY() - 5.0f;
                     pBlock->mUnknown40.mY = y;
                 }
             } else {
                 int slot = !(own.mX <= goal.mX) ? 1 : 5;
-                pMarked = PlyrGet(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
+                pMarked = PlyrGet(ScrmGetOffenseTeam(), ((unsigned char *)pTactics)[7 + slot]);
                 {
-            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(ScrmGetOffenseTeam());
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
@@ -931,7 +931,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
                 if ((slot == 1 && marked.mX < goal.mX + 6.0f) || (slot == 5 && !(marked.mX <= goal.mX - 6.0f))) {
                     pBlock->mUnknown40.mX = slot == 1 ? own.mX - 3.5f : own.mX + 3.5f;
                     float y = own.mY + 2.5f;
-                    if (y > fn_80178A44() - 5.0f) y = fn_80178A44() - 5.0f;
+                    if (y > ScrmGetEndLineY() - 5.0f) y = ScrmGetEndLineY() - 5.0f;
                     pBlock->mUnknown40.mY = y;
                     pBlock->mUnknown49 = 1;
                 }
@@ -944,9 +944,9 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
                 pBlock->mUnknown40.mY = own.mY;
             } else {
                 int slot = !(own.mX <= goal.mX) ? 2 : 4;
-                pMarked = PlyrGet(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
+                pMarked = PlyrGet(ScrmGetOffenseTeam(), ((unsigned char *)pTactics)[7 + slot]);
                 {
-            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(ScrmGetOffenseTeam());
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
@@ -980,9 +980,9 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
             }
         } else {
             int slot = !(own.mX <= goal.mX) ? 2 : 4;
-            pMarked = PlyrGet(fn_80178308(), ((unsigned char *)pTactics)[7 + slot]);
+            pMarked = PlyrGet(ScrmGetOffenseTeam(), ((unsigned char *)pTactics)[7 + slot]);
             {
-            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(fn_80178308());
+            PlayBookFormation_t *pMarkedTeam = PlayBookGetFormation(ScrmGetOffenseTeam());
             PlayBookPosition_t *pMarkedEntry = PlaySetGetEntry(pMarkedTeam, pMarked->mIdBytes[1], 0);
             marked.mX = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mX;
             marked.mY = (pMarkedTeam->mUnknown8.mUnknownF == 1 ? &pMarkedEntry->mUnknown18 : &pMarkedEntry->mUnknown10)->mY;
@@ -1011,7 +1011,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     default: pBlock->mUnknown49 = 0;
     }
     if (!pBlock->mUnknown0) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
         if (pBlock->mUnknown49) Vec2Sub(&delta, &pBlock->mUnknown40, &p->mMotion);
         else Vec2Sub(&delta, &own, &p->mMotion);
         if (!(Vec2Magnitude(&delta) <= 1.0f) && !pBlock->mUnknown24) pBlock->mUnknown1 = 1;
@@ -1022,25 +1022,25 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     }
 }
 
-extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle)
+extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut, int *pAngle)
 {
-    Point_8017886C point;
-    point = fn_80177FFC(p->mIdBytes[2]);
+    FieldPoint_t point;
+    point = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178320());
+    PlayBookFormation_t *pTeam = PlayBookGetFormation(ScrmGetDefenseTeam());
     PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0);
     pOut->mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     Vec2Add(pOut, pOut, &point);
-    pOut->mX = !(pOut->mX >= 1.0f - fn_80178A08()) ? 1.0f - fn_80178A08()
-        : (pOut->mX > fn_80178A08() - 1.0f ? fn_80178A08() - 1.0f : pOut->mX);
-    pOut->mY = !(pOut->mY >= 1.0f - fn_80178A44()) ? 1.0f - fn_80178A44()
-        : (pOut->mY > fn_80178A44() - 1.0f ? fn_80178A44() - 1.0f : pOut->mY);
+    pOut->mX = !(pOut->mX >= 1.0f - ScrmGetSidelineX()) ? 1.0f - ScrmGetSidelineX()
+        : (pOut->mX > ScrmGetSidelineX() - 1.0f ? ScrmGetSidelineX() - 1.0f : pOut->mX);
+    pOut->mY = !(pOut->mY >= 1.0f - ScrmGetEndLineY()) ? 1.0f - ScrmGetEndLineY()
+        : (pOut->mY > ScrmGetEndLineY() - 1.0f ? ScrmGetEndLineY() - 1.0f : pOut->mY);
     if (pBlock->mpUnknown36) {
         fn_8011F4E0();
         Object_80039F5C *pOther = pBlock->mpUnknown36;
         if (pOther) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &p->mMotion, &pOther->mMotion);
             MathArcTan2(delta.mY, delta.mX);
             switch (p->mUnknown2914) {
@@ -1150,18 +1150,18 @@ extern "C" int PlayerActionFindGap(Object_80039F5C *p, int count, float *pValues
 extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
 {
     Block_800E1954 *pBlock = (Block_800E1954 *)&p->mUnknown336;
-    Point_8017886C point;
-    point = fn_80177FFC(p->mIdBytes[2]);
+    FieldPoint_t point;
+    point = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     float random = SyncRandGetFloat(0);
-    Point_8017886C target;
+    FieldPoint_t target;
     target.mY = point.mY + 1.4f + random;
     if (!(target.mY <= p->mMotion.mPos.mY)) {
-        target.mY = fn_80177FFC(p->mIdBytes[2]).mY + 1.0f;
+        target.mY = ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 1.0f;
         if (!(target.mY <= p->mMotion.mPos.mY)) target.mY = p->mMotion.mPos.mY;
     }
     Record_800E2ABC *pRecord = (Record_800E2ABC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
     if ((pRecord->mUnknown4 & ~0x80) == 30) {
-        Point_8017886C velocity;
+        FieldPoint_t velocity;
         float value = (float)(pRecord->mUnknown5 >> 3) + (float)(pRecord->mUnknown5 & 7) * 0.1428571492433548f;
         Vec2FromAngle(&velocity, (pRecord->mUnknown6 & 0x7F) << 17, value);
         target.mX = (target.mY - p->mMotion.mPos.mY) * velocity.mX;
@@ -1179,10 +1179,10 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
     pBlock->mUnknown4.mX = target.mX;
     pBlock->mUnknown4.mY = target.mY;
     if (!PlayerPathIsLaneClear(p, &pBlock->mUnknown4)) {
-        Point_8017886C *pGoal = &pBlock->mUnknown4;
+        FieldPoint_t *pGoal = &pBlock->mUnknown4;
         float values[7];
         int count = 0;
-        int players = fn_80178D18(p->mIdBytes[2]);
+        int players = ScrmGetTeamPlayerCount(p->mIdBytes[2]);
         int i;
         for (i = 0; i < players; ++i) {
             Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);
@@ -1204,7 +1204,7 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
                     }
                 }
             } while (changed == 1);
-            Point_8017886C goal = fn_80177FFC(p->mIdBytes[2]);
+            FieldPoint_t goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
             float direction = !(pBlock->mUnknown4.mX <= goal.mX) ? -1.0f : 1.0f;
             int next = 0;
             pBlock->mUnknown22 = 0;
@@ -1229,7 +1229,7 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
         pBlock->mUnknown24 = 0;
     } else if (pBlock->mUnknown22 == 1 && pBlock->mUnknown23 == 1) {
         int angle = (pRecord->mUnknown6 & 0x7F) << 17;
-        if (PlayBookGetTeam(fn_80178320())->mUnknown48) angle = (0x800000 - angle) & 0xFFFFFF;
+        if (PlayBookGetTeam(ScrmGetDefenseTeam())->mUnknown48) angle = (0x800000 - angle) & 0xFFFFFF;
         if (angle <= 0xBFFFFF) {
             pBlock->mUnknown20 = pBlock->mUnknown4.mX >= pBlock->mUnknown12.mX;
         } else {
@@ -1238,11 +1238,11 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
     }
 }
 
-extern "C" int PlayerActionIsFacingPoint(Object_80039F5C *p, Point_8017886C *pPoint)
+extern "C" int PlayerActionIsFacingPoint(Object_80039F5C *p, FieldPoint_t *pPoint)
 {
     int result = 0;
     if (fn_801BE648(p->mpUnknown792) == 86) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
         delta.mX = pPoint->mX;
         delta.mY = pPoint->mY;
         if (!(fabsf(delta.mY - p->mMotion.mPos.mY) >= 1.0f)) {

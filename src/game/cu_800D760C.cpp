@@ -30,7 +30,7 @@ float PlayerGetActionScale(int kind, Object_80039F5C *p);
 void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
@@ -327,7 +327,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
         AnimMomentumInit(&pBlock->mUnknown28, (AnimMomentumActor_t *)p, pBlock->mUnknown4Word);
         PlyrAnimTurnComputeStep(p, pBlock);
         if (pState->mUnknown5 == 3) {
-            fn_800AE7F0(6, fn_80178320(), p);
+            fn_800AE7F0(6, ScrmGetDefenseTeam(), p);
             if (pState->mUnknown5 == 3 && pBlock->mUnknownCHalf != 0) {
                 pBlock->mUnknownCHalf += 6;
             }
