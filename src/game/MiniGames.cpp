@@ -288,7 +288,7 @@ public:
     virtual void vfn_10(int value, int *pList, int *pIds);
     virtual void vfn_11(int value, int *pList, int *pIds, unsigned int count, int b);
     virtual void vfn_14();
-    virtual void vfn_20(int team, int index, int kind, char *pFirst, int firstLength, char *pSecond, int secondLength);
+    virtual void vfn_20(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength, char *pSecond, unsigned char secondLength);
     virtual int vfn_21();
     virtual int vfn_26(int team, int index, Object_80039F5C *pPlayer, int kind);
     virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
@@ -1192,10 +1192,10 @@ void fn_801488D4(Object_80039F5C *pA, Object_80039F5C *pB)
 Class_80148A58 *fn_80148A58(void)
 {
     int index = fn_801486A0();
-    if (index == 15) {
-        return 0;
+    if (index != 15) {
+        return lbl_8031BDBC[index];
     }
-    return lbl_8031BDBC[index];
+    return 0;
 }
 
 } /* extern "C" */
@@ -1261,8 +1261,8 @@ void Class_80148A58::vfn_11(int value, int *pList, int *pIds, unsigned int count
 
 int Class_80148A58::vfn_13()
 {
+    unsigned char result = 0;
     unsigned char team = (unsigned char)fn_80178AE0();
-    int result = 0;
     if (team != 2) {
         result = fn_800B65A0(team) != 255;
     }
@@ -1390,12 +1390,16 @@ extern "C" {
 
 void fn_80149040(Object_80039F5C *p)
 {
-    QueryCursor cursor = {0,0,-1,0};
+    QueryCursor cursor;
+    cursor.mUnknown0 = 0;
+    cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
     TDbCompilePerformOp(0,"declare \x8A cursor for select * from 'AGLP' where ('DIGP' = \x84)\n",&cursor,p->mUnknown2908);
     PlyrLoadDbRecord(cursor,0,&p->mUnknown2900);
     p->mUnknown508 = p->mUnknown2904Float;
     fn_800B4900(cursor,0,p->mRatings,p->mUnknown3020);
-    fn_800B4798(p->mRatings,p->mIdBytes[2],p->mIdBytes[1],&p->mUnknown2900);
+    fn_800B4798(p->mRatings,(p->mId >> 8) & 0xFF,(p->mId >> 16) & 0xFF,&p->mUnknown2900);
     if(cursor.mUnknown0)TDbSQLDestroyCursor(&cursor);
     PlyrAttachModel(p);
     fn_800B5150(p);
@@ -1779,7 +1783,7 @@ void fn_8014A6A0(const int *pValues,int *pOrder,unsigned int count)
 
 void fn_8014A8D8(const int *pValues,int *pOrder,unsigned int count)
 {
-    int has11=0,has13=0,has9=0,has10=0,has7=0,has12=0,has8=0;
+    int has11=0,has9=0,has13=0,has10=0,has7=0,has12=0,has8=0;
     for(unsigned char i=0;i<count;i++) {
         if(pOrder[11]==pValues[i])has11=1;
         else if(pOrder[13]==pValues[i])has13=1;
@@ -6139,7 +6143,7 @@ Object_80039F5C *fn_80154FC0(Class_802A27F0 *p, int team, int index)
 
 } /* extern "C" */
 
-void Class_802A27F0::vfn_20(int team, int index, int kind, char *pFirst, int firstLength, char *pSecond, int secondLength)
+void Class_802A27F0::vfn_20(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength, char *pSecond, unsigned char secondLength)
 {
     Object_80039F5C *pPlayer = PlyrGet(team, index);
     switch (kind) {
@@ -6319,8 +6323,7 @@ void Class_802A18C8::OnEnter(float dt)
     PreGamePhase::OnEnter(dt);
     fn_80178A20(fn_80178A2C() * 2.0f);
     fn_80155D7C(fn_80148A58());
-    lbl_803EB2FC = 0;
-    lbl_803EB2FD = 0;
+    lbl_803EB2FC = lbl_803EB2FD = 0;
     TutorialReleasePause();
 }
 
