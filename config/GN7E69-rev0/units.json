@@ -4302,6 +4302,43 @@
       }
     },
     {
+      "source": "src/game/cu_800D760C.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/cu_800D760C.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800D760C",
+          "end": "0x800D7E9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8029D678",
+          "end": "0x8029D7B8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_800D7E9C",
+            "evidence": "evidence.tsv source-form 0x800D7E9C-0x800D8140"
+          }
+        ],
+        "evidence": "merge notes of the pull request that links the file (round 2 lane 3 holdout table)"
+      },
+      "link_roots": {
+        "discarded": [
+          "_StrippedFramesToTime",
+          "_StrippedPrintBlankName",
+          "_StrippedCheckDownOpcodes",
+          "_StrippedGetHoldWeight"
+        ],
+        "evidence": "evidence.tsv linker rows 0x8029D678-0x8029D684, 0x8029D684-0x8029D6BC, 0x8029D6C8-0x8029D758 and 0x8029D75C-0x8029D77C: file-static functions SN linker discarded; only their pools and strings remain"
+      }
+    },
+    {
       "source": "src/game/gsflowman.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80032340-0x800324B0 (src/game/gsflowman.cpp) and its data rows.",

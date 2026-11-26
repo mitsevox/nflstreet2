@@ -8,11 +8,21 @@
 #include "game/fn_801BE60C.h"
 #include "game/AnimChanStartAnim.h"
 #include "game/Table_80089904.h"
+#include "engine/animchan.h"
 
 
 extern "C" {
+void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
+                 void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
+                 unsigned int size, const char *pName);
+void fn_800D760C(BitStream_t *pStream);
+void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+                 BitStream_t *pStream3, float t);
+int MathAngleDiff(int a, int b);
+float AnimSeqGetOpcodeTime(void *p, int key);
+void OSReport(const char *pMsg, ...);
 unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id);
-void fn_800D7A4C(Object_80039F5C *p, Block_801BE60C *pBlock);
+void PlyrAnimTurnComputeStep(Object_80039F5C *p, Block_801BE60C *pBlock);
 void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int fn_800CA5CC(Object_80039F5C *p, int kind, int apply);
@@ -30,6 +40,24 @@ extern float lbl_803EAD04;
 extern float lbl_803EAD08;
 extern float lbl_803EAD0C;
 extern float lbl_803EAD10;
+}
+
+extern "C" {
+static float _StrippedFramesToTime(int frames)
+{
+    return (float)frames + 1.0f;
+}
+}
+
+extern "C" {
+static void _StrippedPrintBlankName(int wide)
+{
+    if (!wide) {
+        OSReport("???                 ");
+    } else {
+        OSReport("???                           ");
+    }
+}
 }
 
 extern "C" void fn_800D760C(BitStream_t *pStream)
@@ -75,6 +103,23 @@ extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStr
     }
 }
 
+extern "C" void fn_800D77F0(void)
+{
+    ReplayRegisterChannel(fn_800D760C, fn_800D7708, 448, "Animations");
+}
+
+extern "C" {
+static void _StrippedCheckDownOpcodes(int anim, int hasPosition, int hasDown, int hasUp)
+{
+    if (hasPosition && !hasDown && !hasUp) {
+        OSReport("Anim %d has a POSITION opcode with no PLAYERDOWN or PLAYERUP opcode.", anim);
+    }
+    if (hasDown && !hasUp && !hasPosition) {
+        OSReport("Anim %d has a PLAYERDOWN opcode with no PLAYERUP or POSITION opcode.", anim);
+    }
+}
+}
+
 extern "C" void fn_800D782C(Object_80039F5C *p)
 {
     Ball_t *pBall = BallFindHeldBy(p);
@@ -99,6 +144,57 @@ extern "C" void fn_800D782C(Object_80039F5C *p)
     p->mUnknown778Unsigned = id;
 }
 
+extern "C" unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id)
+{
+    float best = -1.0f;
+    int search = 1;
+    unsigned char result = 0;
+    unsigned int count = AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, id);
+
+    switch (id) {
+    case 30:
+    case 31:
+    case 74:
+    case 77:
+    case 164:
+    case 181:
+    case 186:
+    case 247:
+        if (p->mUnknown776) {
+            search = 0;
+        }
+        break;
+    }
+    if (!search) {
+        result = p->mUnknown776;
+    } else {
+        for (unsigned short i = 0; i < count; i++) {
+            int index = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, id, i);
+            if (p->mpUnknown800[index].mUnknown30.mUnknown0 > best) {
+                best = p->mpUnknown800[index].mUnknown30.mUnknown0;
+                if (p->mpUnknown800[index].mUnknown7 & 0x10) {
+                    result = 1;
+                } else if (p->mpUnknown800[index].mUnknown7 & 0x20) {
+                    result = 2;
+                } else if (p->mpUnknown800[index].mUnknown7 & 1) {
+                    result = 1;
+                } else {
+                    result = 2;
+                }
+            }
+        }
+    }
+    return result;
+}
+
+extern "C" {
+static float _StrippedGetHoldWeight(int index)
+{
+    static const float weights[8] = {0.14f, 0.4f, 0.4f, 0.14f, 1.0f, 0.0f, 1.6f, 1.0f};
+    return weights[index];
+}
+}
+
 extern "C" void fn_800D7A0C(Object_80039F5C *p, int value)
 {
     p->mUnknown776 = value;
@@ -110,6 +206,28 @@ extern "C" void fn_800D7A18(Object_80039F5C *p)
     p->mUnknown778Unsigned = fn_801BE648(p->mpUnknown792);
 }
 
+extern "C" void PlyrAnimTurnComputeStep(Object_80039F5C *p, Block_801BE60C *pBlock)
+{
+    pBlock->mUnknownCHalf = pBlock->mUnknown0Word = 0;
+    PlyrMoveCmd_t *pMove = &p->mUnknown512;
+    State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
+    if (pMove->mUnknown14 == 6 && pState->mUnknown11) {
+        int facing = p->mMotion.mFacing;
+        if (pBlock->mUnknown24Float > 0.0f) {
+            facing += (int)(pBlock->mUnknown1CWord * (pBlock->mUnknown24Float / pBlock->mUnknown20Float));
+        }
+        int turn = MathAngleDiff(facing, pMove->mUnknown8);
+        if (((pMove->mUnknown8 - facing) & 0xFFFFFF) > 0x800000) {
+            turn = -turn;
+        }
+        float frames = AnimSeqGetOpcodeTime(p->mpUnknown800[pBlock->mUnknown4Word].mUnknown4C.mpUnknown0, 0xC006);
+        pBlock->mUnknown24Float -= 1.0f;
+        turn = (int)(turn / frames);
+        pBlock->mUnknown0Word = turn;
+        pBlock->mUnknownCHalf = (int)frames;
+    }
+}
+
 extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
@@ -119,7 +237,7 @@ extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
         unsigned char saved = p->mUnknown512.mUnknown14;
         p->mUnknown512.mUnknown14 = 6;
         PlyrTackleAimAtCarrier(p, pState);
-        fn_800D7A4C(p, pBlock);
+        PlyrAnimTurnComputeStep(p, pBlock);
         int n = (int)count;
         int value = pBlock->mUnknown0Word * pBlock->mUnknownCHalf / n;
         pBlock->mUnknownCHalf = n;
@@ -203,7 +321,7 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
         }
         p->mpUnknown800[pBlock->mUnknown4Word].mUnknown2C = scale;
         AnimMomentumInit(&pBlock->mUnknown28, (AnimMomentumActor_t *)p, pBlock->mUnknown4Word);
-        fn_800D7A4C(p, pBlock);
+        PlyrAnimTurnComputeStep(p, pBlock);
         if (pState->mUnknown5 == 3) {
             fn_800AE7F0(6, fn_80178320(), p);
             if (pState->mUnknown5 == 3 && pBlock->mUnknownCHalf != 0) {

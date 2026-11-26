@@ -2568,84 +2568,6 @@
       ]
     },
     {
-      "source": "src/game/cu_800D77F0.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D77F0 and its string-literal slice 0x8029D6BC-0x8029D6C8; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D77F0",
-          "end": "0x800D782C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D6BC",
-          "end": "0x8029D6C8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D77F0",
-          "start": "0x800D77F0",
-          "end": "0x800D782C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800D78C4.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D78C4 and its literal-pool slice 0x8029D758-0x8029D75C; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D78C4",
-          "end": "0x800D7A0C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D758",
-          "end": "0x8029D75C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D78C4",
-          "start": "0x800D78C4",
-          "end": "0x800D7A0C"
-        }
-      ]
-    },
-    {
-      "source": "src/game/cu_800D7A4C.cpp",
-      "profile": "game_cpp",
-      "evidence": "Comparison source fragment of the provisional src/game/cu_800D760C.cpp grouping: target whole-function extent of 0x800D7A4C and its literal-pool slice 0x8029D77C-0x8029D790; the split permits independent compilation of a partial literal pool and does not claim an original file boundary.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800D7A4C",
-          "end": "0x800D7BC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x8029D77C",
-          "end": "0x8029D790"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_800D7A4C",
-          "start": "0x800D7A4C",
-          "end": "0x800D7BC4"
-        }
-      ]
-    },
-    {
       "source": "src/game/PlyrTackle.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800E3CC0-0x800EAD44 (src/game/PlyrTackle.cpp) and its data rows. The 14 comparison sources of the range are merged into this one translation unit (all 62 functions in address order, the four previously unwritten bodies included); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
@@ -20789,7 +20711,7 @@
     {
       "source": "src/game/cu_800D760C.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, exact function rows of its eight registered bodies, and exact .rodata data row 0x8029D790-0x8029D7B8 (literals of fn_800D7BC4, fn_800D7D78 and fn_800D7E9C). The other three bodies 0x800D77F0, 0x800D78C4 and 0x800D7A4C are measured in the comparison fragments src/game/cu_800D77F0.cpp, src/game/cu_800D78C4.cpp and src/game/cu_800D7A4C.cpp with their literal slices; all static storage remains original and unmeasured.",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata rows 0x8029D6BC-0x8029D7B8. The two file-static functions SN's linker discarded (_StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
       "sections": [
         {
           "section": ".text",
@@ -20800,7 +20722,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x8029D790",
+          "start": "0x8029D678",
           "end": "0x8029D7B8"
         }
       ],
@@ -20816,9 +20738,19 @@
           "end": "0x800D77F0"
         },
         {
+          "symbol": "fn_800D77F0",
+          "start": "0x800D77F0",
+          "end": "0x800D782C"
+        },
+        {
           "symbol": "fn_800D782C",
           "start": "0x800D782C",
           "end": "0x800D78C4"
+        },
+        {
+          "symbol": "fn_800D78C4",
+          "start": "0x800D78C4",
+          "end": "0x800D7A0C"
         },
         {
           "symbol": "fn_800D7A0C",
@@ -20829,6 +20761,11 @@
           "symbol": "fn_800D7A18",
           "start": "0x800D7A18",
           "end": "0x800D7A4C"
+        },
+        {
+          "symbol": "PlyrAnimTurnComputeStep",
+          "start": "0x800D7A4C",
+          "end": "0x800D7BC4"
         },
         {
           "symbol": "fn_800D7BC4",
@@ -20845,6 +20782,12 @@
           "start": "0x800D7E9C",
           "end": "0x800D8140"
         }
+      ],
+      "discarded": [
+        "_StrippedFramesToTime",
+        "_StrippedPrintBlankName",
+        "_StrippedCheckDownOpcodes",
+        "_StrippedGetHoldWeight"
       ]
     },
     {
