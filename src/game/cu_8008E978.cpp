@@ -33759,19 +33759,27 @@ extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
             return 0;
         case 6:
         case 8:
-            if (pOwner == 0) {
-                return 1;
+            {
+                int result = 1;
+
+                if (pOwner != 0 && (pOwner->mFlags & 0x800)) {
+                    result = 0;
+                }
+                return result;
             }
-            return !(pOwner->mFlags & 0x800);
         }
         break;
-    case 0:
+    case 0: {
+        int result = 1;
+
         switch (pSource->mUnknown54) {
         case 9:
         case 10:
-            return 0;
+            result = 0;
+            break;
         }
-        break;
+        return result;
+    }
     }
     return 1;
 }
