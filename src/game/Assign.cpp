@@ -1286,7 +1286,7 @@ extern "C" {
 extern float lbl_803EAE48;
 }
 
-/* View of the block at player +336 used by fn_800F8D2C and fn_800F9024. */
+/* View of the block at player +336 used by AssignBlockApproachUpdate and fn_800F9024. */
 struct Block_800F8D2C {
     int mRef;
     int mUnknown4;
@@ -3498,7 +3498,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_800F8D24(Object_80039F5C *p);
-extern "C" int fn_800F8D2C(Object_80039F5C *p);
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p);
 extern "C" int fn_800F9024(Object_80039F5C *p);
 extern "C" int fn_800F930C(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p);
@@ -3791,7 +3791,7 @@ Input_800B6D34 lbl_802DAAD0 = {0};
 }
 
 static int (*lbl_802DAB38[4])(Object_80039F5C *p) = {
-    fn_800F8D24, fn_800F8D2C, fn_800F9024, fn_800F930C,
+    fn_800F8D24, AssignBlockApproachUpdate, fn_800F9024, fn_800F930C,
 };
 
 extern "C" {
@@ -7512,7 +7512,7 @@ extern "C" int fn_800F8D24(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F8D2C(Object_80039F5C *p) {
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p) {
     Block_800F8D2C *pBlock = (Block_800F8D2C *)&p->mUnknown336;
     Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mRef);
 
@@ -7566,24 +7566,47 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
                 if (pBlock->mUnknown16 > 60) {
                     return 0;
                 }
-            } else if (side == 1 ? angle < 0x400000 : angle > 0x400000) {
-                if (pBlock->mUnknown16 > 30) {
-                    return 0;
-                }
-            } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
-                if (fabsf(delta.mX) < 2.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (pBlock->mUnknown16 > 45) {
-                    return 0;
+            } else if (side == 1) {
+                if (angle < 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             } else {
-                if (fabsf(delta.mX) < 1.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (delta.mY > -5.0f) {
-                    pBlock->mUnknown22 = 2;
-                    return 1;
+                if (angle > 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             }
         } else {
