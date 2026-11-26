@@ -1,31 +1,16 @@
-#include <string.h>
-
-#include <dolphin/gx/GXBump.h>
-#include <dolphin/gx/GXCull.h>
-#include <dolphin/gx/GXGeometry.h>
-#include <dolphin/gx/GXLighting.h>
-#include <dolphin/gx/GXPixel.h>
-#include <dolphin/gx/GXTev.h>
-#include <dolphin/gx/GXTexture.h>
-#include <dolphin/gx/GXTransform.h>
-#include <dolphin/gx/GXVert.h>
-#include "UIStudio/UIStudio.h"
-#include "engine/Resource.h"
-#include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
-#include "engine/viewport.h"
-#include "game/fn_801D2B7C.h"
-#include "game/ResOpenDevice.h"
 
 /* UI colour styles: looks up a colour-style item (a colour table) of the
    global UI library and caches the last lookup, so the node and text renderers
-   can recolour their corners and glyphs by palette index; and resets that
-   cache. The lookup is a documented holdout and keeps its original bytes. */
+   can recolour their corners and glyphs by palette index; resets that cache;
+   and swaps a texture node's palette for a library palette around a draw,
+   saving the node's own palette in _PaletteData. */
 
 static Uint32 _UIGColorStyle_uCacheFile;
 static Uint32 _UIGColorStyle_uCacheItem;
 static UIGLibrary_t *_UIGColorStyle_pCacheLibrary;
 static Int32 _UIGColorStyle_pCacheColorStyle;
+static unsigned short *_PaletteData = NULL;
 
 Int32 UIGCSGetColorStyle(Int32 a, Int32 b)
 {
@@ -54,4 +39,34 @@ void UIGCSResetColorStyleCache(void)
     _UIGColorStyle_uCacheFile = -1;
     _UIGColorStyle_pCacheLibrary = NULL;
     _UIGColorStyle_uCacheItem = -1;
+}
+
+Int32 UIGCSLoadPalette(Int32 a, Int32 b)
+{
+    UIGLibrary_t *pObject;
+
+    pObject = UIGLibraryGetGlobal(1);
+    if (pObject == NULL) {
+        return 0;
+    }
+    return UIGLibraryLoadItem(pObject, a, b);
+}
+
+void UIGCSSwapPalette(Int32 a, Int32 b, Int32 c)
+{
+    Int32 p;
+
+    _PaletteData = UIGTexNodeGetPalette((struct UIGTexNode_t *)c);
+    p = UIGCSLoadPalette(a, b);
+    if (p != 0) {
+        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, (unsigned short *)p);
+    }
+}
+
+void UIGCSRestorePalette(Int32 a, Int32 b, Int32 c)
+{
+    if (_PaletteData != NULL) {
+        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, _PaletteData);
+    }
+    _PaletteData = NULL;
 }

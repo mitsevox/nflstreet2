@@ -87,7 +87,7 @@ void MsgGameGetPlayerStatus(int, int *, int *);
 int UserProfileGetSelected(unsigned char);
 int TeamLogoGetSlot(int);
 void *UIGLibraryGetGlobal(int);
-unsigned char *UIGRenderLoadPalette(int, int);
+unsigned char *UIGCSLoadPalette(int, int);
 void *LLUIGTexNodeGet(void *, int, int);
 void TMTexLibReplaceClut(void *, TexFilePalette_t *, int, void *);
 void TMTexLibReplaceTexture(void *, void *, int, TexFileImage_t *, int, int);
@@ -224,7 +224,7 @@ void HotspotLoadTeamLogos(BigObj_t *)
         if (value == 0) {
             int slot;
             if (i == 0) slot = 0; else slot = 1;
-            pPalette = UIGRenderLoadPalette(5, TeamLogoGetSlot(slot));
+            pPalette = UIGCSLoadPalette(5, TeamLogoGetSlot(slot));
         }
         _Hotspot_aLogo[i].mImage.mWidth = pTexture->mWidth;
         _Hotspot_aLogo[i].mImage.mHeight = pTexture->mHeight;

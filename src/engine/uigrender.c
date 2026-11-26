@@ -1,27 +1,11 @@
-#include <string.h>
-
-#include <dolphin/gx/GXBump.h>
-#include <dolphin/gx/GXCull.h>
-#include <dolphin/gx/GXGeometry.h>
-#include <dolphin/gx/GXLighting.h>
-#include <dolphin/gx/GXPixel.h>
-#include <dolphin/gx/GXTev.h>
-#include <dolphin/gx/GXTexture.h>
-#include <dolphin/gx/GXTransform.h>
-#include <dolphin/gx/GXVert.h>
-#include "UIStudio/UIStudio.h"
-#include "engine/Resource.h"
 #include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
 #include "engine/viewport.h"
-#include "game/fn_801D2B7C.h"
-#include "game/ResOpenDevice.h"
 
-/* UI graphics render state shared by the node renderers: the texture palette
-   swap for image nodes, the active and last renderer words, the stack of
-   colour states (multiply and add colours pushed by transform nodes), and the
-   transform node that pushes and pops the matrix and colour state around its
-   children. */
+/* UI graphics render state shared by the node renderers: the active and last
+   renderer words, the stack of colour states (multiply and add colours pushed
+   by transform nodes), and the transform node that pushes and pops the matrix
+   and colour state around its children. */
 
 /* Transform record read by UIGRenderPushTransform; +0x30 is not accessed and the size is not established. */
 typedef struct UIGTransform_t {
@@ -35,48 +19,15 @@ typedef struct UIGTransform_t {
 } UIGTransform_t;
 
 static UIGMaterialColorState_t _UIGRender_aColorStates[8];
-static unsigned short *_UIGRender_pSavedPalette = NULL;
-static Int32 _UIGRender_iUnreferenced = 0;
 static UIGMaterialColorState_t *_UIGRender_pColorState = _UIGRender_aColorStates;
 static Int32 _UIGRender_iActive = 0;
 static Int32 _UIGRender_iLast = 0;
 static Uint8 _UIGRender_bActiveValid = 0;
 static Int32 _UIGRender_iColorState;
 
-Int32 UIGRenderLoadPalette(Int32 a, Int32 b);
 void UIGRenderResetColorState(void);
 void UIGRenderPushTransform(void *p);
 void UIGRenderPopTransform(void *p);
-
-Int32 UIGRenderLoadPalette(Int32 a, Int32 b)
-{
-    UIGLibrary_t *pObject;
-
-    pObject = UIGLibraryGetGlobal(1);
-    if (pObject == NULL) {
-        return 0;
-    }
-    return UIGLibraryLoadItem(pObject, a, b);
-}
-
-void UIGRenderSwapPalette(Int32 a, Int32 b, Int32 c)
-{
-    Int32 p;
-
-    _UIGRender_pSavedPalette = UIGTexNodeGetPalette((struct UIGTexNode_t *)c);
-    p = UIGRenderLoadPalette(a, b);
-    if (p != 0) {
-        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, (unsigned short *)p);
-    }
-}
-
-void UIGRenderRestorePalette(Int32 a, Int32 b, Int32 c)
-{
-    if (_UIGRender_pSavedPalette != NULL) {
-        UIGTexNodeSetPalette((struct UIGTexNode_t *)c, _UIGRender_pSavedPalette);
-    }
-    _UIGRender_pSavedPalette = NULL;
-}
 
 void UIGRenderSetActive(Int32 a)
 {

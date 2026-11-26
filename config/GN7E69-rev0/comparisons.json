@@ -29480,13 +29480,19 @@
     {
       "source": "src/engine/UIGColorStyle.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80220B4C-0x80220BFC (src/engine/UIGColorStyle.c), its function and name rows, the file compiler row and the exact data rows of its .sbss; the file is linked with holdouts and its holdout 0x80220B4C (HOLDOUT source-form row) is measured here.",
+      "evidence": "evidence.tsv provisional unit row 0x80220B4C-0x80220CDC (src/engine/UIGColorStyle.c), its function and name rows, the file compiler row and the exact data rows of its .sdata and .sbss; the file is linked with holdouts and its holdout UIGCSGetColorStyle 0x80220B4C (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80220B4C",
-          "end": "0x80220BFC"
+          "end": "0x80220CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF48",
+          "end": "0x803EBF4C"
         },
         {
           "section": ".sbss",
@@ -29505,13 +29511,28 @@
           "symbol": "UIGCSResetColorStyleCache",
           "start": "0x80220BE0",
           "end": "0x80220BFC"
+        },
+        {
+          "symbol": "UIGCSLoadPalette",
+          "start": "0x80220BFC",
+          "end": "0x80220C4C"
+        },
+        {
+          "symbol": "UIGCSSwapPalette",
+          "start": "0x80220C4C",
+          "end": "0x80220CA4"
+        },
+        {
+          "symbol": "UIGCSRestorePalette",
+          "start": "0x80220CA4",
+          "end": "0x80220CDC"
         }
       ]
     },
     {
       "source": "src/engine/uigtext.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/cu_80221BF0.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout fn_80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/uigtext.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout UIGTextLayout 0x80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",

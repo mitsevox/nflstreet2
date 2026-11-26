@@ -28635,19 +28635,25 @@
             "evidence": "evidence.tsv source-form 0x80220310-0x80220988"
           }
         ],
-        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out fn_8021F984, fn_8021FB30, fn_80220310."
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
       }
     },
     {
       "source": "src/engine/UIGColorStyle.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/UIGColorStyle.c (0x80220B4C-0x80220BFC) and the data rows of its .sbss; linked with holdouts (owner ruling of 2026-11-20): 1 of 2 functions exact, the holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/UIGColorStyle.c (0x80220B4C-0x80220CDC) and the data rows of its .sdata and .sbss; linked with holdouts (owner ruling of 2026-11-20): 4 of 5 functions exact, the holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80220BE0",
-          "end": "0x80220BFC"
+          "end": "0x80220CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF48",
+          "end": "0x803EBF4C"
         },
         {
           "section": ".sbss",
@@ -28663,18 +28669,18 @@
             "evidence": "evidence.tsv source-form 0x80220B4C-0x80220BE0"
           }
         ],
-        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/UIGColorStyle.c holds out fn_80220B4C."
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/UIGColorStyle.c holds out UIGCSGetColorStyle."
       }
     },
     {
       "source": "src/engine/uigrender.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row of src/engine/uigrender.c (0x80220BFC-0x80221314) and the data rows of its whole data sections; all 15 functions exact.",
+      "evidence": "evidence.tsv unit row of src/engine/uigrender.c (0x80220CDC-0x80221314) and the data rows of its whole data sections; all 12 functions exact.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80220BFC",
+          "start": "0x80220CDC",
           "end": "0x80221314"
         },
         {
@@ -28692,7 +28698,7 @@
         {
           "section": ".sdata",
           "placement": ".data5",
-          "start": "0x803EBF48",
+          "start": "0x803EBF50",
           "end": "0x803EBF60"
         },
         {
@@ -28706,7 +28712,7 @@
     {
       "source": "src/engine/uigtext.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_80221BF0.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 8 of 9 functions exact, the holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/uigtext.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 8 of 9 functions exact, the holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28740,7 +28746,7 @@
             "evidence": "evidence.tsv source-form 0x80221DB0-0x80222220"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table) and lane e1b merge notes (PR #1455 holdouts table): src/engine/cu_80221BF0.c holds out fn_80221DB0."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table) and lane e1b merge notes (PR #1455 holdouts table): src/engine/uigtext.c holds out UIGTextLayout."
       }
     },
     {

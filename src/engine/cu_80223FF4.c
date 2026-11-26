@@ -86,11 +86,11 @@ void fn_802254F8(UIGNode_t *pNode)
         Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        UIGRenderSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
     fn_80225958(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        UIGRenderRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 

@@ -23,8 +23,7 @@
    a string out into lines (newline split, word or character wrap, trimming),
    answers cursor-position queries, handles the node's load/unload/draw and
    property messages, and draws each line with the font renderer in the node's
-   colours. The layout function UIGTextLayout is a documented holdout and keeps
-   its original bytes. */
+   colours. */
 
 extern void *memcpy();
 
@@ -118,7 +117,7 @@ void UIGTextGetCursorPos(UIGText_t *pText, Int32 Offset, Int32 *pA, Int32 *pB)
     i = pText->NumRanges;
     while (i-- != 0) {
         pRange = UIGTextGetLine(pText, i);
-        /* FAKEMATCH: unsigned compare (cmplw at 0x80221C90) written as a cast of Offset */
+        // FAKEMATCH: unsigned compare (cmplw at 0x80221C90) written as a cast of Offset
         if (pRange->unk_00 <= (Uint32)Offset) {
             break;
         }
