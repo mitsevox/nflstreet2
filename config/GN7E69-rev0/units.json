@@ -27533,7 +27533,14 @@
           }
         ],
         "evidence": "LLFont.c holdout covering FontLLUploadPalettes. The complete body remains under the unchanged engine_c comparison profile."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_FontLLRenderMapScratch",
+          "start": "0x803E763C",
+          "end": "0x803E91F8"
+        }
+      ]
     },
     {
       "source": "src/engine/colorRamp.c",

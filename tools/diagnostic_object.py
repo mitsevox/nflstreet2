@@ -123,10 +123,16 @@ def fragment(native, section, offset, size, target_start, functions, targets, pl
         name = symbol['name']
         value = symbol['value'] + addend
         if symbol['shndx'] == sb.SHN_COMMON:
-            # COMMON storage has no section; only an evidenced storage address locates it.
-            if storage is None or index - 1 not in storage:
+            # COMMON storage has no section; only an evidenced storage address locates it: the
+            # comparison's own storage map, or the address the verified source build placed a linked
+            # unit's mapped COMMON symbol at (function_compare.reference_addresses), which covers a
+            # holdouts file whose COMMON lies outside its own uninitialized placements.
+            if storage is not None and index - 1 in storage:
+                address = storage[index - 1] + addend
+            elif name in externals:
+                address = externals[name] + addend
+            else:
                 raise ValueError(f'Comparison common symbol {name} lacks an evidenced storage address')
-            address = storage[index - 1] + addend
         elif symbol['shndx'] == sb.SHN_UNDEF:
             neutral = sb.NEUTRAL.fullmatch(name)
             if name in externals:
