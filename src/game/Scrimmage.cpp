@@ -101,8 +101,8 @@ GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetModeAll(int a);
 int fn_801486A0(void);
 void PlyrStarSetShown(int a, int b);
-void fn_80164C4C(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
-int fn_801650BC(PlayBookPlay_t *pRecord);
+void PlayAlignIssueTeamRoutes(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
+int PlayAlignIsPlayType11To18(PlayBookPlay_t *pRecord);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void PlayTrackUpdateSummary(void);
 void ClockRuleSnap(void);
@@ -428,8 +428,8 @@ extern "C" void ScrmStartPlay(void)
     fn_800FAD2C();
     PlayTrackUpdateSummary();
     fn_800FAECC(1);
-    fn_80164C4C(PlayBookGetFormation(team), PlayBookGetPlay(team), team, 0);
-    fn_80164C4C(PlayBookGetFormation(other), PlayBookGetPlay(other), other, 0);
+    PlayAlignIssueTeamRoutes(PlayBookGetFormation(team), PlayBookGetPlay(team), team, 0);
+    PlayAlignIssueTeamRoutes(PlayBookGetFormation(other), PlayBookGetPlay(other), other, 0);
 
     count = fn_80178D70(team);
     for (i = 0; i < count; i++) {
@@ -475,7 +475,7 @@ extern "C" void ScrmStartPlay(void)
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
         PlayBookPlay_t *pRecord = PlayBookGetPlay(side);
 
-        if (fn_801650BC(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
+        if (PlayAlignIsPlayType11To18(pRecord) == 0 && pRecord->mUnknown14 != 4 && pRecord->mUnknown14 != 2) {
             CamGameSetModeAll(2);
             CamFreeClearVelocity(pCamera);
         }

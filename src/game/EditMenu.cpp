@@ -78,12 +78,12 @@ int DbCursorGetRow(DbCursor *pObject);
 int TeamDbGetColor1(DbCursor *pObject);
 int TeamDbGetColor2(DbCursor *pObject);
 int TeamDbGetColor3(DbCursor *pObject);
-void fn_8007BA48(DbCursor *pObject);
-void fn_8007BB04(DbCursor *pObject);
-int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult);
-void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size);
-int fn_8007BF14(int a);
-int fn_8007C690(DbCursor *pCursor, short *pOut);
+void GearDbOpen(DbCursor *pObject);
+void GearDbClose(DbCursor *pObject);
+int GearDbSeekTypeId(DbCursor *pCursor, int a, int b, int *pResult);
+void GearDbGetName(DbCursor *pCursor, char *pBuffer, int size);
+int GearDbGetSlotType(int a);
+int GearDbReadBoosts(DbCursor *pCursor, short *pOut);
 void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues);
@@ -453,7 +453,7 @@ void EditMenuReloadTeam(void)
     Desc_8008044C desc;
     int status;
 
-    fn_8008056C(&gEditMenuPlayerCursor);
+    PlayerCursorClose(&gEditMenuPlayerCursor);
     if (EditMenuIsStoryTeam()) {
         fn_8018C48C(0x54415453);
         if (StoryTeamExists(_EditMenu_cTeamSlot)) {
@@ -814,16 +814,16 @@ void EditMenuGetGearNames(int *pCount, MenuArg_t *pList)
         int type;
         int seen;
 
-        fn_8007BA48(&query);
+        GearDbOpen(&query);
         seen = 0;
         PlayerDbSeekId(EditMenuGetPlayerCursor(), CreatePlayerGetPlayerId(), 0);
         PlayerDbReadGear(EditMenuGetPlayerCursor(), &info);
         for (i = 0; i < 14; i++) {
-            type = fn_8007BF14(i);
-            fn_8007BB84(&query, type, info.mValues[i], 0);
-            if (fn_8007C690(&query, 0)) {
+            type = GearDbGetSlotType(i);
+            GearDbSeekTypeId(&query, type, info.mValues[i], 0);
+            if (GearDbReadBoosts(&query, 0)) {
                 if ((type != 6 || !seen) && *pCount < 10) {
-                    fn_8007BE20(&query, buffer, 32);
+                    GearDbGetName(&query, buffer, 32);
                     strnzcpy(pList[*pCount].pParams->mpText, buffer, pList[*pCount].pParams->mLength);
                     (*pCount)++;
                 }
@@ -832,7 +832,7 @@ void EditMenuGetGearNames(int *pCount, MenuArg_t *pList)
                 }
             }
         }
-        fn_8007BB04(&query);
+        GearDbClose(&query);
     }
 }
 
@@ -1285,7 +1285,7 @@ void EditMenuEnd(void)
 {
     if (_EditMenu_bActive) {
         TeamDbClose(&gEditMenuTeamCursor);
-        fn_8008056C(&gEditMenuPlayerCursor);
+        PlayerCursorClose(&gEditMenuPlayerCursor);
         if (EditMenuIsStoryTeam()) {
             fn_8018C48C(0x54415453);
             if (MsgGameGetSetupState() == 1 && EditMenuGetMode() == 3) {

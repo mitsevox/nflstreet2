@@ -94,11 +94,11 @@ static inline void fn_801C3EFC_Rot(int x, int y, int z)
 void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
                  Limit_801C3EFC *pLimits, float *pTarget, int iterations)
 {
+    int rot[3];
     float toEnd[3];
     float toTarget[3];
     float jointPos[3];
     float mats[16][16];
-    int rot[3];
     float axis[3];
     float endPos[3];
     float q[4];

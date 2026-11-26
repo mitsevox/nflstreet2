@@ -2078,7 +2078,7 @@ void PlaybookUnlockPlay(int a,int value);
 int fn_800C8818(int team);
 void TeamFilterSet(void);
 void LogoUnlock(int value);
-void fn_8007BF60(int value);
+void GearDbUpgradeItem(int value);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int ChallengeBonusGet(void);
 void ChalCloseCursors(void);
@@ -2376,7 +2376,7 @@ void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLas
     PlayerDbGetFirstName(&_InGameScreens_LeaderCursor,first,12); strncpy(pFirst,first,firstSize);
     PlayerDbGetLastName(&_InGameScreens_LeaderCursor,last,15); strncpy(pLast,last,lastSize);
 }
-void InGameLeaderClose(void) {fn_8008056C(&_InGameScreens_LeaderCursor);}
+void InGameLeaderClose(void) {PlayerCursorClose(&_InGameScreens_LeaderCursor);}
 void InGameLeaderOpen(int team)
 {
     Desc_8008044C desc;
@@ -2537,7 +2537,7 @@ void InGameRewardGrant(int kind,int value)
     switch(kind) {
     case 1:ChalSetDevPoints(ChalGetDevPoints()+value);break;
     case 2:GearUnlock(ChalGetGearReward(value));break;
-    case 8:fn_8007BF60(value);break;
+    case 8:GearDbUpgradeItem(value);break;
     case 7:PlaybookUnlockPlay(1,value);break;
     case 3:PlaybookUnlockPlay(0,value);break;
     case 5:LogoUnlock(value);break;

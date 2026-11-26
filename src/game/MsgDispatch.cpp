@@ -11,7 +11,7 @@
 extern "C" {
 int MsgPlayerPickupHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MsgChallengeHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
-int fn_8001FE10(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
+int MsgEATraxHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int MsgTutorialHandleMessage(unsigned int id, void *pArgs, int unused, int *pResult);
 int MsgAudioSettingsHandleMessage(unsigned int id, OptionsScreenMsg_t *pBlock, int unused, int *pResult);
 int TournBracketMsg(unsigned int id, void *pArgs, int unused, int *pResult);
@@ -63,7 +63,7 @@ int MsgOptionsDispatch(int group, unsigned int id, MenuArg_t *pArgs, int unused,
     case 0:
         return OptionsScreenMsg(id, (OptionsScreenMsg_t *)pArgs, unused, pResult);
     case 1:
-        return fn_8001FE10(id, pArgs, unused, pResult);
+        return MsgEATraxHandleMessage(id, pArgs, unused, pResult);
     case 2:
         return MsgTutorialHandleMessage(id, pArgs, unused, pResult);
     case 5:

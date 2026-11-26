@@ -1,10 +1,15 @@
+/* The player gear database: opens, seeks and reads the gear table of the game database (each piece's
+   type, id, name and look), maps the 14 gear slots of a player to gear types, reads a piece's rating
+   boosts, and upgrades a gear item to its next level for the current profile, carrying the unlocks and
+   every created player's equipped pieces over to the new level. */
+
 #include <string.h>
 
 #include "game/TDbCompilePerformOp.h"
 #include "game/DbTableCursorInline.h"
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Row_8007BC34.h"
+#include "game/GearDb.h"
 #include "game/DbSortKey.h"
 
 extern "C" {
@@ -21,10 +26,7 @@ void CreateTeamPlayerCursorOpen(DbCursor *pCursor, int index);
 void CreateTeamPlayerCursorClose(DbCursor *pCursor);
 }
 
-extern "C" {
-}
-
-static int sColumnTags[33] = {
+static int _GearDb_aColumnTags[33] = {
     0x48545247, 0x54485447, 0x4C475447, 0x52545447, 0x50535447, 0x43425447, 0x424C5447,
     0x42455447, 0x41465447, 0x52575447, 0x44485447, 0x48545447, 0x4E4B5447, 0x53555447,
     0x534C5447, 0x48535447, 0x594B5047, 0x44494547, 0x4D4E5247, 0x54534247, 0x49545247,
@@ -32,50 +34,50 @@ static int sColumnTags[33] = {
     0x44425547, 0x53485247, 0x41485247, 0x54485247, 0x44544847
 };
 
-static int sShortColumnTags[10] = {
+static int _GearDb_aBoostTags[10] = {
     0x4C474147, 0x504D4A47, 0x4B544247, 0x43544347, 0x44505347,
     0x4B435447, 0x53535047, 0x4B4C4247, 0x564F4347, 0x43544447
 };
 
-static int sIndexA[14] = { 0, 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12 };
-static int sIndexB[13] = { 0, 1, 2, 3, 4, 5, 14, 8, 9, 10, 11, 12, 13 };
+static int _GearDb_aSlotType[14] = { 0, 1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12 };
+static int _GearDb_aTypeSlot[13] = { 0, 1, 2, 3, 4, 5, 14, 8, 9, 10, 11, 12, 13 };
 
-static DbSortKey sKeys[2] = {
+static DbSortKey _GearDb_aIdSortKeys[2] = {
     { 0x52414547, 0x44494547, 0, 0 },
     { -1, -1, 3, 0 },
 };
 
 extern "C" {
 
-void fn_8007BA48(DbCursor *pCursor)
+void GearDbOpen(DbCursor *pCursor)
 {
     DbCursorOpen(pCursor, 0x52414547, 0x594B5047, 0, 0, 0x54415453);
 }
 
-void fn_8007BA88(DbCursor *pCursor, int value)
+void GearDbOpenType(DbCursor *pCursor, int value)
 {
     DbFilter arg;
 
     arg.Set(6, 0x5241454749545247LL, 3, value);
-    DbCursorOpen(pCursor, 0x52414547, 0x594B5047, sKeys, &arg, 0x54415453);
+    DbCursorOpen(pCursor, 0x52414547, 0x594B5047, _GearDb_aIdSortKeys, &arg, 0x54415453);
 }
 
-void fn_8007BB04(DbCursor *pCursor)
+void GearDbClose(DbCursor *pCursor)
 {
     DbCursorClose(pCursor);
 }
 
-int fn_8007BB24(DbCursor *pCursor)
+int GearDbGetKey(DbCursor *pCursor)
 {
     return DbCursorGetInt(pCursor, 0x594B5047);
 }
 
-int fn_8007BB4C(DbCursor *pCursor, int key, int *pResult)
+int GearDbSeekKey(DbCursor *pCursor, int key, int *pResult)
 {
     return DbCursorFindInt(pCursor, 0x594B5047, key, 0, pResult);
 }
 
-int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult)
+int GearDbSeekTypeId(DbCursor *pCursor, int a, int b, int *pResult)
 {
     DbColumnValue list[3];
 
@@ -88,19 +90,19 @@ int fn_8007BB84(DbCursor *pCursor, int a, int b, int *pResult)
     return DbCursorFindRow(pCursor, list, 0, pResult);
 }
 
-int fn_8007BBFC(DbCursor *pCursor, int key, int *pResult)
+int GearDbSeekId(DbCursor *pCursor, int key, int *pResult)
 {
     return DbCursorFindInt(pCursor, 0x44494547, key, 0, pResult);
 }
 
-void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pOut)
+void GearDbReadRow(DbCursor *pCursor, GearRow_t *pOut)
 {
     DbColumnValue list[34];
     char *pSpace;
     int i;
 
     for (i = 0; i < 33; i++) {
-        list[i].Set(0x52414547, sColumnTags[i]);
+        list[i].Set(0x52414547, _GearDb_aColumnTags[i]);
         list[i].mValue = 0;
     }
     list[33].Set(-1, -1);
@@ -134,32 +136,32 @@ void fn_8007BC34(DbCursor *pCursor, Row_8007BC34 *pOut)
     }
 }
 
-unsigned int fn_8007BDF8(DbCursor *pCursor)
+unsigned int GearDbGetGrsi(DbCursor *pCursor)
 {
     return DbCursorGetInt(pCursor, 0x49535247);
 }
 
-void fn_8007BE20(DbCursor *pCursor, char *pBuffer, int size)
+void GearDbGetName(DbCursor *pCursor, char *pBuffer, int size)
 {
     DbCursorGetString(pCursor, 0x4D4E5247, (int)pBuffer, size);
 }
 
-int fn_8007BE54(DbCursor *pCursor)
+int GearDbGetId(DbCursor *pCursor)
 {
     return DbCursorGetInt(pCursor, 0x44494547);
 }
 
-int fn_8007BE7C(DbCursor *pCursor)
+int GearDbGetType(DbCursor *pCursor)
 {
     return DbCursorGetInt(pCursor, 0x49545247);
 }
 
-int fn_8007BEA4(DbCursor *pCursor)
+int GearDbGetGsti(DbCursor *pCursor)
 {
     return DbCursorGetInt(pCursor, 0x49545347);
 }
 
-int fn_8007BECC(int a, int b)
+int GearDbFindIdByGbst(int a, int b)
 {
     int value = 0;
 
@@ -168,24 +170,24 @@ int fn_8007BECC(int a, int b)
     return value;
 }
 
-int fn_8007BF14(int index)
+int GearDbGetSlotType(int index)
 {
-    return sIndexA[index];
+    return _GearDb_aSlotType[index];
 }
 
-int fn_8007BF28(int index)
+int GearDbGetTypeSlot(int index)
 {
-    return sIndexB[index];
+    return _GearDb_aTypeSlot[index];
 }
 
-int fn_8007C690(DbCursor *pCursor, short *pOut);
+int GearDbReadBoosts(DbCursor *pCursor, short *pOut);
 
-int fn_8007BF3C(DbCursor *pCursor)
+int GearDbHasBoosts(DbCursor *pCursor)
 {
-    return fn_8007C690(pCursor, 0);
+    return GearDbReadBoosts(pCursor, 0);
 }
 
-void fn_8007BF60(int id)
+void GearDbUpgradeItem(int id)
 {
     int index = DbUserFindIndex(DbUserGetCurrent());
     int handle = DbUserGetDb(DbUserGetCurrent());
@@ -258,7 +260,7 @@ void fn_8007BF60(int id)
                 do {
                     PlayerDbReadGear((Object_8008044C *)&teams, &record);
                     for (i = 0; i < 14; i++) {
-                        int type = fn_8007BF14(i);
+                        int type = GearDbGetSlotType(i);
 
                         for (j = 0; j < 2; j++) {
                             if (type == types[j] && record.mValues[i] == oldIds[j]) {
@@ -274,7 +276,7 @@ void fn_8007BF60(int id)
     }
 }
 
-int fn_8007C46C(int key)
+int GearDbGetCurrentKey(int key)
 {
     int a;
     int b;
@@ -297,7 +299,7 @@ int fn_8007C46C(int key)
     return key;
 }
 
-int fn_8007C538(int id)
+int GearDbIsItemUnlocked(int id)
 {
     int result = 0;
     DbFilter arg;
@@ -320,25 +322,25 @@ int fn_8007C538(int id)
     return result;
 }
 
-int fn_8007C67C(Row_8007BC34 *pRow)
+int GearDbIsNumberItem(GearRow_t *pRow)
 {
     return pRow->mUnknown64 == 5;
 }
 
-int fn_8007C690(DbCursor *pCursor, short *pOut)
+int GearDbReadBoosts(DbCursor *pCursor, short *pOut)
 {
     int result = 0;
     DbFilter arg;
     int i;
 
-    arg.Set(6, 0x50495247594B5047LL, 2, fn_8007BB24(pCursor));
+    arg.Set(6, 0x50495247594B5047LL, 2, GearDbGetKey(pCursor));
     {
         DbTableCursor rows(0x50495247, 0x594B5047, 0, &arg, 0x54415453);
 
         if (rows.GetRowCount() > 0 && rows.GetColumnValue(0x49544947) > 0) {
             if (pOut) {
                 for (i = 0; i < 10; i++) {
-                    pOut[i] = rows.GetColumnValue(sShortColumnTags[i]);
+                    pOut[i] = rows.GetColumnValue(_GearDb_aBoostTags[i]);
                 }
             }
             result = 1;

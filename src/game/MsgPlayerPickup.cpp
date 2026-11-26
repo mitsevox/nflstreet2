@@ -474,9 +474,9 @@ void MsgPlayerPickupShutdown(void)
     MsgPlayerPickupApplyAdd();
     MsgPlayerPickupUnregisterPlayers();
     FEPlyrHide();
-    fn_8008056C(&_MsgPlayerPickup_PoolCursor);
-    fn_8008056C(&_MsgPlayerPickup_TeamCursor);
-    fn_8008056C(&_MsgPlayerPickup_RosterCursor);
+    PlayerCursorClose(&_MsgPlayerPickup_PoolCursor);
+    PlayerCursorClose(&_MsgPlayerPickup_TeamCursor);
+    PlayerCursorClose(&_MsgPlayerPickup_RosterCursor);
     FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
         StoryTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);

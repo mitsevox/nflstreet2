@@ -129,7 +129,6 @@ void StoryTournamentSetOptions(int value14, int value1);
 int StoryTournamentLoadCpuTeam(int digt);
 int StoryTournamentLoadUserTeam(int digt);
 
-#if defined(DECOMP_COMPARE)
 void StoryTournamentGetTeamName(int id, char *pName, int size)
 {
     char name[18];
@@ -179,7 +178,7 @@ void StoryTournamentCloseDbs(void)
         _StoryTournament_State.mOpen = 0;
     }
     ExpLevelClose();
-    fn_8008056C(_StoryTournament_pPlayerDb);
+    PlayerCursorClose(_StoryTournament_pPlayerDb);
     _StoryTournament_pPlayerDb = 0;
     StevClose();
     UserStatsClose(_StoryTournament_pUserStats);
@@ -516,7 +515,6 @@ int StoryTournamentLoadUserTeam(int digt)
     TeamDbLoadSideWithCopies(digt, list, 1, 7);
     return digt;
 }
-#endif
 
 void StoryTournamentSetupMatch(int dit1, int dit2, int lvlt)
 {
