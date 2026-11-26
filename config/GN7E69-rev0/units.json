@@ -14253,7 +14253,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the six holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -14265,18 +14265,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80164E30",
-          "end": "0x80164ED8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80165098",
-          "end": "0x80165110"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801651E0",
           "end": "0x80165464"
         },
         {
@@ -14315,18 +14303,6 @@
           {
             "function": "PlayAlignIssuePlayerRoute",
             "evidence": "evidence.tsv source-form 0x80164CE4-0x80164E30"
-          },
-          {
-            "function": "PlayAlignGetSlotPlayer",
-            "evidence": "evidence.tsv source-form 0x80164ED8-0x80165000"
-          },
-          {
-            "function": "PlayAlignSetSlotValue",
-            "evidence": "evidence.tsv source-form 0x80165000-0x80165098"
-          },
-          {
-            "function": "PlayAlignSwapOuterSlots",
-            "evidence": "evidence.tsv source-form 0x80165110-0x801651E0"
           },
           {
             "function": "PlayAlignLoadPlayRoutes",

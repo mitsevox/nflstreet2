@@ -326,12 +326,13 @@ unsigned char PlayAlignGetSlotPlayer(PlayBookFormation_t *object, PlayBookPlay_t
     }
     if (out) {
         if (slots && !override) {
-            if (!remap) *out = slots[slot][1];
+            // FAKEMATCH: slot bytes addressed as base + (index << 2), not slots[index][n]
+            if (!remap) *out = *((unsigned char *)slots + (slot << 2) + 1);
             else {
                 unsigned char n = PlaySetGetEntry(object, index, 0)->mUnknownB;
                 *out = 0;
                 for (int i = 0; i <= 2; ++i) {
-                    if (slots[i][0] == n) {*out = slots[i][1]; break;}
+                    if (*((unsigned char *)slots + (i << 2)) == n) {*out = *((unsigned char *)slots + (i << 2) + 1); break;}
                 }
             }
         } else *out = 0;
@@ -346,8 +347,9 @@ void PlayAlignSetSlotValue(PlayBookFormation_t *object, PlayBookPlay_t *record, 
         unsigned char (*slots)[4] = record->mUnknown1C;
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
         for (i = 0; i <= 2; ++i) {
-            if (index == slots[i][0]) {
-                slots[i][1] = value;
+            // FAKEMATCH: slot bytes addressed as base + (i << 2), not slots[i][n]
+            if (index == *((unsigned char *)slots + (i << 2))) {
+                *((unsigned char *)slots + (i << 2) + 1) = value;
                 return;
             }
         }
@@ -382,7 +384,8 @@ void PlayAlignSwapOuterSlots(PlayArtPlay_t *record, int force)
     if (PlayAlignHasSlots((PlayBookPlay_t *)record)) {
         PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
-            unsigned char index = *record->mUnknown1C[i];
+            // FAKEMATCH: slot byte addressed as record + (i << 2) + 0x1C, not record->mUnknown1C[i][0]
+            unsigned char index = *((unsigned char *)record + (i << 2) + 0x1C);
             PlyrGet(fn_80178308(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
