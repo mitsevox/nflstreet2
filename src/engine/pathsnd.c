@@ -166,6 +166,8 @@ int SNDstop(int handle);
 
 }
 
+/* Two equivalent node lookups: GetPathStatus matches only with the conditional form and
+   PathTrackSndBank::CheckStatus only with the if/else form (see the source-form row). */
 static inline PathSndNode_t *_PathSndNodePtr(int index)
 {
     return (index >= 0 && index <= pfstate->mpMap->mNodeCount)
@@ -536,14 +538,14 @@ void PathTrackSndBank::CheckStatus()
     SndSampleFormat_t format;
     PathSndNode_t *node;
     int result;
-    int voices;
+    int elapsed; /* ms played so far (voice metric * 10) */
     int beatsLeft;
     int length;
     int rate;
 
     memset(&mStatus, 0, sizeof(mStatus));
     mStatus.mVoice = -1;
-    voices = 0;
+    elapsed = 0;
     mStatus.unk_0xC = -1;
     mStatus.mNode = -1;
     result = -8;
@@ -557,12 +559,12 @@ void PathTrackSndBank::CheckStatus()
             length = 0;
             result = SNDBANK_patchinfo(mHandle, mPatch, &format, &attr, &desc);
             if (result >= 0) {
-                voices = AudioVoiceGetMaxMetric(mVoice);
-                if (voices < 0) {
+                elapsed = AudioVoiceGetMaxMetric(mVoice);
+                if (elapsed < 0) {
                     mVoice = mHandle = -1;
                     goto done;
                 }
-                voices *= 10;
+                elapsed *= 10;
                 rate = format.mRate;
                 length = (int)((float)desc.mFrames / (float)rate * 1000.0f);
                 node = _PathSndGetNode(mNode);
@@ -578,9 +580,9 @@ void PathTrackSndBank::CheckStatus()
             }
             mStatus.mBuffered = length;
             mLength = length;
-            mRemaining = voices;
-            mStatus.mRemaining = voices;
-            mStatus.mPosition = length * beatsLeft + voices;
+            mRemaining = elapsed;
+            mStatus.mRemaining = elapsed;
+            mStatus.mPosition = length * beatsLeft + elapsed;
             mStatus.unk_0x8 = mBeat;
             mStatus.unk_0xC = mStatus.mNode = mNode;
             mStatus.mVoice = mVoice;
