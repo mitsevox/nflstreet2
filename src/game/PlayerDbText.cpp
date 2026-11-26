@@ -124,7 +124,7 @@ extern "C" {
 void PlayerDbTextFormatField(char *pText, int field, int value);
 
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x152400. */
-unsigned char PlayerDbTextIsJerseyFree(short team, int jersey)
+unsigned char PlayerDbTextIsJerseyFree(int team, short jersey)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -132,7 +132,7 @@ unsigned char PlayerDbTextIsJerseyFree(short team, int jersey)
     int status;
 
     status = TDbCompilePerformOp(&cursor, "declare \x8a cursor for select * from 'YALP' where 'DIGT' = \x82 and 'NEJP' = \x82\n",
-                                 &result, jersey, team);
+                                 &result, team, jersey);
     if (status == 0 || status == 23 || status == 21 || status == 20) {
         if (result.mUnknown0 == 0) {
             bFree = 1;
@@ -181,6 +181,9 @@ void PositionAbbrevFormat(int slot, char *pText)
 
 /* Discarded by the GameCube linker: the default play-style text that the Xbox counterpart
    0x152690 copies inline at its start. */
+// FAKEMATCH: the Xbox 0x152690 initializes its local buffer with this literal; that natural form
+// (char szStyle[40] = "Pocket Passer "; in PlayerDbTextGetPlayStyle) places the string after the
+// other literals, so this helper stands in only to emit it at 0x802A5CAC.
 void PlayerDbTextGetDefaultPlayStyle(char *pText)
 {
     strcpy(pText, "Pocket Passer ");
@@ -210,7 +213,9 @@ void PlayerDbTextFormatPlayStyle(char *pText, int position, int rating)
     }
 }
 
-/* Discarded by the GameCube linker; body from the Xbox counterpart 0x152810. */
+/* Discarded by the GameCube linker; body from the Xbox counterpart 0x152810. The Xbox version returns
+   the position passed through a conversion helper with no identified GameCube counterpart; the raw
+   position is returned here. */
 int PlayerDbTextGetPosition(int player)
 {
     int position = 0;
@@ -239,7 +244,7 @@ int PlayerDbTextReadField(char *pText, int field, int player)
             TDbCompilePerformOp(0, "select 'SOPP' into \x82 from 'YALP' where 'DIGP' = \x82\n", &position, player);
             PlayerDbTextFormatPlayStyle(pText, position, tendency);
         }
-        break;
+        return value;
     case 1:
         if (field == 1) {
             status = TDbCompilePerformOp(0, "select \x8c into \x88 from 'YALP' where 'DIGP' = \x82\n",
@@ -268,13 +273,13 @@ void PlayerDbTextFormatField(char *pText, int field, int value)
             fn_801C2E18(pText, "Rookie");
         }
         break;
-    case 4:
+    case 8:
         fn_801C2E18(pText, "%d", value + 160);
         break;
     case 0:
         fn_801C2E18(pText, _PlayerDbText_apPositionNames[value]);
         break;
-    case 8:
+    case 6:
         fn_801C2E18(pText, "%d", value);
         break;
     case 11:
@@ -297,7 +302,7 @@ int PlayerDbTextGetJersey(int player)
 }
 
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x152690. */
-void PlayerDbTextGetPlayStyle(int player, char *pText)
+int PlayerDbTextGetPlayStyle(int player, char *pText)
 {
     char szStyle[40];
     char szPosition[12];
@@ -313,10 +318,11 @@ void PlayerDbTextGetPlayStyle(int player, char *pText)
     }
     tendency = PlayerDbTextReadField(szStyle, 12, player);
     PlayerDbTextFormatPlayStyle(pText, position, tendency);
+    return tendency;
 }
 
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x152AA0. */
-short PlayerDbTextFindFreeJersey(short team, int bUp, int jersey, short low, short high)
+short PlayerDbTextFindFreeJersey(int team, int bUp, short jersey, short low, short high)
 {
     QueryCursor cursor;
     QueryResult result;
