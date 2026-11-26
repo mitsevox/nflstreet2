@@ -8,8 +8,8 @@
 #include "game/fn_801D2B7C.h"
 #include "engine/lzh.h"
 
-extern Desc_802C2860 lbl_802C2848;
-extern Desc_802C2860 lbl_802C2854;
+extern LZHCodeSet_t lbl_802C2848;
+extern LZHCodeSet_t lbl_802C2854;
 extern unsigned char lbl_802C2878[];
 extern short lbl_802C2894[];
 extern unsigned char lbl_802C28D0[];
@@ -21,19 +21,19 @@ extern unsigned char lbl_803B7DD4[];
 extern int lbl_803ED42C;
 extern short lbl_803ED484;
 extern unsigned int (*lbl_803ED460)(short count);
-void fn_8028490C(Desc_802C2860 *p);
-void fn_80284968(Desc_802C2860 *p);
-void fn_80284AEC(Desc_802C2860 *p);
-void fn_80284D1C(Desc_802C2860 *p);
-void fn_80284DD0(Desc_802C2860 *p);
-void fn_80284E70(Desc_802C2860 *p);
-void fn_80284F78(Desc_802C2860 *p);
-unsigned int fn_80283E48(short count);
-int fn_802832CC(void);
-int fn_80283660(void);
-int fn_80282F24(void);
-void fn_80282D70(void);
-void fn_80285304(unsigned int *sum, unsigned char *data, unsigned int length);
+void _LZHHuffWriteHuffData(LZHCodeSet_t *p);
+void _LZHHuffEncodeBuildTree(LZHCodeSet_t *p);
+void _LZHHuffEncodeGenCodeLen(LZHCodeSet_t *p);
+void _LZHHuffReadHuffData(LZHCodeSet_t *p);
+void _LZHHuffAssignCodes(LZHCodeSet_t *p);
+void _LZHHuffDecodeBuildTree(LZHCodeSet_t *p);
+void _LZHHuffDecodeBuildTable(LZHCodeSet_t *p);
+unsigned int _LZHReadBits(short count);
+int _LZHDecodeInput(void);
+int _LZHDecodeInputFull(void);
+int _LZHEncodeCodeBuffer(void);
+void _LZHEncodeCodeBufferStart(void);
+void _LZHUpdateChecksum(unsigned int *sum, unsigned char *data, unsigned int length);
 extern unsigned char lbl_803EC584;
 extern unsigned char lbl_803ED420;
 extern unsigned char lbl_803ED421;
@@ -53,8 +53,8 @@ extern unsigned char *lbl_803ED454;
 extern unsigned short *lbl_803ED458;
 extern unsigned short lbl_803ED45C;
 extern short *lbl_803ED464;
-extern Struct_803ED474 *lbl_803ED474;
-extern Struct_803ED474 *lbl_803ED478;
+extern LZHBlock_t *lbl_803ED474;
+extern LZHBlock_t *lbl_803ED478;
 extern short lbl_803ED47C;
 extern short lbl_803ED47E;
 extern unsigned int lbl_803ED480;
@@ -74,20 +74,20 @@ extern SysCriticalSection_t lbl_803B53FC;
 extern SysCriticalSection_t lbl_803B541C;
 extern SysCriticalSection_t lbl_803B543C;
 
-int fn_80282800(void);
-int fn_802828BC(void);
-int fn_8028291C(void);
-int fn_802830F0(void);
-int fn_80284030(void);
-void fn_802851E8(void);
-void fn_80285394(short count, unsigned int value);
-void fn_80285458(void);
-void fn_802854D8(void);
-int fn_8028257C(Struct_803ED474 *a, Struct_803ED474 *b);
-void fn_80282624(Struct_803ED474 *a, Struct_803ED474 *b, int mode);
-int fn_80282740(Struct_803ED474 *a, Struct_803ED474 *b, int mode);
+int _LZHEncodeNewBlock(void);
+int _LZHEncodeNewBlockEOF(void);
+int _LZHEncodeInput(void);
+int _LZHDecodeNewBlock(void);
+int _LZHMemDecodeNewBlock(void);
+void _LZHHuffGenCodeConvertTables(void);
+void _LZHWriteBits(short count, unsigned int value);
+void _LZHFlushByteBuffer(void);
+void _LZHFlushBitBuffer(void);
+int _LZHMemDecStart(LZHBlock_t *a, LZHBlock_t *b);
+void _LZHMemDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode);
+int _LZHMemProcess(LZHBlock_t *a, LZHBlock_t *b, int mode);
 
-int fn_802821E8(void)
+int _LZHInit(void)
 {
     if (lbl_803EC584 == 0) {
         lbl_803EC584 = 1;
@@ -102,7 +102,7 @@ int fn_802821E8(void)
     return 0x150001;
 }
 
-int fn_80282260(void)
+int _LZHShutdown(void)
 {
     if (lbl_803EC584 != 0 && lbl_803ED424 == 0 && lbl_803ED430 == 0) {
         SysShutdownCriticalSectionFunc(&lbl_803B53FC);
@@ -114,7 +114,7 @@ int fn_80282260(void)
     return 0x150002;
 }
 
-int fn_802822E0(void)
+int _LZHCoStart(void)
 {
     unsigned short i;
     SysEnterCriticalSectionFunc(&lbl_803B53FC);
@@ -130,11 +130,11 @@ int fn_802822E0(void)
     lbl_803ED454 = fn_801D2BB0(1, 0x4000, 0, 0);
     lbl_803ED458 = fn_801D2BB0(1, 0x8000, 0, 0);
     lbl_803ED464 = fn_801D2BB0(1, 0x474, 0, 0);
-    fn_802851E8();
+    _LZHHuffGenCodeConvertTables();
     lbl_803ED45C = 0;
     lbl_803ED47E = 0;
     lbl_803ED498 = 1;
-    lbl_803ED428 = fn_80282800;
+    lbl_803ED428 = _LZHEncodeNewBlock;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
     lbl_803ED444 = 0;
@@ -144,7 +144,7 @@ int fn_802822E0(void)
     return 0;
 }
 
-void fn_8028243C(void)
+void _LZHCoStop(void)
 {
     fn_801D2BD0(lbl_803ED464);
     fn_801D2BD0(lbl_803ED458);
@@ -158,10 +158,10 @@ void fn_8028243C(void)
     SysExitCriticalSectionFunc(&lbl_803B53FC);
 }
 
-int fn_802824A8(Struct_803ED474 *a, Struct_803ED474 *b)
+int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
 {
     if (a->mUnknown18 != 0 && b->mUnknown18 != 0) {
-        return fn_8028257C(a, b);
+        return _LZHMemDecStart(a, b);
     }
     SysEnterCriticalSectionFunc(&lbl_803B53FC);
     lbl_803ED47E = 0;
@@ -180,23 +180,23 @@ int fn_802824A8(Struct_803ED474 *a, Struct_803ED474 *b)
         lbl_803ED440 = fn_801D2BB0(1, 0x8000, 0, 0);
     }
     lbl_803ED498 = 1;
-    lbl_803ED428 = fn_802830F0;
+    lbl_803ED428 = _LZHDecodeNewBlock;
     return 0;
 }
 
-int fn_8028257C(Struct_803ED474 *a, Struct_803ED474 *b)
+int _LZHMemDecStart(LZHBlock_t *a, LZHBlock_t *b)
 {
     SysEnterCriticalSectionFunc(&lbl_803B541C);
     lbl_803ED430 = 2;
     lbl_803ED49C = lbl_803ED4A0 = 0;
-    lbl_803ED434 = fn_80284030;
+    lbl_803ED434 = _LZHMemDecodeNewBlock;
     return 1;
 }
 
-void fn_802825C8(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
+void _LZHDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
     if (mode == 1) {
-        fn_80282624(a, b, 1);
+        _LZHMemDecStop(a, b, 1);
     } else {
         if (lbl_803ED440 != 0) {
             fn_801D2BD0(lbl_803ED440);
@@ -207,16 +207,16 @@ void fn_802825C8(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
     }
 }
 
-void fn_80282624(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
+void _LZHMemDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
     lbl_803ED430 = 0;
     SysExitCriticalSectionFunc(&lbl_803B541C);
 }
 
-int fn_80282654(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
+int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
     if (mode == 1) {
-        return fn_80282740(a, b, 1);
+        return _LZHMemProcess(a, b, 1);
     }
     lbl_803ED420 = 1;
     lbl_803ED474 = a;
@@ -243,7 +243,7 @@ int fn_80282654(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
     return 1;
 }
 
-int fn_80282740(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
+int _LZHMemProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
     lbl_803ED421 = 1;
     lbl_803ED4A4 = a->mUnknown04 - a->mUnknown08;
@@ -261,26 +261,26 @@ int fn_80282740(Struct_803ED474 *a, Struct_803ED474 *b, int mode)
     return 1;
 }
 
-int fn_80282800(void)
+int _LZHEncodeNewBlock(void)
 {
     if (lbl_803ED488 == 0 && lbl_803ED474->mUnknown18 != 0 && lbl_803ED444 == 0) {
-        fn_80285394(1, 1);
-        fn_80285394(32, lbl_803ED498);
-        fn_802854D8();
+        _LZHWriteBits(1, 1);
+        _LZHWriteBits(32, lbl_803ED498);
+        _LZHFlushBitBuffer();
         lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-        lbl_803ED428 = fn_802828BC;
+        lbl_803ED428 = _LZHEncodeNewBlockEOF;
     } else {
-        fn_80285394(1, 0);
+        _LZHWriteBits(1, 0);
         lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-        lbl_803ED428 = fn_8028291C;
+        lbl_803ED428 = _LZHEncodeInput;
         lbl_803ED45C = 0;
     }
     return 0;
 }
 
-int fn_802828BC(void)
+int _LZHEncodeNewBlockEOF(void)
 {
-    fn_80285458();
+    _LZHFlushByteBuffer();
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
     if (lbl_803ED486 != lbl_803ED47E) {
         return 2;
@@ -290,7 +290,7 @@ int fn_802828BC(void)
     return 0;
 }
 
-int fn_8028291C(void)
+int _LZHEncodeInput(void)
 {
     unsigned int best;
     unsigned short bestPos = 0;
@@ -308,7 +308,7 @@ int fn_8028291C(void)
         while (lbl_803ED444 <= 228) {
             if (lbl_803ED488 == 0) {
                 if (lbl_803ED474->mUnknown18 == 0) {
-                    fn_80285304(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
+                    _LZHUpdateChecksum(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
                     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04;
                     return 1;
                 }
@@ -388,17 +388,17 @@ int fn_8028291C(void)
         }
     }
     if (lbl_803ED488 == 0 && lbl_803ED444 == 0 && lbl_803ED474->mUnknown18 != 0) {
-        fn_80285304(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
+        _LZHUpdateChecksum(&lbl_803ED498, lbl_803ED474->mUnknown00, lbl_803ED474->mUnknown04);
     }
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
-    fn_80282D70();
+    _LZHEncodeCodeBufferStart();
     return 0;
 }
 
-void fn_80282D70(void)
+void _LZHEncodeCodeBufferStart(void)
 {
-    Code_802C2860 *a = lbl_802C2848.mpCodes;
-    Code_802C2860 *b = lbl_802C2854.mpCodes;
+    LZHHuffCode_t *a = lbl_802C2848.mpCodes;
+    LZHHuffCode_t *b = lbl_802C2854.mpCodes;
     short i;
     unsigned short j;
     unsigned short n;
@@ -427,26 +427,26 @@ void fn_80282D70(void)
         }
     }
     SysEnterCriticalSectionFunc(&lbl_803B543C);
-    fn_80284968(&lbl_802C2848);
-    fn_80284AEC(&lbl_802C2848);
-    fn_80284DD0(&lbl_802C2848);
-    fn_80284968(&lbl_802C2854);
-    fn_80284AEC(&lbl_802C2854);
-    fn_80284DD0(&lbl_802C2854);
+    _LZHHuffEncodeBuildTree(&lbl_802C2848);
+    _LZHHuffEncodeGenCodeLen(&lbl_802C2848);
+    _LZHHuffAssignCodes(&lbl_802C2848);
+    _LZHHuffEncodeBuildTree(&lbl_802C2854);
+    _LZHHuffEncodeGenCodeLen(&lbl_802C2854);
+    _LZHHuffAssignCodes(&lbl_802C2854);
     SysExitCriticalSectionFunc(&lbl_803B543C);
-    fn_8028490C(&lbl_802C2848);
-    fn_8028490C(&lbl_802C2854);
+    _LZHHuffWriteHuffData(&lbl_802C2848);
+    _LZHHuffWriteHuffData(&lbl_802C2854);
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = fn_80282F24;
+    lbl_803ED428 = _LZHEncodeCodeBuffer;
     lbl_803ED42C = 0;
 }
 
-int fn_80282F24(void)
+int _LZHEncodeCodeBuffer(void)
 {
     unsigned short d;
     unsigned char n;
     unsigned char code;
-    fn_80285458();
+    _LZHFlushByteBuffer();
     while ((unsigned int)lbl_803ED42C < lbl_803ED45C) {
         if (lbl_803ED490 == 0) {
             lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04;
@@ -456,34 +456,34 @@ int fn_80282F24(void)
         n = lbl_803ED454[lbl_803ED42C++];
         if (d != 0) {
             code = lbl_803B7678[n];
-            fn_80285394(lbl_802C2848.mpCodes[code + 257].mUnknown02,
+            _LZHWriteBits(lbl_802C2848.mpCodes[code + 257].mUnknown02,
                          lbl_802C2848.mpCodes[code + 257].mUnknown00);
             if ((unsigned int)(code - 8) <= 18) {
-                fn_80285394(lbl_802C2878[code], (short)(n - lbl_802C2894[code]));
+                _LZHWriteBits(lbl_802C2878[code], (short)(n - lbl_802C2894[code]));
             }
             if (d <= 256) {
                 code = lbl_803B775C[d - 1];
             } else {
                 code = lbl_803B785C[(d - 1) >> 7];
             }
-            fn_80285394(lbl_802C2854.mpCodes[code].mUnknown02,
+            _LZHWriteBits(lbl_802C2854.mpCodes[code].mUnknown02,
                          lbl_802C2854.mpCodes[code].mUnknown00);
             if (code > 3) {
-                fn_80285394(lbl_802C28D0[code], (unsigned short)(d - lbl_802C28EE[code]));
+                _LZHWriteBits(lbl_802C28D0[code], (unsigned short)(d - lbl_802C28EE[code]));
             }
         } else {
-            fn_80285394(lbl_802C2848.mpCodes[n].mUnknown02,
+            _LZHWriteBits(lbl_802C2848.mpCodes[n].mUnknown02,
                          lbl_802C2848.mpCodes[n].mUnknown00);
         }
     }
-    fn_80285394(lbl_802C2848.mpCodes[256].mUnknown02,
+    _LZHWriteBits(lbl_802C2848.mpCodes[256].mUnknown02,
                  lbl_802C2848.mpCodes[256].mUnknown00);
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = fn_80282800;
+    lbl_803ED428 = _LZHEncodeNewBlock;
     return 0;
 }
 
-int fn_802830F0(void)
+int _LZHDecodeNewBlock(void)
 {
     lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
     while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0) {
@@ -497,27 +497,27 @@ int fn_802830F0(void)
         lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04;
         return 1;
     }
-    if ((unsigned char)fn_80283E48(1) == 0) {
+    if ((unsigned char)_LZHReadBits(1) == 0) {
         SysEnterCriticalSectionFunc(&lbl_803B543C);
-        lbl_803ED460 = fn_80283E48;
-        fn_80284D1C(&lbl_802C2848);
-        fn_80284DD0(&lbl_802C2848);
-        fn_80284E70(&lbl_802C2848);
-        fn_80284F78(&lbl_802C2848);
-        fn_80284D1C(&lbl_802C2854);
-        fn_80284DD0(&lbl_802C2854);
-        fn_80284E70(&lbl_802C2854);
-        fn_80284F78(&lbl_802C2854);
+        lbl_803ED460 = _LZHReadBits;
+        _LZHHuffReadHuffData(&lbl_802C2848);
+        _LZHHuffAssignCodes(&lbl_802C2848);
+        _LZHHuffDecodeBuildTree(&lbl_802C2848);
+        _LZHHuffDecodeBuildTable(&lbl_802C2848);
+        _LZHHuffReadHuffData(&lbl_802C2854);
+        _LZHHuffAssignCodes(&lbl_802C2854);
+        _LZHHuffDecodeBuildTree(&lbl_802C2854);
+        _LZHHuffDecodeBuildTable(&lbl_802C2854);
         SysExitCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
         if (lbl_803ED422 != 0) {
-            lbl_803ED428 = fn_80283660;
+            lbl_803ED428 = _LZHDecodeInputFull;
         } else {
-            lbl_803ED428 = fn_802832CC;
+            lbl_803ED428 = _LZHDecodeInput;
         }
         return 0;
     }
-    fn_80283E48(32);
+    _LZHReadBits(32);
     lbl_803ED47C = 0;
     lbl_803ED480 = 0;
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
@@ -527,40 +527,40 @@ int fn_802830F0(void)
     return 0;
 }
 
-typedef struct Node_803B795C
+typedef struct LZHHeapNode_t
 {
     short mUnknown00;
     unsigned short mUnknown02;
-} Node_803B795C;
+} LZHHeapNode_t;
 
-extern Desc_802C2860 lbl_802C2860;
-extern Desc_802C2860 lbl_802C286C;
-extern Leaf_802C2860 lbl_803B545C[];
-extern Leaf_802C2860 lbl_803B61B8[];
-extern Leaf_802C2860 lbl_803B6320[];
-extern Leaf_802C2860 lbl_803B707C[];
+extern LZHCodeSet_t lbl_802C2860;
+extern LZHCodeSet_t lbl_802C286C;
+extern LZHDecodeEntry_t lbl_803B545C[];
+extern LZHDecodeEntry_t lbl_803B61B8[];
+extern LZHDecodeEntry_t lbl_803B6320[];
+extern LZHDecodeEntry_t lbl_803B707C[];
 extern short lbl_803B71E4[];
 extern short lbl_803B7204[][2];
-extern Node_803B795C lbl_803B795C[];
+extern LZHHeapNode_t lbl_803B795C[];
 extern unsigned int (*lbl_803ED460)(short n);
 extern short lbl_803ED468;
-extern Leaf_802C2860 *lbl_803ED46C;
+extern LZHDecodeEntry_t *lbl_803ED46C;
 extern short lbl_803ED470;
 extern unsigned int lbl_803ED4B4;
-unsigned int fn_80283E48(short n);
-int fn_8028410C(void);
-unsigned int fn_80284700(short n);
-void fn_80284D1C(Desc_802C2860 *pDesc);
-void fn_80284DD0(Desc_802C2860 *pDesc);
-void fn_80284E70(Desc_802C2860 *pDesc);
-void fn_80284F78(Desc_802C2860 *pDesc);
-void fn_80284FB8(short node, Leaf_802C2860 *pLeaf);
-void fn_8028555C(short symbol, unsigned short weight);
-Node_803B795C fn_802855EC();
+unsigned int _LZHReadBits(short n);
+int _LZHMemDecodeInput(void);
+unsigned int _LZHMemReadBits(short n);
+void _LZHHuffReadHuffData(LZHCodeSet_t *pDesc);
+void _LZHHuffAssignCodes(LZHCodeSet_t *pDesc);
+void _LZHHuffDecodeBuildTree(LZHCodeSet_t *pDesc);
+void _LZHHuffDecodeBuildTable(LZHCodeSet_t *pDesc);
+void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf);
+void _LZHHeapPush(short symbol, unsigned short weight);
+LZHHeapNode_t _LZHHeapPop();
 
-int fn_802832CC(void)
+int _LZHDecodeInput(void)
 {
-    Leaf_802C2860 *pTable;
+    LZHDecodeEntry_t *pTable;
     int index;
     short code;
     short symbol;
@@ -594,7 +594,7 @@ int fn_802832CC(void)
         index = 0;
         do
         {
-            index = pTable[index].mUnknown00 + fn_80283E48(pTable[index].mUnknown02);
+            index = pTable[index].mUnknown00 + _LZHReadBits(pTable[index].mUnknown02);
         } while (pTable[index].mUnknown02 != 0);
         code = pTable[index].mUnknown00;
         if (code <= 255)
@@ -614,7 +614,7 @@ int fn_802832CC(void)
             else if (lbl_802C2878[code] != 0)
             {
                 length = lbl_802C2894[code];
-                length += fn_80283E48(lbl_802C2878[code]);
+                length += _LZHReadBits(lbl_802C2878[code]);
             }
             else
             {
@@ -624,7 +624,7 @@ int fn_802832CC(void)
             index = 0;
             do
             {
-                index = pTable[index].mUnknown00 + fn_80283E48(pTable[index].mUnknown02);
+                index = pTable[index].mUnknown00 + _LZHReadBits(pTable[index].mUnknown02);
             } while (pTable[index].mUnknown02 != 0);
             symbol = pTable[index].mUnknown00;
             if (symbol <= 3)
@@ -634,7 +634,7 @@ int fn_802832CC(void)
             else
             {
                 distance = lbl_802C28EE[symbol];
-                distance += fn_80283E48(lbl_802C28D0[symbol]);
+                distance += _LZHReadBits(lbl_802C28D0[symbol]);
             }
             distance = (lbl_803ED43C - (distance + 0x8000)) & 0x7FFF;
             do
@@ -659,7 +659,7 @@ int fn_802832CC(void)
     }
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = fn_802830F0;
+    lbl_803ED428 = _LZHDecodeNewBlock;
     return 0;
 }
 
@@ -720,7 +720,7 @@ int fn_802832CC(void)
         }                                                          \
     }
 
-int fn_80283660(void)
+int _LZHDecodeInputFull(void)
 {
     short wr = lbl_803ED47E;
     short rd = lbl_803ED486;
@@ -826,11 +826,11 @@ int fn_80283660(void)
     lbl_803ED490 = remaining;
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - avail;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - remaining;
-    lbl_803ED428 = fn_802830F0;
+    lbl_803ED428 = _LZHDecodeNewBlock;
     return 0;
 }
 
-unsigned int fn_80283E48(short n)
+unsigned int _LZHReadBits(short n)
 {
     unsigned int result;
 
@@ -892,25 +892,25 @@ unsigned int fn_80283E48(short n)
     return result;
 }
 
-int fn_80284030(void)
+int _LZHMemDecodeNewBlock(void)
 {
-    if (!(unsigned char)fn_80284700(1))
+    if (!(unsigned char)_LZHMemReadBits(1))
     {
         SysEnterCriticalSectionFunc(&lbl_803B543C);
-        lbl_803ED460 = fn_80284700;
-        fn_80284D1C(&lbl_802C2860);
-        fn_80284DD0(&lbl_802C2860);
-        fn_80284E70(&lbl_802C2860);
-        fn_80284F78(&lbl_802C2860);
-        fn_80284D1C(&lbl_802C286C);
-        fn_80284DD0(&lbl_802C286C);
-        fn_80284E70(&lbl_802C286C);
-        fn_80284F78(&lbl_802C286C);
+        lbl_803ED460 = _LZHMemReadBits;
+        _LZHHuffReadHuffData(&lbl_802C2860);
+        _LZHHuffAssignCodes(&lbl_802C2860);
+        _LZHHuffDecodeBuildTree(&lbl_802C2860);
+        _LZHHuffDecodeBuildTable(&lbl_802C2860);
+        _LZHHuffReadHuffData(&lbl_802C286C);
+        _LZHHuffAssignCodes(&lbl_802C286C);
+        _LZHHuffDecodeBuildTree(&lbl_802C286C);
+        _LZHHuffDecodeBuildTable(&lbl_802C286C);
         SysExitCriticalSectionFunc(&lbl_803B543C);
-        lbl_803ED434 = fn_8028410C;
+        lbl_803ED434 = _LZHMemDecodeInput;
         return 0;
     }
-    lbl_803ED4B4 = fn_80284700(32);
+    lbl_803ED4B4 = _LZHMemReadBits(32);
     lbl_803ED434 = 0;
     lbl_803ED49C = 0;
     lbl_803ED4A0 = 0;
@@ -974,7 +974,7 @@ int fn_80284030(void)
     } \
     }
 
-int fn_8028410C(void)
+int _LZHMemDecodeInput(void)
 {
     short bitCount = lbl_803ED49C;
     unsigned int bitBuf = lbl_803ED4A0;
@@ -1057,11 +1057,11 @@ int fn_8028410C(void)
     lbl_803ED4A8 = pIn;
     lbl_803ED4AC = remaining;
     lbl_803ED4B0 = pOut;
-    lbl_803ED434 = fn_80284030;
+    lbl_803ED434 = _LZHMemDecodeNewBlock;
     return 0;
 }
 
-unsigned int fn_80284700(short n)
+unsigned int _LZHMemReadBits(short n)
 {
     unsigned int result;
 
@@ -1120,25 +1120,25 @@ unsigned int fn_80284700(short n)
     return result;
 }
 
-void fn_8028490C(Desc_802C2860 *p)
+void _LZHHuffWriteHuffData(LZHCodeSet_t *p)
 {
-    Code_802C2860 *pElems = p->mpCodes;
+    LZHHuffCode_t *pElems = p->mpCodes;
     short count = p->mCount;
     short i;
 
     for (i = 0; i < count; i++)
-        fn_80285394(4, pElems[i].mUnknown02);
+        _LZHWriteBits(4, pElems[i].mUnknown02);
 }
 
-void fn_80284968(Desc_802C2860 *p)
+void _LZHHuffEncodeBuildTree(LZHCodeSet_t *p)
 {
-    Code_802C2860 *pElems = p->mpCodes;
+    LZHHuffCode_t *pElems = p->mpCodes;
     short count = p->mCount;
     unsigned short used;
     short i;
     short next;
     unsigned short weight;
-    Node_803B795C node;
+    LZHHeapNode_t node;
 
     lbl_803B795C[0].mUnknown02 = 0;
     lbl_803B795C[0].mUnknown00 = 0;
@@ -1149,7 +1149,7 @@ void fn_80284968(Desc_802C2860 *p)
         if (pElems[i].mUnknown00 != 0)
         {
             used++;
-            fn_8028555C(i + count, pElems[i].mUnknown00);
+            _LZHHeapPush(i + count, pElems[i].mUnknown00);
         }
     }
     while (used <= 1)
@@ -1158,33 +1158,33 @@ void fn_80284968(Desc_802C2860 *p)
             ;
         pElems[i].mUnknown00 = 1;
         used++;
-        fn_8028555C(i + count, 1);
+        _LZHHeapPush(i + count, 1);
     }
     next = count - 1;
     while (lbl_803ED470 > 1)
     {
-        node = fn_802855EC();
+        node = _LZHHeapPop();
         lbl_803ED464[node.mUnknown00] = next;
         weight = node.mUnknown02;
-        node = fn_802855EC();
+        node = _LZHHeapPop();
         lbl_803ED464[node.mUnknown00] = next;
         weight += node.mUnknown02;
-        fn_8028555C(next, weight);
+        _LZHHeapPush(next, weight);
         next--;
     }
-    node = fn_802855EC();
+    node = _LZHHeapPop();
     lbl_803ED464[node.mUnknown00] = 0;
 }
 
-void fn_80284AEC(Desc_802C2860 *p)
+void _LZHHuffEncodeGenCodeLen(LZHCodeSet_t *p)
 {
     short count = p->mCount;
-    Code_802C2860 *pElems = p->mpCodes;
+    LZHHuffCode_t *pElems = p->mpCodes;
     short i;
     short j;
     short length;
     short overflow;
-    Node_803B795C node;
+    LZHHeapNode_t node;
 
     for (i = 0; i <= 15; i++)
         lbl_803B71E4[i] = 0;
@@ -1227,22 +1227,22 @@ void fn_80284AEC(Desc_802C2860 *p)
         for (i = 0; i < count; i++)
         {
             if (pElems[i].mUnknown00 != 0)
-                fn_8028555C(i, pElems[i].mUnknown00);
+                _LZHHeapPush(i, pElems[i].mUnknown00);
         }
         for (length = 15; length > 0; length--)
         {
             for (count = lbl_803B71E4[length]; count > 0; count--)
             {
-                node = fn_802855EC();
+                node = _LZHHeapPop();
                 pElems[node.mUnknown00].mUnknown02 = length;
             }
         }
     }
 }
 
-void fn_80284D1C(Desc_802C2860 *pDesc)
+void _LZHHuffReadHuffData(LZHCodeSet_t *pDesc)
 {
-    Code_802C2860 *pCodes = pDesc->mpCodes;
+    LZHHuffCode_t *pCodes = pDesc->mpCodes;
     short count = pDesc->mCount;
     short i;
     short length;
@@ -1259,10 +1259,10 @@ void fn_80284D1C(Desc_802C2860 *pDesc)
     lbl_803B71E4[0] = 0;
 }
 
-void fn_80284DD0(Desc_802C2860 *pDesc)
+void _LZHHuffAssignCodes(LZHCodeSet_t *pDesc)
 {
     unsigned short next[16];
-    Code_802C2860 *pCodes = pDesc->mpCodes;
+    LZHHuffCode_t *pCodes = pDesc->mpCodes;
     short count = pDesc->mCount;
     unsigned short n = 0;
     short bits;
@@ -1281,9 +1281,9 @@ void fn_80284DD0(Desc_802C2860 *pDesc)
     }
 }
 
-void fn_80284E70(Desc_802C2860 *pDesc)
+void _LZHHuffDecodeBuildTree(LZHCodeSet_t *pDesc)
 {
-    Code_802C2860 *pCodes = pDesc->mpCodes;
+    LZHHuffCode_t *pCodes = pDesc->mpCodes;
     short count = pDesc->mCount;
     short i;
     short next = 1;
@@ -1326,15 +1326,15 @@ void fn_80284E70(Desc_802C2860 *pDesc)
     }
 }
 
-void fn_80284F78(Desc_802C2860 *pDesc)
+void _LZHHuffDecodeBuildTable(LZHCodeSet_t *pDesc)
 {
     lbl_803ED470 = 0;
     lbl_803ED468 = 1;
     lbl_803ED46C = pDesc->mpLeaves;
-    fn_80284FB8(0, pDesc->mpLeaves);
+    _LZHHuffDecodeBuildTableR(0, pDesc->mpLeaves);
 }
 
-void fn_80284FB8(short node, Leaf_802C2860 *pLeaf)
+void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf)
 {
     short depth;
     short value;
@@ -1390,14 +1390,14 @@ void fn_80284FB8(short node, Leaf_802C2860 *pLeaf)
         }
         else
         {
-            fn_80284FB8(value, &lbl_803ED46C[index]);
+            _LZHHuffDecodeBuildTableR(value, &lbl_803ED46C[index]);
         }
         index++;
     }
     lbl_803ED470 -= pLeaf->mUnknown02;
 }
 
-void fn_802851E8(void)
+void _LZHHuffGenCodeConvertTables(void)
 {
     unsigned short length = 1;
     unsigned char code;
@@ -1420,7 +1420,7 @@ void fn_802851E8(void)
     }
 }
 
-void fn_80285304(unsigned int *pSum, unsigned char *pData, unsigned int length)
+void _LZHUpdateChecksum(unsigned int *pSum, unsigned char *pData, unsigned int length)
 {
     unsigned int s1 = *pSum & 0xFFFF;
     unsigned int s2 = *pSum >> 16;
@@ -1441,7 +1441,7 @@ void fn_80285304(unsigned int *pSum, unsigned char *pData, unsigned int length)
     *pSum = (s2 << 16) | s1;
 }
 
-void fn_80285394(short count, unsigned int value)
+void _LZHWriteBits(short count, unsigned int value)
 {
     unsigned char shift;
 
@@ -1460,10 +1460,10 @@ void fn_80285394(short count, unsigned int value)
         lbl_803ED47E &= 0xFF;
         lbl_803ED47C = 0;
     } while (count > 0);
-    fn_80285458();
+    _LZHFlushByteBuffer();
 }
 
-void fn_80285458(void)
+void _LZHFlushByteBuffer(void)
 {
     while (lbl_803ED486 != lbl_803ED47E && lbl_803ED490 != 0)
     {
@@ -1473,7 +1473,7 @@ void fn_80285458(void)
     }
 }
 
-void fn_802854D8(void)
+void _LZHFlushBitBuffer(void)
 {
     if (lbl_803ED47C <= 7)
     {
@@ -1488,11 +1488,11 @@ void fn_802854D8(void)
         lbl_803B7DD4[lbl_803ED47E++] = (unsigned char)lbl_803ED480;
         lbl_803ED47E &= 0xFF;
         lbl_803ED47C = 0;
-        fn_80285458();
+        _LZHFlushByteBuffer();
     }
 }
 
-void fn_8028555C(short symbol, unsigned short weight)
+void _LZHHeapPush(short symbol, unsigned short weight)
 {
     short i = ++lbl_803ED470;
 
@@ -1505,9 +1505,9 @@ void fn_8028555C(short symbol, unsigned short weight)
     lbl_803B795C[i].mUnknown02 = weight;
 }
 
-Node_803B795C fn_802855EC(void)
+LZHHeapNode_t _LZHHeapPop(void)
 {
-    Node_803B795C top = lbl_803B795C[1];
+    LZHHeapNode_t top = lbl_803B795C[1];
     unsigned short weight = lbl_803B795C[lbl_803ED470].mUnknown02;
     short count = --lbl_803ED470;
     short i = 1;

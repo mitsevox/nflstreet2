@@ -1816,15 +1816,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801D177C",
+            "function": "_ShortenBlock",
             "evidence": "evidence.tsv source-form 0x801D177C-0x801D18A0"
           },
           {
-            "function": "fn_801D18A0",
+            "function": "_SplitBlock",
             "evidence": "evidence.tsv source-form 0x801D18A0-0x801D1ACC"
           },
           {
-            "function": "fn_801D1C14",
+            "function": "_SplitBlockTail",
             "evidence": "evidence.tsv source-form 0x801D1C14-0x801D1E30"
           },
           {
@@ -1832,7 +1832,7 @@
             "evidence": "evidence.tsv source-form 0x801D2130-0x801D2478"
           },
           {
-            "function": "fn_801D2478",
+            "function": "MemCustomHeap",
             "evidence": "evidence.tsv source-form 0x801D2478-0x801D2570"
           }
         ],
@@ -28349,9 +28349,9 @@
       }
     },
     {
-      "source": "src/engine/cu_801BDA30.c",
+      "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801BDA30.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28413,11 +28413,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801BE99C",
+            "function": "_AnimTranDoTransition",
             "evidence": "evidence.tsv source-form 0x801BE99C-0x801BEFA4"
           },
           {
-            "function": "fn_801BEFA4",
+            "function": "_AnimTranGetBestTransition",
             "evidence": "evidence.tsv source-form 0x801BEFA4-0x801BF090"
           }
         ],
@@ -28679,67 +28679,67 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_802822E0",
+            "function": "_LZHCoStart",
             "evidence": "evidence.tsv source-form 0x802822E0-0x8028243C"
           },
           {
-            "function": "fn_802824A8",
+            "function": "_LZHDecStart",
             "evidence": "evidence.tsv source-form 0x802824A8-0x8028257C"
           },
           {
-            "function": "fn_80282654",
+            "function": "_LZHProcess",
             "evidence": "evidence.tsv source-form 0x80282654-0x80282740"
           },
           {
-            "function": "fn_80282740",
+            "function": "_LZHMemProcess",
             "evidence": "evidence.tsv source-form 0x80282740-0x80282800"
           },
           {
-            "function": "fn_8028291C",
+            "function": "_LZHEncodeInput",
             "evidence": "evidence.tsv source-form 0x8028291C-0x80282D70"
           },
           {
-            "function": "fn_80282D70",
+            "function": "_LZHEncodeCodeBufferStart",
             "evidence": "evidence.tsv source-form 0x80282D70-0x80282F24"
           },
           {
-            "function": "fn_80282F24",
+            "function": "_LZHEncodeCodeBuffer",
             "evidence": "evidence.tsv source-form 0x80282F24-0x802830F0"
           },
           {
-            "function": "fn_802830F0",
+            "function": "_LZHDecodeNewBlock",
             "evidence": "evidence.tsv source-form 0x802830F0-0x802832CC"
           },
           {
-            "function": "fn_802832CC",
+            "function": "_LZHDecodeInput",
             "evidence": "evidence.tsv source-form 0x802832CC-0x80283660"
           },
           {
-            "function": "fn_80283660",
+            "function": "_LZHDecodeInputFull",
             "evidence": "evidence.tsv source-form 0x80283660-0x80283E48"
           },
           {
-            "function": "fn_80283E48",
+            "function": "_LZHReadBits",
             "evidence": "evidence.tsv source-form 0x80283E48-0x80284030"
           },
           {
-            "function": "fn_80284030",
+            "function": "_LZHMemDecodeNewBlock",
             "evidence": "evidence.tsv source-form 0x80284030-0x8028410C"
           },
           {
-            "function": "fn_8028410C",
+            "function": "_LZHMemDecodeInput",
             "evidence": "evidence.tsv source-form 0x8028410C-0x80284700"
           },
           {
-            "function": "fn_80284E70",
+            "function": "_LZHHuffDecodeBuildTree",
             "evidence": "evidence.tsv source-form 0x80284E70-0x80284F78"
           },
           {
-            "function": "fn_80284FB8",
+            "function": "_LZHHuffDecodeBuildTableR",
             "evidence": "evidence.tsv source-form 0x80284FB8-0x802851E8"
           },
           {
-            "function": "fn_802855EC",
+            "function": "_LZHHeapPop",
             "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],

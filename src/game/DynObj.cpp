@@ -192,7 +192,7 @@ void AnimChanInitChannels(void *p, void *q);
 int AnimFileLoadResident(int id, int a);
 int AnimFileGetSlotFromFileNum(int a, int b);
 void fn_801BE030(int type, BigObjAnimHandlerSet_t *pTable);
-void fn_801BE040(void *p);
+void AnimStInitStructure(void *p);
 AnimSeqncrStatic_t *AnimSeqncrGetStaticPtr(Actor_801C009C *pActor, int index);
 int MathArcTan2(float y, float x);
 void Vec2Scale(void *pOut, void *p, float scale);
@@ -381,7 +381,7 @@ void BigObjAnimInitObject(BigObjInst *pObject, int index)
         }
         AnimInitHeader((AnimHeader_t *)pObject->mUnknown428->mUnknown48, 0, 10, 10);
         AnimChanInitChannels(pObject->mUnknown428->mUnknown48, pObject->mUnknown428->mUnknown60);
-        fn_801BE040(pObject->mUnknown428->mUnknown1300);
+        AnimStInitStructure(pObject->mUnknown428->mUnknown1300);
         pObject->mUnknown428->mUnknown1708 = 0;
     }
 }

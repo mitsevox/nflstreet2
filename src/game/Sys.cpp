@@ -6,7 +6,7 @@
 #include "engine/system.h"
 #include <dolphin/__vm.h>
 
-/* Argument of fn_801D2054. */
+/* Argument of MemInit. */
 struct MemInitParams_t {
     char mLogName[64];
     MemPoolDesc_t *mpArena;
@@ -27,11 +27,11 @@ int DSInit(void);
 int DSShutdown(void);
 void ArenaSetupInit(void);
 void ArenaSetupShutdown(void);
-int fn_801D2054(MemInitParams_t *pConfig);
-int fn_801D20C8(void);
+int MemInit(MemInitParams_t *pConfig);
+int MemShutdown(void);
 int fn_801D2130(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
-void fn_801D277C(int a);
+void MemSetDefaultHeap(int a);
 int SysInit(SysInitParams_t *pDesc);
 int SysShutdown(void);
 }
@@ -60,7 +60,7 @@ int Sys::Init()
     DSInit();
     ArenaSetupInit();
     _Sys_MemInitParams.mpArena = MemPoolGetDesc(1);
-    fn_801D2054(&_Sys_MemInitParams);
+    MemInit(&_Sys_MemInitParams);
     fn_801D2130(MemPoolGetDesc(0x20));
     fn_801D2130(MemPoolGetDesc(0x100));
     pDb = MemPoolGetDesc(2);
@@ -72,7 +72,7 @@ int Sys::Init()
     }
     pAuxRam = MemPoolGetDesc(0x10);
     MemInitExternHeap(0x10, 1, (char *)pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);
-    fn_801D277C(1);
+    MemSetDefaultHeap(1);
     SysInitParams_t desc(1, 0, 1);
     SysInit(&desc);
     SysInitRealTimeClock();
@@ -88,7 +88,7 @@ int Sys::Shutdown()
     }
     fn_801D2570(2);
     fn_801D2570(0x20);
-    fn_801D20C8();
+    MemShutdown();
     ArenaSetupShutdown();
     DSShutdown();
     return 1;

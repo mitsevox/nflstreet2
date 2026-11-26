@@ -2,7 +2,7 @@
    (each active channel contributes its current and its next motion, split by the sequence's blend
    fraction), finds a channel's state index and compression table, and blends two orientations. */
 
-#include "engine/cu_801BDA30.h"
+#include "engine/animst.h"
 
 typedef struct AnimMotQuat_t {
     float mValues[4];
@@ -30,7 +30,7 @@ typedef struct AnimMotFrameList_t {
 
 static AnimMotFrameList_t _AnimMot_FrameList;
 
-Slot_801BE594 *fn_801BE594(Collection_801BE594 *p, unsigned short key);
+AnimStSlot_t *AnimStGetStateSlot(AnimStInfo_t *p, unsigned short key);
 void *AnimFileGetFramePerState(AnimFileFormat_t *pFile, int a, int b, unsigned int index, unsigned short group);
 
 int abs(int x);
@@ -40,7 +40,7 @@ void QuatSlerp(AnimMotQuat_t *pOut, AnimMotQuat_t *pA, AnimMotQuat_t *pB, float 
 void QuatToEulerYZX(Triple_801BCA74 *pOut, AnimMotQuat_t *pQuat);
 void Orient3Lerp(Triple_801BCA74 *pOut, Triple_801BCA74 *pA, Triple_801BCA74 *pB, float t);
 
-unsigned short _AnimMotGetStateIndex(int state, AnimFileFormat_t *pFile, Slot_801BE594 *pSlot)
+unsigned short _AnimMotGetStateIndex(int state, AnimFileFormat_t *pFile, AnimStSlot_t *pSlot)
 {
     if (pFile->flags & 4)
         return pSlot->mUnknown6;
@@ -75,13 +75,13 @@ AnimQuantContext *_AnimMotGetCmpTbl(AnimFileFormat_t *pFile, int group)
     return 0;
 }
 
-AnimMotFrameList_t *AnimMotCreateWeightList(AnimHeader_t *pObject, AnimChannel_t *pChannels, Collection_801BE594 *pSlots)
+AnimMotFrameList_t *AnimMotCreateWeightList(AnimHeader_t *pObject, AnimChannel_t *pChannels, AnimStInfo_t *pSlots)
 {
     AnimMotFrameList_t *pList = &_AnimMot_FrameList;
     unsigned short count = 0;
     int i;
     int j;
-    Slot_801BE594 *pSlot;
+    AnimStSlot_t *pSlot;
     AnimFileFormat_t *pFile;
     float weight;
     int state;
@@ -96,7 +96,7 @@ AnimMotFrameList_t *AnimMotCreateWeightList(AnimHeader_t *pObject, AnimChannel_t
         if (pChannels[i].mUnknown1 && pChannels[i].mUnknown48 == 0.0f) {
             AnimSeq_t *pSeq = &pChannels[i].mUnknown4C;
 
-            pSlot = fn_801BE594(pSlots, pChannels[i].mUnknown8);
+            pSlot = AnimStGetStateSlot(pSlots, pChannels[i].mUnknown8);
             weight = pSlot->mUnknown4C.mUnknown0;
             weight *= pChannels[i].mUnknown30.mUnknown0;
             pList->mFrames[count].mWeight = weight;

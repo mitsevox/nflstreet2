@@ -3,7 +3,7 @@
 
 #include "engine/pathlib.h"
 
-struct FadeCurve_801B4A24 {
+struct PathFadeCurve_t {
     unsigned int mShape:7, mRising:1, mUnknown8:8, mTime:16;
 };
 
@@ -86,7 +86,7 @@ extern "C" void PATHI_fade(PathTrack_t *p, int a, int b, int c)
     p->mUnknown3 = (float)a;
 }
 
-extern "C" void fn_801B4960(PathTrack_t *p, int a, int b, int c)
+extern "C" void PATHI_customsfxfade(PathTrack_t *p, int a, int b, int c)
 {
     p->mUnknown1C = gPathMilliseconds;
     p->mUnknown20 = b;
@@ -95,7 +95,7 @@ extern "C" void fn_801B4960(PathTrack_t *p, int a, int b, int c)
     p->mUnknown26 = a;
 }
 
-extern "C" void fn_801B49C4(PathTrack_t *p, int a, int b, int c)
+extern "C" void PATHI_customdrylevelfade(PathTrack_t *p, int a, int b, int c)
 {
     p->mUnknown28 = gPathMilliseconds;
     p->mUnknown2C = b;
@@ -106,7 +106,7 @@ extern "C" void fn_801B49C4(PathTrack_t *p, int a, int b, int c)
 
 extern "C" void PATHI_setfadevolume(PathTrack_t *p)
 {
-    FadeCurve_801B4A24 curve;
+    PathFadeCurve_t curve;
     float delta = (float)p->mUnknown1A - (float)p->mUnknown18;
     float factor = -1.0f;
     curve.mTime = p->mUnknown14;
@@ -146,7 +146,7 @@ extern "C" void PATHI_setfadevolume(PathTrack_t *p)
 
 extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
 {
-    FadeCurve_801B4A24 curve;
+    PathFadeCurve_t curve;
     float delta = (float)p->mUnknown26 - (float)p->mUnknown24;
     float factor = -1.0f;
     curve.mTime = p->mUnknown20;
@@ -185,7 +185,7 @@ extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
 
 extern "C" void PATHI_setdrylevelfadevolume(PathTrack_t *p)
 {
-    FadeCurve_801B4A24 curve;
+    PathFadeCurve_t curve;
     float delta = (float)p->mUnknown32 - (float)p->mUnknown30;
     float factor = -1.0f;
     curve.mTime = p->mUnknown2C;

@@ -4,7 +4,7 @@
 #include "engine/sound.h"
 #include "game/fn_801D2B7C.h"
 
-extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
+extern void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 extern int SNDbankheadercopy(void *pDest, int handle);
 extern int SNDbankheadersize(int handle);
 extern void SNDmemlimits(int a, int b);
@@ -20,7 +20,7 @@ void SndllResolveBank(SndBankInfo_t *pBank, int move)
         SNDbankheadercopy(pData, pBank->mHandle);
         fn_801D2BD0(pBank->pData);
     } else {
-        pData = fn_801D310C(pBank->pData, SNDbankheadersize(pBank->mHandle), 0, 0);
+        pData = MemReallocMem(pBank->pData, SNDbankheadersize(pBank->mHandle), 0, 0);
         pBank->pData = pData;
     }
     pBank->pData = pData;

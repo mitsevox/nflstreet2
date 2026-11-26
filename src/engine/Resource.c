@@ -81,7 +81,7 @@ extern int FileGetPosition(int handle);
 extern int FileGetLength(int handle);
 extern int FileGetSize(int handle);
 extern void AuxRamUpload(unsigned int dest, void *pSrc, unsigned int size);
-extern void *fn_801D310C(void *pAddr, int size, int ident, int flags);
+extern void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 
 extern int ResLooseFileOpen(ResFile_t *pRes, int index);
 extern void AuxRamDownload(void *pDest, unsigned int source, unsigned int length);
@@ -114,7 +114,7 @@ extern int FileReadCallback(int handle, void *pBuffer, int size, void (*pCallbac
 void fn_801D3318(int ident, const char *pLabel);
 void fn_801D339C(int ident);
 void fn_801D342C(int ident);
-void fn_801D3470(void *pAddr, char *pOut, int size);
+void MemGetGroupLabelByAddr(void *pAddr, char *pOut, int size);
 int strcmp(const char *pA, const char *pB);
 void *FileReadAsyncCyclic(int file, char *pBuffer, int size, int priority, void (*pDone)(int, int, void *), void *pArg,
                   void (*pBlock)(int, char *, int, void *), int blockSize);
@@ -221,7 +221,7 @@ static void _ResBlockLoadCompFileAsyncBlockCallback(int size, char *pData, int u
         _Res_sBlockOutput.mPos = 0;
         _Res_sBlockOutput.mDone = 1;
         _Res_sBlockOutput.pData = pReq->pBuffer;
-        fn_801D3470(pReq->pBuffer, info, sizeof(info));
+        MemGetGroupLabelByAddr(pReq->pBuffer, info, sizeof(info));
         fn_801D339C(pReq->mHeap);
         fn_801D3318(pReq->mHeap, info);
         _Res_pBlockDecompressor = GCmpBlockStart(pRes->pBlocks[index].mOffsetOrCodec, 1, &_Res_sBlockInput, &_Res_sBlockOutput);
@@ -1159,7 +1159,7 @@ static int _ResInitRamResourceFile(ResFile_t *pRes, char *pName, unsigned int fi
                 if (pRes->mState == 3) {
                     pCopy = fn_801D2BB0(pRes->mMode, block.mSize, _Res_uMemAllocFlags, 0);
                     AuxRamUpload((unsigned int)pCopy, (void *)(pRes->mBaseAddr + position), block.mSize);
-                    fn_801D310C((void *)pRes->mBaseAddr, position, 0, 0);
+                    MemReallocMem((void *)pRes->mBaseAddr, position, 0, 0);
                     pRes->mBaseOffset = (unsigned int)pCopy;
                 } else {
                     pRes->mBaseOffset = position;

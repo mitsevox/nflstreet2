@@ -13,7 +13,7 @@ extern "C" {
 void AnimLerpFixed(short *pOut, short *pA, short *pB, int weight, int count);
 void AnimLerpFixedScaled(short *pOut, short *pA, short *pB, int weight, int count, short *pOffset, short *pScale);
 void AnimScaleFixed(short *pOut, short *pA, int count, short *pOffset, short *pScale);
-float fn_801BE5D0(void *p, unsigned short index);
+float AnimStGetStateWeight(void *p, unsigned short index);
 void Orient3Lerp(int *pOut, int *pA, int *pB, float t);
 void OrientLerpAngle(int *pOut, int a, int b, float t);
 void MatPushUnit(void);
@@ -286,7 +286,7 @@ void AnimBlendRootAngles(Object_8003DEC4 *pObject, AnimRootItem *pItems, unsigne
     angles[0] = angles[1] = angles[2] = 0;
     for (i = 0; i < count; i++) {
         if (pItems[i].mUnknown1 != 0 && pItems[i].mUnknown48 == 0.0f) {
-            weight = fn_801BE5D0(p, pItems[i].mUnknown8) * pItems[i].mUnknown30;
+            weight = AnimStGetStateWeight(p, pItems[i].mUnknown8) * pItems[i].mUnknown30;
             total += weight;
             Orient3Lerp(angles, pItems[i].mUnknown10, angles, weight / total);
         }

@@ -1,32 +1,32 @@
 #ifndef ENGINE_LZH_H
 #define ENGINE_LZH_H
 
-typedef struct Struct_803ED474
+typedef struct LZHBlock_t
 {
     unsigned char *mUnknown00;
     int mUnknown04;
     int mUnknown08;
     char mUnknown0C[12];
     unsigned char mUnknown18;
-} Struct_803ED474;
+} LZHBlock_t;
 
-typedef struct Code_802C2860
+typedef struct LZHHuffCode_t
 {
     unsigned short mUnknown00;
     short mUnknown02;
-} Code_802C2860;
+} LZHHuffCode_t;
 
-typedef struct Leaf_802C2860
+typedef struct LZHDecodeEntry_t
 {
     short mUnknown00;
     unsigned char mUnknown02;
-} Leaf_802C2860;
+} LZHDecodeEntry_t;
 
-typedef struct Desc_802C2860
+typedef struct LZHCodeSet_t
 {
-    Code_802C2860 *mpCodes;
-    Leaf_802C2860 *mpLeaves;
+    LZHHuffCode_t *mpCodes;
+    LZHDecodeEntry_t *mpLeaves;
     short mCount;
-} Desc_802C2860;
+} LZHCodeSet_t;
 
 #endif

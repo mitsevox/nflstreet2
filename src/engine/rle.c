@@ -3,7 +3,7 @@
 #include <string.h>
 #include "engine/GCmp.h"
 
-extern void *fn_801D310C(void *allocation, int size, int c, int d);
+extern void *MemReallocMem(void *allocation, int size, int c, int d);
 
 void *_RLECoStart(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
 {
@@ -40,7 +40,7 @@ int _RLECoProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
             length = run;
         }
         while (outPos + length > capacity) {
-            pOut = fn_801D310C(pOut, capacity * 2, 0, 0);
+            pOut = MemReallocMem(pOut, capacity * 2, 0, 0);
             capacity *= 2;
         }
         if (escape) {
@@ -90,7 +90,7 @@ int _RLEDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
             pos++;
         }
         while (outPos + run > capacity) {
-            pOut = fn_801D310C(pOut, capacity * 2, 0, 0);
+            pOut = MemReallocMem(pOut, capacity * 2, 0, 0);
             capacity *= 2;
         }
         if (run == 1) {

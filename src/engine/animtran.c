@@ -1,17 +1,19 @@
-#include "engine/cu_801BDA30.h"
+/* Animation state transitions: when an object changes animation state, picks the transition rule
+   between the outgoing and incoming animations and cross-fades, cuts or plays a transition clip. */
+#include "engine/animst.h"
 
-void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames);
-Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
+void _AnimTranSetTransOutWgt(AnimStInfo_t *p, unsigned short key, int frames);
+AnimTranInfo_t *_AnimTranGetBestTransition(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
                                  unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
                                  unsigned short state, unsigned short toAnim, unsigned short toFileNum);
 
-int fn_801BE82C(unsigned short type, unsigned short key)
+int _AnimTranGetStateTransitions(unsigned short type, unsigned short key)
 {
     AnimFileGetTransList(type, key, &lbl_803D4F50);
     return lbl_803D4F50.mCount;
 }
 
-unsigned int fn_801BE860(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key)
+unsigned int _AnimTranFindBestChannel(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key)
 {
     float highest = 0.0f;
     unsigned int best = 0xFFFF;
@@ -29,7 +31,7 @@ unsigned int fn_801BE860(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChan
     return best;
 }
 
-void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
+void _AnimTranSetTransOutWgt(AnimStInfo_t *p, unsigned short key, int frames)
 {
     int i;
 
@@ -41,7 +43,7 @@ void fn_801BE910(Collection_801BE594 *p, unsigned short key, int frames)
     }
 }
 
-void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
+void _AnimTranDoTransition(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
                  unsigned short previous, int state, void *pOwner)
 {
     AnimStateTransList_t *pTable = &lbl_803D4F50;
@@ -58,30 +60,30 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
         }
         p->mUnknown4[i].mUnknown2 = 1;
         if (pTable->mState != previous) {
-            fn_801BE82C(pObject->mUnknown2, previous);
+            _AnimTranGetStateTransitions(pObject->mUnknown2, previous);
         }
         if (pTable->mCount != 0) {
             unsigned short slotKey = p->mUnknown4[i].mUnknown0;
-            unsigned int from = fn_801BE860(p, pObject, pRecords, slotKey);
-            unsigned int to = fn_801BE860(p, pObject, pRecords, key);
+            unsigned int from = _AnimTranFindBestChannel(p, pObject, pRecords, slotKey);
+            unsigned int to = _AnimTranFindBestChannel(p, pObject, pRecords, key);
 
             if (from != 0xFFFF && to != 0xFFFF) {
-                Transition_801BEFA4 *pTransition;
+                AnimTranInfo_t *pTransition;
 
-                pTransition = fn_801BEFA4(pTable, pObject, pRecords, pRecords[from].mUnknown2, pRecords[from].mUnknown4,
+                pTransition = _AnimTranGetBestTransition(pTable, pObject, pRecords, pRecords[from].mUnknown2, pRecords[from].mUnknown4,
                                           pRecords[from].mUnknown4C.mUnknown18, key, pRecords[to].mUnknown2,
                                           pRecords[to].mUnknown4);
                 if (pTransition == 0) {
-                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, pRecords[from].mUnknown2,
+                    pTransition = _AnimTranGetBestTransition(pTable, pObject, pRecords, pRecords[from].mUnknown2,
                                               pRecords[from].mUnknown4, pRecords[from].mUnknown4C.mUnknown18, key,
                                               0xFFFF, 0);
                 }
                 if (pTransition == 0) {
-                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, pRecords[to].mUnknown2,
+                    pTransition = _AnimTranGetBestTransition(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, pRecords[to].mUnknown2,
                                               pRecords[to].mUnknown4);
                 }
                 if (pTransition == 0) {
-                    pTransition = fn_801BEFA4(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, 0xFFFF, 0);
+                    pTransition = _AnimTranGetBestTransition(pTable, pObject, pRecords, 0xFFFF, 0, 0, key, 0xFFFF, 0);
                 }
                 if (pTransition != 0) {
                     switch (pTransition->mUnknown4) {
@@ -94,7 +96,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
                                            (1.0f - pTransition->mUnknown8) +
                                        pTransition->mUnknown6 * pRecords[to].mUnknown4C.mUnknown4 * pTransition->mUnknown8;
 
-                        fn_801BE910(p, slotKey, (unsigned int)frames);
+                        _AnimTranSetTransOutWgt(p, slotKey, (unsigned int)frames);
                         AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, (unsigned int)frames, 0.0f,
                                     p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
                         fallback = 0;
@@ -123,7 +125,7 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
                             AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f,
                                         p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
                             delay = (float)hold + (float)fade;
-                            fn_801BE798(p, key, delay);
+                            AnimStSetStateDelay(p, key, delay);
                             AnimChanSetDelayByState(pObject, pRecords, key, delay);
                             fallback = 0;
                         } else {
@@ -141,11 +143,11 @@ void fn_801BE99C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
     }
 }
 
-Transition_801BEFA4 *fn_801BEFA4(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
+AnimTranInfo_t *_AnimTranGetBestTransition(AnimStateTransList_t *pTable, AnimHeader_t *pObject, AnimChannel_t *pRecords,
                                  unsigned short fromAnim, unsigned short fromFileNum, unsigned short fromReadPos,
                                  unsigned short state, unsigned short toAnim, unsigned short toFileNum)
 {
-    Transition_801BEFA4 *pResult = 0;
+    AnimTranInfo_t *pResult = 0;
     unsigned short key;
     int i;
 

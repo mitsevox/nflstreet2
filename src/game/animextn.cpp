@@ -8,8 +8,8 @@
 extern "C" {
 void *fn_801D2BB0(int a, int size, int c, int d);
 void AuxRamUpload(void *destination, char *source, int size);
-int fn_801D3148(int a, void *allocation);
-void *fn_801D310C(void *allocation, int size, int c, int d);
+int MemGetSizeByAddr(int a, void *allocation);
+void *MemReallocMem(void *allocation, int size, int c, int d);
 void fn_801D2BD0(void *allocation);
 void AuxRamDownload(char *pDst, void *pSrc, int size);
 }
@@ -22,7 +22,7 @@ void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
 {
     unsigned int i;
     unsigned int j;
-    int size = fn_801D3148(1, file);
+    int size = MemGetSizeByAddr(1, file);
     unsigned int start = (unsigned int)file;
     if (file->flags & 4) {
         for (i = 0; i < file->groups->count; ++i) {
@@ -43,7 +43,7 @@ void _AnimExtnRelocateMotion(AnimFileFormat_t *file)
     int motionSize = size - headerSize;
     unsigned int copy = (unsigned int)fn_801D2BB0(16, motionSize, 0, 0);
     AuxRamUpload((void *)copy, (char *)start, (motionSize + 31) & ~31);
-    fn_801D310C(file, headerSize, 0, 0);
+    MemReallocMem(file, headerSize, 0, 0);
     if (file->flags & 4) {
         for (i = 0; i < file->groups->count; ++i) {
             for (j = 0; j < file->groupMotion[i].count; ++j)

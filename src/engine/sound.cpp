@@ -118,7 +118,7 @@ void DSDelListNode(void *pList, void *pNode);
 int DSTraverseList(void *pPool, int start, void *pKey, void *pOut, SndTraverseFn_t pFunc, int count);
 int FileHostCheckActive(void);
 void FileDebugProcess(void);
-void *fn_801D310C(void *pAddr, int size, int ident, int flags);
+void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 unsigned long OSGetSoundMode(void);
 void SNDSYS_linkmaincpumixer(void);
 int fn_802692B8(int handle);
@@ -872,7 +872,7 @@ static void *_SndAemsBankAlloc(void *pData, int size, int c)
 
 static void _SndAemsBankRealloc(SndAemsBankInfo_t *pBank)
 {
-    pBank->pData = fn_801D310C(pBank->pData, pBank->mSize, 0, 0);
+    pBank->pData = MemReallocMem(pBank->pData, pBank->mSize, 0, 0);
 }
 
 SndAemsBankInfo_t *SndAemsLoadBank(ResFile_t *pRes, unsigned int index, int bank)
