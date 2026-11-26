@@ -26717,7 +26717,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. Draft comparisons only; original assembly remains linked. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9BC stay external; no .rodata or .data is emitted. MemInitHeap 0x801D2130 and three other large bodies have no draft yet.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the five holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
       "sections": [
         {
           "section": ".text",
@@ -26803,6 +26803,11 @@
           "end": "0x801D2130"
         },
         {
+          "symbol": "fn_801D2130",
+          "start": "0x801D2130",
+          "end": "0x801D2478"
+        },
+        {
           "symbol": "fn_801D2478",
           "start": "0x801D2478",
           "end": "0x801D2570"
@@ -26858,6 +26863,11 @@
           "end": "0x801D28A8"
         },
         {
+          "symbol": "fn_801D28A8",
+          "start": "0x801D28A8",
+          "end": "0x801D2B7C"
+        },
+        {
           "symbol": "fn_801D2B7C",
           "start": "0x801D2B7C",
           "end": "0x801D2BB0"
@@ -26866,6 +26876,16 @@
           "symbol": "fn_801D2BB0",
           "start": "0x801D2BB0",
           "end": "0x801D2BD0"
+        },
+        {
+          "symbol": "fn_801D2BD0",
+          "start": "0x801D2BD0",
+          "end": "0x801D2E5C"
+        },
+        {
+          "symbol": "fn_801D2E5C",
+          "start": "0x801D2E5C",
+          "end": "0x801D310C"
         },
         {
           "symbol": "fn_801D310C",
