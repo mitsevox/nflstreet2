@@ -195,6 +195,9 @@ class ConstantCheck(unittest.TestCase):
         self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lfs(1, 9, 0), 0x4E800020, lfs(2, 9, 4)), 0, 9), [(0, 4)])
         lmw = (46 << 26) | (29 << 21) | (9 << 16) | 8  # lmw r29, 8(r9): three words
         self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lmw), 0, 9), [(8, 12)])
+        # lfs f9 loads a floating-point register: r9 keeps the base, and the next use through it counts.
+        self.assertEqual(function_compare.base_uses(ppc(addi(9, 9, 0), lfs(9, 9, 0), lfs(2, 9, 4), 0x4E800020), 0, 9),
+                         [(0, 4), (4, 4)])
 
     def test_extent(self):
         sections = [{'name': '.rodata', 'index': 1, 'size': 0x20}]

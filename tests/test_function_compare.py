@@ -1169,6 +1169,14 @@ class SectionBaseReferences(unittest.TestCase):
             'a derived address past the end': dict(relocations=self.pair(0x10020), uses=[0x387F7000, blr]),
             'a conditional return cannot be followed': dict(relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0x4D820020, blr]),
             'a callee-saved base live past a call': dict(relocations=self.pair(0x10020), uses=[0x48000001, self.lwz(-0x3FB8), blr]),
+            # lfs f31 loads a floating-point register: r31 still holds the base, so the use past the
+            # end after it counts (through another register, and through the base itself).
+            'an FP load into f31 from another register keeps the base': dict(
+                relocations=self.pair(0x10020), uses=[self.lwz(-0x3FB8), 0xC3E30000, self.lwz(0), blr]),
+            'an FP load into f31 through the base keeps the base': dict(
+                relocations=self.pair(0x10020), uses=[0xC3FF0000 | -0x3FB8 & 0xFFFF, self.lwz(0), blr]),
+            'an lfd into f31 through the base keeps the base': dict(
+                relocations=self.pair(0x10020), uses=[0xCBFF0000 | -0x3FB8 & 0xFFFF, self.lwz(0), blr]),
             'a base stored to memory is passed on': dict(relocations=self.pair(0x10020), uses=[0x93FF0000 | -0x3FB8 & 0xFFFF]),
             'a base with no use': dict(relocations=self.pair(0x10020), uses=[blr]),
             'a high half without its low half': dict(relocations=[(2, 6, 0x10020)]),

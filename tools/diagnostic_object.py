@@ -11,6 +11,9 @@ import source_build as sb
 ACCESS_WIDTH = {32: 4, 33: 4, 34: 1, 35: 1, 36: 4, 37: 4, 38: 1, 39: 1, 40: 2, 41: 2, 42: 2, 43: 2, 44: 2, 45: 2,
                 46: None, 47: None, 48: 4, 49: 4, 50: 8, 51: 8, 52: 4, 53: 4, 54: 8, 55: 8}
 STORES = {36, 37, 38, 39, 44, 45, 47, 52, 53, 54, 55}
+# The loads whose rD is a general register (lwz lwzu lbz lbzu lhz lhzu lha lhau lmw): only these overwrite a
+# base. lfs lfsu lfd lfdu (48-51) load a floating-point register, so `lfs f31,0(r3)` leaves r31 alone.
+GPR_LOADS = {32, 33, 34, 35, 40, 41, 42, 43, 46}
 # The update forms, which also write the accessed address to rA: lwzu lbzu stwu stbu lhzu lhau sthu lfsu lfdu stfsu
 # stfdu. Their indexed forms (lwzux, ...) are X-form instructions with the base in rA, which base_uses refuses.
 UPDATES = {33, 35, 37, 39, 41, 43, 45, 49, 51, 53, 55}
@@ -58,7 +61,7 @@ def base_uses(code, at, register, strict=False):
                 return None
             displacement = word & 0xFFFF
             uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
-            if opcode not in STORES and (target == register or opcode == 46 and target <= register):
+            if opcode in GPR_LOADS and (target == register or opcode == 46 and target <= register):
                 break
             continue
         if word == BLR:
@@ -79,8 +82,9 @@ def flow_uses(code, at, register, branches=None):
     A branch that carries a relocation goes where `branches` maps its position (a position in
     `code`, or None for a target outside it); in a relocatable object its field is not the
     displacement.
-    A path ends where the register is overwritten (an li, lis or a load into it, or an addi whose
-    target is the register), at a return, or at a call when the register is volatile. An addi from
+    A path ends where the register is overwritten (an li, lis or a general-register load into it,
+    an addi rB,rB,imm, or an rlwinm/ori-type instruction writing it from another register; an addi
+    into it from another register is refused), at a return, or at a call when the register is volatile. An addi from
     the register forms a derived address, returned as a one-byte use at its immediate: it must lie
     in the section like any address formed there. None when any path uses the address any other
     way (passed on, stored, indexed, moved by an update form), leaves the function's bytes, runs
@@ -110,7 +114,7 @@ def flow_uses(code, at, register, branches=None):
                     return None
                 displacement = word & 0xFFFF
                 uses.append((displacement - 0x10000 if displacement & 0x8000 else displacement, access_width(word)))
-                if opcode not in STORES and (target == register or opcode == 46 and target <= register):
+                if opcode in GPR_LOADS and (target == register or opcode == 46 and target <= register):
                     break
                 position += 4
                 continue
@@ -149,9 +153,9 @@ def flow_uses(code, at, register, branches=None):
                 continue
             if opcode == 19:  # bclr, bcctr and the condition-register operations
                 return None
-            if opcode in (14, 15) and base == 0 and target == register or opcode in ACCESS_WIDTH and \
-                    opcode not in STORES and (target == register or opcode == 46 and target <= register):
-                break  # li, lis, or a load (lmw from a lower register) into the register: the address is gone.
+            if opcode in (14, 15) and base == 0 and target == register or opcode in GPR_LOADS and \
+                    (target == register or opcode == 46 and target <= register):
+                break  # li, lis, or a GPR load (lmw from a lower register) into the register: the address is gone.
             if opcode in (21, 23, 24, 25, 26, 27, 28, 29) and base == register and target != register and not (
                     opcode == 23 and (word >> 11) & 31 == register):
                 break  # rlwinm, rlwnm, ori, oris, xori, xoris, andi., andis. write rA from rS (and rB): gone.
