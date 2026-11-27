@@ -977,8 +977,8 @@ int TutorialFinishCategory(void)
             switch (mode) {
             case 2:
                 SpchIGSetCommentaryOn(0);
-                MiniGameGetCurrent()->vfn_07(0, 1);
-                MiniGameGetCurrent()->vfn_07(1, 5);
+                MiniGameGetCurrent()->SetOption(0, 1);
+                MiniGameGetCurrent()->SetOption(1, 5);
                 break;
             case 0:
                 ClockRuleClearFlags(0x800);
@@ -991,7 +991,7 @@ int TutorialFinishCategory(void)
                 if (fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) {
                     ScrmChangePossession(0);
                 }
-                MiniGameGetCurrent()->vfn_07(0, 21);
+                MiniGameGetCurrent()->SetOption(0, 21);
                 PlayBookSetFormationType(1, 1);
                 PlayBookSetIndices(1, 0, 0, 0);
                 PlayBookLoadCurrentPlay(1);

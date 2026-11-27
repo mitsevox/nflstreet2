@@ -230,8 +230,8 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
             rounds = 20;
             break;
         }
-        MiniGameGetCurrent()->vfn_07(0, type);
-        MiniGameGetCurrent()->vfn_07(1, rounds);
+        MiniGameGetCurrent()->SetOption(0, type);
+        MiniGameGetCurrent()->SetOption(1, rounds);
         break;
     }
     case 3:

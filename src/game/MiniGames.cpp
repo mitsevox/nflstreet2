@@ -191,15 +191,15 @@ class MiniGame2MinuteC : public MiniGameC {
 public:
     MiniGame2MinuteC();
     virtual ~MiniGame2MinuteC();
-    virtual void vfn_01();
-    virtual void vfn_02();
+    virtual void Start();
+    virtual void Stop();
     virtual int vfn_05(int team);
-    virtual int vfn_08(int a);
-    virtual void vfn_10(int value, int *pList, int *pIds);
+    virtual int GetPlayType(int a);
+    virtual void FillDepthChart(int value, int *pList, int *pIds);
     virtual void AutoFillDepthChart(int value, int *pList, int *pIds, unsigned int count, int slot);
     virtual int vfn_21();
-    virtual int vfn_32(int team, int kind);
-    virtual int vfn_33(int kind, int team);
+    virtual int CheckTeamAward(int team, int kind);
+    virtual int GetTeamStat(int kind, int team);
 
     MiniGame2MinuteData *mpUnknown1C;
 };
@@ -208,19 +208,19 @@ class MiniGame4On4C : public MiniGameC {
 public:
     MiniGame4On4C();
     virtual ~MiniGame4On4C() { }
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual int vfn_03();
+    virtual void Start();
+    virtual void Stop();
+    virtual int GetTotalPlayerCount();
     virtual unsigned int vfn_04(int team);
     virtual int vfn_05(int team);
     virtual unsigned int vfn_06();
-    virtual void vfn_07(int a, int b);
-    virtual int vfn_08(int a);
-    virtual void vfn_10(int value, int *pList, int *pIds);
+    virtual void SetOption(int a, int b);
+    virtual int GetPlayType(int a);
+    virtual void FillDepthChart(int value, int *pList, int *pIds);
     virtual void AutoFillDepthChart(int value, int * list, int * ids, unsigned int count, int b);
     virtual void vfn_14();
-    virtual int vfn_32(int team, int kind);
-    virtual int vfn_33(int kind, int team);
+    virtual int CheckTeamAward(int team, int kind);
+    virtual int GetTeamStat(int kind, int team);
 
     MiniGame4On4Data *mpUnknown1C;
     int mUnknown20;
@@ -231,17 +231,17 @@ public:
     MiniGameCrushCarrierC();
     void RestorePlayerOrder();
     virtual ~MiniGameCrushCarrierC() { }
-    virtual void vfn_01();
-    virtual void vfn_02();
+    virtual void Start();
+    virtual void Stop();
     virtual int vfn_05(int team);
-    virtual void vfn_10(int value, int *pList, int *pIds);
+    virtual void FillDepthChart(int value, int *pList, int *pIds);
     virtual void AutoFillDepthChart(int value, int *pList, int *pIds, unsigned int a, int b);
-    virtual void vfn_12();
+    virtual void UpdateRecords();
     virtual int IsWinnerUserTeam();
     virtual int vfn_21();
     virtual int CheckAward(int team, int index, Object_80039F5C *pPlayer, int kind);
-    virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
-    virtual int vfn_31(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode);
+    virtual int GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer);
+    virtual int IsBestPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode);
 
     MiniGameCrushCarrierData *mpUnknown1C;
 };
@@ -250,9 +250,9 @@ class MiniGameQuickStrikeC : public MiniGameC {
 public:
     MiniGameQuickStrikeC() : mpUnknown1C(0) {}
     virtual ~MiniGameQuickStrikeC() { }
-    virtual void vfn_01();
-    virtual void vfn_02();
-    virtual int vfn_08(int a);
+    virtual void Start();
+    virtual void Stop();
+    virtual int GetPlayType(int a);
 
     MiniGameQuickStrikeData *mpUnknown1C;
 };
@@ -261,18 +261,18 @@ class MiniGameJumpBallC : public MiniGameC {
 public:
     MiniGameJumpBallC();
     virtual ~MiniGameJumpBallC() { }
-    virtual void vfn_01();
-    virtual void vfn_02();
+    virtual void Start();
+    virtual void Stop();
     virtual int vfn_05(int team);
-    virtual void vfn_10(int value, int *list, int *ids);
+    virtual void FillDepthChart(int value, int *list, int *ids);
     virtual void AutoFillDepthChart(int value, int *list, int *ids, unsigned int a, int b);
-    virtual void vfn_12();
+    virtual void UpdateRecords();
     virtual int IsWinnerUserTeam();
     virtual int vfn_21();
-    virtual int vfn_22(int value);
-    virtual int vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count);
+    virtual int AllowsPause(int value);
+    virtual int SelectDepthRecord(AutoDepthPlayer_t *pRecords, unsigned int count);
     virtual int CheckAward(int team, int index, Object_80039F5C * pPlayer, int kind);
-    virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
+    virtual int GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer);
 
     MiniGameJumpBallData *mpUnknown1C;
     unsigned int mUnknown32;
@@ -284,19 +284,19 @@ public:
 class MiniGameOpenFieldC : public MiniGameC {
 public:
     MiniGameOpenFieldC();
-    virtual void vfn_01();
-    virtual void vfn_02();
+    virtual void Start();
+    virtual void Stop();
     virtual int vfn_05(int team);
-    virtual void vfn_07(int kind, int value);
-    virtual const float * vfn_09(int index);
-    virtual void vfn_10(int value, int *pList, int *pIds);
+    virtual void SetOption(int kind, int value);
+    virtual const float * GetAssignDirections(int index);
+    virtual void FillDepthChart(int value, int *pList, int *pIds);
     virtual void AutoFillDepthChart(int value, int *pList, int *pIds, unsigned int count, int b);
     virtual void vfn_14();
     virtual void GetPlayerStatText(int team, unsigned char index, int kind, char *pFirst, unsigned char firstLength, char *pSecond, unsigned char secondLength);
     virtual int vfn_21();
     virtual int CheckAward(int team, int index, Object_80039F5C *pPlayer, int kind);
-    virtual int vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer);
-    virtual void vfn_35(int team, int showColors);
+    virtual int GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer);
+    virtual void UpdateScoreRows(int team, int showColors);
 
     MiniGameOpenFieldData *mpUnknown1C;
     int mUnknown20;
@@ -1082,12 +1082,12 @@ void MiniGameSetType(int value)
 void MiniGameStart(void)
 {
     _MiniGame_iState = 2;
-    _MiniGame_apModes[_MiniGame_iType]->vfn_01();
+    _MiniGame_apModes[_MiniGame_iType]->Start();
 }
 
 void MiniGameStop(void)
 {
-    _MiniGame_apModes[_MiniGame_iType]->vfn_02();
+    _MiniGame_apModes[_MiniGame_iType]->Stop();
     _MiniGame_iState = 1;
     MiniGameDisable();
 }
@@ -1214,7 +1214,7 @@ MiniGameC::MiniGameC()
     mState.mUnknownC = 1;
 }
 
-int MiniGameC::vfn_03()
+int MiniGameC::GetTotalPlayerCount()
 {
     return 14;
 }
@@ -1234,7 +1234,7 @@ unsigned int MiniGameC::vfn_06()
     return 7;
 }
 
-int MiniGameC::vfn_08(int a)
+int MiniGameC::GetPlayType(int a)
 {
     return 0;
 }
@@ -1251,7 +1251,7 @@ void MiniGameSetDepthCallbacks(MiniGameC *p)
 
 } /* extern "C" */
 
-void MiniGameC::vfn_10(int value, int *pList, int *pIds)
+void MiniGameC::FillDepthChart(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
 }
@@ -1271,7 +1271,7 @@ int MiniGameC::IsWinnerUserTeam()
     return result;
 }
 
-void MiniGameC::vfn_15()
+void MiniGameC::UpdateCountdown()
 {
     int value = (int)fn_8009D990(1);
     if (value != mState.mCachedValue && value >= 0) {
@@ -1282,7 +1282,7 @@ void MiniGameC::vfn_15()
     }
 }
 
-int MiniGameC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
+int MiniGameC::SelectDepthRecord(AutoDepthPlayer_t *pRecords, unsigned int count)
 {
     unsigned int index;
     for (index = 0; index < mState.mCount && mState.mpRecords[index].mUnknown2C; ++index) {
@@ -1293,7 +1293,7 @@ int MiniGameC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
     return index;
 }
 
-int MiniGameC::vfn_24(int team, unsigned int tag)
+int MiniGameC::SumPlayerColumn(int team, unsigned int tag)
 {
     int value = 0;
     int result = 0;
@@ -1331,7 +1331,7 @@ void MiniGameDepthRatePlayer(AutoDepthPlayer_t *pRecord, int *pValues, DbCursor 
 void MiniGameDepthSelectPlayer(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *pCategory)
 {
     MiniGameC *p = MiniGameGetCurrent();
-    int index = p->vfn_23(pRecords, count);
+    int index = p->SelectDepthRecord(pRecords, count);
     unsigned int values[4];
     int ids[4];
     int categories[4];
@@ -1484,7 +1484,7 @@ void MiniGameC::AssignPlayerAwards(const int *pKinds)
             unsigned char team=i/7;
             Object_80039F5C *player=PlyrGet(team,i%7);
             if(player->mUnknown9[2]) {
-                unsigned int count=vfn_25(team,i%7);
+                unsigned int count=GetAwardCount(team,i%7);
                 if(count<=2 && CheckAward(team,i%7,player,pKinds[k])) {
                     _MiniGame_aPlayerAwards[i][count]=pKinds[k];
                     _MiniGame_aAwardCounts[k]++;
@@ -1494,15 +1494,15 @@ void MiniGameC::AssignPlayerAwards(const int *pKinds)
     }
 }
 
-void MiniGameC::vfn_17(const int *pKinds)
+void MiniGameC::AssignTeamAwards(const int *pKinds)
 {
     memset(_MiniGame_aPlayerAwards,0,168);
     memset(_MiniGame_aAwardCounts,0,54);
     fn_800C8704(&_MiniGame_aTeamIds[0],&_MiniGame_aTeamIds[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char team=0;team<2;team++) {
-            unsigned int count=vfn_25(0,team);
-            if(count<=2 && vfn_32(team,pKinds[k])) {
+            unsigned int count=GetAwardCount(0,team);
+            if(count<=2 && CheckTeamAward(team,pKinds[k])) {
                 _MiniGame_aPlayerAwards[team][count]=pKinds[k];
                 _MiniGame_aAwardCounts[k]++;
             }
@@ -1514,7 +1514,7 @@ void MiniGameC::GetPlayerAwardsText(int team, unsigned char index, char *text, u
 {
     *text=0;
     for(unsigned char i=0;i<3 && _MiniGame_aPlayerAwards[team*7+index][i];i++) {
-        const char *name=vfn_29(_MiniGame_aPlayerAwards[team*7+index][i]);
+        const char *name=GetAwardTitle(_MiniGame_aPlayerAwards[team*7+index][i]);
         unsigned char length=strlen(name);
         if(i)length+=2;
         if(capacity>length) {
@@ -1528,12 +1528,12 @@ void MiniGameC::GetPlayerAwardsText(int team, unsigned char index, char *text, u
     }
 }
 
-void MiniGameC::vfn_19(int team, int column, char *text, int capacity)
+void MiniGameC::GetTeamAwardText(int team, int column, char *text, int capacity)
 {
-    snprintf(text,capacity,vfn_29(_MiniGame_aPlayerAwards[team][column]));
+    snprintf(text,capacity,GetAwardTitle(_MiniGame_aPlayerAwards[team][column]));
 }
 
-unsigned char MiniGameC::vfn_25(int team, int index)
+unsigned char MiniGameC::GetAwardCount(int team, int index)
 {
     unsigned char row=index+team*7,count=0;
     while(count<3 && _MiniGame_aPlayerAwards[row][count])count++;
@@ -1544,24 +1544,24 @@ int MiniGameC::CheckAward(int team, int index, Object_80039F5C *player, int kind
 {
     int result=0;
     switch(kind) {
-    case 1:result=vfn_31(kind,team,index,player,1,0);break;
-    case 2:result=vfn_31(kind,team,index,player,0,0);break;
-    case 3:result=vfn_31(kind,team,index,player,10,0);break;
-    case 4:result=vfn_31(kind,team,index,player,2,0);break;
-    case 5:result=vfn_31(kind,team,index,player,2,0);break;
-    case 6:result=vfn_31(kind,team,index,player,1,0);break;
-    case 7:result=vfn_31(kind,team,index,player,3,0);break;
-    case 8:result=vfn_31(kind,team,index,player,1,1);break;
+    case 1:result=IsBestPlayerStat(kind,team,index,player,1,0);break;
+    case 2:result=IsBestPlayerStat(kind,team,index,player,0,0);break;
+    case 3:result=IsBestPlayerStat(kind,team,index,player,10,0);break;
+    case 4:result=IsBestPlayerStat(kind,team,index,player,2,0);break;
+    case 5:result=IsBestPlayerStat(kind,team,index,player,2,0);break;
+    case 6:result=IsBestPlayerStat(kind,team,index,player,1,0);break;
+    case 7:result=IsBestPlayerStat(kind,team,index,player,3,0);break;
+    case 8:result=IsBestPlayerStat(kind,team,index,player,1,1);break;
     case 9:
-        result=vfn_31(kind,team,index,player,2,1);
-        if(result && vfn_28(8))result=0;
+        result=IsBestPlayerStat(kind,team,index,player,2,1);
+        if(result && GetAwardWinnerCount(8))result=0;
         break;
-    case 10:result=vfn_25(team,index)==0;break;
-    case 11:result=vfn_31(kind,team,index,player,3,0);break;
-    case 12:result=vfn_31(kind,team,index,player,0,0);break;
-    case 13:result=vfn_31(kind,team,index,player,1,0);break;
-    case 14:result=vfn_31(kind,team,index,player,1,0);break;
-    case 15:result=vfn_31(kind,team,index,player,1,0);break;
+    case 10:result=GetAwardCount(team,index)==0;break;
+    case 11:result=IsBestPlayerStat(kind,team,index,player,3,0);break;
+    case 12:result=IsBestPlayerStat(kind,team,index,player,0,0);break;
+    case 13:result=IsBestPlayerStat(kind,team,index,player,1,0);break;
+    case 14:result=IsBestPlayerStat(kind,team,index,player,1,0);break;
+    case 15:result=IsBestPlayerStat(kind,team,index,player,1,0);break;
     }
     return result;
 }
@@ -1574,19 +1574,19 @@ int MiniGameC::PlayerHasAward(int team, int index, int value)
     return found;
 }
 
-const char * MiniGameC::vfn_29(int kind)
+const char * MiniGameC::GetAwardTitle(int kind)
 {
     unsigned char index=0;
     if(_MiniGame_aAwardTitles[kind].mCount>1)index=SyncRandGetRange(0,_MiniGame_aAwardTitles[kind].mCount);
     return _MiniGame_aAwardTitles[kind].mpText[index];
 }
 
-unsigned char MiniGameC::vfn_28(int index)
+unsigned char MiniGameC::GetAwardWinnerCount(int index)
 {
     return _MiniGame_aAwardCounts[index];
 }
 
-int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameC::GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int result=0;
     unsigned short id=pPlayer->mUnknown2908;
@@ -1654,10 +1654,10 @@ int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
     return result;
 }
 
-int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, int threshold, int mode)
+int MiniGameC::IsBestPlayerStat(int kind, int team, int index, Object_80039F5C *player, int threshold, int mode)
 {
     int best=0,result=0,found=0;
-    int value=vfn_30(kind,team,index,player);
+    int value=GetPlayerStat(kind,team,index,player);
     int count;
     switch(MiniGameGetType()) {
     case 1:count=4;break;
@@ -1670,9 +1670,9 @@ int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, in
             Object_80039F5C *other=PlyrGet(t,i);
             if(other->mUnknown9[2]) {
                 if(!found) {
-                    best=vfn_30(kind,t,i,other);found=1;
+                    best=GetPlayerStat(kind,t,i,other);found=1;
                 } else {
-                    int next=vfn_30(kind,t,i,other);
+                    int next=GetPlayerStat(kind,t,i,other);
                     if((mode==0 && next>best) || (mode==1 && next<best))best=next;
                 }
             }
@@ -1682,33 +1682,33 @@ int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, in
     return result;
 }
 
-int MiniGameC::vfn_32(int team, int kind)
+int MiniGameC::CheckTeamAward(int team, int kind)
 {
     int result=0;
     if(kind!=21 && PlayerHasAward(0,team,8))return 0;
     switch(kind) {
-    case 15:result=vfn_34(kind,team,1,0);break;
-    case 14:result=vfn_34(kind,team,1,0);break;
-    case 13:result=vfn_34(kind,team,1,0);break;
-    case 12:result=vfn_34(kind,team,1,0);break;
-    case 11:result=vfn_34(kind,team,3,0);break;
+    case 15:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 14:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 13:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 12:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 11:result=IsBetterTeamStat(kind,team,3,0);break;
     case 9:
-        result=!vfn_28(8) && vfn_34(kind,team,100,1);
+        result=!GetAwardWinnerCount(8) && IsBetterTeamStat(kind,team,100,1);
         break;
-    case 8:result=vfn_33(8,team)==0;break;
-    case 7:result=vfn_34(kind,team,3,0);break;
-    case 6:result=vfn_34(kind,team,1,0);break;
-    case 5:result=vfn_34(kind,team,2,0);break;
-    case 4:result=vfn_34(kind,team,4,0);break;
-    case 3:result=vfn_34(kind,team,10,0);break;
-    case 2:result=vfn_34(kind,team,1,0);break;
-    case 1:result=vfn_34(kind,team,1,0);break;
-    case 10:result=vfn_25(0,team)==0;break;
+    case 8:result=GetTeamStat(8,team)==0;break;
+    case 7:result=IsBetterTeamStat(kind,team,3,0);break;
+    case 6:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 5:result=IsBetterTeamStat(kind,team,2,0);break;
+    case 4:result=IsBetterTeamStat(kind,team,4,0);break;
+    case 3:result=IsBetterTeamStat(kind,team,10,0);break;
+    case 2:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 1:result=IsBetterTeamStat(kind,team,1,0);break;
+    case 10:result=GetAwardCount(0,team)==0;break;
     }
     return result;
 }
 
-int MiniGameC::vfn_33(int kind, int team)
+int MiniGameC::GetTeamStat(int kind, int team)
 {
     int result=0;
     int handle=fn_800C8744(team);
@@ -1722,7 +1722,7 @@ int MiniGameC::vfn_33(int kind, int team)
     }
     case 13:
         DbMttsGetTeamColumn(handle,0x69447374,&result);
-        result+=vfn_24(team,0x72666C67);break;
+        result+=SumPlayerColumn(team,0x72666C67);break;
     case 12:result=StyleTrackerGetTotal(team);break;
     case 11: {
         int value;
@@ -1735,8 +1735,8 @@ int MiniGameC::vfn_33(int kind, int team)
         DbMttsGetTeamColumn(handle,0x74507374,&value);result+=value;
         DbMttsGetTeamColumn(handle,0x64647374,&value);result+=value;
         DbMttsGetTeamColumn(handle,0x69707374,&value);result+=value;
-        result+=vfn_24(team,0x61746467);
-        result+=vfn_24(team,0x72666C67);break;
+        result+=SumPlayerColumn(team,0x61746467);
+        result+=SumPlayerColumn(team,0x72666C67);break;
     }
     case 7: {
         int a=StyleTrackerGetEventCount(team,63),b=StyleTrackerGetEventCount(team,11);
@@ -1761,18 +1761,18 @@ int MiniGameC::vfn_33(int kind, int team)
         DbMttsGetTeamColumn(handle,0x74507374,&value);result+=value;
         DbMttsGetTeamColumn(handle,0x64647374,&value);result+=value;break;
     }
-    case 1:case 9:result=vfn_24(team,0x61746467);break;
+    case 1:case 9:result=SumPlayerColumn(team,0x61746467);break;
     case 10:break;
     }
     return result;
 }
 
-int MiniGameC::vfn_34(int kind, int team, int threshold, int mode)
+int MiniGameC::IsBetterTeamStat(int kind, int team, int threshold, int mode)
 {
     int other=(team+1)&1;
-    int value=vfn_33(kind,team);
+    int value=GetTeamStat(kind,team);
     int result=1;
-    if((mode==0 && value<vfn_33(kind,other)) || (mode==1 && value>vfn_33(kind,other)))result=0;
+    if((mode==0 && value<GetTeamStat(kind,other)) || (mode==1 && value>GetTeamStat(kind,other)))result=0;
     if((mode==0 && value<threshold) || (mode==1 && value>threshold))result=0;
     return result;
 }
@@ -1959,8 +1959,8 @@ void MiniGame2MinuteGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
-    MiniGameGetCurrent()->vfn_12();
-    MiniGameGetCurrent()->vfn_17(_MiniGame_a2MinuteAwards);
+    MiniGameGetCurrent()->UpdateRecords();
+    MiniGameGetCurrent()->AssignTeamAwards(_MiniGame_a2MinuteAwards);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
@@ -2005,7 +2005,7 @@ void MiniGame2MinutePlayCallC::vfn_04(float dt)
         fn_800B3EFC(other);
         fn_800AD910(2, dt);
     }
-    MiniGameGetCurrent()->vfn_15();
+    MiniGameGetCurrent()->UpdateCountdown();
 }
 
 void MiniGame2MinutePlayCallC::vfn_05(float dt)
@@ -2046,7 +2046,7 @@ void MiniGame2MinutePrePlayC::OnEnter(float dt)
 void MiniGame2MinutePrePlayC::OnUpdate(float dt)
 {
     PreSnapPhase::OnUpdate(dt);
-    MiniGameGetCurrent()->vfn_15();
+    MiniGameGetCurrent()->UpdateCountdown();
     if (fn_8009D990(1) == 0) {
         ScrmEndPlay();
     }
@@ -2061,7 +2061,7 @@ void MiniGame2MinuteDuringPlayC::OnEnter(float dt)
 void MiniGame2MinuteDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
-    MiniGameGetCurrent()->vfn_15();
+    MiniGameGetCurrent()->UpdateCountdown();
     if (fn_8011F1CC() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
         !ScrmTestPlayFlag(20)) {
         ScrmEndPlay();
@@ -2083,7 +2083,7 @@ int MiniGame2MinutePostPlayC::GetResultText(char *pText)
 void MiniGame2MinutePostPlayC::OnUpdate(float dt)
 {
     PostPlayPhase::OnUpdate(dt);
-    MiniGameGetCurrent()->vfn_15();
+    MiniGameGetCurrent()->UpdateCountdown();
 }
 
 void MiniGame2MinutePostPlayC::Finish(float dt)
@@ -2142,7 +2142,7 @@ MiniGame2MinuteC::~MiniGame2MinuteC()
     mState.mpRecords = 0;
 }
 
-void MiniGame2MinuteC::vfn_01()
+void MiniGame2MinuteC::Start()
 {
     unsigned int i;
     int id;
@@ -2195,7 +2195,7 @@ void MiniGame2MinuteC::vfn_01()
     }
 }
 
-void MiniGame2MinuteC::vfn_02()
+void MiniGame2MinuteC::Stop()
 {
     if (mpUnknown1C->mUnknown38 != 0) {
         GameOptionsSet(19, 1);
@@ -2214,7 +2214,7 @@ void MiniGame2MinuteC::vfn_02()
     mpUnknown1C = 0;
 }
 
-int MiniGame2MinuteC::vfn_08(int a)
+int MiniGame2MinuteC::GetPlayType(int a)
 {
     return 2;
 }
@@ -2227,7 +2227,7 @@ int MiniGame2MinuteC::vfn_05(int team)
     return 2;
 }
 
-void MiniGame2MinuteC::vfn_10(int value, int *pList, int *pIds)
+void MiniGame2MinuteC::FillDepthChart(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
     MiniGameDepthEnsureOffense(pList, pIds, 3);
@@ -2286,12 +2286,12 @@ void MiniGame2MinuteGetTeamStats(MiniGame2MinuteC *p, int team, Stats_8005C844 *
 
 } /* extern "C" */
 
-int MiniGame2MinuteC::vfn_32(int team, int kind)
+int MiniGame2MinuteC::CheckTeamAward(int team, int kind)
 {
     int result = 0;
     switch (kind) {
     case 16:
-        if (ScrmGetTeamScore(team) >= ScrmGetTeamScore((team + 1) & 1) - 3 && vfn_34(2, team, 100, 1)) {
+        if (ScrmGetTeamScore(team) >= ScrmGetTeamScore((team + 1) & 1) - 3 && IsBetterTeamStat(2, team, 100, 1)) {
             result = 1;
         }
         break;
@@ -2306,13 +2306,13 @@ int MiniGame2MinuteC::vfn_32(int team, int kind)
         }
         break;
     default:
-        result = MiniGameC::vfn_32(team, kind);
+        result = MiniGameC::CheckTeamAward(team, kind);
         break;
     }
     return result;
 }
 
-int MiniGame2MinuteC::vfn_33(int kind, int team)
+int MiniGame2MinuteC::GetTeamStat(int kind, int team)
 {
     switch (kind) {
     case 16:
@@ -2320,7 +2320,7 @@ int MiniGame2MinuteC::vfn_33(int kind, int team)
     case 21:
         return ScrmGetTeamScore(team);
     default:
-        return MiniGameC::vfn_33(kind, team);
+        return MiniGameC::GetTeamStat(kind, team);
     }
 }
 
@@ -2700,7 +2700,7 @@ MiniGame4On4C::MiniGame4On4C()
     mState.mpRecords = _MiniGame_a4On4Depth;
 }
 
-void MiniGame4On4C::vfn_01()
+void MiniGame4On4C::Start()
 {
     mUnknown0 = 10;
     mUnknown4 = 9;
@@ -2755,8 +2755,8 @@ void MiniGame4On4GameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
-    MiniGameGetCurrent()->vfn_12();
-    MiniGameGetCurrent()->vfn_17(_MiniGame_a4On4Awards);
+    MiniGameGetCurrent()->UpdateRecords();
+    MiniGameGetCurrent()->AssignTeamAwards(_MiniGame_a4On4Awards);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
@@ -2771,7 +2771,7 @@ void MiniGame4On4GameEndC::vfn_09()
     fn_8021956C(gUISMainInfo, 3, 24, 1);
 }
 
-void MiniGame4On4C::vfn_02()
+void MiniGame4On4C::Stop()
 {
     fn_800BC51C(0);
     fn_800B3644(0);
@@ -2806,12 +2806,12 @@ int MiniGame4On4C::vfn_05(int team)
     return 4;
 }
 
-int MiniGame4On4C::vfn_03()
+int MiniGame4On4C::GetTotalPlayerCount()
 {
     return 14;
 }
 
-int MiniGame4On4C::vfn_08(int a)
+int MiniGame4On4C::GetPlayType(int a)
 {
     int result = 0;
     if (MiniGame4On4IsPassOnly()) {
@@ -2820,7 +2820,7 @@ int MiniGame4On4C::vfn_08(int a)
     return result;
 }
 
-void MiniGame4On4C::vfn_10(int value, int *pList, int *pIds)
+void MiniGame4On4C::FillDepthChart(int value, int *pList, int *pIds)
 {
     AutoDepthFillChart(value, pList, pIds);
     MiniGame4On4DepthEnsureOffense(pList, pIds, 4);
@@ -2944,7 +2944,7 @@ void MiniGame4On4GetTeamStats(MiniGameC *p, int team, Stats_8005CAE4 *pStats)
     pStats->mValues[1] += value;
     DbMttsGetTeamColumn(handle, 0x69447374, &value);
     pStats->mValues[3] = value;
-    pStats->mValues[2] = p->vfn_24(team, 0x61746467);
+    pStats->mValues[2] = p->SumPlayerColumn(team, 0x61746467);
 }
 
 } /* extern "C" */
@@ -2957,29 +2957,29 @@ void MiniGame4On4C::vfn_14()
     }
 }
 
-int MiniGame4On4C::vfn_32(int team, int kind)
+int MiniGame4On4C::CheckTeamAward(int team, int kind)
 {
     int result;
     if (kind == 41) {
-        result = vfn_34(41, team, 1, 0);
+        result = IsBetterTeamStat(41, team, 1, 0);
     } else {
-        result = MiniGameC::vfn_32(team, kind);
+        result = MiniGameC::CheckTeamAward(team, kind);
     }
     return result;
 }
 
-int MiniGame4On4C::vfn_33(int kind, int team)
+int MiniGame4On4C::GetTeamStat(int kind, int team)
 {
     int result;
     if (kind == 41) {
         result = StyleTrackerGetEventCount(team, 101);
     } else {
-        result = MiniGameC::vfn_33(kind, team);
+        result = MiniGameC::GetTeamStat(kind, team);
     }
     return result;
 }
 
-void MiniGame4On4C::vfn_07(int a, int b)
+void MiniGame4On4C::SetOption(int a, int b)
 {
     if (a == 0) {
         mUnknown20 = b;
@@ -3254,7 +3254,7 @@ void MiniGameCrushCarrierGameEndC::vfn_03(float dt)
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
-    MiniGameGetCurrent()->vfn_12();
+    MiniGameGetCurrent()->UpdateRecords();
     MiniGameGetCurrent()->AssignPlayerAwards(_MiniGame_aCrushCarrierAwards);
     Class_80297B90::vfn_03(dt);
 }
@@ -3479,7 +3479,7 @@ void MiniGameCrushCarrierPrePlayC::OnUpdate(float dt)
         AudmonEventClear();
         ClockRuleSnap();
         fn_800C9FC0();
-        MiniGameGetCurrent()->vfn_15();
+        MiniGameGetCurrent()->UpdateCountdown();
     }
     if (InGameOverlayGetState() == 3 || InGameOverlayGetState() == 4) {
         if (InGameOverlayGetState() != 4) {
@@ -3597,7 +3597,7 @@ void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
             StyleTrackerEndPlay();
         }
     }
-    MiniGameGetCurrent()->vfn_15();
+    MiniGameGetCurrent()->UpdateCountdown();
     RefreshSixPlayerScoreRows(this);
     if (BallStateGet(BallGetCurrent(), 0) == 1 && !_MiniGame_pCrushCarrierHolder) {
         int time = fn_8009D990(1);
@@ -3720,7 +3720,7 @@ MiniGameCrushCarrierC::MiniGameCrushCarrierC()
     mpUnknown1C = 0;
 }
 
-void MiniGameCrushCarrierC::vfn_01()
+void MiniGameCrushCarrierC::Start()
 {
     MiniGameCrushCarrierData *pBlock = new (0) MiniGameCrushCarrierData;
     mpUnknown1C = pBlock;
@@ -3738,7 +3738,7 @@ void MiniGameCrushCarrierC::vfn_01()
     }
 }
 
-void MiniGameCrushCarrierC::vfn_02()
+void MiniGameCrushCarrierC::Stop()
 {
     fn_800A8738(0);
     if (mpUnknown1C->mUnknown2C != 1) {
@@ -3779,7 +3779,7 @@ int MiniGameCrushCarrierC::vfn_05(int team)
     return 1;
 }
 
-void MiniGameCrushCarrierC::vfn_10(int value, int *pList, int *pIds)
+void MiniGameCrushCarrierC::FillDepthChart(int value, int *pList, int *pIds)
 {
     for (unsigned char i = 0; i <= 6 && pList[i] != 32767; i++) {
         pIds[i] = pIds[i + 7] = pList[i];
@@ -3788,10 +3788,10 @@ void MiniGameCrushCarrierC::vfn_10(int value, int *pList, int *pIds)
 
 void MiniGameCrushCarrierC::AutoFillDepthChart(int value, int *pList, int *pIds, unsigned int a, int b)
 {
-    vfn_10(value, pList, pIds);
+    FillDepthChart(value, pList, pIds);
 }
 
-void MiniGameCrushCarrierC::vfn_12()
+void MiniGameCrushCarrierC::UpdateRecords()
 {
     for (unsigned short i = 0; i <= 5; i++) {
         if (mpUnknown1C->mpUnknown34[i].mUnknown8 == 255) {
@@ -3899,7 +3899,7 @@ int MiniGameCrushCarrierC::CheckAward(int team, int index, Object_80039F5C *pPla
     MiniGameCrushCarrierScore *pRecord = &mpUnknown1C->mpUnknown34[i];
     switch (kind) {
     case 26:
-        if (vfn_31(26, team, index, pPlayer, 1, 0)) {
+        if (IsBestPlayerStat(26, team, index, pPlayer, 1, 0)) {
             unsigned int j;
             result = 1;
             for (j = 0; j <= 5; j++) {
@@ -3914,7 +3914,7 @@ int MiniGameCrushCarrierC::CheckAward(int team, int index, Object_80039F5C *pPla
         }
         break;
     case 19:
-        if (vfn_31(26, team, index, pPlayer, 1, 0)) {
+        if (IsBestPlayerStat(26, team, index, pPlayer, 1, 0)) {
             unsigned int j;
             result = 1;
             for (j = 0; j <= 5; j++) {
@@ -3940,52 +3940,52 @@ int MiniGameCrushCarrierC::CheckAward(int team, int index, Object_80039F5C *pPla
     }
     case 17:
         {
-            int ok = vfn_31(17, team, index, pPlayer, 1, 0) && pRecord->mUnknown4 >= RecordsGetValue(22);
+            int ok = IsBestPlayerStat(17, team, index, pPlayer, 1, 0) && pRecord->mUnknown4 >= RecordsGetValue(22);
             result = ok;
         }
         break;
     case 18:
-        result = vfn_31(18, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(18, team, index, pPlayer, 1, 0);
         break;
     case 22:
-        result = vfn_31(22, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(22, team, index, pPlayer, 1, 0);
         break;
     case 23:
-        result = vfn_31(23, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(23, team, index, pPlayer, 1, 0);
         break;
     case 24:
-        result = vfn_31(24, team, index, pPlayer, 100, 1);
+        result = IsBestPlayerStat(24, team, index, pPlayer, 100, 1);
         break;
     case 25:
-        result = vfn_31(25, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(25, team, index, pPlayer, 1, 0);
         break;
     case 1:
-        result = vfn_31(1, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(1, team, index, pPlayer, 1, 0);
         break;
     case 3:
-        result = vfn_31(3, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(3, team, index, pPlayer, 1, 0);
         break;
     case 4:
-        result = vfn_31(4, team, index, pPlayer, 3, 0);
+        result = IsBestPlayerStat(4, team, index, pPlayer, 3, 0);
         break;
     case 5:
-        result = vfn_31(5, team, index, pPlayer, 3, 0);
+        result = IsBestPlayerStat(5, team, index, pPlayer, 3, 0);
         break;
     case 6:
-        result = vfn_31(6, team, index, pPlayer, 1, 0);
+        result = IsBestPlayerStat(6, team, index, pPlayer, 1, 0);
         break;
     case 7:
-        result = vfn_31(7, team, index, pPlayer, 3, 0);
+        result = IsBestPlayerStat(7, team, index, pPlayer, 3, 0);
         break;
     case 8:
         {
-            int ok = vfn_31(6, team, index, pPlayer, 100, 1) && vfn_31(1, team, index, pPlayer, 100, 1);
+            int ok = IsBestPlayerStat(6, team, index, pPlayer, 100, 1) && IsBestPlayerStat(1, team, index, pPlayer, 100, 1);
             result = ok;
         }
         break;
     case 9:
         {
-            int ok = vfn_31(9, team, index, pPlayer, 100, 1) && !vfn_28(8);
+            int ok = IsBestPlayerStat(9, team, index, pPlayer, 100, 1) && !GetAwardWinnerCount(8);
             result = ok;
         }
         break;
@@ -3997,7 +3997,7 @@ int MiniGameCrushCarrierC::CheckAward(int team, int index, Object_80039F5C *pPla
     return result;
 }
 
-int MiniGameCrushCarrierC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameCrushCarrierC::GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int result = 0;
     unsigned int i = MiniGameCrushCarrierFindScore(this, pPlayer);
@@ -4048,16 +4048,16 @@ int MiniGameCrushCarrierC::vfn_30(int kind, int team, int index, Object_80039F5C
         break;
     case 10:
     default:
-        result = MiniGameC::vfn_30(kind, team, index, pPlayer);
+        result = MiniGameC::GetPlayerStat(kind, team, index, pPlayer);
         break;
     }
     return result;
 }
 
-int MiniGameCrushCarrierC::vfn_31(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode)
+int MiniGameCrushCarrierC::IsBestPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer, int threshold, int mode)
 {
     int answer = 0;
-    int original = vfn_30(kind, team, index, pPlayer);
+    int original = GetPlayerStat(kind, team, index, pPlayer);
     int result = 0;
     bool found = false;
     for (unsigned char t = 0; t <= 1; t++) {
@@ -4065,10 +4065,10 @@ int MiniGameCrushCarrierC::vfn_31(int kind, int team, int index, Object_80039F5C
             Object_80039F5C *pCandidate = PlyrGet(t, i);
             if (pCandidate->mUnknown9[2] != 0) {
                 if (!found) {
-                    result = vfn_30(kind, t, i, pCandidate);
+                    result = GetPlayerStat(kind, t, i, pCandidate);
                     found = true;
                 } else {
-                    int value = vfn_30(kind, t, i, pCandidate);
+                    int value = GetPlayerStat(kind, t, i, pCandidate);
                     if ((mode == 0 && value > result) || (mode == 1 && value < result)) {
                         result = value;
                     }
@@ -4340,7 +4340,7 @@ void MiniGameJumpBallPrePlayC::OnUpdate(float dt)
 {
     fn_800AD910(3, dt);
     if (gMiniGameJumpBall.mUnknown36 != 0) {
-        MiniGameGetCurrent()->vfn_15();
+        MiniGameGetCurrent()->UpdateCountdown();
     }
 }
 
@@ -4398,7 +4398,7 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
     }
     LivePlayPhase::OnUpdate(dt);
     if (gMiniGameJumpBall.mUnknown36) {
-        MiniGameGetCurrent()->vfn_15();
+        MiniGameGetCurrent()->UpdateCountdown();
     }
     unsigned int count = BallsGetCount();
     int noneFree = 1;
@@ -4689,7 +4689,7 @@ void MiniGameJumpBallGameEndC::vfn_03(float dt)
     for (i = 0; i < 4; i++) {
         PlyrFindById(MiniGameJumpBallGetTable()->mEntries[i].mUnknown0)->mUnknown9[2] = 1;
     }
-    MiniGameGetCurrent()->vfn_12();
+    MiniGameGetCurrent()->UpdateRecords();
     MiniGameGetCurrent()->AssignPlayerAwards(_MiniGame_aJumpBallAwards);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     if (StoryEventsGetCurrentEvent()) {
@@ -4718,7 +4718,7 @@ MiniGameJumpBallC::MiniGameJumpBallC()
     mState.mpRecords = _MiniGame_aJumpBallDepth;
 }
 
-void MiniGameJumpBallC::vfn_01()
+void MiniGameJumpBallC::Start()
 {
     void *pHandle = 0;
     int allocate = IsTutorial() == 0;
@@ -4758,7 +4758,7 @@ void MiniGameJumpBallC::vfn_01()
     PlyrStarSetBallRingEnabled(0);
 }
 
-void MiniGameJumpBallC::vfn_02()
+void MiniGameJumpBallC::Stop()
 {
     PlyrStarSetBallRingEnabled(1);
     if (mpUnknown1C->mpUnknown36->mUnknown116 != 0) {
@@ -5020,7 +5020,7 @@ int MiniGameJumpBallPickBallAhead(Object_80039F5C *p, unsigned char *pIndex)
 
 } /* extern "C" */
 
-void MiniGameJumpBallC::vfn_10(int value, int *list, int *ids)
+void MiniGameJumpBallC::FillDepthChart(int value, int *list, int *ids)
 {
     unsigned char i;
 
@@ -5031,10 +5031,10 @@ void MiniGameJumpBallC::vfn_10(int value, int *list, int *ids)
 
 void MiniGameJumpBallC::AutoFillDepthChart(int value, int *list, int *ids, unsigned int a, int b)
 {
-    vfn_10(value, list, ids);
+    FillDepthChart(value, list, ids);
 }
 
-void MiniGameJumpBallC::vfn_12()
+void MiniGameJumpBallC::UpdateRecords()
 {
     for (unsigned short i = 0; i <= 3; i++) {
         if (mpUnknown1C->mpUnknown36->mEntries[i].mUnknown12 == 255) {
@@ -5145,7 +5145,7 @@ Object_80039F5C *MiniGameJumpBallGetPlayer(MiniGameJumpBallC *p, int index)
 
 } /* extern "C" */
 
-int MiniGameJumpBallC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
+int MiniGameJumpBallC::SelectDepthRecord(AutoDepthPlayer_t *pRecords, unsigned int count)
 {
     unsigned int n = 0;
     unsigned int i;
@@ -5200,7 +5200,7 @@ int MiniGameJumpBallGetUserRank(MiniGameJumpBallC *p)
 
 } /* extern "C" */
 
-int MiniGameJumpBallC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameJumpBallC::GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     MiniGameSlotInfo_t info;
     int result = 0;
@@ -5229,7 +5229,7 @@ int MiniGameJumpBallC::vfn_30(int kind, int team, int index, Object_80039F5C *pP
             result = info.mUnknown4;
             break;
         default:
-            result = MiniGameC::vfn_30(kind, team, index, pPlayer);
+            result = MiniGameC::GetPlayerStat(kind, team, index, pPlayer);
             break;
         }
     }
@@ -5248,18 +5248,18 @@ int MiniGameJumpBallC::CheckAward(int team, int index, Object_80039F5C *pPlayer,
             switch (kind) {
             case 27:
                 {
-                    int ok = pSlotPlayer != MiniGameJumpBallGetLeader(this) && vfn_31(27, 1, index, pSlotPlayer, 1, 0);
+                    int ok = pSlotPlayer != MiniGameJumpBallGetLeader(this) && IsBestPlayerStat(27, 1, index, pSlotPlayer, 1, 0);
                     result = ok;
                 }
                 break;
             case 28:
                 {
-                    int ok = !PlayerHasAward(1, index, 30) && vfn_31(28, 1, index, pSlotPlayer, 3, 0);
+                    int ok = !PlayerHasAward(1, index, 30) && IsBestPlayerStat(28, 1, index, pSlotPlayer, 3, 0);
                     result = ok;
                 }
                 break;
             case 29:
-                result = vfn_30(29, 1, index, pSlotPlayer) == 0;
+                result = GetPlayerStat(29, 1, index, pSlotPlayer) == 0;
                 break;
             case 30:
                 {
@@ -5268,14 +5268,14 @@ int MiniGameJumpBallC::CheckAward(int team, int index, Object_80039F5C *pPlayer,
                 }
                 break;
             case 31:
-                result = vfn_31(31, 1, index, pSlotPlayer, 1, 0);
+                result = IsBestPlayerStat(31, 1, index, pSlotPlayer, 1, 0);
                 break;
             case 32:
-                result = vfn_31(32, 1, index, pSlotPlayer, 1, 0);
+                result = IsBestPlayerStat(32, 1, index, pSlotPlayer, 1, 0);
                 break;
             case 17:
                 {
-                    int ok = vfn_31(17, 1, index, pSlotPlayer, 1, 0) &&
+                    int ok = IsBestPlayerStat(17, 1, index, pSlotPlayer, 1, 0) &&
                              (unsigned int)info.mUnknown4 >= (unsigned int)RecordsGetValue(23);
                     result = ok;
                 }
@@ -5283,18 +5283,18 @@ int MiniGameJumpBallC::CheckAward(int team, int index, Object_80039F5C *pPlayer,
             case 18:
                 {
                     int ok = !PlayerHasAward(1, index, 33) && !PlayerHasAward(1, index, 19) &&
-                             vfn_31(18, 1, index, pSlotPlayer, 1, 0);
+                             IsBestPlayerStat(18, 1, index, pSlotPlayer, 1, 0);
                     result = ok;
                 }
                 break;
             case 33:
                 {
-                    int ok = vfn_31(18, 1, index, pSlotPlayer, 1, 0) && mpUnknown1C->mpUnknown36->mUnknown126;
+                    int ok = IsBestPlayerStat(18, 1, index, pSlotPlayer, 1, 0) && mpUnknown1C->mpUnknown36->mUnknown126;
                     result = ok;
                 }
                 break;
             case 19:
-                if (vfn_31(19, 1, index, pSlotPlayer, 1, 0)) {
+                if (IsBestPlayerStat(19, 1, index, pSlotPlayer, 1, 0)) {
                     MiniGameSlotInfo_t other;
                     unsigned int i;
                     result = 1;
@@ -5332,7 +5332,7 @@ int MiniGameJumpBallC::vfn_21()
     return 0;
 }
 
-int MiniGameJumpBallC::vfn_22(int value)
+int MiniGameJumpBallC::AllowsPause(int value)
 {
     int result = 0;
 
@@ -5528,7 +5528,7 @@ void MiniGameOpenFieldRulesC::ResetPlaySpot()
         }
         ScrmPlaceBallForDrive(1);
     }
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetSnapOffense(), 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->UpdateScoreRows(ScrmGetSnapOffense(), 0);
 }
 
 void MiniGameOpenFieldRulesC::ResetGame(int team)
@@ -5549,8 +5549,8 @@ void MiniGameOpenFieldPreGameC::OnEnter(float dt)
     PreGamePhase::OnEnter(dt);
     MiniGameGetCurrent()->vfn_14();
     HudSetScoreTableRows(ScrmGetActivePlayerCount(0) * 2);
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(0, 0);
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(1, 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->UpdateScoreRows(0, 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->UpdateScoreRows(1, 0);
     HudPost3AOff();
     fn_800A8738(1);
     TutorialReleasePause();
@@ -5608,8 +5608,8 @@ void MiniGameOpenFieldPrePlayC::OnEnter(float dt)
         pRules->mpUnknown52->mUnknown8 = SyncRandGetRange(0, 3);
     } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && SyncRandGetRange(0, 100) > 20);
     pRules->mpUnknown52->mUnknown0[team] = pRules->mpUnknown52->mUnknown8;
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetOffenseTeam(), 1);
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetDefenseTeam(), 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->UpdateScoreRows(ScrmGetOffenseTeam(), 1);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->UpdateScoreRows(ScrmGetDefenseTeam(), 0);
 
     unsigned int limit = pRules->mpUnknown52->mUnknown12;
     if (pRules->mUnknown44.GetGoalLimit() > limit && pRules->mpUnknown52->mUnknown20[0] == pRules->mpUnknown52->mUnknown20[1]) {
@@ -5792,7 +5792,7 @@ void MiniGameOpenFieldGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
-    MiniGameGetCurrent()->vfn_12();
+    MiniGameGetCurrent()->UpdateRecords();
     MiniGameGetCurrent()->AssignPlayerAwards(_MiniGame_aOpenFieldAwards);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
@@ -5815,7 +5815,7 @@ MiniGameOpenFieldC::MiniGameOpenFieldC()
     mState.mpRecords = _MiniGame_aOpenFieldDepth;
 }
 
-void MiniGameOpenFieldC::vfn_01()
+void MiniGameOpenFieldC::Start()
 {
     void *pHandle = 0;
     int allocate = IsTutorial() == 0;
@@ -5858,7 +5858,7 @@ void MiniGameOpenFieldC::vfn_01()
     GameOptionsSet(14, 2);
 }
 
-void MiniGameOpenFieldC::vfn_02()
+void MiniGameOpenFieldC::Stop()
 {
     fn_800BC51C(0);
     fn_800BFAB4(0);
@@ -5881,7 +5881,7 @@ int MiniGameOpenFieldC::vfn_05(int team)
     return mUnknown24;
 }
 
-void MiniGameOpenFieldC::vfn_07(int kind, int value)
+void MiniGameOpenFieldC::SetOption(int kind, int value)
 {
     switch (kind) {
     case 0:
@@ -5910,7 +5910,7 @@ static const float _MiniGame_aOpenFieldDirections[3][8] = {
     {-5.0f, -6.0f, -8.0f, -6.0f, -5.0f, 85.0f, 200.0f, 85.0f},
 };
 
-const float * MiniGameOpenFieldC::vfn_09(int index)
+const float * MiniGameOpenFieldC::GetAssignDirections(int index)
 {
     if (index == 1) {
         return _MiniGame_aOpenFieldDirections[MiniGameOpenFieldGetData(MiniGameGetCurrent())->mpUnknown52->mUnknown8];
@@ -5918,7 +5918,7 @@ const float * MiniGameOpenFieldC::vfn_09(int index)
     return 0;
 }
 
-void MiniGameOpenFieldC::vfn_10(int value, int *pList, int *pIds)
+void MiniGameOpenFieldC::FillDepthChart(int value, int *pList, int *pIds)
 {
     unsigned char i;
 
@@ -5995,7 +5995,7 @@ void MiniGameOpenFieldC::AutoFillDepthChart(int value, int *pList, int *pIds, un
     }
 }
 
-void MiniGameOpenFieldC::vfn_35(int team, int showColors)
+void MiniGameOpenFieldC::UpdateScoreRows(int team, int showColors)
 {
     char text[16];
     int first = ScrmGetGoalCount(team);
@@ -6120,9 +6120,9 @@ int MiniGameOpenFieldC::CheckAward(int team, int index, Object_80039F5C *pPlayer
         if (mUnknown24 > 1) {
             int value = 0;
             Object_80039F5C *pOther = MiniGameOpenFieldGetTeammate(this, team, index);
-            if (vfn_30(1, team, index, pPlayer) > 2 && vfn_30(1, team, index, pOther) > 2 &&
-                vfn_30(2, team, index, pPlayer) > 2 && vfn_30(2, team, index, pOther) > 2) {
-                value = vfn_30(37, team, index, pPlayer) > 3;
+            if (GetPlayerStat(1, team, index, pPlayer) > 2 && GetPlayerStat(1, team, index, pOther) > 2 &&
+                GetPlayerStat(2, team, index, pPlayer) > 2 && GetPlayerStat(2, team, index, pOther) > 2) {
+                value = GetPlayerStat(37, team, index, pPlayer) > 3;
             }
             result = value;
         }
@@ -6141,14 +6141,14 @@ int MiniGameOpenFieldC::CheckAward(int team, int index, Object_80039F5C *pPlayer
     return result;
 }
 
-int MiniGameOpenFieldC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
+int MiniGameOpenFieldC::GetPlayerStat(int kind, int team, int index, Object_80039F5C *pPlayer)
 {
     int value;
 
     if (kind == 37) {
         DbMttsGetTeamColumn(_MiniGame_aTeamIds[team], 0x7A707374, &value);
     } else {
-        value = MiniGameC::vfn_30(kind, team, index, pPlayer);
+        value = MiniGameC::GetPlayerStat(kind, team, index, pPlayer);
     }
     return value;
 }
@@ -6174,12 +6174,12 @@ void MiniGameOpenFieldC::GetPlayerStatText(int team, unsigned char index, int ki
     case 0:
         snprintf(pFirst, firstLength, "TDs");
         snprintf(pSecond, secondLength, "%d",
-                    vfn_30(2, team, index, pPlayer));
+                    GetPlayerStat(2, team, index, pPlayer));
         break;
     case 1:
         snprintf(pFirst, firstLength, "Tackles");
         snprintf(pSecond, secondLength, "%d",
-                    vfn_30(1, team, index, pPlayer));
+                    GetPlayerStat(1, team, index, pPlayer));
         break;
     }
 }
@@ -6387,7 +6387,7 @@ void MiniGameQuickStrikeLogScore(unsigned int kind, int value, int flag)
 void MiniGameQuickStrikeGameEndC::vfn_03(float dt)
 {
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
-    MiniGameGetCurrent()->vfn_12();
+    MiniGameGetCurrent()->UpdateRecords();
     Class_80297B90::vfn_03(dt);
 }
 
@@ -6401,7 +6401,7 @@ void MiniGameQuickStrikeGameEndC::vfn_09()
     fn_8021956C(gUISMainInfo, 3, 25, 1);
 }
 
-void MiniGameQuickStrikeC::vfn_01()
+void MiniGameQuickStrikeC::Start()
 {
     mpUnknown1C = new (0) MiniGameQuickStrikeData;
     mpUnknown1C->mUnknown188 = 2;
@@ -6418,7 +6418,7 @@ void MiniGameQuickStrikeC::vfn_01()
     ScrmSetRuleSet(&mpUnknown1C->mObject4);
 }
 
-void MiniGameQuickStrikeC::vfn_02()
+void MiniGameQuickStrikeC::Stop()
 {
     fn_800BC51C(0);
     fn_800AACB8(0);
@@ -6431,7 +6431,7 @@ void MiniGameQuickStrikeC::vfn_02()
     mpUnknown1C = 0;
 }
 
-int MiniGameQuickStrikeC::vfn_08(int a)
+int MiniGameQuickStrikeC::GetPlayType(int a)
 {
     int result = 0;
 

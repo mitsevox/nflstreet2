@@ -659,9 +659,9 @@ void StoryEventsStartEvent(void)
             if (type == 2) {
                 enable = 0;
             }
-            MiniGameGetCurrent()->vfn_07(0, enable);
+            MiniGameGetCurrent()->SetOption(0, enable);
             type = _StoryEvents_pEvent->mPes[3];
-            MiniGameGetCurrent()->vfn_07(1, type);
+            MiniGameGetCurrent()->SetOption(1, type);
             break;
         }
         }

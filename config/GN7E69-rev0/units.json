@@ -9294,11 +9294,11 @@
             "evidence": "evidence.tsv source-form 0x8014DDCC-0x8014E220"
           },
           {
-            "function": "vfn_12__21MiniGameCrushCarrierC",
+            "function": "UpdateRecords__21MiniGameCrushCarrierC",
             "evidence": "evidence.tsv source-form 0x8014F19C-0x8014F36C"
           },
           {
-            "function": "vfn_31__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
+            "function": "IsBestPlayerStat__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
             "evidence": "evidence.tsv source-form 0x8014FDD0-0x8014FF2C"
           },
           {
@@ -9330,11 +9330,11 @@
             "evidence": "evidence.tsv source-form 0x8015228C-0x80152400"
           },
           {
-            "function": "vfn_12__17MiniGameJumpBallC",
+            "function": "UpdateRecords__17MiniGameJumpBallC",
             "evidence": "evidence.tsv source-form 0x8015247C-0x8015264C"
           },
           {
-            "function": "vfn_07__18MiniGameOpenFieldCii",
+            "function": "SetOption__18MiniGameOpenFieldCii",
             "evidence": "evidence.tsv source-form 0x80154528-0x80154588"
           }
         ],

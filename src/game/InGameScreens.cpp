@@ -992,7 +992,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
             }
         }
     } else if (MiniGameIsEnabled() && fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
-        switch (MiniGameGetCurrent()->vfn_08(0)) {
+        switch (MiniGameGetCurrent()->GetPlayType(0)) {
         case 0:
             break;
         case 1:
@@ -2772,7 +2772,7 @@ void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *se
     Stats_8005C844 stats;MiniGame2MinuteGetTeamStats(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
     snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
-    MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
+    MiniGameGetCurrent()->GetTeamAwardText(team,0,first,textSize);MiniGameGetCurrent()->GetTeamAwardText(team,1,second,textSize);MiniGameGetCurrent()->GetTeamAwardText(team,2,third,textSize);
 }
 int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
@@ -2794,7 +2794,7 @@ void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *se
     DbCursor cursor;
     MiniGame4On4GetTeamStats(MiniGameGetCurrent(),team,&stats);
     snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
-    MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
+    MiniGameGetCurrent()->GetTeamAwardText(team,0,first,textSize);MiniGameGetCurrent()->GetTeamAwardText(team,1,second,textSize);MiniGameGetCurrent()->GetTeamAwardText(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }
 int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {

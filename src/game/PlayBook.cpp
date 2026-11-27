@@ -1608,7 +1608,7 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
     PlayTrackGetRatingBias(team, &group1Bias, &group2Bias);
     PlayTrackGetGainTendency(team, &kind, &flags);
     if (MiniGameIsEnabled())
-        preferred = MiniGameGetCurrent()->vfn_08(1);
+        preferred = MiniGameGetCurrent()->GetPlayType(1);
 
     for (unsigned short i = 0; i < count; i++) {
         float scale = 1.0f;

@@ -25451,7 +25451,7 @@ void fn_8012327C(Directions_8012430C *pValues, Object_80039F5C *p)
         }
     }
     const Directions_8012430C *pRow = &lbl_8029F5A0[mode];
-    if (MiniGameIsEnabled() && MiniGameGetCurrent()->vfn_09(1)) pRow = (Directions_8012430C *)MiniGameGetCurrent()->vfn_09(1);
+    if (MiniGameIsEnabled() && MiniGameGetCurrent()->GetAssignDirections(1)) pRow = (Directions_8012430C *)MiniGameGetCurrent()->GetAssignDirections(1);
     for (unsigned char i = 0; i < 8; i++) pValues->mCost[i] += pRow->mCost[i];
 }
 }

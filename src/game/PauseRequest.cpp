@@ -59,7 +59,7 @@ int PauseRequestIsAllowed(int a)
 
     if ((fn_800B65A0(ScrmGetOffenseTeam()) == 0xFF && fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) || fn_800B6644(a) != 0xFF || a == 8) {
         if (MiniGameGetCurrent()) {
-            result = MiniGameGetCurrent()->vfn_22(a);
+            result = MiniGameGetCurrent()->AllowsPause(a);
         } else {
             result = 1;
         }

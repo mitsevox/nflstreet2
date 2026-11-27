@@ -180,7 +180,7 @@ int DepthChartCancel(int group)
 void DepthChartAutoFill(int group, int *list, int value)
 {
     if (MiniGameIsEnabled()) {
-        MiniGameGetCurrent()->vfn_10(value, list, _DepthChart_aCommitted[group]);
+        MiniGameGetCurrent()->FillDepthChart(value, list, _DepthChart_aCommitted[group]);
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
