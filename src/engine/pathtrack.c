@@ -143,25 +143,25 @@ extern "C" int PATHI_inittrack(int flags, PathfinderTrackData_t *data)
     p->mUnknown8.bits.flag20 = 0;
     p->mUnknown2 = volscale;
     p->mUnknown3 = 127;
+    // FAKEMATCH: the default stores below are in a measured order (sched1 tie-breaks), not one recovered from the original
+    p->mUnknown4 = -1;
+    p->mUnknown1A = -1;
     p->mUnknown18 = -1;
     p->mUnknown19 = -1;
-    p->mUnknown1A = -1;
+    p->mUnknown26 = -1;
     p->mUnknown24 = -1;
     p->mUnknown25 = -1;
-    p->mUnknown26 = -1;
     p->mUnknown30 = -1;
     p->mUnknown31 = -1;
     p->mUnknown8.bits.mUnknown7 = -1;
-    p->mUnknownF0 = -1;
-    p->mUnknownF4 = 0xBEDFACED;
     p->mUnknown110 = 1;
-    p->mUnknown4 = -1;
     p->mUnknown8.bits.mUnknown1 = defaultfxbus;
-    p->mUnknown8.bits.flag1 = (flags & 0xF0000000) == 0x10000000;
     p->mUnknown6 = -1;
     p->mUnknown4C = -1;
-    p->mUnknown50.mUnknown4 = data->mUnknown4;
-    p->mUnknown50.mUnknown0 = data->mpData;
+    p->mUnknownF0 = -1;
+    p->mUnknownF4 = 0xBEDFACED;
+    p->mUnknown8.bits.flag1 = (flags & 0xF0000000) == 0x10000000;
+    memcpy(&p->mUnknown50, data, sizeof(PathTrackFile_t));
     strcpy(p->mUnknownD0, "TibTrack");
     pfstate->mUnknown40[track] = p;
     return track;
@@ -236,10 +236,9 @@ extern "C" void PATHI_selectprojecttrack(PathTrack_t *p, int state)
         p->mUnknown8.bits.flag1 = 1;
 }
 
-extern "C" int PATHI_dispatchtrackstate(int state)
+extern "C" void PATHI_dispatchtrackstate(int state)
 {
-    int i = 0;
-    for (; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {
         if (pfstates[i] && PATHI_switchproject(i, 0xFFFFFFFF)) {
             for (int j = 0; j < 24; ++j) {
                 PathTrack_t *p = pfstate->mUnknown40[j];
@@ -252,7 +251,6 @@ extern "C" int PATHI_dispatchtrackstate(int state)
             }
         }
     }
-    return i;
 }
 
 IPathTrack::IPathTrack()
