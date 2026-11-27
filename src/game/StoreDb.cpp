@@ -204,11 +204,12 @@ int StoreCountItems(int index)
     DbFilter both;
     DbFilter categoryFilter;
     unsigned short count;
+    DbFilter *pPrice = &priceFilter;
     const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int result = 0;
-    DbFilter *pFilter = &priceFilter;
-    priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
-    priceFilter.mUnknown16.mValue.mInt = 0;
+    pPrice->SetOperands(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0);
+    pPrice->mUnknown32 = 0x10004;
+    DbFilter *pFilter = pPrice;
     if (pDescriptor->mTable == 0x52414547) {
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);
