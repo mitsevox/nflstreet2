@@ -14662,12 +14662,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80121BE8",
-          "end": "0x80121CB0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80122670",
           "end": "0x801227DC"
         },
         {
@@ -14878,10 +14872,6 @@
             "evidence": "evidence.tsv source-form 0x80121918-0x80121BE8"
           },
           {
-            "function": "fn_80121CB0",
-            "evidence": "evidence.tsv source-form 0x80121CB0-0x80122670"
-          },
-          {
             "function": "fn_801227DC",
             "evidence": "evidence.tsv source-form 0x801227DC-0x80123024"
           },
@@ -14890,7 +14880,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 42 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 41 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

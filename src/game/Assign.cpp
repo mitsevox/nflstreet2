@@ -3734,7 +3734,7 @@ extern "C" void fn_80121264(Object_80039F5C *p, Plan_80121264 *pPlan);
 extern "C" int fn_801218EC(FieldPoint_t *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB);
 extern "C" int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 extern "C" int fn_80121BE8(FieldPoint_t *pA, FieldPoint_t *pB, FieldPoint_t *pTarget, int angle, int heading, float distB, float distA);
-extern "C" void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle);
+extern "C" void AssignGapAdjustHeading(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle);
 extern "C" void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 extern "C" void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 extern "C" Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
@@ -24970,7 +24970,7 @@ int fn_80121BE8(FieldPoint_t *pA, FieldPoint_t *pB, FieldPoint_t *pTarget, int a
 }
 
 extern "C" {
-void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
+void AssignGapAdjustHeading(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
 {
     FieldPoint_t *pPos = (FieldPoint_t *)&p->mMotion.mPos;
     int flagsB = pEntry->mpUnknown4->mUnknown36;
@@ -25010,9 +25010,8 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
             adjust = 1;
             weight = MathCos(MathAngleDiff(heading, 0x400000));
         } else if (pEntry->mUnknown24 > 8.0f && MathAngleDiff(pEntry->mUnknown16, angle) > 0x271C71 &&
-                   MathAngleDiff(pEntry->mUnknown16, facing) > 0x271C71) {
-            pEntry->mUnknown16 = angle;
-        } else if (inside && pPos->mY > ScrmGetGoalLineY() - 5.0f && fn_801486A0()) {
+                       MathAngleDiff(pEntry->mUnknown16, facing) > 0x271C71
+                   || inside && pPos->mY > ScrmGetGoalLineY() - 5.0f && fn_801486A0()) {
             pEntry->mUnknown16 = angle;
         }
     } else if ((flagsA & 2) && (flagsB & 1) || (flagsA & 1) && (flagsB & 2)) {
@@ -25021,12 +25020,15 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         if (flagsA & 2) {
             delta = pEntry->mpUnknown4->mUnknown8;
             pOther = pEntry->mpUnknown0;
+            if (delta.mY < pOther->mUnknown8.mY) {
+                adjust = 1;
+            }
         } else {
             delta = pEntry->mpUnknown0->mUnknown8;
             pOther = pEntry->mpUnknown4;
-        }
-        if (delta.mY < pOther->mUnknown8.mY) {
-            adjust = 1;
+            if (delta.mY < pOther->mUnknown8.mY) {
+                adjust = 1;
+            }
         }
         if (adjust) {
             Vec2Sub(&delta, &delta, &pEntry->mUnknown8);
@@ -25040,15 +25042,13 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
     } else if ((flagsA & 8) && (flagsB & 1) || (flagsA & 1) && (flagsB & 8) || (flagsA & 8) && (flagsB & 2) ||
                (flagsA & 2) && (flagsB & 8)) {
         if (pEntry->mUnknown20 > 1.5f && pEntry->mUnknown24 > 4.0f || !fn_801486A0()) {
-            Entry_80120E98 *pEnd;
-
             if (flagsA & 3) {
-                pEnd = pEntry->mpUnknown0;
+                delta = pEntry->mpUnknown0->mUnknown8;
+                heading = (pEntry->mpUnknown0->mUnknown20 + 0x800000) & 0xFFFFFF;
             } else {
-                pEnd = pEntry->mpUnknown4;
+                delta = pEntry->mpUnknown4->mUnknown8;
+                heading = (pEntry->mpUnknown4->mUnknown20 + 0x800000) & 0xFFFFFF;
             }
-            delta = pEnd->mUnknown8;
-            heading = (pEnd->mUnknown20 + 0x800000) & 0xFFFFFF;
             if (MathAngleDiff(heading, pEntry->mUnknown16) > 0x400000 &&
                 MathAngleDiff(pEntry->mUnknown16, facing) > 0x200000) {
                 pEntry->mUnknown16 = angle;
@@ -25068,15 +25068,13 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         if (fabsf(pPos->mX) > fabsf(pEntry->mUnknown8.mX)) {
             pEntry->mUnknown16 = angle;
         } else if (pEntry->mUnknown24 > 4.0f) {
-            Entry_80120E98 *pEnd;
-
             if (flagsA & 3) {
-                pEnd = pEntry->mpUnknown0;
+                delta = pEntry->mpUnknown0->mUnknown8;
+                weight = pEntry->mpUnknown0->mUnknown28;
             } else {
-                pEnd = pEntry->mpUnknown4;
+                delta = pEntry->mpUnknown4->mUnknown8;
+                weight = pEntry->mpUnknown4->mUnknown28;
             }
-            delta = pEnd->mUnknown8;
-            weight = pEnd->mUnknown28;
             if (weight < 2.0f) {
                 adjust = 1;
                 weight *= 0.175f;
@@ -25172,7 +25170,7 @@ void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)
         Vec2Sub(&delta, &pEntry->mpUnknown0->mUnknown8, &pEntry->mpUnknown4->mUnknown8);
         pEntry->mUnknown24 = Vec2Magnitude(&delta);
         pEntry->mUnknown28 = 0.0f;
-        fn_80121CB0(p, pEntry, angle);
+        AssignGapAdjustHeading(p, pEntry, angle);
         if (fn_80121918(p, pPlan, pEntry)) {
             pPlan->mUnknown2372++;
         }
