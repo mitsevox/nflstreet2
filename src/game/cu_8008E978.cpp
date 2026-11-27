@@ -7818,7 +7818,7 @@ extern "C" void fn_800C89F0(Object_80039F5C *p, int angle, int rate, int which, 
 
 extern "C" void PlyrTurnApply(Object_80039F5C *p);
 
-extern "C" void fn_800C8AF0(Object_80039F5C *p);
+extern "C" void PlyrTurnUpdateTwist(Object_80039F5C *p);
 
 extern "C" int fn_800C8BAC(Object_80039F5C *p, int which);
 
@@ -14455,7 +14455,7 @@ extern "C" void fn_8009CDEC(Object_80039F5C *p)
     }
     active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown108);
     active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown200);
-    fn_800C8AF0(p);
+    PlyrTurnUpdateTwist(p);
     if (active) {
         PlyrIKUpdate((Entry_800AF82C *)p->mUnknown816);
     }
@@ -34695,7 +34695,7 @@ extern "C" void PlyrTurnApply(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800C8AF0(Object_80039F5C *p)
+extern "C" void PlyrTurnUpdateTwist(Object_80039F5C *p)
 {
     Turn_800C8AF0 *pTurn = &p->mTurn;
     unsigned int i;

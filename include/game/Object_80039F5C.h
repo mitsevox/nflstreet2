@@ -289,7 +289,7 @@ struct Block_8011E240 {
     char mUnknown106[2];
 };
 
-/* Head/body turn at +300, eased towards mTarget by fn_800C8AF0 (24-bit
+/* Head/body turn at +300, eased towards mTarget by PlyrTurnUpdateTwist (24-bit
    angles); mRate indexes the easing tables. */
 struct Turn_800C8AF0 {
     int mAngle[2];
