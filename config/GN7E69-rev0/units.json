@@ -579,45 +579,13 @@
       "address": "0x80308368",
       "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
     },
-    "__pure_virtual": {
-      "address": "0x8025F088",
-      "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
-    },
     "sprintf": {
       "address": "0x801C2E18",
       "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
     },
-    "__main": {
-      "address": "0x8025E1D8",
-      "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
-    },
-    "__ashldi3": {
-      "address": "0x8025E210",
-      "evidence": "evidence.tsv external row for 0x8025E210 (__ashldi3)."
-    },
-    "__ashrdi3": {
-      "address": "0x8025E250",
-      "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
-    },
-    "__divdi3": {
-      "address": "0x8025E290",
-      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
-    },
-    "__fixsfdi": {
-      "address": "0x8025E80C",
-      "evidence": "evidence.tsv external row for 0x8025E80C (__fixsfdi)."
-    },
-    "__moddi3": {
-      "address": "0x8025EB54",
-      "evidence": "evidence.tsv external row for 0x8025EB54 (__moddi3)."
-    },
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
-    },
-    "__lshrdi3": {
-      "address": "0x8025EB14",
-      "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
     },
     "gTurbo": {
       "address": "0x80307410",
@@ -634,14 +602,6 @@
     "fn_800355FC__8PlayBook": {
       "address": "0x800355FC",
       "evidence": "evidence.tsv external row for 0x800355FC (fn_800355FC__8PlayBook)."
-    },
-    "__fixunssfdi": {
-      "address": "0x8025E850",
-      "evidence": "evidence.tsv external row for 0x8025E850 (__fixunssfdi)."
-    },
-    "__floatdisf": {
-      "address": "0x8025EA64",
-      "evidence": "evidence.tsv external row for 0x8025EA64 (__floatdisf)."
     },
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
@@ -674,14 +634,6 @@
     "__ArenaHi": {
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
-    },
-    "GXSetGPMetric": {
-      "address": "0x8025295C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
-    },
-    "GXClearGPMetric": {
-      "address": "0x8025334C",
-      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
     },
     "__init_cpp": {
       "address": "0x8023E838",
@@ -943,14 +895,6 @@
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     },
-    "__udivdi3": {
-      "address": "0x8025F0A8",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
-    },
-    "__umoddi3": {
-      "address": "0x8025F58C",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
-    },
     "StevQueryRowCount": {
       "address": "0x8018EA3C",
       "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
@@ -1010,22 +954,6 @@
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
-    },
-    "_savegpr_23": {
-      "address": "0x8025FA48",
-      "evidence": "evidence.tsv external row for 0x8025FA48 (_savegpr_23)."
-    },
-    "_restgpr_23": {
-      "address": "0x8025FA94",
-      "evidence": "evidence.tsv external row for 0x8025FA94 (_restgpr_23)."
-    },
-    "_savegpr_24": {
-      "address": "0x8025FA4C",
-      "evidence": "evidence.tsv external row for 0x8025FA4C (_savegpr_24)."
-    },
-    "_restgpr_24": {
-      "address": "0x8025FA98",
-      "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     },
     "SFILTER_remove": {
       "address": "0x80279DF8",
@@ -5675,6 +5603,33 @@
           "placement": ".data6",
           "start": "0x803ED9B0",
           "end": "0x803ED9C0"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/gx/GXPerf.c",
+      "profile": "dolphin_release",
+      "evidence": "sdk.json unit src/dolphin/gx/GXPerf.c and its evidence.tsv function/data rows; every function exact (GXReadGPMetric under the dolsdk2004 source's scheduling off/reset pair), promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "GXSetGPMetric",
+          "GXReadGPMetric",
+          "GXClearGPMetric"
+        ],
+        "evidence": "The target keeps this file's 3 exact functions at the placed range; the global ones are the roots. The file's other 13 functions (GXReadGP0Metric, GXReadGP1Metric, GXReadMemMetric, GXClearMemMetric, GXReadPixMetric, GXClearPixMetric, GXSetVCacheMetric, GXReadVCacheMetric, GXClearVCacheMetric, GXInitXfRasMetric, GXReadXfRasMetric, GXReadClksPerVtx, __GXSetBWDials) have no code anywhere in the target's .init/.text, so the linker drops them as the original link did."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025295C",
+          "end": "0x8025335C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEEA0",
+          "end": "0x802FEFE8"
         }
       ]
     },
@@ -21939,6 +21894,113 @@
           "placement": ".sbss",
           "start": "0x803ED3F8",
           "end": "0x803ED40D"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_main.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E148-0x8025E80C (src/engine/libgcc2_main.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .sdata2 __clz_tab copy 0x803ED9C4-0x803EDAC4 and the __main flag .bss 0x803A6A08-0x803A6A0C.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E148",
+          "end": "0x8025E80C"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9C4",
+          "end": "0x803EDAC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A08",
+          "end": "0x803A6A0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixsfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E80C-0x8025E850 (src/engine/libgcc2_fixsfdi.c), its compiler, function, name and data rows; the one function exact, linked with its .rodata float 0.0 at 0x802B7264-0x802B7268.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E80C",
+          "end": "0x8025E850"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7264",
+          "end": "0x802B7268"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixunssfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E850-0x8025FA24 (src/engine/libgcc2_fixunssfdi.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .rodata 0x802B7268-0x802B72B0 and its three .sdata2 __clz_tab copies 0x803EDAC4-0x803EDDC4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E850",
+          "end": "0x8025FA24"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7268",
+          "end": "0x802B72B0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDAC4",
+          "end": "0x803EDDC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/eabi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FA24-0x8025FABC (src/engine/eabi.c), its compiler, function, name and data rows; the assembly register save and restore sequences, byte-identical.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FA24",
+          "end": "0x8025FABC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_cmpdi2.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FABC-0x8025FBD4 (src/engine/libgcc2_cmpdi2.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .data handler pointers 0x802FF4A8-0x802FF4B0 and the exception-context .bss 0x803A6A0C-0x803A6A28.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FABC",
+          "end": "0x8025FBD4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A8",
+          "end": "0x802FF4B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A0C",
+          "end": "0x803A6A28"
         }
       ]
     },

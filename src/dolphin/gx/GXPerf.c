@@ -180,6 +180,7 @@ void GXSetGPMetric(GXPerf0 perf0, GXPerf1 perf1) {
     __GXData->bpSentNot = 0;
 }
 
+#pragma scheduling off
 void GXReadGPMetric(u32* cnt0, u32* cnt1) {
     u32 cpCtr0, cpCtr1, cpCtr2, cpCtr3;
 
@@ -283,6 +284,7 @@ void GXReadGPMetric(u32* cnt0, u32* cnt1) {
         break;
     }
 }
+#pragma scheduling reset
 
 void GXClearGPMetric(void) {
     u32 reg;

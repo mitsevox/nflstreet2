@@ -1,7 +1,7 @@
 /* libgcc2.c's L_udivmoddi4 block: the count-leading-zeros table and the inline 64-bit unsigned
    divide used by __divdi3, __moddi3, __udivdi3 and __umoddi3. Each of those was its own libgcc2
-   object with its own static copy of both; cu_8025E148.c includes this block once per object, with
-   CLZ_TAB and UDIVMODDI4 naming that object's copies. */
+   object with its own static copy of both; libgcc2_main.c and libgcc2_fixunssfdi.c include this
+   block once per object, with CLZ_TAB and UDIVMODDI4 naming that object's copies. */
 
 /* From GCC 2.95.3 libgcc2.c:
    Copyright (C) 1989, 92-98, 1999 Free Software Foundation, Inc.
