@@ -12732,7 +12732,7 @@
           "end": "0x80098EAC"
         },
         {
-          "symbol": "fn_80098EAC",
+          "symbol": "CatchAnimSearchReach",
           "start": "0x80098EAC",
           "end": "0x800994E0"
         },
@@ -12837,7 +12837,7 @@
           "end": "0x8009A5DC"
         },
         {
-          "symbol": "fn_8009A5DC",
+          "symbol": "CatchAnimUnpackHandle",
           "start": "0x8009A5DC",
           "end": "0x8009A63C"
         },
@@ -13142,7 +13142,7 @@
           "end": "0x8009C220"
         },
         {
-          "symbol": "fn_8009C220",
+          "symbol": "PlyrSyncComparePoseEntries",
           "start": "0x8009C220",
           "end": "0x8009C328"
         },
@@ -13282,7 +13282,7 @@
           "end": "0x8009D0AC"
         },
         {
-          "symbol": "fn_8009D0AC",
+          "symbol": "PlyrTrackPickLookTarget",
           "start": "0x8009D0AC",
           "end": "0x8009D1AC"
         },
@@ -13417,7 +13417,7 @@
           "end": "0x8009DBB4"
         },
         {
-          "symbol": "fn_8009DBB4",
+          "symbol": "DefCoverAreReceiversAhead",
           "start": "0x8009DBB4",
           "end": "0x8009DD10"
         },
@@ -13637,7 +13637,7 @@
           "end": "0x800A0134"
         },
         {
-          "symbol": "fn_800A0134",
+          "symbol": "DefPredGetRatingScale",
           "start": "0x800A0134",
           "end": "0x800A0230"
         },
@@ -14202,7 +14202,7 @@
           "end": "0x800A46D8"
         },
         {
-          "symbol": "fn_800A46D8",
+          "symbol": "DefReactGetInterceptAngle",
           "start": "0x800A46D8",
           "end": "0x800A4790"
         },
@@ -14597,7 +14597,7 @@
           "end": "0x800A7FE0"
         },
         {
-          "symbol": "fn_800A7FE0",
+          "symbol": "GamebreakerUpdateCutscene",
           "start": "0x800A7FE0",
           "end": "0x800A8224"
         },
@@ -14817,7 +14817,7 @@
           "end": "0x800A9D84"
         },
         {
-          "symbol": "fn_800A9D84",
+          "symbol": "GamebreakerSceneAdjustSpot",
           "start": "0x800A9D84",
           "end": "0x800A9F4C"
         },

@@ -80,7 +80,7 @@ int fn_8009A298(int handle);
 int fn_8009A2EC(int handle);
 int fn_8009A578(int handle);
 int fn_8009A5D4(int handle);
-void fn_8009A5DC(int a, int b, void *pA, int *pB);
+void CatchAnimUnpackHandle(int a, int b, void *pA, int *pB);
 int fn_8009AD38(int team, int value);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
@@ -250,7 +250,7 @@ void PossCalcBallSpot(Object_80039F5C *p, void *pBall, Point2_t *pOut, int a)
     if (p == 0) {
         return;
     }
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
     if (!(p->mMotion.mPos.mZ > 0.0f)) {
         Vector_80039F5C left;
         Vector_80039F5C right;
@@ -489,7 +489,7 @@ float PossCalcHitFactor(Object_80039F5C *p)
         timing = 0.0f;
     }
     pBlock = &p->mUnknown560;
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
     slot = handle;
     if (p->mpState->mId == 0x1C) {
         fn_8009A298(slot);
@@ -786,7 +786,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
             float chance;
 
             if (p->mpState->mId == 0x1C) {
-                fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+                CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
             }
             if (BallStateGet(pBall, 0) == 4 && !ScrmTestPlayFlag(0xB) && !ScrmTestPlayFlag(0xC)) {
                 pReceiver = BallGetLastHolder(pBall);
@@ -1393,7 +1393,7 @@ void PossLogBallResult(Object_80039F5C *p)
         Record_800B15FC *pRecord;
 
         if (p->mpState->mId == 0x1C) {
-            fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+            CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         }
         team = ScrmGetOffenseTeam();
         BallGetPosition(pBall, &pos);
