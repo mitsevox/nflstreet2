@@ -6,7 +6,7 @@
 #include "game/ResLoad.h"
 
 extern "C" {
-extern char lbl_802EBDE8[];
+extern char File_PladynclStr[];
 
 char *strchr(const char *pString, int c);
 int FileSetMemAllocFlags(int value);
@@ -46,7 +46,7 @@ void PlaDynClutOpen(void)
 {
     int saved0 = ResSetMemFlags(4);
     int saved1 = FileSetMemAllocFlags(4);
-    _PlaDynClut_pFile = ResOpenDevice(lbl_802EBDE8, 44);
+    _PlaDynClut_pFile = ResOpenDevice(File_PladynclStr, 44);
     ResSetMemFlags(saved0);
     FileSetMemAllocFlags(saved1);
 }

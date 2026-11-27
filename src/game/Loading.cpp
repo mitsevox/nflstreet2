@@ -48,7 +48,7 @@ static LoadingPoint_t _Loading_MarkerPos;
 static float _Loading_fMarkerStep;
 typedef GXTexRegion *(*LoadingTexRegionFunc_t)(GXTexObj *, GXTexMapID);
 static LoadingTexRegionFunc_t _Loading_pOldTexRegionFunc;
-extern "C" const char lbl_802EBE14[];
+extern "C" const char File_LoaddataStr[];
 extern "C" const signed char _Loading_aImageGroup[40];
 
 extern "C" {
@@ -271,7 +271,7 @@ void LoadingInit(void)
    no marker. */
 void LoadingBegin(int mode)
 {
-    _Loading_pImageFile = ResOpenDevice(lbl_802EBE14,44);
+    _Loading_pImageFile = ResOpenDevice(File_LoaddataStr,44);
     GXInvalidateTexAll();
     GXTexModeSync();
     GlibSetClear(0);

@@ -18,7 +18,7 @@
 #include "game/SyncRandGetRange.h"
 
 extern "C" {
-extern char lbl_802EBDF8[];
+extern char File_IgdataStr[];
 
 unsigned int PlayBookGetLoadFlags(void);
 void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int count);
@@ -502,7 +502,7 @@ int PlayBookDbOpen(unsigned int id, int a, int b, int c, int d, int e)
     int result = TDbCreate(id, 0x80000);
 
     if (result == 0) {
-        result = TDbExtLoadFromResource(id, lbl_802EBDF8, a, 0);
+        result = TDbExtLoadFromResource(id, File_IgdataStr, a, 0);
     }
     return result;
 }

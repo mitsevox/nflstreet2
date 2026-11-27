@@ -65,7 +65,7 @@ struct PathfinderStatus_t {
 extern "C" {
 extern void *gUISMainInfo;
 extern void *gUISSubInfo;
-extern char lbl_802EBF88[];
+extern char File_PathfindStr[];
 int FELoopIsMainFEActive(void);
 int fn_801486A0(void);
 void SndgUpdate(int a);
@@ -472,7 +472,7 @@ void SndgMusicInit(void)
     }
     PlaylistDbClose(&cursor);
     if (SndEnabled()) {
-        _SndgMusic_pState->mpUnknown20 = ResOpenDevice(lbl_802EBF88, 44);
+        _SndgMusic_pState->mpUnknown20 = ResOpenDevice(File_PathfindStr, 44);
         _SndgMusic_pState->mUnknown24 = SndgPathLoadMap(_SndgMusic_pState->mpUnknown20, 1);
         SndgPathCreateTrack(_SndgMusic_pState->mpUnknown20, 2, 0x11000001, 2.0f);
         SndgPathAddCallback(SndgMusicTrackCallback);

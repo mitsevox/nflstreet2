@@ -11801,6 +11801,50 @@
       ]
     },
     {
+      "source": "src/game/files.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802EBDA0-0x802EC0AC (src/game/files.cpp) and its data and name rows: the code-less file of the game resource file names (NASCAR 2005 files.cpp counterpart; #1528 ruling 1).",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EBDA0",
+          "end": "0x802EC0AC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB6F0",
+          "end": "0x803EB700"
+        }
+      ]
+    },
+    {
+      "source": "src/game/hack.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802EC0AC-0x802EC104 (src/game/hack.cpp) and its data, name and source-form rows: the code-less file of the development hacks (NASCAR 2005 hack.cpp counterpart; #1528 rulings 1 and 2).",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AB858",
+          "end": "0x802AB8AC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EC0AC",
+          "end": "0x802EC104"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB700",
+          "end": "0x803EB71C"
+        }
+      ]
+    },
+    {
       "source": "src/game/FeatsScreen.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80055318-0x800554FC (src/game/FeatsScreen.cpp) and its .rodata and .sbss rows.",
@@ -13984,6 +14028,19 @@
           "placement": ".data4",
           "start": "0x802EA490",
           "end": "0x802EA934"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerStatColumns.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802A6400-0x802A6AB8 (src/game/PlayerStatColumns.cpp) and its data, name, type and source-form rows: the code-less file of the player statistics screen columns (#1528 rulings 6 and 1, slot proof in the unit row; ruling 2 FAKEMATCH stand-in for two literals).",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A6400",
+          "end": "0x802A6AB8"
         }
       ]
     },

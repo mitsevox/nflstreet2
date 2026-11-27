@@ -9,7 +9,7 @@
 void *operator new(unsigned int size, int unknown);
 
 extern "C" {
-extern char lbl_802EC018[];
+extern char File_CrowddatStr[];
 
 void *memset(void *pDest, int value, unsigned int size);
 int SndEnabled(void);
@@ -35,7 +35,7 @@ int SndgCrowd::Init()
 {
     mpState.mp = new (0) SndgCrowdState;
     memset(mpState.mp, 0, sizeof(SndgCrowdState));
-    mpState.mp->mpUnknown0 = ResOpenDevice(lbl_802EC018, 44);
+    mpState.mp->mpUnknown0 = ResOpenDevice(File_CrowddatStr, 44);
     if (SndEnabled()) {
         mpState.mp->mUnknown4 = SndgPathLoadMap(mpState.mp->mpUnknown0, 1);
         SndgPathCreateTrack(mpState.mp->mpUnknown0, 2, 0x14000001, 1.0f);

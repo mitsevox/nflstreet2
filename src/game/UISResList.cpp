@@ -23,23 +23,23 @@ void UIGLibrarySetGlobal(int index, void *p);
 void *UIGLibraryGetGlobal(int index);
 }
 
-extern char lbl_802EBE68[];
-extern char lbl_802EBE88[];
+extern char File_UisLibsStr[];
+extern char File_UisComnStr[];
 extern char lbl_802EBE98[];
-extern char lbl_802EBEA8[];
-extern char lbl_802EBEB8[];
-extern char lbl_802EBEC8[];
-extern char lbl_802EBED8[];
-extern char lbl_802EBEE8[];
-extern char lbl_802EBEF8[];
-extern char lbl_802EBF08[];
-extern char lbl_802EBF18[];
-extern char lbl_802EBF28[];
-extern char lbl_802EBF38[];
-extern char lbl_802EBF48[];
-extern char lbl_802EBF58[];
-extern char lbl_802EBF68[];
-extern char lbl_802EBF78[];
+extern char File_UisButtStr[];
+extern char File_UisTmloStr[];
+extern char File_UisClstStr[];
+extern char File_UisCtrlStr[];
+extern char File_UisFronStr[];
+extern char File_UisFselStr[];
+extern char File_UisPortStr[];
+extern char File_UisIngmStr[];
+extern char File_UisCrtmStr[];
+extern char File_UisChalStr[];
+extern char File_UisMoviStr[];
+extern char File_UisMpicStr[];
+extern char File_UisCmapStr[];
+extern char File_UisPostStr[];
 extern char gMainFEGroup[];
 
 extern "C" {
@@ -47,10 +47,10 @@ void UISResListAddCommon(void)
 {
     void *pList = UIGLibraryGetGlobal(1);
 
-    UIGLibrarySetDevice(pList, 0, lbl_802EBE68, 1, 16);
-    UIGLibrarySet(pList, 3, lbl_802EBEA8, 1, 0, 196);
+    UIGLibrarySetDevice(pList, 0, File_UisLibsStr, 1, 16);
+    UIGLibrarySet(pList, 3, File_UisButtStr, 1, 0, 196);
     UIGLibrarySet(pList, 2, lbl_802EBE98, 1, 0, 200);
-    UIGLibrarySet(pList, 5, lbl_802EBEC8, 1, 0, 65);
+    UIGLibrarySet(pList, 5, File_UisClstStr, 1, 0, 65);
 }
 
 void UISResListAddFrontEnd(void)
@@ -59,25 +59,25 @@ void UISResListAddFrontEnd(void)
     void *pList = UIGLibraryGetGlobal(1);
 
     if (flag == 0) {
-        UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 196);
-        UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 212);
-        UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 212);
-        UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 84);
+        UIGLibrarySet(pList, 1, File_UisComnStr, 1, 0, 196);
+        UIGLibrarySet(pList, 6, File_UisCtrlStr, 1, 0, 212);
+        UIGLibrarySet(pList, 7, File_UisFronStr, 1, 0, 212);
+        UIGLibrarySet(pList, 4, File_UisTmloStr, 1, 0, 84);
     } else {
-        UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 132);
-        UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 132);
-        UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 132);
-        UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 4);
+        UIGLibrarySet(pList, 1, File_UisComnStr, 1, 0, 132);
+        UIGLibrarySet(pList, 6, File_UisCtrlStr, 1, 0, 132);
+        UIGLibrarySet(pList, 7, File_UisFronStr, 1, 0, 132);
+        UIGLibrarySet(pList, 4, File_UisTmloStr, 1, 0, 4);
     }
-    UIGLibrarySet(pList, 10, lbl_802EBF08, 1, 0, 52);
-    UIGLibrarySet(pList, 8, lbl_802EBEF8, 1, 0, 180);
-    UIGLibrarySet(pList, 11, lbl_802EBF18, 1, 0, 132);
-    UIGLibrarySet(pList, 12, lbl_802EBF28, 1, 0, 52);
-    UIGLibrarySet(pList, 14, lbl_802EBF38, 1, 0, 180);
-    UIGLibrarySet(pList, 16, lbl_802EBF48, 1, 0, 180);
-    UIGLibrarySet(pList, 17, lbl_802EBF58, 1, 0, 180);
-    UIGLibrarySet(pList, 19, lbl_802EBF68, 1, 0, 180);
-    UIGLibrarySet(pList, 20, lbl_802EBF78, 1, 0, 180);
+    UIGLibrarySet(pList, 10, File_UisPortStr, 1, 0, 52);
+    UIGLibrarySet(pList, 8, File_UisFselStr, 1, 0, 180);
+    UIGLibrarySet(pList, 11, File_UisIngmStr, 1, 0, 132);
+    UIGLibrarySet(pList, 12, File_UisCrtmStr, 1, 0, 52);
+    UIGLibrarySet(pList, 14, File_UisChalStr, 1, 0, 180);
+    UIGLibrarySet(pList, 16, File_UisMoviStr, 1, 0, 180);
+    UIGLibrarySet(pList, 17, File_UisMpicStr, 1, 0, 180);
+    UIGLibrarySet(pList, 19, File_UisCmapStr, 1, 0, 180);
+    UIGLibrarySet(pList, 20, File_UisPostStr, 1, 0, 180);
 }
 
 void UISResListAddInGame(void)
@@ -87,19 +87,19 @@ void UISResListAddInGame(void)
     int second = 0;
     void *pList = UIGLibraryGetGlobal(1);
 
-    UIGLibrarySet(pList, 1, lbl_802EBE88, 1, 0, 180);
-    UIGLibrarySet(pList, 6, lbl_802EBED8, 1, 0, 132);
-    UIGLibrarySet(pList, 7, lbl_802EBEE8, 1, 0, 132);
-    UIGLibrarySet(pList, 4, lbl_802EBEB8, 1, 0, 20);
-    UIGLibrarySet(pList, 10, lbl_802EBF08, 1, 0, 52);
-    UIGLibrarySet(pList, 8, lbl_802EBEF8, 1, 0, 132);
-    UIGLibrarySet(pList, 11, lbl_802EBF18, 1, 0, 196);
-    UIGLibrarySet(pList, 12, lbl_802EBF28, 1, 0, 4);
-    UIGLibrarySet(pList, 14, lbl_802EBF38, 1, 0, 132);
-    UIGLibrarySet(pList, 16, lbl_802EBF48, 1, 0, 132);
-    UIGLibrarySet(pList, 17, lbl_802EBF58, 1, 0, 132);
-    UIGLibrarySet(pList, 19, lbl_802EBF68, 1, 0, 132);
-    UIGLibrarySet(pList, 20, lbl_802EBF78, 1, 0, 132);
+    UIGLibrarySet(pList, 1, File_UisComnStr, 1, 0, 180);
+    UIGLibrarySet(pList, 6, File_UisCtrlStr, 1, 0, 132);
+    UIGLibrarySet(pList, 7, File_UisFronStr, 1, 0, 132);
+    UIGLibrarySet(pList, 4, File_UisTmloStr, 1, 0, 20);
+    UIGLibrarySet(pList, 10, File_UisPortStr, 1, 0, 52);
+    UIGLibrarySet(pList, 8, File_UisFselStr, 1, 0, 132);
+    UIGLibrarySet(pList, 11, File_UisIngmStr, 1, 0, 196);
+    UIGLibrarySet(pList, 12, File_UisCrtmStr, 1, 0, 4);
+    UIGLibrarySet(pList, 14, File_UisChalStr, 1, 0, 132);
+    UIGLibrarySet(pList, 16, File_UisMoviStr, 1, 0, 132);
+    UIGLibrarySet(pList, 17, File_UisMpicStr, 1, 0, 132);
+    UIGLibrarySet(pList, 19, File_UisCmapStr, 1, 0, 132);
+    UIGLibrarySet(pList, 20, File_UisPostStr, 1, 0, 132);
     UIGLibraryPreloadItem(pList, 1, 0);
     UIGLibraryPreloadItem(pList, 1, 1);
     UIGLibraryPreloadItem(pList, 1, 2);

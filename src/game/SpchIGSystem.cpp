@@ -44,7 +44,7 @@ struct SpchIGState_t {
 };
 
 extern "C" {
-extern char lbl_802EBE04[];
+extern char File_ChatdataStr[];
 
 int SndgChannelGetStream(int a);
 void SndgChannelSetVolume(int idx, unsigned char percent);
@@ -339,7 +339,7 @@ extern "C" void SpchIGLoadChatData(SpchIGInitParams_t *pParams, int unused)
 
     _SpchIG_bTutorial = GameModeTypeGet() == 11;
     _SpchIG_bUseSpeakerPos = 1;
-    _SpchIG_sState.mpUnknown4 = ResOpenDevice(lbl_802EBE04, 44);
+    _SpchIG_sState.mpUnknown4 = ResOpenDevice(File_ChatdataStr, 44);
     _SpchIG_sState.mpUnknown8 = ResOpenRam(_SpchIG_sState.mpUnknown4, 0, 1, 1);
     SpchInit(pParams);
     SpchSetRuleCallbacks(SpchIGCanPlayEvent);

@@ -15,10 +15,10 @@
 
 extern "C" {
 extern char lbl_802EBDBC[];
-extern char lbl_802EBDF8[];
-extern char lbl_802EBFC0[];
-extern char lbl_803EB6F0[];
-extern char lbl_803EB6F8[];
+extern char File_IgdataStr[];
+extern char File_StatmodStr[];
+extern char File_FEQuickloadStr[];
+extern char File_GameQuickloadStr[];
 
 void fn_800A1A58(void);
 void fn_800A1A80(void);
@@ -109,7 +109,7 @@ const char *IGMisc::GetName() { return "IGMisc"; }
 
 int IGMisc::Init()
 {
-    mData.mp = ResOpenDevice(lbl_802EBDF8, 44);
+    mData.mp = ResOpenDevice(File_IgdataStr, 44);
     return 1;
 }
 
@@ -165,9 +165,9 @@ int Qkl::Init()
     }
 
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
-        strncpy(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
+        strncpy(mFileName.mText, File_FEQuickloadStr, sizeof(mFileName.mText));
     } else {
-        snprintf(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
+        snprintf(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", File_GameQuickloadStr, fn_800A3444());
     }
     ResQuickloadOpenDevice(mFileName.mText, 44);
     return 1;
@@ -228,7 +228,7 @@ const char *StaData::GetName() { return "StaData"; }
 
 int StaData::Init()
 {
-    mData.mp = ResOpenDevice(lbl_802EBFC0, 44);
+    mData.mp = ResOpenDevice(File_StatmodStr, 44);
     return 1;
 }
 

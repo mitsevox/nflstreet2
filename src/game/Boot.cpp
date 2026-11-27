@@ -19,7 +19,7 @@ RcmpCodec *MAD_CODEC_create();
 
 extern "C" {
 extern char lbl_800034A0[];
-extern char lbl_802EC09C[];
+extern char File_MoviedatStr[];
 extern void *gUISMainInfo;
 extern unsigned char Per_BtnMask[8];
 extern int Per_MaxAxis;
@@ -326,7 +326,7 @@ static unsigned char _BootPlayMovie(int index, int a, int b, int c, int d, void 
     handle = STREAM_create(2, 2, 2, pBuffer, 0x100000);
     unknown0 = STREAM_taphandle(handle, 2);
     STREAM_setfilter(handle, 1, 0xFFFF, 0x4353, 2);
-    _Boot_pMovieFile = ResOpenDevice(lbl_802EC09C, 0x2C);
+    _Boot_pMovieFile = ResOpenDevice(File_MoviedatStr, 0x2C);
     desc.mpUnknown0 = _Boot_pMovieFile;
     desc.mUnknown4 = index;
     unknown1 = STREAM_queuefile(handle, &desc, 0, 0);
