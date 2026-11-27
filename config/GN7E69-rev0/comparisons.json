@@ -24013,7 +24013,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Three full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Two full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24044,11 +24044,6 @@
           "symbol": "iSPCH_MakeSampleRequests",
           "start": "0x801B0EA4",
           "end": "0x801B10AC"
-        },
-        {
-          "symbol": "iSPCH_EACrandom",
-          "start": "0x801B1934",
-          "end": "0x801B1A3C"
         }
       ]
     },
@@ -28606,26 +28601,6 @@
           "symbol": "SNDAEMS_addmodulebank",
           "start": "0x802697D8",
           "end": "0x80269990"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/spchrule.c",
-      "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0, the speech_cxx comparison profile and evidence.tsv source-form 0x801B22E0-0x801B2368. The other fifteen native routines link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B1CFC",
-          "end": "0x801B23A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "iSPCH_GetSampleSizeData",
-          "start": "0x801B22E0",
-          "end": "0x801B2368"
         }
       ]
     },

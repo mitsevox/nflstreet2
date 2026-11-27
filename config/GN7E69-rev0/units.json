@@ -751,10 +751,6 @@
       "address": "0x800E2FE4",
       "evidence": "evidence.tsv function and name rows for the PlyrAlignApproach.cpp holdout, called by PlyrAlignUpdate in src/game/PlyrTackle.cpp."
     },
-    "iSPCH_GetSampleSizeData": {
-      "address": "0x801B22E0",
-      "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368; original sample-size code retained as the only spchrule.c holdout. Called by the speech pick comparison."
-    },
     "_f_bss": {
       "address": "0x803064C0",
       "evidence": "Linker-defined start of .bss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
@@ -17941,31 +17937,16 @@
     },
     {
       "source": "src/engine/spchrule.c",
-      "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. Fifteen routines link from the speech rule source. The 136-byte sample size helper keeps the original bytes. This source has no allocated data section.",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. All sixteen routines link from the speech rule source. This source has no allocated data section.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B1CFC",
-          "end": "0x801B22E0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B2368",
           "end": "0x801B23A0"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "iSPCH_GetSampleSizeData",
-            "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368"
-          }
-        ],
-        "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368 records the remaining status register and store ordering differences."
-      }
+      ]
     },
     {
       "source": "src/engine/pathinit.c",
@@ -29510,7 +29491,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Three documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Two documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests) retain original code; all other code links through the existing owner-approved named profile.",
       "sections": [
         {
           "section": ".text",
@@ -29528,7 +29509,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801B10AC",
-          "end": "0x801B1934"
+          "end": "0x801B1A3C"
         },
         {
           "section": ".data",
@@ -29552,10 +29533,6 @@
           {
             "function": "iSPCH_MakeSampleRequests",
             "evidence": "evidence.tsv source-form 0x801B0EA4-0x801B10AC"
-          },
-          {
-            "function": "iSPCH_EACrandom",
-            "evidence": "evidence.tsv source-form 0x801B1934-0x801B1A3C"
           }
         ],
         "evidence": "PR1447 merge notes list all12 full measured partials; existing owner holdouts ruling2026-11-20. Entire native data sections kept."
