@@ -24,7 +24,7 @@ struct DirectedRunState_t {
 
 extern "C" {
 int fn_800ABDA4(int team);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -62,7 +62,7 @@ extern "C" int DirectedRunEnter(Object_80039F5C *p)
             message.mId = 85;
             message.mUnknown1[0] = 96;
             message.mUnknown1[1] = 180;
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
             return 1;
         }
         }
@@ -130,7 +130,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                 if (SyncRandGetRange(0, 100) < chance) {
                     memset(&message, 0, 4);
                     message.mId = 2;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     return 1;
                 }
             } else {
@@ -144,7 +144,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
                 if (SyncRandGetRange(0, 100) < chance) {
                     memset(&message, 0, 4);
                     message.mId = 2;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     return 1;
                 }
             }
@@ -154,7 +154,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             if (SyncRandGetRange(0, 100) < chance) {
                 memset(&message, 0, 4);
                 message.mId = 2;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
                 return 1;
             }
         }

@@ -10,7 +10,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include <string.h>
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
@@ -44,7 +44,7 @@ void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
-int fn_800FD2AC(Object_80039F5C *p);
+int PlyrRunLegEnter(Object_80039F5C *p);
 int fn_800FD41C(Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80112928(Object_80039F5C *p);
@@ -62,7 +62,7 @@ float SyncRandGetFloat(int stream);
 float Vec2Distance(Vector_80039F5C *pA, Vector_80039F5C *pB);
 void Vec3ClosestPointOnSegment(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pPoint, Vector_80039F5C *pOut, float *pDist,
                  float *pT);
-void fn_800FD724(Object_80039F5C *p);
+void PlyrRunLegSaveRemaining(Object_80039F5C *p);
 }
 
 static float _RouteRun_fEdgeMargin = 4.0f;
@@ -291,7 +291,7 @@ extern "C" int RouteRunEnter(Object_80039F5C *p)
     float margin;
 
     fn_8009A8D4(pBlock->mUnknown36);
-    result = fn_800FD2AC(p);
+    result = PlyrRunLegEnter(p);
     pBlock->mUnknown12 = MIN(pBlock->mUnknown12, 1.0f);
     moved = 0;
     if (fabs(pBlock->mUnknown0) > ScrmGetSidelineX() - 3.0f) {
@@ -349,7 +349,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
 
         memset(&message, 0, 4);
         message.mId = 33;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (!RouteRunSidestepDefender(p, pBlock)) {
@@ -379,7 +379,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
                 result = 1;
             }
         }
-        if (!result && pBlock->mUnknown60 == 0 && p->mUnknown16 != 2 && fn_800F06F4(0, p->mpState, 19, 1) == 0xFFFF) {
+        if (!result && pBlock->mUnknown60 == 0 && p->mUnknown16 != 2 && PlyrStateQueueFind(0, p->mpState, 19, 1) == 0xFFFF) {
             Vector_80039F5C delta;
             float dist;
 
@@ -421,6 +421,6 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
 extern "C" int RouteRunExit(Object_80039F5C *p)
 {
     fn_8009CE88(p, &p->mUnknown16, 8);
-    fn_800FD724(p);
+    PlyrRunLegSaveRemaining(p);
     return 1;
 }

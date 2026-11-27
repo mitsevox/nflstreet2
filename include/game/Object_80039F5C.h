@@ -204,7 +204,7 @@ struct Block_800C8330 {
     char mUnknown63[1];
 };
 
-/* Three bytes at +1008, compared field by field by fn_80110630. */
+/* Three bytes at +1008, compared field by field by AssignMoveKeyMatches. */
 struct Key_80110630 {
     unsigned char mUnknown0;
     unsigned char mUnknown1;
@@ -246,9 +246,9 @@ struct State_80039F5C {
 
 /* Object that +3092 points to; its layout is declared where it is read. */
 struct Object_800EA284;
-/* Block at player +1072 (Block_8011E240 +40), passed to fn_8011DBC8. +52 is
+/* Block at player +1072 (Block_8011E240 +40), passed to AssignEngageResetScales. +52 is
    a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40); +40, +44 and +48
-   are reset to 1.0f by fn_8011DBC8. The byte at +54 is player +1126. */
+   are reset to 1.0f by AssignEngageResetScales. The byte at +54 is player +1126. */
 struct Block_8011DBC8 {
     char mUnknown0[40];
     float mUnknown40;
@@ -258,9 +258,9 @@ struct Block_8011DBC8 {
     unsigned char mUnknown54;
 };
 
-/* View of the 108 bytes at player +1032 as one block: fn_8011DF90 clears
-   them with one 108-byte memset call, and fn_8011E194, fn_8011E1A8,
-   fn_8011E1BC, fn_8011E240, fn_8011E33C and fn_8011E3A4 address them
+/* View of the 108 bytes at player +1032 as one block: AssignEngageSysReset clears
+   them with one 108-byte memset call, and AssignEngageSetFlags, AssignEngageClearFlags,
+   AssignEngageStart, fn_8011E240, AssignEngageSetOpponent and AssignEngageClear address them
    through a register holding player +1032. The per-field view is the
    mUnknown1032-mUnknown1139 members; this view declares the bytes the
    block-relative code accesses and leaves the others opaque. +102 is the
@@ -490,8 +490,8 @@ struct Object_80039F5C {
     char mUnknown3020[20];
     int mUnknown3040;
     char mUnknown3044[4];
-    /* Message queue that mpState points to; passed to fn_800F03D8 and
-       fn_800F053C. */
+    /* Message queue that mpState points to; passed to PlyrStateQueueAppend and
+       PlyrStateQueueSet. */
     State_80039F5C mQueue[10];
     unsigned char mUnknown3088;
     char mUnknown3089[1];

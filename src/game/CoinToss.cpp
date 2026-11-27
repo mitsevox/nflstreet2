@@ -71,7 +71,7 @@ struct CoinTossCamEntry_t {
 
 extern "C" {
 void fn_800CC560(int a);
-void fn_800FF6D8(Object_80039F5C *p);
+void PlyrSnapToMovePoint(Object_80039F5C *p);
 void PlyrOverlayAnimStopAll(Object_80039F5C *p);
 void InGameSetInputPaused(int unknown);
 int FELoopIsMainFEActive(void);
@@ -257,19 +257,19 @@ void CoinTossSendPlayersToSpots(unsigned char *pUnused, CoinTossSpot_t *pA, Coin
             message.mUnknown1[1] = (int)(pTable[i].mPos.mY + pTable[i].mPos.mY);
             message.mId = 0x3F;
             message.mUnknown1[2] = angle;
-            fn_800F053C(0, p->mQueue, &message, p);
+            PlyrStateQueueSet(0, p->mQueue, &message, p);
 
             memset(&message, 0, sizeof(message));
             message.mId = 6;
             message.mUnknown1[0] = angle;
-            fn_800F03D8(0, p->mQueue, &message, p);
+            PlyrStateQueueAppend(0, p->mQueue, &message, p);
 
             memset(&message, 0, sizeof(message));
             message.mId = 9;
             message.mUnknown1[0] = 0xCB;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 0xFF;
-            fn_800F03D8(0, p->mQueue, &message, p);
+            PlyrStateQueueAppend(0, p->mQueue, &message, p);
         }
     }
 }
@@ -283,7 +283,7 @@ void CoinTossSnapPlayers(void)
         int *pRefs = side == 0 ? _CoinToss_pState->mRefs0 : _CoinToss_pState->mRefs1;
 
         for (i = 0; i < 3; i++) {
-            fn_800FF6D8(fn_8009BCE8(&pRefs[i]));
+            PlyrSnapToMovePoint(fn_8009BCE8(&pRefs[i]));
         }
     }
 }

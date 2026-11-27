@@ -13,7 +13,7 @@
 #include "game/Object_80039F5C.h"
 #include "game/ScrmPlayResult.h"
 #include "game/Ball.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include <string.h>
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
@@ -78,7 +78,7 @@ int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009A8D4(void *p);
 int fn_800B78DC(Object_80039F5C *p);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void Vec2Rotate(void *pOut, void *pIn, int angle);
 void Vec3ScaleAcc(void *pOut, void *pV, float scale);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
@@ -86,7 +86,7 @@ void PlyrFindNearest(void *pPos, float *pExtra, int team);
 void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int ScrmGetSnapDefense(void);
 void fn_8011E240(Object_80039F5C *p);
-void fn_8011E3EC(Object_80039F5C *p, int a);
+void AssignEngageSetMode(Object_80039F5C *p, int a);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
@@ -99,7 +99,7 @@ float ScrmGetDistanceToBounds(FieldPoint_t *pPos);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011E8A4(Object_80039F5C *p);
-void fn_8011E8D8(Object_80039F5C *p);
+void AssignEngageRelease(Object_80039F5C *p);
 int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c);
 int LooseBallGetEdge(Ball_t *pBall);
 int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *pState, Ball_t *pBall, int a, int b);
@@ -145,7 +145,7 @@ extern "C" void LooseBallPredictPos(Vector_80039F5C *pOut, Ball_t *pBall, float 
 extern "C" int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c) {
     int result = 0xFFFF;
     if (fn_8011E8A4(p)) {
-        fn_8011E8D8(p);
+        AssignEngageRelease(p);
         p->mUnknown1008.mUnknown0 = a;
         p->mUnknown1008.mUnknown1 = b;
         p->mUnknown1008.mUnknown2 = c;
@@ -414,7 +414,7 @@ extern "C" void LooseBallBroadcast(int id) {
                 if (LooseBallCanQueueMessage(pOther))
                     PlyrSetPendingMsg(pOther, &message, value);
                 else
-                    fn_800F01CC(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
+                    PlyrStateQueueInsertNext(0, pOther->mpState, &message, (Object_80039F5C *)&pOther);
             }
         }
     }
@@ -427,7 +427,7 @@ extern "C" int LooseBallEnter(Object_80039F5C *p) {
     state->mUnknown42 = state->mUnknown28 = 0;
     state->mUnknown43 = p->mpState->mUnknown1;
     if (p->mIdBytes[3] == 1) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             fn_8011E240(p);
         } else {
@@ -517,7 +517,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 memset(&message, 0, 4);
                 message.mId = 11;
                 message.mUnknown1[0] = p->mUnknown9[0];
-                fn_800F00D4(0, p->mpState, &message, p);
+                PlyrStateQueuePush(0, p->mpState, &message, p);
             }
             break;
         case 1:
@@ -543,7 +543,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
             memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
         }
         result = 0;
         goto done;
@@ -608,30 +608,30 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                     if (pHolder->mIdBytes[2] == p->mIdBytes[2]) {
                         memset(&message, 0, 4);
                         message.mId = 33;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     } else {
                         memset(&message, 0, 4);
                         message.mId = 2;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     }
                     } else {
                         memset(&message, 0, 4);
                         message.mId = 97;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     }
                 } else {
                     memset(&message, 0, 4);
                     message.mId = 1;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                 }
             } else if (fn_801486A0()) {
                 memset(&message, 0, 4);
                 message.mId = 2;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             } else {
                 memset(&message, 0, 4);
                 message.mId = 97;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
         }
     }

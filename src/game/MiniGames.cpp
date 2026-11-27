@@ -29,7 +29,7 @@
 #include "game/ScrmRuleSet.h"
 #include "game/Object_8008044C.h"
 #include "game/GameOptions.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/fn_80218FC4.h"
 #include "game/ScrmPlayResult.h"
 #include "game/GameCamera.h"
@@ -772,7 +772,7 @@ void MemCopy(void *pDst, const void *pSrc, int size);
 extern int lbl_803EB2A8;
 extern int lbl_803EB2AC;
 extern MiniGameC *lbl_8031BDBC[];
-void fn_800EFE1C(int a, State_80039F5C *pQueue);
+void PlyrStateQueueClear(int a, State_80039F5C *pQueue);
 void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB);
 void MiniGameReloadPlayer(Object_80039F5C *p);
 void fn_800B6474(int index, unsigned char team);
@@ -891,7 +891,7 @@ void fn_8014F4D8(MiniGameC *p, Object_80039F5C *pPlayer, int kind, int value);
 void HudShowPlayerPopup(Object_80039F5C *p, int team, const char *pText, int value, int d);
 int sprintf(char *pBuffer, const char *pFormat, ...);
 void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
-void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
+void PlyrStateQueueExitAndClear(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
 void PlyrClearPendingMsg(Object_80039F5C *pPlayer, int value);
 void Vec2FromAngle(float *pOut, int angle, float length);
 float ScrmGetSidelineX(void);
@@ -920,8 +920,8 @@ void PauseUnblock(void);
 extern int lbl_803EB2D8;
 void HudShowCallout(const char *pText);
 void ParticleTrailStartAfterimage(Block_80170E64 *p);
-void fn_800F0490(int a, State_80039F5C *pQueue, int id);
-void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p,
+void PlyrStateQueueRemove(int a, State_80039F5C *pQueue, int id);
+void PlyrStateQueueInsertAt(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p,
                  unsigned char position);
 void fn_80120618(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -974,7 +974,7 @@ void fn_8014FFC4(FieldPoint_t *pPoint);
 extern int lbl_802DEA78[];
 int ScrmGetPlayTurnovers(void);
 void ScrmChangePossession(int a);
-void fn_8011DF90(void);
+void AssignEngageSysReset(void);
 void PlayBookRestoreSelection(int team);
 void fn_8009B924(void);
 int fn_801529C0(MiniGameJumpBallC *p);
@@ -1138,7 +1138,7 @@ void MiniGameBenchPlayer(Object_80039F5C *p)
     }
     p->mMotion.mPos.mY = p->mMotion.mPos.mX = -100.0f;
     p->mpUnknown4->mUnknown20 &= ~1U;
-    fn_800EFE1C(0, p->mpState);
+    PlyrStateQueueClear(0, p->mpState);
     p->mFlags |= 0x40000;
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown0 = 0.0f;
@@ -2597,10 +2597,10 @@ void MiniGame4On4DuringPlayC::OnUpdate(float dt)
         unsigned char i;
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pPlayer = PlyrGet(ScrmGetOffenseTeam(), i);
-            if (fn_800F06F4(0, pPlayer->mpState, 18, 0xFFFF) != 0xFFFF) {
+            if (PlyrStateQueueFind(0, pPlayer->mpState, 18, 0xFFFF) != 0xFFFF) {
                 clear = 0;
             }
-            if (fn_800F06F4(0, pPlayer->mpState, 26, 0xFFFF) != 0xFFFF) {
+            if (PlyrStateQueueFind(0, pPlayer->mpState, 26, 0xFFFF) != 0xFFFF) {
                 clear = 0;
             }
         }
@@ -3169,7 +3169,7 @@ void PlaceSixPlayerFormation(void)
     unsigned int first = SyncRandGetRange(0, 6);
     float sectorWidth = 60.0f;
     Object_80039F5C *pPlayer = PlyrGet(1, 0);
-    fn_800EFE60(0, pPlayer->mpState, pPlayer);
+    PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
     PlyrClearPendingMsg(pPlayer, 0);
     pPlayer->mMotion.mPos.mX = 0.0f;
     pPlayer->mMotion.mPos.mY = 0.0f;
@@ -3182,7 +3182,7 @@ void PlaceSixPlayerFormation(void)
 
     for (unsigned char i = 0; i <= 4; i++) {
         pPlayer = PlyrGet(0, i);
-        fn_800EFE60(0, pPlayer->mpState, pPlayer);
+        PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
         PlyrClearPendingMsg(pPlayer, 0);
         unsigned int sector = (i + first) % 6;
         unsigned int spread = SyncRandGetRange(0, 2);
@@ -3224,7 +3224,7 @@ void MiniGameCrushCarrierPreGameC::fn_8014DA20()
         for (unsigned short i = 0; i <= 6; i++) {
             Object_80039F5C *pPlayer = PlyrGet(team, i);
             MiniGameReloadPlayer(pPlayer);
-            fn_800EFE60(0, pPlayer->mpState, pPlayer);
+            PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
         }
     }
 }
@@ -3496,20 +3496,20 @@ void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
     LivePlayPhase::OnEnter(dt);
     Object_80039F5C *pPlayer = PlyrGet(1, 0);
     PlyrClearPendingMsg(pPlayer, 0);
-    if (fn_800F06F4(0, pPlayer->mpState, 1, 0xFFFF) == 0xFFFF) {
+    if (PlyrStateQueueFind(0, pPlayer->mpState, 1, 0xFFFF) == 0xFFFF) {
         Message_800F01CC message;
         if (fn_8014F104(MiniGameGetCurrent())->mUnknown18.mUnknown12) {
             memset(&message, 0, 4);
             message.mId = 51;
             message.mUnknown1[0] = 16;
-            fn_800F053C(0, pPlayer->mpState, &message, pPlayer);
+            PlyrStateQueueSet(0, pPlayer->mpState, &message, pPlayer);
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F01CC(0, pPlayer->mpState, &message, pPlayer);
+            PlyrStateQueueInsertNext(0, pPlayer->mpState, &message, pPlayer);
         } else {
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
+            PlyrStateQueueAppend(0, pPlayer->mpState, &message, pPlayer);
         }
     }
     char text[64];
@@ -3518,11 +3518,11 @@ void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
     ParticleTrailStartAfterimage(pPlayer->mpUnknown4);
     for (unsigned char i = 0; i <= 4; i++) {
         Object_80039F5C *pOther = PlyrGet(0, i);
-        int position = fn_800F06F4(0, pOther->mpState, 97, 0xFFFF);
+        int position = PlyrStateQueueFind(0, pOther->mpState, 97, 0xFFFF);
         PlyrClearPendingMsg(pOther, 0);
-        fn_800F0490(0, pOther->mpState, 51);
-        fn_800F0490(0, pOther->mpState, 2);
-        fn_800F0490(0, pOther->mpState, 97);
+        PlyrStateQueueRemove(0, pOther->mpState, 51);
+        PlyrStateQueueRemove(0, pOther->mpState, 2);
+        PlyrStateQueueRemove(0, pOther->mpState, 97);
         Message_800F01CC message;
         memset(&message, 0, 4);
         message.mId = 51;
@@ -3532,15 +3532,15 @@ void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
             message.mUnknown1[0] = 32;
         }
         if (position == 0xFFFF) {
-            fn_800F03D8(0, pOther->mpState, &message, pOther);
+            PlyrStateQueueAppend(0, pOther->mpState, &message, pOther);
             memset(&message, 0, 4);
             message.mId = 97;
-            fn_800F03D8(0, pOther->mpState, &message, pOther);
+            PlyrStateQueueAppend(0, pOther->mpState, &message, pOther);
         } else {
-            fn_800F0278(0, pOther->mpState, &message, pOther, position);
+            PlyrStateQueueInsertAt(0, pOther->mpState, &message, pOther, position);
             memset(&message, 0, 4);
             message.mId = 97;
-            fn_800F0278(0, pOther->mpState, &message, pOther, position + 1);
+            PlyrStateQueueInsertAt(0, pOther->mpState, &message, pOther, position + 1);
         }
     }
     fn_80120618();
@@ -3680,7 +3680,7 @@ void MiniGameCrushCarrierPostPlayC::OnExit()
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
                 Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, i);
-                fn_800EFE60(0, pPlayer->mpState, pPlayer);
+                PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
             }
         }
     }
@@ -4295,7 +4295,7 @@ void MiniGameJumpBallPreGameC::OnExit()
         for (unsigned short i = 0; i <= 6; i++) {
             Object_80039F5C *pPlayer = PlyrGet(team, i);
             MiniGameReloadPlayer(pPlayer);
-            fn_800EFE60(0, pPlayer->mpState, pPlayer);
+            PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
         }
     }
 }
@@ -4546,7 +4546,7 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
             pPlayer->mMotion.mFacing = 0x800000;
             pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX + 0.5f;
         }
-        fn_800EFE60(0, pPlayer->mpState, pPlayer);
+        PlyrStateQueueExitAndClear(0, pPlayer->mpState, pPlayer);
         memset(&message, 0, 4);
         message.mId = 51;
         float delay = (signed char)SyncRandGetRange(0, 15) * (1.0f / 60.0f);
@@ -4559,13 +4559,13 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
         } else {
             message.mUnknown1[0] = (int)((delay + 2.0f) * 32.0f);
         }
-        fn_800F053C(0, pPlayer->mpState, &message, pPlayer);
+        PlyrStateQueueSet(0, pPlayer->mpState, &message, pPlayer);
         fn_801024FC(pPlayer, 8, 15, 5, 0);
         memset(&message, 0, 4);
         message.mId = 62;
         message.mUnknown1[0] = 0;
         message.mUnknown1[1] = 0;
-        fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
+        PlyrStateQueueAppend(0, pPlayer->mpState, &message, pPlayer);
         // FAKEMATCH: store order of the control block chosen by search to match the target's schedule
         if (pPlayer->mUnknown2913 == 0) {
             pPlayer->mUnknown512.mUnknown0 = 1.0f;
@@ -4600,10 +4600,10 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
     for (i = 0; i < total; i++) {
         Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
         if (fn_801530FC()->mEntries[i].mUnknown12 == 0xFF &&
-            fn_800F06F4(0, pPlayer->mpState, 95, 0xFFFF) == 0xFFFF) {
+            PlyrStateQueueFind(0, pPlayer->mpState, 95, 0xFFFF) == 0xFFFF) {
             memset(&message, 0, 4);
             message.mId = 95;
-            fn_800F03D8(0, pPlayer->mpState, &message, pPlayer);
+            PlyrStateQueueAppend(0, pPlayer->mpState, &message, pPlayer);
         }
     }
     CamGameSetModeAll(12);
@@ -4646,7 +4646,7 @@ void MiniGameJumpBallPostPlayC::OnExit()
         ScrmChangePossession(1);
         ScrmSetPlayTurnovers(0);
     }
-    fn_8011DF90();
+    AssignEngageSysReset();
     team = ScrmGetOffenseTeam();
     PlayBookRestoreSelection(team);
 }

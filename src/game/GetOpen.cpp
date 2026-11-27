@@ -26,14 +26,14 @@
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include <math.h>
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
 
 extern "C" {
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800FD68C(Message_800F01CC *, void *, void *);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrRunLegEncode(Message_800F01CC *, void *, void *);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int ScrmGetDefenseTeam(void);
 int MathArcTan2(float y, float x);
@@ -52,7 +52,7 @@ int ScrmGetOffenseTeam(void);
 int ScrmTestPlayFlag(int a);
 extern float gPlyrMoveFwdSpeed;
 void fn_8009A8D4(void *p);
-int fn_80103D6C(Object_80039F5C *p);
+int AssignIsPassTarget(Object_80039F5C *p);
 int fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
 int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 void PlayerCutPostTurn(Object_80039F5C *p, int angle);
@@ -319,9 +319,9 @@ extern "C" void GetOpenRunOn(Object_80039F5C *p, float distance)
     GetOpenGetRunOnPoint(p, &point);
     memset(&message, 0, 4);
     message.mId = 19;
-    fn_800FD68C(&message, &p->mMotion, &point);
+    PlyrRunLegEncode(&message, &p->mMotion, &point);
     message.mUnknown1[2] = 255;
-    fn_800F00D4(0, p->mpState, &message, p);
+    PlyrStateQueuePush(0, p->mpState, &message, p);
 }
 
 extern "C" void GetOpenGetRunOnPoint(Object_80039F5C *p, FieldPoint_t *pOut)
@@ -366,7 +366,7 @@ extern "C" int GetOpenEnter(Object_80039F5C *p)
             near = 1;
         }
         if (!near) {
-            if (!fn_80103D6C(p)) {
+            if (!AssignIsPassTarget(p)) {
                 unsigned char a, b;
                 if (fn_800C13A0(p, &a, &b) > 1 && BallGetCurrentHolder()) {
                     if (!(fabsf(ScrmGetSidelineX() - p->mMotion.mPos.mX) >= 9.0f)) {
@@ -402,14 +402,14 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
         if (BallGetCurrentHolder() && ScrmTestPlayFlag(0)) {
             memset(&message, 0, 4);
             message.mId = 33;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 1;
         }
         float a, b;
         state->mUnknown24 -= 2;
         if (state->mUnknown24 < 0 || !(fabsf(p->mMotion.mPos.mX) <= ScrmGetSidelineX() - 4.0f)) {
             int available = 0;
-            if (BallGetCurrentHolder() && fn_80103D6C(p)) {
+            if (BallGetCurrentHolder() && AssignIsPassTarget(p)) {
                 unsigned char first, second;
                 available = fn_800C13A0(p, &first, &second) <= 1;
             }
@@ -438,7 +438,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
 
                 }
                 ++state->mUnknown36;
-                if (!fn_80103D6C(p) && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x71C70
+                if (!AssignIsPassTarget(p) && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x71C70
                     && !state->mUnknown40 && SyncRandGetRange(0, state->mUnknown32) < state->mUnknown36) {
                     p->mUnknown512.mUnknown14 = 0;
                     fn_8009BD60(p);
@@ -457,16 +457,16 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
                 PlayerCutPostTurn(p, MathArcTan2(delta.mY, delta.mX));
                 memset(&message, 0, 4);
                 message.mId = 19;
-                fn_800FD68C(&message, &p->mMotion, &point);
+                PlyrRunLegEncode(&message, &p->mMotion, &point);
                 message.mUnknown1[2] = 255;
-                if (fn_800F06F4(0, p->mpState, 20, 65535) == 65535) {
-                    fn_800F053C(0, p->mpState, &message, p);
+                if (PlyrStateQueueFind(0, p->mpState, 20, 65535) == 65535) {
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                 } else {
-                    fn_800F03D8(0, p->mpState, &message, p);
+                    PlyrStateQueueAppend(0, p->mpState, &message, p);
                 }
                 memset(&message, 0, 4);
                 message.mId = 21;
-                fn_800F03D8(0, p->mpState, &message, p);
+                PlyrStateQueueAppend(0, p->mpState, &message, p);
                 return 0;
             }
         }

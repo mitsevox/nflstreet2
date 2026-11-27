@@ -18,7 +18,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/fn_801BE60C.h"
 #include "game/PlyrCollide.h"
 #include "game/Ball.h"
@@ -90,7 +90,7 @@ int ScrmGetDefenseTeam(void);
 int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 
 int ScrmGetOffenseTeam(void);
-void fn_8011E3EC(Object_80039F5C *, int);
+void AssignEngageSetMode(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int AnimSeqHasOpcode(AnimSeq_t *, AnimScript_t *, unsigned short);
@@ -101,8 +101,8 @@ int PlyrEngageTryShed(Object_80039F5C *, int);
 int fn_8011EC68(Object_80039F5C *, Object_80039F5C *);
 float Vec2Distance(void *, void *);
 int PlyrTackleStart(Object_80039F5C *, int, int);
-int fn_800F0490(int, State_80039F5C *, int);
-void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
+int PlyrStateQueueRemove(int, State_80039F5C *, int);
+void PlyrStateQueueReplaceHead(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int MathArcTan2(float, float);
 int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
@@ -112,7 +112,7 @@ void PlyrEngageShortenMessages(Object_80039F5C *, unsigned int);
 
 void PlyrEngageReleaseControl(Object_80039F5C *p)
 {
-    fn_8011E3EC(p, 0);
+    AssignEngageSetMode(p, 0);
     if (p->mIdBytes[2] == ScrmGetOffenseTeam())
         fn_8011E240(p);
     else {
@@ -124,7 +124,7 @@ void PlyrEngageReleaseControl(Object_80039F5C *p)
 
 void PlyrEngageShortenMessages(Object_80039F5C *p, unsigned int count)
 {
-    int index = fn_800F06F4(0, p->mpState, 31, 0xFFFF);
+    int index = PlyrStateQueueFind(0, p->mpState, 31, 0xFFFF);
     if (index != 0xFFFF) {
         unsigned char n = p->mpState[index].mUnknown1;
         if (n) {
@@ -133,7 +133,7 @@ void PlyrEngageShortenMessages(Object_80039F5C *p, unsigned int count)
             p->mpState[index].mUnknown1 -= count;
         }
     }
-    index = fn_800F06F4(0, p->mpState, 33, 0xFFFF);
+    index = PlyrStateQueueFind(0, p->mpState, 33, 0xFFFF);
     if (index != 0xFFFF) {
         unsigned char n = p->mpState[index].mUnknown1;
         if (n) {
@@ -221,7 +221,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         memset(&m, 0, 4);
         m.mId = 11;
         m.mUnknown1[0] = p->mUnknown9[0];
-        fn_800F05E4(0, p->mpState, &m, p);
+        PlyrStateQueueReplaceHead(0, p->mpState, &m, p);
     }
     if ((unsigned int)s->mUnknown10 % 5 == 0 && (unsigned int)s->mUnknown10 > 4 &&
         p->mIdBytes[2] == ScrmGetDefenseTeam() && !(p->mFlags & 0x400) && !s->mUnknownCByte &&
@@ -267,7 +267,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             PlyrCollideRemoveExempt(p, other);
             s->mUnknown8Bytes[0] = 1;
             if (PlyrTackleStart(p, 2, 0))
-                fn_800F0490(0, p->mpState, 32);
+                PlyrStateQueueRemove(0, p->mpState, 32);
             p->mFlags &= ~4;
         }
         if (p->mFlags & 4) {
@@ -355,9 +355,9 @@ int PlyrStateUpdateClear(Object_80039F5C *p)
 void PlyrStatesRegister(int kind, int enabled)
 {
     if (enabled)
-        fn_800EFE0C(kind, &_PlyrStates_qAlternate);
+        PlyrStateQueueRegister(kind, &_PlyrStates_qAlternate);
     else
-        fn_800EFE0C(kind, &_PlyrStates_qDefault);
+        PlyrStateQueueRegister(kind, &_PlyrStates_qDefault);
 }
 
 }
@@ -440,42 +440,42 @@ void LooseBallEnter(void);
 void LooseBallExit(void);
 void LooseBallUpdate(void);
 void LooseBallInput(void);
-void fn_800F08F8(void);
-void fn_800F0900(void);
-void fn_800F0908(void);
+void PlyrStateHandlerFalse(void);
+void PlyrStateExitDefault(void);
+void PlyrStateNotifyDefault(void);
 void fn_800F0C6C(void);
 void fn_800F0CCC(void);
 void fn_800F0E10(void);
-void fn_800F23EC(void);
-void fn_800F24D8(void);
-void fn_800F268C(void);
+void CarrierJukeEnter(void);
+void CarrierJukeUpdate(void);
+void CarrierJukeInput(void);
 void fn_800F2AA0(void);
 void fn_800F2B8C(void);
 void fn_800F2C14(void);
-void fn_800F4A74(void);
+void JumpBallChaseEnter(void);
 void fn_800F4AD4(void);
-void fn_800F6158(void);
-void fn_800F62A4(void);
+void PlyrMoveToSpotEnter(void);
+void PlyrMoveToSpotOrBlockEnter(void);
 void fn_800F6370(void);
-void fn_800F6790(void);
-void fn_800F67CC(void);
+void PlyrMoveToSpotExit(void);
+void PlyrMoveToSpotMirrorMessage(void);
 void fn_800FA0DC(void);
 void fn_800FA300(void);
-void fn_800FAD10(void);
+void AssignBlockMirrorMessage(void);
 void fn_800FCA78(void);
 void fn_800FCC24(void);
-void fn_800FD2AC(void);
-void fn_800FD3F0(void);
+void PlyrRunLegEnter(void);
+void PlyrRunLegExit(void);
 void fn_800FD41C(void);
-void fn_800FD580(void);
-void fn_800FD650(void);
-void fn_800FD708(void);
-void fn_800FDA58(void);
+void PlyrRunLegSteer(void);
+void PlyrRunLegNotify(void);
+void PlyrRunLegMirrorMessage(void);
+void PlyrLineUpEnter(void);
 void fn_800FDAC8(void);
-void fn_800FDFD8(void);
-void fn_800FEFD4(void);
+void PlyrLineUpInput(void);
+void PlyrGotoPointEnter(void);
 void fn_800FF094(void);
-void fn_800FF538(void);
+void PlyrMoveToPointNotify(void);
 void fn_800FF7A8(void);
 void fn_800FF7F4(void);
 void fn_800FF860(void);
@@ -490,9 +490,9 @@ void fn_80102664(void);
 void fn_8010279C(void);
 void fn_80105898(void);
 void fn_80105AF4(void);
-void fn_80105DF0(void);
-void fn_80106794(void);
-void fn_80109150(void);
+void PitchMirrorMessage(void);
+void PitchExit(void);
+void PlyrPlayBallEnter(void);
 void fn_80109248(void);
 void fn_8010A4E8(void);
 void fn_8010A640(void);
@@ -520,19 +520,19 @@ void fn_8010FD8C(void);
 void fn_8010FD94(void);
 void fn_8010FE40(void);
 void fn_80110078(void);
-void fn_801100A0(void);
-void fn_801108D4(void);
-void fn_801109A4(void);
-void fn_80110B00(void);
-void fn_80111104(void);
-void fn_801111E8(void);
-void fn_801112D8(void);
-void fn_80111314(void);
+void PlyrStateSetFlagEnter(void);
+void CarrierSpinEnter(void);
+void CarrierSpinUpdate(void);
+void CarrierSpinInput(void);
+void CarrierStiffArmEnter(void);
+void CarrierStiffArmUpdate(void);
+void CarrierStiffArmExit(void);
+void CarrierStiffArmInput(void);
 void fn_801113DC(void);
 void fn_80111528(void);
 void fn_80111580(void);
-void fn_80111794(void);
-void fn_801117F8(void);
+void CarrierTightropeEnter(void);
+void CarrierTightropeUpdate(void);
 void fn_80111964(void);
 void fn_80111974(void);
 void fn_80111F80(void);
@@ -545,20 +545,20 @@ void fn_80113498(void);
 void fn_80113510(void);
 void fn_801135E4(void);
 void fn_80113604(void);
-void fn_80113680(void);
-void fn_8011380C(void);
+void PlyrHitStrikeEnter(void);
+void PlyrHitStrikeUpdate(void);
 void fn_80113AAC(void);
 void fn_80113B28(void);
-void fn_80113C20(void);
+void PlyrHitImpactEnter(void);
 void PlyrHitImpactUpdate(void);
-void fn_801147D4(void);
+void PlyrHitImpactExit(void);
 void fn_80114838(void);
-void fn_80116B98(void);
+void AssignZoneEnter(void);
 void fn_80116C34(void);
-void fn_801170A0(void);
+void AssignZoneMirrorMessage(void);
 void fn_80118210(void);
 void fn_801182C8(void);
-void fn_80118778(void);
+void AssignZoneUpperMirrorMessage(void);
 void fn_80125304(void);
 void fn_801253A8(void);
 void fn_80125494(void);
@@ -583,107 +583,107 @@ void PassBlockExit(void);
 void PassBlockInput(void);
 
 PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
     {{(void *)CarrierRunEnter, (void *)CarrierRunExit, (void *)CarrierRunUpdate, (void *)CarrierRunInput, (void *)CarrierRunNotify, 0}},
     {{(void *)PursueEnter, (void *)PursueExit, (void *)PursueUpdate, (void *)DefReactSelectPursueInput, (void *)PursueNotify, 0}},
-    {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)fn_800FD650, (void *)fn_800FD708}},
-    {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD580, (void *)fn_800B76E8, (void *)fn_800FD650, (void *)fn_800FD708}},
-    {{(void *)fn_800F2AA0, (void *)fn_800F2C14, (void *)fn_800F2B8C, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
-    {{(void *)PlyrTurnEnter, (void *)fn_800F0900, (void *)PlyrTurnUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FDA58, (void *)fn_800F0900, (void *)fn_800FDAC8, (void *)fn_800FDFD8, (void *)fn_800FF538, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010FC40, (void *)fn_800F0900, (void *)fn_8010FD8C, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrRunLegEnter, (void *)PlyrRunLegExit, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)PlyrRunLegNotify, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)PlyrRunLegEnter, (void *)PlyrRunLegExit, (void *)PlyrRunLegSteer, (void *)fn_800B76E8, (void *)PlyrRunLegNotify, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)fn_800F2AA0, (void *)fn_800F2C14, (void *)fn_800F2B8C, (void *)fn_800B7F34, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrTurnEnter, (void *)PlyrStateExitDefault, (void *)PlyrTurnUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrLineUpEnter, (void *)PlyrStateExitDefault, (void *)fn_800FDAC8, (void *)PlyrLineUpInput, (void *)PlyrMoveToPointNotify, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010FC40, (void *)PlyrStateExitDefault, (void *)fn_8010FD8C, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
     {{(void *)CarrierMomentumEnter, (void *)CarrierMomentumExit, (void *)CarrierMomentumUpdate, (void *)CarrierMomentumInput, (void *)CarrierMomentumNotify, 0}},
     {{(void *)TurnToPlayEnter, (void *)TurnToPlayExit, (void *)TurnToPlayUpdate, (void *)TurnToPlayInput, (void *)TurnToPlayNotify, 0}},
     {{(void *)PlyrTackleEnter, (void *)PlyrTackleExit, (void *)PlyrTackleUpdate, (void *)PlyrTackleInput, (void *)PlyrTackleNotify, 0}},
-    {{(void *)HuddleMoveEnter, (void *)fn_800F0900, (void *)HuddleMoveUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
-    {{(void *)HuddleMoveAltEnter, (void *)fn_800F0900, (void *)HuddleMoveAltUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
-    {{(void *)fn_80101CB4, (void *)fn_80102470, (void *)fn_801021C0, (void *)fn_80102664, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80113C20, (void *)fn_801147D4, (void *)PlyrHitImpactUpdate, (void *)fn_80114838, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80113680, (void *)fn_80113AAC, (void *)fn_8011380C, (void *)fn_80113B28, (void *)fn_800F0908, 0}},
-    {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
-    {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)PlayerCutMirrorMessage}},
-    {{(void *)GetOpenEnter, (void *)fn_800F0900, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FAD10}},
-    {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80105898, (void *)fn_80106794, (void *)fn_80105AF4, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_80105DF0}},
-    {{(void *)HandoffEnter, (void *)HandoffExit, (void *)HandoffUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)HandoffMirrorMessage}},
-    {{(void *)fn_8010CAE8, (void *)fn_800F0900, (void *)fn_8010CB58, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)PassBlockEnter, (void *)PassBlockExit, (void *)PassBlockUpdate, (void *)PassBlockInput, (void *)fn_800F0908, 0}},
-    {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F23EC, (void *)fn_800F0900, (void *)fn_800F24D8, (void *)fn_800F268C, (void *)fn_800F0908, 0}},
-    {{(void *)fn_801108D4, (void *)fn_800F0900, (void *)fn_801109A4, (void *)fn_80110B00, (void *)fn_800F0908, 0}},
-    {{(void *)CarrierMoveEnter, (void *)CarrierMoveExit, (void *)CarrierMoveUpdate, (void *)CarrierMoveInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80116B98, (void *)fn_800F0900, (void *)fn_80116C34, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_801170A0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)PlyrAlignEnter, (void *)PlyrAlignExit, (void *)PlyrAlignUpdate, (void *)PlyrAlignInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80111104, (void *)fn_801112D8, (void *)fn_801111E8, (void *)fn_80111314, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F6158, (void *)fn_800F6790, (void *)fn_800F6370, (void *)fn_8010FB4C, (void *)fn_800F0908, (void *)fn_800F67CC}},
-    {{(void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)PlayerActionDropBallEnter, (void *)PlayerActionDropBallExit, (void *)PlayerActionDropBallUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)PlyrWaitEnter, (void *)fn_800F0900, (void *)PlyrWaitUpdate, (void *)PlyrWaitInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F0C6C, (void *)fn_800F0900, (void *)fn_800F0CCC, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800F0E10}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010D6D4, (void *)fn_800F0900, (void *)fn_8010D734, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)LooseBallEnter, (void *)LooseBallExit, (void *)LooseBallUpdate, (void *)LooseBallInput, (void *)fn_800F0908, 0}},
+    {{(void *)HuddleMoveEnter, (void *)PlyrStateExitDefault, (void *)HuddleMoveUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrMoveToPointNotify, 0}},
+    {{(void *)HuddleMoveAltEnter, (void *)PlyrStateExitDefault, (void *)HuddleMoveAltUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrMoveToPointNotify, 0}},
+    {{(void *)fn_80101CB4, (void *)fn_80102470, (void *)fn_801021C0, (void *)fn_80102664, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrHitImpactEnter, (void *)PlyrHitImpactExit, (void *)PlyrHitImpactUpdate, (void *)fn_80114838, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrHitStrikeEnter, (void *)fn_80113AAC, (void *)PlyrHitStrikeUpdate, (void *)fn_80113B28, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)QbPassEnter, (void *)PlyrStateExitDefault, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, (void *)PlayerCutMirrorMessage}},
+    {{(void *)GetOpenEnter, (void *)PlyrStateExitDefault, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_800FA0DC, (void *)PlyrStateExitDefault, (void *)fn_800FA300, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, (void *)AssignBlockMirrorMessage}},
+    {{(void *)fn_80111F80, (void *)PlyrStateExitDefault, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrPlayBallEnter, (void *)PlyrStateExitDefault, (void *)fn_80109248, (void *)fn_800B78DC, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_80105898, (void *)PitchExit, (void *)fn_80105AF4, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, (void *)PitchMirrorMessage}},
+    {{(void *)HandoffEnter, (void *)HandoffExit, (void *)HandoffUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, (void *)HandoffMirrorMessage}},
+    {{(void *)fn_8010CAE8, (void *)PlyrStateExitDefault, (void *)fn_8010CB58, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)DirectedRunEnter, (void *)PlyrStateExitDefault, (void *)DirectedRunUpdate, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)PassBlockEnter, (void *)PassBlockExit, (void *)PassBlockUpdate, (void *)PassBlockInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)CarrierJukeEnter, (void *)PlyrStateExitDefault, (void *)CarrierJukeUpdate, (void *)CarrierJukeInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)CarrierSpinEnter, (void *)PlyrStateExitDefault, (void *)CarrierSpinUpdate, (void *)CarrierSpinInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)CarrierMoveEnter, (void *)CarrierMoveExit, (void *)CarrierMoveUpdate, (void *)CarrierMoveInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)AssignZoneEnter, (void *)PlyrStateExitDefault, (void *)fn_80116C34, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, (void *)AssignZoneMirrorMessage}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrAlignEnter, (void *)PlyrAlignExit, (void *)PlyrAlignUpdate, (void *)PlyrAlignInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)CarrierStiffArmEnter, (void *)CarrierStiffArmExit, (void *)CarrierStiffArmUpdate, (void *)CarrierStiffArmInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrMoveToSpotEnter, (void *)PlyrMoveToSpotExit, (void *)fn_800F6370, (void *)fn_8010FB4C, (void *)PlyrStateNotifyDefault, (void *)PlyrMoveToSpotMirrorMessage}},
+    {{(void *)PlyrStateExitDefault, (void *)PlyrStateExitDefault, (void *)PlyrStateExitDefault, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlayerActionDropBallEnter, (void *)PlayerActionDropBallExit, (void *)PlayerActionDropBallUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrWaitEnter, (void *)PlyrStateExitDefault, (void *)PlyrWaitUpdate, (void *)PlyrWaitInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_800F0C6C, (void *)PlyrStateExitDefault, (void *)fn_800F0CCC, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, (void *)fn_800F0E10}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010D6D4, (void *)PlyrStateExitDefault, (void *)fn_8010D734, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)LooseBallEnter, (void *)LooseBallExit, (void *)LooseBallUpdate, (void *)LooseBallInput, (void *)PlyrStateNotifyDefault, 0}},
     {{(void *)fn_801113DC, (void *)fn_80111580, (void *)CarrierMomentumUpdate, (void *)fn_80111528, (void *)CarrierMomentumNotify, 0}},
-    {{(void *)fn_80111794, (void *)fn_80111964, (void *)fn_801117F8, (void *)fn_80111974, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FCA78, (void *)fn_800F0900, (void *)fn_800FCC24, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010A4E8, (void *)fn_8010AEA0, (void *)fn_8010A640, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FEFD4, (void *)fn_800F0900, (void *)fn_800FF094, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
-    {{(void *)fn_801100A0, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010D004, (void *)fn_800FD3F0, (void *)fn_8010D090, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)fn_800FF7A8, (void *)fn_800FF860, (void *)fn_800FF7F4, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010AF48, (void *)fn_8010B1B4, (void *)fn_8010AFB8, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)HuddleHoldExit, (void *)HuddleHoldUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F62A4, (void *)fn_800F6790, (void *)fn_800F6370, (void *)fn_8010FB4C, (void *)fn_800F0908, (void *)fn_800F67CC}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_801135E4, (void *)fn_800F0900, (void *)fn_80113604, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010BED4, (void *)fn_800F0900, (void *)fn_8010BF5C, (void *)DefReactSelectInput, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80112E10, (void *)fn_800F0900, (void *)fn_80112E8C, (void *)fn_80112F8C, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010FD94, (void *)fn_800F0900, (void *)fn_8010FE40, (void *)fn_80110078, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80113478, (void *)fn_800F0900, (void *)fn_80113498, (void *)fn_80113510, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F08F8, (void *)fn_800F08F8, (void *)PlyrStateUpdateClear, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FFDFC, (void *)fn_800FFF78, (void *)fn_800FFE30, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FFFA0}},
-    {{(void *)OptionRunEnter, (void *)OptionRunExit, (void *)OptionRunUpdate, (void *)OptionRunInput, (void *)fn_800F0908, (void *)OptionRunMirror}},
-    {{(void *)fn_80118210, (void *)fn_800F0900, (void *)fn_801182C8, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_80118778}},
-    {{(void *)fn_8010BA00, (void *)fn_8010BC48, (void *)fn_8010BA90, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)PlayerActionDiveEnter, (void *)PlayerActionDiveExit, (void *)PlayerActionDiveUpdate, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F4A74, (void *)fn_800F0900, (void *)fn_800F4AD4, (void *)DefReactSelectInput, (void *)fn_800F0908, 0}},
+    {{(void *)CarrierTightropeEnter, (void *)fn_80111964, (void *)CarrierTightropeUpdate, (void *)fn_80111974, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_800FCA78, (void *)PlyrStateExitDefault, (void *)fn_800FCC24, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010A4E8, (void *)fn_8010AEA0, (void *)fn_8010A640, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrGotoPointEnter, (void *)PlyrStateExitDefault, (void *)fn_800FF094, (void *)PlyrStateHandlerFalse, (void *)PlyrMoveToPointNotify, 0}},
+    {{(void *)PlyrStateSetFlagEnter, (void *)PlyrStateExitDefault, (void *)PlyrStateHandlerFalse, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010D004, (void *)PlyrRunLegExit, (void *)fn_8010D090, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, (void *)PlyrRunLegMirrorMessage}},
+    {{(void *)fn_800FF7A8, (void *)fn_800FF860, (void *)fn_800FF7F4, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010AF48, (void *)fn_8010B1B4, (void *)fn_8010AFB8, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)HuddleHoldExit, (void *)HuddleHoldUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrMoveToSpotOrBlockEnter, (void *)PlyrMoveToSpotExit, (void *)fn_800F6370, (void *)fn_8010FB4C, (void *)PlyrStateNotifyDefault, (void *)PlyrMoveToSpotMirrorMessage}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_801135E4, (void *)PlyrStateExitDefault, (void *)fn_80113604, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010BED4, (void *)PlyrStateExitDefault, (void *)fn_8010BF5C, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_80112E10, (void *)PlyrStateExitDefault, (void *)fn_80112E8C, (void *)fn_80112F8C, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_8010FD94, (void *)PlyrStateExitDefault, (void *)fn_8010FE40, (void *)fn_80110078, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_80113478, (void *)PlyrStateExitDefault, (void *)fn_80113498, (void *)fn_80113510, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateHandlerFalse, (void *)PlyrStateUpdateClear, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)fn_800FFDFC, (void *)fn_800FFF78, (void *)fn_800FFE30, (void *)fn_800B7E60, (void *)PlyrStateNotifyDefault, (void *)fn_800FFFA0}},
+    {{(void *)OptionRunEnter, (void *)OptionRunExit, (void *)OptionRunUpdate, (void *)OptionRunInput, (void *)PlyrStateNotifyDefault, (void *)OptionRunMirror}},
+    {{(void *)fn_80118210, (void *)PlyrStateExitDefault, (void *)fn_801182C8, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, (void *)AssignZoneUpperMirrorMessage}},
+    {{(void *)fn_8010BA00, (void *)fn_8010BC48, (void *)fn_8010BA90, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlayerActionDiveEnter, (void *)PlayerActionDiveExit, (void *)PlayerActionDiveUpdate, (void *)fn_800B7F34, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)JumpBallChaseEnter, (void *)PlyrStateExitDefault, (void *)fn_800F4AD4, (void *)DefReactSelectInput, (void *)PlyrStateNotifyDefault, 0}},
     {{(void *)fn_80125304, (void *)fn_80125494, (void *)fn_801253A8, (void *)fn_801254C8, (void *)fn_80125508, 0}},
-    {{(void *)fn_80125DF0, (void *)fn_800F0900, (void *)fn_80125E20, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
+    {{(void *)fn_80125DF0, (void *)PlyrStateExitDefault, (void *)fn_80125E20, (void *)fn_800B78DC, (void *)PlyrStateNotifyDefault, 0}},
 };
 PlyrStateHandlers_t _PlyrStates_aAltHandlers[2] = {
-    {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
+    {{(void *)PlyrStateHandlerFalse, (void *)PlyrStateExitDefault, (void *)PlyrStateHandlerFalse, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
+    {{(void *)PlayerActionCharAnimEnter, (void *)PlayerActionCharAnimExit, (void *)PlayerActionCharAnimUpdate, (void *)PlyrStateHandlerFalse, (void *)PlyrStateNotifyDefault, 0}},
 };
 }

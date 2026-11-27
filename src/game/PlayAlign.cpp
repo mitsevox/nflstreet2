@@ -15,7 +15,7 @@
 #include "game/PlayAlign.h"
 #include <math.h>
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/State_803EB098.h"
 #include "game/PlayArtState.h"
 #include "game/PlayArtPlayer.h"
@@ -29,10 +29,10 @@ void PlayAlignResetSetNames(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void ScrmPlayerSendLineUp(Object_80039F5C *p);
 void PlyrAlignReset(Object_80039F5C *p);
-void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800FF6D8(Object_80039F5C *p);
+void PlyrStateQueueExitAndClear(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+void PlyrStateQueueFlush(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrSnapToMovePoint(Object_80039F5C *p);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 void PlyrMgrClearTeamFlag(int team);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
@@ -60,20 +60,20 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
 
     if (p->mpState->mId != '*') {
         p->mFlags &= ~0x40000;
-        fn_800EFEF8(0, p->mpState, p);
+        PlyrStateQueueFlush(0, p->mpState, p);
         delta = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
         Vec2Add(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
         Vec2Sub(&delta, &p->mMotion.mPos, &delta);
         if (Vec2Magnitude(&delta) > 0.5f) {
             memset(&msg, 0, 4);
             msg.mId = 7;
-            fn_800F03D8(0, p->mpState, &msg, p);
+            PlyrStateQueueAppend(0, p->mpState, &msg, p);
             memset(&msg, 0, 4);
             msg.mId = 6;
             msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
-            fn_800F03D8(0, p->mpState, &msg, p);
+            PlyrStateQueueAppend(0, p->mpState, &msg, p);
         } else if (MathAngleDiff(side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20,
                        p->mMotion.mFacing) > 0xAAAAA) {
             memset(&msg, 0, 4);
@@ -81,7 +81,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
             msg.mUnknown1[0] = (side == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
             msg.mUnknown1[1] = 1;
             msg.mUnknown1[2] = 20;
-            fn_800F03D8(0, p->mpState, &msg, p);
+            PlyrStateQueueAppend(0, p->mpState, &msg, p);
         }
         PlaySetPointToRoleMate(p);
         memset(&msg, 0, 4);
@@ -89,7 +89,7 @@ void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
         msg.mUnknown1[0] = side == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
         msg.mUnknown1[1] = 0;
         msg.mUnknown1[2] = 146;
-        fn_800F03D8(0, p->mpState, &msg, p);
+        PlyrStateQueueAppend(0, p->mpState, &msg, p);
         ScrmPlayerSendLineUp(p);
     } else {
         PlyrAlignReset(p);
@@ -117,22 +117,22 @@ void PlayAlignTeam(PlayBookFormation_t *pObject, int team, const char **ppNames)
         Object_80039F5C *p = PlyrGet(team, i);
 
         p->mFlags = (p->mFlags & ~0x4000) | 0x10;
-        fn_800EFE60(0, p->mpState, p);
+        PlyrStateQueueExitAndClear(0, p->mpState, p);
         PlyrClearPendingMsg(p, 0);
         if (p == BallGetCurrentHolder()) {
             memset(&msg, 0, 4);
             msg.mId = 49;
-            fn_800F03D8(0, p->mpState, &msg, p);
+            PlyrStateQueueAppend(0, p->mpState, &msg, p);
         }
         memset(&msg, 0, 4);
         msg.mId = 7;
-        fn_800F03D8(0, p->mpState, &msg, p);
+        PlyrStateQueueAppend(0, p->mpState, &msg, p);
         PlaySetPointToRoleMate(p);
         memset(&msg, 0, 4);
         msg.mId = 87;
         msg.mUnknown1[0] = pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknownA : pEntry->mUnknown9;
         msg.mUnknown1[1] = (pObject->mUnknown8.mUnknownF == 1 ? pEntry->mUnknown24 : pEntry->mUnknown20) >> 16;
-        fn_800F03D8(0, p->mpState, &msg, p);
+        PlyrStateQueueAppend(0, p->mpState, &msg, p);
     }
 }
 
@@ -189,7 +189,7 @@ void PlayAlignPostStartDelays(int team)
                 Message_800F01CC msg;
                 float value;
 
-                fn_800FF6D8(p);
+                PlyrSnapToMovePoint(p);
                 memset(&msg, 0, 4);
                 msg.mId = 51;
                 value = SyncRandGetFloat(0);
@@ -199,7 +199,7 @@ void PlayAlignPostStartDelays(int team)
                     value *= 0.4f;
                 }
                 msg.mUnknown1[0] = (int)(value * 32.0f);
-                fn_800F00D4(0, p->mpState, &msg, p);
+                PlyrStateQueuePush(0, p->mpState, &msg, p);
             }
         }
     }
@@ -235,7 +235,7 @@ PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
-void fn_800F0910(int, Message_800F01CC *);
+void PlyrStateMirrorMessage(int, Message_800F01CC *);
 int fn_800AD9B4(void);
 int PlayAlignHasSlots(PlayBookPlay_t *);
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
@@ -250,7 +250,7 @@ unsigned char PlayAlignGetKeyPlayer(void)
             Object_80039F5C *p = PlyrGet(ScrmGetOffenseTeam(), i);
             PlayBookPlay_t *record = PlayBookGetPlay(ScrmGetOffenseTeam());
             void *queue = PlayAlignGetRoute(record, ScrmGetOffenseTeam(), p->mIdBytes[1]);
-            if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
+            if (PlyrStateQueueFind(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
         } while (++i < n);
     }
     return selected->mIdBytes[1];
@@ -281,10 +281,10 @@ void PlayAlignIssuePlayerRoute(PlayBookPlay_t *record, Object_80039F5C *p, int r
             end = queue->mId >> 7;
             Message_800F01CC message = *queue;
             if (end) message.mId &= 0x7F;
-            if (remap) fn_800F0910(0, &message);
+            if (remap) PlyrStateMirrorMessage(0, &message);
             if (!message.mId) break;
-            if (!count) fn_800F053C(0, p->mpState, &message, p);
-            else fn_800F03D8(0, p->mpState, &message, p);
+            if (!count) PlyrStateQueueSet(0, p->mpState, &message, p);
+            else PlyrStateQueueAppend(0, p->mpState, &message, p);
             ++count;
             ++queue;
         } while (!end);

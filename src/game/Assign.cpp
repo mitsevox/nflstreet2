@@ -30,7 +30,7 @@
 #include "game/Ball.h"
 #include "game/PlayBookDb.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/ScrmGetBallSpot.h"
@@ -301,7 +301,7 @@ struct Table_8010B738 {
     Entry_8010B738 mEntries[1];
 };
 
-/* Output of fn_801076F0. */
+/* Output of PlyrPlayBallGetGeometry. */
 struct Result_801076F0 {
     FieldPoint_t mUnknown0;
     FieldPoint_t mUnknown8;
@@ -314,7 +314,7 @@ struct Result_801076F0 {
     float mUnknown40;
 };
 
-/* Input of fn_801076F0 and fn_80108074. Partial layout. */
+/* Input of PlyrPlayBallGetGeometry and fn_80108074. Partial layout. */
 struct Input_801076F0 {
     char mUnknown0[4];
     FieldPoint_t mUnknown4;
@@ -388,7 +388,7 @@ struct Entry_800F0EFC {
     char mUnknown113[3];
 };
 
-/* 8-byte record registered through SyncStateRegister by fn_800F164C. */
+/* 8-byte record registered through SyncStateRegister by AssignInputInit. */
 struct Record_803EAE18 {
     unsigned char mCount;
     char mUnknown1[3];
@@ -404,7 +404,7 @@ struct Block_800F0C6C {
     unsigned char mUnknown9;
 };
 
-/* 88-byte block at +336 of the player object, cleared by fn_800F4A74. */
+/* 88-byte block at +336 of the player object, cleared by JumpBallChaseEnter. */
 struct Block_800F4A74 {
     char mUnknown0[20];
     int mUnknown20;
@@ -444,9 +444,9 @@ struct Info_800F3A6C {
     float mUnknown40;
 };
 
-/* Object pointer, three positions, a pair and a float filled by fn_800F39FC
-   and passed to fn_800F2EC8, fn_800F30AC, fn_800F3284, fn_800F3838,
-   fn_800F3A6C, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
+/* Object pointer, three positions, a pair and a float filled by JumpBallChaseGetBallInfo
+   and passed to JumpBallChaseFindRival, fn_800F30AC, fn_800F3284, fn_800F3838,
+   JumpBallChaseGetGeometry, fn_800F3B54, fn_800F3D38, fn_800F3F90 and fn_800F4038. Only
    the accessed prefix is declared; the size is unknown. */
 struct Points_800F3A6C {
     Ball_t *mpUnknown0;
@@ -466,8 +466,8 @@ struct Block_800F3344 {
     unsigned int mUnknown16;
 };
 
-/* Block at +336 of the player object used by fn_800F23EC, fn_800F24D8 and
-   fn_800F268C. Only the accessed prefix is declared; the size is unknown. */
+/* Block at +336 of the player object used by CarrierJukeEnter, CarrierJukeUpdate and
+   CarrierJukeInput. Only the accessed prefix is declared; the size is unknown. */
 struct Block_800F23EC {
     float mUnknown0;
     short mUnknown4;
@@ -488,7 +488,7 @@ struct Key_800F2CB4 {
     unsigned char mUnknown3;
 };
 
-/* Record passed by the caller at 0x800F6548/0x800F6594 to fn_800F4E88 and
+/* Record passed by the caller at 0x800F6548/0x800F6594 to PlyrMoveToSpotIsPast and
    fn_800F4F08. Only the accessed members are declared; the size is unknown. */
 struct Record_800F4E88 {
     FieldPoint_t mUnknown0;
@@ -1127,7 +1127,7 @@ struct List_801018B4_800F0960 {
 };
 
 /* 92-byte state allocated through SyncStateRegister under the id 'blck'
-   (fn_8011DF3C). */
+   (AssignEngageSysInit). */
 struct Block_803EB028_800F0960 {
     int mUnknown0;
     char mUnknown4[80];
@@ -1182,7 +1182,7 @@ extern "C" {
 extern float lbl_803EAE28;
 }
 
-/* View of the block at player +336 that fn_800F4E14 and fn_800F6158
+/* View of the block at player +336 that fn_800F4E14 and PlyrMoveToSpotEnter
    address. */
 struct Object_800F4E14_800F60BC {
     float mUnknown0;
@@ -1248,8 +1248,8 @@ extern "C" {
 extern float lbl_803EAE2C;
 }
 
-/* View of the block at player +336 used by fn_800F81C0, fn_800F846C,
-   fn_800F8588, fn_800F8828, fn_800F8A88 and fn_800FA0DC. */
+/* View of the block at player +336 used by fn_800F81C0, AssignBlockSteerToLine,
+   fn_800F8588, AssignBlockApplySideFlag, fn_800F8A88 and fn_800FA0DC. */
 struct Block_800F8A88 {
     int mRef;
     int mUnknown4;
@@ -1311,7 +1311,7 @@ extern "C" {
 extern float lbl_803EAE54;
 }
 
-/* View of the block at player +336 used by fn_800F930C. */
+/* View of the block at player +336 used by AssignBlockAngleBackUpdate. */
 struct Block_800F930C {
     int mRef;
     int mUnknown4;
@@ -1893,7 +1893,7 @@ struct Block_800F4A74_8010810C {
     char mUnknown67[21];
 };
 
-/* The 88-byte block at player +336 as fn_80109150 initialises it and
+/* The 88-byte block at player +336 as PlyrPlayBallEnter initialises it and
    fn_80108954 updates it. */
 struct Block_80109150 {
     char mUnknown0[36];
@@ -2443,7 +2443,7 @@ struct Timer_8010FD94 {
     unsigned char mUnknown8;
 };
 
-/* The bytes at player +336 as fn_801108D4 sets them up. */
+/* The bytes at player +336 as CarrierSpinEnter sets them up. */
 struct State_801108D4 {
     float mUnknown0;
     int mUnknown4;
@@ -2515,7 +2515,7 @@ extern "C" {
 int CharSkelGetJointByName(void *p, const char *pName);
 }
 
-/* Bytes at player +336 as fn_80113680 sets them up. */
+/* Bytes at player +336 as PlyrHitStrikeEnter sets them up. */
 struct State_80113680 {
     int mRef;
     int mUnknown4;
@@ -2530,7 +2530,7 @@ struct State_80113680 {
     unsigned char mUnknown21;
 };
 
-/* Bytes at player +336 as fn_80113C20 sets them up. */
+/* Bytes at player +336 as PlyrHitImpactEnter sets them up. */
 struct State_80113C20 {
     int mRef;
     float mUnknown4;
@@ -2863,7 +2863,7 @@ struct State_80116C34 {
     unsigned char mUnknown24;
 };
 
-/* View of the block at player +336 used by fn_80116B98. */
+/* View of the block at player +336 used by AssignZoneEnter. */
 struct Block_80116B98 {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
@@ -3458,38 +3458,38 @@ extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_8009E9EC(Object_80039F5C *p, int index, FieldPoint_t *pOut);
 
 /* Forward declarations of the functions this file defines, in address order. */
-extern "C" void fn_800EFC68(int a, State_80039F5C *pQueue);
-extern "C" void fn_800EFCD0(int a, State_80039F5C *pQueue, Object_80039F5C *p);
-extern "C" void fn_800F00D4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
-extern "C" void fn_800F0490(int a, State_80039F5C *pQueue, int id);
-extern "C" void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
-extern "C" void fn_800F05E4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
+extern "C" void PlyrStateQueuePop(int a, State_80039F5C *pQueue);
+extern "C" void PlyrStateQueueEnterHead(int a, State_80039F5C *pQueue, Object_80039F5C *p);
+extern "C" void PlyrStateQueuePush(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
+extern "C" void PlyrStateQueueRemove(int a, State_80039F5C *pQueue, int id);
+extern "C" void PlyrStateQueueSet(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
+extern "C" void PlyrStateQueueReplaceHead(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p);
 extern "C" void fn_800F0960(Object_80039F5C *p, Block_800F0C6C *pBlock);
 extern "C" int fn_800F0B84(Object_80039F5C *p);
-extern "C" int fn_800F0FA0(Input_800B6D34 *pBlock, unsigned int *pMasks, int index);
-extern "C" void fn_800F0FD0(Input_800B6D34 *pBlock, int index);
-extern "C" int fn_800F1FDC(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float distance);
+extern "C" int AssignInputMaskHeld(Input_800B6D34 *pBlock, unsigned int *pMasks, int index);
+extern "C" void AssignInputRead(Input_800B6D34 *pBlock, int index);
+extern "C" int CarrierJukePickSide(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int CarrierJukePickKind(Object_80039F5C *p, Object_80039F5C *pOther, float distance);
 extern "C" int fn_800F2920(Object_80039F5C *p);
 extern "C" int fn_800F2A40(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
-extern "C" void fn_800F3A6C(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints);
+extern "C" void JumpBallChaseGetGeometry(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints);
 extern "C" int fn_800F4E14(Object_80039F5C *p, Object_800F4E14 *pInfo);
-extern "C" int fn_800F4E88(Object_80039F5C *p, Record_800F4E88 *pRecord);
+extern "C" int PlyrMoveToSpotIsPast(Object_80039F5C *p, Record_800F4E88 *pRecord);
 extern "C" void fn_800F4F08(Object_80039F5C *p, Record_800F4E88 *pRecord);
 extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord);
-extern "C" int fn_800F5AD4(Object_80039F5C *p);
+extern "C" int PlyrMoveToSpotShouldBlock(Object_80039F5C *p);
 extern "C" int fn_800F5CBC(Object_80039F5C *p, Record_800F4E88 *pRecord);
 extern "C" void fn_800F60BC(Object_80039F5C *p);
-extern "C" unsigned int fn_800F67E8(Object_80039F5C *pTarget);
-extern "C" int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_800F69C0(int angle, Object_80039F5C *p);
-extern "C" void fn_800F6AD8(float *p);
-extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
-extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
+extern "C" unsigned int AssignBlockCountOnTarget(Object_80039F5C *pTarget);
+extern "C" int AssignIsTargetBreakingUpfield(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int AssignTurnAwayFromPlayers(int angle, Object_80039F5C *p);
+extern "C" void AssignSteerDeadZone(float *p);
+extern "C" void AssignSteerClampToField(Object_80039F5C *p, Vector_80039F5C *pDelta);
+extern "C" void AssignSteerDepthPastLine(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
+extern "C" void AssignSteerDepthToTarget(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
 extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
+extern "C" void AssignSteerDepthWithMargin(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
 extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
 extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
@@ -3497,44 +3497,44 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_800F8D24(Object_80039F5C *p);
+extern "C" int AssignBlockIdleUpdate(Object_80039F5C *p);
 extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p);
 extern "C" int fn_800F9024(Object_80039F5C *p);
-extern "C" int fn_800F930C(Object_80039F5C *p);
+extern "C" int AssignBlockAngleBackUpdate(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p);
-extern "C" Object_80039F5C *fn_800F9688(Object_80039F5C *p);
+extern "C" Object_80039F5C *AssignFindUnblockedSlotPlayer(Object_80039F5C *p);
 extern "C" FieldPoint_t AssignGetFormationPos(Object_80039F5C *p);
 extern "C" int fn_800F9CB4(void);
 extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag);
-extern "C" void fn_800FA014(Object_80039F5C *p, int *pRef);
+extern "C" void AssignBlockRefreshTarget(Object_80039F5C *p, int *pRef);
 extern "C" int fn_800FA098();
 extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p);
 extern "C" void fn_800FBB70(void);
-extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5C *pOther);
-extern "C" unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" unsigned char fn_800FC0C4(Object_80039F5C *p);
-extern "C" unsigned char fn_800FC128(Object_80039F5C *p);
-extern "C" unsigned char fn_800FC1DC(Object_80039F5C *p);
+extern "C" Object_80039F5C *AssignFindDefenderOnReceiver(Object_80039F5C *pTarget, Object_80039F5C *pOther);
+extern "C" unsigned char AssignGetCoverSlot(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" unsigned char AssignGetReceiverSlot(Object_80039F5C *p);
+extern "C" unsigned char AssignCountBlockersRightOf(Object_80039F5C *p);
+extern "C" unsigned char AssignCountBlockersLeftOf(Object_80039F5C *p);
 extern "C" void fn_800FC290(Object_80039F5C *p, Block_800FCC24 *pBlock, FieldPoint_t target);
 extern "C" int fn_800FC4A8(Object_80039F5C *p, Block_800FCC24 *pBlock, int mode);
 extern "C" int fn_800FC648(Object_80039F5C *p, Block_800FCC24 *pBlock);
 extern "C" int fn_800FC7A0(Object_80039F5C *p, Block_800FCC24 *pBlock);
 extern "C" int fn_800FCE58(Object_80039F5C *p, Block_800FCC24 *pBlock);
 extern "C" int fn_800FCFC0(Object_80039F5C *p);
-extern "C" void fn_800FD178(Object_80039F5C *p, Block_800FD650 *pBlock);
-extern "C" int fn_800FD2AC(Object_80039F5C *p);
-extern "C" int fn_800FD580(Object_80039F5C *p);
-extern "C" void fn_800FD724(Object_80039F5C *p);
-extern "C" int fn_800FD7D0(Object_80039F5C *p);
+extern "C" void PlyrRunLegClampToField(Object_80039F5C *p, Block_800FD650 *pBlock);
+extern "C" int PlyrRunLegEnter(Object_80039F5C *p);
+extern "C" int PlyrRunLegSteer(Object_80039F5C *p);
+extern "C" void PlyrRunLegSaveRemaining(Object_80039F5C *p);
+extern "C" int AssignGetFormationAngle(Object_80039F5C *p);
 extern "C" int fn_800FD828(Object_80039F5C *p);
-extern "C" void fn_800FD978(Object_80039F5C *p);
+extern "C" void PlyrLineUpStartMove(Object_80039F5C *p);
 extern "C" void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut);
-extern "C" void fn_800FE41C(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut);
-extern "C" void fn_800FE430(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut);
+extern "C" void AssignAvoidGetPosition(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut);
+extern "C" void AssignAvoidGetVelocity(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut);
 extern "C" int fn_800FF094(Object_80039F5C *p);
 extern "C" void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, FieldPoint_t *point, int angle, float value);
-extern "C" void fn_800FF6D8(Object_80039F5C *p);
+extern "C" void PlyrSnapToMovePoint(Object_80039F5C *p);
 extern "C" void fn_800FF868(Object_80039F5C *p,State_800FFDFC *,Object_80039F5C *other);
 extern "C" void fn_800FF8FC(Object_80039F5C *p, float *out);
 extern "C" int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other);
@@ -3550,10 +3550,10 @@ extern "C" void fn_80100BF8(Object_80039F5C *p, float, Vector_80039F5C *point, F
 extern "C" Object_80039F5C *fn_80100EA0(Object_80039F5C *p, int angle);
 extern "C" void fn_80101064(Object_80039F5C *p);
 extern "C" void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out);
-extern "C" void fn_801016A4(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, int *angle);
+extern "C" void AssignPassGetFacingTarget(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, int *angle);
 extern "C" void fn_8010176C(Object_80039F5C *p, int mode, FieldPoint_t *point);
 extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int b, int *pOut);
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut);
+extern "C" void AssignGetPassAccuracy(Object_80039F5C *p, float *pOut);
 extern "C" int fn_80101B7C(Object_80039F5C *p);
 extern "C" int fn_80101C40(Object_80039F5C *p);
 extern "C" void fn_80102D78(Object_80039F5C *p);
@@ -3565,25 +3565,25 @@ extern "C" void fn_80104328(Object_80039F5C *p, unsigned int count, int *pTime, 
 extern "C" int fn_80104610(Object_80039F5C *p);
 extern "C" int fn_80104720(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_801047C8(void);
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t *pBall, Vector_80039F5C *pTarget);
-extern "C" void fn_801048B4(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *pTarget);
-extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut);
+extern "C" void AssignClampTargetBehindBall(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t *pBall, Vector_80039F5C *pTarget);
+extern "C" void AssignClampTargetInsideSideline(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *pTarget);
+extern "C" void AssignScatterByRating(Object_80039F5C *p, Vector_80039F5C *pOut);
 extern "C" void fn_80104A08(Object_80039F5C *p, float scale, int angle, FieldPoint_t *pPoint, float *pValue);
-extern "C" void fn_80104B24(Vector_80039F5C *p);
-extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut);
-extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale);
+extern "C" void AssignNudgeUpfield(Vector_80039F5C *p);
+extern "C" void AssignGetLeadVelocity(Object_80039F5C *p, Vector_80039F5C *pOut);
+extern "C" void AssignPredictPosition(Object_80039F5C *p, Vector_80039F5C *pOut, float scale);
 extern "C" void fn_80104D98(Object_80039F5C *p);
 extern "C" void fn_80105168(int mode, Ball_t *pBall, Object_80039F5C *p, Object_80039F5C *pOther, float speed, Vector_80039F5C *pTarget, int unused);
 extern "C" Object_80039F5C *fn_80105384(Object_80039F5C *p, int aggressive, FieldPoint_t *pOut);
 extern "C" int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 extern "C" int fn_80106618(Object_80039F5C *p);
-extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
+extern "C" void AssignSetPassRecord(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 extern "C" void fn_80106A60(Object_80039F5C *p);
 extern "C" void AssignBlockUpdatePassCoverage(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock);
 extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo);
-extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index);
-extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn);
+extern "C" void PlyrPlayBallGetBallInfo(Points_800F3A6C *pInfo, int index);
+extern "C" void PlyrPlayBallGetGeometry(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn);
 extern "C" void fn_801077D8(Object_80039F5C *p, Object_80039F5C *pOther, Block_800F4A74_801077D8 *pBlock, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints);
 extern "C" void fn_801079BC(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pA, FieldPoint_t *pB, Points_800F3A6C *pInfo);
 extern "C" void fn_80107A9C(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pA, FieldPoint_t *pB, Info_800F3A6C *pResult, Points_800F3A6C *pInfo, float *pScale);
@@ -3630,7 +3630,7 @@ extern "C" int fn_801101DC(Object_80039F5C *p);
 extern "C" int fn_801102A4(Object_80039F5C *p);
 extern "C" int fn_801105B0(Object_80039F5C *p);
 extern "C" unsigned short fn_8011067C(Table_8010B738 *pTable, Object_80039F5C *p, Block_8011067C *pBlock, int angle);
-extern "C" int fn_8011165C(Object_80039F5C *p);
+extern "C" int CarrierTightropePickSide(Object_80039F5C *p);
 extern "C" void CatchGetHandReach(Object_80039F5C *p, int angle, float length, Vector_80039F5C *pOut);
 extern "C" int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float *pValue);
 extern "C" int fn_80113088(Object_80039F5C *p);
@@ -3639,12 +3639,12 @@ extern "C" int fn_80113604(Object_80039F5C *p);
 extern "C" int fn_80113BCC(Object_80039F5C *p);
 extern "C" int fn_80113C18(Object_80039F5C *p, void *pState);
 extern "C" int fn_80114D14(int a, unsigned char b, int c, unsigned char d);
-extern "C" Object_80039F5C *fn_80114E7C(Object_80039F5C *p);
+extern "C" Object_80039F5C *PlyrHitGetOpponent(Object_80039F5C *p);
 extern "C" void fn_80114F64(Object_80039F5C *p, int angle);
 extern "C" void fn_8011569C(Object_80039F5C *p);
 extern "C" int fn_801163B4(Object_80039F5C *p);
 extern "C" int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_8011569C *pState, FieldPoint_t *pTarget);
-extern "C" int fn_801167C4(void *pTarget, Object_80039F5C *p);
+extern "C" int AssignZoneIsTargetCovered(void *pTarget, Object_80039F5C *p);
 extern "C" void fn_80116880(Object_80039F5C *p, Object_80039F5C *pOther, float *pValue, float *pOut, float range);
 extern "C" int fn_80116984(Object_80039F5C *p, Object_80039F5C *pOther, float *pOut);
 extern "C" int fn_80116AB8(Object_80039F5C *p);
@@ -3665,8 +3665,8 @@ extern "C" int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" Move_8011AB38 *fn_8011A7B4(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_8011A994(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_8011AB38(void);
-extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries);
-extern "C" void fn_8011B138(Entry_8011AFCC *pEntries);
+extern "C" void AssignSortEntriesAscending(Entry_8011AFCC *pEntries);
+extern "C" void AssignSortEntriesDescending(Entry_8011AFCC *pEntries);
 extern "C" int fn_8011B2A4(Entry_8011AFCC_8011B2A4 *pEntry);
 extern "C" void fn_8011B6E8(Entry_8011AFCC_8011B4F8 *pEntries, Pair_8011BAE0 target);
 extern "C" void fn_8011B83C(Entry_8011AFCC_8011B4F8 *pEntries, Pair_8011BAE0 target);
@@ -3674,27 +3674,27 @@ extern "C" void fn_8011BAE0(Pair_8011BAE0 *pOut);
 extern "C" void fn_8011D0BC(Entry_8011AFCC_8011BCDC *pA, Entry_8011AFCC_8011BCDC *pB, Pair_8011BAE0 pair);
 extern "C" int fn_8011D558(Vector_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pC);
 extern "C" void fn_8011D654(Entry_8011AFCC *pEntries);
-extern "C" void fn_8011D8B4(Entry_8011AFCC *pEntries);
+extern "C" void AssignEntryListRemoveFirst(Entry_8011AFCC *pEntries);
 extern "C" void fn_8011D9B8(void);
 extern "C" void fn_8011DBC0(Object_80039F5C *p);
 extern "C" void fn_8011DBC4(Object_80039F5C *p);
-extern "C" void fn_8011DBC8(Object_80039F5C *p, Block_8011DBC8 *pBlock);
-extern "C" int fn_8011DBE0(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_8011DC68(unsigned int id);
+extern "C" void AssignEngageResetScales(Object_80039F5C *p, Block_8011DBC8 *pBlock);
+extern "C" int AssignIsSameBlockAnim(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int AssignIsBlockMoveAnim(unsigned int id);
 extern "C" int fn_8011DCA8(unsigned int id);
 extern "C" void fn_8011DCDC(void);
-extern "C" unsigned int fn_8011E188(void);
-extern "C" void fn_8011E194(Object_80039F5C *p, unsigned char mask);
-extern "C" void fn_8011E1A8(Object_80039F5C *p, unsigned char mask);
-extern "C" void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
+extern "C" unsigned int AssignEngageSysGetFrames(void);
+extern "C" void AssignEngageSetFlags(Object_80039F5C *p, unsigned char mask);
+extern "C" void AssignEngageClearFlags(Object_80039F5C *p, unsigned char mask);
+extern "C" void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value);
 extern "C" void fn_8011E240(Object_80039F5C *p);
-extern "C" void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int value);
-extern "C" void fn_8011E3A4(Object_80039F5C *p);
-extern "C" void fn_8011E3EC(Object_80039F5C *p, int a);
+extern "C" void AssignEngageSetOpponent(Object_80039F5C *p, Object_80039F5C *pOther, int value);
+extern "C" void AssignEngageClear(Object_80039F5C *p);
+extern "C" void AssignEngageSetMode(Object_80039F5C *p, int a);
 extern "C" int fn_8011E3F4(Object_80039F5C *p);
 extern "C" int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_8011E8A4(Object_80039F5C *p);
-extern "C" void fn_8011E8D8(Object_80039F5C *p);
+extern "C" void AssignEngageRelease(Object_80039F5C *p);
 extern "C" void fn_8011E938(Object_80039F5C *p);
 extern "C" int fn_8011E95C(void);
 extern "C" int fn_8011E9B4(Object_80039F5C *p);
@@ -3777,7 +3777,7 @@ extern "C" int fn_80125D98(Object_80039F5C *p, State_80125594 *pState);
 extern "C" int fn_80125DF0(Object_80039F5C *p);
 extern "C" int fn_80125E20(Object_80039F5C *p);
 
-extern "C" void fn_800EFC68(int a, State_80039F5C *pQueue) {
+extern "C" void PlyrStateQueuePop(int a, State_80039F5C *pQueue) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     memmove(pEntries, pEntries + 1, (lbl_803EAE14[a]->mCount - 1) * 4);
@@ -3791,7 +3791,7 @@ Input_800B6D34 lbl_802DAAD0 = {0};
 }
 
 static int (*lbl_802DAB38[4])(Object_80039F5C *p) = {
-    fn_800F8D24, AssignBlockApproachUpdate, fn_800F9024, fn_800F930C,
+    AssignBlockIdleUpdate, AssignBlockApproachUpdate, fn_800F9024, AssignBlockAngleBackUpdate,
 };
 
 extern "C" {
@@ -4032,17 +4032,17 @@ int lbl_803EC9EC;
 unsigned char *lbl_803EC9F0;
 }
 
-extern "C" void fn_800EFCD0(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueEnterHead(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
     p->mUnknown3088 = 0;
     if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown0(p) == 1 && p->mUnknown3088 == 0) {
-        fn_800EFC68(a, pQueue);
-        fn_800EFCD0(a, pQueue, p);
+        PlyrStateQueuePop(a, pQueue);
+        PlyrStateQueueEnterHead(a, pQueue, p);
     }
     p->mUnknown3088 = 1;
     StyleTrackerEndDefensiveMove(p);
 }
 
-extern "C" void fn_800EFD70(int count) {
+extern "C" void PlyrStateQueueInit(int count) {
     if (lbl_803EAE14 == 0) {
         lbl_803EC9EC = count;
         lbl_803EAE14 = (Queue_800EFE0C **)fn_801D2B7C(count * 4, 0, 0);
@@ -4052,18 +4052,18 @@ extern "C" void fn_800EFD70(int count) {
     }
 }
 
-extern "C" void fn_800EFDD8() {
+extern "C" void PlyrStateQueueShutdown() {
     if (lbl_803EAE14 != 0) {
         fn_801D2BD0(lbl_803EAE14);
         lbl_803EAE14 = 0;
     }
 }
 
-extern "C" void fn_800EFE0C(int a, Queue_800EFE0C *pQueue) {
+extern "C" void PlyrStateQueueRegister(int a, Queue_800EFE0C *pQueue) {
     lbl_803EAE14[a] = pQueue;
 }
 
-extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue) {
+extern "C" void PlyrStateQueueClear(int a, State_80039F5C *pQueue) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     for (int i = 0; i < lbl_803EAE14[a]->mCount; i++) {
@@ -4071,7 +4071,7 @@ extern "C" void fn_800EFE1C(int a, State_80039F5C *pQueue) {
     }
 }
 
-extern "C" void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueExitAndClear(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p);
@@ -4080,7 +4080,7 @@ extern "C" void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
     }
 }
 
-extern "C" void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueFlush(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p) == 1) {
@@ -4091,7 +4091,7 @@ extern "C" void fn_800EFEF8(int a, State_80039F5C *pQueue, Object_80039F5C *p) {
     }
 }
 
-extern "C" void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag) {
+extern "C" void PlyrStateQueueUpdate(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag) {
     int id = pQueue->mId;
     int done = 0;
 
@@ -4099,11 +4099,11 @@ extern "C" void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, i
         p->mUnknown3088 = 0;
         if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown12(p) == 1) {
             if (p->mUnknown3088 == 0) {
-                fn_800EFC68(a, pQueue);
+                PlyrStateQueuePop(a, pQueue);
                 done = 1;
-                fn_800EFCD0(a, pQueue, p);
+                PlyrStateQueueEnterHead(a, pQueue, p);
             } else {
-                fn_800F0490(a, pQueue, id);
+                PlyrStateQueueRemove(a, pQueue, id);
             }
         }
     }
@@ -4111,16 +4111,16 @@ extern "C" void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, i
         p->mUnknown3088 = 0;
         if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown8(p) == 1) {
             if (p->mUnknown3088 == 0) {
-                fn_800EFC68(a, pQueue);
-                fn_800EFCD0(a, pQueue, p);
+                PlyrStateQueuePop(a, pQueue);
+                PlyrStateQueueEnterHead(a, pQueue, p);
             } else {
-                fn_800F0490(a, pQueue, id);
+                PlyrStateQueueRemove(a, pQueue, id);
             }
         }
     }
 }
 
-extern "C" void fn_800F00D4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueuePush(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p) == 1) {
@@ -4131,14 +4131,14 @@ extern "C" void fn_800F00D4(int a, State_80039F5C *pQueue, Message_800F01CC *pMe
         }
         memmove(pEntries + 1, pEntries, (i + 1) * 4);
         pEntries[0] = *pMessage;
-        fn_800EFCD0(a, pQueue, p);
+        PlyrStateQueueEnterHead(a, pQueue, p);
     } else {
-        fn_800F01CC(a, pQueue, pMessage, p);
+        PlyrStateQueueInsertNext(a, pQueue, pMessage, p);
         pEntries[2].mId = 0;
     }
 }
 
-extern "C" void fn_800F01CC(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueInsertNext(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (pEntries[0].mId != 0) {
@@ -4150,11 +4150,11 @@ extern "C" void fn_800F01CC(int a, State_80039F5C *pQueue, Message_800F01CC *pMe
         memmove(pEntries + 2, pEntries + 1, i * 4);
         pEntries[1] = *pMessage;
     } else {
-        fn_800F053C(a, pQueue, pMessage, p);
+        PlyrStateQueueSet(a, pQueue, pMessage, p);
     }
 }
 
-extern "C" void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p, int position) {
+extern "C" void PlyrStateQueueInsertAt(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p, int position) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
     Queue_800EFE0C *pInfo = lbl_803EAE14[a];
 
@@ -4171,16 +4171,16 @@ extern "C" void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMe
                 memmove(pEntries + (i + 1), pEntries + i, (lbl_803EAE14[a]->mCount - i - 1) * 4);
                 pEntries[i] = *pMessage;
                 if (i == 0) {
-                    fn_800EFCD0(a, pQueue, p);
+                    PlyrStateQueueEnterHead(a, pQueue, p);
                 }
             }
         } else {
-            fn_800F053C(a, pQueue, pMessage, p);
+            PlyrStateQueueSet(a, pQueue, pMessage, p);
         }
     }
 }
 
-extern "C" void fn_800F03D8(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueAppend(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (pEntries[0].mId != 0) {
@@ -4195,11 +4195,11 @@ extern "C" void fn_800F03D8(int a, State_80039F5C *pQueue, Message_800F01CC *pMe
             }
         }
     } else {
-        fn_800F053C(a, pQueue, pMessage, p);
+        PlyrStateQueueSet(a, pQueue, pMessage, p);
     }
 }
 
-extern "C" void fn_800F0490(int a, State_80039F5C *pQueue, int id) {
+extern "C" void PlyrStateQueueRemove(int a, State_80039F5C *pQueue, int id) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
     int count = lbl_803EAE14[a]->mCount;
 
@@ -4212,39 +4212,39 @@ extern "C" void fn_800F0490(int a, State_80039F5C *pQueue, int id) {
     }
 }
 
-extern "C" void fn_800F053C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueSet(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p) == 1) {
         pEntries[0] = *pMessage;
         pEntries[1].mId = 0;
-        fn_800EFCD0(a, pQueue, p);
+        PlyrStateQueueEnterHead(a, pQueue, p);
     } else {
-        fn_800F01CC(a, pQueue, pMessage, p);
+        PlyrStateQueueInsertNext(a, pQueue, pMessage, p);
         pEntries[2].mId = 0;
     }
 }
 
-extern "C" void fn_800F05E4(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueReplaceHead(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     if (lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p) == 1) {
         pEntries[0] = *pMessage;
-        fn_800EFCD0(a, pQueue, p);
+        PlyrStateQueueEnterHead(a, pQueue, p);
     } else {
-        fn_800F01CC(a, pQueue, pMessage, p);
+        PlyrStateQueueInsertNext(a, pQueue, pMessage, p);
     }
 }
 
-extern "C" void fn_800F067C(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
+extern "C" void PlyrStateQueueForceHead(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pQueue;
 
     lbl_803EAE14[a]->mpHandlers[pQueue->mId].mpUnknown4(p);
     pEntries[0] = *pMessage;
-    fn_800EFCD0(a, pQueue, p);
+    PlyrStateQueueEnterHead(a, pQueue, p);
 }
 
-extern "C" int fn_800F06F4(int a, void *pRecord, int id, int value) {
+extern "C" int PlyrStateQueueFind(int a, void *pRecord, int id, int value) {
     Message_800F01CC *pEntries = (Message_800F01CC *)pRecord;
     int result = 0xFFFF;
     unsigned int i;
@@ -4266,7 +4266,7 @@ extern "C" int fn_800F06F4(int a, void *pRecord, int id, int value) {
     return result;
 }
 
-extern "C" int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p) {
+extern "C" int PlyrStateQueueCallHandler(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p) {
     int result = 0;
 
     switch (which) {
@@ -4289,25 +4289,25 @@ extern "C" int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, 
         break;
     }
     if (result == 1) {
-        fn_800EFC68(a, pQueue);
-        fn_800EFCD0(a, pQueue, p);
+        PlyrStateQueuePop(a, pQueue);
+        PlyrStateQueueEnterHead(a, pQueue, p);
     }
     return result;
 }
 
-extern "C" int fn_800F08F8() {
+extern "C" int PlyrStateHandlerFalse() {
     return 0;
 }
 
-extern "C" int fn_800F0900() {
+extern "C" int PlyrStateExitDefault() {
     return 1;
 }
 
-extern "C" int fn_800F0908() {
+extern "C" int PlyrStateNotifyDefault() {
     return 0;
 }
 
-extern "C" void fn_800F0910(int a, Message_800F01CC *pMessage) {
+extern "C" void PlyrStateMirrorMessage(int a, Message_800F01CC *pMessage) {
     void (*pHandler)(Message_800F01CC *) = lbl_803EAE14[a]->mpHandlers[pMessage->mId].mpUnknown20;
 
     if (pHandler != 0) {
@@ -4412,7 +4412,7 @@ extern "C" void fn_800F0BF8(Object_80039F5C *p, int a, int angle) {
         message.mId = 52;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = angle >> 17 & 0x7F;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
 }
 
@@ -4448,7 +4448,7 @@ extern "C" int fn_800F0CCC(Object_80039F5C *p) {
         memset(&message, 0, 4);
         message.mId = 23;
         message.mUnknown1[0] = BallGetIndex(BallGetCurrent());
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (p->mFlags & 1) {
@@ -4470,7 +4470,7 @@ extern "C" void fn_800F0E10(Message_800F01CC *pMessage) {
     pMessage->mUnknown1[1] = (0x800000 - (pMessage->mUnknown1[1] << 17)) >> 17 & 0x7F;
 }
 
-extern "C" int fn_800F0E2C(void *p, void *q) {
+extern "C" int AssignInputSyncCompare(void *p, void *q) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
     Record_803EAE18 *pOther = (Record_803EAE18 *)q;
     int result;
@@ -4486,7 +4486,7 @@ extern "C" int fn_800F0E2C(void *p, void *q) {
     return result;
 }
 
-extern "C" int fn_800F0EC0(void *p, int value) {
+extern "C" int AssignInputSyncFree(void *p, int value) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
 
     fn_801D2BD0(pRecord->mpEntries);
@@ -4494,7 +4494,7 @@ extern "C" int fn_800F0EC0(void *p, int value) {
     return 0;
 }
 
-extern "C" int fn_800F0EFC(void *p, int value) {
+extern "C" int AssignInputSyncAlloc(void *p, int value) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
 
     pRecord->mpEntries = (Entry_800F0EFC *)fn_801D2B7C(pRecord->mCount * 116, 0, 0);
@@ -4506,7 +4506,7 @@ extern "C" int fn_800F0EFC(void *p, int value) {
     return 0;
 }
 
-extern "C" int fn_800F0FA0(Input_800B6D34 *pBlock, unsigned int *pMasks, int index) {
+extern "C" int AssignInputMaskHeld(Input_800B6D34 *pBlock, unsigned int *pMasks, int index) {
     int result = 0;
 
     if (pMasks != 0 && (pBlock->mUnknown0 & pMasks[index]) == pMasks[index]) {
@@ -4515,7 +4515,7 @@ extern "C" int fn_800F0FA0(Input_800B6D34 *pBlock, unsigned int *pMasks, int ind
     return result;
 }
 
-extern "C" void fn_800F0FD0(Input_800B6D34 *pBlock, int index) {
+extern "C" void AssignInputRead(Input_800B6D34 *pBlock, int index) {
     Record_800B8694 *pRecord;
     unsigned int i;
 
@@ -4652,13 +4652,13 @@ extern "C" void fn_800F0FD0(Input_800B6D34 *pBlock, int index) {
         pBlock->mUnknown72[i] = pBlock->mUnknown24[lbl_803EAE18->mpEntries[index].mpUnknown4[i]];
     }
     for (i = 0; i < 68; i++) {
-        if (fn_800F0FA0(pBlock, lbl_803EAE18->mpEntries[index].mpUnknown0, i) != 0) {
+        if (AssignInputMaskHeld(pBlock, lbl_803EAE18->mpEntries[index].mpUnknown0, i) != 0) {
             *(pBlock->mBytes92 + i / 8) |= 1 << (i % 8);
         }
     }
 }
 
-extern "C" int fn_800F15B0(void *p, void *pBuffer) {
+extern "C" int AssignInputSyncSave(void *p, void *pBuffer) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
 
     memcpy(pBuffer, pRecord, 8);
@@ -4666,41 +4666,41 @@ extern "C" int fn_800F15B0(void *p, void *pBuffer) {
     return 1;
 }
 
-extern "C" int fn_800F1604(void *p, void *pBuffer) {
+extern "C" int AssignInputSyncLoad(void *p, void *pBuffer) {
     Record_803EAE18 *pRecord = (Record_803EAE18 *)p;
 
     memcpy(pRecord->mpEntries, (char *)pBuffer + 8, pRecord->mCount * 116);
     return 1;
 }
 
-extern "C" int fn_800F1638(void *p) {
+extern "C" int AssignInputSyncGetSize(void *p) {
     return lbl_803EAE18->mCount * 116 + 8;
 }
 
-extern "C" void fn_800F164C(int count) {
+extern "C" void AssignInputInit(int count) {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAE18, 8, 0, 0x6173736A);
     Record_803EAE18 *pRecord;
 
-    SyncStateSetCallbacks(pHandle, fn_800F0EFC, fn_800F0EC0, 0, fn_800F0E2C);
-    SyncStateSetSaveCallbacks(pHandle, fn_800F15B0, fn_800F1638, fn_800F1604);
+    SyncStateSetCallbacks(pHandle, AssignInputSyncAlloc, AssignInputSyncFree, 0, AssignInputSyncCompare);
+    SyncStateSetSaveCallbacks(pHandle, AssignInputSyncSave, AssignInputSyncGetSize, AssignInputSyncLoad);
     pRecord = (Record_803EAE18 *)SyncStateGetData(pHandle);
     pRecord->mCount = count;
     pRecord->mpEntries = 0;
     SyncStateCommit(pHandle);
 }
 
-extern "C" void fn_800F16F4() {
+extern "C" void AssignInputShutdown() {
     lbl_803EAE18 = 0;
 }
 
-extern "C" void fn_800F1700() {
+extern "C" void AssignInputUpdateAll() {
     for (unsigned char i = 0; i < lbl_803EAE18->mCount; i++) {
-        fn_800F0FD0(&lbl_803EAE18->mpEntries[i].mBlock, i);
+        AssignInputRead(&lbl_803EAE18->mpEntries[i].mBlock, i);
         lbl_803EAE18->mpEntries[i].mUnknown112 = 0;
     }
 }
 
-extern "C" void fn_800F177C(int index, Input_800B6D34 *pOut) {
+extern "C" void AssignInputGet(int index, Input_800B6D34 *pOut) {
     Input_800B6D34 *pSource;
 
     if (lbl_803EAE18->mpEntries[index].mUnknown112 == 0) {
@@ -4711,11 +4711,11 @@ extern "C" void fn_800F177C(int index, Input_800B6D34 *pOut) {
     *pOut = *pSource;
 }
 
-extern "C" void fn_800F1800(int index) {
+extern "C" void AssignInputDisable(int index) {
     lbl_803EAE18->mpEntries[index].mUnknown112 = 1;
 }
 
-extern "C" void fn_800F181C(int index, int which) {
+extern "C" void AssignInputSetMapping(int index, int which) {
     lbl_803EAE18->mpEntries[index].mpUnknown0 = lbl_802EE928[which];
     lbl_803EAE18->mpEntries[index].mpUnknown4 = lbl_802EE938[which];
 }
@@ -4828,7 +4828,7 @@ extern "C" void AssignBlockEngageBegin(Object_80039F5C *p) {
     }
 }
 
-extern "C" void fn_800F1C68(Object_80039F5C *p) {
+extern "C" void CarrierJukeBeginMove(Object_80039F5C *p) {
     Block_800F0C6C *pBlock = (Block_800F0C6C *)&p->mUnknown336;
     Command_800CEE74 command;
     int value;
@@ -4888,7 +4888,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
     }
 }
 
-extern "C" int fn_800F1EE0(Object_80039F5C *p) {
+extern "C" int CarrierJukeCanStart(Object_80039F5C *p) {
     int result = 0;
     int mode = fn_800AD9B4();
 
@@ -4923,7 +4923,7 @@ extern "C" int fn_800F1EE0(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" int fn_800F1FDC(Object_80039F5C *p, Object_80039F5C *pOther) {
+extern "C" int CarrierJukePickSide(Object_80039F5C *p, Object_80039F5C *pOther) {
     Object_800B26B0 *pMotion = &p->mMotion;
     float margin = ScrmGetSidelineX() - fabsf(pMotion->mPos.mX);
     int result;
@@ -4981,7 +4981,7 @@ extern "C" int fn_800F1FDC(Object_80039F5C *p, Object_80039F5C *pOther) {
     return result;
 }
 
-extern "C" int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float distance) {
+extern "C" int CarrierJukePickKind(Object_80039F5C *p, Object_80039F5C *pOther, float distance) {
     Object_800B26B0 *pMotion = &p->mMotion;
     int result;
 
@@ -5009,10 +5009,10 @@ extern "C" int fn_800F21E0(Object_80039F5C *p, Object_80039F5C *pOther, float di
     return result;
 }
 
-extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
+extern "C" int CarrierJukeStart(Object_80039F5C *p, int a, int b, int c) {
     int result = 0;
 
-    if (fn_800F1EE0(p) != 0) {
+    if (CarrierJukeCanStart(p) != 0) {
         Message_800F01CC message;
 
         if (b == 0 || a == 1) {
@@ -5021,10 +5021,10 @@ extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
             Object_80039F5C *pOther = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), 0x2E38E3, &distance, 0);
 
             if (b == 0) {
-                b = fn_800F1FDC(p, pOther);
+                b = CarrierJukePickSide(p, pOther);
             }
             if (a == 1) {
-                a = fn_800F21E0(p, pOther, distance);
+                a = CarrierJukePickKind(p, pOther, distance);
             }
         }
         PlayerMoveBegin(p, c, 34);
@@ -5033,12 +5033,12 @@ extern "C" int fn_800F22D8(Object_80039F5C *p, int a, int b, int c) {
         message.mId = 34;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = b;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
 
-extern "C" int fn_800F23EC(Object_80039F5C *p) {
+extern "C" int CarrierJukeEnter(Object_80039F5C *p) {
     Block_800F23EC *pBlock = (Block_800F23EC *)&p->mUnknown336;
     int kind = p->mpState->mUnknown1;
 
@@ -5076,7 +5076,7 @@ extern "C" int fn_800F23EC(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F24D8(Object_80039F5C *p) {
+extern "C" int CarrierJukeUpdate(Object_80039F5C *p) {
     int result = 0;
     Block_800F23EC *pBlock = (Block_800F23EC *)&p->mUnknown336;
     Object_800B26B0 *pMotion = &p->mMotion;
@@ -5088,7 +5088,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
         break;
     case 1:
         if (PlayerMoveGetKind(p) == 4) {
-            fn_800F1C68(p);
+            CarrierJukeBeginMove(p);
         } else {
             AssignBlockEngageBegin(p);
         }
@@ -5117,7 +5117,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
                 memset(&message, 0, 4);
                 message.mId = 11;
                 message.mUnknown1[0] = p->mUnknown9[0];
-                fn_800F05E4(0, p->mpState, &message, p);
+                PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
                 return 1;
             }
         } else {
@@ -5133,7 +5133,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" int fn_800F268C(Object_80039F5C *p) {
+extern "C" int CarrierJukeInput(Object_80039F5C *p) {
     Block_800F23EC *pBlock = (Block_800F23EC *)&p->mUnknown336;
 
     if (pBlock->mUnknown6 == 0) {
@@ -5237,8 +5237,8 @@ extern "C" int fn_800F2920(Object_80039F5C *p) {
             if (fn_800CE4A8(&query) != 0) {
                 float scaled;
 
-                fn_8011E1BC(pTarget, p, 0, 5);
-                fn_8011E33C(p, pTarget, 5);
+                AssignEngageStart(pTarget, p, 0, 5);
+                AssignEngageSetOpponent(p, pTarget, 5);
                 scaled = p->mRatings[0] / 255.0f;
                 p->mUnknown772 = fn_800C49A4(p, scaled * 0.5f + 0.5f);
                 return 1;
@@ -5307,7 +5307,7 @@ extern "C" int fn_800F2C1C(Object_80039F5C *p, int a) {
             memset(&message, 0, 4);
             message.mId = 5;
             message.mUnknown1[0] = a;
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
             return 1;
         }
     }
@@ -5381,7 +5381,7 @@ extern "C" int fn_800F2CB4(Table_80089904 *pTable, unsigned short event, void *a
     return 0;
 }
 
-extern "C" Object_80039F5C *fn_800F2EC8(Object_80039F5C *pExclude, Points_800F3A6C *pInfo) {
+extern "C" Object_80039F5C *JumpBallChaseFindRival(Object_80039F5C *pExclude, Points_800F3A6C *pInfo) {
     Object_80039F5C *pBest = 0;
     unsigned char index = 0;
     unsigned int i;
@@ -5410,7 +5410,7 @@ extern "C" Object_80039F5C *fn_800F2EC8(Object_80039F5C *pExclude, Points_800F3A
     return pBest;
 }
 
-extern "C" int fn_800F2FB8(Object_80039F5C *p, unsigned char *pIndex) {
+extern "C" int JumpBallChaseGetBall(Object_80039F5C *p, unsigned char *pIndex) {
     int result = 0;
 
     *pIndex = 0;
@@ -5483,7 +5483,7 @@ extern "C" void fn_800F30AC(Object_80039F5C *p, Object_80039F5C *pOther, Points_
 }
 
 extern "C" void fn_800F3284(Object_80039F5C *p, Block_800F4A74 *pBlock, Points_800F3A6C *pInfo) {
-    Object_80039F5C *pOther = fn_800F2EC8(p, pInfo);
+    Object_80039F5C *pOther = JumpBallChaseFindRival(p, pInfo);
 
     if (pOther == 0) {
         pBlock->mUnknown49 = 0;
@@ -5691,7 +5691,7 @@ extern "C" void fn_800F3838(Object_80039F5C *p, Object_80039F5C *pOther, Points_
     }
 }
 
-extern "C" void fn_800F39FC(Points_800F3A6C *pInfo, int index) {
+extern "C" void JumpBallChaseGetBallInfo(Points_800F3A6C *pInfo, int index) {
     pInfo->mpUnknown0 = BallGet(index);
     BallGetLandingPoint(pInfo->mpUnknown0, &pInfo->mUnknown4);
     BallSolveFallToHeight(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
@@ -5699,7 +5699,7 @@ extern "C" void fn_800F39FC(Points_800F3A6C *pInfo, int index) {
     BallGetPosition(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }
 
-extern "C" void fn_800F3A6C(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints) {
+extern "C" void JumpBallChaseGetGeometry(Object_80039F5C *pA, Object_80039F5C *pB, Info_800F3A6C *pInfo, Points_800F3A6C *pPoints) {
     FieldPoint_t delta;
 
     Vec2Sub(&pInfo->mUnknown0, &pPoints->mUnknown16, &pB->mMotion.mPos);
@@ -6033,7 +6033,7 @@ extern "C" void fn_800F4918(Object_80039F5C *p, Object_80039F5C *pOther, Points_
     }
 }
 
-extern "C" int fn_800F4A74(Object_80039F5C *p) {
+extern "C" int JumpBallChaseEnter(Object_80039F5C *p) {
     Block_800F4A74 *pBlock = (Block_800F4A74 *)&p->mUnknown336;
 
     memset(pBlock, 0, 88);
@@ -6055,20 +6055,20 @@ extern "C" int fn_800F4AD4(Object_80039F5C *p) {
         Object_80039F5C *pOther;
 
         if (pBlock->mUnknown63 != 0) {
-            fn_800F39FC(&points, pBlock->mUnknown62);
+            JumpBallChaseGetBallInfo(&points, pBlock->mUnknown62);
             if (BallStateGet(points.mpUnknown0, 0) != 4) {
                 pBlock->mUnknown63 = 0;
             }
         }
         if (pBlock->mUnknown63 == 0) {
-            pBlock->mUnknown63 = fn_800F2FB8(p, &pBlock->mUnknown62);
+            pBlock->mUnknown63 = JumpBallChaseGetBall(p, &pBlock->mUnknown62);
             if (pBlock->mUnknown63 != 0) {
-                fn_800F39FC(&points, pBlock->mUnknown62);
+                JumpBallChaseGetBallInfo(&points, pBlock->mUnknown62);
                 fn_800F3284(p, pBlock, &points);
             }
         }
         if (pBlock->mUnknown63 != 0) {
-            pOther = fn_800F2EC8(p, &points);
+            pOther = JumpBallChaseFindRival(p, &points);
             if (--pBlock->mUnknown58 < 0) {
                 int rating;
                 int spread;
@@ -6100,7 +6100,7 @@ extern "C" int fn_800F4AD4(Object_80039F5C *p) {
                     ScrmTestPlayFlag(12);
                 }
                 if (pOther != 0) {
-                    fn_800F3A6C(p, pOther, &info, &points);
+                    JumpBallChaseGetGeometry(p, pOther, &info, &points);
                     fn_800F3B54(p, pOther, pBlock, &info, &points);
                 }
                 fn_800F3344(p, pOther, pBlock);
@@ -6141,7 +6141,7 @@ extern "C" int fn_800F4E14(Object_80039F5C *p, Object_800F4E14 *pInfo) {
     return result;
 }
 
-extern "C" int fn_800F4E88(Object_80039F5C *p, Record_800F4E88 *pRecord) {
+extern "C" int PlyrMoveToSpotIsPast(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     FieldPoint_t delta;
     FieldPoint_t direction;
 
@@ -6239,8 +6239,8 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
             delta.mY = delta.mY >= pMotion->mPos.mY ? delta.mY : pMotion->mPos.mY;
             if (pTarget && pTarget->mMotion.mPos.mY - delta.mY < lbl_803EAE28 && distance < 5.0f
                 && MathAngleDiff(pTarget->mMotion.mUnknown32, 0xC00000) <= 0x3FFFFF && !fn_8011E9B4(pTarget)
-                && fn_8011E188() > 30) {
-                fn_8011E1BC(p, pTarget, 0, 3);
+                && AssignEngageSysGetFrames() > 30) {
+                AssignEngageStart(p, pTarget, 0, 3);
                 return 1;
             }
         }
@@ -6389,7 +6389,7 @@ extern "C" int fn_800F5208(Object_80039F5C *p, Record_800F4E88 *pRecord) {
     return 0;
 }
 
-extern "C" int fn_800F5AD4(Object_80039F5C *p) {
+extern "C" int PlyrMoveToSpotShouldBlock(Object_80039F5C *p) {
     Vector_80039F5C pos = p->mMotion.mPos;
     float distance;
     Object_80039F5C *pNear;
@@ -6517,7 +6517,7 @@ extern "C" void fn_800F60BC(Object_80039F5C *p) {
     }
 }
 
-extern "C" int fn_800F6158(Object_80039F5C *p) {
+extern "C" int PlyrMoveToSpotEnter(Object_80039F5C *p) {
     Object_800F4E14_800F60BC *pBlock = (Object_800F4E14_800F60BC *)&p->mUnknown336;
     Vector_80039F5C *pPos = &p->mMotion.mPos;
     int result;
@@ -6534,7 +6534,7 @@ extern "C" int fn_800F6158(Object_80039F5C *p) {
         pBlock->mUnknown0 = p->mMotion.mPos.mX + offset.mX;
         pBlock->mUnknown4 = pPos->mY + offset.mY;
         pBlock->mUnknown24 = result;
-        fn_8011E3EC(p, 3);
+        AssignEngageSetMode(p, 3);
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pBlock->mUnknown20;
         p->mUnknown512.mUnknown4 = pBlock->mUnknown20;
@@ -6543,17 +6543,17 @@ extern "C" int fn_800F6158(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F62A4(Object_80039F5C *p) {
+extern "C" int PlyrMoveToSpotOrBlockEnter(Object_80039F5C *p) {
     Message_800F01CC message;
 
-    if (fn_800F5AD4(p)) {
+    if (PlyrMoveToSpotShouldBlock(p)) {
         memset(&message, 0, 4);
         if (fn_8011F1CC() && !ScrmTestPlayFlag(0)) {
             message.mId = 31;
         } else {
             message.mId = 33;
         }
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 0;
     } else {
         memset(&message, 0, 4);
@@ -6561,7 +6561,7 @@ extern "C" int fn_800F62A4(Object_80039F5C *p) {
         message.mUnknown1[1] = p->mpState->mUnknown2;
         message.mUnknown1[0] = p->mpState->mUnknown1;
         message.mUnknown1[2] = p->mpState->mUnknown3[0];
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
     }
     return 0;
 }
@@ -6573,18 +6573,18 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
     int direction;
 
     if (p == BallGetCurrentHolder()) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         fn_8011E240(p);
         memset(&message, 0, sizeof(message));
         message.mId = 1;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         result = 1;
     } else {
         PlyrTryQueueMsg62(p, 0, -1);
         fn_800F60BC(p);
         if (!(p->mFlags & 0x4000)) {
             if (fn_800F5208(p, pRecord)) {
-                fn_8011E3EC(p, 0);
+                AssignEngageSetMode(p, 0);
                 result = 1;
                 fn_8011E240(p);
                 p->mUnknown512.mUnknown15 = result;
@@ -6600,27 +6600,27 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                     if (fn_8011F2F8() != 0) {
                         message.mUnknown1[1] = result;
                         if (ScrmTestPlayFlag(0) == 0) {
-                            fn_8011E194(p, 1);
+                            AssignEngageSetFlags(p, 1);
                         }
-                        int found = fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
+                        int found = PlyrStateQueueFind(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
 
                         if (found) {
                             message.mUnknown1[0] = 32;
-                            fn_800F05E4(0, p->mpState, &message, p);
+                            PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
                         } else {
-                            fn_800F053C(0, p->mpState, &message, p);
+                            PlyrStateQueueSet(0, p->mpState, &message, p);
                         }
                     } else {
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     }
                 } else {
                     message.mId = 33;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                 }
                 result = 1;
             } else {
                 if (pRecord->mUnknown24 == 0) {
-                    if (fn_800F4E88(p, pRecord)) {
+                    if (PlyrMoveToSpotIsPast(p, pRecord)) {
                         pRecord->mUnknown24 = 1;
                         if (ScrmTestPlayFlag(13) == 0
                             && (p->mpState->mUnknown3[1] == 47 || p->mpState->mUnknown3[1] == 72)) {
@@ -6649,7 +6649,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                 }
             }
         } else {
-            fn_8011E3EC(p, 0);
+            AssignEngageSetMode(p, 0);
             fn_8011E240(p);
             memset(&message, 0, sizeof(message));
             if (ScrmTestPlayFlag(13) == 0 && BallStateGet(BallGetCurrent(), 0) != 4
@@ -6658,22 +6658,22 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
                 if (fn_8011F2F8() != 0) {
                     message.mUnknown1[1] = 1;
                     if (ScrmTestPlayFlag(0) == 0) {
-                        fn_8011E194(p, 1);
+                        AssignEngageSetFlags(p, 1);
                     }
-                    int found = fn_800F06F4(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
+                    int found = PlyrStateQueueFind(0, p->mpState, 19, 0xFFFF) == 0xFFFF ? 0 : 1;
 
                     if (found) {
                         message.mUnknown1[0] = 32;
-                        fn_800F05E4(0, p->mpState, &message, p);
+                        PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
                     } else {
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     }
                 } else {
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                 }
             } else {
                 message.mId = 33;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
             result = 1;
         }
@@ -6689,17 +6689,17 @@ static float _StrippedScaleByEight(float x)
 }
 }
 
-extern "C" int fn_800F6790(Object_80039F5C *p) {
-    fn_8011E3EC(p, 0);
+extern "C" int PlyrMoveToSpotExit(Object_80039F5C *p) {
+    AssignEngageSetMode(p, 0);
     fn_8011E240(p);
     return 1;
 }
 
-extern "C" void fn_800F67CC(unsigned char *p) {
+extern "C" void PlyrMoveToSpotMirrorMessage(unsigned char *p) {
     p[2] = ((0x800000 - (p[2] << 17)) >> 17) & 0x7F;
 }
 
-extern "C" unsigned int fn_800F67E8(Object_80039F5C *pTarget) {
+extern "C" unsigned int AssignBlockCountOnTarget(Object_80039F5C *pTarget) {
     unsigned int count = 0;
 
     if (pTarget) {
@@ -6718,7 +6718,7 @@ extern "C" unsigned int fn_800F67E8(Object_80039F5C *pTarget) {
     return count;
 }
 
-extern "C" int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther) {
+extern "C" int AssignIsTargetBreakingUpfield(Object_80039F5C *p, Object_80039F5C *pOther) {
     int result = 0;
 
     if (p && pOther) {
@@ -6745,7 +6745,7 @@ extern "C" int fn_800F6878(Object_80039F5C *p, Object_80039F5C *pOther) {
     return result;
 }
 
-extern "C" int fn_800F69C0(int angle, Object_80039F5C *p) {
+extern "C" int AssignTurnAwayFromPlayers(int angle, Object_80039F5C *p) {
     int found = 0;
     int result = angle;
     unsigned char team;
@@ -6773,7 +6773,7 @@ extern "C" int fn_800F69C0(int angle, Object_80039F5C *p) {
     return found ? result : angle;
 }
 
-extern "C" void fn_800F6AD8(float *p) {
+extern "C" void AssignSteerDeadZone(float *p) {
     if (p) {
         if (fabsf(p[0]) < 0.3f) {
             p[0] = 0.0f;
@@ -6784,7 +6784,7 @@ extern "C" void fn_800F6AD8(float *p) {
     }
 }
 
-extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta) {
+extern "C" void AssignSteerClampToField(Object_80039F5C *p, Vector_80039F5C *pDelta) {
     if (p && pDelta) {
         FieldPoint_t origin;
         FieldPoint_t target;
@@ -6808,7 +6808,7 @@ extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta) {
     }
 }
 
-extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
+extern "C" void AssignSteerDepthPastLine(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         FieldPoint_t origin;
 
@@ -6816,13 +6816,13 @@ extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, FieldPo
         if (pTarget->mY < origin.mY + 7.0f) {
             pOut->mY = 0.0f;
         } else {
-            fn_800F6D40(p, pOther, pTarget, pOut);
+            AssignSteerDepthToTarget(p, pOther, pTarget, pOut);
         }
-        fn_800F6AD8(&pOut->mX);
+        AssignSteerDeadZone(&pOut->mX);
     }
 }
 
-extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
+extern "C" void AssignSteerDepthToTarget(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         FieldPoint_t delta;
 
@@ -6837,10 +6837,10 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, FieldPo
         } else {
             pOut->mY = pTarget->mY - p->mMotion.mPos.mY;
         }
-        if (fn_800F6878(p, pOther)) {
+        if (AssignIsTargetBreakingUpfield(p, pOther)) {
             pOut->mY = pOut->mY + 2.5f;
         } else {
-            fn_800F6AD8(&pOut->mX);
+            AssignSteerDeadZone(&pOut->mX);
         }
     }
 }
@@ -6887,19 +6887,19 @@ extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *
         } else if (pOther->mMotion.mPos.mX < 10.0f - ScrmGetSidelineX()) {
             pOut->mX = 1.0f - ScrmGetSidelineX() - p->mMotion.mPos.mX;
         }
-        if (fn_800F6878(p, pOther)) {
+        if (AssignIsTargetBreakingUpfield(p, pOther)) {
             if (ball.mX > pOther->mMotion.mPos.mX) {
                 pOut->mX = 0.01f;
             } else if (ball.mX < pOther->mMotion.mPos.mX) {
                 pOut->mX = -0.01f;
             }
         } else {
-            fn_800F6AD8(&pOut->mX);
+            AssignSteerDeadZone(&pOut->mX);
         }
     }
 }
 
-extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
+extern "C" void AssignSteerDepthWithMargin(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         FieldPoint_t origin;
         FieldPoint_t delta;
@@ -6923,7 +6923,7 @@ extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, FieldPo
         } else {
             pOut->mY = pTarget->mY - p->mMotion.mPos.mY + 1.0f;
         }
-        fn_800F6AD8(&pOut->mX);
+        AssignSteerDeadZone(&pOut->mX);
     }
 }
 
@@ -6958,7 +6958,7 @@ extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOt
                 *pOut = -distance;
             }
         }
-        fn_800F6AD8(pOut);
+        AssignSteerDeadZone(pOut);
     }
 }
 
@@ -6977,9 +6977,9 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         Vec2Sub(&toBall, &pBall->mState.mPos, &p->mMotion.mPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
-        fn_800F6D40(p, pOther, &spot, pOut);
+        AssignSteerDepthToTarget(p, pOther, &spot, pOut);
         AssignSteerLateralToTarget(p, pOther, &spot, pOut);
-        fn_800F6B2C(p, pOut);
+        AssignSteerClampToField(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
         if (p->mMotion.mPos.mY >= ScrmGetEndLineY() - 5.0f && MathAngleDiff(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
@@ -7031,7 +7031,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 
             pBlock->mUnknown8 = direction;
             pBlock->mUnknown4 = 0xC00000;
-            near = fn_800F6878(p, pOther);
+            near = AssignIsTargetBreakingUpfield(p, pOther);
             if (near || MathAngleDiff(direction, pOther->mMotion.mUnknown32) <= 0x3FFFFF) {
                 if (pBall->mState.mPos.mX > pOther->mMotion.mPos.mX) {
                     pBlock->mUnknown8 = 0x31C71C;
@@ -7069,9 +7069,9 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         Vec2Sub(&toBall, &BallGetCurrent()->mState.mPos, &p->mMotion.mPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
-        fn_800F70D0(p, pOther, &spot, pOut);
+        AssignSteerDepthWithMargin(p, pOther, &spot, pOut);
         AssignSteerLateralByGap(p, pOther, &spot.mX, &pOut->mX);
-        fn_800F6B2C(p, pOut);
+        AssignSteerClampToField(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
         if (p->mMotion.mPos.mY >= ScrmGetEndLineY() - 5.0f && MathAngleDiff(p->mMotion.mUnknown32, 0x400000) > 0x1C71C7
@@ -7191,8 +7191,8 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             if (p->mMotion.mPos.mY > pOther->mMotion.mPos.mY) {
                 pOut->mX = spot.mX - p->mMotion.mPos.mX + side;
                 pOut->mY = pOther->mMotion.mPos.mY - p->mMotion.mPos.mY + 1.0f + lift;
-                fn_800F6AD8(&pOut->mX);
-                fn_800F6B2C(p, pOut);
+                AssignSteerDeadZone(&pOut->mX);
+                AssignSteerClampToField(p, pOut);
                 pBlock->mUnknown8 = MathArcTan2(pOut->mY, pOut->mX);
                 pBlock->mUnknown24 = 0;
                 pBlock->mUnknown12 = 0.66f;
@@ -7204,8 +7204,8 @@ extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             } else {
                 pOut->mX = spot.mX - p->mMotion.mPos.mX + side;
                 pOut->mY = pOther->mMotion.mPos.mY - p->mMotion.mPos.mY - 1.0f + lift;
-                fn_800F6AD8(&pOut->mX);
-                fn_800F6B2C(p, pOut);
+                AssignSteerDeadZone(&pOut->mX);
+                AssignSteerClampToField(p, pOut);
                 pBlock->mUnknown4 = pBlock->mUnknown8 = MathArcTan2(pOut->mY, pOut->mX);
                 pBlock->mUnknown12 = 0.66f;
                 pBlock->mUnknown24 = 0;
@@ -7244,7 +7244,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             return;
         }
         Vec2FromAngle(&target, (pOther->mMotion.mUnknown32 + 0x800000) & 0xFFFFFF, 1.0f);
-        fn_800F6B2C(p, &target);
+        AssignSteerClampToField(p, &target);
         target.mX += pOther->mMotion.mPos.mX;
         target.mZ = 0.0f;
         target.mY += pOther->mMotion.mPos.mY;
@@ -7278,9 +7278,9 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         Vec2Sub(&toBall, &pBall->mState.mPos, pPos);
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, pPos);
-        fn_800F6C90(p, pOther, &spot, pOut);
+        AssignSteerDepthPastLine(p, pOther, &spot, pOut);
         AssignSteerLateralToTarget(p, pOther, &spot, pOut);
-        fn_800F6B2C(p, pOut);
+        AssignSteerClampToField(p, pOut);
         direction = MathArcTan2(pOut->mY, pOut->mX) & 0xFFFFFF;
         if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
             if (MathAngleDiff(p->mMotion.mFacing, MathArcTan2(toBall.mY, toBall.mX)) > 0x71C71) {
@@ -7310,7 +7310,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             Vec2Sub(&toSpot, &spot, pPos);
             pBlock->mUnknown8 = pOther->mMotion.mUnknown32;
             pBlock->mUnknown4 = MathArcTan2(toSpot.mY, toSpot.mX);
-            if (fn_800F6878(p, pOther)) {
+            if (AssignIsTargetBreakingUpfield(p, pOther)) {
                 pBlock->mUnknown24 = 1;
                 pBlock->mUnknown12 = 1.0f;
             } else {
@@ -7321,7 +7321,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
     }
 }
 
-extern "C" void fn_800F846C(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
+extern "C" void AssignBlockSteerToLine(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         Block_800F8A88 *pBlock = (Block_800F8A88 *)&p->mUnknown336;
         float offset;
@@ -7334,7 +7334,7 @@ extern "C" void fn_800F846C(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
             offset = -lbl_803EAE48;
         }
         pOut->mX = pOther->mMotion.mPos.mX + offset - p->mMotion.mPos.mX;
-        fn_800F6B2C(p, pOut);
+        AssignSteerClampToField(p, pOut);
         distance = Vec2Magnitude(pOut);
         pBlock->mUnknown8 = MathArcTan2(pOut->mY, pOut->mX) & 0xFFFFFF;
         pBlock->mUnknown4 = 0xC00000;
@@ -7361,7 +7361,7 @@ extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther) {
         }
         if (fn_8011E9D8(pOther->mpState) && pBlock->mUnknown27) {
             pBlock->mUnknown26 = 6;
-        } else if ((p->mUnknown2914 == 17 || p->mUnknown2914 == 18) && fn_800F67E8(pOther) > 1) {
+        } else if ((p->mUnknown2914 == 17 || p->mUnknown2914 == 18) && AssignBlockCountOnTarget(pOther) > 1) {
             pBlock->mUnknown26 = 4;
         } else if (fabsf(delta.mX) > 4.0f && p->mMotion.mPos.mY < ScrmGetGoalLineY()
                    && (p->mMotion.mPos.mY > origin.mY + 4.0f || pOther->mMotion.mPos.mY < origin.mY - 1.0f)) {
@@ -7390,7 +7390,7 @@ extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther) {
     }
 }
 
-extern "C" void fn_800F8828(Object_80039F5C *p, Object_80039F5C *pOther, Block_800F8A88 *pBlock) {
+extern "C" void AssignBlockApplySideFlag(Object_80039F5C *p, Object_80039F5C *pOther, Block_800F8A88 *pBlock) {
     if (p && pOther) {
         FieldPoint_t origin;
 
@@ -7452,7 +7452,7 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
         Vector_80039F5C out;
         int unknown32;
 
-        fn_800F8828(p, pOther, pBlock);
+        AssignBlockApplySideFlag(p, pOther, pBlock);
         fn_800F88E4(p, pOther);
         out.mX = out.mY = out.mZ = 0.0f;
         switch (pBlock->mUnknown26) {
@@ -7474,7 +7474,7 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
         case 5:
             break;
         case 6:
-            fn_800F846C(p, pOther, &out);
+            AssignBlockSteerToLine(p, pOther, &out);
             break;
         }
         unknown32 = p->mMotion.mUnknown32;
@@ -7508,7 +7508,7 @@ extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther) {
     }
 }
 
-extern "C" int fn_800F8D24(Object_80039F5C *p) {
+extern "C" int AssignBlockIdleUpdate(Object_80039F5C *p) {
     return 0;
 }
 
@@ -7722,7 +7722,7 @@ extern "C" int fn_800F9024(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F930C(Object_80039F5C *p) {
+extern "C" int AssignBlockAngleBackUpdate(Object_80039F5C *p) {
     Block_800F930C *pBlock = (Block_800F930C *)&p->mUnknown336;
     Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mRef);
 
@@ -7744,7 +7744,7 @@ extern "C" int fn_800F930C(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" Object_80039F5C *fn_800F93D0(Object_80039F5C *p) {
+extern "C" Object_80039F5C *AssignGetCoveringDefender(Object_80039F5C *p) {
     Object_80039F5C *pResult = 0;
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i;
@@ -7758,7 +7758,7 @@ extern "C" Object_80039F5C *fn_800F93D0(Object_80039F5C *p) {
     return pResult;
 }
 
-extern "C" void fn_800F9440(Object_80039F5C *p, Object_80039F5C *pOther) {
+extern "C" void AssignSetCoverTarget(Object_80039F5C *p, Object_80039F5C *pOther) {
     fn_8011F4E0()->mUnknown16[p->mIdBytes[1]] = pOther->mIdBytes[1];
 }
 
@@ -7785,7 +7785,7 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
             for (j = 0; j < n; j++) {
                 int valid = 1;
                 Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], j);
-                int slot = fn_800F06F4(0, pMate->mpState, 22, 0xFFFF);
+                int slot = PlyrStateQueueFind(0, pMate->mpState, 22, 0xFFFF);
 
                 if (slot != 0xFFFF) {
                     if (pMate->mpState[slot].mId == 22) {
@@ -7819,7 +7819,7 @@ extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p) {
     return pResult;
 }
 
-extern "C" Object_80039F5C *fn_800F9688(Object_80039F5C *p) {
+extern "C" Object_80039F5C *AssignFindUnblockedSlotPlayer(Object_80039F5C *p) {
     Object_80039F5C *pResult = 0;
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     int n = ScrmGetTeamPlayerCount(p->mIdBytes[2]);
@@ -7834,7 +7834,7 @@ extern "C" Object_80039F5C *fn_800F9688(Object_80039F5C *p) {
 
             for (j = 0; j < n; j++) {
                 Object_80039F5C *pMate = PlyrGet(p->mIdBytes[2], j);
-                int index = fn_800F06F4(0, pMate->mpState, 22, 0xFFFF);
+                int index = PlyrStateQueueFind(0, pMate->mpState, 22, 0xFFFF);
 
                 if (index != 0xFFFF && pMate->mpState[index].mUnknown1 == i + 1) {
                     count++;
@@ -7950,14 +7950,14 @@ extern "C" int fn_800F986C(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" Object_80039F5C *fn_800F9AF0(unsigned char slot) {
+extern "C" Object_80039F5C *AssignGetSlotPlayer(unsigned char slot) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i = 0;
     unsigned char index = pRecord->mUnknown8[slot];
     Object_80039F5C *p = PlyrGet(ScrmGetOffenseTeam(), index);
 
     do {
-        if (pRecord->mUnknown32[i] == fn_800FC0C4(p)) {
+        if (pRecord->mUnknown32[i] == AssignGetReceiverSlot(p)) {
             unsigned char j;
             for (j = 0; j < 8; j++) {
                 if (pRecord->mUnknown24[j] == ((p->mId >> 16) & 0xFF) && pRecord->mUnknown40[j] == i) {
@@ -7997,7 +7997,7 @@ extern "C" Object_80039F5C *AssignGetNextSlotPlayer(int forward, Object_80039F5C
             slot = 2 - i;
         }
         if (found) {
-            Object_80039F5C *pSlot = fn_800F9AF0(slot);
+            Object_80039F5C *pSlot = AssignGetSlotPlayer(slot);
             if (pSlot) {
                 pResult = pSlot;
                 break;
@@ -8090,20 +8090,20 @@ extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag) {
 
                 for (j = 0; j < n; j++) {
                     Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), j);
-                    int slot = fn_800F06F4(0, pOther->mpState, 22, 0xFFFF);
+                    int slot = PlyrStateQueueFind(0, pOther->mpState, 22, 0xFFFF);
 
-                    if (slot != 0xFFFF && pOther->mpState[slot].mUnknown1 == fn_800FC0C4(pTarget)) {
+                    if (slot != 0xFFFF && pOther->mpState[slot].mUnknown1 == AssignGetReceiverSlot(pTarget)) {
                         count++;
                         if (fabsf(pOther->mMotion.mPos.mX - pTarget->mMotion.mPos.mX) > 5.5f
                             && fabsf(p->mMotion.mPos.mX - pTarget->mMotion.mPos.mX) < 5.0f) {
-                            p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                            p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                             pResult = pTarget;
                             break;
                         }
                     }
                 }
                 if (count == 0 && fabsf(p->mMotion.mPos.mX - pTarget->mMotion.mPos.mX) < lbl_803EAE60) {
-                    p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                    p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                     pResult = pTarget;
                 }
             }
@@ -8112,12 +8112,12 @@ extern "C" Object_80039F5C *fn_800F9E3C(Object_80039F5C *p, int flag) {
     return pResult;
 }
 
-extern "C" void fn_800FA014(Object_80039F5C *p, int *pRef) {
+extern "C" void AssignBlockRefreshTarget(Object_80039F5C *p, int *pRef) {
     Object_80039F5C *pOther = 0;
 
     if (p->mUnknown2914 == 16) {
         Object_80039F5C *pCurrent = fn_8009BCE8(pRef);
-        if (!pCurrent || fn_800FC0C4(pCurrent) != p->mpState->mUnknown1) {
+        if (!pCurrent || AssignGetReceiverSlot(pCurrent) != p->mpState->mUnknown1) {
             if (fn_8009F7A4(p, &pOther)) {
                 fn_8009BD2C(pOther, pRef);
             }
@@ -8130,7 +8130,7 @@ extern "C" int fn_800FA098() {
 
     goal = ScrmGetBallSpot();
     fn_801486A0();
-    fn_8011E188();
+    AssignEngageSysGetFrames();
     return 0;
 }
 
@@ -8155,7 +8155,7 @@ extern "C" int fn_800FA0DC(Object_80039F5C *p) {
         memset(&message, 0, 4);
         message.mId = 85;
         message.mUnknown1[0] = 48;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         return 1;
     }
     if (slot == 0xFD) {
@@ -8163,7 +8163,7 @@ extern "C" int fn_800FA0DC(Object_80039F5C *p) {
 
         memset(&message, 0, 4);
         message.mId = 2;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         return 1;
     }
     if (slot) {
@@ -8268,7 +8268,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                 }
                 pBlock->mUnknown8 = MathArcTan2(pGoal->mY, goal.mX);
                 pBlock->mUnknown4 = 0xC00000;
-                pTarget = fn_800F9688(p);
+                pTarget = AssignFindUnblockedSlotPlayer(p);
                 if (pTarget) {
                     pBlock->mUnknown23 = 1;
                     pBlock->mUnknown12 = 0.7f;
@@ -8294,15 +8294,15 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
             } else if (fn_8011F4E0()->mUnknown0 < 0 && !(p->mFlags & 0x20000)
                        && (fn_8011F1CC() || fn_8011F1A4())) {
                 if (pTarget->mUnknown1032 == 0) {
-                    int id = fn_800F06F4(0, pTarget->mpState, 1, 0xFFFF);
+                    int id = PlyrStateQueueFind(0, pTarget->mpState, 1, 0xFFFF);
 
-                    if (id == 0xFFFF && fn_800F06F4(0, pTarget->mpState, 47, 0xFFFF) == id) {
+                    if (id == 0xFFFF && PlyrStateQueueFind(0, pTarget->mpState, 47, 0xFFFF) == id) {
                         unsigned char state = pTarget->mpState->mId;
 
                         if (state != 32 && state != 11 && state != 16) {
                             goto done;
                         }
-                        if (fn_800F06F4(0, pTarget->mpState, 21, 0xFFFF) != 0xFFFF) {
+                        if (PlyrStateQueueFind(0, pTarget->mpState, 21, 0xFFFF) != 0xFFFF) {
                             goto done;
                         }
                     }
@@ -8318,11 +8318,11 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                         fn_8009BD2C(pTarget, &pBlock->mRef);
                         break;
                     }
-                    p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                    p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                     memset(&message, 0, 4);
                     message.mId = 85;
                     message.mUnknown1[0] = 48;
-                    fn_800F00D4(0, p->mpState, &message, p);
+                    PlyrStateQueuePush(0, p->mpState, &message, p);
                     return 0;
                 case 13:
                 case 15:
@@ -8333,17 +8333,17 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                         break;
                     }
                     if ((unsigned int)(fn_8009F6B4() - 2) <= 1 || PlayTrackGetResult5Rate() > 0.25f) {
-                        p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                        p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                         memset(&message, 0, 4);
                         message.mId = 85;
                         message.mUnknown1[0] = 48;
-                        fn_800F00D4(0, p->mpState, &message, p);
+                        PlyrStateQueuePush(0, p->mpState, &message, p);
                         return 0;
                     }
-                    p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                    p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                     memset(&message, 0, 4);
                     message.mId = 2;
-                    fn_800F00D4(0, p->mpState, &message, p);
+                    PlyrStateQueuePush(0, p->mpState, &message, p);
                     return 0;
                 case 16:
                     fn_8009BD2C(0, &pBlock->mRef);
@@ -8374,9 +8374,9 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                             }
 
                             if (blocking) {
-                                int id = fn_800F06F4(0, pMate->mpState, 2, 0xFFFF);
+                                int id = PlyrStateQueueFind(0, pMate->mpState, 2, 0xFFFF);
 
-                                if (id != 0xFFFF || fn_800F06F4(0, pMate->mpState, 30, 0xFFFF) != id) {
+                                if (id != 0xFFFF || PlyrStateQueueFind(0, pMate->mpState, 30, 0xFFFF) != id) {
                                     blocking = 0;
                                 }
                             }
@@ -8386,7 +8386,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                             }
                         }
                     }
-                    p->mpState->mUnknown1 = fn_800FC0C4(pTarget);
+                    p->mpState->mUnknown1 = AssignGetReceiverSlot(pTarget);
                     memset(&message, 0, 4);
                     message.mId = 40;
                     if (alone) {
@@ -8396,7 +8396,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                     } else {
                         message.mUnknown1[0] = 2;
                     }
-                    fn_800F00D4(0, p->mpState, &message, p);
+                    PlyrStateQueuePush(0, p->mpState, &message, p);
                     return 0;
                 }
                 }
@@ -8417,7 +8417,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
             FieldPoint_t *pDirection = &direction;
 
             Vec2FromAngle(pDirection, pBlock->mUnknown8, 1.0f);
-            pBlock->mUnknown8 = fn_800F69C0(pBlock->mUnknown8, p);
+            pBlock->mUnknown8 = AssignTurnAwayFromPlayers(pBlock->mUnknown8, p);
             if (p->mMotion.mPos.mX > ScrmGetSidelineX() - 2.0f && direction.mX > 0.0f) {
                 direction.mX = 0.0f;
             } else if (p->mMotion.mPos.mX < 2.0f - ScrmGetSidelineX() && direction.mX < 0.0f) {
@@ -8437,7 +8437,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
     if (active) {
         int count;
 
-        fn_800FA014(p, (int *)pBlock);
+        AssignBlockRefreshTarget(p, (int *)pBlock);
         count = fn_8009E180(p);
         if (count > 2) {
             if (count == 4) {
@@ -8445,7 +8445,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                     memset(&message, 0, 4);
                     message.mId = 24;
                     message.mUnknown1[0] = 2;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     return 1;
                 }
             } else {
@@ -8459,7 +8459,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
                 if ((unsigned int)SyncRandGetRange(0, 255) < chance || pos.mY > ScrmGetBallSpot().mY + 3.0f) {
                     memset(&message, 0, 4);
                     message.mId = 2;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     return 1;
                 }
             }
@@ -8488,7 +8488,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_800FAD10(unsigned char *p) {
+extern "C" void AssignBlockMirrorMessage(unsigned char *p) {
     unsigned char value = p[1];
     if (value != 0) {
         value = 6 - value;
@@ -8588,7 +8588,7 @@ extern "C" void fn_800FAECC(void) {
         if (!pRoutes) {
             pRoutes = (Message_800F01CC *)PlayAlignGetRoute(pInfoTeam, team, index);
         }
-        slot = fn_800F06F4(0, pRoutes, 0x16, 0);
+        slot = PlyrStateQueueFind(0, pRoutes, 0x16, 0);
         if (slot != 0xFFFF) {
             unsigned char value = pRoutes[slot].mUnknown1[0];
             if (value == 0) {
@@ -8615,7 +8615,7 @@ extern "C" void fn_800FAECC(void) {
         }
     }
     for (unsigned int i = 0; i < 3; i++) {
-        Object_80039F5C *pReceiver = fn_800F93D0(PlyrGet(ScrmGetOffenseTeam(), pRecord->mUnknown8[i]));
+        Object_80039F5C *pReceiver = AssignGetCoveringDefender(PlyrGet(ScrmGetOffenseTeam(), pRecord->mUnknown8[i]));
         if (pReceiver) {
             pRecord->mUnknown32[pReceiver->mIdBytes[1]] = i + 1;
             taken[pReceiver->mIdBytes[1]] = 1;
@@ -8645,7 +8645,7 @@ extern "C" void fn_800FAECC(void) {
                     if (!pSlot) {
                         done = 1;
                     } else if (fn_800F9CAC(entries, k, count, pSlot)) {
-                        pRecord->mUnknown32[entries[k].mpPlayer->mIdBytes[1]] = fn_800FC0C4(pSlot);
+                        pRecord->mUnknown32[entries[k].mpPlayer->mIdBytes[1]] = AssignGetReceiverSlot(pSlot);
                         taken[entries[k].mpPlayer->mIdBytes[1]] = 1;
                         done = 1;
                     }
@@ -8700,8 +8700,8 @@ extern "C" void fn_800FB314(void) {
                     float xA;
                     float xB;
 
-                    fn_800FBF74(pA, (Object_80039F5C *)pA->mpState);
-                    fn_800FBF74(pB, (Object_80039F5C *)pB->mpState);
+                    AssignFindDefenderOnReceiver(pA, (Object_80039F5C *)pA->mpState);
+                    AssignFindDefenderOnReceiver(pB, (Object_80039F5C *)pB->mpState);
                     xA = pA->mMotion.mPos.mX;
                     xB = pB->mMotion.mPos.mX;
                     if (!BallGetCurrentHolder()) {
@@ -8709,8 +8709,8 @@ extern "C" void fn_800FB314(void) {
                     }
                     int time = 0;
                     int angle;
-                    int routeA = fn_800F06F4(0, pA->mpState, 0x15, 0xFFFF);
-                    int routeB = fn_800F06F4(0, pB->mpState, 0x15, 0xFFFF);
+                    int routeA = PlyrStateQueueFind(0, pA->mpState, 0x15, 0xFFFF);
+                    int routeB = PlyrStateQueueFind(0, pB->mpState, 0x15, 0xFFFF);
                     if (routeA != 0 && routeA != 0xFFFF && routeB != 0 && routeB != 0xFFFF) {
                         float a;
                         float b;
@@ -8731,11 +8731,11 @@ extern "C" void fn_800FB314(void) {
             total = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
             for (i = 0; i < total; i++) {
                 Object_80039F5C *p = PlyrGet(ScrmGetDefenseTeam(), i);
-                unsigned short route = fn_800F06F4(0, p->mpState, 0x16, 0xFFFF);
+                unsigned short route = PlyrStateQueueFind(0, p->mpState, 0x16, 0xFFFF);
 
                 if (route != 0xFFFF && pRecord->mUnknown32[p->mIdBytes[1]] != blocked) {
-                    unsigned char ahead = fn_800FC128(p);
-                    unsigned char behind = fn_800FC1DC(p);
+                    unsigned char ahead = AssignCountBlockersRightOf(p);
+                    unsigned char behind = AssignCountBlockersLeftOf(p);
                     unsigned char slot;
                     unsigned char j;
 
@@ -8767,7 +8767,7 @@ extern "C" void fn_800FB314(void) {
     }
 }
 
-extern "C" void fn_800FB768(void) {
+extern "C" void AssignCoverTickSortSlots(void) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
 
     if (!(pRecord->mUnknown2 & 0x8000)) {
@@ -8796,7 +8796,7 @@ extern "C" void fn_800FB768(void) {
 }
 
 extern "C" void fn_800FB824(Object_80039F5C *p, Object_80039F5C *pOther) {
-    fn_800F9440(p, pOther);
+    AssignSetCoverTarget(p, pOther);
 }
 
 extern "C" Object_80039F5C *fn_800FB844(Object_80039F5C *p) {
@@ -8885,7 +8885,7 @@ extern "C" Object_80039F5C *fn_800FB9D4(Object_80039F5C *p)
     return pResult;
 }
 
-extern "C" void fn_800FBAA8(void) {
+extern "C" void AssignCoverReset(void) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char i;
     unsigned int n;
@@ -8958,7 +8958,7 @@ extern "C" void fn_800FBB70(void) {
                     pInfo = PlayAlignGetRoute(PlayBookGetPlay((*pp)->mIdBytes[2]), (*pp)->mIdBytes[2], index);
                 }
             }
-            if (fn_800F06F4(0, pInfo, 21, 0xFFFF) != 0xFFFF) {
+            if (PlyrStateQueueFind(0, pInfo, 21, 0xFFFF) != 0xFFFF) {
                 pp++;
             }
         } else {
@@ -9049,7 +9049,7 @@ extern "C" void fn_800FBB70(void) {
     pRecord->mUnknown5 = 1;
 }
 
-extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5C *pOther) {
+extern "C" Object_80039F5C *AssignFindDefenderOnReceiver(Object_80039F5C *pTarget, Object_80039F5C *pOther) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     Object_80039F5C *pResult = 0;
     unsigned short i;
@@ -9057,7 +9057,7 @@ extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5
 
     for (i = 0; i < n; i++) {
         Object_80039F5C *p = PlyrGet(ScrmGetDefenseTeam(), i);
-        unsigned short kind = fn_800FC014(p, pOther);
+        unsigned short kind = AssignGetCoverSlot(p, pOther);
         if (kind >= 1 && kind <= 5 && PlyrGet(ScrmGetOffenseTeam(), pRecord->mUnknown8[kind - 1]) == pTarget) {
             pResult = p;
             break;
@@ -9066,7 +9066,7 @@ extern "C" Object_80039F5C *fn_800FBF74(Object_80039F5C *pTarget, Object_80039F5
     return pResult;
 }
 
-extern "C" unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther) {
+extern "C" unsigned char AssignGetCoverSlot(Object_80039F5C *p, Object_80039F5C *pOther) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char value;
 
@@ -9081,13 +9081,13 @@ extern "C" unsigned char fn_800FC014(Object_80039F5C *p, Object_80039F5C *pOther
     return value;
 }
 
-extern "C" Object_80039F5C *fn_800FC070(Object_80039F5C *p, Object_80039F5C *pOther) {
+extern "C" Object_80039F5C *AssignGetCoverReceiver(Object_80039F5C *p, Object_80039F5C *pOther) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
-    unsigned char slot = fn_800FC014(p, pOther);
+    unsigned char slot = AssignGetCoverSlot(p, pOther);
     return PlyrGet(ScrmGetOffenseTeam(), pRecord->mUnknown8[slot - 1]);
 }
 
-extern "C" unsigned char fn_800FC0C4(Object_80039F5C *p) {
+extern "C" unsigned char AssignGetReceiverSlot(Object_80039F5C *p) {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     unsigned char id = p->mIdBytes[1];
     unsigned char i;
@@ -9100,14 +9100,14 @@ extern "C" unsigned char fn_800FC0C4(Object_80039F5C *p) {
     return i;
 }
 
-extern "C" unsigned char fn_800FC128(Object_80039F5C *p) {
+extern "C" unsigned char AssignCountBlockersRightOf(Object_80039F5C *p) {
     unsigned char count = 0;
     unsigned char i = 0;
     unsigned int n = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
 
     for (; i < n; i++) {
         Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
-        if (fn_800F06F4(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
+        if (PlyrStateQueueFind(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
             && pOther->mMotion.mPos.mX > p->mMotion.mPos.mX) {
             count++;
         }
@@ -9115,14 +9115,14 @@ extern "C" unsigned char fn_800FC128(Object_80039F5C *p) {
     return count;
 }
 
-extern "C" unsigned char fn_800FC1DC(Object_80039F5C *p) {
+extern "C" unsigned char AssignCountBlockersLeftOf(Object_80039F5C *p) {
     unsigned char count = 0;
     unsigned char i = 0;
     unsigned int n = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
 
     for (; i < n; i++) {
         Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
-        if (fn_800F06F4(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
+        if (PlyrStateQueueFind(0, pOther->mpState, 22, 0xFFFF) != 0xFFFF && pOther != p
             && pOther->mMotion.mPos.mX < p->mMotion.mPos.mX) {
             count++;
         }
@@ -9411,19 +9411,19 @@ extern "C" int fn_800FCC24(Object_80039F5C *p) {
             message.mId = 6;
             message.mUnknown1[0] = pBlock->mUnknown20 >> 16;
             message.mUnknown1[1] = 1;
-            fn_800F03D8(0, p->mpState, &message, p);
+            PlyrStateQueueAppend(0, p->mpState, &message, p);
             memset(&message, 0, 4);
             message.mId = 9;
             message.mUnknown1[0] = pBlock->mUnknown33;
             message.mUnknown1[1] = 0;
             message.mUnknown1[2] = 255;
-            fn_800F03D8(0, p->mpState, &message, p);
+            PlyrStateQueueAppend(0, p->mpState, &message, p);
         } else {
             memset(&message, 0, 4);
             message.mId = 87;
             message.mUnknown1[0] = pBlock->mUnknown33;
             message.mUnknown1[1] = pBlock->mUnknown20 >> 16;
-            fn_800F03D8(0, p->mpState, &message, p);
+            PlyrStateQueueAppend(0, p->mpState, &message, p);
         }
         ScrmPlayerSendLineUp(p);
     }
@@ -9484,7 +9484,7 @@ extern "C" int fn_800FCFC0(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" void fn_800FD178(Object_80039F5C *p, Block_800FD650 *pBlock) {
+extern "C" void PlyrRunLegClampToField(Object_80039F5C *p, Block_800FD650 *pBlock) {
     float limit = ScrmGetSidelineX() - 1.0f;
     float x = fabsf(p->mMotion.mPos.mX);
     int clamped = 0;
@@ -9512,7 +9512,7 @@ extern "C" void fn_800FD178(Object_80039F5C *p, Block_800FD650 *pBlock) {
     }
 }
 
-extern "C" int fn_800FD2AC(Object_80039F5C *p) {
+extern "C" int PlyrRunLegEnter(Object_80039F5C *p) {
     Vector_80039F5C *pPos = &p->mMotion.mPos;
     Block_800FD650 *pBlock = (Block_800FD650 *)&p->mUnknown336;
     FieldPoint_t offset;
@@ -9527,14 +9527,14 @@ extern "C" int fn_800FD2AC(Object_80039F5C *p) {
     pBlock->mUnknown0 = pPos->mX + offset.mX;
     pBlock->mUnknown4 = pPos->mY + offset.mY;
     if ((unsigned int)(fn_800AD9B4() - 2) <= 1) {
-        fn_800FD178(p, pBlock);
+        PlyrRunLegClampToField(p, pBlock);
     }
     return 0;
 }
 
-extern "C" int fn_800FD3F0(Object_80039F5C *p) {
+extern "C" int PlyrRunLegExit(Object_80039F5C *p) {
     if (p) {
-        fn_800FD724(p);
+        PlyrRunLegSaveRemaining(p);
     }
     return 1;
 }
@@ -9552,7 +9552,7 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
         FieldPoint_t delta;
         FieldPoint_t direction;
 
-        fn_800FD178(p, pBlock);
+        PlyrRunLegClampToField(p, pBlock);
         if (!PlayerActionAnimIsPassReady(p)) {
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = pBlock->mUnknown16;
@@ -9587,7 +9587,7 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" int fn_800FD580(Object_80039F5C *p) {
+extern "C" int PlyrRunLegSteer(Object_80039F5C *p) {
     int result = 0;
     Block_800FD650 *pBlock = (Block_800FD650 *)&p->mUnknown336;
     Vector_80039F5C *pPos = &p->mMotion.mPos;
@@ -9610,7 +9610,7 @@ extern "C" int fn_800FD580(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" int fn_800FD650(Object_80039F5C *p, int mode) {
+extern "C" int PlyrRunLegNotify(Object_80039F5C *p, int mode) {
     Block_800FD650 *pBlock = (Block_800FD650 *)&p->mUnknown336;
 
     if (mode == 1) {
@@ -9621,7 +9621,7 @@ extern "C" int fn_800FD650(Object_80039F5C *p, int mode) {
     return 0;
 }
 
-extern "C" void fn_800FD68C(Message_800F01CC *pMessage, Vector_80039F5C *pFrom, FieldPoint_t *pTo) {
+extern "C" void PlyrRunLegEncode(Message_800F01CC *pMessage, Vector_80039F5C *pFrom, FieldPoint_t *pTo) {
     FieldPoint_t delta;
 
     Vec2Sub(&delta, pTo, pFrom);
@@ -9629,12 +9629,12 @@ extern "C" void fn_800FD68C(Message_800F01CC *pMessage, Vector_80039F5C *pFrom, 
     pMessage->mUnknown1[1] = MathArcTan2(delta.mY, delta.mX) >> 17;
 }
 
-extern "C" void fn_800FD708(State_80039F5C *pState)
+extern "C" void PlyrRunLegMirrorMessage(State_80039F5C *pState)
 {
     pState->mUnknown2 = ((0x800000 - (pState->mUnknown2 << 17)) & 0xFFFFFF) >> 17;
 }
 
-extern "C" void fn_800FD724(Object_80039F5C *p)
+extern "C" void PlyrRunLegSaveRemaining(Object_80039F5C *p)
 {
     if (p && (p->mpState->mId == 3 || p->mpState->mId == 19)) {
         Block_800FD650 *pBlock = (Block_800FD650 *)&p->mUnknown336;
@@ -9649,7 +9649,7 @@ extern "C" void fn_800FD724(Object_80039F5C *p)
     }
 }
 
-extern "C" int fn_800FD7D0(Object_80039F5C *p)
+extern "C" int AssignGetFormationAngle(Object_80039F5C *p)
 {
     PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
     PlayBookPosition_t *pEntry = &pTeam->mUnknown8.mUnknown84[0][p->mIdBytes[1]];
@@ -9689,7 +9689,7 @@ extern "C" int fn_800FD828(Object_80039F5C *p)
     return changed;
 }
 
-extern "C" void fn_800FD978(Object_80039F5C *p)
+extern "C" void PlyrLineUpStartMove(Object_80039F5C *p)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
     FieldPoint_t point;
@@ -9699,7 +9699,7 @@ extern "C" void fn_800FD978(Object_80039F5C *p)
 
     ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     fn_800FE03C(p, &point);
-    angle = fn_800FD7D0(p);
+    angle = AssignGetFormationAngle(p);
     state = p->mUnknown2914;
     if (fn_800AD9B4() == 2 && state == 0 && p->mMotion.mPos.mY < point.mY - 2.0f) {
         value = lbl_803EAE64;
@@ -9708,20 +9708,20 @@ extern "C" void fn_800FD978(Object_80039F5C *p)
     }
     fn_800FF598(pState, p, &point, angle, value);
     if (fn_800C0658() == 0) {
-        fn_800FF6D8(p);
+        PlyrSnapToMovePoint(p);
     }
     DivotSkipNextSteps(p);
     PhysPushObjects(&p->mMotion, 1.25f);
 }
 
-extern "C" int fn_800FDA58(Object_80039F5C *p)
+extern "C" int PlyrLineUpEnter(Object_80039F5C *p)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
 
     pState->mUnknown48 = 0;
     pState->mUnknown52 = 0;
     pState->mUnknown53 = 0;
-    fn_800FD978(p);
+    PlyrLineUpStartMove(p);
     if (fn_800FD828(p) != 0) {
         pState->mUnknown48 = 1;
     } else {
@@ -9748,7 +9748,7 @@ extern "C" int fn_800FDAC8(Object_80039F5C *p)
     case 1:
         p->mFlags &= ~0x40000;
         if (p->mFlags & 4) {
-            fn_800FD978(p);
+            PlyrLineUpStartMove(p);
             pState->mUnknown0 = 0;
             pState->mUnknown48 = 2;
         }
@@ -9760,10 +9760,10 @@ extern "C" int fn_800FDAC8(Object_80039F5C *p)
         int flag;
 
         target = pState->mUnknown8;
-        index = fn_800F06F4(0, p->mpState, 6, 0xFFFF);
+        index = PlyrStateQueueFind(0, p->mpState, 6, 0xFFFF);
         distance = Vec2Distance(&target, &p->mMotion.mPos);
         if (index == 0xFFFF) {
-            index = fn_800F06F4(0, p->mpState, 87, 0xFFFF);
+            index = PlyrStateQueueFind(0, p->mpState, 87, 0xFFFF);
             if (index != 0xFFFF) {
                 angle = p->mpState[index].mUnknown2 << 16;
             } else {
@@ -9858,7 +9858,7 @@ extern "C" int fn_800FDAC8(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_800FDFD8(Object_80039F5C *p)
+extern "C" int PlyrLineUpInput(Object_80039F5C *p)
 {
     Input_800B6D34 input;
 
@@ -9958,13 +9958,13 @@ extern "C" void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut)
     pOut->mY = CLAMP(pOut->mY, 1.0f - ScrmGetEndLineY(), ScrmGetEndLineY() - 1.0f);
 }
 
-extern "C" void fn_800FE41C(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut)
+extern "C" void AssignAvoidGetPosition(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut)
 {
     pOut->mX = p->mMotion.mPos.mX;
     pOut->mY = p->mMotion.mPos.mY;
 }
 
-extern "C" void fn_800FE430(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut)
+extern "C" void AssignAvoidGetVelocity(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pOut)
 {
     pOut->mX = p->mMotion.mUnknown40;
     pOut->mY = p->mMotion.mUnknown44;
@@ -10019,13 +10019,13 @@ void fn_800FE564(Object_80039F5C *p, Object_80039F5C *other, Object_80039F5C *ta
     float t;
     float distance;
 
-    fn_800FE41C(p, other, &a);
-    fn_800FE41C(other, p, &b);
+    AssignAvoidGetPosition(p, other, &a);
+    AssignAvoidGetPosition(other, p, &b);
     state = (State_800FDA58 *)&p->mUnknown336;
     if (Vec2Distance(&a, &b) >= limit) {
         return;
     }
-    fn_800FE430(p, target, &av);
+    AssignAvoidGetVelocity(p, target, &av);
     bv.mX = other->mMotion.mUnknown40;
     bv.mY = other->mMotion.mUnknown44;
     if (p->mpState->mId == 7) {
@@ -10101,7 +10101,7 @@ void fn_800FE564(Object_80039F5C *p, Object_80039F5C *other, Object_80039F5C *ta
 }
 
 extern "C" {
-void fn_800FE910(Object_80039F5C *p, FieldPoint_t *point, float *value, float *distance, float *time)
+void AssignAvoidGetGoalDistTime(Object_80039F5C *p, FieldPoint_t *point, float *value, float *distance, float *time)
 {
     *distance = Vec2Distance(point, &p->mMotion.mPos);
     *distance = *distance > 15.0f ? 15.0f : *distance;
@@ -10127,7 +10127,7 @@ void AssignRescanAvoidance(Object_80039F5C *p, FieldPoint_t *point, float *speed
         return;
     }
     direction = &s->mUnknown32;
-    fn_800FE910(p, point, speed, &distance, &time);
+    AssignAvoidGetGoalDistTime(p, point, speed, &distance, &time);
     s->mUnknown0 = lbl_803EAE76;
     s->mUnknown40 = 180.0f;
     s->mUnknown44 = 1000.0f;
@@ -10182,7 +10182,7 @@ void fn_800FEB60(Object_80039F5C *p, FieldPoint_t *point, float *speed)
     int turn;
     float scale;
 
-    fn_800FE910(p, point, speed, &distance, &time);
+    AssignAvoidGetGoalDistTime(p, point, speed, &distance, &time);
     s = (State_800FDA58 *)&p->mUnknown336;
     if (s->mUnknown40 >= time) {
         return;
@@ -10278,7 +10278,7 @@ float fn_800FEDBC(State_800FDA58 *s, Object_80039F5C *p, float distance)
 }
 
 extern "C" {
-int fn_800FEFD4(Object_80039F5C *p)
+int PlyrGotoPointEnter(Object_80039F5C *p)
 {
     FieldPoint_t point;
     point.mX=(float)(signed char)p->mpState->mUnknown1*0.25f;
@@ -10420,7 +10420,7 @@ int fn_800FF094(Object_80039F5C *p)
 }
 }
 
-extern "C" int fn_800FF538(Object_80039F5C *p, int a)
+extern "C" int PlyrMoveToPointNotify(Object_80039F5C *p, int a)
 {
     State_800FDA58 *pState = (State_800FDA58 *)&p->mUnknown336;
 
@@ -10477,7 +10477,7 @@ void fn_800FF598(State_800FDA58 *s, Object_80039F5C *p, FieldPoint_t *point, int
 }
 
 extern "C" {
-void fn_800FF6D8(Object_80039F5C *p)
+void PlyrSnapToMovePoint(Object_80039F5C *p)
 {
     State_800FDA58 *s=(State_800FDA58 *)&p->mUnknown336;
     Object_800B26B0 *motion = &p->mMotion;
@@ -10590,7 +10590,7 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
                 result = 0;
                 memset(&message, 0, 4);
                 message.mId = 33;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
         }
         break;
@@ -10603,7 +10603,7 @@ int fn_800FFA10(Object_80039F5C *p, Object_80039F5C *other)
                 fn_8010CEB8(p, 9);
             } else {
                 message.mId = 33;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
             result = 0;
         }
@@ -10716,7 +10716,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
         if (p == pOther) {
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 1;
         }
         if (fn_800FFA10(p, pOther) != 0) {
@@ -10903,8 +10903,8 @@ int fn_80100370(Ball_t *ball, Object_80039F5C *p, float value, Vector_80039F5C *
     case 58:
         break;
     default:
-        if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 20, 0xFFFF) != 0xFFFF) {
-            unsigned int index = fn_800F06F4(0, queue, 21, 0xFFFF);
+        if (PlyrStateQueueFind(0, queue, 19, 0xFFFF) != 0xFFFF || PlyrStateQueueFind(0, queue, 20, 0xFFFF) != 0xFFFF) {
+            unsigned int index = PlyrStateQueueFind(0, queue, 21, 0xFFFF);
 
             if (index != 0xFFFF && index > 1) {
                 while (queue[index].mId != 19 && queue[index].mId != 20 && queue[index].mId != 51) {
@@ -10973,7 +10973,7 @@ void fn_801007A4(Ball_t *ball, Object_80039F5C *p, Object_80039F5C *other, float
             }
             break;
         case 51:
-            if (fn_800F06F4(0, state, 19, 0xFFFF) != 0xFFFF && other->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
+            if (PlyrStateQueueFind(0, state, 19, 0xFFFF) != 0xFFFF && other->mMotion.mPos.mY >= p->mMotion.mPos.mY) {
                 pos.mY += 2.5f;
                 speed = PlyrMoveGetRatedSpeed(other, 1.0f, 1.0f);
                 Vec2FromAngle((FieldPoint_t *)&velocity, motion->mUnknown32, speed);
@@ -11212,7 +11212,7 @@ void fn_80101130(Object_80039F5C *p, Object_80039F5C *other, unsigned short *out
 }
 
 extern "C" {
-void fn_80101408(Object_80039F5C *p,FieldPoint_t *point,int *angle)
+void AssignPassGetSidelinePoint(Object_80039F5C *p,FieldPoint_t *point,int *angle)
 {
     if(point && angle) {
         point->mX=ScrmGetSidelineX()+14.0f;
@@ -11225,7 +11225,7 @@ void fn_80101408(Object_80039F5C *p,FieldPoint_t *point,int *angle)
 }
 
 extern "C" {
-void fn_801014C8(Object_80039F5C *p,FieldPoint_t *point,int *angle)
+void AssignPassGetEndZonePoint(Object_80039F5C *p,FieldPoint_t *point,int *angle)
 {
     if(point && angle) {
         FieldPoint_t target;target.mX=0.0f;
@@ -11271,7 +11271,7 @@ void fn_80101568(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, i
 }
 
 extern "C" {
-void fn_801016A4(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, int *angle)
+void AssignPassGetFacingTarget(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, int *angle)
 {
     if (!p || !kind || !point || !angle) {
         return;
@@ -11284,10 +11284,10 @@ void fn_801016A4(Object_80039F5C *p, unsigned char *kind, FieldPoint_t *point, i
         *angle = 0;
         break;
     case 3:
-        fn_80101408(p, point, angle);
+        AssignPassGetSidelinePoint(p, point, angle);
         break;
     case 8:
-        fn_801014C8(p, point, angle);
+        AssignPassGetEndZonePoint(p, point, angle);
         break;
     case 0:
     case 1:
@@ -11420,7 +11420,7 @@ extern "C" int fn_801018B4(Object_80039F5C *p, List_801018B4 *pList, int a, int 
     return bestIndex;
 }
 
-extern "C" void fn_80101AE0(Object_80039F5C *p, float *pOut)
+extern "C" void AssignGetPassAccuracy(Object_80039F5C *p, float *pOut)
 {
     if (p && pOut) {
         short rating = p->mRatings[6];
@@ -11719,14 +11719,14 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
     message.mUnknown1[1] = b;
     message.mUnknown1[2] = c;
     if (fn_801486A0() == 1 && p->mpState->mId == 51) {
-        fn_800F01CC(0, p->mpState, &message, p);
+        PlyrStateQueueInsertNext(0, p->mpState, &message, p);
         return;
     }
     switch (kind) {
     case 4: {
         Record_800B15FC *pRecord;
 
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         pRecord = fn_800B15FC();
         fn_8009BD2C(p, &pRecord->mUnknown0);
         pRecord->mUnknownC = p->mMotion.mPos.mX;
@@ -11736,15 +11736,15 @@ extern "C" void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d)
         break;
     }
     case 5:
-        fn_800F05E4(0, p->mpState, &message, p);
+        PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         break;
     default:
         StyleTrackerSetStylePassPending(PlayerMoveGetKind(p));
         CamGameSetModeAll(3);
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         memset(&message, 0, 4);
         message.mId = 33;
-        fn_800F01CC(0, p->mpState, &message, p);
+        PlyrStateQueueInsertNext(0, p->mpState, &message, p);
         break;
     }
 }
@@ -11875,7 +11875,7 @@ extern "C" int PlayerPassAnimFacingCallback(List_801018B4_80102A78 *pList, unsig
         FieldPoint_t point;
         int index;
 
-        fn_801016A4(p, &kind, &point, (int *)&angle);
+        AssignPassGetFacingTarget(p, &kind, &point, (int *)&angle);
         fn_8010176C(p, kind, &point);
         index = fn_801018B4(p, (List_801018B4 *)pList, 0, angle, &delta);
         if (index == -1) {
@@ -12263,7 +12263,7 @@ extern "C" int fn_80103CB0(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_80103D6C(Object_80039F5C *p)
+extern "C" int AssignIsPassTarget(Object_80039F5C *p)
 {
     int result = 0;
     Object_80039F5C *pOther = BallGetCurrentHolder();
@@ -12293,13 +12293,13 @@ extern "C" float AssignGetPassSpeed(Object_80039F5C *p, Object_80039F5C *pOther,
     MathArcTan2(delta.mY, delta.mX);
     *pCount = *pCount < 5 ? 5 : (*pCount > 20 ? 20 : *pCount);
     spread = (*pCount - 5.0f) * scale * (1.0f / 15.0f);
-    fn_80101AE0(p, &factor);
+    AssignGetPassAccuracy(p, &factor);
     base = (lbl_803EAEB8 - distance) * (lbl_803EAEB8 - distance) / (lbl_803EAEB8 * lbl_803EAEB8)
         * (lbl_803EAE94 - lbl_803EAE98) + lbl_803EAE98;
     result = spread * (factor * (lbl_803EAE8C - base)) + base;
     result *= 1.1f;
     result *= gFrameTimeScale;
-    if ((p->mFlags & 0x4000) && fn_8011E188() < lbl_803EAE9C && result > lbl_803EAE90) {
+    if ((p->mFlags & 0x4000) && AssignEngageSysGetFrames() < lbl_803EAE9C && result > lbl_803EAE90) {
         result = lbl_803EAE90;
     }
     return result;
@@ -12505,7 +12505,7 @@ extern "C" int fn_801047C8(void)
     return result;
 }
 
-extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t *pBall, Vector_80039F5C *pTarget)
+extern "C" void AssignClampTargetBehindBall(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t *pBall, Vector_80039F5C *pTarget)
 {
     Vector_80039F5C ball;
     int clamp;
@@ -12523,7 +12523,7 @@ extern "C" void fn_80104814(Object_80039F5C *p, Object_80039F5C *pOther, Ball_t 
     }
 }
 
-extern "C" void fn_801048B4(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *pTarget)
+extern "C" void AssignClampTargetInsideSideline(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *pTarget)
 {
     Vector_80039F5C ball;
     float over;
@@ -12542,7 +12542,7 @@ extern "C" void fn_801048B4(Object_80039F5C *p, Ball_t *pBall, Vector_80039F5C *
     }
 }
 
-extern "C" void fn_80104944(Object_80039F5C *p, Vector_80039F5C *pOut) {
+extern "C" void AssignScatterByRating(Object_80039F5C *p, Vector_80039F5C *pOut) {
     float rating = p->mRatings[6] / 255.0f;
     float range = (1.0f - rating * 0.5f) * 2.0f;
 
@@ -12570,11 +12570,11 @@ extern "C" void fn_80104A08(Object_80039F5C *p, float scale, int angle, FieldPoi
     }
 }
 
-extern "C" void fn_80104B24(Vector_80039F5C *p) {
+extern "C" void AssignNudgeUpfield(Vector_80039F5C *p) {
     p->mY += 1.0f;
 }
 
-extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut) {
+extern "C" void AssignGetLeadVelocity(Object_80039F5C *p, Vector_80039F5C *pOut) {
     State_80039F5C *pState = p->mpState;
     float speed;
 
@@ -12598,10 +12598,10 @@ extern "C" void fn_80104B3C(Object_80039F5C *p, Vector_80039F5C *pOut) {
     pOut->mZ = 0.0f;
 }
 
-extern "C" void fn_80104C3C(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
+extern "C" void AssignPredictPosition(Object_80039F5C *p, Vector_80039F5C *pOut, float scale) {
     Vector_80039F5C v;
 
-    fn_80104B3C(p, &v);
+    AssignGetLeadVelocity(p, &v);
     Vec3Scale(pOut, &v, scale);
     Vec3Add(pOut, pOut, &p->mMotion.mPos);
 }
@@ -12629,7 +12629,7 @@ extern "C" float fn_80104C9C(Object_80039F5C *p, Object_80039F5C *pOther)
     if (time < 0.06f) {
         time = 0.06f;
     }
-    fn_80104C3C(pOther, &ahead, count);
+    AssignPredictPosition(pOther, &ahead, count);
     gain = (Vec2Distance(&ahead, pPos) - Vec2Distance(pOtherPos, pPos)) / count;
     return time < time + gain ? time + gain : time;
 }
@@ -12665,9 +12665,9 @@ extern "C" void fn_80104D98(Object_80039F5C *p)
             fn_80105168(6, pBall, p, pOther, fn_80104C9C(p, pOther), &target, 0);
         }
         if (p->mpState->mId == 91 && p->mMotion.mPos.mY < goal.mY) {
-            fn_80104B24(&target);
+            AssignNudgeUpfield(&target);
         }
-        fn_80104814(p, pOther, BallGetCurrent(), &target);
+        AssignClampTargetBehindBall(p, pOther, BallGetCurrent(), &target);
         Vec2Sub(&dir, &target, &p->mMotion.mPos);
         p->mUnknown1008.mUnknown1 = (int)(dir.mX * 10.0f);
         p->mUnknown1008.mUnknown2 = (int)(dir.mY * 10.0f);
@@ -12740,7 +12740,7 @@ extern "C" void fn_80104D98(Object_80039F5C *p)
     p->mFlags &= ~4;
 }
 
-extern "C" float fn_801050DC(Ball_t *pBall, Vector_80039F5C *pTarget, float speed)
+extern "C" float AssignGetBallTimeToPoint(Ball_t *pBall, Vector_80039F5C *pTarget, float speed)
 {
     Vector_80039F5C delta;
     float time;
@@ -12780,7 +12780,7 @@ extern "C" void fn_80105168(int mode, Ball_t *pBall, Object_80039F5C *p, Object_
     }
     Vec3Sub(&delta, &ball, &hand);
     distance = Vec2Magnitude(&delta);
-    fn_80104B3C(pOther, &velocity);
+    AssignGetLeadVelocity(pOther, &velocity);
     runSpeed = Vec3Magnitude(&velocity);
     angle = MathArcTan2(velocity.mY, velocity.mX);
     angle = (angle - MathArcTan2(delta.mY, delta.mX)) & 0xFFFFFF;
@@ -12788,9 +12788,9 @@ extern "C" void fn_80105168(int mode, Ball_t *pBall, Object_80039F5C *p, Object_
     if (time <= 0.0f || time > 120.0f) {
         time = 2.0f;
     }
-    fn_80104C3C(pOther, pTarget, time);
+    AssignPredictPosition(pOther, pTarget, time);
     pTarget->mZ = hand.mZ;
-    fn_801048B4(p, pBall, pTarget);
+    AssignClampTargetInsideSideline(p, pBall, pTarget);
     pTarget->mY = pTarget->mY >= pOther->mMotion.mPos.mY ? pTarget->mY : pOther->mMotion.mPos.mY;
 }
 
@@ -12939,7 +12939,7 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
     if (p->mpState->mUnknown2 == 9 || p->mpState->mUnknown2 == 11) {
         StyleTrackerBeginPitch(PlayerMoveGetKind(p) != 0, p);
     }
-    fn_80106678(pRecord, pTarget, kind, p->mpState->mUnknown2);
+    AssignSetPassRecord(pRecord, pTarget, kind, p->mpState->mUnknown2);
     pState->mUnknown0 = 2;
     pState->mUnknown1 = 0;
     p->mUnknown512.mUnknown14 = 0;
@@ -12957,15 +12957,15 @@ extern "C" int fn_80105898(Object_80039F5C *p) {
             if (!fn_80105E90(p, pTarget, pRecord->mUnknown4)) {
                 memset(&message, 0, 4);
                 message.mId = 1;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
         }
     } else if (p->mpState[1].mId == 31) {
-        fn_8011E1BC(p, 0, 0, 1);
-        fn_8011E3EC(p, 1);
+        AssignEngageStart(p, 0, 0, 1);
+        AssignEngageSetMode(p, 1);
     } else if (p->mpState[1].mId == 33) {
-        fn_8011E1BC(p, 0, 0, 1);
-        fn_8011E3EC(p, 2);
+        AssignEngageStart(p, 0, 0, 1);
+        AssignEngageSetMode(p, 2);
     }
     if (pRecord->mUnknown4 == 6 || pRecord->mUnknown4 == 7) {
         fn_80104D98(p);
@@ -13049,7 +13049,7 @@ extern "C" int fn_80105AF4(Object_80039F5C *p) {
     return result;
 }
 
-extern "C" void fn_80105DF0(Message_800F01CC *pMessage) {
+extern "C" void PitchMirrorMessage(Message_800F01CC *pMessage) {
     PlayBookFormation_t *pObject;
     unsigned int count;
     unsigned char i;
@@ -13143,7 +13143,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
         BallReleaseStill(pBall, 2, 0);
         fn_8010D80C(pTarget, &target);
         speed = fn_8010D82C(pTarget);
-        speed = fn_801050DC(pBall, &target, speed);
+        speed = AssignGetBallTimeToPoint(pBall, &target, speed);
         if (fn_8011F32C()) {
             BallLaunchToTarget(pBall, &target, 2, speed, 0.0f, 1.0f);
         } else {
@@ -13160,16 +13160,16 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
         fn_80105168(pRecord->mUnknown5, pBall, p, pTarget, speed, &target, 0);
         if (pRecord->mUnknown4 == 9) {
             if (p->mUnknown2914 == 0) {
-                fn_80104B24(&target);
+                AssignNudgeUpfield(&target);
             } else {
                 fn_800A5A8C(6, p, p);
             }
         }
         if (pRecord->mUnknown4 == 9 || pRecord->mUnknown4 == 11) {
-            fn_80104944(p, &target);
+            AssignScatterByRating(p, &target);
             fn_80104A08(p, pRecord->mUnknown8, pRecord->mUnknown12, (FieldPoint_t *)&target, &speed);
         }
-        fn_80104814(p, pTarget, pBall, &target);
+        AssignClampTargetBehindBall(p, pTarget, pBall, &target);
         BallLaunchToTarget(pBall, &target, 3, speed, 1.0f, 4.0f);
         BallSetTarget(pBall, pTarget);
         BallGetVelocity(pBall, &velocity);
@@ -13195,7 +13195,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall) {
     }
 }
 
-extern "C" int fn_801064A4(Object_80039F5C *p, int a) {
+extern "C" int PitchStart(Object_80039F5C *p, int a) {
     int result = 0;
     Object_80039F5C *pTarget = fn_80105384(p, 1, 0);
 
@@ -13212,18 +13212,18 @@ extern "C" int fn_801064A4(Object_80039F5C *p, int a) {
         PlayerMoveBegin(p, a, 25);
         message.mUnknown1[0] = pTarget->mIdBytes[1];
         message.mUnknown1[1] = 11;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         fn_8010CEB8(pTarget, 11);
     }
     return result;
 }
 
-extern "C" int fn_80106580(Object_80039F5C *p, int a) {
+extern "C" int PitchStartFromAction(Object_80039F5C *p, int a) {
     int result = 0;
     Object_80039F5C *pTarget = fn_80105384(p, a, 0);
 
     if (pTarget != 0 && fn_80105E90(p, pTarget, 11) && fn_80106618(p)) {
-        fn_80106678(fn_8011F518(), pTarget, 6, 11);
+        AssignSetPassRecord(fn_8011F518(), pTarget, 6, 11);
         fn_8010CEB8(pTarget, 11);
         StyleTrackerBeginPitch(0, p);
         result = 1;
@@ -13251,7 +13251,7 @@ extern "C" int fn_80106618(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b) {
+extern "C" void AssignSetPassRecord(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b) {
     fn_8009BD2C(p, &pRecord->mUnknown0);
     pRecord->mUnknown4 = b;
     pRecord->mUnknown5 = a;
@@ -13278,7 +13278,7 @@ extern "C" int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kin
     return result;
 }
 
-extern "C" int fn_80106794(Object_80039F5C *p) {
+extern "C" int PitchExit(Object_80039F5C *p) {
     if (BallFindHeldBy(p) == BallGetCurrent()) {
         BallSetCurrentTarget(0);
     }
@@ -13680,7 +13680,7 @@ extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo) {
     }
 }
 
-extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index) {
+extern "C" void PlyrPlayBallGetBallInfo(Points_800F3A6C *pInfo, int index) {
     pInfo->mpUnknown0 = BallGet(index);
     BallGetLandingPoint(pInfo->mpUnknown0, &pInfo->mUnknown4);
     BallSolveFallToHeight(pInfo->mpUnknown0, 1.5f, &pInfo->mUnknown48, (Vector_80039F5C *)&pInfo->mUnknown40);
@@ -13688,7 +13688,7 @@ extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index) {
     BallGetPosition(pInfo->mpUnknown0, &pInfo->mUnknown16);
 }
 
-extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn) {
+extern "C" void PlyrPlayBallGetGeometry(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn) {
     FieldPoint_t delta;
 
     Vec2Sub(&pOut->mUnknown0, &pIn->mUnknown16, &pB->mMotion.mPos);
@@ -14246,7 +14246,7 @@ extern "C" void fn_80108DF8(Object_80039F5C *p, Points_800F3A6C *pInfo, int quic
     }
 }
 
-extern "C" int fn_80109150(Object_80039F5C *p) {
+extern "C" int PlyrPlayBallEnter(Object_80039F5C *p) {
     Block_80109150 *pBlock = (Block_80109150 *)&p->mUnknown336;
 
     memset(pBlock, 0, 88);
@@ -14280,17 +14280,17 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
     Points_800F3A6C info;
     int result = 0;
 
-    fn_80107680(&info, pBlock->mUnknown64);
+    PlyrPlayBallGetBallInfo(&info, pBlock->mUnknown64);
     if (BallStateGet(info.mpUnknown0, 0) != 4) {
         Message_800F01CC message;
 
         pBlock->mUnknown65 = 0;
         memset(&message, 0, 4);
         message.mId = 2;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
-    if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF && (float)fn_8011E188() < lbl_803EAEF8) {
+    if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF && (float)AssignEngageSysGetFrames() < lbl_803EAEF8) {
         pBlock->mUnknown58 = 0;
     }
     if (!(p->mFlags & 0x4000)) {
@@ -14333,7 +14333,7 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
             pOther = BallGetTarget(info.mpUnknown0);
             fn_80106A60(p);
             if (pOther != 0) {
-                fn_801076F0(p, pOther, &res, (Input_801076F0 *)&info);
+                PlyrPlayBallGetGeometry(p, pOther, &res, (Input_801076F0 *)&info);
                 fn_801077D8(p, pOther, (Block_800F4A74_801077D8 *)pBlock, (Info_800F3A6C *)&res, &info);
             }
             AssignBlockUpdatePassCoverage(p, (Block_800F4A74_80104C9C *)pBlock);
@@ -14449,7 +14449,7 @@ extern "C" void fn_801096D4(Object_80039F5C *p) {
     }
 }
 
-extern "C" int fn_80109968(Object_80039F5C *p, FieldPoint_t *pOut) {
+extern "C" int AssignIsNearlyStill(Object_80039F5C *p, FieldPoint_t *pOut) {
     return p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.07f;
 }
 
@@ -14531,7 +14531,7 @@ extern "C" int fn_80109A1C(Object_80039F5C *p, FieldPoint_t *pOut) {
     return result;
 }
 
-extern "C" int fn_80109C7C(Object_80039F5C *p) {
+extern "C" int AssignIsRunning(Object_80039F5C *p) {
     return p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.4f;
 }
 
@@ -14559,11 +14559,11 @@ extern "C" int fn_80109D70(Object_80039F5C *p, FieldPoint_t *pOut) {
 
     if (BallFindHeldBy(p)) {
         result = 8;
-    } else if (fn_80109C7C(p)) {
+    } else if (AssignIsRunning(p)) {
         result = 1;
     } else if (fn_80109A1C(p, pOut)) {
         result = 3;
-    } else if (fn_80109968(p, pOut)) {
+    } else if (AssignIsNearlyStill(p, pOut)) {
         result = 5;
     } else if (p->mMotion.mUnknown28 > gPlyrMoveFwdSpeed * 0.07f) {
         result = 2;
@@ -14584,7 +14584,7 @@ extern "C" int fn_80109E48(Object_80039F5C *p, int kind, int *pOut) {
     case 8:
         memset(&message, 0, 4);
         message.mId = 49;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         if (p->mpState->mId == 49) {
             result = 1;
             *pOut = 2;
@@ -14676,7 +14676,7 @@ extern "C" int fn_8010A0A0(Object_80039F5C *p, int index) {
     return 0;
 }
 
-extern "C" void fn_8010A1C4(int team) {
+extern "C" void AssignClearTeamMsg62(int team) {
     int i;
     int count = ScrmGetTeamPlayerCount(team);
 
@@ -14685,9 +14685,9 @@ extern "C" void fn_8010A1C4(int team) {
     }
 }
 
-extern "C" void fn_8010A220(void) {
-    fn_8010A1C4(ScrmGetOffenseTeam());
-    fn_8010A1C4(ScrmGetDefenseTeam());
+extern "C" void AssignClearAllMsg62(void) {
+    AssignClearTeamMsg62(ScrmGetOffenseTeam());
+    AssignClearTeamMsg62(ScrmGetDefenseTeam());
     lbl_803EAF10 = 0;
 }
 
@@ -15372,7 +15372,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
         message.mId = 62;
         message.mUnknown1[0] = 0;
         message.mUnknown1[1] = 0;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (pBlock->mUnknown1 > 0) {
@@ -15399,7 +15399,7 @@ extern "C" int fn_8010BA90(Object_80039F5C *p) {
             message.mId = 62;
             message.mUnknown1[0] = 0;
             message.mUnknown1[1] = 0;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             if (pBlock->mUnknown3 != 255) {
                 lbl_802DABBC[pBlock->mUnknown3] = 0;
             }
@@ -15586,7 +15586,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                                 memset(&message, 0, 4);
                                 message.mId = 2;
                                 message.mUnknown1[0] = 1;
-                                fn_800F053C(0, p->mpState, &message, p);
+                                PlyrStateQueueSet(0, p->mpState, &message, p);
                                 return 1;
                             }
                         }
@@ -15597,7 +15597,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                 memset(&message, 0, 4);
                 message.mId = 2;
                 message.mUnknown1[0] = 1;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
                 return 1;
             }
             if (((pCarrier->mFlags & 0x8000) && pState->mUnknown52 > lbl_803EAF38
@@ -15607,7 +15607,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                 memset(&message, 0, 4);
                 message.mId = 2;
                 message.mUnknown1[0] = 1;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
                 return 1;
             }
             target.mX = pCarrier->mMotion.mPos.mX + side;
@@ -15667,7 +15667,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                         memset(&message, 0, 4);
                         message.mId = 2;
                         message.mUnknown1[0] = 1;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                         return 1;
                     }
                     break;
@@ -15706,7 +15706,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                         memset(&message, 0, 4);
                         message.mId = 24;
                         message.mUnknown1[0] = 2;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                         return 1;
                     }
                     break;
@@ -15715,7 +15715,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
                     memset(&message, 0, 4);
                     message.mId = 2;
                     message.mUnknown1[0] = 1;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     return 1;
                 }
             }
@@ -15740,7 +15740,7 @@ extern "C" int fn_8010C864(Object_80039F5C *p)
     for (i = 0; i < count; i++) {
         Object_80039F5C *pOther = PlyrGet(ScrmGetOffenseTeam(), i);
 
-        if (pOther != p && fn_800F06F4(0, pOther->mpState, 26, 0xFFFF) != 0xFFFF) {
+        if (pOther != p && PlyrStateQueueFind(0, pOther->mpState, 26, 0xFFFF) != 0xFFFF) {
             found = 1;
             break;
         }
@@ -15781,7 +15781,7 @@ extern "C" void fn_8010C98C(Object_80039F5C *p) {
     }
     BallGetPosition(pBall, &pos);
     fn_8009BD60(p);
-    index = fn_800F06F4(0, p->mpState, 26, 0xFFFF);
+    index = PlyrStateQueueFind(0, p->mpState, 26, 0xFFFF);
     if (index != 0xFFFF) {
         switch (p->mpState[index].mUnknown2) {
         case 2:
@@ -15825,7 +15825,7 @@ extern "C" int fn_8010CAE8(Object_80039F5C *p)
 {
     State_8010CAE8 *pState = (State_8010CAE8 *)&p->mUnknown336;
 
-    fn_800FD2AC(p);
+    PlyrRunLegEnter(p);
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = pState->mUnknown16;
     p->mUnknown512.mUnknown4 = pState->mUnknown16;
@@ -15850,7 +15850,7 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
         } else {
             Object_80039F5C *pCarrier;
 
-            result = fn_800FD580(p);
+            result = PlyrRunLegSteer(p);
             pCarrier = BallGetCurrentHolder();
             if (pCarrier != 0 && pCarrier->mpState->mId == 18 && (p->mFlags & 0x4000)) {
                 result = 1;
@@ -15881,16 +15881,16 @@ extern "C" int fn_8010CB58(Object_80039F5C *p) {
         }
         break;
     case 2: {
-        int has18 = fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF;
-        int has26 = fn_800F06F4(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
-        int has25 = fn_800F06F4(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
+        int has18 = PlyrStateQueueFind(0, p->mpState, 18, 0xFFFF) != 0xFFFF;
+        int has26 = PlyrStateQueueFind(0, p->mpState, 26, 0xFFFF) != 0xFFFF;
+        int has25 = PlyrStateQueueFind(0, p->mpState, 25, 0xFFFF) != 0xFFFF;
 
         if (p == BallGetCurrentHolder() && !has18 && !has26 && !has25) {
             Message_800F01CC message;
 
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             p->mUnknown512.mUnknown14 = 1;
             p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
             p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
@@ -15955,7 +15955,7 @@ extern "C" void fn_8010CEB8(Object_80039F5C *p, int kind)
     message.mUnknown1[0] = 160;
     message.mUnknown1[1] = p->mMotion.mFacing >> 17;
     message.mUnknown1[2] = level < 0.0f ? 0 : (unsigned char)(level > 255.0f ? 255.0f : level);
-    fn_800F00D4(0, p->mpState, &message, p);
+    PlyrStateQueuePush(0, p->mpState, &message, p);
     if (kind == 11) {
         StyleTrackerFinishRun();
     }
@@ -15976,7 +15976,7 @@ extern "C" int fn_8010D004(Object_80039F5C *p)
     int result;
 
     if (BallGetCurrentHolder() != p) {
-        fn_800FD2AC(p);
+        PlyrRunLegEnter(p);
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown8 = pState->mUnknown16;
         p->mUnknown512.mUnknown4 = pState->mUnknown16;
@@ -16006,13 +16006,13 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
         p->mUnknown3040 = 0;
     }
     if (pCarrier == p) {
-        int id = fn_800F06F4(0, p->mpState, 0x1A, 0xFFFF);
+        int id = PlyrStateQueueFind(0, p->mpState, 0x1A, 0xFFFF);
 
-        if (id == 0xFFFF && fn_800F06F4(0, p->mpState, 0x12, 0xFFFF) == id) {
+        if (id == 0xFFFF && PlyrStateQueueFind(0, p->mpState, 0x12, 0xFFFF) == id) {
 
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
         } else {
             result = 1;
         }
@@ -16053,7 +16053,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
                         message2.mId = 0x5A;
                         message2.mUnknown1[0] = 0;
                         message2.mUnknown1[1] = 0xE0;
-                        fn_800F053C(0, p->mpState, &message2, p);
+                        PlyrStateQueueSet(0, p->mpState, &message2, p);
                         break;
                     }
                     result = 1;
@@ -16064,7 +16064,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
             }
         }
         if (result != 1) {
-            fn_800FD580(p);
+            PlyrRunLegSteer(p);
             fn_8010CFD4(p);
         }
     }
@@ -16250,7 +16250,7 @@ extern "C" int fn_8010D8F4(Object_80039F5C *p) {
                 result = 1;
                 memset(&message, 0, 4);
                 message.mId = 33;
-                fn_800F053C(0, pBlocker->mpState, &message, pBlocker);
+                PlyrStateQueueSet(0, pBlocker->mpState, &message, pBlocker);
             }
         }
     }
@@ -16522,7 +16522,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                                                          pMotion->mUnknown28, pTarget->mMotion.mUnknown28,
                                                          pTarget->mMotion.mUnknown32, distance);
                         }
-                        if (distance < 2.5f && fn_8011E188() <= 44) {
+                        if (distance < 2.5f && AssignEngageSysGetFrames() <= 44) {
                             switch (p->mUnknown2914) {
                             case 4:
                             case 5:
@@ -16541,7 +16541,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                             }
                         }
                         if (distance < limit) pOut->mSpeed = distance / limit * (1.0f - 0.72f) + 0.72f;
-                        if (fn_8011E188() <= 59 && distance > 2.0f && fn_8011F1A4() && fn_8011F4C8() > 3 && !ScrmTestPlayFlag(0) &&
+                        if (AssignEngageSysGetFrames() <= 59 && distance > 2.0f && fn_8011F1A4() && fn_8011F4C8() > 3 && !ScrmTestPlayFlag(0) &&
                             MathAngleDiff(pMotion->mFacing, 0x400000) <= 0x3FFFFF) {
                             toward.mX = fn_8011F4D4();
                             toward.mY = ScrmGetBallSpot().mY;
@@ -16604,7 +16604,7 @@ extern "C" void fn_8010E59C(Object_80039F5C *p, Object_80039F5C *pTarget, Steer_
                 } else {
                     pOut->mUnknown22 = 0;
                     if (distance < 1.75f) pOut->mSpeed = distance * 0.34285718f + 0.4f;
-                    if (fn_8011F1A4() && fn_8011F4C8() > 3 && fn_8011E188() <= 59) {
+                    if (fn_8011F1A4() && fn_8011F4C8() > 3 && AssignEngageSysGetFrames() <= 59) {
                         toward.mX = fn_8011F4D4();
                         if (fabsf(pMotion->mPos.mX) < fabsf(toward.mX) && fabsf(pMotion->mPos.mX - toward.mX) < 3.0f) {
                             toward.mY = ScrmGetBallSpot().mY;
@@ -16782,11 +16782,11 @@ extern "C" void fn_8010F1F4(Object_80039F5C *p, Object_80039F5C *pOther)
     case 7:
     case 8:
         fn_8011E240(pBlocker);
-        fn_8011E1BC(pBlocker, 0, 0, 1);
-        fn_8011E3EC(pBlocker, 2);
+        AssignEngageStart(pBlocker, 0, 0, 1);
+        AssignEngageSetMode(pBlocker, 2);
         fn_8011E240(p);
-        fn_8011E1BC(p, 0, 0, 1);
-        fn_8011E3EC(p, 2);
+        AssignEngageStart(p, 0, 0, 1);
+        AssignEngageSetMode(p, 2);
         break;
     }
 }
@@ -16836,8 +16836,8 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
     }
     if (p->mUnknown1052 != 2 ||
         (p->mUnknown1032 != 4 && p->mUnknown1032 != 7 && p->mUnknown1032 != 2 && p->mUnknown1032 != 3)) {
-        fn_8011E1BC(p, 0, 0, 1);
-        fn_8011E3EC(p, 2);
+        AssignEngageStart(p, 0, 0, 1);
+        AssignEngageSetMode(p, 2);
     }
     return 0;
 }
@@ -16855,18 +16855,18 @@ extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
     float minutes;
 
     if (p == BallGetCurrentHolder()) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         fn_8011E240(p);
         memset(&message, 0, 4);
         message.mId = 1;
         result = 1;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
     } else if (fn_8010D8F4(p)) {
         memset(&message, 0, 4);
         message.mId = 90;
         message.mUnknown1[0] = pCarrier->mMotion.mPos.mX > 0.0f ? lbl_803EAF50 : -lbl_803EAF50;
         message.mUnknown1[1] = lbl_803EAF51;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         result = 1;
     } else if (fn_8009FB60(p)) {
         result = 1;
@@ -16877,41 +16877,41 @@ extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
                 memset(&message, 0, 4);
                 message.mId = 57;
                 message.mUnknown1[0] = BallGetCurrentIndex();
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
                 // FAKEMATCH: goto the single return; with return result here cse1 emits its own li r3,0
                 goto done;
             }
         }
         if (!ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(0) && fn_8011F1CC() && !ScrmIsNotReplay() &&
             (pState->mUnknown20 == 0 || pState->mUnknown16 <= 0)) {
-            fn_8011E3EC(p, 0);
+            AssignEngageSetMode(p, 0);
             result = 0;
             fn_8011E240(p);
             memset(&message, 0, 4);
             message.mId = 31;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
         } else {
             PlyrTryQueueMsg62(p, 0, -1);
             if (ScrmIsNotReplay()) {
                 if ((pBlock->mUnknown0 != 4 && pBlock->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
-                    fn_8011E3EC(p, 0);
+                    AssignEngageSetMode(p, 0);
                     fn_8011E240(p);
                     pState->mUnknown21 = 1;
                 }
             } else if (pBlock->mUnknown0 == 0) {
                 fn_8011E240(p);
-                fn_8011E1BC(p, 0, 0, 1);
-                fn_8011E3EC(p, 2);
+                AssignEngageStart(p, 0, 0, 1);
+                AssignEngageSetMode(p, 2);
             }
             if (!(p->mFlags & 0x4000)) {
                 if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
                     if (ScrmTestPlayFlag(0)) {
-                        fn_8011E3EC(p, 0);
+                        AssignEngageSetMode(p, 0);
                         result = 1;
                         fn_8011E240(p);
                         memset(&message, 0, 4);
                         message.mId = 2;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                     } else {
                         pState->mUnknown4 = 0x400000;
                         pState->mUnknown8 = 0x400000;
@@ -16945,7 +16945,7 @@ extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
                         p->mpState->mUnknown1 = 1;
                     }
                     if (pState->mUnknown16 <= 0) {
-                        fn_8011E3EC(p, 0);
+                        AssignEngageSetMode(p, 0);
                         result = 1;
                         fn_8011E240(p);
                     }
@@ -16960,7 +16960,7 @@ done:
 
 extern "C" int fn_8010FB10(Object_80039F5C *p)
 {
-    fn_8011E3EC(p, 0);
+    AssignEngageSetMode(p, 0);
     fn_8011E240(p);
     return 1;
 }
@@ -16981,7 +16981,7 @@ extern "C" int fn_8010FB4C(Object_80039F5C *p)
             fn_800B6E68(p, &input);
             Vec2Sub(&delta, &fn_8009BCE8(&p->mUnknown1036)->mMotion.mPos, &p->mMotion.mPos);
             if (MathAngleDiff(p->mUnknown512.mUnknown4, MathArcTan2(delta.mY, delta.mX)) > 0x600000) {
-                fn_8011E3EC(p, 0);
+                AssignEngageSetMode(p, 0);
                 fn_8011E240(p);
             } else {
                 if (input.mUnknown92 & 1) {
@@ -17110,7 +17110,7 @@ extern "C" int fn_80110078(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_801100A0(Object_80039F5C *p)
+extern "C" int PlyrStateSetFlagEnter(Object_80039F5C *p)
 {
     State_80039F5C *pState = p->mpState;
 
@@ -17318,7 +17318,7 @@ extern "C" int fn_801105B0(Object_80039F5C *p)
     return angle;
 }
 
-extern "C" int fn_80110630(Key_80110630 *pA, Key_80110630 *pB)
+extern "C" int AssignMoveKeyMatches(Key_80110630 *pA, Key_80110630 *pB)
 {
     int result = pA->mUnknown0 == pB->mUnknown0;
 
@@ -17342,7 +17342,7 @@ extern "C" unsigned short fn_8011067C(Table_8010B738 *pTable, Object_80039F5C *p
 
     for (i = 0; i < pTable->mCount; i++) {
         pRecord = pTable->mEntries[i].mpRecord;
-        if (fn_80110630(&pRecord->mUnknown4, &p->mUnknown1008) && angle >= pRecord->mUnknown16 &&
+        if (AssignMoveKeyMatches(&pRecord->mUnknown4, &p->mUnknown1008) && angle >= pRecord->mUnknown16 &&
             angle <= pRecord->mUnknown20) {
             if (pFound == 0 || SyncRandGetRange(0, 100) <= 49) {
                 pFound = pRecord;
@@ -17380,7 +17380,7 @@ extern "C" unsigned short fn_8011067C(Table_8010B738 *pTable, Object_80039F5C *p
     return index;
 }
 
-extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
+extern "C" int CarrierSpinStart(Object_80039F5C *p, int a, int b, int c)
 {
     int result = 0;
     Message_800F01CC message;
@@ -17398,12 +17398,12 @@ extern "C" int fn_80110824(Object_80039F5C *p, int a, int b, int c)
         message.mId = 35;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = b;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
 
-extern "C" int fn_801108D4(Object_80039F5C *p)
+extern "C" int CarrierSpinEnter(Object_80039F5C *p)
 {
     State_801108D4 *pState = (State_801108D4 *)&p->mUnknown336;
     unsigned char kind = p->mpState->mUnknown1;
@@ -17430,7 +17430,7 @@ extern "C" int fn_801108D4(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_801109A4(Object_80039F5C *p)
+extern "C" int CarrierSpinUpdate(Object_80039F5C *p)
 {
     int result = 0;
     State_801108D4 *pState = (State_801108D4 *)&p->mUnknown336;
@@ -17476,7 +17476,7 @@ extern "C" int fn_801109A4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_80110B00(Object_80039F5C *p)
+extern "C" int CarrierSpinInput(Object_80039F5C *p)
 {
     int done = 0;
     State_801108D4 *pState = (State_801108D4 *)&p->mUnknown336;
@@ -17517,7 +17517,7 @@ extern "C" int fn_80110B00(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80110C10(Object_80039F5C *p)
+extern "C" int CarrierSpinGetFacing(Object_80039F5C *p)
 {
     unsigned short key = fn_801BE648(p->mpUnknown792);
 
@@ -17631,7 +17631,7 @@ extern "C" int fn_80110EE4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_80110FE4(Object_80039F5C *p)
+extern "C" int CarrierStiffArmCanStart(Object_80039F5C *p)
 {
     int result = 0;
 
@@ -17662,22 +17662,22 @@ extern "C" int fn_80110FE4(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_80111090(Object_80039F5C *p, int a)
+extern "C" int CarrierStiffArmStart(Object_80039F5C *p, int a)
 {
     int result = 0;
     Message_800F01CC message;
 
-    if (fn_80110FE4(p)) {
+    if (CarrierStiffArmCanStart(p)) {
         result = 1;
         memset(&message, 0, 4);
         message.mId = 43;
         message.mUnknown1[0] = a;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
 
-extern "C" int fn_80111104(Object_80039F5C *p)
+extern "C" int CarrierStiffArmEnter(Object_80039F5C *p)
 {
     State_80111104 *pState = (State_80111104 *)&p->mUnknown336;
     short value;
@@ -17703,7 +17703,7 @@ extern "C" int fn_80111104(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_801111E8(Object_80039F5C *p)
+extern "C" int CarrierStiffArmUpdate(Object_80039F5C *p)
 {
     State_80111104 *pState = (State_80111104 *)&p->mUnknown336;
 
@@ -17730,7 +17730,7 @@ extern "C" int fn_801111E8(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_801112D8(Object_80039F5C *p)
+extern "C" int CarrierStiffArmExit(Object_80039F5C *p)
 {
     p->mRatings[2] = p->mUnknown340;
     p->mUnknown512.mUnknown14 = 1;
@@ -17740,7 +17740,7 @@ extern "C" int fn_801112D8(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_80111314(Object_80039F5C *p)
+extern "C" int CarrierStiffArmInput(Object_80039F5C *p)
 {
     Input_800B6D34 input;
 
@@ -17749,7 +17749,7 @@ extern "C" int fn_80111314(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_80111354(Object_80039F5C *p)
+extern "C" void AssignTrySendKnock(Object_80039F5C *p)
 {
     switch (p->mpState->mId) {
     case 5:
@@ -17826,7 +17826,7 @@ extern "C" int fn_80111580(Object_80039F5C *p)
     return 1;
 }
 
-extern "C" int fn_801115C0(Object_80039F5C *p)
+extern "C" int CarrierTightropeIsOnLine(Object_80039F5C *p)
 {
     int result = 0;
     float limit;
@@ -17848,7 +17848,7 @@ extern "C" int fn_801115C0(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_8011165C(Object_80039F5C *p)
+extern "C" int CarrierTightropePickSide(Object_80039F5C *p)
 {
     float x = p->mMotion.mPos.mX;
 
@@ -17861,14 +17861,14 @@ extern "C" int fn_8011165C(Object_80039F5C *p)
     return 14;
 }
 
-extern "C" int fn_8011168C(Object_80039F5C *p)
+extern "C" int CarrierTightropeStart(Object_80039F5C *p)
 {
     int result = 0;
     Object_800B26B0 *pMotion = &p->mMotion;
     int angle;
     Message_800F01CC message;
 
-    if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.4f && pMotion->mUnknown44 > 0.0f && fn_801115C0(p)) {
+    if (pMotion->mUnknown28 > gPlyrMoveFwdSpeed * 0.4f && pMotion->mUnknown44 > 0.0f && CarrierTightropeIsOnLine(p)) {
         if (p->mMotion.mPos.mX > 0.0f) {
             angle = (pMotion->mUnknown32 - 0x400000) & 0xFFFFFF;
             result = angle > 0xF8E38F;
@@ -17882,28 +17882,28 @@ extern "C" int fn_8011168C(Object_80039F5C *p)
     if (result) {
         memset(&message, 0, 4);
         message.mId = 59;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
 
-extern "C" int fn_80111794(Object_80039F5C *p)
+extern "C" int CarrierTightropeEnter(Object_80039F5C *p)
 {
     State_80111794 *pState = (State_80111794 *)&p->mUnknown336;
 
-    pState->mUnknown0 = fn_8011165C(p);
+    pState->mUnknown0 = CarrierTightropePickSide(p);
     pState->mUnknown4 = 70 - p->mRatings[0] / 16;
     p->mUnknown512.mUnknown14 = 0;
     p->mUnknown512.mUnknown15 = pState->mUnknown0Bytes[3];
     return 0;
 }
 
-extern "C" int fn_801117F8(Object_80039F5C *p)
+extern "C" int CarrierTightropeUpdate(Object_80039F5C *p)
 {
     State_80111794 *pState = (State_80111794 *)&p->mUnknown336;
     int angle;
 
-    if (--pState->mUnknown4 < 0 || !fn_801115C0(p)) {
+    if (--pState->mUnknown4 < 0 || !CarrierTightropeIsOnLine(p)) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.72f;
@@ -18169,7 +18169,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
                 memset(&message, 0, 4);
                 message.mId = 24;
                 message.mUnknown1[0] = 2;
-                fn_800F053C(0, pOther->mpState, &message, pOther);
+                PlyrStateQueueSet(0, pOther->mpState, &message, pOther);
             }
         }
     }
@@ -18181,7 +18181,7 @@ extern "C" int fn_80111FBC(Object_80039F5C *p)
         memset(&message, 0, 4);
         if (BallGetHolder(pBall) == p) {
             message.mId = 1;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 1;
         }
         return 1;
@@ -18377,7 +18377,7 @@ extern "C" int fn_80112928(Object_80039F5C *p)
             memset(&message, 0, sizeof(message));
             message.mId = 23;
             message.mUnknown1[0] = BallGetIndex(pBall);
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 1;
         }
     }
@@ -18649,7 +18649,7 @@ extern "C" int fn_801133FC(Object_80039F5C *p, int a, int b)
         message.mId = 88;
         message.mUnknown1[0] = a;
         message.mUnknown1[1] = b;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
@@ -18732,7 +18732,7 @@ extern "C" int fn_80113604(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80113680(Object_80039F5C *p)
+extern "C" int PlyrHitStrikeEnter(Object_80039F5C *p)
 {
     State_80113680 *state = (State_80113680 *)&p->mUnknown336;
     Object_80039F5C *pOther;
@@ -18761,7 +18761,7 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     }
     fn_800CE674(&p->mUnknown1240);
     fn_800CE684(&p->mUnknown1240);
-    fn_8011E8D8(p);
+    AssignEngageRelease(p);
     pState = p->mpState;
     fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, (pState->mUnknown1 << 8) | pState->mUnknown2, 1.0f, p);
     p->mUnknown512.mUnknown14 = 0;
@@ -18769,7 +18769,7 @@ extern "C" int fn_80113680(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_8011380C(Object_80039F5C *p)
+extern "C" int PlyrHitStrikeUpdate(Object_80039F5C *p)
 {
     State_80113680 *state = (State_80113680 *)&p->mUnknown336;
     int result = 0;
@@ -18823,12 +18823,12 @@ extern "C" int fn_8011380C(Object_80039F5C *p)
             memset(&message, 0, sizeof(message));
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         } else {
             memset(&message, 0, sizeof(message));
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         }
     }
     if ((p->mFlags & 4) && state->mUnknown14 != 1 && state->mUnknown14 != 4) {
@@ -18880,7 +18880,7 @@ extern "C" int fn_80113BCC(Object_80039F5C *p)
 {
     int result = 0;
 
-    if (p->mpState->mId == 17 && fn_80114E7C(p) != 0) {
+    if (p->mpState->mId == 17 && PlyrHitGetOpponent(p) != 0) {
         result = 1;
     }
     return result;
@@ -18890,7 +18890,7 @@ extern "C" int fn_80113C18(Object_80039F5C *p, void *pState) {
     return 0;
 }
 
-extern "C" int fn_80113C20(Object_80039F5C *p)
+extern "C" int PlyrHitImpactEnter(Object_80039F5C *p)
 {
     State_80113C20 *state = (State_80113C20 *)&p->mUnknown336;
     unsigned short key;
@@ -19166,12 +19166,12 @@ extern "C" int PlyrHitImpactUpdate(Object_80039F5C *p)
             memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         } else {
             memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F05E4(0, p->mpState, &message, p);
+            PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         }
     }
     if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
@@ -19186,7 +19186,7 @@ extern "C" int PlyrHitImpactUpdate(Object_80039F5C *p)
     return result;
 }
 
-extern "C" int fn_801147D4(Object_80039F5C *p)
+extern "C" int PlyrHitImpactExit(Object_80039F5C *p)
 {
     State_801147D4 *state = (State_801147D4 *)&p->mUnknown336;
 
@@ -19412,7 +19412,7 @@ extern "C" int fn_80114DE0(Object_80039F5C *p)
     return p->mUnknown392 == 1;
 }
 
-extern "C" void fn_80114DF4(Object_80039F5C *p)
+extern "C" void PlyrHitImpactRelease(Object_80039F5C *p)
 {
     State_80114DF4 *state = (State_80114DF4 *)&p->mUnknown336;
     unsigned char kind = state->mUnknown56;
@@ -19428,7 +19428,7 @@ extern "C" void fn_80114DF4(Object_80039F5C *p)
     }
 }
 
-extern "C" Object_80039F5C *fn_80114E7C(Object_80039F5C *p)
+extern "C" Object_80039F5C *PlyrHitGetOpponent(Object_80039F5C *p)
 {
     Object_80039F5C *result = 0;
     unsigned char id = p->mpState->mId;
@@ -19447,7 +19447,7 @@ extern "C" Object_80039F5C *fn_80114E7C(Object_80039F5C *p)
     return result;
 }
 
-extern "C" float fn_80114EE4(Object_80039F5C *pA, Object_80039F5C *pB)
+extern "C" float PlyrHitGetPowerRatio(Object_80039F5C *pA, Object_80039F5C *pB)
 {
     float a = pA->mUnknown2904Float * lbl_803EAFA4 + pA->mRatings[2];
     float b = pB->mUnknown2904Float * lbl_803EAFA4 + pB->mRatings[5];
@@ -19461,7 +19461,7 @@ extern "C" void fn_80114F64(Object_80039F5C *p, int angle)
     State_80113C20 *state = (State_80113C20 *)&p->mUnknown336;
     float scale = lbl_803EAFA8;
     unsigned short key = fn_801BE648(p->mpUnknown792);
-    Object_80039F5C *pOpponent = fn_80114E7C(p);
+    Object_80039F5C *pOpponent = PlyrHitGetOpponent(p);
     float diff = p->mRatings[2] - pOpponent->mRatings[5];
     int delta;
     Object_80039F5C *pOther;
@@ -19777,7 +19777,7 @@ extern "C" void fn_8011569C(Object_80039F5C *p)
                     covered = 1;
                 }
             }
-            if (covered == 0 && fn_801167C4(pOther, p) != 0) {
+            if (covered == 0 && AssignZoneIsTargetCovered(pOther, p) != 0) {
                 covered = 1;
             }
             if (covered != 0) {
@@ -20097,7 +20097,7 @@ extern "C" int fn_80116410(Object_80039F5C *p, Object_80039F5C *pOther, State_80
     return result;
 }
 
-extern "C" int fn_801167C4(void *pTarget, Object_80039F5C *p)
+extern "C" int AssignZoneIsTargetCovered(void *pTarget, Object_80039F5C *p)
 {
     int found = 0;
 
@@ -20213,7 +20213,7 @@ extern "C" int fn_80116AB8(Object_80039F5C *p)
 }
 
 extern "C" {
-int fn_80116B98(Object_80039F5C *p)
+int AssignZoneEnter(Object_80039F5C *p)
 {
     Block_80116B98 *pBlock = (Block_80116B98 *)&p->mUnknown336;
 
@@ -20289,7 +20289,7 @@ int fn_80116C34(Object_80039F5C *p)
                     if (SyncRandGetRange(0, 255) < odds || IsBallAway(ball)) {
                         memset(&message, 0, 4);
                         message.mId = 2;
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                         return 1;
                     }
                 } else {
@@ -20304,7 +20304,7 @@ int fn_80116C34(Object_80039F5C *p)
                         } else {
                             message.mUnknown1[0] = 1;
                         }
-                        fn_800F053C(0, p->mpState, &message, p);
+                        PlyrStateQueueSet(0, p->mpState, &message, p);
                         return 0;
                     }
                 }
@@ -20327,7 +20327,7 @@ int fn_80116C34(Object_80039F5C *p)
 }
 }
 
-extern "C" void fn_801170A0(Record_801170A0 *p)
+extern "C" void AssignZoneMirrorMessage(Record_801170A0 *p)
 {
     unsigned char value = p->mUnknown1;
 
@@ -20406,7 +20406,7 @@ int fn_801170E8(Object_80039F5C *p)
         Message_800F01CC message;
         memset(&message, 0, 4);
         message.mId = 2;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         *lbl_803EC9F0 = 1;
     }
     return result;
@@ -20831,7 +20831,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
                 memset(&message, 0, 4);
                 message.mId = 24;
                 message.mUnknown1[0] = 2;
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
                 return 0;
             }
         }
@@ -20855,7 +20855,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_80118704(void)
+extern "C" void AssignZoneShiftInit(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC9F0, 4, 0, 0x7A736674);
     unsigned char *pData = (unsigned char *)SyncStateGetData(pHandle);
@@ -20864,17 +20864,17 @@ extern "C" void fn_80118704(void)
     SyncStateCommit(pHandle);
 }
 
-extern "C" void fn_8011875C(void)
+extern "C" void AssignZoneShiftReset(void)
 {
     *lbl_803EC9F0 = 0;
 }
 
-extern "C" void fn_8011876C(void)
+extern "C" void AssignZoneShiftShutdown(void)
 {
     lbl_803EC9F0 = 0;
 }
 
-extern "C" void fn_80118778(Record_801170A0 *p)
+extern "C" void AssignZoneUpperMirrorMessage(Record_801170A0 *p)
 {
     unsigned char value = p->mUnknown1 + 14;
 
@@ -20989,7 +20989,7 @@ extern "C" void fn_8011893C(void)
             switch (mode) {
             case 4:
                 p->mUnknown1072.mUnknown54 = 1;
-                if (fn_8011DC68(fn_801BE648(p->mpUnknown792)) != 0) {
+                if (AssignIsBlockMoveAnim(fn_801BE648(p->mpUnknown792)) != 0) {
                     p->mUnknown1064 = fn_801BE648(p->mpUnknown792);
                 } else {
                     p->mUnknown1064 = -1;
@@ -20998,7 +20998,7 @@ extern "C" void fn_8011893C(void)
             case 1:
                 pOther = 0;
                 fn_8011E240(p);
-                fn_8011E1BC(p, 0, 0, 1);
+                AssignEngageStart(p, 0, 0, 1);
                 break;
             }
         }
@@ -21094,14 +21094,14 @@ extern "C" int fn_80118B4C(Object_80039F5C *p, Pair_8011BAE0 *pPair)
             if (fn_800CE4A8(&query)) {
                 result = 1;
                 if (moves[i] == lbl_802DAC38[0] || moves[i] == lbl_802DAC38[2]) {
-                    fn_8011E1BC(p, pOther, 0, 5);
-                    fn_8011E33C(pOther, p, 5);
+                    AssignEngageStart(p, pOther, 0, 5);
+                    AssignEngageSetOpponent(pOther, p, 5);
                     if (moves[i] == lbl_802DAC38[0]) {
                         fn_801187CC(p, pOther);
                     }
                 } else {
-                    fn_8011E1BC(p, pOther, 0, 6);
-                    fn_8011E33C(pOther, p, 6);
+                    AssignEngageStart(p, pOther, 0, 6);
+                    AssignEngageSetOpponent(pOther, p, 6);
                 }
                 fn_800CA5CC(p, 8, 1);
                 if (fn_800B65A0(pOther->mIdBytes[2]) != 255 || !fn_8011F1CC()) {
@@ -21156,7 +21156,7 @@ extern "C" void fn_80119020(void)
                 case 8:
                 case 9:
                 case 24:
-                    if (pBlock->mUnknown105 || fn_8011E188() > 179) {
+                    if (pBlock->mUnknown105 || AssignEngageSysGetFrames() > 179) {
                         diff /= 4;
                     } else {
                         diff = 0;
@@ -21167,7 +21167,7 @@ extern "C" void fn_80119020(void)
                 int late = 0;
                 if (!ScrmTestPlayFlag(0) && ScrmGetBallSpot().mY - ball.mY > 2.0f) {
                     late = 1;
-                } else if (fn_8011E188() <= 59) {
+                } else if (AssignEngageSysGetFrames() <= 59) {
                     late = 1;
                 }
                 if (late) diff = 0;
@@ -21216,8 +21216,8 @@ extern "C" void fn_80119020(void)
             done = fn_800CE4A8(&query);
         }
         if (done) {
-            fn_8011E1BC(p, pOther, 0, 5);
-            fn_8011E33C(pOther, p, 5);
+            AssignEngageStart(p, pOther, 0, 5);
+            AssignEngageSetOpponent(pOther, p, 5);
         }
     }
 }
@@ -21346,14 +21346,14 @@ extern "C" void fn_801194F0(void)
             if (fn_800CE4A8(&query)) {
                 if (moves[j] == lbl_802DAC20[3] || moves[j] == lbl_802DAC20[0]
                     || moves[j] == lbl_802DAC20[5] || moves[j] == lbl_802DAC20[2]) {
-                    fn_8011E1BC(p, pOther, 0, 5);
-                    fn_8011E33C(pOther, p, 5);
+                    AssignEngageStart(p, pOther, 0, 5);
+                    AssignEngageSetOpponent(pOther, p, 5);
                     if (moves[j] == lbl_802DAC20[3] || moves[j] == lbl_802DAC20[2]) {
                         fn_801187CC(p, query.mpUnknown4);
                     }
                 } else {
-                    fn_8011E1BC(p, pOther, 0, 6);
-                    fn_8011E33C(pOther, p, 6);
+                    AssignEngageStart(p, pOther, 0, 6);
+                    AssignEngageSetOpponent(pOther, p, 6);
                 }
                 fn_800CA5CC(p, 8, 1);
                 fn_800CA5CC(pOther, 8, 1);
@@ -21397,24 +21397,24 @@ extern "C" void fn_80119B98(void)
                 query.mpUnknown4Entries[1] = pB;
                 query.mUnknown44 = 0.45f;
                 done = 0;
-                fn_8011E1A8(p, 2);
+                AssignEngageClearFlags(p, 2);
                 if (fn_800CE4A8(&query)) {
                     done = 1;
                 } else {
                     query.mUnknown57 = 1;
-                    fn_8011E194(p, 2);
+                    AssignEngageSetFlags(p, 2);
                     if (fn_800CE4A8(&query)) {
                         done = 1;
                     }
                 }
                 if (done) {
-                    fn_8011E1BC(p, pA, pB, 5);
-                    fn_8011E33C(pA, p, 6);
-                    fn_8011E33C(pB, p, 6);
+                    AssignEngageStart(p, pA, pB, 5);
+                    AssignEngageSetOpponent(pA, p, 6);
+                    AssignEngageSetOpponent(pB, p, 6);
                     fn_800CA5CC(p, 8, 1);
                     fn_800CA5CC(pB, 8, 1);
                 }
-                fn_8011E1A8(p, 2);
+                AssignEngageClearFlags(p, 2);
             }
         }
     }
@@ -21636,8 +21636,8 @@ extern "C" int fn_8011A608(Object_80039F5C *p, Object_80039F5C *pOther)
         }
     }
     if (result) {
-        fn_8011E1BC(p, pOther, 0, 5);
-        fn_8011E33C(pOther, p, 5);
+        AssignEngageStart(p, pOther, 0, 5);
+        AssignEngageSetOpponent(pOther, p, 5);
         if (pass) {
             fn_801187CC(p, pOther);
         }
@@ -21826,7 +21826,7 @@ extern "C" void fn_8011AB38(void)
     }
 }
 
-extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
+extern "C" void AssignSortEntriesAscending(Entry_8011AFCC *pEntries)
 {
     int swapped;
 
@@ -21847,7 +21847,7 @@ extern "C" void fn_8011AFCC(Entry_8011AFCC *pEntries)
     } while (swapped);
 }
 
-extern "C" void fn_8011B138(Entry_8011AFCC *pEntries)
+extern "C" void AssignSortEntriesDescending(Entry_8011AFCC *pEntries)
 {
     int swapped;
 
@@ -22022,7 +22022,7 @@ extern "C" void fn_8011B6E8(Entry_8011AFCC_8011B4F8 *pEntries, Pair_8011BAE0 tar
     pEntries[count].mUnknown0 = 0;
     pEntries[count].mUnknown68 = 0.0f;
     if (lbl_803EB028->mUnknown88) {
-        fn_8011B138((Entry_8011AFCC *)pEntries);
+        AssignSortEntriesDescending((Entry_8011AFCC *)pEntries);
     }
 }
 
@@ -22098,7 +22098,7 @@ extern "C" void fn_8011B83C(Entry_8011AFCC_8011B4F8 *pEntries, Pair_8011BAE0 tar
     pEntries[count].mpUnknown60 = 0;
     pEntries[count].mUnknown0 = 0;
     pEntries[count].mUnknown68 = 0.0f;
-    fn_8011AFCC((Entry_8011AFCC *)pEntries);
+    AssignSortEntriesAscending((Entry_8011AFCC *)pEntries);
 }
 
 extern "C" void fn_8011BAE0(Pair_8011BAE0 *pOut)
@@ -22693,32 +22693,32 @@ void fn_8011D0BC(Entry_8011AFCC_8011BCDC *pA, Entry_8011AFCC_8011BCDC *pB, Pair_
                             if (pMarked->mUnknown1040 == pBest->mpUnknown0->mpUnknown60->mId) {
                                 Object_80039F5C *pPartner = fn_8009BCE8(&pMarked->mUnknown1036);
 
-                                fn_8011E1BC(pMarked, pPartner, 0, 4);
-                                fn_8011E33C(pPartner, pMarked, 4);
+                                AssignEngageStart(pMarked, pPartner, 0, 4);
+                                AssignEngageSetOpponent(pPartner, pMarked, 4);
                             } else {
-                                fn_8011E1BC(pMarked, 0, 0, 1);
+                                AssignEngageStart(pMarked, 0, 0, 1);
                             }
                         }
                         if (pBest->mpUnknown60->mUnknown1032 == 4 || pBest->mpUnknown60->mUnknown1032 == 7) {
                             Object_80039F5C *pPartner = fn_8009BCE8(&pBest->mpUnknown60->mUnknown1036);
                             short saved = pBest->mpUnknown60->mBlock1032.mUnknown102;
 
-                            fn_8011E1BC(pBest->mpUnknown60, pPartner, pBest->mpUnknown0->mpUnknown60, 7);
+                            AssignEngageStart(pBest->mpUnknown60, pPartner, pBest->mpUnknown0->mpUnknown60, 7);
                             pBest->mpUnknown60->mBlock1032.mUnknown102 = saved;
-                            fn_8011E33C(pPartner, pBest->mpUnknown60, 4);
-                            fn_8011E33C(pBest->mpUnknown0->mpUnknown60, pBest->mpUnknown60, 8);
+                            AssignEngageSetOpponent(pPartner, pBest->mpUnknown60, 4);
+                            AssignEngageSetOpponent(pBest->mpUnknown0->mpUnknown60, pBest->mpUnknown60, 8);
                         } else {
                             if (pBest->mpUnknown0->mpUnknown60->mId == lbl_803EB028->mUnknown0) {
-                                fn_8011E1BC(pBest->mpUnknown60, pBest->mpUnknown0->mpUnknown60, 0, 3);
+                                AssignEngageStart(pBest->mpUnknown60, pBest->mpUnknown0->mpUnknown60, 0, 3);
                                 fn_8011E938(0);
                             } else {
-                                fn_8011E1BC(pBest->mpUnknown60, pBest->mpUnknown0->mpUnknown60, 0, 2);
+                                AssignEngageStart(pBest->mpUnknown60, pBest->mpUnknown0->mpUnknown60, 0, 2);
                             }
-                            fn_8011E33C(pBest->mpUnknown0->mpUnknown60, pBest->mpUnknown60, 8);
+                            AssignEngageSetOpponent(pBest->mpUnknown0->mpUnknown60, pBest->mpUnknown60, 8);
                         }
                     }
                     pBest->mpUnknown0->mUnknown68 = 0.0f;
-                    fn_8011D8B4((Entry_8011AFCC *)pBest);
+                    AssignEntryListRemoveFirst((Entry_8011AFCC *)pBest);
                 }
                 pEntry = pA;
             } else {
@@ -22797,29 +22797,29 @@ void fn_8011D654(Entry_8011AFCC *pEntries)
                 Object_80039F5C *pTargetB = fn_8009BCE8(&pB->mUnknown1036);
 
                 if (modeA == 7) {
-                    fn_8011E1BC(pA, pTargetA, pOtherB, 7);
+                    AssignEngageStart(pA, pTargetA, pOtherB, 7);
                 } else {
-                    fn_8011E1BC(pA, pOtherB, 0, modeA);
+                    AssignEngageStart(pA, pOtherB, 0, modeA);
                 }
                 if (modeB == 7) {
-                    fn_8011E1BC(pB, pTargetB, pOtherA, 7);
+                    AssignEngageStart(pB, pTargetB, pOtherA, 7);
                 } else {
-                    fn_8011E1BC(pB, pOtherA, 0, modeB);
+                    AssignEngageStart(pB, pOtherA, 0, modeB);
                 }
                 switch (modeA) {
                 case 7:
-                    fn_8011E33C(pTargetA, pA, 4);
+                    AssignEngageSetOpponent(pTargetA, pA, 4);
                 case 2:
                 case 3:
-                    fn_8011E33C(pOtherB, pA, 8);
+                    AssignEngageSetOpponent(pOtherB, pA, 8);
                     break;
                 }
                 switch (modeB) {
                 case 7:
-                    fn_8011E33C(pTargetB, pB, 4);
+                    AssignEngageSetOpponent(pTargetB, pB, 4);
                 case 2:
                 case 3:
-                    fn_8011E33C(pOtherA, pB, 8);
+                    AssignEngageSetOpponent(pOtherA, pB, 8);
                     break;
                 }
             }
@@ -22829,7 +22829,7 @@ void fn_8011D654(Entry_8011AFCC *pEntries)
 }
 
 extern "C" {
-void fn_8011D8B4(Entry_8011AFCC *pEntries)
+void AssignEntryListRemoveFirst(Entry_8011AFCC *pEntries)
 {
     while (pEntries->mpUnknown60 != 0) {
         *pEntries = pEntries[1];
@@ -22884,8 +22884,8 @@ void fn_8011DA40(void)
                 p->mUnknown1048 = p->mUnknown1036;
                 if (side == team) {
                     if (--p->mBlock1032.mUnknown102 < 0) {
-                        fn_8011E1BC(p, pOther, 0, 2);
-                        fn_8011E33C(pOther, p, 8);
+                        AssignEngageStart(p, pOther, 0, 2);
+                        AssignEngageSetOpponent(pOther, p, 8);
                     }
                 } else {
                     p->mBlock1032.mUnknown102++;
@@ -22903,7 +22903,7 @@ void fn_8011DA40(void)
             }
             if (--pBlock40->mUnknown52 <= 0) {
                 pBlock40->mUnknown52 = 0;
-                fn_8011DBC8(p, pBlock40);
+                AssignEngageResetScales(p, pBlock40);
             }
         }
     }
@@ -22923,7 +22923,7 @@ void fn_8011DBC4(Object_80039F5C *p)
 }
 
 extern "C" {
-void fn_8011DBC8(Object_80039F5C *p, Block_8011DBC8 *pBlock)
+void AssignEngageResetScales(Object_80039F5C *p, Block_8011DBC8 *pBlock)
 {
     pBlock->mUnknown40 = 1.0f;
     pBlock->mUnknown44 = 1.0f;
@@ -22932,13 +22932,13 @@ void fn_8011DBC8(Object_80039F5C *p, Block_8011DBC8 *pBlock)
 }
 
 extern "C" {
-int fn_8011DBE0(Object_80039F5C *p, Object_80039F5C *pOther)
+int AssignIsSameBlockAnim(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     unsigned int id = fn_801BE648(p->mpUnknown792);
     unsigned int otherId = fn_801BE648(pOther->mpUnknown792);
 
     if (otherId == id) {
-        if (fn_8011DC68(id) && fn_8011DC68(otherId)) {
+        if (AssignIsBlockMoveAnim(id) && AssignIsBlockMoveAnim(otherId)) {
             return 1;
         }
         switch (otherId) {
@@ -22957,7 +22957,7 @@ int fn_8011DBE0(Object_80039F5C *p, Object_80039F5C *pOther)
 }
 
 extern "C" {
-int fn_8011DC68(unsigned int id)
+int AssignIsBlockMoveAnim(unsigned int id)
 {
     switch (id) {
     case 49:
@@ -23001,10 +23001,10 @@ void fn_8011DCDC(void)
         int hasOther;
 
         if (p) {
-            index = fn_800F06F4(0, p->mQueue, 31, 0xFFFF);
+            index = PlyrStateQueueFind(0, p->mQueue, 31, 0xFFFF);
         }
         if (pOther) {
-            otherIndex = fn_800F06F4(0, pOther->mQueue, 31, 0xFFFF);
+            otherIndex = PlyrStateQueueFind(0, pOther->mQueue, 31, 0xFFFF);
         }
         hasOther = otherIndex != 0xFFFF;
         if ((index != 0xFFFF && !hasOther) || (index == 0xFFFF && hasOther)) {
@@ -23016,11 +23016,11 @@ void fn_8011DCDC(void)
             }
             ball = ScrmGetBallSpot();
             if (fabsf(p->mMotion.mPos.mX - ball.mX) < 0.75f) {
-                index = fn_800F06F4(0, p->mQueue, 3, 0xFFFF);
+                index = PlyrStateQueueFind(0, p->mQueue, 3, 0xFFFF);
                 if (index == 0xFFFF) {
-                    index = fn_800F06F4(0, p->mQueue, 4, 0xFFFF);
+                    index = PlyrStateQueueFind(0, p->mQueue, 4, 0xFFFF);
                     if (index == 0xFFFF) {
-                        index = fn_800F06F4(0, p->mQueue, 27, 0xFFFF);
+                        index = PlyrStateQueueFind(0, p->mQueue, 27, 0xFFFF);
                     }
                 }
                 if (index == 0xFFFF) {
@@ -23050,7 +23050,7 @@ void fn_8011DCDC(void)
 }
 
 extern "C" {
-void fn_8011DF3C(void)
+void AssignEngageSysInit(void)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EB028, sizeof(Block_803EB028), 0, 0x626C636B);
 
@@ -23060,13 +23060,13 @@ void fn_8011DF3C(void)
 }
 
 extern "C" {
-void fn_8011DF8C(void)
+void AssignEngageSysShutdown(void)
 {
 }
 }
 
 extern "C" {
-void fn_8011DF90(void)
+void AssignEngageSysReset(void)
 {
     unsigned char side;
     int team;
@@ -23084,7 +23084,7 @@ void fn_8011DF90(void)
             Object_80039F5C *p = PlyrGet(team, i);
 
             memset(&p->mBlock1032, 0, sizeof(p->mBlock1032));
-            fn_8011DBC8(p, &p->mUnknown1072);
+            AssignEngageResetScales(p, &p->mUnknown1072);
             p->mUnknown1139 = 5;
             p->mUnknown1138 = 0;
         }
@@ -23094,7 +23094,7 @@ void fn_8011DF90(void)
 }
 
 extern "C" {
-void fn_8011E068(void)
+void AssignEngageSysStartPlay(void)
 {
     int team = ScrmGetOffenseTeam();
     unsigned int count = ScrmGetActivePlayerCount(team);
@@ -23105,11 +23105,11 @@ void fn_8011E068(void)
 
         if (p->mpState->mId == 51) {
             if (p->mpState[1].mId == 33) {
-                fn_8011E1BC(p, 0, 0, 1);
-                fn_8011E3EC(p, 2);
+                AssignEngageStart(p, 0, 0, 1);
+                AssignEngageSetMode(p, 2);
             } else if (p->mpState[1].mId == 31) {
-                fn_8011E1BC(p, 0, 0, 1);
-                fn_8011E3EC(p, 1);
+                AssignEngageStart(p, 0, 0, 1);
+                AssignEngageSetMode(p, 1);
             }
         }
     }
@@ -23119,7 +23119,7 @@ void fn_8011E068(void)
 }
 
 extern "C" {
-void fn_8011E13C(void)
+void AssignEngageSysUpdate(void)
 {
     int mode = fn_800AD9B4();
 
@@ -23137,14 +23137,14 @@ void fn_8011E13C(void)
 }
 
 extern "C" {
-unsigned int fn_8011E188(void)
+unsigned int AssignEngageSysGetFrames(void)
 {
     return lbl_803EB028->mUnknown84;
 }
 }
 
 extern "C" {
-void fn_8011E194(Object_80039F5C *p, unsigned char mask)
+void AssignEngageSetFlags(Object_80039F5C *p, unsigned char mask)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
 
@@ -23153,7 +23153,7 @@ void fn_8011E194(Object_80039F5C *p, unsigned char mask)
 }
 
 extern "C" {
-void fn_8011E1A8(Object_80039F5C *p, unsigned char mask)
+void AssignEngageClearFlags(Object_80039F5C *p, unsigned char mask)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
 
@@ -23162,7 +23162,7 @@ void fn_8011E1A8(Object_80039F5C *p, unsigned char mask)
 }
 
 extern "C" {
-void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value)
+void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pA, Object_80039F5C *pB, int value)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
 
@@ -23198,7 +23198,7 @@ void fn_8011E240(Object_80039F5C *p)
         PlyrCollideRemoveExempt(pOther, p);
         fn_8009BD2C(p, &ref);
         if (pOther->mUnknown1036 == ref) {
-            fn_8011E3A4(pOther);
+            AssignEngageClear(pOther);
         }
     }
     fn_8009BD2C(0, &pBlock->mUnknown4);
@@ -23208,7 +23208,7 @@ void fn_8011E240(Object_80039F5C *p)
         PlyrCollideRemoveExempt(pOther, p);
         fn_8009BD2C(p, &ref);
         if (pOther->mUnknown1036 == ref) {
-            fn_8011E3A4(pOther);
+            AssignEngageClear(pOther);
         }
     }
     fn_8009BD2C(0, &pBlock->mUnknown8);
@@ -23216,7 +23216,7 @@ void fn_8011E240(Object_80039F5C *p)
 }
 
 extern "C" {
-void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int value)
+void AssignEngageSetOpponent(Object_80039F5C *p, Object_80039F5C *pOther, int value)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
 
@@ -23231,7 +23231,7 @@ void fn_8011E33C(Object_80039F5C *p, Object_80039F5C *pOther, int value)
 }
 
 extern "C" {
-void fn_8011E3A4(Object_80039F5C *p)
+void AssignEngageClear(Object_80039F5C *p)
 {
     Block_8011E240 *pBlock = &p->mBlock1032;
 
@@ -23245,7 +23245,7 @@ void fn_8011E3A4(Object_80039F5C *p)
 }
 
 extern "C" {
-void fn_8011E3EC(Object_80039F5C *p, int a)
+void AssignEngageSetMode(Object_80039F5C *p, int a)
 {
     p->mUnknown1052 = a;
 }
@@ -23347,14 +23347,14 @@ int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther)
                                 } else {
                                     reach = 0.85f;
                                 }
-                                if (fn_8011DBE0(p, pOther)) {
+                                if (AssignIsSameBlockAnim(p, pOther)) {
                                     reach *= 1.2f;
                                 } else if (fn_8011F228() && !ScrmTestPlayFlag(0)) {
                                     reach = 1.25f;
                                 }
                             }
                             if (both || Vec2Distance(&joint, &otherJoint) < reach) {
-                                if (fn_8011DBE0(p, pOther) || difference > 0x3C71C7) {
+                                if (AssignIsSameBlockAnim(p, pOther) || difference > 0x3C71C7) {
                                     result = 1;
                                 }
                             }
@@ -23369,7 +23369,7 @@ int fn_8011E484(Object_80039F5C *p, Object_80039F5C *pOther)
 }
 
 extern "C" {
-void fn_8011E7CC(Object_80039F5C *p, int which, float amount)
+void AssignEngageAddScale(Object_80039F5C *p, int which, float amount)
 {
     Block_8011DBC8 *pBlock = &p->mUnknown1072;
 
@@ -23428,9 +23428,9 @@ int fn_8011E8A4(Object_80039F5C *p)
 }
 
 extern "C" {
-void fn_8011E8D8(Object_80039F5C *p)
+void AssignEngageRelease(Object_80039F5C *p)
 {
-    fn_8011E3EC(p, 0);
+    AssignEngageSetMode(p, 0);
     if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
         fn_8011E240(p);
     } else {
@@ -23486,11 +23486,11 @@ int fn_8011E9D8(State_80039F5C *pState)
     int result = 0;
 
     if (pState) {
-        unsigned int a = fn_800F06F4(0, pState, 31, 0xFFFF);
-        unsigned int b = fn_800F06F4(0, pState, 47, 0xFFFF);
+        unsigned int a = PlyrStateQueueFind(0, pState, 31, 0xFFFF);
+        unsigned int b = PlyrStateQueueFind(0, pState, 47, 0xFFFF);
 
         if (a != 0xFFFF || b != 0xFFFF) {
-            c = fn_800F06F4(0, pState, 19, 0xFFFF);
+            c = PlyrStateQueueFind(0, pState, 19, 0xFFFF);
         }
         if (a != 0xFFFF && c != 0xFFFF && a < c) {
             result = 1;
@@ -23592,9 +23592,9 @@ int fn_8011EC68(Object_80039F5C *p, Object_80039F5C *pOther)
                 query.mpUnknown4 = pOther;
                 query.mUnknown54 = fn_8011EE18(pOther, pCarrier);
                 if (fn_800CE4A8(&query)) {
-                    fn_8011E1BC(p, pOther, 0, 5);
+                    AssignEngageStart(p, pOther, 0, 5);
                     result = 1;
-                    fn_8011E33C(pOther, p, 5);
+                    AssignEngageSetOpponent(pOther, p, 5);
                 }
             }
         }
@@ -25577,7 +25577,7 @@ void fn_801237F4(Directions_8012430C *pValues, Object_80039F5C *p, Object_80039F
         }
     }
     if (fn_801486A0()) fn_8012327C(pValues, p);
-    else if (fn_800F06F4(0, PlyrGet(ScrmGetDefenseTeam(), 0)->mpState, 51, 65535) != 65535) {
+    else if (PlyrStateQueueFind(0, PlyrGet(ScrmGetDefenseTeam(), 0)->mpState, 51, 65535) != 65535) {
         pValues->mCost[(p->mMotion.mFacing + 0x100000) >> 21 & 7] = 0.0f;
     }
 }
@@ -26172,7 +26172,7 @@ int fn_80125510(Object_80039F5C *p, Message_800F01CC *pIn)
         memset(&message, 0, sizeof(message));
         message.mId = 96;
         message.mUnknown1[0] = value;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
@@ -26328,7 +26328,7 @@ int fn_80125E20(Object_80039F5C *p)
         memset(&message, 0, sizeof(message));
         message.mId = 57;
         message.mUnknown1[0] = BallGetCurrentIndex();
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (!(p->mFlags & 0x400)) {

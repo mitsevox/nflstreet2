@@ -78,10 +78,10 @@ void fn_800B26E0(Object_800B267C *pObject);
 void fn_800B2A14(Object_800B267C *pObject, unsigned char *a);
 int fn_800C47C4(void);
 void fn_800D7A0C(FEPlyrModel_t *pRecord, int a);
-void fn_800EFD70(int a);
-void fn_800EFDD8(void);
+void PlyrStateQueueInit(int a);
+void PlyrStateQueueShutdown(void);
 struct State_80039F5C;
-void fn_800EFFA0(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
+void PlyrStateQueueUpdate(int a, State_80039F5C *pQueue, FEPlyrModel_t *pRecord, int c);
 void PlaTexCacheUpdate(void);
 void PlyrMoveCmdClear(void *pObject);
 void UISGameSetDrawMode(int a);
@@ -194,7 +194,7 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     int result;
 
-    fn_800EFFA0(0, (State_80039F5C *)pRecord->mUnknown3048, pRecord, 0);
+    PlyrStateQueueUpdate(0, (State_80039F5C *)pRecord->mUnknown3048, pRecord, 0);
     if (pObject->mUnknown20 & 0x10) {
         fn_801BE420(pRecord->mUnknown3604, &pRecord->mUnknown3096, pRecord->mUnknown3108, pRecord, step);
         AnimChanProcess(&pRecord->mUnknown3096, pRecord->mUnknown3108, step, pRecord);
@@ -355,7 +355,7 @@ void FEPlyrInit(int count)
     VptPerspective(_FEPlyr_Projection, 45.0f, 4.0f / 3.0f, 1.0f, 200.0f);
     fn_8008FCB4(0);
     PlayerAnimLoadFrontEndFiles();
-    fn_800EFD70(0x21);
+    PlyrStateQueueInit(0x21);
     PlyrObjsCreate(_FEPlyr_iCount, 0, 1);
     PlyrObjsSetDrawFlag(0);
     for (i = 0; i < _FEPlyr_iCount; i++) {
@@ -380,7 +380,7 @@ void FEPlyrShutdown(void)
     _FEPlyr_bActive = 0;
     FEPlyrLoadShutdown();
     PlyrObjsDestroy(0);
-    fn_800EFDD8();
+    PlyrStateQueueShutdown();
     PlayerAnimUnloadFrontEndFiles();
     fn_8008FD88(1);
     PlayerCursorClose(&_FEPlyr_PlayerCursor);

@@ -46,11 +46,11 @@ int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerActionAiConsiderDive(Object_80039F5C *p);
 int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
-int fn_80110C10(Object_80039F5C *p);
+int CarrierSpinGetFacing(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
-void fn_80111354(Object_80039F5C *p);
+void AssignTrySendKnock(Object_80039F5C *p);
 int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float *pValue);
-unsigned int fn_8011E188(void);
+unsigned int AssignEngageSysGetFrames(void);
 int fn_8011F1A4(void);
 int fn_8011F1CC(void);
 int fn_8011F32C(void);
@@ -651,7 +651,7 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
             }
         }
     }
-    if (done == 0 && fn_8011E188() < _Pursue_fKind3SidelineTime) {
+    if (done == 0 && AssignEngageSysGetFrames() < _Pursue_fKind3SidelineTime) {
         if ((pMotion->mPos.mX > 0.0f && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)
             || (pMotion->mPos.mX < 0.0f && MathAngleDiff(angle, 0) <= 0x3FFFFF)) {
             if (pMotion->mPos.mX > 0.0f) {
@@ -1013,7 +1013,7 @@ extern "C" void PursueTryBlockReaction(Object_80039F5C *p, Object_80039F5C *pOth
     if (SyncRandGetRange(0, 100) < 75) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
         if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), pTarget->mMotion.mUnknown32) <= 0x3FFFFF) {
-            fn_80111354(p);
+            AssignTrySendKnock(p);
         }
     } else if (SyncRandGetRange(0, 100) < 50) {
         Vec2Sub(&delta, &p->mMotion.mPos, &pTarget->mMotion.mPos);
@@ -1237,7 +1237,7 @@ extern "C" void PursueMatchTarget(Object_80039F5C *p, Object_80039F5C *pOther, V
 
         if (id == 35) {
             if (fn_80110C68(pOther) != 0) {
-                *pAngle = fn_80110C10(pOther);
+                *pAngle = CarrierSpinGetFacing(pOther);
             }
         } else if (id == 34) {
             *pAngle = pOther->mMotion.mFacing;
@@ -1295,7 +1295,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     if (fn_801486A0() == 0) {
         memset(&message, 0, sizeof(message));
         message.mId = 97;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 0;
     }
     if (fn_8009FB60(p) != 0) {
@@ -1350,7 +1350,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                             memset(&message, 0, sizeof(message));
                             message.mId = 57;
                             message.mUnknown1[0] = BallGetIndex(pBall);
-                            fn_800F053C(0, p->mpState, &message, p);
+                            PlyrStateQueueSet(0, p->mpState, &message, p);
                             return 1;
                         }
                     }
@@ -1369,7 +1369,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
         if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             memset(&message, 0, sizeof(message));
             message.mId = 33;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 0;
         }
         if (--pState->mUnknown15 <= 0) {

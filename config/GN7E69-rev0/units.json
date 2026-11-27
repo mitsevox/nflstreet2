@@ -14732,11 +14732,11 @@
             "evidence": "evidence.tsv source-form 0x800F6370-0x800F6790"
           },
           {
-            "function": "fn_800F69C0",
+            "function": "AssignTurnAwayFromPlayers",
             "evidence": "evidence.tsv source-form 0x800F69C0-0x800F6AD8"
           },
           {
-            "function": "fn_800F6B2C",
+            "function": "AssignSteerClampToField",
             "evidence": "evidence.tsv source-form 0x800F6B2C-0x800F6C90"
           },
           {
@@ -14748,7 +14748,7 @@
             "evidence": "evidence.tsv source-form 0x800F7798-0x800F7B64"
           },
           {
-            "function": "fn_800F8828",
+            "function": "AssignBlockApplySideFlag",
             "evidence": "evidence.tsv source-form 0x800F8828-0x800F88E4"
           },
           {
@@ -14784,7 +14784,7 @@
             "evidence": "evidence.tsv source-form 0x800FCE58-0x800FCFC0"
           },
           {
-            "function": "fn_800FD2AC",
+            "function": "PlyrRunLegEnter",
             "evidence": "evidence.tsv source-form 0x800FD2AC-0x800FD3F0"
           },
           {
@@ -14832,15 +14832,15 @@
             "evidence": "evidence.tsv source-form 0x801100E8-0x801101DC"
           },
           {
-            "function": "fn_80110B00",
+            "function": "CarrierSpinInput",
             "evidence": "evidence.tsv source-form 0x80110B00-0x80110C10"
           },
           {
-            "function": "fn_80113C20",
+            "function": "PlyrHitImpactEnter",
             "evidence": "evidence.tsv source-form 0x80113C20-0x80113E74"
           },
           {
-            "function": "fn_80114EE4",
+            "function": "PlyrHitGetPowerRatio",
             "evidence": "evidence.tsv source-form 0x80114EE4-0x80114F64"
           },
           {
@@ -14852,7 +14852,7 @@
             "evidence": "evidence.tsv source-form 0x80116410-0x801167C4"
           },
           {
-            "function": "fn_801167C4",
+            "function": "AssignZoneIsTargetCovered",
             "evidence": "evidence.tsv source-form 0x801167C4-0x80116880"
           },
           {

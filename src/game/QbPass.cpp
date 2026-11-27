@@ -19,7 +19,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
 #include "game/Input_800B6D34.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/fn_801BE60C.h"
 #include "game/PlyrCollide.h"
 #include "game/Ball.h"
@@ -75,8 +75,8 @@ void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, 
 int TutorialIsActive(void);
 float ScrmGetGoalLineY(void);
 void Vec2FromAngle(Vec2_t *, int, float);
-void fn_800FD68C(Message_800F01CC *, void *, void *);
-void fn_800F00D4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
+void PlyrRunLegEncode(Message_800F01CC *, void *, void *);
+void PlyrStateQueuePush(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 void Vec2Sub(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
@@ -253,7 +253,7 @@ void QbPassUpdateReceiverOptions(Object_80039F5C *p, PlyrModeState_t *s)
         switch (other->mpState->mId) {
         case 10: case 11: case 16: case 31: case 32: disabled = 1; break;
         case 3: case 51:
-            if (fn_800F06F4(0, other->mpState, 31, 0xFFFF) != 0xFFFF) disabled = 1;
+            if (PlyrStateQueueFind(0, other->mpState, 31, 0xFFFF) != 0xFFFF) disabled = 1;
             break;
         }
         if (other->mFlags & 0x800) disabled = 1;
@@ -277,7 +277,7 @@ int QbPassEnter(Object_80039F5C *player) {
         Message_800F01CC message;
         memset(&message, 0, 4);
         message.mId = 33;
-        fn_800F053C(0, player->mpState, &message, player);
+        PlyrStateQueueSet(0, player->mpState, &message, player);
         return 1;
     }
     PlyrModeState_t *state = (PlyrModeState_t *)&player->mUnknown336;
@@ -543,9 +543,9 @@ int QbPassUpdate(Object_80039F5C *player) {
                             Message_800F01CC message;
                             memset(&message, 0, 4);
                             message.mId = 19;
-                            fn_800FD68C(&message, &selected->mMotion.mPos, &offset);
+                            PlyrRunLegEncode(&message, &selected->mMotion.mPos, &offset);
                             message.mUnknown1[2] = 255;
-                            fn_800F00D4(0, selected->mpState, &message, selected);
+                            PlyrStateQueuePush(0, selected->mpState, &message, selected);
                         }
                         Vec2_t diff;
 
@@ -561,7 +561,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                 } else {
                     memset(&message, 0, 4);
                     message.mId = 1;
-                    fn_800F053C(0, player->mpState, &message, player);
+                    PlyrStateQueueSet(0, player->mpState, &message, player);
                     return 1;
                 }
             } else
@@ -593,7 +593,7 @@ int QbPassUpdate(Object_80039F5C *player) {
         DefPredRefreshRatings();
         memset(&message, 0, 4);
         message.mId = 1;
-        fn_800F053C(0, player->mpState, &message, player);
+        PlyrStateQueueSet(0, player->mpState, &message, player);
         return 1;
     }
     return 0;
@@ -639,7 +639,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
             Message_800F01CC m;
             memset(&m, 0, 4);
             m.mId = 1;
-            fn_800F053C(0, p->mpState, &m, p);
+            PlyrStateQueueSet(0, p->mpState, &m, p);
             return 1;
         }
         s->mUnknown8 = 0x400000;

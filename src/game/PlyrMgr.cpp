@@ -146,7 +146,7 @@ int PlyrHandUpdateBlend(void *pElements, unsigned int index);
 int PlyrHandGetBlend(void *pElements, unsigned int index);
 void fn_800B2BC0(Object_800B26B0 *pMotion);
 void PlyrUpdateMatrices(Object_80039F5C *p);
-int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
+int PlyrStateQueueCallHandler(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
 void AnimInitHeader(void *p, int a, int b, int c);
 void AnimChanInitChannels(void *p, void *q);
@@ -166,7 +166,7 @@ void PlyrTrackUpdateAll(Object_80039F5C *p);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void PlyrTrackEnable(void *p, int *pRecord);
 int fn_8011E8A4(void);
-void fn_8011E8D8(Object_80039F5C *p);
+void AssignEngageRelease(Object_80039F5C *p);
 CollideSet_t *StatcollGetSet(void);
 }
 
@@ -175,7 +175,7 @@ int CharSkelGetJointByName(void *p, const char *pName);
 void PlyrHandSetPoseFor(Object_80039F5C *p, int a, int b, int c);
 void ParticlesAddPlayerEvent(int type, int a, int b, int c);
 void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsigned char index);
-void fn_800EFE1C(int a, State_80039F5C *pQueue);
+void PlyrStateQueueClear(int a, State_80039F5C *pQueue);
 void PlyrResetPose(Object_80039F5C *p, int a);
 void PlyrInitAnimChannels(Object_80039F5C *p);
 int ScrmGetOffenseTeam(void);
@@ -217,7 +217,7 @@ int PassIconsAreLocked(void);
 int PassIconGetSlot(int index, int force);
 unsigned char fn_800B65A0(int team);
 int ScrmIsNotReplay(void);
-void fn_800F1700(void);
+void AssignInputUpdateAll(void);
 void fn_800C11B8(void);
 void fn_800C845C(void);
 void PlayerMoveTickAll(void);
@@ -225,11 +225,11 @@ void fn_800C8330(Object_80039F5C *p);
 void fn_800C7794(Object_80039F5C *p);
 void PlyrContactHitWall(Object_80039F5C *p);
 void fn_800C89BC(Object_80039F5C *p);
-void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
+void PlyrStateQueueUpdate(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void DefReactValidate(Object_80039F5C *p);
 void PlyrUpdateControlFlag(Object_80039F5C *p, int flag);
 void fn_800C7D44(Object_80039F5C *p);
-void fn_8011E13C(void);
+void AssignEngageSysUpdate(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
 void *RouteArrowShow(Object_80039F5C *p, FieldPoint_t *pPos, void *pRecord, unsigned char flag);
@@ -280,7 +280,7 @@ extern "C" int PlyrMgrCreate(PlyrMgr_t *pManager)
 
         PlyrInitAnimChannels(p);
         PlyrInit(p, &pPlayers[i], i / pManager->mPerTeam, i % pManager->mPerTeam);
-        fn_800EFE1C(0, &p->mQueue[0]);
+        PlyrStateQueueClear(0, &p->mQueue[0]);
         PlyrClearPendingMsg(p, 0);
         p->mpUnknown3092 = (Object_800EA284 *)CollideSetAddObject((CollideSet_t *)pManager->mpUnknown4, 0,
                                                           pPlayers[i].mObject.mId);
@@ -538,8 +538,8 @@ extern "C" void PlyrUpdatePendingMsg(Object_80039F5C *p)
         if (--p->mUnknown3040 <= 0) {
             p->mUnknown3040 = 0;
             if (fn_8011E8A4() != 0) {
-                fn_8011E8D8(p);
-                fn_800F053C(0, p->mQueue, (Message_800F01CC *)p->mUnknown3044, p);
+                AssignEngageRelease(p);
+                PlyrStateQueueSet(0, p->mQueue, (Message_800F01CC *)p->mUnknown3044, p);
                 if (p->mQueue[0].mId == (unsigned char)p->mUnknown3044[0]) {
                     PlyrClearPendingMsg(p, p->mQueue[0].mId);
                 }
@@ -694,7 +694,7 @@ extern "C" void PlyrMgrUpdate(void)
     int team = ScrmGetDefenseTeam();
     int i;
 
-    fn_800F1700();
+    AssignInputUpdateAll();
     fn_800C11B8();
     fn_800C845C();
     PlayerMoveTickAll();
@@ -722,13 +722,13 @@ extern "C" void PlyrMgrUpdate(void)
             PlyrContactHitWall(p);
         }
         fn_800C89BC(p);
-        fn_800EFFA0(0, &p->mQueue[0], p, active);
+        PlyrStateQueueUpdate(0, &p->mQueue[0], p, active);
         DefReactValidate(p);
         PlyrUpdatePendingMsg(p);
         PlyrUpdateControlFlag(p, active);
     }
     fn_800C7D44(BallGetCurrentHolder());
-    fn_8011E13C();
+    AssignEngageSysUpdate();
 }
 
 extern "C" void PlyrMgrEmptyPass(void)
@@ -943,7 +943,7 @@ extern "C" void PlyrMgrReverseAll(void)
         Object_80039F5C *p = &pPlayer->mObject;
         fn_800B2BC0(&p->mMotion);
         AnimMotRotateHalfTurn(p->mUnknown1244, p->mUnknown1244 + 12);
-        fn_800F0770(0, p->mQueue, 4, 1, p);
+        PlyrStateQueueCallHandler(0, p->mQueue, 4, 1, p);
         PlyrMoveCmdReverse(&p->mUnknown528);
         PlyrMoveCmdReverse(&p->mUnknown512);
         PlyrUpdateMatrices(p);

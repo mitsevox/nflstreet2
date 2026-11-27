@@ -140,7 +140,7 @@ int fn_800C8744(int team);
 void fn_800C87CC(int team, int value);
 void fn_800C9FC0(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_8011DF90(void);
+void AssignEngageSysReset(void);
 void fn_8011F574(void);
 void fn_80120618(void);
 void CamGameSuspendAll(void);
@@ -757,12 +757,12 @@ extern "C" void ScrmChangePossession(int a)
         _Scrm_pState->mPlayTurnovers++;
         ScrmSetOffenseTeam(_Scrm_pState->mOffenseTeam ^ 1);
         fn_800B1584(0x1E, 0);
-        fn_8011DF90();
+        AssignEngageSysReset();
         break;
     case 0:
         _Scrm_pState->mPlayTurnovers++;
         ScrmSetOffenseTeam(_Scrm_pState->mOffenseTeam ^ 1);
-        fn_8011DF90();
+        AssignEngageSysReset();
         ScrmEndPlay();
         break;
     case 1:
@@ -775,7 +775,7 @@ extern "C" void ScrmChangePossession(int a)
         }
         ScrmSetOffenseTeam(_Scrm_pState->mOffenseTeam ^ 1);
         ScrmFlipForDrive(a);
-        fn_8011DF90();
+        AssignEngageSysReset();
         ScrmSetPlayFlag(2, 0);
         _Scrm_pState->mDriveCount++;
         break;

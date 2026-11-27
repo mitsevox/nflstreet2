@@ -25,9 +25,9 @@ int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
 Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
 
 extern float gPlyrMoveFwdSpeed;
-unsigned int fn_8011E188(void);
-void fn_8011E3EC(Object_80039F5C *, int);
-void fn_8011E1BC(Object_80039F5C *, Object_80039F5C *, int, int);
+unsigned int AssignEngageSysGetFrames(void);
+void AssignEngageSetMode(Object_80039F5C *, int);
+void AssignEngageStart(Object_80039F5C *, Object_80039F5C *, int, int);
 int ScrmIsNotReplay(void);
 int fn_8009FB60(Object_80039F5C *);
 int fn_8011F524(void);
@@ -238,7 +238,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
             location = ball->mMotion.mPos;
             reference[0] = location.mX;
             reference[1] = location.mY;
-            if (fn_8011E188() <= 59) reference[1] = point.mY - 8.0f;
+            if (AssignEngageSysGetFrames() <= 59) reference[1] = point.mY - 8.0f;
         } else {
             if (!(ball->mMotion.mPos.mX >= 0.0f)) location.mX = point.mX - 3.0f;
             else location.mX = point.mX + 3.0f;
@@ -259,7 +259,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
         if (!fn_8011E3F4(p)) {
             fn_8011E240(p);
             other = 0;
-            fn_8011E1BC(p, 0, 0, 1);
+            AssignEngageStart(p, 0, 0, 1);
         }
     }
     if (other) {
@@ -282,7 +282,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
                 fabsf(motion->mPos.mX - other->mMotion.mPos.mX) > 0.5f ||
                 MathAngleDiff(other->mMotion.mFacing, otherAngle) > 0x6E38E3) {
                 int turn;
-                if (fn_8011E188() <= 59 && MathAngleDiff(otherAngle, toward) > 0xAAAAA) {
+                if (AssignEngageSysGetFrames() <= 59 && MathAngleDiff(otherAngle, toward) > 0xAAAAA) {
                     Vec2Sub(delta, reference, &motion->mPos);
                     turn = MathArcTan2(delta[1], delta[0]);
                 } else turn = s->mUnknownC;
@@ -430,7 +430,7 @@ int PassBlockEnter(Object_80039F5C *p)
     s->mUnknown19 = 0;
     s->mUnknown1A = 0;
     s->mUnknown1B = p->mpState->mUnknown2;
-    if (fn_8011E188() <= 14) {
+    if (AssignEngageSysGetFrames() <= 14) {
         s->mUnknown1A = 1;
         if (!(values.mY - p->mMotion.mPos.mY >= 2.0f)) {
             float limit = p->mMotion.mPos.mY - _PassBlock_fDropDepth;
@@ -460,12 +460,12 @@ int PassBlockEnter(Object_80039F5C *p)
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     }
     if (ScrmIsNotReplay()) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         fn_8011E240(p);
         return 1;
     }
-    if (*pRole != 3) fn_8011E1BC(p, 0, 0, 1);
-    fn_8011E3EC(p, 1);
+    if (*pRole != 3) AssignEngageStart(p, 0, 0, 1);
+    AssignEngageSetMode(p, 1);
     return 0;
 }
 
@@ -478,41 +478,41 @@ int PassBlockUpdate(Object_80039F5C *p)
     int result = 0;
     Message_800F01CC message;
     if (p == ball) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         fn_8011E240(p);
         memset(&message, 0, 4);
         message.mId = 1;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (fn_8009FB60(p)) return 1;
     if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         fn_8011E240(p);
         memset(&message, 0, 4);
         message.mId = 2;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if ((fn_8011F524() && !fn_8011F2C4()) || ScrmTestPlayFlag(0) || ScrmIsNotReplay()) {
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
-            fn_8011E3EC(p, 0);
+            AssignEngageSetMode(p, 0);
             fn_8011E240(p);
         }
         memset(&message, 0, 4);
         message.mId = 33;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
     if (ScrmIsNotReplay()) {
         if ((block->mUnknown0 != 4 && block->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
-            fn_8011E3EC(p, 0);
+            AssignEngageSetMode(p, 0);
             fn_8011E240(p);
         }
     } else if (!block->mUnknown0) {
         fn_8011E240(p);
-        fn_8011E1BC(p, 0, 0, 1);
-        fn_8011E3EC(p, 1);
+        AssignEngageStart(p, 0, 0, 1);
+        AssignEngageSetMode(p, 1);
     }
     PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
@@ -542,7 +542,7 @@ int PassBlockUpdate(Object_80039F5C *p)
             p->mUnknown512.mUnknown0 = s->mUnknown8;
         }
     } else if (p->mpState[1].mId == 19) {
-        fn_8011E3EC(p, 0);
+        AssignEngageSetMode(p, 0);
         result = 1;
         fn_8011E240(p);
     }
@@ -553,7 +553,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         if (s->mUnknown14 > 0 && !p->mpState->mUnknown1) p->mpState->mUnknown1 = 1;
         if (s->mUnknown14 <= 0 ||
             ((p->mFlags & 0x4000) && !(p->mMotion.mPos.mY <= ScrmGetBallSpot().mY))) {
-            fn_8011E3EC(p, 0);
+            AssignEngageSetMode(p, 0);
             result = 1;
             fn_8011E240(p);
         }
@@ -563,7 +563,7 @@ int PassBlockUpdate(Object_80039F5C *p)
 
 int PassBlockExit(Object_80039F5C *p)
 {
-    fn_8011E3EC(p, 0);
+    AssignEngageSetMode(p, 0);
     fn_8011E240(p);
     return 1;
 }
@@ -583,7 +583,7 @@ int PassBlockInput(Object_80039F5C *p)
             float delta[2];
             Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (MathAngleDiff(p->mUnknown512.mUnknown4, MathArcTan2(delta[1], delta[0])) > 0x600000) {
-                fn_8011E3EC(p, 0);
+                AssignEngageSetMode(p, 0);
                 fn_8011E240(p);
                 goto done;
             }
