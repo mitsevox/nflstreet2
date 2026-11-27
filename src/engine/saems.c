@@ -1,35 +1,13 @@
-/* Partial source of the sound library's module player (saems.c): the module state updaters,
-   bank and play-option setters, bank players and the Csis module callbacks. */
+/* The sound library's AEMS module player (saems.c): the AEMS audio-effect modules that drive the
+   game's sound effects (counters, random pickers, triggers, envelopes, tables, delay lines, math
+   and player modules), the per-voice bank and play-option setters they feed, the bank players,
+   the Csis class callbacks that create module instances, and the module bank registry. */
 
-#include "engine/sndaems.h"
-#include "engine/sndvoice.h"
-
-namespace Snd {
-extern float gVariableTimerPeriod;
-}
+#include "engine/sndbank.h"
+#include "engine/sndaems_state.h"
+#include "engine/csis.h"
 
 extern "C" {
-
-typedef struct Range_80267114 {
-    int mMin;
-    int mMax;
-} Range_80267114;
-
-typedef struct Object_80267114 {
-    unsigned char mUnknown0[8];
-    unsigned char mUnknown8;
-    unsigned char mUnknown9;
-    unsigned char mUnknownA[2];
-    Range_80267114 mUnknownC[1];
-} Object_80267114;
-
-typedef struct Object_8026739C {
-    unsigned char mUnknown0[8];
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-} Object_8026739C;
 
 typedef struct Object_80267404 {
     int mUnknown0;
@@ -102,21 +80,6 @@ typedef struct Object_80267DB4 {
     int mUnknownC[1];
 } Object_80267DB4;
 
-typedef struct Object_80268480 {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1[3];
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    unsigned char mUnknown6[2];
-    short mUnknown8;
-    unsigned char mUnknownA[2];
-    unsigned short mUnknownC;
-    short mUnknownE;
-    unsigned char mUnknown10[4];
-    unsigned short mUnknown14;
-    unsigned short mUnknown16;
-} Object_80268480;
-
 typedef struct Entry_802686CC {
     unsigned char mType;
     unsigned char mUnknown1[3];
@@ -182,37 +145,35 @@ typedef struct Object_80269048 {
     int mUnknown1C[1];
 } Object_80269048;
 
-extern void (*lbl_802FFB6C[])(Object_80268480 *params, int value);
-extern int fn_801B9410(void *p, int *values);
-extern int fn_801B9B30(void *p, int *value);
-extern int SNDBANK_play(int a, int b, Object_80268480 *params);
-extern void SNDplaysetdef(Object_80268480 *params);
-extern unsigned int iSNDrandom(void);
-extern int SNDpitchmult(int handle, int value);
-extern int SNDstop(int handle);
-extern int SNDvol(int handle, int value);
-extern int SNDPLATFORM_setpitch(int index);
-extern int SNDPLATFORM_timemult(int voice, int value);
-extern void SndHalSetDry(int voice);
-extern void SndHalSetPan(int index);
-extern void SNDPLATFORM_lowpass(int voice, int value);
-extern void SNDPLATFORM_highpass(int voice, int value);
-extern void fn_80268188(int handle, int value);
+typedef void (*SndAemsBankSetter_t)(int voice, int value);
+typedef void (*SndAemsOptSetter_t)(SndPlayOpts_t *opts, int value);
+typedef int (*SndAemsUpdateFn_t)(void *state);
 
-/* An envelope module's state: the current segment +0x3, the level +0x4 and step +0x8 it drives,
-   the start level +0xC and the segments' (time, level) pairs from +0x18. */
+extern SndAemsBankSetter_t playerinterfacefn[12];
+extern SndAemsOptSetter_t SNDAEMSoptfn[12];
+extern int SNDvol(int handle, int value);
+extern float lbl_80300028;
+void SNDAEMSI_bankvol(int voice, int value);
+
+/* An envelope module's state: the offset of its gate input word, the last gate value, the current
+   segment, the time left and per-tick step of that segment, the output level, the segment count,
+   the sustain segment, the start level and the segments' (time, level) pairs from +0x18. */
 typedef struct EnvelopeSegment_80267858 {
     float mTime;
     float mLevel;
 } EnvelopeSegment_80267858;
 
 typedef struct EnvelopeState_80267858 {
-    unsigned char mUnknown0[3];
+    unsigned short mInputOffset;
+    signed char mLastInput;
     unsigned char mSegment;
     float mTime;
     float mStep;
-    float mStart;
-    unsigned char mUnknown10[8];
+    float mLevel;
+    unsigned char mNumSegments;
+    unsigned char unk_0x11;
+    short mSustainSegment;
+    float mStartLevel;
     EnvelopeSegment_80267858 mSegments[1];
 } EnvelopeState_80267858;
 
@@ -247,19 +208,202 @@ typedef struct PlayerState_80268774 {
     PlayerOutput_80268774 mOutputs[1];
 } PlayerState_80268774;
 
-/* A loaded module bank on the bank list: its handle and, 20 bytes in, its list link. */
-typedef struct ModuleBank_80269260 {
-    int mHandle;
-    unsigned char mUnknown4[16];
-    void *mpLink;
-} ModuleBank_80269260;
+/* A parameter range of a call or class module, and the inputs that follow the ranges: the trigger
+   (create for a class), the release request of a class, then the parameters. */
+typedef struct AemsRange_t {
+    int mMin;
+    int mMax;
+} AemsRange_t;
 
-extern void *lbl_803A6BD0;
-extern int fn_802692B8(int handle);
+typedef struct CallFunctionInput_t {
+    int mTrigger;
+    int mParams[1];
+} CallFunctionInput_t;
+
+typedef struct CallFunctionState_t {
+    Csis::FunctionHandle mHandle;
+    unsigned char mClamp;
+    unsigned char mNumParams;
+    unsigned char unk_0xA[2];
+    AemsRange_t mRanges[1];
+} CallFunctionState_t;
+
+typedef struct ControlClassInput_t {
+    int mCreate;
+    int mRelease;
+    int mParams[1];
+} ControlClassInput_t;
+
+typedef struct ControlClassState_t {
+    Csis::ClassHandle mHandle;
+    Csis::Class *mpObject;
+    unsigned char mClamp;
+    unsigned char mNumParams;
+    unsigned char unk_0xE[2];
+    AemsRange_t mRanges[1];
+} ControlClassState_t;
+
+/* A bank player's inputs (type, last and current value, 12 bytes each, from +0x1C) and, after
+   them, its two outputs: the time left and the play position, in milliseconds. */
+typedef struct PlayerInput_t {
+    unsigned char mType;
+    unsigned char unk_0x1[3];
+    int mLast;
+    int mValue;
+} PlayerInput_t;
+
+typedef struct PlayerTimes_t {
+    int mRemaining;
+    int mPosition;
+} PlayerTimes_t;
+
+typedef struct PlayerSample_t {
+    signed char mType;
+    unsigned char unk_0x1[3];
+    int mPatch;
+    int unk_0x8;
+} PlayerSample_t;
+
+typedef struct PlayerSampleList_t {
+    int mCount;
+    PlayerSample_t mSamples[1];
+} PlayerSampleList_t;
+
+typedef struct PlayerHandle_t {
+    int mHandle;
+} PlayerHandle_t;
+
+typedef struct PlayerState_t {
+    void *mpOwner;
+    PlayerSampleList_t *mpSamples;
+    PlayerHandle_t mHandle;
+    signed char mMode : 8;
+    signed char mPrevMode : 8;
+    unsigned char mNumInputs : 8;
+    unsigned char mPlaying : 8;
+    signed char mType;
+    unsigned char unk_0x11[3];
+    int mSample;
+    int mModeInput;
+    PlayerInput_t mInputs[1];
+} PlayerState_t;
+
+typedef PlayerHandle_t (*SndAemsPlayFn_t)(...);
+typedef int (*SndAemsPlayerFn_t)(PlayerState_t *p);
+typedef int (*SndAemsPauseFn_t)(PlayerHandle_t handle);
+
+extern SndAemsPlayFn_t SNDAEMSplayerplayfn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerstopfn[4];
+extern SndAemsPauseFn_t SNDAEMSplayerpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4];
+extern SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4];
+
+/* A module class of a bank (60 bytes, then one offset word per player state and per class state
+   of an instance): its Csis class handle and constructor client, the instance count and limit,
+   the instance's global variable, function, player and class state counts and whether it has a
+   destructor and member data, the instance update callback, the instance template and its size,
+   the offset of the destroy state and the list of live instances. */
+typedef struct AemsInstance_t AemsInstance_t;
+
+typedef struct AemsClass_t {
+    int unk_0x0;
+    Csis::ClassHandle mHandle;
+    Csis::ClassConstructorClient mConstructor;
+    short mNumInstances;
+    short mMaxInstances;
+    unsigned short mNumGlobals;
+    unsigned short mNumFunctions;
+    unsigned char mNumPlayers;
+    unsigned char mHasDestructor;
+    unsigned char mHasMemberData;
+    unsigned char mNumClasses;
+    void (*mpUpdate)(void *context);
+    void *mpTemplate;
+    int mInstanceSize;
+    int mDestroyOffset;
+    AemsInstance_t *mpInstances;
+    int mStateOffsets[1];
+} AemsClass_t;
+
+/* A module instance: its link on the class's instance list, its client on the module timer list,
+   then the template's data (the Csis client records first). */
+struct AemsInstance_t {
+    AemsInstance_t *mpNext;
+    AemsInstance_t *mpPrev;
+    SndAemsTimerClient_t mTimer;
+    unsigned char mData[1];
+};
+
+/* The destroy state of an instance: its class, the instance, its Csis object and the request. */
+typedef struct DestroyState_t {
+    AemsClass_t *mpClass;
+    AemsInstance_t *mpInstance;
+    Csis::Class *mpObject;
+    int mDestroy;
+} DestroyState_t;
+
+/* A Csis client record of an instance: a handle and a function client, then (for functions and
+   member data) a count of parameter words. */
+typedef struct AemsVariableClient_t {
+    Csis::GlobalVariableHandle mHandle;
+    Csis::FunctionClient mClient;
+    int unk_0x18;
+} AemsVariableClient_t;
+
+typedef struct AemsFunctionClient_t {
+    Csis::FunctionHandle mHandle;
+    Csis::FunctionClient mClient;
+    unsigned char mNumParams;
+    unsigned char unk_0x19[3];
+    int mParams[1];
+} AemsFunctionClient_t;
+
+typedef struct AemsMemberDataClient_t {
+    Csis::FunctionClient mClient;
+    unsigned char mNumParams;
+    unsigned char unk_0x11[3];
+    int mParams[1];
+} AemsMemberDataClient_t;
+
+typedef struct AemsDestructorClient_t {
+    Csis::ClassDestructorClient mClient;
+    int unk_0x10;
+} AemsDestructorClient_t;
+
+/* A resolved module bank: its class count, code size, class table offset, fixup header offset,
+   handle, sound banks, name and user word, and its link on sndaems.mpModuleBanks. */
+typedef struct AemsModuleBank_t {
+    unsigned char unk_0x0[10];
+    unsigned short mNumClasses;
+    unsigned char unk_0xC[8];
+    int mSize;
+    unsigned char unk_0x18[4];
+    int mClassOffset;
+    unsigned char unk_0x20[16];
+    int mFixupHeaderOffset;
+    int mRelocOffset;
+    int mCsisOffset;
+    int mHandle;
+    int mBankA;
+    int mBankB;
+    char *mpName;
+    int mUser;
+    SndAemsModuleBankLink_t mLink;
+} AemsModuleBank_t;
+
+#define AEMS_BANK_FROM_LINK(link) ((AemsModuleBank_t *)((char *)(link) - 80))
+// FAKEMATCH: the module bank list head read through a constant address (sndaems + 4) instead of sndaems.mpModuleBanks, for the target's folded sndaems+4 accesses
+#define AEMS_MODULE_BANKS (*(SndAemsModuleBankLink_t **)((char *)&sndaems + 4))
+
+int SNDAEMS_removemodulebank(int handle);
+int SNDAEMSI_updatedestroy(DestroyState_t *p);
+void SNDAEMSI_timerupdate(void *unused);
 extern void SNDSYS_entercritical(void);
 extern void SNDSYS_leavecritical(void);
+unsigned int strlen(const char *s);
+char *strcpy(char *dst, const char *src);
 
-int fn_80266E88(int *p)
+int SNDAEMSI_UpdateClassDestructor(int *p)
 {
     int value = p[4];
 
@@ -267,17 +411,17 @@ int fn_80266E88(int *p)
     return value;
 }
 
-int fn_80266E9C(int *p)
+int SNDAEMSI_UpdateClassData(int *p)
 {
     return p[5];
 }
 
-int fn_80266EA4(int *p)
+int SNDAEMSI_UpdateGlobalVariable(int *p)
 {
     return p[6];
 }
 
-int fn_80266EAC(int *p)
+int SNDAEMSI_updatecreate(int *p)
 {
     int value = p[0];
 
@@ -285,56 +429,193 @@ int fn_80266EAC(int *p)
     return value;
 }
 
-int fn_80267114(Object_80267114 *p)
+int SNDAEMSI_updatedestroy(DestroyState_t *p)
 {
-    int *values;
-    int i;
+    if (p->mDestroy != 0) {
+        AemsClass_t *c = p->mpClass;
+        AemsInstance_t *inst = p->mpInstance;
+        SndAemsTimerClient_t *timer;
+        unsigned char *data;
+        int *offsets;
+        int i;
 
-    if (p->mUnknown8) {
-        values = (int *)&p->mUnknownC[p->mUnknown9];
-        for (i = 0; i < p->mUnknown9; i++) {
-            int value = values[i + 1];
-            int clamped;
-
-            if (value < p->mUnknownC[i].mMin) {
-                clamped = p->mUnknownC[i].mMin;
-            } else {
-                clamped = value;
-                if (value > p->mUnknownC[i].mMax)
-                    clamped = p->mUnknownC[i].mMax;
-            }
-            values[i + 1] = clamped;
+        if (inst == c->mpInstances)
+            c->mpInstances = inst->mpNext;
+        if (inst->mpPrev != 0)
+            inst->mpPrev->mpNext = inst->mpNext;
+        if (inst->mpNext != 0)
+            inst->mpNext->mpPrev = inst->mpPrev;
+        timer = &p->mpInstance->mTimer;
+        if (timer == sndaems.mpTimerClients)
+            sndaems.mpTimerClients = timer->mpNext;
+        if (timer->mpPrev != 0)
+            timer->mpPrev->mpNext = timer->mpNext;
+        if (timer->mpNext != 0)
+            timer->mpNext->mpPrev = timer->mpPrev;
+        inst = p->mpInstance;
+        data = inst->mData;
+        if (p->mpClass->mHasDestructor) {
+            p->mpObject->UnsubscribeDestructorFast(&((AemsDestructorClient_t *)data)->mClient);
+            data = inst->mData + sizeof(AemsDestructorClient_t);
         }
-    } else {
-        values = (int *)p->mUnknownC;
+        for (i = 0; i < p->mpClass->mNumGlobals; i++) {
+            Csis::GlobalVariable::UnsubscribeFast(&((AemsVariableClient_t *)data)->mHandle,
+                                                  &((AemsVariableClient_t *)data)->mClient);
+            data += sizeof(AemsVariableClient_t);
+        }
+        if (p->mpClass->mHasMemberData) {
+            p->mpObject->UnsubscribeMemberDataFast(&((AemsMemberDataClient_t *)data)->mClient);
+            data += ((AemsMemberDataClient_t *)data)->mNumParams * 4 + 20;
+        }
+        for (i = 0; i < p->mpClass->mNumFunctions; i++) {
+            Csis::Function::UnsubscribeFast(&((AemsFunctionClient_t *)data)->mHandle,
+                                            &((AemsFunctionClient_t *)data)->mClient);
+            data += ((AemsFunctionClient_t *)data)->mNumParams * 4 + 28;
+        }
+        offsets = p->mpClass->mStateOffsets;
+        for (i = 0; i < p->mpClass->mNumPlayers; i++) {
+            PlayerState_t *player = (PlayerState_t *)((char *)p->mpInstance + *offsets++);
+
+            if (player->mType >= 0)
+                SNDAEMSplayerstopfn[player->mType](player);
+        }
+        for (i = 0; i < p->mpClass->mNumClasses; i++) {
+            ControlClassState_t *object = (ControlClassState_t *)((char *)p->mpInstance + *offsets++);
+
+            if (object->mpObject != 0)
+                object->mpObject->Release();
+        }
+        p->mpClass->mNumInstances--;
+        SNDMEMI_free(p->mpInstance);
     }
-    if (values[0] != 0)
-        fn_801B9410(p, values + 1);
     return 0;
 }
 
-int fn_8026739C(Object_8026739C *p)
+int UpdateCallFunction(CallFunctionState_t *p)
+{
+    CallFunctionInput_t *input;
+
+    if (p->mClamp) {
+        AemsRange_t *ranges = p->mRanges;
+        int i;
+
+        input = (CallFunctionInput_t *)&ranges[p->mNumParams];
+        for (i = 0; i < p->mNumParams; i++) {
+            int value = input->mParams[i];
+            int clamped;
+
+            if (value < ranges[i].mMin) {
+                clamped = ranges[i].mMin;
+            } else {
+                clamped = value;
+                if (value > ranges[i].mMax)
+                    clamped = ranges[i].mMax;
+            }
+            input->mParams[i] = clamped;
+        }
+    } else {
+        input = (CallFunctionInput_t *)p->mRanges;
+    }
+    if (input->mTrigger != 0)
+        Csis::Function::CallFast(&p->mHandle, input->mParams);
+    return 0;
+}
+
+int UpdateControlClass(ControlClassState_t *p)
+{
+    AemsRange_t *ranges = 0;
+    ControlClassInput_t *input;
+    int refs;
+    int i;
+
+    if (p->mClamp) {
+        ranges = p->mRanges;
+        input = (ControlClassInput_t *)&ranges[p->mNumParams];
+    } else {
+        input = (ControlClassInput_t *)p->mRanges;
+    }
+    if (input->mRelease != 0) {
+        if (p->mpObject == 0)
+            return 0;
+        p->mpObject->Release();
+        p->mpObject = 0;
+    } else if (input->mCreate != 0) {
+        if (p->mpObject == 0) {
+            if (p->mClamp) {
+                for (i = 0; i < p->mNumParams; i++) {
+                    int value = input->mParams[i];
+                    int clamped;
+
+                    if (value < ranges[i].mMin) {
+                        clamped = ranges[i].mMin;
+                    } else {
+                        clamped = value;
+                        if (value > ranges[i].mMax)
+                            clamped = ranges[i].mMax;
+                    }
+                    input->mParams[i] = clamped;
+                }
+            }
+            if (Csis::Class::CreateInstanceFast(&p->mHandle, input->mParams, &p->mpObject) < 0)
+                p->mpObject = 0;
+        }
+    } else {
+        if (p->mpObject == 0)
+            return 0;
+        if (p->mClamp) {
+            for (i = 0; i < p->mNumParams; i++) {
+                int value = input->mParams[i];
+                int clamped;
+
+                if (value < ranges[i].mMin) {
+                    clamped = ranges[i].mMin;
+                } else {
+                    clamped = value;
+                    if (value > ranges[i].mMax)
+                        clamped = ranges[i].mMax;
+                }
+                input->mParams[i] = clamped;
+            }
+        }
+        p->mpObject->SetMemberDataFast(input->mParams);
+    }
+    if (p->mpObject == 0)
+        return 0;
+    p->mpObject->GetRefCount(&refs);
+    return refs;
+}
+
+/* A set-global-variable module: the Csis handle, the value range, the last input and the input. */
+typedef struct SetGlobalVariableState_t {
+    Csis::GlobalVariableHandle mHandle;
+    int mMin;
+    int mMax;
+    int mLast;
+    int mInput;
+} SetGlobalVariableState_t;
+
+int UpdateSetGlobalVariable(SetGlobalVariableState_t *p)
 {
     int value;
-    int v = p->mUnknown14;
+    int v = p->mInput;
     int lo, hi;
 
-    if (p->mUnknown10 != v) {
-        p->mUnknown10 = v;
-        lo = p->mUnknown8;
-        hi = p->mUnknownC;
+    if (p->mLast != v) {
+        p->mLast = v;
+        lo = p->mMin;
+        hi = p->mMax;
         if (v < lo)
             value = lo;
         else if (v > hi)
             value = hi;
         else
             value = v;
-        fn_801B9B30(p, &value);
+        Csis::GlobalVariable::SetFast(&p->mHandle, &value);
     }
     return 0;
 }
 
-int fn_80267404(Object_80267404 *p)
+int SNDAEMSI_updatecounter(Object_80267404 *p)
 {
     int v = p->mUnknown14;
 
@@ -351,7 +632,7 @@ int fn_80267404(Object_80267404 *p)
     return p->mUnknown8;
 }
 
-int fn_80267480(Object_80267480 *p)
+int SNDAEMSI_updaterandom(Object_80267480 *p)
 {
     int result;
 
@@ -364,7 +645,7 @@ int fn_80267480(Object_80267480 *p)
     return result;
 }
 
-int fn_802674DC(Object_802674DC *p)
+int SNDAEMSI_updaterandomshuffle(Object_802674DC *p)
 {
     unsigned int index;
 
@@ -390,7 +671,41 @@ int fn_802674DC(Object_802674DC *p)
     return p->mUnknownC;
 }
 
-int fn_8026769C(Object_8026769C *p)
+/* A weighted random module's state: the weight table, the output base, the choice count, the
+   output and the trigger input. */
+typedef struct RandomWeightTable_t {
+    unsigned char unk_0x0[16];
+    signed char mWeights[1];
+} RandomWeightTable_t;
+
+typedef struct RandomWeightedState_t {
+    RandomWeightTable_t *mpTable;
+    int mBase;
+    int mCount;
+    int mValue;
+    int mTrigger;
+} RandomWeightedState_t;
+
+int SNDAEMSI_updaterandomweighted(RandomWeightedState_t *p)
+{
+    if (p->mTrigger != 0) {
+        unsigned int roll = iSNDrandom() % 100;
+        RandomWeightTable_t *table = p->mpTable;
+        unsigned int sum;
+        int i;
+
+        for (i = 0, sum = 0; i < p->mCount; i++) {
+            sum += table->mWeights[i];
+            if (sum > roll) {
+                p->mValue = i + p->mBase;
+                break;
+            }
+        }
+    }
+    return p->mValue;
+}
+
+int SNDAEMSI_updaterangetrig(Object_8026769C *p)
 {
     if (p->mUnknown14 >= p->mUnknown0 && p->mUnknown14 <= p->mUnknown4) {
         if (p->mUnknown10 == 0) {
@@ -405,13 +720,40 @@ int fn_8026769C(Object_8026769C *p)
     return 0;
 }
 
-int fn_802677B4(Object_802677B4 *p)
+/* A delay trigger's state: the running time, the output, the trigger input and the delay. */
+typedef struct DelayTrigState_t {
+    float mTime;
+    unsigned char mOutput;
+    unsigned char unk_0x5[3];
+    int mTrigger;
+    int mDelay;
+} DelayTrigState_t;
+
+int SNDAEMSI_updatedelaytrig(DelayTrigState_t *p)
+{
+    if (p->mTrigger != 0)
+        p->mTime = 0.0f;
+    if (!(p->mTime < 0.0f)) {
+        if (!(p->mTime < (float)p->mDelay)) {
+            p->mOutput = 1;
+            p->mTime = -1.0f;
+            return 1;
+        }
+        p->mTime += Snd::gVariableTimerPeriod;
+    }
+    p->mOutput = 0;
+    return 0;
+}
+
+int SNDAEMSI_updatestategen(Object_802677B4 *p)
 {
     int *flags = (int *)((char *)p + p->mUnknown0);
     int i;
 
     for (i = 0; i < p->mUnknown2; i++) {
-        if (flags[i] != 0) {
+        int *flag = &flags[i];
+
+        if (*flag != 0) {
             p->mUnknown4 = p->mUnknown8[i];
             break;
         }
@@ -419,7 +761,7 @@ int fn_802677B4(Object_802677B4 *p)
     return p->mUnknown4;
 }
 
-int fn_80267814(Object_80267814 *p)
+int SNDAEMSI_updatemerge(Object_80267814 *p)
 {
     int i;
 
@@ -433,10 +775,159 @@ int fn_80267814(Object_80267814 *p)
 void SNDAEMSI_envelopeprogramsegment(EnvelopeState_80267858 *p)
 {
     p->mTime = p->mSegments[p->mSegment].mTime;
-    p->mStep = Snd::gVariableTimerPeriod * ((p->mSegments[p->mSegment].mLevel - p->mStart) / p->mTime);
+    p->mStep = (p->mSegments[p->mSegment].mLevel - p->mLevel) / p->mTime;
+    p->mStep *= Snd::gVariableTimerPeriod;
 }
 
-int fn_80267D84(Args_80267D84 *p)
+int SNDAEMSI_updateenvelope(EnvelopeState_80267858 *p)
+{
+    int *input = (int *)((char *)p + p->mInputOffset);
+
+    if (*input == 1 && p->mLastInput == 0) {
+        p->mSegment = 0;
+        p->mLevel = p->mStartLevel;
+        SNDAEMSI_envelopeprogramsegment(p);
+    } else if (*input == 3 && (unsigned char)p->mLastInput != 3 && p->mSegment < p->mSustainSegment) {
+        p->mSegment = p->mSustainSegment;
+        SNDAEMSI_envelopeprogramsegment(p);
+    } else if ((*input == 1 || *input == 3) && p->mSegment < p->mNumSegments) {
+        p->mTime -= Snd::gVariableTimerPeriod;
+        if (!(p->mTime > 0.0f)) {
+            p->mLevel = p->mSegments[p->mSegment].mLevel;
+            p->mSegment++;
+            if (p->mSegment < p->mNumSegments)
+                SNDAEMSI_envelopeprogramsegment(p);
+            else
+                p->mLevel = 0.0f;
+        } else {
+            p->mLevel += p->mStep;
+        }
+    } else if (*input != 2) {
+        p->mLevel = 0.0f;
+    }
+    p->mLastInput = *input;
+    return (int)(!(p->mLevel < 0.0f) ? p->mLevel + 0.5f : p->mLevel - 0.5f);
+}
+
+/* A lookup table module: the table (entry type, entry count, input range, index scale and the
+   entries), the last input, the output and the input. */
+typedef struct TableData_t {
+    unsigned char mType;
+    unsigned char unk_0x1;
+    unsigned short mCount;
+    int mMin;
+    int mMax;
+    float mScale;
+    union {
+        signed char mBytes[1];
+        short mShorts[1];
+        int mInts[1];
+    } mEntries;
+} TableData_t;
+
+typedef struct TableState_t {
+    TableData_t *mpTable;
+    int mLastInput;
+    int mOutput;
+    int mInput;
+} TableState_t;
+
+int SNDAEMSI_updatetable(TableState_t *p)
+{
+    int input = p->mInput;
+
+    if (input != p->mLastInput) {
+        TableData_t *t = p->mpTable;
+        int index;
+        int min;
+        int max;
+
+        p->mLastInput = input;
+        min = t->mMin;
+        max = t->mMax;
+        if (input < min)
+            index = min;
+        else if (input > max)
+            index = max;
+        else
+            index = input;
+        index -= t->mMin;
+        if (t->mScale == 1.0f) {
+            if (t->mType == 2)
+                p->mOutput = t->mEntries.mShorts[index];
+            else if (t->mType == 1)
+                p->mOutput = t->mEntries.mBytes[index];
+            else
+                p->mOutput = t->mEntries.mInts[index];
+        } else {
+            float pos = (float)index * t->mScale;
+            float start = pos - 0.5f;
+            int first = (int)(!(start < 0.0f) ? start + 0.5f : start - 0.5f);
+            int next = first + 1;
+            float a;
+            float b;
+            float value;
+
+            pos -= (float)first;
+            if (next >= t->mCount)
+                next = t->mCount - 1;
+            if (t->mType == 2) {
+                a = t->mEntries.mShorts[first];
+                b = t->mEntries.mShorts[next];
+            } else if (t->mType == 1) {
+                a = t->mEntries.mBytes[first];
+                b = t->mEntries.mBytes[next];
+            } else {
+                a = t->mEntries.mInts[first];
+                b = t->mEntries.mInts[next];
+            }
+            value = pos * (b - a) + a;
+            index = (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+            p->mOutput = index;
+        }
+    }
+    return p->mOutput;
+}
+
+/* A delay line: the offset of its (value, delay) inputs, the buffer length, the write and read
+   cursors, the last delay and the buffer. */
+typedef struct DelayLineState_t {
+    unsigned short mInputOffset;
+    unsigned short mLength;
+    unsigned short mWrite;
+    unsigned short mRead;
+    int mLastDelay;
+    int mBuffer[1];
+} DelayLineState_t;
+
+int SNDAEMSI_updatedelayline(DelayLineState_t *p)
+{
+    int *input = (int *)((char *)p + p->mInputOffset);
+    int value;
+
+    if (input[1] != p->mLastDelay) {
+        int ticks;
+
+        p->mLastDelay = input[1];
+        if (input[1] < 0)
+            input[1] = 0;
+        ticks = (int)((float)input[1] / Snd::gVariableTimerPeriod + 0.5f);
+        if (ticks >= p->mLength)
+            ticks = p->mLength - 1;
+        p->mWrite = p->mRead + ticks;
+    }
+    if (p->mWrite >= p->mLength)
+        p->mWrite -= p->mLength;
+    if (p->mRead >= p->mLength)
+        p->mRead = 0;
+    p->mBuffer[p->mWrite] = input[0];
+    value = p->mBuffer[p->mRead];
+    p->mWrite++;
+    p->mRead++;
+    return value;
+}
+
+int SNDAEMSI_updatemux(Args_80267D84 *p)
 {
     int index = p->mValues[0];
 
@@ -445,7 +936,7 @@ int fn_80267D84(Args_80267D84 *p)
     return p->mValues[index];
 }
 
-int fn_80267DB4(Object_80267DB4 *p)
+int SNDAEMSI_updatedemux(Object_80267DB4 *p)
 {
     int index;
 
@@ -458,7 +949,7 @@ int fn_80267DB4(Object_80267DB4 *p)
     return p->mUnknownC[0];
 }
 
-int fn_80267E04(Args_80267D84 *p)
+int SNDAEMSI_updatemin(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -470,7 +961,7 @@ int fn_80267E04(Args_80267D84 *p)
     return result;
 }
 
-int fn_80267E48(int *p)
+int SNDAEMSI_updatemin2(int *p)
 {
     int a = p[0];
     int b = p[1];
@@ -480,7 +971,7 @@ int fn_80267E48(int *p)
     return b;
 }
 
-int fn_80267E64(Args_80267D84 *p)
+int SNDAEMSI_updatemax(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -492,7 +983,7 @@ int fn_80267E64(Args_80267D84 *p)
     return result;
 }
 
-int fn_80267EA8(int *p)
+int SNDAEMSI_updatemax2(int *p)
 {
     int a = p[0];
     int b = p[1];
@@ -520,7 +1011,7 @@ int SNDAEMSI_updatescale2(Scale2State_80267F80 *p)
     return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
 }
 
-int fn_8026801C(Args_80267D84 *p)
+int SNDAEMSI_updateadd(Args_80267D84 *p)
 {
     int i;
     int result = p->mValues[0];
@@ -530,40 +1021,40 @@ int fn_8026801C(Args_80267D84 *p)
     return result;
 }
 
-int fn_80268058(int *p)
+int SNDAEMSI_updateadd2(int *p)
 {
     return p[0] + p[1];
 }
 
-int fn_80268068(int *p)
+int SNDAEMSI_updatesubtract(int *p)
 {
     return p[0] - p[1];
 }
 
-int fn_80268078(int *p)
+int SNDAEMSI_updatemultiply(int *p)
 {
     return p[0] * p[1];
 }
 
-int fn_80268088(int *p)
+int SNDAEMSI_updatedivide(int *p)
 {
     if (p[1] != 0)
         return p[0] / p[1];
     return 0;
 }
 
-int fn_802680A8(int *p)
+int SNDAEMSI_updatemodulo(int *p)
 {
     if (p[1] != 0)
         return p[0] % p[1];
     return 0;
 }
 
-void fn_802680D0(void)
+void SNDAEMSI_bankinputstub(void)
 {
 }
 
-int fn_802680D4(int voice, int value)
+void SNDAEMSI_bankpitchmult(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -571,31 +1062,70 @@ int fn_802680D4(int voice, int value)
         value = 0;
     else if (value > max)
         value = max;
-    lbl_803A6C24.mUnknown1CC[voice].mUnknown8E = value;
-    return SNDPLATFORM_setpitch(voice);
+    lbl_803A6C24.m1CC[voice].m8E = value;
+    SNDPLATFORM_setpitch(voice);
 }
 
-int fn_80268130(int voice, int value)
+void SNDAEMSI_banktimemult(int voice, int value)
 {
     if (value > 8192)
         value = 8192;
     else if (value < 2048)
         value = 2048;
-    lbl_803A6C24.mUnknown1CC[voice].mUnknown6E = value;
-    return SNDPLATFORM_timemult(voice, value);
+    lbl_803A6C24.m1CC[voice].m6E = value;
+    SNDPLATFORM_timemult(voice, value);
 }
 
-void fn_80268270(int voice, int value)
+void SNDAEMSI_bankvol(int voice, int value)
 {
-    Voice_803A6C24 *v = &lbl_803A6C24.mUnknown1CC[voice];
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
+    int clamped;
+    int i;
 
-    if (v->mUnknown23 == 1) {
-        v->mUnknown1C = value;
+    if (value < 0)
+        clamped = 0;
+    else if (value > 32767)
+        clamped = 32767;
+    else
+        clamped = value;
+    v->m38 = (float)clamped * (1.0f / 32767.0f);
+    v->m48 = v->m38 * lbl_80300028;
+    for (i = 0; i < v->m23; i++) {
+        int index = v->m4[i];
+        Record_803A6DF0 *sub = &lbl_803A6C24.m1CC[index];
+
+        sub->m38 = v->m38;
+        sub->m48 = v->m48;
+        SndHalSetVol(index);
+    }
+}
+
+void SNDAEMSI_bankazimuth(int voice, int value)
+{
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
+
+    if (v->m23 == 1) {
+        v->m1C = value;
         SndHalSetPan(voice);
     }
 }
 
-void fn_80268354(int voice, int value)
+void SNDAEMSI_bankfxwet0(int voice, int value)
+{
+    int clamped;
+
+    if (value < 0)
+        clamped = 0;
+    else if (value > 32767)
+        clamped = 32767;
+    else
+        clamped = value;
+    lbl_803A6C24.m1CC[voice].m60 = clamped >> 8;
+    *lbl_803A6C24.m1CC[voice].m64 = (float)(signed char)lbl_803A6C24.m1CC[voice].m60 * (1.0f / 127.0f);
+    SNDPLATFORM_setfxlevel(voice, 0);
+}
+
+void SNDAEMSI_banklowpass(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -606,7 +1136,7 @@ void fn_80268354(int voice, int value)
     SNDPLATFORM_lowpass(voice, value);
 }
 
-void fn_8026839C(int voice, int value)
+void SNDAEMSI_bankhighpass(int voice, int value)
 {
     int max = 0xFFFF;
 
@@ -617,9 +1147,9 @@ void fn_8026839C(int voice, int value)
     SNDPLATFORM_highpass(voice, value);
 }
 
-void fn_802683E4(int voice, int value)
+void SNDAEMSI_bankdrylevel(int voice, int value)
 {
-    Voice_803A6C24 *v = &lbl_803A6C24.mUnknown1CC[voice];
+    Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
     int clamped;
     int i;
 
@@ -630,14 +1160,14 @@ void fn_802683E4(int voice, int value)
     else
         clamped = value;
     value = clamped >> 8;
-    for (i = 0; i < v->mUnknown23; i++) {
-        int index = v->mUnknown4[i];
-        lbl_803A6C24.mUnknown1CC[index].mUnknown5F = value;
+    for (i = 0; i < v->m23; i++) {
+        int index = v->m4[i];
+        lbl_803A6C24.m1CC[index].m5F = value;
         SndHalSetDry(index);
     }
 }
 
-void fn_80268480(Object_80268480 *p, int value)
+void SNDAEMSI_optpitchmult(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -645,19 +1175,19 @@ void fn_80268480(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknownC = value;
+    p->mC = value;
 }
 
-void fn_802684B0(Object_80268480 *p, int value)
+void SNDAEMSI_opttimemult(SndPlayOpts_t *p, int value)
 {
     if (value > 8192)
         value = 8192;
     else if (value < 2048)
         value = 2048;
-    p->mUnknownE = value;
+    p->mE = value;
 }
 
-void fn_802684D4(Object_80268480 *p, int value)
+void SNDAEMSI_optvol(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -667,15 +1197,15 @@ void fn_802684D4(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown0 = clamped >> 8;
+    p->m0 = clamped >> 8;
 }
 
-void fn_802684FC(Object_80268480 *p, int value)
+void SNDAEMSI_optazimuth(SndPlayOpts_t *p, int value)
 {
-    p->mUnknown8 = value;
+    p->m8 = value;
 }
 
-void fn_80268504(Object_80268480 *p, int value)
+void SNDAEMSI_optfxwet0(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -685,10 +1215,10 @@ void fn_80268504(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown5 = clamped >> 8;
+    p->m5 = clamped >> 8;
 }
 
-void fn_8026852C(Object_80268480 *p, int value)
+void SNDAEMSI_optlowpass(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -696,10 +1226,10 @@ void fn_8026852C(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknown14 = value;
+    p->m14 = value;
 }
 
-void fn_8026855C(Object_80268480 *p, int value)
+void SNDAEMSI_opthighpass(SndPlayOpts_t *p, int value)
 {
     int max = 0xFFFF;
 
@@ -707,10 +1237,10 @@ void fn_8026855C(Object_80268480 *p, int value)
         value = 0;
     else if (value > max)
         value = max;
-    p->mUnknown16 = value;
+    p->m16 = value;
 }
 
-void fn_8026858C(Object_80268480 *p, int value)
+void SNDAEMSI_optdrylevel(SndPlayOpts_t *p, int value)
 {
     int clamped;
 
@@ -720,37 +1250,37 @@ void fn_8026858C(Object_80268480 *p, int value)
         clamped = 32767;
     else
         clamped = value;
-    p->mUnknown4 = clamped >> 8;
+    p->m4 = clamped >> 8;
 }
 
-void fn_802685B4(void)
+void SNDAEMSI_optstub(void)
 {
 }
 
-Result_802685B8 fn_802685B8(Object_802685B8 *p, int *q)
+Result_802685B8 SNDAEMSI_playerplaybank(Object_802685B8 *p, int *q)
 {
-    Object_80268480 params;
+    SndPlayOpts_t params;
     Result_802685B8 result;
     Entry_802686CC *e;
     int i;
 
     SNDplaysetdef(&params);
-    params.mUnknown5 = 0;
+    params.m5 = 0;
     e = p->mEntries;
     for (i = 0; i < p->mUnknownE; i++, e++) {
-        lbl_802FFB6C[e->mType](&params, e->mUnknown8);
+        SNDAEMSoptfn[e->mType](&params, e->mUnknown8);
         e->mUnknown4 = e->mUnknown8;
     }
     result.mUnknown0 = SNDBANK_play(p->mUnknown0->mUnknown40, q[1], &params);
     return result;
 }
 
-int fn_80268668(Object_802686CC *p)
+int SNDAEMSI_playerstopbank(Object_802686CC *p)
 {
     return SNDstop(p->mUnknown8);
 }
 
-int fn_8026868C(int *p)
+int SNDAEMSI_playerpausebank(int *p)
 {
     int handle = *p;
 
@@ -758,7 +1288,7 @@ int fn_8026868C(int *p)
     return SNDpitchmult(handle, 0);
 }
 
-void fn_802686CC(Object_802686CC *p)
+void SNDAEMSI_playerunpausebank(Object_802686CC *p)
 {
     int a = 4096;
     int b = 32767;
@@ -778,8 +1308,8 @@ void fn_802686CC(Object_802686CC *p)
                 e->mUnknown4 = b;
             }
         }
-        fn_802680D4(handle, a);
-        fn_80268188(handle, b);
+        SNDAEMSI_bankpitchmult(handle, a);
+        SNDAEMSI_bankvol(handle, b);
     }
 }
 
@@ -788,15 +1318,185 @@ int SNDAEMSI_playerresetoutputs(PlayerState_80268774 *p)
     p->mUnknown10 = -1;
     if (p->mPlaying != 0) {
         PlayerOutput_80268774 *outputs = p->mOutputs;
-        int output = p->mOutput;
+        PlayerOutput_80268774 *output = &outputs[p->mOutput];
 
-        outputs[output].mUnknown4 = 0;
-        outputs[output].mUnknown0 = 0;
+        output->mUnknown4 = 0;
+        output->mUnknown0 = 0;
     }
     return 0;
 }
 
-int fn_80268F54(Object_80268F54 *p)
+int SNDAEMSI_playerupdatebank(PlayerState_t *p)
+{
+    int i;
+    PlayerInput_t *input = p->mInputs;
+    int voice = SNDVOICEI_get(p->mHandle.mHandle);
+
+    if (voice < 0)
+        return SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+    for (i = 0; i < p->mNumInputs; i++) {
+        if (input->mValue != input->mLast) {
+            playerinterfacefn[input->mType](voice, input->mValue);
+            input->mLast = input->mValue;
+        }
+        input++;
+    }
+    if (p->mPlaying != 0) {
+        Record_803A6DF0 *v = &lbl_803A6C24.m1CC[voice];
+        float msPerFrame = 1000.0f / (float)v->m20;
+        int frame = SNDPLATFORM_getcurframe(voice);
+        float ms = (float)frame * msPerFrame;
+        int value;
+
+        value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+        ((PlayerTimes_t *)input)->mPosition = value;
+        if (v->m18 <= 0) {
+            ms = (float)((unsigned int)v->m14 - frame) * msPerFrame;
+            value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+        } else {
+            value = 0;
+        }
+        ((PlayerTimes_t *)input)->mRemaining = value;
+    }
+    return 1;
+}
+
+int SNDAEMSI_updateplayer(PlayerState_t *p)
+{
+    int input = p->mModeInput;
+    int mode;
+
+    if (input < 0)
+        mode = 0;
+    else if (input > 2)
+        mode = 2;
+    else
+        mode = input;
+    if (mode != p->mMode) {
+        if (mode == 0) {
+            if (p->mType >= 0) {
+                SNDAEMSplayerstopfn[p->mType](p);
+                SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+            }
+        } else if (mode == 1) {
+            if (p->mType >= 0) {
+                SNDAEMSplayerunpausefn[p->mType](p);
+            } else if (!(p->mMode == 2 && p->mPrevMode == 1)) {
+                int index = p->mSample;
+                PlayerSampleList_t *list = p->mpSamples;
+                int count = list->mCount;
+
+                if (index >= count)
+                    index = count - 1;
+                else if (index < 0)
+                    index = 0;
+                p->mType = list->mSamples[index].mType;
+                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &list->mSamples[index]);
+                if (p->mHandle.mHandle < 0)
+                    SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
+            }
+        } else {
+            if (p->mType >= 0)
+                SNDAEMSplayerpausefn[p->mType](p->mHandle);
+        }
+        p->mPrevMode = p->mMode;
+        p->mMode = mode;
+    }
+    if (mode == 1 && p->mType >= 0)
+        mode = SNDAEMSplayerupdatefn[p->mType](p);
+    if (p->mType < 0)
+        mode = 0;
+    return mode;
+}
+
+/* An oscillator: the waveform (0 sine, 1 square, 2 saw, else triangle), the phase in cycles,
+   the period and the amplitude. */
+typedef struct OscillatorState_t {
+    unsigned char mWaveform;
+    unsigned char unk_0x1[3];
+    float mPhase;
+    int mPeriod;
+    int mAmplitude;
+} OscillatorState_t;
+
+int SNDAEMSI_updateoscillator(OscillatorState_t *p)
+{
+    float step;
+    float amplitude;
+    float value;
+
+    if (p->mPeriod <= 0)
+        return 0;
+    step = Snd::gVariableTimerPeriod / (float)p->mPeriod;
+    amplitude = (float)p->mAmplitude;
+    if (!(p->mPhase < 1.0f)) {
+        do {
+            p->mPhase -= 1.0f;
+        } while (p->mPhase >= 1.0f);
+    }
+    if (p->mWaveform == 0) {
+        float angle = p->mPhase * 1024.0f;
+
+        value = (float)iSNDsin((int)(!(angle < 0.0f) ? angle + 0.5f : angle - 0.5f)) * (1.0f / 65536.0f) * amplitude;
+    } else if (p->mWaveform == 1) {
+        if (!(p->mPhase < 0.5f))
+            value = amplitude;
+        else
+            value = 0.0f;
+    } else {
+        float shape;
+
+        if (p->mWaveform == 2)
+            shape = p->mPhase;
+        else if (!(p->mPhase >= 0.5f))
+            shape = p->mPhase * 2.0f;
+        else
+            shape = (1.0f - p->mPhase) * 2.0f;
+        value = shape * amplitude;
+    }
+    p->mPhase += step;
+    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+}
+
+/* A ramp: the current value, the per-tick rate, the target and time it was set up for, the ramp
+   time, the rate multiplier and the target input. */
+typedef struct RampState_t {
+    float mValue;
+    float mRate;
+    int mLastTarget;
+    int mLastTime;
+    int mTime;
+    int mScale;
+    int mTarget;
+} RampState_t;
+
+int SNDAEMSI_updateramp(RampState_t *p)
+{
+    float target = (float)p->mTarget;
+
+    if (target == p->mValue)
+        return p->mTarget;
+    if (p->mTarget != p->mLastTarget || p->mTime != p->mLastTime) {
+        p->mLastTarget = p->mTarget;
+        p->mLastTime = p->mTime;
+        if (p->mTime <= 0) {
+            p->mValue = target;
+            return p->mTarget;
+        }
+        p->mRate = (target - p->mValue) * Snd::gVariableTimerPeriod / (float)p->mTime * (1.0f / 4096.0f);
+    }
+    p->mValue = p->mRate * (float)p->mScale + p->mValue;
+    if (!(p->mRate < 0.0f)) {
+        if (!(p->mValue <= (float)p->mTarget))
+            p->mValue = (float)p->mTarget;
+    } else {
+        if (!(p->mValue >= (float)p->mTarget))
+            p->mValue = (float)p->mTarget;
+    }
+    return (int)(!(p->mValue < 0.0f) ? p->mValue + 0.5f : p->mValue - 0.5f);
+}
+
+int SNDAEMSI_updateaddmax(Object_80268F54 *p)
 {
     int i;
     int sum = p->mValues[0];
@@ -808,7 +1508,7 @@ int fn_80268F54(Object_80268F54 *p)
     return sum;
 }
 
-int fn_80268FA0(int *p)
+int SNDAEMSI_updatesubtractmin(int *p)
 {
     int value = p[1] - p[2];
 
@@ -817,7 +1517,7 @@ int fn_80268FA0(int *p)
     return value;
 }
 
-int fn_80268FC4(int *p)
+int SNDAEMSI_updatemultiplymax(int *p)
 {
     int value = p[1] * p[2];
 
@@ -826,7 +1526,7 @@ int fn_80268FC4(int *p)
     return value;
 }
 
-int fn_80268FE8(Object_80269048 *p)
+int UpdateFunction(Object_80269048 *p)
 {
     int value = p->mUnknown19;
 
@@ -834,17 +1534,17 @@ int fn_80268FE8(Object_80269048 *p)
     return value;
 }
 
-void fn_80268FFC(int *values, Object_80268FFC *p)
+void SNDAEMSI_SetGlobalVariable(int *values, Object_80268FFC *p)
 {
     p->mUnknown18 = values[0];
 }
 
-void fn_80269008(int *values, Object_80269008 *p)
+void SNDAEMSI_SetClassDestructor(int *values, Object_80269008 *p)
 {
     p->mUnknown10 = 1;
 }
 
-void fn_80269014(int *values, Object_80269014 *p)
+void SNDAEMSI_SetClassData(int *values, Object_80269014 *p)
 {
     int i;
 
@@ -852,7 +1552,7 @@ void fn_80269014(int *values, Object_80269014 *p)
         p->mUnknown14[i] = values[i];
 }
 
-void fn_80269048(int *values, Object_80269048 *p)
+void CsisFunctionCallback(int *values, Object_80269048 *p)
 {
     int i;
 
@@ -861,11 +1561,274 @@ void fn_80269048(int *values, Object_80269048 *p)
     p->mUnknown19 = 1;
 }
 
+void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params, void *context)
+{
+    AemsClass_t *c = (AemsClass_t *)context;
+    AemsInstance_t *inst;
+    DestroyState_t *destroy;
+    unsigned char *data;
+    int i;
+
+    SNDSYS_entercritical();
+    if (c->mNumInstances >= c->mMaxInstances || (inst = (AemsInstance_t *)SNDMEMI_allocz(c->mInstanceSize)) == 0) {
+        SNDSYS_leavecritical();
+        return;
+    }
+    SNDI_memcpy(inst, c->mpTemplate, c->mInstanceSize);
+    destroy = (DestroyState_t *)((char *)inst + c->mDestroyOffset);
+    destroy->mpClass = c;
+    destroy->mpObject = object;
+    destroy->mpInstance = inst;
+    inst->mpPrev = 0;
+    inst->mpNext = c->mpInstances;
+    if (c->mpInstances != 0)
+        c->mpInstances->mpPrev = inst;
+    c->mpInstances = inst;
+    inst->mTimer.mpCallback = c->mpUpdate;
+    inst->mTimer.mpContext = inst->mData;
+    inst->mTimer.mpNext = sndaems.mpTimerClients;
+    inst->mTimer.mpPrev = 0;
+    if (sndaems.mpTimerClients != 0)
+        sndaems.mpTimerClients->mpPrev = &inst->mTimer;
+    sndaems.mpTimerClients = &inst->mTimer;
+    data = inst->mData;
+    if (c->mHasDestructor) {
+        AemsDestructorClient_t *client = (AemsDestructorClient_t *)data;
+
+        client->mClient.mContext = client;
+        client->mClient.mCallback = (void (*)(Csis::Class *, void *))SNDAEMSI_SetClassDestructor;
+        object->SubscribeDestructorFast(&client->mClient);
+        data = inst->mData + sizeof(AemsDestructorClient_t);
+    }
+    for (i = 0; i < c->mNumGlobals; i++) {
+        AemsVariableClient_t *client = (AemsVariableClient_t *)data;
+
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetGlobalVariable;
+        client->mClient.mContext = client;
+        Csis::GlobalVariable::SubscribeFast(&client->mHandle, &client->mClient);
+        data += sizeof(AemsVariableClient_t);
+    }
+    if (c->mHasMemberData) {
+        AemsMemberDataClient_t *client = (AemsMemberDataClient_t *)data;
+
+        client->mClient.mContext = client;
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetClassData;
+        object->SubscribeMemberDataFast(&client->mClient);
+        data += client->mNumParams * 4 + 20;
+    }
+    for (i = 0; i < c->mNumFunctions; i++) {
+        AemsFunctionClient_t *client = (AemsFunctionClient_t *)data;
+
+        client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))CsisFunctionCallback;
+        client->mClient.mContext = client;
+        Csis::Function::SubscribeFast(&client->mHandle, &client->mClient);
+        data += client->mNumParams * 4 + 28;
+    }
+    c->mNumInstances++;
+    SNDSYS_leavecritical();
+}
+
+
+SndAemsBankSetter_t playerinterfacefn[12] = {
+    SNDAEMSI_bankpitchmult, SNDAEMSI_banktimemult, SNDAEMSI_bankvol, SNDAEMSI_bankazimuth,
+    (SndAemsBankSetter_t)SNDAEMSI_bankinputstub, SNDAEMSI_bankfxwet0, SNDAEMSI_banklowpass, SNDAEMSI_bankhighpass,
+    SNDAEMSI_bankdrylevel, (SndAemsBankSetter_t)SNDAEMSI_bankinputstub, (SndAemsBankSetter_t)SNDAEMSI_bankinputstub,
+    (SndAemsBankSetter_t)SNDAEMSI_bankinputstub,
+};
+
+SndAemsOptSetter_t SNDAEMSoptfn[12] = {
+    SNDAEMSI_optpitchmult, SNDAEMSI_opttimemult, SNDAEMSI_optvol, SNDAEMSI_optazimuth,
+    (SndAemsOptSetter_t)SNDAEMSI_optstub, SNDAEMSI_optfxwet0, SNDAEMSI_optlowpass, SNDAEMSI_opthighpass,
+    SNDAEMSI_optdrylevel, (SndAemsOptSetter_t)SNDAEMSI_optstub, (SndAemsOptSetter_t)SNDAEMSI_optstub,
+    (SndAemsOptSetter_t)SNDAEMSI_optstub,
+};
+
+SndAemsPlayFn_t SNDAEMSplayerplayfn[4] = { (SndAemsPlayFn_t)SNDAEMSI_playerplaybank };
+SndAemsPlayerFn_t SNDAEMSplayerstopfn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerstopbank };
+SndAemsPauseFn_t SNDAEMSplayerpausefn[4] = { (SndAemsPauseFn_t)SNDAEMSI_playerpausebank };
+SndAemsPlayerFn_t SNDAEMSplayerunpausefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerunpausebank };
+SndAemsPlayerFn_t SNDAEMSplayerupdatefn[4] = { (SndAemsPlayerFn_t)SNDAEMSI_playerupdatebank };
+
+SndAemsUpdateFn_t sndaemsfuncs[40] = {
+    (SndAemsUpdateFn_t)SNDAEMSI_UpdateClassDestructor, (SndAemsUpdateFn_t)SNDAEMSI_UpdateClassData, (SndAemsUpdateFn_t)SNDAEMSI_UpdateGlobalVariable,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatecreate, (SndAemsUpdateFn_t)SNDAEMSI_updatedestroy, (SndAemsUpdateFn_t)UpdateCallFunction,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatecounter, (SndAemsUpdateFn_t)SNDAEMSI_updaterandom, (SndAemsUpdateFn_t)SNDAEMSI_updaterandomshuffle,
+    (SndAemsUpdateFn_t)SNDAEMSI_updaterandomweighted, (SndAemsUpdateFn_t)SNDAEMSI_updaterangetrig,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatedelaytrig, (SndAemsUpdateFn_t)SNDAEMSI_updatestategen,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemerge, (SndAemsUpdateFn_t)SNDAEMSI_updateenvelope, (SndAemsUpdateFn_t)SNDAEMSI_updatetable, (SndAemsUpdateFn_t)SNDAEMSI_updatedelayline,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemux, (SndAemsUpdateFn_t)SNDAEMSI_updatedemux, (SndAemsUpdateFn_t)SNDAEMSI_updatemin,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemax, (SndAemsUpdateFn_t)SNDAEMSI_updatescale,
+    (SndAemsUpdateFn_t)SNDAEMSI_updateadd, (SndAemsUpdateFn_t)SNDAEMSI_updatesubtract, (SndAemsUpdateFn_t)SNDAEMSI_updatemultiply,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatedivide, (SndAemsUpdateFn_t)SNDAEMSI_updatemodulo, (SndAemsUpdateFn_t)SNDAEMSI_updateplayer, (SndAemsUpdateFn_t)SNDAEMSI_updateoscillator,
+    (SndAemsUpdateFn_t)SNDAEMSI_updateramp, (SndAemsUpdateFn_t)SNDAEMSI_updateaddmax, (SndAemsUpdateFn_t)SNDAEMSI_updatesubtractmin,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatemultiplymax, (SndAemsUpdateFn_t)SNDAEMSI_updatemin2, (SndAemsUpdateFn_t)SNDAEMSI_updatemax2,
+    (SndAemsUpdateFn_t)SNDAEMSI_updatescale2, (SndAemsUpdateFn_t)SNDAEMSI_updateadd2,
+    (SndAemsUpdateFn_t)UpdateFunction, (SndAemsUpdateFn_t)UpdateControlClass, (SndAemsUpdateFn_t)UpdateSetGlobalVariable,
+};
+
 void SNDAEMSI_restore(void)
 {
     SNDSYS_entercritical();
-    while (lbl_803A6BD0 != 0)
-        fn_802692B8(((ModuleBank_80269260 *)((char *)lbl_803A6BD0 - 20))->mHandle);
+    while (AEMS_MODULE_BANKS != 0)
+        SNDAEMS_removemodulebank(AEMS_BANK_FROM_LINK(AEMS_MODULE_BANKS)->mHandle);
+    SNDSYS_leavecritical();
+}
+
+int SNDAEMS_removemodulebank(int handle)
+{
+    AemsModuleBank_t *bank;
+
+    if (sndaems.mpBeforeRemoveBank != 0)
+        sndaems.mpBeforeRemoveBank();
+    SNDSYS_entercritical();
+    for (bank = AEMS_BANK_FROM_LINK(AEMS_MODULE_BANKS); bank != 0;
+         bank = AEMS_BANK_FROM_LINK(bank->mLink.mpNext)) {
+        if (handle == bank->mHandle) {
+            AemsClass_t *c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
+            int i;
+
+            for (i = 0; i < bank->mNumClasses; i++) {
+                AemsInstance_t *inst;
+
+                Csis::Class::UnsubscribeConstructorFast(&c->mHandle, &c->mConstructor);
+                inst = c->mpInstances;
+                while (inst != 0) {
+                    AemsInstance_t *next = inst->mpNext;
+                    DestroyState_t *destroy = (DestroyState_t *)((char *)inst + c->mDestroyOffset);
+
+                    destroy->mDestroy = 1;
+                    SNDAEMSI_updatedestroy(destroy);
+                    inst = next;
+                }
+                c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+            }
+            if (bank->mpName != 0)
+                SNDMEMI_free(bank->mpName);
+            if (bank->mBankA >= 0)
+                SNDbankremove(bank->mBankA);
+            if (bank->mBankB >= 0)
+                SNDbankremove(bank->mBankB);
+            if (&bank->mLink == AEMS_MODULE_BANKS)
+                AEMS_MODULE_BANKS = bank->mLink.mpNext;
+            if (bank->mLink.mpPrev != 0)
+                bank->mLink.mpPrev->mpNext = bank->mLink.mpNext;
+            if (bank->mLink.mpNext != 0)
+                bank->mLink.mpNext->mpPrev = bank->mLink.mpPrev;
+            if (AEMS_MODULE_BANKS == 0)
+                Snd::gVariableTimerList.Remove((SndStreamFader_t *)&sndaems.mTimerClient);
+            SNDSYS_leavecritical();
+            return 0;
+        }
+    }
+    SNDSYS_leavecritical();
+    return -8;
+}
+
+int SNDAEMSI_createmodulebankhandle(void)
+{
+    static int modulebankhandle = 0;
+
+    modulebankhandle++;
+    if (modulebankhandle < 0)
+        modulebankhandle = 1;
+    return modulebankhandle;
+}
+
+/* A bank's fixup header: the count and bank offsets of the module function ids to patch. */
+typedef struct AemsFixupHeader_t {
+    int mCount;
+    int mOffsets[1];
+} AemsFixupHeader_t;
+
+/* A Csis interface fixup: the handle's bank offset, the offset of its (hash, name) record and
+   the handle kind (0 global variable, 1 class, else function). */
+typedef struct AemsCsisFixup_t {
+    int mHandleOffset;
+    int mNameOffset;
+    unsigned char mKind;
+    unsigned char unk_0x9[3];
+} AemsCsisFixup_t;
+
+typedef struct AemsCsisFixups_t {
+    int mCount;
+    AemsCsisFixup_t mFixups[1];
+} AemsCsisFixups_t;
+
+void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixups, char *name, int user)
+{
+    int first;
+    int i;
+    unsigned char *base;
+    AemsFixupHeader_t *relocs;
+    AemsCsisFixups_t *csis;
+    AemsClass_t *c;
+
+    lbl_803A6C24.m1B4[0] = SNDAEMSI_restore;
+    SNDSYS_entercritical();
+    first = AEMS_MODULE_BANKS == 0;
+    bank->mLink.mpNext = AEMS_MODULE_BANKS;
+    bank->mLink.mpPrev = 0;
+    if (AEMS_MODULE_BANKS != 0)
+        AEMS_MODULE_BANKS->mpPrev = &bank->mLink;
+    AEMS_MODULE_BANKS = &bank->mLink;
+    for (i = 0; i < fixups->mCount; i++) {
+        unsigned short *id = (unsigned short *)((char *)bank + fixups->mOffsets[i]);
+        unsigned short *fn = (unsigned short *)&sndaemsfuncs[(id[0] << 16) | id[2]];
+
+        id[0] = fn[0];
+        id[2] = fn[1];
+    }
+    base = (unsigned char *)fixups - bank->mFixupHeaderOffset;
+    relocs = (AemsFixupHeader_t *)(base + bank->mRelocOffset);
+    for (i = 0; i < relocs->mCount; i++)
+        *(int *)((char *)bank + relocs->mOffsets[i]) += (int)bank;
+    csis = (AemsCsisFixups_t *)(base + bank->mCsisOffset);
+    for (i = 0; i < csis->mCount; i++) {
+        Csis::InterfaceId id;
+        unsigned short *record = (unsigned short *)(base + csis->mFixups[i].mNameOffset);
+
+        ((unsigned short *)&id.mHash)[0] = record[0];
+        ((unsigned short *)&id.mHash)[1] = record[1];
+        id.mName = (const char *)(record + 2);
+        if (csis->mFixups[i].mKind == 0)
+            ((Csis::GlobalVariableHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+        else if (csis->mFixups[i].mKind == 1)
+            ((Csis::ClassHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+        else
+            ((Csis::FunctionHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+    }
+    c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
+    for (i = 0; i < bank->mNumClasses; i++) {
+        int j;
+
+        c->mConstructor.mCallback = SNDAEMSI_CreateModuleInstance;
+        c->mConstructor.mContext = c;
+        c->mpTemplate = (char *)bank + (int)c->mpTemplate;
+        c->mpUpdate = (void (*)(void *))((char *)bank + (int)c->mpUpdate);
+        Csis::Class::SubscribeConstructorFast(&c->mHandle, &c->mConstructor);
+        for (j = 0; j < c->mNumPlayers; j++)
+            *(AemsModuleBank_t **)((char *)c->mpTemplate + c->mStateOffsets[j]) = bank;
+        c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+    }
+    if (name != 0 && name[0] != 0) {
+        bank->mpName = (char *)SNDMEMI_allocz(strlen(name) + 1);
+        strcpy(bank->mpName, name);
+        bank->mUser = user;
+    } else {
+        bank->mpName = 0;
+    }
+    if (first) {
+        SndAemsTimerClient_t *client = &sndaems.mTimerClient;
+
+        client->mpCallback = SNDAEMSI_timerupdate;
+        client->mpNext = (SndAemsTimerClient_t *)Snd::gVariableTimerList.mpHead;
+        client->mpPrev = 0;
+        if (Snd::gVariableTimerList.mpHead != 0)
+            Snd::gVariableTimerList.mpHead->mpPrev = (SndStreamFader_t *)client;
+        Snd::gVariableTimerList.mpHead = (SndStreamFader_t *)client;
+    }
+    ICInvalidateRange(bank, bank->mSize);
+    DCFlushRange(bank, bank->mSize);
     SNDSYS_leavecritical();
 }
 }

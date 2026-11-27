@@ -25821,6 +25821,114 @@
       ]
     },
     {
+      "source": "src/engine/saems.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 62 of 74 functions exact, the 12 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80266E88",
+          "end": "0x80266EC0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026739C",
+          "end": "0x80267894"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80267C70",
+          "end": "0x802687AC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80268F54",
+          "end": "0x80269084"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80269260",
+          "end": "0x802692B8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80269484",
+          "end": "0x802694AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B77C8",
+          "end": "0x802B78A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFB3C",
+          "end": "0x802FFC90"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDAEMSI_updatedestroy",
+            "evidence": "evidence.tsv source-form 0x80266EC0-0x80267114"
+          },
+          {
+            "function": "UpdateCallFunction",
+            "evidence": "evidence.tsv source-form 0x80267114-0x802671D0"
+          },
+          {
+            "function": "UpdateControlClass",
+            "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"
+          },
+          {
+            "function": "SNDAEMSI_updateenvelope",
+            "evidence": "evidence.tsv source-form 0x80267894-0x80267A1C"
+          },
+          {
+            "function": "SNDAEMSI_updatetable",
+            "evidence": "evidence.tsv source-form 0x80267A1C-0x80267C70"
+          },
+          {
+            "function": "SNDAEMSI_playerupdatebank",
+            "evidence": "evidence.tsv source-form 0x802687AC-0x8026898C"
+          },
+          {
+            "function": "SNDAEMSI_updateplayer",
+            "evidence": "evidence.tsv source-form 0x8026898C-0x80268B88"
+          },
+          {
+            "function": "SNDAEMSI_updateoscillator",
+            "evidence": "evidence.tsv source-form 0x80268B88-0x80268DA8"
+          },
+          {
+            "function": "SNDAEMSI_updateramp",
+            "evidence": "evidence.tsv source-form 0x80268DA8-0x80268F54"
+          },
+          {
+            "function": "SNDAEMSI_CreateModuleInstance",
+            "evidence": "evidence.tsv source-form 0x80269084-0x80269260"
+          },
+          {
+            "function": "SNDAEMS_removemodulebank",
+            "evidence": "evidence.tsv source-form 0x802692B8-0x80269484"
+          },
+          {
+            "function": "SNDAEMSI_resolvemodulebank",
+            "evidence": "evidence.tsv source-form 0x802694AC-0x802697D8"
+          }
+        ],
+        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out SNDAEMSI_updatedestroy, UpdateCallFunction, UpdateControlClass, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer, SNDAEMSI_updateoscillator, SNDAEMSI_updateramp, SNDAEMSI_CreateModuleInstance, SNDAEMS_removemodulebank, SNDAEMSI_resolvemodulebank; their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
+      }
+    },
+    {
       "source": "src/engine/saemsamb.c",
       "profile": "sound_cxx_holdouts",
       "evidence": "evidence.tsv unit, function, name, data and source-form rows for saemsamb.c, with the sound_cxx compiler row. The native static initializer and wrapper, constructor word and 56 bytes of module state are linked. SNDAEMS_addmodulebank is a measured holdout and keeps its original bytes.",

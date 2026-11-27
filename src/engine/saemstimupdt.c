@@ -6,13 +6,6 @@
 
 extern "C" {
 
-typedef struct SndAemsTimerClient_t {
-    struct SndAemsTimerClient_t *mpNext;
-    int unk_0x4;
-    void (*mpCallback)(void *context);
-    void *mpContext;
-} SndAemsTimerClient_t;
-
 void SNDAEMSI_timerupdate(void *unused)
 {
     SndAemsState_t *state = &sndaems;

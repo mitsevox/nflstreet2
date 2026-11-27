@@ -121,7 +121,7 @@ void FileDebugProcess(void);
 void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 unsigned long OSGetSoundMode(void);
 void SNDSYS_linkmaincpumixer(void);
-int fn_802692B8(int handle);
+int SNDAEMS_removemodulebank(int handle);
 int fn_802697D8(void *pData, char *pName, int b, void *(*pAlloc)(void *, int, int));
 int SNDautovol(int handle, int time, int vol);
 int SNDbankadd(int *handle, BankVer_t *bank);
@@ -918,7 +918,7 @@ int SndAemsUnloadBank(SndAemsBankInfo_t *pBank)
 
     result = 0;
     if (SND_READY()) {
-        result = fn_802692B8(pBank->mHandle);
+        result = SNDAEMS_removemodulebank(pBank->mHandle);
         fn_801D2BD0(pBank->pData);
         DSDelListNode(_Snd_ModuleInfo.pAemsBankList, pBank);
     }

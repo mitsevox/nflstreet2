@@ -29258,7 +29258,7 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler and source-form rows; draft comparisons only, original assembly remains linked. Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 12 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 62 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29269,295 +29269,76 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B7808",
-          "end": "0x802B7828"
+          "start": "0x802B77C8",
+          "end": "0x802B78A0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFB3C",
+          "end": "0x802FFC90"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80266E88",
-          "start": "0x80266E88",
-          "end": "0x80266E9C"
+          "symbol": "SNDAEMSI_updatedestroy",
+          "start": "0x80266EC0",
+          "end": "0x80267114"
         },
         {
-          "symbol": "fn_80266E9C",
-          "start": "0x80266E9C",
-          "end": "0x80266EA4"
-        },
-        {
-          "symbol": "fn_80266EA4",
-          "start": "0x80266EA4",
-          "end": "0x80266EAC"
-        },
-        {
-          "symbol": "fn_80266EAC",
-          "start": "0x80266EAC",
-          "end": "0x80266EC0"
-        },
-        {
-          "symbol": "fn_80267114",
+          "symbol": "UpdateCallFunction",
           "start": "0x80267114",
           "end": "0x802671D0"
         },
         {
-          "symbol": "fn_8026739C",
-          "start": "0x8026739C",
-          "end": "0x80267404"
+          "symbol": "UpdateControlClass",
+          "start": "0x802671D0",
+          "end": "0x8026739C"
         },
         {
-          "symbol": "fn_80267404",
-          "start": "0x80267404",
-          "end": "0x80267480"
+          "symbol": "SNDAEMSI_updateenvelope",
+          "start": "0x80267894",
+          "end": "0x80267A1C"
         },
         {
-          "symbol": "fn_80267480",
-          "start": "0x80267480",
-          "end": "0x802674DC"
+          "symbol": "SNDAEMSI_updatetable",
+          "start": "0x80267A1C",
+          "end": "0x80267C70"
         },
         {
-          "symbol": "fn_802674DC",
-          "start": "0x802674DC",
-          "end": "0x802675E8"
+          "symbol": "SNDAEMSI_playerupdatebank",
+          "start": "0x802687AC",
+          "end": "0x8026898C"
         },
         {
-          "symbol": "fn_8026769C",
-          "start": "0x8026769C",
-          "end": "0x80267710"
+          "symbol": "SNDAEMSI_updateplayer",
+          "start": "0x8026898C",
+          "end": "0x80268B88"
         },
         {
-          "symbol": "fn_802677B4",
-          "start": "0x802677B4",
-          "end": "0x80267814"
+          "symbol": "SNDAEMSI_updateoscillator",
+          "start": "0x80268B88",
+          "end": "0x80268DA8"
         },
         {
-          "symbol": "fn_80267814",
-          "start": "0x80267814",
-          "end": "0x80267858"
+          "symbol": "SNDAEMSI_updateramp",
+          "start": "0x80268DA8",
+          "end": "0x80268F54"
         },
         {
-          "symbol": "SNDAEMSI_envelopeprogramsegment",
-          "start": "0x80267858",
-          "end": "0x80267894"
+          "symbol": "SNDAEMSI_CreateModuleInstance",
+          "start": "0x80269084",
+          "end": "0x80269260"
         },
         {
-          "symbol": "fn_80267D84",
-          "start": "0x80267D84",
-          "end": "0x80267DB4"
+          "symbol": "SNDAEMS_removemodulebank",
+          "start": "0x802692B8",
+          "end": "0x80269484"
         },
         {
-          "symbol": "fn_80267DB4",
-          "start": "0x80267DB4",
-          "end": "0x80267E04"
-        },
-        {
-          "symbol": "fn_80267E04",
-          "start": "0x80267E04",
-          "end": "0x80267E48"
-        },
-        {
-          "symbol": "fn_80267E48",
-          "start": "0x80267E48",
-          "end": "0x80267E64"
-        },
-        {
-          "symbol": "fn_80267E64",
-          "start": "0x80267E64",
-          "end": "0x80267EA8"
-        },
-        {
-          "symbol": "fn_80267EA8",
-          "start": "0x80267EA8",
-          "end": "0x80267EC4"
-        },
-        {
-          "symbol": "SNDAEMSI_updatescale",
-          "start": "0x80267EC4",
-          "end": "0x80267F80"
-        },
-        {
-          "symbol": "SNDAEMSI_updatescale2",
-          "start": "0x80267F80",
-          "end": "0x8026801C"
-        },
-        {
-          "symbol": "fn_8026801C",
-          "start": "0x8026801C",
-          "end": "0x80268058"
-        },
-        {
-          "symbol": "fn_80268058",
-          "start": "0x80268058",
-          "end": "0x80268068"
-        },
-        {
-          "symbol": "fn_80268068",
-          "start": "0x80268068",
-          "end": "0x80268078"
-        },
-        {
-          "symbol": "fn_80268078",
-          "start": "0x80268078",
-          "end": "0x80268088"
-        },
-        {
-          "symbol": "fn_80268088",
-          "start": "0x80268088",
-          "end": "0x802680A8"
-        },
-        {
-          "symbol": "fn_802680A8",
-          "start": "0x802680A8",
-          "end": "0x802680D0"
-        },
-        {
-          "symbol": "fn_802680D0",
-          "start": "0x802680D0",
-          "end": "0x802680D4"
-        },
-        {
-          "symbol": "fn_802680D4",
-          "start": "0x802680D4",
-          "end": "0x80268130"
-        },
-        {
-          "symbol": "fn_80268130",
-          "start": "0x80268130",
-          "end": "0x80268188"
-        },
-        {
-          "symbol": "fn_80268270",
-          "start": "0x80268270",
-          "end": "0x802682B0"
-        },
-        {
-          "symbol": "fn_80268354",
-          "start": "0x80268354",
-          "end": "0x8026839C"
-        },
-        {
-          "symbol": "fn_8026839C",
-          "start": "0x8026839C",
-          "end": "0x802683E4"
-        },
-        {
-          "symbol": "fn_802683E4",
-          "start": "0x802683E4",
-          "end": "0x80268480"
-        },
-        {
-          "symbol": "fn_80268480",
-          "start": "0x80268480",
-          "end": "0x802684B0"
-        },
-        {
-          "symbol": "fn_802684B0",
-          "start": "0x802684B0",
-          "end": "0x802684D4"
-        },
-        {
-          "symbol": "fn_802684D4",
-          "start": "0x802684D4",
-          "end": "0x802684FC"
-        },
-        {
-          "symbol": "fn_802684FC",
-          "start": "0x802684FC",
-          "end": "0x80268504"
-        },
-        {
-          "symbol": "fn_80268504",
-          "start": "0x80268504",
-          "end": "0x8026852C"
-        },
-        {
-          "symbol": "fn_8026852C",
-          "start": "0x8026852C",
-          "end": "0x8026855C"
-        },
-        {
-          "symbol": "fn_8026855C",
-          "start": "0x8026855C",
-          "end": "0x8026858C"
-        },
-        {
-          "symbol": "fn_8026858C",
-          "start": "0x8026858C",
-          "end": "0x802685B4"
-        },
-        {
-          "symbol": "fn_802685B4",
-          "start": "0x802685B4",
-          "end": "0x802685B8"
-        },
-        {
-          "symbol": "fn_802685B8",
-          "start": "0x802685B8",
-          "end": "0x80268668"
-        },
-        {
-          "symbol": "fn_80268668",
-          "start": "0x80268668",
-          "end": "0x8026868C"
-        },
-        {
-          "symbol": "fn_8026868C",
-          "start": "0x8026868C",
-          "end": "0x802686CC"
-        },
-        {
-          "symbol": "fn_802686CC",
-          "start": "0x802686CC",
-          "end": "0x80268774"
-        },
-        {
-          "symbol": "SNDAEMSI_playerresetoutputs",
-          "start": "0x80268774",
-          "end": "0x802687AC"
-        },
-        {
-          "symbol": "fn_80268F54",
-          "start": "0x80268F54",
-          "end": "0x80268FA0"
-        },
-        {
-          "symbol": "fn_80268FA0",
-          "start": "0x80268FA0",
-          "end": "0x80268FC4"
-        },
-        {
-          "symbol": "fn_80268FC4",
-          "start": "0x80268FC4",
-          "end": "0x80268FE8"
-        },
-        {
-          "symbol": "fn_80268FE8",
-          "start": "0x80268FE8",
-          "end": "0x80268FFC"
-        },
-        {
-          "symbol": "fn_80268FFC",
-          "start": "0x80268FFC",
-          "end": "0x80269008"
-        },
-        {
-          "symbol": "fn_80269008",
-          "start": "0x80269008",
-          "end": "0x80269014"
-        },
-        {
-          "symbol": "fn_80269014",
-          "start": "0x80269014",
-          "end": "0x80269048"
-        },
-        {
-          "symbol": "fn_80269048",
-          "start": "0x80269048",
-          "end": "0x80269084"
-        },
-        {
-          "symbol": "SNDAEMSI_restore",
-          "start": "0x80269260",
-          "end": "0x802692B8"
+          "symbol": "SNDAEMSI_resolvemodulebank",
+          "start": "0x802694AC",
+          "end": "0x802697D8"
         }
       ]
     },
