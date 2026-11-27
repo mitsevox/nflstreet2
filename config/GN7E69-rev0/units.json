@@ -29726,8 +29726,14 @@
     {
       "source": "src/engine/sprintf.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteInt, _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteInt (r6 lane 4, FAKEMATCH source-form row 0x801C20F0), _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C20F0",
+          "end": "0x801C21D0"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -29750,10 +29756,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "_WriteInt",
-            "evidence": "evidence.tsv source-form 0x801C20F0-0x801C21D0"
-          },
-          {
             "function": "_WriteFloat",
             "evidence": "evidence.tsv source-form 0x801C21D0-0x801C2428"
           },
@@ -29766,7 +29768,7 @@
             "evidence": "evidence.tsv source-form 0x801C289C-0x801C2D88"
           }
         ],
-        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteInt, _WriteFloat, _WriteSci and vsnprintf."
+        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteFloat, _WriteSci and vsnprintf (_WriteInt linked in r6 lane 4)."
       }
     },
     {
