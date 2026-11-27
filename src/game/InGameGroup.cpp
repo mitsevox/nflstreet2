@@ -3,7 +3,7 @@
    the modules each stage needs, and the per-frame step that runs the game and
    hands control back to the front-end group when it ends. */
 #include "game/InGameGroup.h"
-#include "game/ModuleGroup_8003450C.h"
+#include "game/InGameModules.h"
 #include "game/GameModules.h"
 #include "game/GameState.h"
 #include "game/SndgCrowd.h"

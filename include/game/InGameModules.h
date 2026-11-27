@@ -1,5 +1,5 @@
-#ifndef GAME_MODULEGROUP_8003450C_H
-#define GAME_MODULEGROUP_8003450C_H
+#ifndef GAME_INGAMEMODULES_H
+#define GAME_INGAMEMODULES_H
 
 #include "game/Module.h"
 

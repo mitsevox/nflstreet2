@@ -6,7 +6,7 @@
 /* Draft. Clamps a parameter s on pA0-pA1 and t on pB0-pB1 to 0..1 (s from
    the two-segment solve, then t from s, then s again from t), stores the
    midpoint of the two points to pOut and returns their squared distance. */
-extern "C" float fn_80088FFC(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut)
+extern "C" float CollideSegmentClosestPoints(float *pA0, float *pA1, float *pB0, float *pB1, float *pOut)
 {
     float r[3];
     float d2[3];

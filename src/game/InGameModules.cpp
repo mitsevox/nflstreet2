@@ -1,4 +1,9 @@
-#include "game/ModuleGroup_8003450C.h"
+/* The in-game modules: the 60 flow modules (animation, ball, players, camera, collision,
+   effects, sound, replay, play book and the rest) that the in-game group starts and stops
+   around a game. Each module names itself, lists the modules it depends on and sets up or
+   tears down its subsystem; the file's static initializer builds every module object and
+   its dependency table. */
+#include "game/InGameModules.h"
 #include "game/StyleTracker.h"
 #include "game/GameObjList.h"
 #include "game/GameState.h"
