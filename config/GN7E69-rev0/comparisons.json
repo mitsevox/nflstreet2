@@ -23827,37 +23827,6 @@
       ]
     },
     {
-      "source": "src/engine/animmotroot.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8 and the HOLDOUT source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset, which keep the original code while AnimMotRotateHalfTurn and the pool link.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BCA74",
-          "end": "0x801BCF40"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDC0",
-          "end": "0x802AEDC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "AnimMotBlendRootAngle",
-          "start": "0x801BCA74",
-          "end": "0x801BCCAC"
-        },
-        {
-          "symbol": "AnimMotBlendRootOffset",
-          "start": "0x801BCCAC",
-          "end": "0x801BCEEC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes. Data rows 0x8037EC7C-0x8037F860 (.bss) and 0x803ECEBC-0x803ECEC0 (.sbss).",
@@ -24044,7 +24013,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Four full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Three full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24066,11 +24035,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "iSPCH_GetPhraseBank",
-          "start": "0x801AFD04",
-          "end": "0x801AFDFC"
-        },
         {
           "symbol": "iSPCH_ChooseSamples",
           "start": "0x801B0050",
@@ -26657,7 +26621,7 @@
     {
       "source": "src/engine/splytree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are drafted at 90.62% (the target loads the child into r0 and copies it to r3 after loading the tree sentinel; see the compiler row).",
+      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are exact and linked since round 5 lane 2 (2026-11-27; FAKEMATCH dead-branch form, see their source-form rows).",
       "sections": [
         {
           "section": ".text",
@@ -26927,32 +26891,6 @@
       ]
     },
     {
-      "source": "src/engine/pathserv.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, complete native data row and HOLDOUT 0x801B3568-0x801B3724. Only the integer-return sort remains a comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B343C",
-          "end": "0x801B3AD0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA58",
-          "end": "0x802AEA60"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_sortprojects",
-          "start": "0x801B3568",
-          "end": "0x801B3724"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathvol.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
@@ -27014,37 +26952,6 @@
       ]
     },
     {
-      "source": "src/engine/pathnode.c",
-      "profile": "path_cxx",
-      "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B6780",
-          "end": "0x801B7778"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AED00",
-          "end": "0x802AED50"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_choosesynchtime",
-          "start": "0x801B6A18",
-          "end": "0x801B6CB4"
-        },
-        {
-          "symbol": "PATHI_enternode",
-          "start": "0x801B6ED0",
-          "end": "0x801B7178"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
       "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
@@ -27073,16 +26980,6 @@
           "symbol": "PATHI_serviceaction",
           "start": "0x801B7880",
           "end": "0x801B845C"
-        },
-        {
-          "symbol": "PATHI_conditiondone",
-          "start": "0x801B845C",
-          "end": "0x801B84E4"
-        },
-        {
-          "symbol": "PATHI_trackstatus",
-          "start": "0x801B8580",
-          "end": "0x801B864C"
         },
         {
           "symbol": "PATHI_getvalue",

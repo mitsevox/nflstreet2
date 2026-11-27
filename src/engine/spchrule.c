@@ -218,8 +218,8 @@ int iSPCH_GetSampleSizeData(VoxBankHdr_t *bank, int sample, int *pStart, int *pS
         if (sample + 1 >= count) end = bank->mUnknown8;
         else end = (next[0] << 8) + next[1];
         end = end * scale - start;
-        *pStart = start;
         *pSize = end;
+        *pStart = start;
         result = 1;
     }
     return result;

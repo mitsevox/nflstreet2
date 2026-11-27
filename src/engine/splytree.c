@@ -50,9 +50,16 @@ static int _DSListTraverseSplayTreeLeft(SplayTree_t *pTree, SplayNode_t *pNode, 
 
 SplayNode_t *_DSListGetSplayPrev(SplayTree_t *pTree, SplayNode_t *pNode)
 {
+    SplayNode_t *pChild = pNode->mpLeft;
     SplayNode_t *pNil = pTree->mpNil;
 
-    pNode = pNode->mpLeft;
+    // FAKEMATCH: dead increment of pTree (unused afterwards). flow deletes it, but the branch
+    // stays a block boundary through register allocation, so the child load keeps its own
+    // register (r0) and is copied to the result (r3) after the sentinel load, as in the target.
+    if (pChild != 0) {
+        pTree++;
+    }
+    pNode = pChild;
     if (pNode != pNil) {
         while (pNode->mpRight != pNil) {
             pNode = pNode->mpRight;
@@ -63,9 +70,16 @@ SplayNode_t *_DSListGetSplayPrev(SplayTree_t *pTree, SplayNode_t *pNode)
 
 SplayNode_t *_DSListGetSplayNext(SplayTree_t *pTree, SplayNode_t *pNode)
 {
+    SplayNode_t *pChild = pNode->mpRight;
     SplayNode_t *pNil = pTree->mpNil;
 
-    pNode = pNode->mpRight;
+    // FAKEMATCH: dead increment of pTree (unused afterwards). flow deletes it, but the branch
+    // stays a block boundary through register allocation, so the child load keeps its own
+    // register (r0) and is copied to the result (r3) after the sentinel load, as in the target.
+    if (pChild != 0) {
+        pTree++;
+    }
+    pNode = pChild;
     if (pNode != pNil) {
         while (pNode->mpLeft != pNil) {
             pNode = pNode->mpLeft;
