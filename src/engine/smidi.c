@@ -236,7 +236,9 @@ void SNDI_midiparsecontrol(int seq, SndMidiChan_t *chan, int channel, int contro
             SndMidiNote_t *note = &sndms.mNotes[i];
 
             if (note->mSeq == seq && note->mChan == channel) {
-                SND3dpos(note->mHandle, (chan->mAzimuth << 6) + s->m20, 0);
+                int azimuth = (chan->mAzimuth << 6) + s->m20;
+
+                SND3dpos(note->mHandle, azimuth, 0);
             }
         }
     } else {

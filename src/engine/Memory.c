@@ -759,13 +759,13 @@ void *MemCustomHeap(int ident, int parentIdent, char *pStart, unsigned int size,
     }
     memset(pHeap, 0, total);
     pHeap->mId = ident;
+    pHeap->mpSelf = pHeap;
+    pHeap->mpStart = pStart;
     pHeap->mSize = size;
     pHeap->mpEnd = pStart + size;
     pHeap->mDebugSize = lbl_803EBCD8;
-    pHeap->mpFuncs = pFuncs;
-    pHeap->mpStart = pStart;
     pHeap->mDebug = lbl_803EBCDA;
-    pHeap->mpSelf = pHeap;
+    pHeap->mpFuncs = pFuncs;
     pHeap->mpNext = lbl_803EBCC8;
     lbl_803EBCC8 = pHeap;
     _BuildHeapAddrTable();

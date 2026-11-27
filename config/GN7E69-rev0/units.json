@@ -1671,7 +1671,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 34 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail, fn_801D2130 and MemCustomHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and fn_801D2130 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
       "sections": [
         {
           "section": ".text",
@@ -1694,7 +1694,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801D2570",
+          "start": "0x801D2478",
           "end": "0x801D34C4"
         }
       ],
@@ -1715,13 +1715,9 @@
           {
             "function": "fn_801D2130",
             "evidence": "evidence.tsv source-form 0x801D2130-0x801D2478"
-          },
-          {
-            "function": "MemCustomHeap",
-            "evidence": "evidence.tsv source-form 0x801D2478-0x801D2570"
           }
         ],
-        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478."
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 (fn_801D2478, MemCustomHeap, exact since #1492)."
       }
     },
     {
@@ -25989,7 +25985,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 10 of 13 functions exact, the holdouts SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 11 of 13 functions exact, the holdouts SNDI_midiparsenoteon and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
@@ -26001,12 +25997,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8026BBF0",
-          "end": "0x8026BC9C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026BE48",
           "end": "0x8026BF04"
         },
         {
@@ -26035,15 +26025,11 @@
             "evidence": "evidence.tsv source-form 0x8026BA60-0x8026BBF0"
           },
           {
-            "function": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-            "evidence": "evidence.tsv source-form 0x8026BC9C-0x8026BE48"
-          },
-          {
             "function": "SNDI_midiprocesstick__Fi",
             "evidence": "evidence.tsv source-form 0x8026BF04-0x8026C0C0"
           }
         ],
-        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick; their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
+        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick (SNDI_midiparsecontrol exact since #1492); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
       }
     },
     {
@@ -28167,13 +28153,19 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv saramman.c unit, compiler, state and HOLDOUT source-form rows. Four exact functions (324 bytes) and the native 16-byte state link; alloc/free keep original instructions.",
+      "evidence": "evidence.tsv saramman.c unit, compiler, state and HOLDOUT source-form rows. Five exact functions (480 bytes) and the native 16-byte state link; SNDARAM_alloc keeps original instructions.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027981C",
           "end": "0x80279960"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80279B24",
+          "end": "0x80279BC0"
         },
         {
           "section": ".bss",
@@ -28187,13 +28179,9 @@
           {
             "function": "SNDARAM_alloc",
             "evidence": "evidence.tsv source-form 0x80279960-0x80279B24"
-          },
-          {
-            "function": "SNDARAM_free",
-            "evidence": "evidence.tsv source-form 0x80279B24-0x80279BC0"
           }
         ],
-        "evidence": "Both gap-search/insertion and remove/compaction bodies remain measured partials after source-form and RTL investigation; the four prefix functions and complete native state link."
+        "evidence": "The gap-search/insertion body remains a measured partial after source-form and RTL investigation; the other five functions and the complete native state link."
       }
     },
     {

@@ -23816,7 +23816,7 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; the first four and native state link, the two allocator loops remain registered partials.",
+      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; five and the native state link, the SNDARAM_alloc loop remains a registered partial.",
       "sections": [
         {
           "section": ".text",
@@ -23836,11 +23836,6 @@
           "symbol": "SNDARAM_alloc",
           "start": "0x80279960",
           "end": "0x80279B24"
-        },
-        {
-          "symbol": "SNDARAM_free",
-          "start": "0x80279B24",
-          "end": "0x80279BC0"
         }
       ]
     },
@@ -25157,7 +25152,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the five holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the four holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
       "sections": [
         {
           "section": ".text",
@@ -29878,7 +29873,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 10 functions are exact and linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29904,11 +29899,6 @@
           "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
           "start": "0x8026BA60",
           "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-          "start": "0x8026BC9C",
-          "end": "0x8026BE48"
         },
         {
           "symbol": "SNDI_midiprocesstick__Fi",
