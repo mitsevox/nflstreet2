@@ -342,7 +342,7 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
             approach = -Vec3DotProduct(&normalA, &relative);
         }
     }
-    if (approach <= 0.0f) {
+    if (!(approach > 0.0f)) {
         return 0;
     }
     float response;

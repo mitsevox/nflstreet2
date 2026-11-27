@@ -25159,7 +25159,7 @@
     {
       "source": "src/engine/physbroadphase.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its function rows and the game_cpp compiler row, plus the exact data row 0x802B1708-0x802B1720. Registered for its two holdouts; the exact functions link through units.json.",
+      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its function rows and the game_cpp compiler row, plus the exact data row 0x802B1708-0x802B1720. Registered for its holdout BroadPhase::InsertEndpoint; the exact functions link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -26471,7 +26471,7 @@
     {
       "source": "src/engine/llsystem.c",
       "profile": "llsystem_c_data",
-      "evidence": "evidence.tsv llsystem.c complete unit and two HOLDOUT source-form rows. Only the two complete unfinished functions are registered; all22 other functions and all88 native data bytes link. The base comparison profile differs from the linked holdouts profile solely by -ffunction-sections. No function or data slice is omitted.",
+      "evidence": "evidence.tsv llsystem.c complete unit and the HOLDOUT source-form row of SysStartTimer. Registered: SysStartTimer (holdout) and SysInitRealTimeClock (exact since the lane-2 holdout PR, linked); the other 23 functions (SysInitRealTimeClock included) and all88 native data bytes link. The base comparison profile differs from the linked holdouts profile solely by -ffunction-sections. No function or data slice is omitted.",
       "sections": [
         {
           "section": ".text",

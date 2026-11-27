@@ -510,7 +510,7 @@
       "include_dirs": [
         "include/libc"
       ],
-      "evidence": "evidence.tsv llsystem.c compiler row and two HOLDOUT source-form rows; same whole-file flags as llsystem_c_data plus -ffunction-sections for the existing documented holdouts mechanism. Original SysStartTimer and SysInitRealTimeClock bytes remain linked."
+      "evidence": "evidence.tsv llsystem.c compiler row and the HOLDOUT source-form row of SysStartTimer; same whole-file flags as llsystem_c_data plus -ffunction-sections for the existing documented holdouts mechanism. Original SysStartTimer bytes remain linked; SysInitRealTimeClock links from source (lane-2 holdout PR)."
     },
     "uigcurve_native_c": {
       "flags": [
