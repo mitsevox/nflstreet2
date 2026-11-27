@@ -749,7 +749,7 @@ int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
-    int err;
+    int err = 0;
 
     table = lbl_803EC010[set][index];
     aCols[0].mUnk0 = key;
@@ -924,18 +924,19 @@ int fn_8022B2CC(int key, unsigned int col, int value)
     } else {
         index = lbl_802FA614[c - 65];
     }
-    if (index < 0) {
-        return 131;
-    }
-    table = lbl_803EC010[0][index];
-    _DbMttsSetCol(&aCols[0], value, table, col);
-    fn_801F9718_SetEnd(&aCols[1]);
-    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
-    _DbMttsSetTable(&aTables[0], table, 2, &expr);
-    _DbMttsSetTable(&aTables[1], -1, 2, 0);
-    err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
-    if (err == 23) {
-        err = fn_8022AF5C(key, -1, col, value, 0, index);
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        _DbMttsSetCol(&aCols[0], value, table, col);
+        fn_801F9718_SetEnd(&aCols[1]);
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+        if (err == 23) {
+            err = fn_8022AF5C(key, -1, col, value, 0, index);
+        }
+    } else {
+        err = 131;
     }
     return err;
 }
