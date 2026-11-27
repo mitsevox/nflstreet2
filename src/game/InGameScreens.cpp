@@ -204,7 +204,7 @@ void RecordsEnd(void);
 void RecordsSeekRow(int type, int row);
 int RecordsGetValue(int column);
 int RecordsGetText(int type, int row, int column, char *text, int size);
-int fn_8022B7A4(int handle, int tag, void *pValue);
+int DbMttsGetTeamColumn(int handle, int tag, void *pValue);
 int ScrmGetScoreGoal(int *pValue);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
@@ -527,7 +527,7 @@ int GameStatsReadTag(int handle, int tag)
 {
     int value;
 
-    fn_8022B7A4(handle, tag, &value);
+    DbMttsGetTeamColumn(handle, tag, &value);
     return value;
 }
 

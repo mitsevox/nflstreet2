@@ -780,7 +780,7 @@ void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 void MiniGameBenchPlayer(Object_80039F5C *p);
 int ScrmGetWinner(void);
-int fn_8022B414(int handle, unsigned int tag, int *pValue);
+int DbMttsGetPlayerColumn(int handle, unsigned int tag, int *pValue);
 void fn_80148D20(AutoDepthPlayer_t *pRecords, int *pValues,
                  DbCursor *pQuery);
 void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *pExcluded,
@@ -800,7 +800,7 @@ void fn_800B5150(Object_80039F5C *p);
 void PlyrAttachModel(Object_80039F5C *p);
 int fn_800C8704(int *pFirst, int *pSecond);
 int fn_800C8744(int team);
-int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
+int DbMttsGetTeamColumn(int handle, unsigned int tag, int *pValue);
 int snprintf(char *pText, int capacity, const char *pFormat, ...);
 void ScrmSetDown(int value);
 int fn_800A2178(void);
@@ -1300,7 +1300,7 @@ int MiniGameC::vfn_24(int team, unsigned int tag)
     for (unsigned char index = 0; index <= 6; ++index) {
         Object_80039F5C *p = PlyrGet((unsigned char)team, index);
         if (p->mUnknown9[2]) {
-            fn_8022B414(p->mUnknown2908, tag, &value);
+            DbMttsGetPlayerColumn(p->mUnknown2908, tag, &value);
             result += value;
         }
     }
@@ -1591,65 +1591,65 @@ int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
     int result=0;
     unsigned short id=pPlayer->mUnknown2908;
     switch(kind) {
-    case 1:case 9:fn_8022B414(id,0x61746467,&result);break;
+    case 1:case 9:DbMttsGetPlayerColumn(id,0x61746467,&result);break;
     case 2: {
         int value;
-        fn_8022B414(id,0x64747567,&result);
-        fn_8022B414(id,0x64746167,&value);result+=value;
+        DbMttsGetPlayerColumn(id,0x64747567,&result);
+        DbMttsGetPlayerColumn(id,0x64746167,&value);result+=value;
         break;
     }
     case 3: {
         int value;
-        fn_8022B414(id,0x74627567,&result);
-        fn_8022B7A4(lbl_803ECA24[team],0x61737374,&value);
+        DbMttsGetPlayerColumn(id,0x74627567,&result);
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x61737374,&value);
         result+=value*10;
         break;
     }
     case 4: {
         int value;
-        fn_8022B7A4(lbl_803ECA24[team],0x68647374,&result);
-        fn_8022B7A4(lbl_803ECA24[team],0x68777374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x68737374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x68327374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68647374,&result);
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68777374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68737374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68327374,&value);result+=value;
         break;
     }
     case 5: {
         int value;
-        fn_8022B7A4(lbl_803ECA24[team],0x6A737374,&result);
-        fn_8022B7A4(lbl_803ECA24[team],0x6A777374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x73737374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x73327374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A737374,&result);
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A777374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x73737374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x73327374,&value);result+=value;
         break;
     }
-    case 6:fn_8022B414(id,0x72666C67,&result);break;
+    case 6:DbMttsGetPlayerColumn(id,0x72666C67,&result);break;
     case 7: {
         int value;
-        fn_8022B7A4(lbl_803ECA24[team],0x68777374,&result);
-        fn_8022B7A4(lbl_803ECA24[team],0x6A777374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x70777374,&value);result+=value;
-        fn_8022B7A4(lbl_803ECA24[team],0x63777374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68777374,&result);
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A777374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x70777374,&value);result+=value;
+        DbMttsGetTeamColumn(lbl_803ECA24[team],0x63777374,&value);result+=value;
         break;
     }
     case 8: {
         int second,third,fourth,fifth;
-        fn_8022B414(id,0x64747567,&result);
-        fn_8022B414(id,0x64746167,&second);result+=second;
-        fn_8022B414(id,0x61746467,&third);result+=third;
-        fn_8022B414(id,0x66666C67,&fourth);result+=fourth;
-        fn_8022B414(id,0x6E696167,&fifth);result+=fifth;
+        DbMttsGetPlayerColumn(id,0x64747567,&result);
+        DbMttsGetPlayerColumn(id,0x64746167,&second);result+=second;
+        DbMttsGetPlayerColumn(id,0x61746467,&third);result+=third;
+        DbMttsGetPlayerColumn(id,0x66666C67,&fourth);result+=fourth;
+        DbMttsGetPlayerColumn(id,0x6E696167,&fifth);result+=fifth;
         break;
     }
     case 10:break;
-    case 11:fn_8022B414(id,0x75667567,&result);break;
+    case 11:DbMttsGetPlayerColumn(id,0x75667567,&result);break;
     case 12:result=StyleTrackerGetTotal(team);break;
     case 13: {
         int value;
-        fn_8022B414(id,0x72666C67,&result);
-        fn_8022B414(id,0x6E696167,&value);result+=value;
+        DbMttsGetPlayerColumn(id,0x72666C67,&result);
+        DbMttsGetPlayerColumn(id,0x6E696167,&value);result+=value;
         break;
     }
-    case 14:fn_8022B414(id,0x6B736C67,&result);break;
-    case 15:fn_8022B414(id,0x6E696167,&result);break;
+    case 14:DbMttsGetPlayerColumn(id,0x6B736C67,&result);break;
+    case 15:DbMttsGetPlayerColumn(id,0x6E696167,&result);break;
     }
     return result;
 }
@@ -1721,20 +1721,20 @@ int MiniGameC::vfn_33(int kind, int team)
         int a=StyleTrackerGetEventCount(team,77),b=StyleTrackerGetEventCount(team,103);result=a+b;break;
     }
     case 13:
-        fn_8022B7A4(handle,0x69447374,&result);
+        DbMttsGetTeamColumn(handle,0x69447374,&result);
         result+=vfn_24(team,0x72666C67);break;
     case 12:result=StyleTrackerGetTotal(team);break;
     case 11: {
         int value;
-        fn_8022B7A4(handle,0x75667374,&value);result+=value*5;
-        fn_8022B7A4(handle,0x70447374,&value);result+=value;break;
+        DbMttsGetTeamColumn(handle,0x75667374,&value);result+=value*5;
+        DbMttsGetTeamColumn(handle,0x70447374,&value);result+=value;break;
     }
     case 8: {
         int value;
-        fn_8022B7A4(handle,0x74727374,&value);result+=value;
-        fn_8022B7A4(handle,0x74507374,&value);result+=value;
-        fn_8022B7A4(handle,0x64647374,&value);result+=value;
-        fn_8022B7A4(handle,0x69707374,&value);result+=value;
+        DbMttsGetTeamColumn(handle,0x74727374,&value);result+=value;
+        DbMttsGetTeamColumn(handle,0x74507374,&value);result+=value;
+        DbMttsGetTeamColumn(handle,0x64647374,&value);result+=value;
+        DbMttsGetTeamColumn(handle,0x69707374,&value);result+=value;
         result+=vfn_24(team,0x61746467);
         result+=vfn_24(team,0x72666C67);break;
     }
@@ -1743,7 +1743,7 @@ int MiniGameC::vfn_33(int kind, int team)
         int c=StyleTrackerGetEventCount(team,42),d=StyleTrackerGetEventCount(team,113);
         int e=StyleTrackerGetEventCount(team,110);result=a+b+c+d+e;break;
     }
-    case 6:fn_8022B7A4(handle,0x72667374,&result);break;
+    case 6:DbMttsGetTeamColumn(handle,0x72667374,&result);break;
     case 5: {
         int a=StyleTrackerGetEventCount(team,34),b=StyleTrackerGetEventCount(team,46);
         int c=StyleTrackerGetEventCount(team,42);result=a+b+c;break;
@@ -1757,9 +1757,9 @@ int MiniGameC::vfn_33(int kind, int team)
     }
     case 2: {
         int value;
-        fn_8022B7A4(handle,0x74727374,&result);
-        fn_8022B7A4(handle,0x74507374,&value);result+=value;
-        fn_8022B7A4(handle,0x64647374,&value);result+=value;break;
+        DbMttsGetTeamColumn(handle,0x74727374,&result);
+        DbMttsGetTeamColumn(handle,0x74507374,&value);result+=value;
+        DbMttsGetTeamColumn(handle,0x64647374,&value);result+=value;break;
     }
     case 1:case 9:result=vfn_24(team,0x61746467);break;
     case 10:break;
@@ -2272,15 +2272,15 @@ void fn_8014BA20(MiniGame2MinuteC *p, int team, Stats_8005C844 *pStats)
         pStats->mpPlayers[i] = PlyrFindById(p->mpUnknown1C->mUnknown20[team][i]);
     }
     pStats->mValues[0] = ScrmGetTeamScore((unsigned char)team);
-    fn_8022B7A4(handle, 0x74727374, &value);
+    DbMttsGetTeamColumn(handle, 0x74727374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x74507374, &value);
+    DbMttsGetTeamColumn(handle, 0x74507374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x64647374, &value);
+    DbMttsGetTeamColumn(handle, 0x64647374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x69447374, &value);
+    DbMttsGetTeamColumn(handle, 0x69447374, &value);
     pStats->mValues[3] = value;
-    fn_8022B7A4(handle, 0x72667374, &value);
+    DbMttsGetTeamColumn(handle, 0x72667374, &value);
     pStats->mValues[2] = value;
 }
 
@@ -2936,13 +2936,13 @@ void fn_8014CCE8(MiniGameC *p, int team, Stats_8005CAE4 *pStats)
         pStats->mpPlayers[i] = PlyrFindById(ids[i]);
     }
     pStats->mValues[0] = ScrmGetTeamScore((unsigned char)team);
-    fn_8022B7A4(handle, 0x74727374, &value);
+    DbMttsGetTeamColumn(handle, 0x74727374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x74507374, &value);
+    DbMttsGetTeamColumn(handle, 0x74507374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x64647374, &value);
+    DbMttsGetTeamColumn(handle, 0x64647374, &value);
     pStats->mValues[1] += value;
-    fn_8022B7A4(handle, 0x69447374, &value);
+    DbMttsGetTeamColumn(handle, 0x69447374, &value);
     pStats->mValues[3] = value;
     pStats->mValues[2] = p->vfn_24(team, 0x61746467);
 }
@@ -5219,7 +5219,7 @@ int MiniGameJumpBallC::vfn_30(int kind, int team, int index, Object_80039F5C *pP
             result = 0;
             break;
         case 32:
-            fn_8022B414(pPlayer->mUnknown2908, 0x64706467, &result);
+            DbMttsGetPlayerColumn(pPlayer->mUnknown2908, 0x64706467, &result);
             break;
         case 18:
             result = 4 - info.mUnknown21;
@@ -6146,7 +6146,7 @@ int MiniGameOpenFieldC::vfn_30(int kind, int team, int index, Object_80039F5C *p
     int value;
 
     if (kind == 37) {
-        fn_8022B7A4(lbl_803ECA24[team], 0x7A707374, &value);
+        DbMttsGetTeamColumn(lbl_803ECA24[team], 0x7A707374, &value);
     } else {
         value = MiniGameC::vfn_30(kind, team, index, pPlayer);
     }

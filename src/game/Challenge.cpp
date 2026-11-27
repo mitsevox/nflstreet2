@@ -16,7 +16,7 @@
 
 extern "C" {
 
-int fn_8022B7A4(int handle, int tag, void *pValue);
+int DbMttsGetTeamColumn(int handle, int tag, void *pValue);
 
 /* Goal tests, one pair per goal kind (see _Chal_aGoalTests): ChalCheckGoal calls the
    first of a pair to check a goal entry of the challenge, and ChalCheckMedalGoal calls
@@ -37,7 +37,7 @@ int ChalCheckAtMostGoal(int tag, int side, Challenge_t *pRecord, int index)
     unsigned int limit = pRecord->mUnknown1C4[index].mValue;
     unsigned int value;
 
-    fn_8022B7A4(side, tag, &value);
+    DbMttsGetTeamColumn(side, tag, &value);
     return value > limit;
 }
 
@@ -47,7 +47,7 @@ int ChalRankAtMostGoal(int tag, int side, ChalMedalGoal_t *pInfo)
     unsigned int value;
     int i;
 
-    fn_8022B7A4(side, tag, &value);
+    DbMttsGetTeamColumn(side, tag, &value);
     for (i = 0; i <= 2; i++) {
         if (value < pInfo->mUnknown4[i]) {
             result = i;
@@ -62,7 +62,7 @@ int ChalCheckAtLeastGoal(int tag, int side, Challenge_t *pRecord, int index)
     unsigned int limit = pRecord->mUnknown1C4[index].mValue;
     unsigned int value;
 
-    fn_8022B7A4(side, tag, &value);
+    DbMttsGetTeamColumn(side, tag, &value);
     return value < limit ? 2 : 0;
 }
 
@@ -72,7 +72,7 @@ int ChalRankAtLeastGoal(int tag, int side, ChalMedalGoal_t *pInfo)
     unsigned int value;
     int i;
 
-    fn_8022B7A4(side, tag, &value);
+    DbMttsGetTeamColumn(side, tag, &value);
     for (i = 0; i <= 2; i++) {
         if (value >= pInfo->mUnknown4[i]) {
             result = i;
@@ -136,7 +136,7 @@ void ChalReadMedalGoal(int id, ChalMedalGoal_t *pInfo)
 
 
 /* 16-byte entry of the table _Chal_aGoalTypes, indexed by a type number: the tag
-   passed to fn_8022B7A4, a flag that selects the other side, a kind (0-4)
+   passed to DbMttsGetTeamColumn, a flag that selects the other side, a kind (0-4)
    and a printf format. */
 struct ChalGoalType_t {
     int mTag;
@@ -184,7 +184,7 @@ int ScrmGetTeamScore(int team);
 int UserProfileFindIndex(int a);
 void UserProfileAddRecordRow(int index);
 int snprintf(char *pBuffer, int size, const char *pFormat, ...);
-int fn_8022B7A4(int handle, int tag, void *pValue);
+int DbMttsGetTeamColumn(int handle, int tag, void *pValue);
 int DbUserGetId(int index);
 int DbUserGetDb(int handle);
 int DbUserGetCurrent(void);
@@ -841,7 +841,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
     if (tag != -1 && strlen(pFormat) != 0) {
         int side = !_Chal_aGoalTypes[type].mFlag;
 
-        fn_8022B7A4(side, tag, &a);
+        DbMttsGetTeamColumn(side, tag, &a);
         if (tag == 0x73707374 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 5)) {
             int value2 = ScrmGetOffenseTeam();
             ScrmPlayResult_t *pPlay = ScrmGetPlayResult();
@@ -859,8 +859,8 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 6:
-            fn_8022B7A4(1, 0x6E737374, &a);
-            fn_8022B7A4(0, 0x6E737374, &b);
+            DbMttsGetTeamColumn(1, 0x6E737374, &a);
+            DbMttsGetTeamColumn(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
             case 5:
                 snprintf(text, 128, pFormat, a + b + 1);
@@ -885,9 +885,9 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x29:
-            fn_8022B7A4(1, 0x74727374, &a);
-            fn_8022B7A4(1, 0x74507374, &b);
-            fn_8022B7A4(1, 0x64647374, &c);
+            DbMttsGetTeamColumn(1, 0x74727374, &a);
+            DbMttsGetTeamColumn(1, 0x74507374, &b);
+            DbMttsGetTeamColumn(1, 0x64647374, &c);
             snprintf(text, 128, pFormat, a + b + c);
             strncpy(pText, text, size);
             break;
@@ -896,9 +896,9 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x2D:
-            fn_8022B7A4(0, 0x74727374, &a);
-            fn_8022B7A4(0, 0x74507374, &b);
-            fn_8022B7A4(0, 0x64647374, &c);
+            DbMttsGetTeamColumn(0, 0x74727374, &a);
+            DbMttsGetTeamColumn(0, 0x74507374, &b);
+            DbMttsGetTeamColumn(0, 0x64647374, &c);
             snprintf(text, 128, pFormat, a + b + c);
             strncpy(pText, text, size);
             break;
@@ -907,7 +907,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x31:
-            fn_8022B7A4(1, 0x43637374, &a);
+            DbMttsGetTeamColumn(1, 0x43637374, &a);
             if (a >= value) {
                 snprintf(text, 128, "Best Completion Streak: %d", a);
             } else {
@@ -916,8 +916,8 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x35:
-            fn_8022B7A4(1, 0x6E737374, &a);
-            fn_8022B7A4(0, 0x6E737374, &b);
+            DbMttsGetTeamColumn(1, 0x6E737374, &a);
+            DbMttsGetTeamColumn(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
             case 5:
                 snprintf(text, 128, pFormat, a + b + 1);
@@ -938,13 +938,13 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x3A:
-            fn_8022B7A4(1, 0x61707374, &a);
-            fn_8022B7A4(1, 0x6E737374, &b);
+            DbMttsGetTeamColumn(1, 0x61707374, &a);
+            DbMttsGetTeamColumn(1, 0x6E737374, &b);
             snprintf(text, 128, pFormat, b != 0 ? (unsigned int)((float)a / (float)b * 100.0f) : 0);
             strncpy(pText, text, size);
             break;
         case 0x3E:
-            fn_8022B7A4(1, 0x43737374, &a);
+            DbMttsGetTeamColumn(1, 0x43737374, &a);
             if (a >= value) {
                 snprintf(text, 128, "Best Stylin' Completion Streak: %d", a);
             } else {
@@ -953,7 +953,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x42:
-            fn_8022B7A4(1, 0x50637374, &a);
+            DbMttsGetTeamColumn(1, 0x50637374, &a);
             if (a >= value) {
                 snprintf(text, 128, "Consecutive Pitches One Play Best: %d", a);
             } else {
@@ -962,8 +962,8 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x4A:
-            fn_8022B7A4(1, 0x61707374, &a);
-            fn_8022B7A4(1, 0x63707374, &b);
+            DbMttsGetTeamColumn(1, 0x61707374, &a);
+            DbMttsGetTeamColumn(1, 0x63707374, &b);
             snprintf(text, 128, "Incomplete Passes: %d", a - b);
             strncpy(pText, text, size);
             break;

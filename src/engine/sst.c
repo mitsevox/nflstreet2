@@ -384,10 +384,11 @@ int SNDSTRMI_isheld(SndStreamChannel_t *channel)
                 request->mHold = 0;
                 return 0;
             }
-            if (channel->mFreeRequests.mCount > 0 || STREAM_state(channel->mpTap) != 0) {
+            if (channel->mFreeRequests.mCount <= 0 && STREAM_state(channel->mpTap) == 0) {
+                request->mHold = 0;
+            } else {
                 return 1;
             }
-            request->mHold = 0;
         }
     }
     return 0;

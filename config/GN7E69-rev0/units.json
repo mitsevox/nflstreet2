@@ -930,6 +930,22 @@
     "DbFindUnusedTeamIds": {
       "address": "0x8022C628",
       "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
+    },
+    "DbMttsGetPlayerColumn": {
+      "address": "0x8022B414",
+      "evidence": "evidence.tsv function and name rows at 0x8022B414. src/game/MiniGames.cpp and src/game/ScrmRules.cpp call the original-byte DbMttsGetPlayerColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsUpdatePlayerColumn": {
+      "address": "0x8022B580",
+      "evidence": "evidence.tsv function and name rows at 0x8022B580. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdatePlayerColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsGetTeamColumn": {
+      "address": "0x8022B7A4",
+      "evidence": "evidence.tsv function and name rows at 0x8022B7A4. src/game/Challenge.cpp, src/game/ChallengeGoals.cpp, src/game/InGameScreens.cpp, src/game/MiniGames.cpp and src/game/ScrmRules.cpp call the original-byte DbMttsGetTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsUpdateTeamColumn": {
+      "address": "0x8022B8C8",
+      "evidence": "evidence.tsv function and name rows at 0x8022B8C8. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdateTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
     }
   },
   "units": [
