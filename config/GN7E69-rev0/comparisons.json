@@ -24790,7 +24790,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and five HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These five full partial bodies retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
+      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and the HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These partial bodies (two after round 5 lane 3, 2026-11-27) retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
       "sections": [
         {
           "section": ".text",
@@ -24836,24 +24836,9 @@
           "end": "0x801DE010"
         },
         {
-          "symbol": "_sumGasMotionForces",
-          "start": "0x801DE04C",
-          "end": "0x801DE114"
-        },
-        {
-          "symbol": "ParticleLibInit",
-          "start": "0x801DE1E0",
-          "end": "0x801DE410"
-        },
-        {
           "symbol": "ParticleLibShutdown",
           "start": "0x801DE410",
           "end": "0x801DE4F8"
-        },
-        {
-          "symbol": "ParticleObjInitState",
-          "start": "0x801DE794",
-          "end": "0x801DE7F4"
         }
       ],
       "discarded": [
