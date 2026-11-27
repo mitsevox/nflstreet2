@@ -26,6 +26,7 @@
 #include "game/fn_801F40F4.h"
 #include "game/LevelSurface.h"
 #include "game/Vec3Magnitude.h"
+#include "game/bitstream.h"
 
 void *operator new(unsigned int size, int unknown);
 
@@ -549,8 +550,6 @@ int ScrmGetOffenseTeam(void);
 void GetScores(int *pHome, int *pAway);
 int ScrmGetSnapOffense(void);
 int ScrmIsFieldFlipped(void);
-unsigned long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
 void PATH_seteventcallbacks(void (*a)(int, int), void (*b)(int, int), void (*c)(int, int));
 void PATH_setvariable(int flags, const char *pName, int value);
 void *DSNewListNode(void *pool);
@@ -2883,10 +2882,10 @@ extern "C" void SndgReplayPlayEntry(SndgReplaySfx_t *pEntry)
 
 extern "C" void SndgReplayWriteEntry(SndgReplaySfx_t *pEntry, void *pStream)
 {
-    fn_80191068(pStream, pEntry->mId, 8);
+    WriteBitStream((BitStream_t *)pStream, pEntry->mId, 8);
     ReplayWritePacked2(pStream, &pEntry->mPos.mX, 8, 1.0f);
-    fn_80191068(pStream, pEntry->mUnknown12, 8);
-    fn_80191068(pStream, pEntry->mFlags, 1);
+    WriteBitStream((BitStream_t *)pStream, pEntry->mUnknown12, 8);
+    WriteBitStream((BitStream_t *)pStream, pEntry->mFlags, 1);
 }
 
 extern "C" void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, void *pStream1, void *pStream2,
@@ -2895,28 +2894,28 @@ extern "C" void SndgReplayReadEntry(SndgReplaySfx_t *pEntry, void *pStream0, voi
     float pos[2];
     Vector_80039F5C *pPos;
 
-    pEntry->mId = fn_80190F18(pStream1, 8);
+    pEntry->mId = ReadBitStream((BitStream_t *)pStream1, 8);
     pPos = &pEntry->mPos;
     pPos->mX = pPos->mY = pPos->mZ = 0.0f;
     ReplayReadPacked2(pStream1, &pPos->mX, 8, 1.0f);
-    pEntry->mUnknown12 = fn_80190F18(pStream1, 8);
-    pEntry->mFlags = (unsigned char)fn_80190F18(pStream1, 1);
+    pEntry->mUnknown12 = ReadBitStream((BitStream_t *)pStream1, 8);
+    pEntry->mFlags = (unsigned char)ReadBitStream((BitStream_t *)pStream1, 1);
 
-    fn_80190F18(pStream0, 8);
+    ReadBitStream((BitStream_t *)pStream0, 8);
     ReplayReadPacked2(pStream0, pos, 8, 1.0f);
-    fn_80190F18(pStream0, 8);
-    fn_80190F18(pStream0, 1);
+    ReadBitStream((BitStream_t *)pStream0, 8);
+    ReadBitStream((BitStream_t *)pStream0, 1);
     if (pStream2) {
-        fn_80190F18(pStream2, 8);
+        ReadBitStream((BitStream_t *)pStream2, 8);
         ReplayReadPacked2(pStream2, pos, 8, 1.0f);
-        fn_80190F18(pStream2, 8);
-        fn_80190F18(pStream2, 1);
+        ReadBitStream((BitStream_t *)pStream2, 8);
+        ReadBitStream((BitStream_t *)pStream2, 1);
     }
     if (pStream3) {
-        fn_80190F18(pStream3, 8);
+        ReadBitStream((BitStream_t *)pStream3, 8);
         ReplayReadPacked2(pStream3, pos, 8, 1.0f);
-        fn_80190F18(pStream3, 8);
-        fn_80190F18(pStream3, 1);
+        ReadBitStream((BitStream_t *)pStream3, 8);
+        ReadBitStream((BitStream_t *)pStream3, 1);
     }
 }
 
@@ -2924,7 +2923,7 @@ extern "C" void SndgReplayWriteFrame(void *pStream)
 {
     unsigned int i;
 
-    fn_80191068(pStream, _SndgReplay_pQueue->mCount, 4);
+    WriteBitStream((BitStream_t *)pStream, _SndgReplay_pQueue->mCount, 4);
     for (i = 0; i < 12; i++) {
         SndgReplayWriteEntry(&_SndgReplay_pQueue->mEntries[i], pStream);
     }
@@ -2940,13 +2939,13 @@ extern "C" void SndgReplayReadFrame(void *pStream0, void *pStream1, void *pStrea
     int parity;
     SndgReplaySfx_t entry;
 
-    count = (unsigned char)fn_80190F18(pStream1, 4);
-    fn_80190F18(pStream0, 4);
+    count = (unsigned char)ReadBitStream((BitStream_t *)pStream1, 4);
+    ReadBitStream((BitStream_t *)pStream0, 4);
     if (pStream2) {
-        fn_80190F18(pStream2, 4);
+        ReadBitStream((BitStream_t *)pStream2, 4);
     }
     if (pStream3) {
-        fn_80190F18(pStream3, 4);
+        ReadBitStream((BitStream_t *)pStream3, 4);
     }
     frames = gpReplay->mUnknownD74 - gpReplay->mUnknownD70;
     half = frames / 2;

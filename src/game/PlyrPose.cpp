@@ -124,7 +124,7 @@ void PlyrPoseWrite(AnimPose_t *pPose, BitStream_t *pStream)
             } else {
                 value = 0;
             }
-            fn_80191068(pStream, (unsigned int)((value >> 4) & ((1 << bits) - 1)), bits);
+            WriteBitStream(pStream, (unsigned int)((value >> 4) & ((1 << bits) - 1)), bits);
         }
     }
     pPose->mUnknown48[75] = saved75[0];
@@ -134,7 +134,7 @@ void PlyrPoseWrite(AnimPose_t *pPose, BitStream_t *pStream)
     pPose->mUnknown48[58] = saved57[1];
     pPose->mUnknown48[59] = saved57[2];
     ReplayWritePacked3(pStream, pPose->mUnknown8, 16, 2048.0f);
-    fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
+    WriteBitStream(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
 void PlyrPoseRead(AnimPose_t *pPose, BitStream_t *pStream)
@@ -168,7 +168,7 @@ void PlyrPoseWritePart(Object_8003DEC4 *pObject, unsigned int index, BitStream_t
     bits |= (pObject->mUnknown116[index].mUnknown6 << 9) & 0x7E00;
     bits |= (pObject->mUnknown116[index].mUnknown8 << 11) & 0x1F8000;
     bits |= (pObject->mUnknown116[index].mUnknown0 << 21) & 0x200000;
-    fn_80191068(pStream, bits, 22);
+    WriteBitStream(pStream, bits, 22);
 }
 
 int PlyrPoseReadPart(PlyrPosePart_t *pElement, BitStream_t *pStream)
@@ -224,11 +224,11 @@ void PlyrPoseWriteBlend(Object_8003DEC4 *pObject, BitStream_t *pStream)
     unsigned int count = pObject->mUnknown828 > 7 ? 7 : pObject->mUnknown828;
     unsigned int blends = pObject->mUnknown260 > 2 ? 2 : pObject->mUnknown260;
 
-    fn_80191068(pStream, count, 3);
-    fn_80191068(pStream, blends, 2);
-    fn_80191068(pStream, pObject->mUnknown264[0].mUnknown6, 16);
-    fn_80191068(pStream, (unsigned long long)pObject->mUnknown264[1].mUnknown0, 32);
-    fn_80191068(pStream, pObject->mUnknown264[1].mUnknown6, 16);
+    WriteBitStream(pStream, count, 3);
+    WriteBitStream(pStream, blends, 2);
+    WriteBitStream(pStream, pObject->mUnknown264[0].mUnknown6, 16);
+    WriteBitStream(pStream, (unsigned long long)pObject->mUnknown264[1].mUnknown0, 32);
+    WriteBitStream(pStream, pObject->mUnknown264[1].mUnknown6, 16);
 }
 
 void PlyrPoseSetBlend(Object_8003DEC4 *pObject, AnimBlendList *pBlend);
@@ -575,10 +575,10 @@ void PlyrPoseWriteState(Object_8003DEC4 *pObject, BitStream_t *pStream)
 {
     unsigned int bit11;
 
-    fn_80191068(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 0), 1);
-    fn_80191068(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 17), 1);
+    WriteBitStream(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 0), 1);
+    WriteBitStream(pStream, _PlyrPoseFlagBit(pObject->mUnknown20, 17), 1);
     bit11 = (pObject->mUnknown20 >> 11) & 1;
-    fn_80191068(pStream, bit11, 1);
+    WriteBitStream(pStream, bit11, 1);
     if (!bit11) {
         PlyrPoseWrite(&pObject->mUnknown44, pStream);
         PlyrPoseWritePart(pObject, 0, pStream);
@@ -586,7 +586,7 @@ void PlyrPoseWriteState(Object_8003DEC4 *pObject, BitStream_t *pStream)
         PlyrPoseWriteBlend(pObject, pStream);
     }
     ReplayWritePacked3(pStream, pObject->mUnknown4, 16, 256.0f);
-    fn_80191068(pStream, (pObject->mUnknown36 >> 12) & 0xFFF, 12);
+    WriteBitStream(pStream, (pObject->mUnknown36 >> 12) & 0xFFF, 12);
 }
 
 void PlyrPoseReadState(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream_t *pStreamB, BitStream_t *pStreamC,

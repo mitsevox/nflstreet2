@@ -238,12 +238,12 @@ void ParticleSysReplayWrite(BitStream_t *pStream)
 {
     unsigned int i;
 
-    fn_80191068(pStream, _ParticleSys_nReplayRecords, 8);
+    WriteBitStream(pStream, _ParticleSys_nReplayRecords, 8);
     for (i = 0; i < 6; i++) {
-        fn_80191068(pStream, (short)_ParticleSys_aReplayRecords[i].mId, 16);
+        WriteBitStream(pStream, (short)_ParticleSys_aReplayRecords[i].mId, 16);
         ReplayWritePacked3(pStream, _ParticleSys_aReplayRecords[i].mPos, 16, 256.0f);
         ReplayWritePacked4(pStream, _ParticleSys_aReplayRecords[i].mRot, 12, 1024.0f);
-        fn_80191068(pStream, (unsigned int)_ParticleSys_aReplayRecords[i].mpSource, 32);
+        WriteBitStream(pStream, (unsigned int)_ParticleSys_aReplayRecords[i].mpSource, 32);
     }
     _ParticleSys_nReplayRecords = 0;
 }
