@@ -1,7 +1,7 @@
 #ifndef GAME_BLOCK_800BFAD0_H
 #define GAME_BLOCK_800BFAD0_H
 
-/* Read by fn_800BD608 through a pointer to +12 of Slot_800BFAD0. */
+/* Read by PreSnapHandleStick through a pointer to +12 of Slot_800BFAD0. */
 struct Stick_800BD608 {
     float mX;
     float mY;

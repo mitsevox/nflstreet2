@@ -13916,7 +13916,7 @@
             "evidence": "evidence.tsv source-form 0x800BA3F0-0x800BA570"
           },
           {
-            "function": "fn_800BB5DC",
+            "function": "PreGameIntroShowPlayers",
             "evidence": "evidence.tsv source-form 0x800BB5DC-0x800BB694"
           },
           {

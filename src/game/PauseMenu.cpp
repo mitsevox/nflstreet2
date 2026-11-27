@@ -81,7 +81,7 @@ void PenaltyCallInitOdds(void);
 void PlayCallStopHuddleScene(void);
 void PlayCallRestartHuddleScene(void);
 int fn_800B81A4(void);
-void fn_800BA5B0(void);
+void PracticeApplyOptions(void);
 void fn_800BF658(int a);
 void fn_800BF6CC(int a);
 int fn_800BF718(int a);
@@ -517,7 +517,7 @@ void PauseClose(void)
         fn_800AD910(_Pause_State.mUnknown0, 0.0f);
     }
     PauseResetState();
-    fn_800BA5B0();
+    PracticeApplyOptions();
     ReplayHandleCommand(gpReplay, 5, 0);
     GameEventFlagsSetFlag1(_Pause_bSavedSwap1);
     GameEventFlagsSetFlag0(_Pause_bSavedSwap0);

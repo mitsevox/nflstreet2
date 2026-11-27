@@ -1817,7 +1817,7 @@ extern "C" {
 extern Handler_800B4D7C lbl_8030FB60[248];
 }
 
-/* Four-byte entry of the stream read by fn_800B9F50. */
+/* Four-byte entry of the stream read by PracticeUpdateVoiceEvents. */
 struct Event_800B9F50 {
     unsigned char mType;
     unsigned char mIndex;
@@ -1904,7 +1904,7 @@ extern "C" Event_800B9F50 *lbl_802D9A84[];
    to; only the accessed fields are declared. */
 struct Slot_800BAE7C {
     int mUnknown0;
-    /* Written as a word by fn_800BC190, read by its low byte. */
+    /* Written as a word by PreGameIntroFillScenePlayers, read by its low byte. */
     union {
         int mTeamWord;
         struct {
@@ -7342,181 +7342,181 @@ extern "C" void GameInfoClearFlagBSPG(void);
 
 extern "C" unsigned char fn_800B9C70(void);
 
-extern "C" void fn_800B9CB0(void);
+extern "C" void GameInfoClearFlagPNPG(void);
 
-extern "C" int fn_800B9CE4(void);
+extern "C" int GameInfoGetFlagYTPG(void);
 
-extern "C" void fn_800B9D24(void);
+extern "C" void PracticeRemoveDefense(void);
 
-extern "C" void fn_800B9E44(void);
+extern "C" void PracticeRestoreDefense(void);
 
-extern "C" void fn_800B9F4C(void);
+extern "C" void PracticeStartHook(void);
 
-extern "C" int fn_800B9F50(void);
+extern "C" int PracticeUpdateVoiceEvents(void);
 
 extern "C" void fn_800BA3F0(void);
 
 extern "C" void fn_800BA570(void);
 
-extern "C" void fn_800BA574(void);
+extern "C" void PracticeApplyDefenseOff(void);
 
-extern "C" void fn_800BA5B0(void);
+extern "C" void PracticeApplyOptions(void);
 
-extern "C" void fn_800BA674(void);
+extern "C" void PracticeResetPlay(void);
 
-extern "C" void fn_800BA6F4(void);
+extern "C" void PracticeRefreshHook(void);
 
 extern "C" int fn_800BA6F8(void);
 
-extern "C" int fn_800BA71C(void);
+extern "C" int PracticeGetModeType(void);
 
-extern "C" void fn_800BA728(void);
+extern "C" void PracticeEndHook(void);
 
-extern "C" void fn_800BA72C(void);
+extern "C" void PracticeSavePlays(void);
 
 extern "C" FieldPoint_t fn_800BA7A0(void);
 
-extern "C" void fn_800BA7E8(float x, float y);
+extern "C" void PracticeSetSpot(float x, float y);
 
-extern "C" void fn_800BA804(int value);
+extern "C" void PracticeSetMenuRequest(int value);
 
-extern "C" int fn_800BA864(void);
+extern "C" int PracticeGetMenuRequest(void);
 
-extern "C" int fn_800BA870(void);
+extern "C" int PracticeCanOpenMenu(void);
 
-extern "C" void fn_800BA8CC(int value);
+extern "C" void PracticeRequestReset(int value);
 
-extern "C" int fn_800BA940(void);
+extern "C" int PracticeIsResetPending(void);
 
-extern "C" int fn_800BA94C(void);
+extern "C" int PracticeCanReset(void);
 
-extern "C" void fn_800BA988(void);
+extern "C" void PracticeCountPlay(void);
 
-extern "C" void fn_800BA9C0(int value);
+extern "C" void PracticeSetDefenseOff(int value);
 
 extern "C" int fn_800BAA24(void);
 
-extern "C" void fn_800BAA30(int value);
+extern "C" void PracticeSetDown(int value);
 
 extern "C" int fn_800BAAB8(void);
 
-extern "C" void fn_800BAAC4(void);
+extern "C" void PracticeOnPlayEnd(void);
 
-extern "C" void fn_800BAAE4(void);
+extern "C" void PracticeResetField(void);
 
-extern "C" void fn_800BACF4(void);
+extern "C" void PracticeShutdownHook(void);
 
-extern "C" int fn_800BACF8(void);
+extern "C" int PracticeIsVoiceBusy(void);
 
-extern "C" void fn_800BAD1C(void);
+extern "C" void PracticeStartVoiceEvents(void);
 
-extern "C" void fn_800BAD9C(void);
+extern "C" void PracticeUpdateVoice(void);
 
-extern "C" void fn_800BADD4(void);
+extern "C" void PracticeEndVoiceEvents(void);
 
-extern "C" int fn_800BAE40(void);
+extern "C" int PracticeIsLessonVoiceBusy(void);
 
-extern "C" int fn_800BAE64(void);
+extern "C" int PracticeGetLessonValue(void);
 
-extern "C" void fn_800BAE7C(Record_800BAE7C *p, int index);
+extern "C" void PreGameIntroStartScene(Record_800BAE7C *p, int index);
 
-extern "C" int fn_800BAF30(void);
+extern "C" int PreGameIntroIsScenePlaying(void);
 
-extern "C" void fn_800BAF7C(void);
+extern "C" void PreGameIntroNextScene(void);
 
-extern "C" void fn_800BAFE8(void);
+extern "C" void PreGameIntroSetupTeams(void);
 
-extern "C" int fn_800BB050(int value);
+extern "C" int PreGameIntroIsSpeechIdle(int value);
 
-extern "C" unsigned char fn_800BB0C4(void);
+extern "C" unsigned char PreGameIntroToggleTeam(void);
 
-extern "C" unsigned int fn_800BB0EC(void);
+extern "C" unsigned int PreGameIntroPickRandomScene(void);
 
-extern "C" int fn_800BB23C(int value);
+extern "C" int PreGameIntroIsSoloScene(int value);
 
-extern "C" void fn_800BB24C(void);
+extern "C" void PreGameIntroBuildScenes(void);
 
-extern "C" void fn_800BB458(void);
+extern "C" void PreGameIntroResetPlayerAnims(void);
 
-extern "C" void fn_800BB504(void);
+extern "C" void PreGameIntroStopScenes(void);
 
-extern "C" void fn_800BB5DC(void);
+extern "C" void PreGameIntroShowPlayers(void);
 
-extern "C" void fn_800BB694(int index, unsigned int kind, float value);
+extern "C" void PreGameIntroHandleButton(int index, unsigned int kind, float value);
 
-extern "C" void fn_800BB828(void);
+extern "C" void PreGameIntroClearHandles(void);
 
-extern "C" void fn_800BB840(int a, int b, int c);
+extern "C" void PreGameIntroLoadScene(int a, int b, int c);
 
-extern "C" void fn_800BB8D4(void);
+extern "C" void PreGameIntroPlayLoaded(void);
 
-extern "C" void fn_800BB924(void);
+extern "C" void PreGameIntroSwapToLoaded(void);
 
-extern "C" void fn_800BB9A0(int, float);
+extern "C" void PreGameIntroUpdateHook(int, float);
 
-extern "C" void fn_800BB9A4(int team, int value);
+extern "C" void PlyrObjsSetTeamVisible(int team, int value);
 
-extern "C" void fn_800BBA2C(void);
+extern "C" void PreGameIntroHidePlayers(void);
 
-extern "C" void fn_800BBB4C(PreGamePhase *pThis);
+extern "C" void PreGameIntroFinish(PreGamePhase *pThis);
 
-extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords, int index, int slot);
+extern "C" Object_80039F5C *PreGameIntroPickPlayer(int position, Record_800BAE7C *pRecords, int index, int slot);
 
-extern "C" void fn_800BBCF0(Record_800BAE7C *p);
+extern "C" void PreGameIntroPostSceneAudio(Record_800BAE7C *p);
 
-extern "C" void fn_800BBDE0(void);
+extern "C" void PreGameIntroBindActors(void);
 
-extern "C" void fn_800BBE98(void);
+extern "C" void PreGameIntroEnd(void);
 
-extern "C" void fn_800BBF18(void);
+extern "C" void PreGameIntroUpdatePlayback(void);
 
-extern "C" void fn_800BC190(int index, int value);
+extern "C" void PreGameIntroFillScenePlayers(int index, int value);
 
-extern "C" void fn_800BC3F0(void);
+extern "C" void PreGameIntroInit(void);
 
 extern "C" void fn_800BC51C(PreGamePhase *pObject);
 
 extern "C" void fn_800BCF7C(void);
 
-extern "C" void fn_800BD184(PreGamePhase *p, int value);
+extern "C" void PreGameSetIntroDone(PreGamePhase *p, int value);
 
-extern "C" float fn_800BD190(void);
+extern "C" float PreGameIntroGetSceneValue(void);
 
-extern "C" int fn_800BD1BC(void *p);
+extern "C" int PreGameIntroGetSide(void *p);
 
-extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords);
+extern "C" void PreGameIntroPostNextAudio(Record_800BAE7C *pRecords);
 
-extern "C" void fn_800BD2F8(int team);
+extern "C" void PlyrTeamClearFlag10(int team);
 
-extern "C" void fn_800BD35C(void);
+extern "C" void PreSnapResetHumanControls(void);
 
-extern "C" int fn_800BD3C0(int team);
+extern "C" int PreSnapStartPassIconView(int team);
 
-extern "C" void fn_800BD460(int team, int force);
+extern "C" void PreSnapBeginStickView(int team, int force);
 
-extern "C" void fn_800BD51C(void);
+extern "C" void PreSnapEndPassIconView(void);
 
-extern "C" void fn_800BD568(int team);
+extern "C" void PreSnapEndStickView(int team);
 
-extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team);
+extern "C" int PreSnapHandleStick(Stick_800BD608 *pStick, int team);
 
-extern "C" void fn_800BD774(int index, int kind);
+extern "C" void PreSnapUpdateSlot(int index, int kind);
 
-extern "C" void fn_800BD830(void);
+extern "C" void PreSnapUpdateCpuCamera(void);
 
-extern "C" void fn_800BD8F4(void);
+extern "C" void PreSnapLineUpDefense(void);
 
-extern "C" void fn_800BD958(void);
+extern "C" void PreSnapLineUpOnce(void);
 
-extern "C" void fn_800BD99C(int team);
+extern "C" void PreSnapRunCpuScript(int team);
 
-extern "C" void fn_800BDA00(void);
+extern "C" void PreSnapCheckAutoMotion(void);
 
-extern "C" void fn_800BDA7C(void);
+extern "C" void PreSnapUpdateCadence(void);
 
-extern "C" void fn_800BDB14(int index, unsigned int msg, float value);
+extern "C" void PreSnapHandleButton(int index, unsigned int msg, float value);
 
-extern "C" void fn_800BDFB4(int index, unsigned int msg, float value);
+extern "C" void PreSnapHandlePlayButton(int index, unsigned int msg, float value);
 
 extern "C" void fn_800BE3E8(int a, int kind, float value);
 
@@ -10434,7 +10434,7 @@ extern "C" int fn_800943D0(void)
 extern "C" void fn_800943D8(void)
 {
     if (fn_800AD9B4() == 1) {
-        AudmonEventPostArgs(108, 0, fn_800BD1BC(lbl_803EAB90), 0, 0);
+        AudmonEventPostArgs(108, 0, PreGameIntroGetSide(lbl_803EAB90), 0, 0);
     } else if (fn_800AD9B4() == 7) {
         AudmonEventPostArgs(108, 0, fn_800ABCDC(), 0, 0);
     } else {
@@ -16697,7 +16697,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
             ScrmSetFirstDownLine();
         }
         if(ScrmGetDown()==6)ScrmSetLineToGain(ScrmGetGoalLineY());
-        if(fn_800BA6F8())fn_800BAAE4();
+        if(fn_800BA6F8())PracticeResetField();
         ClockRuleStopGameClock(result);fn_800B14E4();PenaltyCallClearFlags();PostPlayQueueDelay(lbl_803EAB84);
         ScrmQuarterEnd();PlayTrackRegister();
         if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
@@ -22055,7 +22055,7 @@ extern "C" void fn_800AD3A8(float dt)
         }
     }
     VptManagerRestoreCamera();
-    fn_800BA574();
+    PracticeApplyDefenseOff();
 }
 
 extern "C" void fn_800AD418(float dt)
@@ -25105,7 +25105,7 @@ void Class_80297B50::vfn_03(float dt)
         ScreenTransStart(1, 20, 0x808080, 0);
     }
     PauseBlock();
-    if (fn_800BA6F8() != 0 && fn_800BA71C() == 1) {
+    if (fn_800BA6F8() != 0 && PracticeGetModeType() == 1) {
         fn_800B8028();
     }
     ScrmSetPlayFlag(21, 0);
@@ -25336,7 +25336,7 @@ void Class_80297B50::vfn_05(float dt)
         fn_800B4184(1);
         AudmonEventPostArgs(0x70, 0, ScrmGetOffenseTeam(), 0, 0);
     }
-    fn_800BA72C();
+    PracticeSavePlays();
     PlayBookSaveSelection(0);
     PlayBookSaveSelection(1);
     lbl_803EAB34->mUnknown1C = 0;
@@ -27212,10 +27212,10 @@ extern "C" void _PostPlayShotDone(int value)
     TDbCompilePerformOp(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultA, a);
     TDbCompilePerformOp(0, "select 'DIOT' into \x82 from 'MTTS' where 'DIGT' = \x82\n", &resultB, b);
     if (resultA == resultB) {
-        fn_800BD184(lbl_803EAB90, value);
+        PreGameSetIntroDone(lbl_803EAB90, value);
         CamShotRequestStop();
     } else {
-        fn_800BD184(lbl_803EAB90, value);
+        PreGameSetIntroDone(lbl_803EAB90, value);
     }
 }
 
@@ -27400,10 +27400,10 @@ void PostPlayPhase::Finish(float dt)
         InGameOverlayReset();
     }
     if (fn_800BA6F8() != 0) {
-        if (fn_800BA940() == 1) {
+        if (PracticeIsResetPending() == 1) {
             fn_800AD910(5, dt);
         } else {
-            fn_800BA728();
+            PracticeEndHook();
             fn_800AD910(2, dt);
         }
     } else if (lbl_803EAB78->mUnknown150 == 0) {
@@ -27658,7 +27658,7 @@ void PostPlayPhase::OnEnter(float dt)
     }
     PenaltyCallCheckPending();
     if (fn_800BA6F8()) {
-        fn_800BAAC4();
+        PracticeOnPlayEnd();
     }
     fn_800A1FEC(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
     lbl_803EAB78->mUnknown151 = 0;
@@ -27740,7 +27740,7 @@ void PostPlayPhase::OnExit()
     fn_800C4568(&lbl_803EAB78->mSequence);
     fn_800B63B0();
     if (fn_800BA6F8()) {
-        fn_800BAAE4();
+        PracticeResetField();
     }
     BannerClear(7);
     AudmonEventPost(125, 0);
@@ -27869,12 +27869,12 @@ extern "C" unsigned char fn_800B9C70(void)
     return value;
 }
 
-extern "C" void fn_800B9CB0(void)
+extern "C" void GameInfoClearFlagPNPG(void)
 {
     TDbCompilePerformOp(0, "update 'FNIG' set 'PNPG' = \x82\n", 0);
 }
 
-extern "C" int fn_800B9CE4(void)
+extern "C" int GameInfoGetFlagYTPG(void)
 {
     int value = 0;
 
@@ -27882,7 +27882,7 @@ extern "C" int fn_800B9CE4(void)
     return value;
 }
 
-extern "C" void fn_800B9D24(void)
+extern "C" void PracticeRemoveDefense(void)
 {
     int team = ScrmGetDefenseTeam();
     unsigned short i;
@@ -27907,7 +27907,7 @@ extern "C" void fn_800B9D24(void)
     }
 }
 
-extern "C" void fn_800B9E44(void)
+extern "C" void PracticeRestoreDefense(void)
 {
     int team = ScrmGetDefenseTeam();
     unsigned short i;
@@ -27927,11 +27927,11 @@ extern "C" void fn_800B9E44(void)
     }
 }
 
-extern "C" void fn_800B9F4C(void)
+extern "C" void PracticeStartHook(void)
 {
 }
 
-extern "C" int fn_800B9F50(void)
+extern "C" int PracticeUpdateVoiceEvents(void)
 {
     Status_801F4834 status;
     Position_801F4934 position;
@@ -28095,10 +28095,10 @@ extern "C" void fn_800BA3F0(void)
         p->mUnknown180 = GameInfoGet(2);
         p->mUnknown181[0] = p->mUnknown180 == 0;
         GameInfoClearFlagBSPG();
-        fn_800B9CB0();
+        GameInfoClearFlagPNPG();
         p->mUnknown183 = 0;
         p->mUnknown184 = 1;
-        switch (fn_800B9CE4()) {
+        switch (GameInfoGetFlagYTPG()) {
         case 0:
             p->mUnknown20 = 1;
             p->mUnknown185 = 0;
@@ -28136,59 +28136,59 @@ extern "C" void fn_800BA570(void)
 {
 }
 
-extern "C" void fn_800BA574(void)
+extern "C" void PracticeApplyDefenseOff(void)
 {
     if (lbl_803EAB88->mUnknown182 && lbl_803EAB88->mUnknown185) {
-        fn_800B9D24();
+        PracticeRemoveDefense();
     }
 }
 
-extern "C" void fn_800BA5B0(void)
+extern "C" void PracticeApplyOptions(void)
 {
     if (lbl_803EAB88->mUnknown182) {
         CamGameGetCamera(0);
-        fn_800B9F4C();
+        PracticeStartHook();
         if (GameInfoGetFlagBSPG() == 1) {
-            fn_800BA804(1);
+            PracticeSetMenuRequest(1);
             GameInfoClearFlagBSPG();
         }
         if (fn_800B9C70() == 1) {
-            fn_800BA8CC(1);
-            fn_800B9CB0();
+            PracticeRequestReset(1);
+            GameInfoClearFlagPNPG();
         }
-        switch (fn_800B9CE4()) {
+        switch (GameInfoGetFlagYTPG()) {
         case 0:
-            fn_800BAA30(1);
-            fn_800BA9C0(0);
+            PracticeSetDown(1);
+            PracticeSetDefenseOff(0);
             break;
         case 1:
-            fn_800BAA30(1);
-            fn_800BA9C0(1);
+            PracticeSetDown(1);
+            PracticeSetDefenseOff(1);
             break;
         case 2:
-            fn_800BAA30(0);
+            PracticeSetDown(0);
             break;
         }
-        fn_800BA6F4();
+        PracticeRefreshHook();
     }
 }
 
-extern "C" void fn_800BA674(void)
+extern "C" void PracticeResetPlay(void)
 {
     if (lbl_803EAB88->mUnknown182) {
         ScrmSetBallSpot(fn_800BA7A0());
         ScrmSetOffenseTeam(lbl_803EAB88->mUnknown180);
         ScrmSetDown(lbl_803EAB88->mUnknown20);
         PenaltyCallSetAllowFlag(0);
-        fn_800BA6F4();
+        PracticeRefreshHook();
         if (lbl_803EAB88->mUnknown185) {
-            fn_800B9D24();
-            fn_800BAA30(1);
+            PracticeRemoveDefense();
+            PracticeSetDown(1);
         }
     }
 }
 
-extern "C" void fn_800BA6F4(void)
+extern "C" void PracticeRefreshHook(void)
 {
 }
 
@@ -28203,16 +28203,16 @@ extern "C" int fn_800BA6F8(void)
     return result;
 }
 
-extern "C" int fn_800BA71C(void)
+extern "C" int PracticeGetModeType(void)
 {
     return lbl_803EAB88->mUnknown17C;
 }
 
-extern "C" void fn_800BA728(void)
+extern "C" void PracticeEndHook(void)
 {
 }
 
-extern "C" void fn_800BA72C(void)
+extern "C" void PracticeSavePlays(void)
 {
     lbl_803EAB88->mpUnknown0 = PlayBookGetFormation(ScrmGetOffenseTeam());
     lbl_803EAB88->mpUnknown4 = PlayBookGetFormation(ScrmGetDefenseTeam());
@@ -28232,7 +28232,7 @@ extern "C" FieldPoint_t fn_800BA7A0(void)
     return lbl_803EAB88->mUnknown18;
 }
 
-extern "C" void fn_800BA7E8(float x, float y)
+extern "C" void PracticeSetSpot(float x, float y)
 {
     if (lbl_803EAB88->mUnknown20 != 0) {
         lbl_803EAB88->mUnknown18.mX = x;
@@ -28240,9 +28240,9 @@ extern "C" void fn_800BA7E8(float x, float y)
     }
 }
 
-extern "C" void fn_800BA804(int value)
+extern "C" void PracticeSetMenuRequest(int value)
 {
-    if (fn_800BA870() != 0) {
+    if (PracticeCanOpenMenu() != 0) {
         lbl_803EAB88->mUnknown183 = value;
         if (value != 0) {
             fn_800AD910(8, 0.0f);
@@ -28252,12 +28252,12 @@ extern "C" void fn_800BA804(int value)
     }
 }
 
-extern "C" int fn_800BA864(void)
+extern "C" int PracticeGetMenuRequest(void)
 {
     return lbl_803EAB88->mUnknown183;
 }
 
-extern "C" int fn_800BA870(void)
+extern "C" int PracticeCanOpenMenu(void)
 {
     int result;
 
@@ -28278,9 +28278,9 @@ extern "C" int fn_800BA870(void)
     return result;
 }
 
-extern "C" void fn_800BA8CC(int value)
+extern "C" void PracticeRequestReset(int value)
 {
-    if (fn_800BA94C() != 0 && value != 0) {
+    if (PracticeCanReset() != 0 && value != 0) {
         lbl_803EAB88->mUnknown184 = value;
         fn_800B63B0();
         fn_800B14E4();
@@ -28292,12 +28292,12 @@ extern "C" void fn_800BA8CC(int value)
     }
 }
 
-extern "C" int fn_800BA940(void)
+extern "C" int PracticeIsResetPending(void)
 {
     return lbl_803EAB88->mUnknown184;
 }
 
-extern "C" int fn_800BA94C(void)
+extern "C" int PracticeCanReset(void)
 {
     int result;
 
@@ -28313,24 +28313,24 @@ extern "C" int fn_800BA94C(void)
     return result;
 }
 
-extern "C" void fn_800BA988(void)
+extern "C" void PracticeCountPlay(void)
 {
     if (fn_800BA6F8()) {
         lbl_803EAB88->mUnknown10++;
     }
 }
 
-extern "C" void fn_800BA9C0(int value)
+extern "C" void PracticeSetDefenseOff(int value)
 {
     if (lbl_803EAB88->mUnknown185 != value) {
         if (value != 0) {
-            fn_800B9D24();
+            PracticeRemoveDefense();
         } else {
-            fn_800B9E44();
+            PracticeRestoreDefense();
         }
         lbl_803EAB88->mUnknown185 = value;
-        fn_800BAA30(1);
-        fn_800BA8CC(1);
+        PracticeSetDown(1);
+        PracticeRequestReset(1);
     }
 }
 
@@ -28339,11 +28339,11 @@ extern "C" int fn_800BAA24(void)
     return lbl_803EAB88->mUnknown185;
 }
 
-extern "C" void fn_800BAA30(int value)
+extern "C" void PracticeSetDown(int value)
 {
     if (lbl_803EAB88->mUnknown20 != value) {
         if (value == 0) {
-            fn_800B9E44();
+            PracticeRestoreDefense();
             lbl_803EAB88->mUnknown185 = value;
         }
         lbl_803EAB88->mUnknown20 = value;
@@ -28362,12 +28362,12 @@ extern "C" int fn_800BAAB8(void)
     return lbl_803EAB88->mUnknown20;
 }
 
-extern "C" void fn_800BAAC4(void)
+extern "C" void PracticeOnPlayEnd(void)
 {
-    fn_800BA988();
+    PracticeCountPlay();
 }
 
-extern "C" void fn_800BAAE4(void)
+extern "C" void PracticeResetField(void)
 {
     Vector_80039F5C pos;
     int angles[3];
@@ -28424,16 +28424,16 @@ extern "C" void fn_800BAAE4(void)
     }
 }
 
-extern "C" void fn_800BACF4(void)
+extern "C" void PracticeShutdownHook(void)
 {
 }
 
-extern "C" int fn_800BACF8(void)
+extern "C" int PracticeIsVoiceBusy(void)
 {
     return SndgChannelIsStreamBusy(4);
 }
 
-extern "C" void fn_800BAD1C(void)
+extern "C" void PracticeStartVoiceEvents(void)
 {
     int i;
 
@@ -28448,14 +28448,14 @@ extern "C" void fn_800BAD1C(void)
     lbl_803EAB88->mUnknownE0 = 0;
 }
 
-extern "C" void fn_800BAD9C(void)
+extern "C" void PracticeUpdateVoice(void)
 {
     if (lbl_803EAB88->mUnknownE0 == 0) {
-        lbl_803EAB88->mUnknownE0 = fn_800B9F50();
+        lbl_803EAB88->mUnknownE0 = PracticeUpdateVoiceEvents();
     }
 }
 
-extern "C" void fn_800BADD4(void)
+extern "C" void PracticeEndVoiceEvents(void)
 {
     int i;
 
@@ -28469,17 +28469,17 @@ extern "C" void fn_800BADD4(void)
     PlyrRouteShowTeam(0, ScrmGetOffenseTeam());
 }
 
-extern "C" int fn_800BAE40(void)
+extern "C" int PracticeIsLessonVoiceBusy(void)
 {
     return SndgChannelIsStreamBusy(4);
 }
 
-extern "C" int fn_800BAE64(void)
+extern "C" int PracticeGetLessonValue(void)
 {
     return lbl_803EAB88->mUnknownE4[lbl_803EAB88->mUnknownC0];
 }
 
-extern "C" void fn_800BAE7C(Record_800BAE7C *p, int index)
+extern "C" void PreGameIntroStartScene(Record_800BAE7C *p, int index)
 {
     if (p[index].mUnknown0 != 9999) {
         int b = 0;
@@ -28488,20 +28488,20 @@ extern "C" void fn_800BAE7C(Record_800BAE7C *p, int index)
         if (p[index].mUnknown4C == 1) {
             a = lbl_803EC990[lbl_803EABA1];
             b = lbl_803EC98C->mUnknown2C;
-            fn_800BB0C4();
+            PreGameIntroToggleTeam();
         }
         if (lbl_803EC98C->mUnknown29 == 1) {
-            fn_800BB840(8, a, b);
+            PreGameIntroLoadScene(8, a, b);
         } else {
-            fn_800BB840(p[index].mUnknown0, a, b);
+            PreGameIntroLoadScene(p[index].mUnknown0, a, b);
         }
         if (index == 0) {
-            fn_800BBCF0(p);
+            PreGameIntroPostSceneAudio(p);
         }
     }
 }
 
-extern "C" int fn_800BAF30(void)
+extern "C" int PreGameIntroIsScenePlaying(void)
 {
     int result = 0;
 
@@ -28511,20 +28511,20 @@ extern "C" int fn_800BAF30(void)
     return result;
 }
 
-extern "C" void fn_800BAF7C(void)
+extern "C" void PreGameIntroNextScene(void)
 {
     PlayerObjSetDrawReady(1);
     CamShotRequestStop();
     if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
-        fn_800BBE98();
+        PreGameIntroEnd();
     } else {
         lbl_803EC98C->mUnknown0 = 1;
-        fn_800BB8D4();
-        fn_800BAE7C(lbl_803EC98C->mpUnknown10, lbl_803EAB95 + 1);
+        PreGameIntroPlayLoaded();
+        PreGameIntroStartScene(lbl_803EC98C->mpUnknown10, lbl_803EAB95 + 1);
     }
 }
 
-extern "C" void fn_800BAFE8(void)
+extern "C" void PreGameIntroSetupTeams(void)
 {
     unsigned int i;
 
@@ -28533,10 +28533,10 @@ extern "C" void fn_800BAFE8(void)
     }
     lbl_803EC98C->mUnknown29 = 2;
     lbl_803EC98C->mUnknown2C = 0x19000;
-    fn_800BB828();
+    PreGameIntroClearHandles();
 }
 
-extern "C" int fn_800BB050(int value)
+extern "C" int PreGameIntroIsSpeechIdle(int value)
 {
     int result = 0;
 
@@ -28548,7 +28548,7 @@ extern "C" int fn_800BB050(int value)
     return result;
 }
 
-extern "C" unsigned char fn_800BB0C4(void)
+extern "C" unsigned char PreGameIntroToggleTeam(void)
 {
     lbl_803EABA1++;
     if (lbl_803EABA1 > 1) {
@@ -28557,7 +28557,7 @@ extern "C" unsigned char fn_800BB0C4(void)
     return lbl_803EABA1;
 }
 
-extern "C" unsigned int fn_800BB0EC(void)
+extern "C" unsigned int PreGameIntroPickRandomScene(void)
 {
     unsigned int index = 9999;
     int checkFirst = fn_801486A0() == 3;
@@ -28593,12 +28593,12 @@ extern "C" unsigned int fn_800BB0EC(void)
     return index;
 }
 
-extern "C" int fn_800BB23C(int value)
+extern "C" int PreGameIntroIsSoloScene(int value)
 {
     return value == 6;
 }
 
-extern "C" void fn_800BB24C(void)
+extern "C" void PreGameIntroBuildScenes(void)
 {
     int i;
     int value;
@@ -28619,22 +28619,22 @@ extern "C" void fn_800BB24C(void)
                     lbl_803EC98C->mpUnknown10[i].mUnknown0 = value;
                     lbl_803EC98C->mpUnknown10[i].mUnknown40 = fn_80093EC0(lbl_803EC98C->mUnknown14, value);
                     lbl_803EC98C->mpUnknown10[i].mUnknown44 = 0;
-                    fn_800BC190(i, value);
+                    PreGameIntroFillScenePlayers(i, value);
                 }
             }
         } else {
-            lbl_803EC98C->mpUnknown10[0].mUnknown0 = fn_800BB0EC();
+            lbl_803EC98C->mpUnknown10[0].mUnknown0 = PreGameIntroPickRandomScene();
             lbl_803EC98C->mpUnknown10[0].mUnknown40 = fn_80093EC0(lbl_803EC98C->mUnknown14, lbl_803EC98C->mpUnknown10[0].mUnknown0);
             lbl_803EC98C->mpUnknown10[0].mUnknown44 = 0;
-            fn_800BC190(0, lbl_803EC98C->mpUnknown10[0].mUnknown0);
-            if (fn_800BB23C(lbl_803EC98C->mpUnknown10[0].mUnknown0) == 0) {
+            PreGameIntroFillScenePlayers(0, lbl_803EC98C->mpUnknown10[0].mUnknown0);
+            if (PreGameIntroIsSoloScene(lbl_803EC98C->mpUnknown10[0].mUnknown0) == 0) {
                 do {
-                    lbl_803EC98C->mpUnknown10[1].mUnknown0 = fn_800BB0EC();
+                    lbl_803EC98C->mpUnknown10[1].mUnknown0 = PreGameIntroPickRandomScene();
                 } while (lbl_803EC98C->mpUnknown10[1].mUnknown0 == lbl_803EC98C->mpUnknown10[0].mUnknown0
-                         || fn_800BB23C(lbl_803EC98C->mpUnknown10[1].mUnknown0) != 0);
+                         || PreGameIntroIsSoloScene(lbl_803EC98C->mpUnknown10[1].mUnknown0) != 0);
                 lbl_803EC98C->mpUnknown10[1].mUnknown40 = fn_80093EC0(lbl_803EC98C->mUnknown14, lbl_803EC98C->mpUnknown10[1].mUnknown0);
                 lbl_803EC98C->mpUnknown10[1].mUnknown44 = 0;
-                fn_800BC190(1, lbl_803EC98C->mpUnknown10[1].mUnknown0);
+                PreGameIntroFillScenePlayers(1, lbl_803EC98C->mpUnknown10[1].mUnknown0);
             } else {
                 lbl_803EC98C->mpUnknown10[1].mUnknown0 = 9999;
                 lbl_803EC98C->mpUnknown10[1].mUnknown40 = 0;
@@ -28654,7 +28654,7 @@ static void _StrippedFillExtent(float *p)
 }
 }
 
-extern "C" void fn_800BB458(void)
+extern "C" void PreGameIntroResetPlayerAnims(void)
 {
     unsigned char team;
 
@@ -28673,7 +28673,7 @@ extern "C" void fn_800BB458(void)
     }
 }
 
-extern "C" void fn_800BB504(void)
+extern "C" void PreGameIntroStopScenes(void)
 {
     GameCamera_t *pCamera;
 
@@ -28692,14 +28692,14 @@ extern "C" void fn_800BB504(void)
         fn_80093410(lbl_803EC98C->mUnknown1C);
         lbl_803EC98C->mUnknown1C = -1;
     }
-    fn_800BB458();
+    PreGameIntroResetPlayerAnims();
     pCamera = CamGameGetCamera(2);
     if (pCamera->mUnknown28 != 0) {
         VptSetPerspective((Viewport_t *)pCamera->mUnknown28, 45.0f, 4.0f / 3.0f, 0.1f, 750.0f);
     }
 }
 
-extern "C" void fn_800BB5DC(void)
+extern "C" void PreGameIntroShowPlayers(void)
 {
     unsigned int count;
     unsigned short i;
@@ -28716,7 +28716,7 @@ extern "C" void fn_800BB5DC(void)
     }
 }
 
-extern "C" void fn_800BB694(int index, unsigned int kind, float value)
+extern "C" void PreGameIntroHandleButton(int index, unsigned int kind, float value)
 {
     MiniGameC *pMode;
     int i;
@@ -28747,12 +28747,12 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     }
     PlayerObjSetDrawReady(1);
     CamShotRequestStop();
-    fn_800BB9A4(1, 1);
+    PlyrObjsSetTeamVisible(1, 1);
     PlyrStarSetShown(1, 1);
     SpchIGPurgeChannel(0);
     SpchIGPurgeChannel(1);
     if (fn_800BA6F8() == 0) {
-        fn_800BBE98();
+        PreGameIntroEnd();
         if (PauseIsUnblocked() == 0) {
             PauseUnblock();
         }
@@ -28771,14 +28771,14 @@ extern "C" void fn_800BB694(int index, unsigned int kind, float value)
     fn_800941B8();
 }
 
-extern "C" void fn_800BB828(void)
+extern "C" void PreGameIntroClearHandles(void)
 {
     lbl_803EC98C->mUnknown18 = -1;
     lbl_803EC98C->mUnknown1C = -1;
     lbl_803EC98C->mUnknown20 = -1;
 }
 
-extern "C" void fn_800BB840(int a, int b, int c)
+extern "C" void PreGameIntroLoadScene(int a, int b, int c)
 {
     Params_80092E54 params;
 
@@ -28793,16 +28793,16 @@ extern "C" void fn_800BB840(int a, int b, int c)
     lbl_803EC98C->mUnknown1C = fn_80092E54(&params, (void *)b, c);
 }
 
-extern "C" void fn_800BB8D4(void)
+extern "C" void PreGameIntroPlayLoaded(void)
 {
     lbl_803EC98C->mUnknown18 = lbl_803EC98C->mUnknown1C;
-    fn_800BBDE0();
+    PreGameIntroBindActors();
     fn_80092F98(lbl_803EC98C->mUnknown18);
     fn_80092830(lbl_803EC98C->mUnknown18);
     fn_80092830(lbl_803EC98C->mUnknown18);
 }
 
-extern "C" void fn_800BB924(void)
+extern "C" void PreGameIntroSwapToLoaded(void)
 {
     int handle;
 
@@ -28812,17 +28812,17 @@ extern "C" void fn_800BB924(void)
     handle = lbl_803EC98C->mUnknown1C;
     lbl_803EC98C->mUnknown1C = -1;
     lbl_803EC98C->mUnknown18 = handle;
-    fn_800BBDE0();
+    PreGameIntroBindActors();
     fn_80092F98(lbl_803EC98C->mUnknown18);
     fn_80092830(lbl_803EC98C->mUnknown18);
     fn_80092830(lbl_803EC98C->mUnknown18);
 }
 
-extern "C" void fn_800BB9A0(int, float)
+extern "C" void PreGameIntroUpdateHook(int, float)
 {
 }
 
-extern "C" void fn_800BB9A4(int team, int value)
+extern "C" void PlyrObjsSetTeamVisible(int team, int value)
 {
     unsigned int count = ScrmGetTeamPlayerCount(team);
     unsigned short i;
@@ -28838,7 +28838,7 @@ extern "C" void fn_800BB9A4(int team, int value)
     }
 }
 
-extern "C" void fn_800BBA2C(void)
+extern "C" void PreGameIntroHidePlayers(void)
 {
     unsigned int count;
     unsigned short i;
@@ -28875,14 +28875,14 @@ extern "C" void fn_800BBA2C(void)
     }
 }
 
-extern "C" void fn_800BBB4C(PreGamePhase *pThis)
+extern "C" void PreGameIntroFinish(PreGamePhase *pThis)
 {
     fn_800CC560(1);
     lbl_803EC98C->mUnknown0 = 2;
     lbl_803EAB94 = 1;
 }
 
-extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords, int index, int slot)
+extern "C" Object_80039F5C *PreGameIntroPickPlayer(int position, Record_800BAE7C *pRecords, int index, int slot)
 {
     Object_80039F5C *p = 0;
 
@@ -28925,7 +28925,7 @@ extern "C" Object_80039F5C *fn_800BBB84(int position, Record_800BAE7C *pRecords,
     return p;
 }
 
-extern "C" void fn_800BBCF0(Record_800BAE7C *p)
+extern "C" void PreGameIntroPostSceneAudio(Record_800BAE7C *p)
 {
     Object_80039F5C *pA = 0;
     Object_80039F5C *pB = 0;
@@ -28950,7 +28950,7 @@ extern "C" void fn_800BBCF0(Record_800BAE7C *p)
     lbl_803EABA0 = 0;
 }
 
-extern "C" void fn_800BBDE0(void)
+extern "C" void PreGameIntroBindActors(void)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(lbl_803EC98C->mUnknown18);
     Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
@@ -28965,10 +28965,10 @@ extern "C" void fn_800BBDE0(void)
     }
 }
 
-extern "C" void fn_800BBE98(void)
+extern "C" void PreGameIntroEnd(void)
 {
-    fn_800BB504();
-    fn_800BB5DC();
+    PreGameIntroStopScenes();
+    PreGameIntroShowPlayers();
     fn_80096E1C();
     lbl_803EC98C->mUnknown8 = -1;
     lbl_803EC98C->mUnknownC = -1;
@@ -28980,7 +28980,7 @@ extern "C" void fn_800BBE98(void)
     lbl_803EC98C->mUnknown0 = 2;
 }
 
-extern "C" void fn_800BBF18(void)
+extern "C" void PreGameIntroUpdatePlayback(void)
 {
     int playing = fn_80096B1C(lbl_803EC98C->mUnknown8);
     MiniGameC *pMode;
@@ -29016,9 +29016,9 @@ extern "C" void fn_800BBF18(void)
         BannerClear(7);
         lbl_803EAB94 = 1;
         if (lbl_803EC98C->mUnknown29 == 0) {
-            fn_800BBE98();
+            PreGameIntroEnd();
         } else {
-            fn_800BAF7C();
+            PreGameIntroNextScene();
         }
         PauseUnblock();
         if ((pMode = MiniGameGetCurrent()) == 0 || pMode->vfn_21() != 0) {
@@ -29033,7 +29033,7 @@ extern "C" void fn_800BBF18(void)
     }
 }
 
-extern "C" void fn_800BC190(int index, int value)
+extern "C" void PreGameIntroFillScenePlayers(int index, int value)
 {
     int sides[4];
     Object_8008044C reader;
@@ -29076,7 +29076,7 @@ extern "C" void fn_800BC190(int index, int value)
 
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 0;
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mTeamWord = sides[i];
-        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject = fn_800BBB84(position, lbl_803EC98C->mpUnknown10, index, i);
+        lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject = PreGameIntroPickPlayer(position, lbl_803EC98C->mpUnknown10, index, i);
         PlayerDbSeekId(&reader, ((Object_8003DEC4 *)lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mpUnknown4)->mUnknown4956, 0);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2912 = fn_80081E3C(&reader);
         lbl_803EC98C->mpUnknown10[index].mSlots[i].mpObject->mUnknown2920 = PlayerDbGetPybt(&reader);
@@ -29085,7 +29085,7 @@ extern "C" void fn_800BC190(int index, int value)
     lbl_803EC98C->mpUnknown10[index].mSlots[i].mUnknown0 = 31;
 }
 
-extern "C" void fn_800BC3F0(void)
+extern "C" void PreGameIntroInit(void)
 {
     StevRow_t *pRow;
 
@@ -29157,7 +29157,7 @@ void PreGamePhase::OnEnter(float dt)
     PauseRequestCancel();
     lbl_803EC98C->mUnknown32 = 0;
     practice = TutorialGetLesson() <= 4;
-    fn_800BA674();
+    PracticeResetPlay();
     ClockRuleNextPeriod();
     if (fn_800C1E40() != 0) {
         fn_8009D964(2, 0);
@@ -29165,11 +29165,11 @@ void PreGamePhase::OnEnter(float dt)
     }
     fn_8009D888(2, 0);
     fn_800CC448();
-    fn_800BC3F0();
+    PreGameIntroInit();
     lbl_803EAB98 = 0;
     lbl_803EAB9C = 0;
-    fn_800BB24C();
-    if (fn_800BA71C() == 1 || practice) {
+    PreGameIntroBuildScenes();
+    if (PracticeGetModeType() == 1 || practice) {
         lbl_803EAB94 = 1;
     } else {
         Block_800BC538 *pBlock = lbl_803EC98C;
@@ -29184,20 +29184,20 @@ void PreGamePhase::OnEnter(float dt)
         }
         BallsSetVisible(1);
         lbl_803EAB94 = 0;
-        fn_800BBA2C();
+        PreGameIntroHidePlayers();
     }
     if (fn_800C1E40() != 0) {
-        fn_800BBA2C();
-        fn_800BBB4C(this);
+        PreGameIntroHidePlayers();
+        PreGameIntroFinish(this);
         lbl_803EAB94 = 1;
     }
     if (ChallengeIsActive() != 0) {
-        fn_800BBB4C(this);
+        PreGameIntroFinish(this);
     }
     if (practice) {
-        fn_800BBB4C(this);
+        PreGameIntroFinish(this);
     }
-    CallbackListAdd(fn_800BB694);
+    CallbackListAdd(PreGameIntroHandleButton);
     PlyrObjsSetDrawFlag(0);
     PenaltyCallSetAllowFlag(0);
     fn_800C432C();
@@ -29232,38 +29232,38 @@ void PreGamePhase::UpdateIntroStart(float dt)
     }
     PauseBlock();
     if (lbl_803EAB94 == 0) {
-        fn_800BBF18();
+        PreGameIntroUpdatePlayback();
     }
     if (lbl_803EC98C->mUnknown4 == 2.0f) {
-        fn_800BAFE8();
-        fn_800BAE7C(lbl_803EC98C->mpUnknown10, lbl_803EAB95);
-        fn_800BD1C8(lbl_803EC98C->mpUnknown10);
+        PreGameIntroSetupTeams();
+        PreGameIntroStartScene(lbl_803EC98C->mpUnknown10, lbl_803EAB95);
+        PreGameIntroPostNextAudio(lbl_803EC98C->mpUnknown10);
     }
 }
 
 void PreGamePhase::UpdateIntro(float dt)
 {
-    int busy = fn_800BAF30();
+    int busy = PreGameIntroIsScenePlaying();
 
     lbl_803EC98C->mUnknown24++;
-    if (fn_800BB050(busy) != 0) {
+    if (PreGameIntroIsSpeechIdle(busy) != 0) {
         lbl_803EAB95++;
         lbl_803EC98C->mUnknown24 = 0;
         if (lbl_803EC98C->mpUnknown10[lbl_803EAB95].mUnknown0 == 9999) {
-            fn_800BBE98();
+            PreGameIntroEnd();
         } else {
-            fn_800BBA2C();
-            fn_800BBCF0(lbl_803EC98C->mpUnknown10);
-            fn_800BB924();
-            fn_800BAE7C(lbl_803EC98C->mpUnknown10, lbl_803EAB95 + 1);
-            fn_800BD1C8(lbl_803EC98C->mpUnknown10);
+            PreGameIntroHidePlayers();
+            PreGameIntroPostSceneAudio(lbl_803EC98C->mpUnknown10);
+            PreGameIntroSwapToLoaded();
+            PreGameIntroStartScene(lbl_803EC98C->mpUnknown10, lbl_803EAB95 + 1);
+            PreGameIntroPostNextAudio(lbl_803EC98C->mpUnknown10);
         }
     }
     if (lbl_803EABA2 == 0 && lbl_803EC98C->mpUnknown10[lbl_803EAB95 + 1].mUnknown0 == 9999) {
         float time = fn_80094454(lbl_803EC98C->mUnknown18);
 
         if (time > 0.0f && time <= 61.0f) {
-            ScreenTransStart(6, 60, 0, fn_800BB9A0);
+            ScreenTransStart(6, 60, 0, PreGameIntroUpdateHook);
             lbl_803EABA2 = 1;
         }
     }
@@ -29294,7 +29294,7 @@ void PreGamePhase::EnterFirstPhase(float dt)
 
 void PreGamePhase::OnUpdate(float dt)
 {
-    if (fn_800BA71C() == 1) {
+    if (PracticeGetModeType() == 1) {
         PlayerObjSetDrawReady(1);
         while (BannerIsActive(7) != 0) {
             BannerClear(7);
@@ -29359,11 +29359,11 @@ void PreGamePhase::OnExit()
     fn_800941B8();
     HudSetDown();
     if (fn_800BA6F8() != 0) {
-        fn_800BAAE4();
+        PracticeResetField();
     } else {
         BallResetToSpot();
     }
-    CallbackListRemove(fn_800BB694);
+    CallbackListRemove(PreGameIntroHandleButton);
     AudmonEventPost(0x6e, 0);
     if (SpchIGGetTeamSceneSpeaker(0) != 0) {
         AudmonEventPostArgs(0x6d, 0, 0, 0, 0);
@@ -29374,7 +29374,7 @@ void PreGamePhase::OnExit()
     lbl_803EABA0 = 0;
     ScrmQuarterEnd();
     if (fn_800BA6F8() == 0) {
-        fn_800BB9A4(1, 1);
+        PlyrObjsSetTeamVisible(1, 1);
     }
     lbl_803EC98C->mUnknown24 = 0;
     lbl_803EC98C->mUnknown30 = 0;
@@ -29382,7 +29382,7 @@ void PreGamePhase::OnExit()
     lbl_803EC98C->mUnknown28 = 0;
     lbl_803EAB95 = 0;
     BallsSetVisible(1);
-    fn_800BB5DC();
+    PreGameIntroShowPlayers();
     PlyrObjsSetDrawFlag(1);
     if (lbl_803EC98C->mUnknown8 != -1) {
         fn_80096D14(lbl_803EC98C->mUnknown8);
@@ -29477,12 +29477,12 @@ extern "C" void fn_800BCF7C(void)
     ResSync(0);
 }
 
-extern "C" void fn_800BD184(PreGamePhase *p, int value)
+extern "C" void PreGameSetIntroDone(PreGamePhase *p, int value)
 {
     lbl_803EAB94 = 1;
 }
 
-extern "C" float fn_800BD190(void)
+extern "C" float PreGameIntroGetSceneValue(void)
 {
     float result = 0.1f;
 
@@ -29492,12 +29492,12 @@ extern "C" float fn_800BD190(void)
     return result;
 }
 
-extern "C" int fn_800BD1BC(void *p)
+extern "C" int PreGameIntroGetSide(void *p)
 {
     return lbl_803EAB95 & 1;
 }
 
-extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
+extern "C" void PreGameIntroPostNextAudio(Record_800BAE7C *pRecords)
 {
     Object_80039F5C *pA = 0;
     Object_80039F5C *pB = 0;
@@ -29523,7 +29523,7 @@ extern "C" void fn_800BD1C8(Record_800BAE7C *pRecords)
     }
 }
 
-extern "C" void fn_800BD2F8(int team)
+extern "C" void PlyrTeamClearFlag10(int team)
 {
     unsigned char i;
     unsigned int count = ScrmGetTeamPlayerCount(team);
@@ -29533,7 +29533,7 @@ extern "C" void fn_800BD2F8(int team)
     }
 }
 
-extern "C" void fn_800BD35C(void)
+extern "C" void PreSnapResetHumanControls(void)
 {
     unsigned char team;
 
@@ -29545,7 +29545,7 @@ extern "C" void fn_800BD35C(void)
     }
 }
 
-extern "C" int fn_800BD3C0(int team)
+extern "C" int PreSnapStartPassIconView(int team)
 {
     GameCamera_t *pCamera = CamGameGetCamera(5);
 
@@ -29566,7 +29566,7 @@ extern "C" int fn_800BD3C0(int team)
     return 1;
 }
 
-extern "C" void fn_800BD460(int team, int force)
+extern "C" void PreSnapBeginStickView(int team, int force)
 {
     int other = team ^ 1;
 
@@ -29580,11 +29580,11 @@ extern "C" void fn_800BD460(int team, int force)
             lbl_803EABA8->mSlots[other].mStick.mUnknown9 = 0;
         }
     } else if (lbl_803EABA8->mSlots[team].mStick.mUnknown9 == 0) {
-        lbl_803EABA8->mSlots[team].mStick.mUnknown9 = fn_800BD3C0(team);
+        lbl_803EABA8->mSlots[team].mStick.mUnknown9 = PreSnapStartPassIconView(team);
     }
 }
 
-extern "C" void fn_800BD51C(void)
+extern "C" void PreSnapEndPassIconView(void)
 {
     if (lbl_803EABA8->mUnknown44 != -1) {
         CamGameSetModeAll(lbl_803EABA8->mUnknown44);
@@ -29594,7 +29594,7 @@ extern "C" void fn_800BD51C(void)
     lbl_803EABA8->mUnknownC0 = 20;
 }
 
-extern "C" void fn_800BD568(int team)
+extern "C" void PreSnapEndStickView(int team)
 {
     if (lbl_803EABA8->mSlots[team].mStick.mUnknownA != 0) {
         int other = team ^ 1;
@@ -29610,12 +29610,12 @@ extern "C" void fn_800BD568(int team)
                 PassIconsShow(1);
             }
         } else {
-            fn_800BD51C();
+            PreSnapEndPassIconView();
         }
     }
 }
 
-extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
+extern "C" int PreSnapHandleStick(Stick_800BD608 *pStick, int team)
 {
     GameCamera_t *pCamera = CamGameGetCamera(5);
     int result = 0;
@@ -29658,7 +29658,7 @@ extern "C" int fn_800BD608(Stick_800BD608 *pStick, int team)
     return result;
 }
 
-extern "C" void fn_800BD774(int index, int kind)
+extern "C" void PreSnapUpdateSlot(int index, int kind)
 {
     CamGameGetCamera(5);
     if (kind == 5) {
@@ -29667,12 +29667,12 @@ extern "C" void fn_800BD774(int index, int kind)
         }
         lbl_803EABA8->mSlots[index].mUnknown8--;
     } else if (lbl_803EABA8->mSlots[index].mStick.mUnknownA != 0 &&
-               fn_800BD608(&lbl_803EABA8->mSlots[index].mStick, index) == 0 && kind == 4) {
+               PreSnapHandleStick(&lbl_803EABA8->mSlots[index].mStick, index) == 0 && kind == 4) {
         fn_800BEC1C(fn_800B65A0(index), index);
     }
 }
 
-extern "C" void fn_800BD830(void)
+extern "C" void PreSnapUpdateCpuCamera(void)
 {
     if (fn_800B65A0(0) == 255 && fn_800B65A0(1) == 255) {
         if (ScrmGetDown() == 0 && lbl_803EABA8->mUnknown9C != -1) {
@@ -29694,7 +29694,7 @@ extern "C" void fn_800BD830(void)
     }
 }
 
-extern "C" void fn_800BD8F4(void)
+extern "C" void PreSnapLineUpDefense(void)
 {
     int team = ScrmGetDefenseTeam();
 
@@ -29706,17 +29706,17 @@ extern "C" void fn_800BD8F4(void)
     PlayAlignPostStartDelays(team);
 }
 
-extern "C" void fn_800BD958(void)
+extern "C" void PreSnapLineUpOnce(void)
 {
     if (lbl_803EABA8->mUnknownC5 == 0) {
         if (lbl_803EABA8->mUnknownC4 == 0) {
             lbl_803EABA8->mUnknownC4 = 1;
-            fn_800BD8F4();
+            PreSnapLineUpDefense();
         }
     }
 }
 
-extern "C" void fn_800BD99C(int team)
+extern "C" void PreSnapRunCpuScript(int team)
 {
     if (fn_800BA6F8() == 0 && fn_800B65A0(team) == 255) {
         if (team == ScrmGetDefenseTeam()) {
@@ -29727,7 +29727,7 @@ extern "C" void fn_800BD99C(int team)
     }
 }
 
-extern "C" void fn_800BDA00(void)
+extern "C" void PreSnapCheckAutoMotion(void)
 {
     short count = lbl_803EABA4->fn_800C02C8();
     if (count != 0 && lbl_803EABA8->mUnknownC5 != 0) {
@@ -29738,7 +29738,7 @@ extern "C" void fn_800BDA00(void)
     }
 }
 
-extern "C" void fn_800BDA7C(void)
+extern "C" void PreSnapUpdateCadence(void)
 {
     if (lbl_803EABA8->mUnknownC5 != 0 && ScrmOffenseIsSet() != 0) {
         if (--lbl_803EABA8->mUnknownA0 <= 0) {
@@ -29751,7 +29751,7 @@ extern "C" void fn_800BDA7C(void)
     }
 }
 
-extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
+extern "C" void PreSnapHandleButton(int index, unsigned int msg, float value)
 {
     int twoPlayer = fn_801486A0() == 2;
     Object_80039F5C *pObject = fn_800B6544(index);
@@ -29801,7 +29801,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
         if (ok == 1) {
             ScrmStartPlay();
         } else {
-            fn_800BD958();
+            PreSnapLineUpOnce();
         }
         break;
     }
@@ -29823,7 +29823,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
             if (!blocked) {
                 fn_800A7514(side);
                 lbl_803EABA8->mUnknownB0 = side;
-                fn_800BD35C();
+                PreSnapResetHumanControls();
                 lbl_803EABB4 = 0;
             }
         }
@@ -29887,7 +29887,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
     }
 }
 
-extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
+extern "C" void PreSnapHandlePlayButton(int index, unsigned int msg, float value)
 {
     int team = fn_800B6644(index);
     int home = ScrmGetOffenseTeam();
@@ -29942,7 +29942,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
                 done = 1;
                 fn_800A7514(team);
                 lbl_803EABA8->mUnknownB0 = team;
-                fn_800BD35C();
+                PreSnapResetHumanControls();
             }
         }
         break;
@@ -30099,12 +30099,12 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
                 switch (msg) {
                 case 94:
                     if (!ReplayIsShowing(gpReplay)) {
-                        fn_800BA8CC(1);
+                        PracticeRequestReset(1);
                     }
                     break;
                 case 93:
                     if (!ReplayIsShowing(gpReplay) && fn_800BAAB8()) {
-                        fn_800BA804(1);
+                        PracticeSetMenuRequest(1);
                     }
                     break;
                 }
@@ -30114,10 +30114,10 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
                 fn_800BE944(team, a, msg, value);
                 break;
             case 0:
-                fn_800BDB14(a, msg, value);
+                PreSnapHandleButton(a, msg, value);
                 break;
             case 1:
-                fn_800BDFB4(a, msg, value);
+                PreSnapHandlePlayButton(a, msg, value);
                 lbl_803EABAC[team] = 15.0f;
                 break;
             case 3:
@@ -30127,8 +30127,8 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
                 fn_800BE3E8(a, msg, value);
                 break;
             }
-        } else if (fn_800BA71C() == 1 && msg == 89) {
-            fn_800BD958();
+        } else if (PracticeGetModeType() == 1 && msg == 89) {
+            PreSnapLineUpOnce();
         }
     } else if (lbl_803EABA8->mSlots[team].mUnknown0 == 4) {
         fn_800BE944(team, a, msg, value);
@@ -30141,8 +30141,8 @@ extern "C" void fn_800BE72C(PreSnapPhase *p)
         if (p->CanSnap() != 0) {
             ScrmStartPlay();
         } else {
-            fn_800BDA00();
-            fn_800BDA7C();
+            PreSnapCheckAutoMotion();
+            PreSnapUpdateCadence();
         }
     }
 }
@@ -30186,7 +30186,7 @@ extern "C" void fn_800BE808(int a, int index)
     if (fn_800A8488(1) && !fn_800A8444(1)) {
         HudHidePressPrompt(1);
     }
-    fn_800BD460(index, 0);
+    PreSnapBeginStickView(index, 0);
 }
 
 extern "C" void fn_800BE8E4(int team)
@@ -30282,7 +30282,7 @@ extern "C" void fn_800BEC1C(int a, int index)
         }
     }
     ConSetChannelInfo(a, 3, lbl_802ECD44);
-    fn_800BD568(index);
+    PreSnapEndStickView(index);
 }
 
 extern "C" void fn_800BED54(unsigned char index)
@@ -30295,24 +30295,24 @@ extern "C" void fn_800BED54(unsigned char index)
         break;
     case 1:
         if (SpchIGAreChannelsIdle() != 0) {
-            fn_800BACF4();
+            PracticeShutdownHook();
             lbl_803EABA8->mUnknownBC = 2;
         }
         break;
     case 2:
-        if (fn_800BACF8() == 0) {
+        if (PracticeIsVoiceBusy() == 0) {
             lbl_803EABA8->mUnknownBC = 3;
         }
         break;
     case 3:
         if (SpchIGAreChannelsIdle() != 0) {
-            fn_800BAD1C();
+            PracticeStartVoiceEvents();
             lbl_803EABA8->mUnknownBC = 4;
         }
         break;
     case 4:
-        fn_800BAD9C();
-        if (fn_800BAE40() == 0) {
+        PracticeUpdateVoice();
+        if (PracticeIsLessonVoiceBusy() == 0) {
             lbl_803EABA8->mUnknownBC = 5;
         }
         break;
@@ -30322,7 +30322,7 @@ extern "C" void fn_800BED54(unsigned char index)
         for (i = 0; i <= 2; i++) {
             SpchIGPurgeChannel(i);
         }
-        fn_800BADD4();
+        PracticeEndVoiceEvents();
         CamMainMsg(CamGameGetCamera(5), 10, 0);
         CamGameSetModeAll(lbl_803EABA8->mUnknown44);
         lbl_803EABA8->mUnknownBC = 6;
@@ -30332,7 +30332,7 @@ extern "C" void fn_800BED54(unsigned char index)
 
             PlayAlignTeam(PlayBookGetFormation(team), team, gPlayAlignNormSet);
             ScrmTeamSendLineUp(team);
-            fn_800BD958();
+            PreSnapLineUpOnce();
         }
         break;
     }
@@ -30342,7 +30342,7 @@ extern "C" void fn_800BED54(unsigned char index)
             lbl_803EABA8->mSlots[index].mUnknown0 = lbl_803EABA8->mSlots[index].mUnknown4;
             lbl_803EABA8->mUnknownC6 = 1;
             PlyrStarSetShown(1, 1);
-            if (fn_800BAE64() == 0) {
+            if (PracticeGetLessonValue() == 0) {
                 short value;
 
                 fn_800B6474(fn_800B65A0(index), 255);
@@ -30595,7 +30595,7 @@ extern "C" void fn_800BF658(int index)
 extern "C" void fn_800BF6CC(int index)
 {
     lbl_803EABA8->mSlots[index].mUnknown1C = 0;
-    fn_800BD35C();
+    PreSnapResetHumanControls();
     PlyrRouteShowTeam(0, index);
 }
 
@@ -30614,7 +30614,7 @@ extern "C" void fn_800BF72C(PreSnapPhase *p, float dt)
         switch (pSlot->mUnknown0) {
         case 4:
         case 5:
-            fn_800BD774((unsigned char)i, pSlot->mUnknown0);
+            PreSnapUpdateSlot((unsigned char)i, pSlot->mUnknown0);
             break;
         case 8:
             lbl_803EABAC[i] -= dt;
@@ -30636,7 +30636,7 @@ extern "C" void fn_800BF72C(PreSnapPhase *p, float dt)
     if (lbl_803EABA8->mUnknownC0 > 0) {
         lbl_803EABA8->mUnknownC0--;
     }
-    fn_800BD830();
+    PreSnapUpdateCpuCamera();
 }
 
 extern "C" int fn_800BF824(void)
@@ -30823,14 +30823,14 @@ void PreSnapPhase::OnEnter(float dt)
     PassIconsClearReplayFlag();
     fn_800BF3F4(ScrmGetOffenseTeam());
     fn_800BF3F4(ScrmGetDefenseTeam());
-    fn_800BD99C(ScrmGetOffenseTeam());
-    fn_800BD99C(ScrmGetDefenseTeam());
+    PreSnapRunCpuScript(ScrmGetOffenseTeam());
+    PreSnapRunCpuScript(ScrmGetDefenseTeam());
     switch (fn_801486A0()) {
     case 0:
     case 1:
         break;
     default:
-        fn_800BD958();
+        PreSnapLineUpOnce();
         break;
     }
     if (fn_800BA6F8() != 0) {
@@ -30903,10 +30903,10 @@ void PreSnapPhase::OnUpdate(float dt)
         lbl_803EABA8->mUnknownB4++;
     }
     if (lbl_803EABA8->mUnknownA9 > 0 && --lbl_803EABA8->mUnknownA9 == 0) {
-        fn_800BD2F8(ScrmGetOffenseTeam());
+        PlyrTeamClearFlag10(ScrmGetOffenseTeam());
     }
     if (lbl_803EABA8->mUnknownAA > 0 && --lbl_803EABA8->mUnknownAA == 0) {
-        fn_800BD2F8(ScrmGetDefenseTeam());
+        PlyrTeamClearFlag10(ScrmGetDefenseTeam());
     }
 }
 
@@ -30926,8 +30926,8 @@ void PreSnapPhase::OnExit(float dt)
     PadInputRestoreHandlers(lbl_803EABA8->mUnknown48);
     PadInputResetSlot(-1);
     PlayMotionReset();
-    fn_800BD568(0);
-    fn_800BD568(1);
+    PreSnapEndStickView(0);
+    PreSnapEndStickView(1);
     PlyrRouteShowTeam(0, 0);
     PlyrRouteShowTeam(0, 1);
     BannerClear(1);
@@ -30939,8 +30939,8 @@ void PreSnapPhase::OnExit(float dt)
     PassIconsHide();
     PassIconsClearReplayFlag();
     ParticleTrailSetEnabled(1);
-    fn_800BD2F8(ScrmGetOffenseTeam());
-    fn_800BD2F8(ScrmGetDefenseTeam());
+    PlyrTeamClearFlag10(ScrmGetOffenseTeam());
+    PlyrTeamClearFlag10(ScrmGetDefenseTeam());
     lbl_803EABA8->mUnknownC5 = 0;
     EngineParamWords desc = { 0, 14 };
     fn_802345C4(&desc, 2);
@@ -31069,7 +31069,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
                 handled = 1;
                 fn_800A7514(team);
                 lbl_803EABA8->mUnknownB0 = team;
-                fn_800BD35C();
+                PreSnapResetHumanControls();
             }
             break;
         default:
@@ -31796,7 +31796,7 @@ extern "C" void fn_800C1E5C(int a, unsigned int b, float c)
     case 0:
     case 7:
         if (c > 0.0f) {
-            fn_800BA7E8(pos.mX, pos.mY);
+            PracticeSetSpot(pos.mX, pos.mY);
             ScrmEndPlay();
         }
         break;
@@ -31842,7 +31842,7 @@ extern "C" void fn_800C20D8(void)
 extern "C" void fn_800C20DC(void)
 {
     CallbackListRemove(fn_800C1E5C);
-    fn_800BA804(0);
+    PracticeSetMenuRequest(0);
 }
 
 extern "C" int fn_800C210C(int *p, int offset, int *pValue)

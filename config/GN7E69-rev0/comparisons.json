@@ -16872,32 +16872,32 @@
           "end": "0x800B9CB0"
         },
         {
-          "symbol": "fn_800B9CB0",
+          "symbol": "GameInfoClearFlagPNPG",
           "start": "0x800B9CB0",
           "end": "0x800B9CE4"
         },
         {
-          "symbol": "fn_800B9CE4",
+          "symbol": "GameInfoGetFlagYTPG",
           "start": "0x800B9CE4",
           "end": "0x800B9D24"
         },
         {
-          "symbol": "fn_800B9D24",
+          "symbol": "PracticeRemoveDefense",
           "start": "0x800B9D24",
           "end": "0x800B9E44"
         },
         {
-          "symbol": "fn_800B9E44",
+          "symbol": "PracticeRestoreDefense",
           "start": "0x800B9E44",
           "end": "0x800B9F4C"
         },
         {
-          "symbol": "fn_800B9F4C",
+          "symbol": "PracticeStartHook",
           "start": "0x800B9F4C",
           "end": "0x800B9F50"
         },
         {
-          "symbol": "fn_800B9F50",
+          "symbol": "PracticeUpdateVoiceEvents",
           "start": "0x800B9F50",
           "end": "0x800BA3F0"
         },
@@ -16912,22 +16912,22 @@
           "end": "0x800BA574"
         },
         {
-          "symbol": "fn_800BA574",
+          "symbol": "PracticeApplyDefenseOff",
           "start": "0x800BA574",
           "end": "0x800BA5B0"
         },
         {
-          "symbol": "fn_800BA5B0",
+          "symbol": "PracticeApplyOptions",
           "start": "0x800BA5B0",
           "end": "0x800BA674"
         },
         {
-          "symbol": "fn_800BA674",
+          "symbol": "PracticeResetPlay",
           "start": "0x800BA674",
           "end": "0x800BA6F4"
         },
         {
-          "symbol": "fn_800BA6F4",
+          "symbol": "PracticeRefreshHook",
           "start": "0x800BA6F4",
           "end": "0x800BA6F8"
         },
@@ -16937,17 +16937,17 @@
           "end": "0x800BA71C"
         },
         {
-          "symbol": "fn_800BA71C",
+          "symbol": "PracticeGetModeType",
           "start": "0x800BA71C",
           "end": "0x800BA728"
         },
         {
-          "symbol": "fn_800BA728",
+          "symbol": "PracticeEndHook",
           "start": "0x800BA728",
           "end": "0x800BA72C"
         },
         {
-          "symbol": "fn_800BA72C",
+          "symbol": "PracticeSavePlays",
           "start": "0x800BA72C",
           "end": "0x800BA7A0"
         },
@@ -16957,47 +16957,47 @@
           "end": "0x800BA7E8"
         },
         {
-          "symbol": "fn_800BA7E8",
+          "symbol": "PracticeSetSpot",
           "start": "0x800BA7E8",
           "end": "0x800BA804"
         },
         {
-          "symbol": "fn_800BA804",
+          "symbol": "PracticeSetMenuRequest",
           "start": "0x800BA804",
           "end": "0x800BA864"
         },
         {
-          "symbol": "fn_800BA864",
+          "symbol": "PracticeGetMenuRequest",
           "start": "0x800BA864",
           "end": "0x800BA870"
         },
         {
-          "symbol": "fn_800BA870",
+          "symbol": "PracticeCanOpenMenu",
           "start": "0x800BA870",
           "end": "0x800BA8CC"
         },
         {
-          "symbol": "fn_800BA8CC",
+          "symbol": "PracticeRequestReset",
           "start": "0x800BA8CC",
           "end": "0x800BA940"
         },
         {
-          "symbol": "fn_800BA940",
+          "symbol": "PracticeIsResetPending",
           "start": "0x800BA940",
           "end": "0x800BA94C"
         },
         {
-          "symbol": "fn_800BA94C",
+          "symbol": "PracticeCanReset",
           "start": "0x800BA94C",
           "end": "0x800BA988"
         },
         {
-          "symbol": "fn_800BA988",
+          "symbol": "PracticeCountPlay",
           "start": "0x800BA988",
           "end": "0x800BA9C0"
         },
         {
-          "symbol": "fn_800BA9C0",
+          "symbol": "PracticeSetDefenseOff",
           "start": "0x800BA9C0",
           "end": "0x800BAA24"
         },
@@ -17007,7 +17007,7 @@
           "end": "0x800BAA30"
         },
         {
-          "symbol": "fn_800BAA30",
+          "symbol": "PracticeSetDown",
           "start": "0x800BAA30",
           "end": "0x800BAAB8"
         },
@@ -17017,187 +17017,187 @@
           "end": "0x800BAAC4"
         },
         {
-          "symbol": "fn_800BAAC4",
+          "symbol": "PracticeOnPlayEnd",
           "start": "0x800BAAC4",
           "end": "0x800BAAE4"
         },
         {
-          "symbol": "fn_800BAAE4",
+          "symbol": "PracticeResetField",
           "start": "0x800BAAE4",
           "end": "0x800BACF4"
         },
         {
-          "symbol": "fn_800BACF4",
+          "symbol": "PracticeShutdownHook",
           "start": "0x800BACF4",
           "end": "0x800BACF8"
         },
         {
-          "symbol": "fn_800BACF8",
+          "symbol": "PracticeIsVoiceBusy",
           "start": "0x800BACF8",
           "end": "0x800BAD1C"
         },
         {
-          "symbol": "fn_800BAD1C",
+          "symbol": "PracticeStartVoiceEvents",
           "start": "0x800BAD1C",
           "end": "0x800BAD9C"
         },
         {
-          "symbol": "fn_800BAD9C",
+          "symbol": "PracticeUpdateVoice",
           "start": "0x800BAD9C",
           "end": "0x800BADD4"
         },
         {
-          "symbol": "fn_800BADD4",
+          "symbol": "PracticeEndVoiceEvents",
           "start": "0x800BADD4",
           "end": "0x800BAE40"
         },
         {
-          "symbol": "fn_800BAE40",
+          "symbol": "PracticeIsLessonVoiceBusy",
           "start": "0x800BAE40",
           "end": "0x800BAE64"
         },
         {
-          "symbol": "fn_800BAE64",
+          "symbol": "PracticeGetLessonValue",
           "start": "0x800BAE64",
           "end": "0x800BAE7C"
         },
         {
-          "symbol": "fn_800BAE7C",
+          "symbol": "PreGameIntroStartScene",
           "start": "0x800BAE7C",
           "end": "0x800BAF30"
         },
         {
-          "symbol": "fn_800BAF30",
+          "symbol": "PreGameIntroIsScenePlaying",
           "start": "0x800BAF30",
           "end": "0x800BAF7C"
         },
         {
-          "symbol": "fn_800BAF7C",
+          "symbol": "PreGameIntroNextScene",
           "start": "0x800BAF7C",
           "end": "0x800BAFE8"
         },
         {
-          "symbol": "fn_800BAFE8",
+          "symbol": "PreGameIntroSetupTeams",
           "start": "0x800BAFE8",
           "end": "0x800BB050"
         },
         {
-          "symbol": "fn_800BB050",
+          "symbol": "PreGameIntroIsSpeechIdle",
           "start": "0x800BB050",
           "end": "0x800BB0C4"
         },
         {
-          "symbol": "fn_800BB0C4",
+          "symbol": "PreGameIntroToggleTeam",
           "start": "0x800BB0C4",
           "end": "0x800BB0EC"
         },
         {
-          "symbol": "fn_800BB0EC",
+          "symbol": "PreGameIntroPickRandomScene",
           "start": "0x800BB0EC",
           "end": "0x800BB23C"
         },
         {
-          "symbol": "fn_800BB23C",
+          "symbol": "PreGameIntroIsSoloScene",
           "start": "0x800BB23C",
           "end": "0x800BB24C"
         },
         {
-          "symbol": "fn_800BB24C",
+          "symbol": "PreGameIntroBuildScenes",
           "start": "0x800BB24C",
           "end": "0x800BB458"
         },
         {
-          "symbol": "fn_800BB458",
+          "symbol": "PreGameIntroResetPlayerAnims",
           "start": "0x800BB458",
           "end": "0x800BB504"
         },
         {
-          "symbol": "fn_800BB504",
+          "symbol": "PreGameIntroStopScenes",
           "start": "0x800BB504",
           "end": "0x800BB5DC"
         },
         {
-          "symbol": "fn_800BB5DC",
+          "symbol": "PreGameIntroShowPlayers",
           "start": "0x800BB5DC",
           "end": "0x800BB694"
         },
         {
-          "symbol": "fn_800BB694",
+          "symbol": "PreGameIntroHandleButton",
           "start": "0x800BB694",
           "end": "0x800BB828"
         },
         {
-          "symbol": "fn_800BB828",
+          "symbol": "PreGameIntroClearHandles",
           "start": "0x800BB828",
           "end": "0x800BB840"
         },
         {
-          "symbol": "fn_800BB840",
+          "symbol": "PreGameIntroLoadScene",
           "start": "0x800BB840",
           "end": "0x800BB8D4"
         },
         {
-          "symbol": "fn_800BB8D4",
+          "symbol": "PreGameIntroPlayLoaded",
           "start": "0x800BB8D4",
           "end": "0x800BB924"
         },
         {
-          "symbol": "fn_800BB924",
+          "symbol": "PreGameIntroSwapToLoaded",
           "start": "0x800BB924",
           "end": "0x800BB9A0"
         },
         {
-          "symbol": "fn_800BB9A0",
+          "symbol": "PreGameIntroUpdateHook",
           "start": "0x800BB9A0",
           "end": "0x800BB9A4"
         },
         {
-          "symbol": "fn_800BB9A4",
+          "symbol": "PlyrObjsSetTeamVisible",
           "start": "0x800BB9A4",
           "end": "0x800BBA2C"
         },
         {
-          "symbol": "fn_800BBA2C",
+          "symbol": "PreGameIntroHidePlayers",
           "start": "0x800BBA2C",
           "end": "0x800BBB4C"
         },
         {
-          "symbol": "fn_800BBB4C",
+          "symbol": "PreGameIntroFinish",
           "start": "0x800BBB4C",
           "end": "0x800BBB84"
         },
         {
-          "symbol": "fn_800BBB84",
+          "symbol": "PreGameIntroPickPlayer",
           "start": "0x800BBB84",
           "end": "0x800BBCF0"
         },
         {
-          "symbol": "fn_800BBCF0",
+          "symbol": "PreGameIntroPostSceneAudio",
           "start": "0x800BBCF0",
           "end": "0x800BBDE0"
         },
         {
-          "symbol": "fn_800BBDE0",
+          "symbol": "PreGameIntroBindActors",
           "start": "0x800BBDE0",
           "end": "0x800BBE98"
         },
         {
-          "symbol": "fn_800BBE98",
+          "symbol": "PreGameIntroEnd",
           "start": "0x800BBE98",
           "end": "0x800BBF18"
         },
         {
-          "symbol": "fn_800BBF18",
+          "symbol": "PreGameIntroUpdatePlayback",
           "start": "0x800BBF18",
           "end": "0x800BC190"
         },
         {
-          "symbol": "fn_800BC190",
+          "symbol": "PreGameIntroFillScenePlayers",
           "start": "0x800BC190",
           "end": "0x800BC3F0"
         },
         {
-          "symbol": "fn_800BC3F0",
+          "symbol": "PreGameIntroInit",
           "start": "0x800BC3F0",
           "end": "0x800BC470"
         },
@@ -17267,102 +17267,102 @@
           "end": "0x800BD184"
         },
         {
-          "symbol": "fn_800BD184",
+          "symbol": "PreGameSetIntroDone",
           "start": "0x800BD184",
           "end": "0x800BD190"
         },
         {
-          "symbol": "fn_800BD190",
+          "symbol": "PreGameIntroGetSceneValue",
           "start": "0x800BD190",
           "end": "0x800BD1BC"
         },
         {
-          "symbol": "fn_800BD1BC",
+          "symbol": "PreGameIntroGetSide",
           "start": "0x800BD1BC",
           "end": "0x800BD1C8"
         },
         {
-          "symbol": "fn_800BD1C8",
+          "symbol": "PreGameIntroPostNextAudio",
           "start": "0x800BD1C8",
           "end": "0x800BD2F8"
         },
         {
-          "symbol": "fn_800BD2F8",
+          "symbol": "PlyrTeamClearFlag10",
           "start": "0x800BD2F8",
           "end": "0x800BD35C"
         },
         {
-          "symbol": "fn_800BD35C",
+          "symbol": "PreSnapResetHumanControls",
           "start": "0x800BD35C",
           "end": "0x800BD3C0"
         },
         {
-          "symbol": "fn_800BD3C0",
+          "symbol": "PreSnapStartPassIconView",
           "start": "0x800BD3C0",
           "end": "0x800BD460"
         },
         {
-          "symbol": "fn_800BD460",
+          "symbol": "PreSnapBeginStickView",
           "start": "0x800BD460",
           "end": "0x800BD51C"
         },
         {
-          "symbol": "fn_800BD51C",
+          "symbol": "PreSnapEndPassIconView",
           "start": "0x800BD51C",
           "end": "0x800BD568"
         },
         {
-          "symbol": "fn_800BD568",
+          "symbol": "PreSnapEndStickView",
           "start": "0x800BD568",
           "end": "0x800BD608"
         },
         {
-          "symbol": "fn_800BD608",
+          "symbol": "PreSnapHandleStick",
           "start": "0x800BD608",
           "end": "0x800BD774"
         },
         {
-          "symbol": "fn_800BD774",
+          "symbol": "PreSnapUpdateSlot",
           "start": "0x800BD774",
           "end": "0x800BD830"
         },
         {
-          "symbol": "fn_800BD830",
+          "symbol": "PreSnapUpdateCpuCamera",
           "start": "0x800BD830",
           "end": "0x800BD8F4"
         },
         {
-          "symbol": "fn_800BD8F4",
+          "symbol": "PreSnapLineUpDefense",
           "start": "0x800BD8F4",
           "end": "0x800BD958"
         },
         {
-          "symbol": "fn_800BD958",
+          "symbol": "PreSnapLineUpOnce",
           "start": "0x800BD958",
           "end": "0x800BD99C"
         },
         {
-          "symbol": "fn_800BD99C",
+          "symbol": "PreSnapRunCpuScript",
           "start": "0x800BD99C",
           "end": "0x800BDA00"
         },
         {
-          "symbol": "fn_800BDA00",
+          "symbol": "PreSnapCheckAutoMotion",
           "start": "0x800BDA00",
           "end": "0x800BDA7C"
         },
         {
-          "symbol": "fn_800BDA7C",
+          "symbol": "PreSnapUpdateCadence",
           "start": "0x800BDA7C",
           "end": "0x800BDB14"
         },
         {
-          "symbol": "fn_800BDB14",
+          "symbol": "PreSnapHandleButton",
           "start": "0x800BDB14",
           "end": "0x800BDFB4"
         },
         {
-          "symbol": "fn_800BDFB4",
+          "symbol": "PreSnapHandlePlayButton",
           "start": "0x800BDFB4",
           "end": "0x800BE3E8"
         },
