@@ -1713,9 +1713,9 @@
       }
     },
     {
-      "source": "src/game/cu_8018C344.cpp",
+      "source": "src/game/TeamTables.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/cu_8018C344.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; the .rodata linked whole.",
+      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/TeamTables.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; the .rodata linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -1733,11 +1733,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8018C344",
+            "function": "TeamTablesCopy",
             "evidence": "evidence.tsv source-form 0x8018C344-0x8018C3EC"
           },
           {
-            "function": "fn_8018C48C",
+            "function": "TeamTablesPurgeCreated",
             "evidence": "evidence.tsv source-form 0x8018C48C-0x8018C688"
           }
         ],
@@ -4289,9 +4289,9 @@
       }
     },
     {
-      "source": "src/game/cu_800D760C.cpp",
+      "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/cu_800D760C.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -12291,7 +12291,7 @@
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/cu_80081CDC.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place. src/game/cu_80081CDC.cpp is linked and keeps those two copies (its kept_locals), so the folded references resolve to its kept copies through __folded_<name>."
+        "evidence": "evidence.tsv source-form row CreatePlayerMenu FchrCursor linkage and data row 0x8000A2B8-0x8000A360: the implicit destructor and vtable of FchrCursor are local to both this file and src/game/PlayerCreateDb.cpp; the target keeps only the latter's destructor 0x80083454, this file's references resolve to 0x80083454 and 0x802938C0, and its vtable copy stays unreferenced in place. src/game/PlayerCreateDb.cpp is linked and keeps those two copies (its kept_locals), so the folded references resolve to its kept copies through __folded_<name>."
       }
     },
     {
@@ -27549,9 +27549,9 @@
       }
     },
     {
-      "source": "src/game/cu_80081CDC.cpp",
+      "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
       "sections": [
         {
           "section": ".text",
@@ -27607,16 +27607,16 @@
           "_._10FchrCursor": "0x80083454",
           "_vt.10FchrCursor": "0x802938C0"
         },
-        "evidence": "evidence.tsv source-form rows cu_80081CDC FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
+        "evidence": "evidence.tsv source-form rows PlayerCreateDb FchrCursor destructor and CreatePlayerMenu FchrCursor linkage: under -fno-weak the implicit FchrCursor destructor and vtable are local to this file and to src/game/CreatePlayerMenu.cpp, and the target keeps only this file's copies, the destructor 0x80083454 and the vtable 0x802938C0, for both files' references; CreatePlayerMenu.cpp's folded map resolves to them through __folded_<name>."
       },
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80082688",
+            "function": "PlayerUnlockAll",
             "evidence": "evidence.tsv source-form 0x80082688-0x8008274C"
           },
           {
-            "function": "fn_800827EC",
+            "function": "PlayerIsLocked",
             "evidence": "evidence.tsv source-form 0x800827EC-0x80082864"
           }
         ],
@@ -28696,9 +28696,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80196F48.cpp",
+      "source": "src/game/GlowRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/cu_80196F48.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 8 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/GlowRender.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 8 functions exact, the 3 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -28716,19 +28716,19 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8019723C",
+            "function": "ParticleTrailDraw",
             "evidence": "evidence.tsv source-form 0x8019723C-0x80197680"
           },
           {
-            "function": "fn_80197680",
+            "function": "GlowRender",
             "evidence": "evidence.tsv source-form 0x80197680-0x80197D08"
           },
           {
-            "function": "fn_80197D08",
+            "function": "GlowProject",
             "evidence": "evidence.tsv source-form 0x80197D08-0x80197E64"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/cu_80196F48.cpp holds out fn_8019723C, fn_80197680, fn_80197D08."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/GlowRender.cpp holds out fn_8019723C, fn_80197680, fn_80197D08."
       }
     },
     {

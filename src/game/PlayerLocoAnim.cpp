@@ -43,7 +43,7 @@ int CharSkelGetJointByName(void *p, const char *name);
 int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *object);
 int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void PlayerLocoSetCycleDuration(float value, Block_801BE60C *block, LocoBlendSet_t *object, AnimChannel_t *entries);
-unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short key);
+unsigned char PlyrBallHandFromAnim(Object_80039F5C *p, unsigned short key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int AnimChanIsMirrored(AnimChannel_t *entry);
@@ -384,7 +384,7 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
         } else if (p == other) {
             unsigned char state = p->mUnknown528.mUnknown15;
             if (state != 6 && state != 8 && state != 7 && state != 9 &&
-                fn_800D78C4(p, key) != p->mUnknown776) p->mUnknown778 = -1;
+                PlyrBallHandFromAnim(p, key) != p->mUnknown776) p->mUnknown778 = -1;
         }
         block->mUnknown20.mUnknownC = p->mMotion.mUnknown28;
         if ((signed char)block->mUnknown3A[1] > 0) {

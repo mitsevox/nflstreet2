@@ -189,10 +189,10 @@ void StoryTeamSyncCreatedPlayer(int index)
 
 int TeamDbCreate(int type, int logo, const char *pName);
 unsigned int strlen(const char *pText);
-void fn_8018C48C(int handle);
-void fn_8018C344(int database, int firstTable, int secondTable,
+void TeamTablesPurgeCreated(int handle);
+void TeamTablesCopy(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
-void fn_8018C3EC(int firstTable, int secondTable);
+void TeamTablesDestroy(int firstTable, int secondTable);
 int UserProfileGetSelected(unsigned char index);
 int StoryTestIndexedFlag(int index, int n);
 int TDbTblGetCount(int handle, int table, DbFilter *pFilter, unsigned short *pCount);
@@ -203,15 +203,15 @@ int DbUserFindIndex(int a);
 void StorySetNew(int index, int value);
 int DbNiomIsModeActive(void);
 int DbNiomEndMode(void);
-void fn_800828FC(void);
-void fn_800829D8(void);
-int fn_80082AE4(int a, int b);
+void PlayerNamesOpen(void);
+void PlayerNamesClose(void);
+int PlayerCreateStory(int a, int b);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
 int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int PlayerDbGetPlht(Object_8008044C *pObject);
 int fn_80081E3C(Object_8008044C *pObject);
-int fn_80082280(Object_8008044C *pObject);
-int fn_800822D4(Object_8008044C *pObject);
+int PlayerDbGetFaceId(Object_8008044C *pObject);
+int PlayerDbGetEyebrows(Object_8008044C *pObject);
 int PlayerDbGetPlex(Object_8008044C *pObject);
 int PlayerDbGetHairColor(Object_8008044C *pObject);
 int PlayerDbGetFacialHairColor(Object_8008044C *pObject);
@@ -277,10 +277,10 @@ void StoryTeamCreatePlayer(int index, int value)
         request.mCount = 1;
         DbManagerInit(&request);
     }
-    fn_800828FC();
+    PlayerNamesOpen();
     int k = DbUtilRandomRange(0, 7);
-    int id = fn_80082AE4(_StoryTeam_aPositions[k], value);
-    fn_800829D8();
+    int id = PlayerCreateStory(_StoryTeam_aPositions[k], value);
+    PlayerNamesClose();
     if (!busy) DbNiomEndMode();
     StoryPlayerResetById(id);
     TDbCompilePerformOp(0, "use 'TATS' update 'YALP' set 'YTRP' = \x85 where 'DIGP' = \x85\n", 1, id);
@@ -300,12 +300,12 @@ void StoryTeamCreatePlayer(int index, int value)
     int value6E = PlayerDbGetHairStyle(&object);
     int value6C = PlayerDbGetPlht(&object);
     int value72 = fn_80081E3C(&object);
-    int value73 = fn_80082280(&object);
-    int value74 = fn_800822D4(&object);
+    int value73 = PlayerDbGetFaceId(&object);
+    int value74 = PlayerDbGetEyebrows(&object);
     int value76 = PlayerDbGetPlex(&object);
     unsigned int color18 = PlayerDbGetHairColor(&object);
     unsigned int color19 = PlayerDbGetFacialHairColor(&object);
-    fn_80082138(&object, &block);
+    PlayerDbGetFaceFeatures(&object, &block);
     FaceMorphBuildWeights(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
     PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
@@ -357,12 +357,12 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
         int value6E = PlayerDbGetHairStyle(&object);
         int value6C = PlayerDbGetPlht(&object);
         int value72 = fn_80081E3C(&object);
-        int value73 = fn_80082280(&object);
-        int value74 = fn_800822D4(&object);
+        int value73 = PlayerDbGetFaceId(&object);
+        int value74 = PlayerDbGetEyebrows(&object);
         int value76 = PlayerDbGetPlex(&object);
         unsigned int color18 = PlayerDbGetHairColor(&object);
         unsigned int color19 = PlayerDbGetFacialHairColor(&object);
-        fn_80082138(&object, &block);
+        PlayerDbGetFaceFeatures(&object, &block);
         FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
         PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
@@ -397,7 +397,7 @@ int StoryTeamLoadToStats(int index, int rumt, int *pIds, int *pCount)
     int *p;
     if (pIds) p = pIds;
     else p = ids;
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     return StoryTeamLoadAll(0x54415453, rumt, index, p, pCount, 1);
 }
 
@@ -407,7 +407,7 @@ int StoryTeamLoadOneToStats(int index, int rumt, StoryTeamIdBlock_t *pOut)
     StoryTeamIdBlock_t *p;
     if (pOut) p = pOut;
     else p = &result;
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     return StoryTeamLoadOne(0x54415453, rumt, index, &p->mUnknown0, 1);
 }
 
@@ -442,12 +442,12 @@ void StoryTeamClear(void)
 
 void StoryTeamBackup(int *pFirstCopy, int *pSecondCopy, int database)
 {
-    fn_8018C344(database, 0x4D455453, 0x59505453, pFirstCopy, pSecondCopy);
+    TeamTablesCopy(database, 0x4D455453, 0x59505453, pFirstCopy, pSecondCopy);
 }
 
 void StoryTeamFreeBackup(int firstTable, int secondTable)
 {
-    fn_8018C3EC(firstTable, secondTable);
+    TeamTablesDestroy(firstTable, secondTable);
 }
 
 void StoryTeamRestore(int firstTable, int secondTable)
@@ -491,8 +491,8 @@ void StoryTeamLoadUserTeams(int reset, int count)
 {
     int ids[8];
     if (reset) {
-        fn_8018C48C(0x54415453);
-        fn_8018C48C(0x454D4147);
+        TeamTablesPurgeCreated(0x54415453);
+        TeamTablesPurgeCreated(0x454D4147);
     }
     for (unsigned char i = 0; i <= 1; i++) {
         int index = UserProfileGetSelected(i);

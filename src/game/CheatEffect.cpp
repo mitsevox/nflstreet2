@@ -21,8 +21,8 @@ void TeamUnlock(int db, int id);
 void TeamLock(int db, int id);
 void TeamUnlockAll(int db);
 void TeamLockAll(int db);
-void fn_80082688(int db);
-void fn_8008274C(int db);
+void PlayerUnlockAll(int db);
+void PlayerUnlockClear(int db);
 int TutorialAllComplete(void);
 void TutorialSetProfileDb(int db);
 void UserInfoSetPoints(int handle, int value);
@@ -44,7 +44,7 @@ void CheatEffectApply(signed char db, int id)
         EnvUnlockBonus(db);
         break;
     case 2:
-        fn_80082688(db);
+        PlayerUnlockAll(db);
         break;
     case 3:
         GearUnlockAll(db);
@@ -153,7 +153,7 @@ void CheatEffectRemove(signed char db, int id)
         EnvLockBonus(db);
         break;
     case 2:
-        fn_8008274C(db);
+        PlayerUnlockClear(db);
         break;
     case 3:
         GearLockAll(db);

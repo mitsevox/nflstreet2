@@ -3376,9 +3376,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8018C344.cpp",
+      "source": "src/game/TeamTables.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv cu_8018C344 bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -3395,22 +3395,22 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8018C344",
+          "symbol": "TeamTablesCopy",
           "start": "0x8018C344",
           "end": "0x8018C3EC"
         },
         {
-          "symbol": "fn_8018C3EC",
+          "symbol": "TeamTablesDestroy",
           "start": "0x8018C3EC",
           "end": "0x8018C438"
         },
         {
-          "symbol": "fn_8018C438",
+          "symbol": "TeamTablesDeleteTeamPlayers",
           "start": "0x8018C438",
           "end": "0x8018C48C"
         },
         {
-          "symbol": "fn_8018C48C",
+          "symbol": "TeamTablesPurgeCreated",
           "start": "0x8018C48C",
           "end": "0x8018C688"
         }
@@ -9686,9 +9686,9 @@
       ]
     },
     {
-      "source": "src/game/cu_80081CDC.cpp",
+      "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/cu_80081CDC.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -9729,17 +9729,17 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80081CDC",
+          "symbol": "PlayerGearColorsOpen",
           "start": "0x80081CDC",
           "end": "0x80081D24"
         },
         {
-          "symbol": "fn_80081D24",
+          "symbol": "PlayerGearColorsClose",
           "start": "0x80081D24",
           "end": "0x80081D4C"
         },
         {
-          "symbol": "fn_80081D4C",
+          "symbol": "PlayerGearColorsRead",
           "start": "0x80081D4C",
           "end": "0x80081E3C"
         },
@@ -9749,127 +9749,127 @@
           "end": "0x80081E64"
         },
         {
-          "symbol": "fn_80081E64",
+          "symbol": "PlayerDbSetFirstName",
           "start": "0x80081E64",
           "end": "0x80081E98"
         },
         {
-          "symbol": "fn_80081E98",
+          "symbol": "PlayerDbSetLastName",
           "start": "0x80081E98",
           "end": "0x80081ECC"
         },
         {
-          "symbol": "fn_80081ECC",
+          "symbol": "PlayerRatingsScore",
           "start": "0x80081ECC",
           "end": "0x80081F50"
         },
         {
-          "symbol": "fn_80081F50",
+          "symbol": "PlayerDbSetPickedFlag",
           "start": "0x80081F50",
           "end": "0x80081FD4"
         },
         {
-          "symbol": "fn_80081FD4",
+          "symbol": "PlayerDbGetPickedFlag",
           "start": "0x80081FD4",
           "end": "0x8008201C"
         },
         {
-          "symbol": "fn_8008201C",
+          "symbol": "PlayerDbFindNextPicked",
           "start": "0x8008201C",
           "end": "0x80082138"
         },
         {
-          "symbol": "fn_80082138",
+          "symbol": "PlayerDbGetFaceFeatures",
           "start": "0x80082138",
           "end": "0x80082280"
         },
         {
-          "symbol": "fn_80082280",
+          "symbol": "PlayerDbGetFaceId",
           "start": "0x80082280",
           "end": "0x800822A8"
         },
         {
-          "symbol": "fn_800822A8",
+          "symbol": "PlayerDbSetFaceId",
           "start": "0x800822A8",
           "end": "0x800822D4"
         },
         {
-          "symbol": "fn_800822D4",
+          "symbol": "PlayerDbGetEyebrows",
           "start": "0x800822D4",
           "end": "0x80082308"
         },
         {
-          "symbol": "fn_80082308",
+          "symbol": "PlayerDbSetEyebrows",
           "start": "0x80082308",
           "end": "0x80082334"
         },
         {
-          "symbol": "fn_80082334",
+          "symbol": "PlayerDbSetFaceFeatures",
           "start": "0x80082334",
           "end": "0x80082414"
         },
         {
-          "symbol": "fn_80082414",
+          "symbol": "PlayerPoolGetCount",
           "start": "0x80082414",
           "end": "0x80082534"
         },
         {
-          "symbol": "fn_80082534",
+          "symbol": "PlayerRecordSaveTeam",
           "start": "0x80082534",
           "end": "0x80082558"
         },
         {
-          "symbol": "fn_80082558",
+          "symbol": "PlayerRecordLoadTeam",
           "start": "0x80082558",
           "end": "0x8008257C"
         },
         {
-          "symbol": "fn_8008257C",
+          "symbol": "PlayerGetUnlockedCount",
           "start": "0x8008257C",
           "end": "0x80082688"
         },
         {
-          "symbol": "fn_80082688",
+          "symbol": "PlayerUnlockAll",
           "start": "0x80082688",
           "end": "0x8008274C"
         },
         {
-          "symbol": "fn_8008274C",
+          "symbol": "PlayerUnlockClear",
           "start": "0x8008274C",
           "end": "0x800827EC"
         },
         {
-          "symbol": "fn_800827EC",
+          "symbol": "PlayerIsLocked",
           "start": "0x800827EC",
           "end": "0x80082864"
         },
         {
-          "symbol": "fn_80082864",
+          "symbol": "PlayerGetUnlockRosterCount",
           "start": "0x80082864",
           "end": "0x800828FC"
         },
         {
-          "symbol": "fn_800828FC",
+          "symbol": "PlayerNamesOpen",
           "start": "0x800828FC",
           "end": "0x800829D8"
         },
         {
-          "symbol": "fn_800829D8",
+          "symbol": "PlayerNamesClose",
           "start": "0x800829D8",
           "end": "0x80082A64"
         },
         {
-          "symbol": "fn_80082A64",
+          "symbol": "PlayerCreateRandom",
           "start": "0x80082A64",
           "end": "0x80082AB0"
         },
         {
-          "symbol": "fn_80082AB0",
+          "symbol": "PlayerCreateAtPosition",
           "start": "0x80082AB0",
           "end": "0x80082AE4"
         },
         {
-          "symbol": "fn_80082AE4",
+          "symbol": "PlayerCreateStory",
           "start": "0x80082AE4",
           "end": "0x80082B18"
         },
@@ -9879,27 +9879,27 @@
           "end": "0x80082C64"
         },
         {
-          "symbol": "fn_80082C64",
+          "symbol": "PlayerRecordRandomName",
           "start": "0x80082C64",
           "end": "0x80082D30"
         },
         {
-          "symbol": "fn_80082D30",
+          "symbol": "PlayerRecordRandomFace",
           "start": "0x80082D30",
           "end": "0x80082E48"
         },
         {
-          "symbol": "fn_80082E48",
+          "symbol": "PlayerRecordRandomAttributes",
           "start": "0x80082E48",
           "end": "0x80083070"
         },
         {
-          "symbol": "fn_80083070",
+          "symbol": "PlayerRecordFixup",
           "start": "0x80083070",
           "end": "0x8008318C"
         },
         {
-          "symbol": "fn_8008318C",
+          "symbol": "PlayerRecordInsert",
           "start": "0x8008318C",
           "end": "0x80083414"
         },
@@ -9914,12 +9914,12 @@
           "end": "0x80083474"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_80081CDC",
+          "symbol": "_GLOBAL_.I.PlayerGearColorsOpen",
           "start": "0x80083474",
           "end": "0x800834A0"
         },
         {
-          "symbol": "_GLOBAL_.D.fn_80081CDC",
+          "symbol": "_GLOBAL_.D.PlayerGearColorsOpen",
           "start": "0x800834A0",
           "end": "0x800834CC"
         }
@@ -20416,7 +20416,7 @@
       ]
     },
     {
-      "source": "src/game/cu_800D760C.cpp",
+      "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
       "sections": [
@@ -20435,27 +20435,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_800D760C",
+          "symbol": "PlyrAnimReplayWrite",
           "start": "0x800D760C",
           "end": "0x800D7708"
         },
         {
-          "symbol": "fn_800D7708",
+          "symbol": "PlyrAnimReplayRead",
           "start": "0x800D7708",
           "end": "0x800D77F0"
         },
         {
-          "symbol": "fn_800D77F0",
+          "symbol": "PlyrAnimReplayRegister",
           "start": "0x800D77F0",
           "end": "0x800D782C"
         },
         {
-          "symbol": "fn_800D782C",
+          "symbol": "PlyrBallHandUpdate",
           "start": "0x800D782C",
           "end": "0x800D78C4"
         },
         {
-          "symbol": "fn_800D78C4",
+          "symbol": "PlyrBallHandFromAnim",
           "start": "0x800D78C4",
           "end": "0x800D7A0C"
         },
@@ -20475,12 +20475,12 @@
           "end": "0x800D7BC4"
         },
         {
-          "symbol": "fn_800D7BC4",
+          "symbol": "PlyrAnimTurnTowardCarrier",
           "start": "0x800D7BC4",
           "end": "0x800D7D78"
         },
         {
-          "symbol": "fn_800D7D78",
+          "symbol": "PlyrAnimRampLevels",
           "start": "0x800D7D78",
           "end": "0x800D7E9C"
         },
@@ -23167,7 +23167,7 @@
       ]
     },
     {
-      "source": "src/game/cu_80196F48.cpp",
+      "source": "src/game/GlowRender.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit 0x8019723C-0x801981D8 and source-form/shared type/external/compiler rows. Eight complete functions and the 144-byte readonly interval 0x802ADA80-0x802ADB10 measured; all partials retained. Original bytes remain linked.",
       "sections": [
@@ -23186,37 +23186,37 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8019723C",
+          "symbol": "ParticleTrailDraw",
           "start": "0x8019723C",
           "end": "0x80197680"
         },
         {
-          "symbol": "fn_80197680",
+          "symbol": "GlowRender",
           "start": "0x80197680",
           "end": "0x80197D08"
         },
         {
-          "symbol": "fn_80197D08",
+          "symbol": "GlowProject",
           "start": "0x80197D08",
           "end": "0x80197E64"
         },
         {
-          "symbol": "fn_80197E64",
+          "symbol": "GlowRenderInit",
           "start": "0x80197E64",
           "end": "0x80197E68"
         },
         {
-          "symbol": "fn_80197E68",
+          "symbol": "GlowRenderShutdown",
           "start": "0x80197E68",
           "end": "0x80197E6C"
         },
         {
-          "symbol": "fn_80197E6C",
+          "symbol": "GlowTextureLoad",
           "start": "0x80197E6C",
           "end": "0x80197F84"
         },
         {
-          "symbol": "fn_80197F84",
+          "symbol": "GlowTextureUnload",
           "start": "0x80197F84",
           "end": "0x80197FDC"
         },

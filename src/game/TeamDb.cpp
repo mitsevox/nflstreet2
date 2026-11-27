@@ -27,10 +27,10 @@ void FESndUpdate(int a);
 int DbCursorGetRow(DbCursor *pObject);
 int DbCursorGetValue(DbCursor *pObject, int key);
 void GameInfoSet(int index, int value);
-void fn_800828FC(void);
-void fn_800829D8(void);
-int fn_80082A64(int a, int b);
-int fn_80082AB0(int a, int b, int c);
+void PlayerNamesOpen(void);
+void PlayerNamesClose(void);
+int PlayerCreateRandom(int a, int b);
+int PlayerCreateAtPosition(int a, int b, int c);
 void *UIGLibraryGetGlobal(int index);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
@@ -602,7 +602,7 @@ void TeamDbCreatePlayers(int a, int *pIds, int *pCounts, int count, int *pOut, i
     int i;
     int j;
 
-    fn_800828FC();
+    PlayerNamesOpen();
     prev = -1;
     k = 0;
     if (count) {
@@ -610,17 +610,17 @@ void TeamDbCreatePlayers(int a, int *pIds, int *pCounts, int count, int *pOut, i
             int n = pCounts[i];
 
             for (j = 0; j < n; j++) {
-                prev = pOut[k] = fn_80082AB0(pIds[k], a, prev);
+                prev = pOut[k] = PlayerCreateAtPosition(pIds[k], a, prev);
                 k++;
                 FESndUpdate(1);
             }
         }
     }
     while (k < total) {
-        prev = pOut[k++] = fn_80082A64(a, prev);
+        prev = pOut[k++] = PlayerCreateRandom(a, prev);
         FESndUpdate(1);
     }
-    fn_800829D8();
+    PlayerNamesClose();
 }
 
 void TeamDbAutoPickPlayers(int a, int b, int *pOut, unsigned int count, int *pIn, unsigned int size)
@@ -686,7 +686,7 @@ void TeamDbLoadSideWithCopies(int team, int *pList, int side, int count)
     PlayerCursorOpen(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
         PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
-        fn_80081F50(&cursor, side, 1);
+        PlayerDbSetPickedFlag(&cursor, side, 1);
     }
     PlayerCursorClose(&cursor);
 }
@@ -718,7 +718,7 @@ void TeamDbLoadSide(int team, int *pList, int side, int count)
     PlayerCursorOpen(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
         PlayerDbSeekId(&cursor, record.mUnknown[i], 0);
-        fn_80081F50(&cursor, side, 1);
+        PlayerDbSetPickedFlag(&cursor, side, 1);
     }
     PlayerCursorClose(&cursor);
 }

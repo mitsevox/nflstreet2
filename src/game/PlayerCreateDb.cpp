@@ -1,4 +1,9 @@
-#include "game/Record_80082B18.h"
+/* Player database support for creating and picking players: reads and writes
+   the create-a-player columns of the PLAY table (gear colours, skin tone,
+   names, face features, the per-side pick flags), counts the player pools and
+   the unlockable players, and generates new players for PlayerRecordCreate by
+   drawing random names, a face and attributes and inserting the record. */
+#include "game/PlayerCreateRecord.h"
 #include "game/FaceFeatures.h"
 #include "game/DbTableCursor.h"
 #include "game/FchrCursor.h"
@@ -29,9 +34,9 @@ int DbFileTblDestroy(int a, int tag);
 int DbUserGetId(int index);
 int DbUserGetDb(int handle);
 
-int fn_80082280(Object_8008044C *pObject);
-int fn_8008257C(int count, unsigned int *pOut);
-int fn_80082864(void);
+int PlayerDbGetFaceId(Object_8008044C *pObject);
+int PlayerGetUnlockedCount(int count, unsigned int *pOut);
+int PlayerGetUnlockRosterCount(void);
 
 extern int lbl_802D6850[18];
 extern int lbl_802D69F0[];
@@ -40,27 +45,27 @@ extern const int lbl_80293968[];
 extern QueryCursor lbl_8030BC88;
 extern QueryCursor lbl_8030BC98;
 
-static DbCursor lbl_8030BC2C;
+static DbCursor _PlayerCreateDb_sGearColorCursor;
 
-static unsigned char lbl_803EA7D8 = 0;
-static int lbl_803EA7DC = 0;
-static int lbl_803EA7E0 = 0;
+static unsigned char _PlayerCreateDb_bNamesOpen = 0;
+static int _PlayerCreateDb_iFirstNameCount = 0;
+static int _PlayerCreateDb_iLastNameCount = 0;
 
-void fn_80081CDC(void)
+void PlayerGearColorsOpen(void)
 {
-    DbCursorOpen(&lbl_8030BC2C, 0x4C434750, 0x44494750, 0, 0, 0x54415453);
+    DbCursorOpen(&_PlayerCreateDb_sGearColorCursor, 0x4C434750, 0x44494750, 0, 0, 0x54415453);
 }
 
-void fn_80081D24(void)
+void PlayerGearColorsClose(void)
 {
-    DbCursorClose(&lbl_8030BC2C);
+    DbCursorClose(&_PlayerCreateDb_sGearColorCursor);
 }
 
-int fn_80081D4C(Object_8008044C *pObject, unsigned char *p)
+int PlayerGearColorsRead(Object_8008044C *pObject, unsigned char *p)
 {
     int found = 0;
 
-    if (DbCursorFindInt(&lbl_8030BC2C, 0x44494750, PlayerDbGetId(pObject), 0, 0)) {
+    if (DbCursorFindInt(&_PlayerCreateDb_sGearColorCursor, 0x44494750, PlayerDbGetId(pObject), 0, 0)) {
         DbColumnValue columns[19];
         int i;
 
@@ -82,17 +87,17 @@ int fn_80081E3C(Object_8008044C *pObject)
     return DbCursorGetInt(pObject, 0x494B5350);
 }
 
-void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size)
+void PlayerDbSetFirstName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     DbCursorSetString(pObject, 0x414E4650, pBuffer, size);
 }
 
-void fn_80081E98(Object_8008044C *pObject, char *pBuffer, int size)
+void PlayerDbSetLastName(Object_8008044C *pObject, char *pBuffer, int size)
 {
     DbCursorSetString(pObject, 0x414E4C50, pBuffer, size);
 }
 
-unsigned int fn_80081ECC(int category, int *pValues)
+unsigned int PlayerRatingsScore(int category, int *pValues)
 {
     int values[10];
 
@@ -109,7 +114,7 @@ unsigned int fn_80081ECC(int category, int *pValues)
     return DbYalpGetOverallRating(category, values, 0);
 }
 
-void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
+void PlayerDbSetPickedFlag(Object_8008044C *pObject, unsigned char side, int a)
 {
     unsigned int flags = DbCursorGetInt(pObject, 0x47494C50);
 
@@ -129,7 +134,7 @@ void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)
     DbCursorSetInt(pObject, 0x47494C50, flags);
 }
 
-int fn_80081FD4(Object_8008044C *pObject, int a)
+int PlayerDbGetPickedFlag(Object_8008044C *pObject, int a)
 {
     if (a != 0) {
         return (DbCursorGetInt(pObject, 0x47494C50) >> 1) & 1;
@@ -137,7 +142,7 @@ int fn_80081FD4(Object_8008044C *pObject, int a)
     return DbCursorGetInt(pObject, 0x47494C50) & 1;
 }
 
-int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosition)
+int PlayerDbFindNextPicked(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosition)
 {
     DbCursor *pCursor = (DbCursor *)pObject;
     int first;
@@ -178,12 +183,12 @@ int fn_8008201C(Object_8008044C *pObject, int a, int b, int *pResult, int *pPosi
     return found;
 }
 
-void fn_80082138(Object_8008044C *pObject, FaceFeatures_t *pBlock)
+void PlayerDbGetFaceFeatures(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     FchrCursor cursor;
 
     cursor.OpenFchrTable();
-    cursor.FindFchrRow(fn_80082280(pObject), 0);
+    cursor.FindFchrRow(PlayerDbGetFaceId(pObject), 0);
     pBlock->mUnknown0[0] = cursor.GetFchrFhstCode();
     pBlock->mUnknown0[1] = DbCursorGetInt(pObject, 0x57424650);
     pBlock->mUnknown0[2] = DbCursorGetInt(pObject, 0x41454650) + 8;
@@ -196,17 +201,17 @@ void fn_80082138(Object_8008044C *pObject, FaceFeatures_t *pBlock)
     pBlock->mUnknown0[9] = DbCursorGetInt(pObject, 0x54425950);
 }
 
-int fn_80082280(Object_8008044C *pObject)
+int PlayerDbGetFaceId(Object_8008044C *pObject)
 {
     return DbCursorGetInt(pObject, 0x48464650);
 }
 
-void fn_800822A8(Object_8008044C *pObject, int value)
+void PlayerDbSetFaceId(Object_8008044C *pObject, int value)
 {
     DbCursorSetInt(pObject, 0x48464650, value);
 }
 
-int fn_800822D4(Object_8008044C *pObject)
+int PlayerDbGetEyebrows(Object_8008044C *pObject)
 {
     int value = DbCursorGetInt(pObject, 0x42454650);
 
@@ -216,12 +221,12 @@ int fn_800822D4(Object_8008044C *pObject)
     return value;
 }
 
-void fn_80082308(Object_8008044C *pObject, int value)
+void PlayerDbSetEyebrows(Object_8008044C *pObject, int value)
 {
     DbCursorSetInt(pObject, 0x42454650, value);
 }
 
-void fn_80082334(Object_8008044C *pObject, FaceFeatures_t *pBlock)
+void PlayerDbSetFaceFeatures(Object_8008044C *pObject, FaceFeatures_t *pBlock)
 {
     DbCursorSetInt(pObject, 0x57424650, pBlock->mUnknown0[1]);
     DbCursorSetInt(pObject, 0x41454650, pBlock->mUnknown0[2] - 8);
@@ -233,7 +238,7 @@ void fn_80082334(Object_8008044C *pObject, FaceFeatures_t *pBlock)
     DbCursorSetInt(pObject, 0x4F4E4650, pBlock->mUnknown0[8] - 0x48);
 }
 
-int fn_80082414(int index)
+int PlayerPoolGetCount(int index)
 {
     int result;
 
@@ -243,10 +248,10 @@ int fn_80082414(int index)
         PlayerQueryClose(0);
         return result;
     case 1: {
-        int count = fn_80082864();
+        int count = PlayerGetUnlockRosterCount();
         unsigned int teams = 0;
 
-        return fn_8008257C(count, &teams);
+        return PlayerGetUnlockedCount(count, &teams);
     }
     case 2:
         return 42;
@@ -266,12 +271,12 @@ int fn_80082414(int index)
     return -1;
 }
 
-void fn_80082534(int a, int b)
+void PlayerRecordSaveTeam(int a, int b)
 {
     PlayerRecordCopyTeam(a, b, 0);
 }
 
-void fn_80082558(int a, int b)
+void PlayerRecordLoadTeam(int a, int b)
 {
     PlayerRecordCopyTeam(a, b, 1);
 }
@@ -282,7 +287,7 @@ void fn_80082558(int a, int b)
 
 extern "C" {
 
-int fn_8008257C(int count, unsigned int *pOut)
+int PlayerGetUnlockedCount(int count, unsigned int *pOut)
 {
     int result;
     unsigned int pad;
@@ -309,7 +314,7 @@ int fn_8008257C(int count, unsigned int *pOut)
     return result;
 }
 
-void fn_80082688(int db)
+void PlayerUnlockAll(int db)
 {
     int mask = 0;
     int i;
@@ -326,7 +331,7 @@ void fn_80082688(int db)
     }
 }
 
-void fn_8008274C(int db)
+void PlayerUnlockClear(int db)
 {
     int mask = 0;
     int handle = DbUserGetDb(DbUserGetId(db));
@@ -336,7 +341,7 @@ void fn_8008274C(int db)
     cursor.SetColumnInt(0x504C5555, mask);
 }
 
-int fn_800827EC(int id, unsigned int value)
+int PlayerIsLocked(int id, unsigned int value)
 {
     int i;
     int result = 1;
@@ -351,7 +356,7 @@ int fn_800827EC(int id, unsigned int value)
     return result;
 }
 
-int fn_80082864(void)
+int PlayerGetUnlockRosterCount(void)
 {
     Object_8008044C cursor;
     Desc_8008044C desc;
@@ -366,7 +371,7 @@ int fn_80082864(void)
     return count;
 }
 
-void fn_800828FC(void)
+void PlayerNamesOpen(void)
 {
     QueryResult result;
 
@@ -380,17 +385,17 @@ void fn_800828FC(void)
     lbl_8030BC88.mUnknown8 = -1;
     lbl_8030BC88.mUnknown12 = 0;
     TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
-    lbl_803EA7DC = result.mUnknown0;
+    _PlayerCreateDb_iFirstNameCount = result.mUnknown0;
     lbl_8030BC98.mUnknown0 = 0;
     lbl_8030BC98.mUnknown4 = 0;
     lbl_8030BC98.mUnknown8 = -1;
     lbl_8030BC98.mUnknown12 = 0;
     TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
-    lbl_803EA7E0 = result.mUnknown0;
-    lbl_803EA7D8 = 1;
+    _PlayerCreateDb_iLastNameCount = result.mUnknown0;
+    _PlayerCreateDb_bNamesOpen = 1;
 }
 
-void fn_800829D8(void)
+void PlayerNamesClose(void)
 {
     if (lbl_8030BC98.mUnknown0) {
         TDbSQLDestroyCursor(&lbl_8030BC98);
@@ -403,25 +408,25 @@ void fn_800829D8(void)
     SndgMusicPumpFrame(0);
     DbFileTblDestroy(0, 0x4D4E4C53);
     SndgMusicPumpFrame(0);
-    lbl_803EA7D8 = 0;
+    _PlayerCreateDb_bNamesOpen = 0;
 }
 
-int fn_80082A64(int a, int b)
+int PlayerCreateRandom(int a, int b)
 {
     return PlayerRecordCreate(a, DbUtilRandomRange(0, 14), 0, b);
 }
 
-int fn_80082AB0(int a, int b, int c)
+int PlayerCreateAtPosition(int a, int b, int c)
 {
     return PlayerRecordCreate(b, a, 0, c);
 }
 
-int fn_80082AE4(int a, int b)
+int PlayerCreateStory(int a, int b)
 {
     return PlayerRecordCreate(b, a, 1, -1);
 }
 
-void PlayerRecordSetDefaults(Record_80082B18 *pRecord)
+void PlayerRecordSetDefaults(PlayerCreateRecord_t *pRecord)
 {
     pRecord->mUnknown00 = 0x7FFF;
     pRecord->mUnknown04 = 0;
@@ -498,17 +503,17 @@ void PlayerRecordSetDefaults(Record_80082B18 *pRecord)
 }
 
 /* Fetches a randomly chosen first and last name through the two name cursors
-   opened by fn_800828FC, and stores the upper-case form of the last name. */
-void fn_80082C64(Record_80082B18 *pRecord)
+   opened by PlayerNamesOpen, and stores the upper-case form of the last name. */
+void PlayerRecordRandomName(PlayerCreateRecord_t *pRecord)
 {
     char *pLast = pRecord->mUnknown08;
     char *pFirst = pRecord->mUnknown04;
     char *pUpper = pRecord->mUnknown0C;
     unsigned int i;
 
-    lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, lbl_803EA7DC);
+    lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iFirstNameCount);
     TDbCompilePerformOp(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
-    lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, lbl_803EA7E0);
+    lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iLastNameCount);
     TDbCompilePerformOp(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
@@ -517,7 +522,7 @@ void fn_80082C64(Record_80082B18 *pRecord)
     }
 }
 
-void fn_80082D30(Record_80082B18 *pRecord)
+void PlayerRecordRandomFace(PlayerCreateRecord_t *pRecord)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -544,7 +549,7 @@ void fn_80082D30(Record_80082B18 *pRecord)
     }
 }
 
-void fn_80082E48(Record_80082B18 *pRecord)
+void PlayerRecordRandomAttributes(PlayerCreateRecord_t *pRecord)
 {
     QueryCursor cursor;
     QueryResult result;
@@ -593,7 +598,7 @@ void fn_80082E48(Record_80082B18 *pRecord)
     }
 }
 
-void fn_80083070(Record_80082B18 *pRecord)
+void PlayerRecordFixup(PlayerCreateRecord_t *pRecord)
 {
     int dftp;
     int dbtp;
@@ -629,7 +634,7 @@ void fn_80083070(Record_80082B18 *pRecord)
     pRecord->mUnknown11C = lbl_80293968[pRecord->mUnknown118];
 }
 
-void fn_8008318C(int handle, Record_80082B18 *pRecord, int team, int offset)
+void PlayerRecordInsert(int handle, PlayerCreateRecord_t *pRecord, int team, int offset)
 {
     TDbCompilePerformOp(0,
                 "use 'TATS' insert into \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ANFP' = \x88 and 'ANLP' = "
