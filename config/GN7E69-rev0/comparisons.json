@@ -19205,6 +19205,11 @@
           "end": "0x8022A624"
         },
         {
+          "symbol": "fn_8022A624",
+          "start": "0x8022A624",
+          "end": "0x8022AB6C"
+        },
+        {
           "symbol": "DbMttsReadSlots",
           "start": "0x8022AB6C",
           "end": "0x8022AC80"

@@ -104,7 +104,16 @@ typedef struct DbMttsCursor_t {
     int mUnknown4;
 } DbMttsCursor_t;
 
-extern int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, int a, int b);
+int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, unsigned int tables, int flags);
+extern int DbCacheGetTableId(int index);
+extern int DbCacheCopyRows(unsigned short id, int key, int value, int db, int mode,
+                           unsigned int tableMask, int flags);
+extern char lbl_802B32D8[];
+extern char lbl_802B3384[];
+extern char lbl_802B33B8[];
+extern char lbl_802B33F8[];
+extern char lbl_802B3438[];
+extern char lbl_802B3494[];
 extern int DbCacheOpen(int key, unsigned short *pId);
 extern int DbCacheClose(unsigned short id);
 extern int DbLockAcquire(void);
@@ -575,6 +584,183 @@ int fn_8022A59C(int a, DbMttsCursor_t **ppOut)
     } else {
         fn_8022AC80(p);
         *ppOut = 0;
+    }
+    return err;
+}
+
+typedef void (*DbMttsSlotFunc)(int team, int type, unsigned int *pMask, int *pFlags);
+
+#define DBMTTS_BIT(set, i) (((unsigned char *)&(set))[(i) >> 3] & (1 << ((i) & 7)))
+
+/* Walks the 'MTTS' rows of the open cursor: for each slot whose team is not a
+   placeholder, copies the slot team's rows into the cache, writes the team and its
+   applied table bits back to the slot, and fills the team's 'DIGC', 'DIGD' and 'NSID'
+   defaults from 'MAET'. */
+int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, unsigned int tables, int flags)
+{
+    unsigned short n;
+    unsigned short count;
+    unsigned char teft;
+    unsigned short rows;
+    unsigned int inTats;
+    unsigned int inTeams;
+    int slot;
+    int team;
+    int oldTeam;
+    int type;
+    int res;
+    int digc;
+    int digd;
+    int nsid;
+    unsigned int applied;
+    unsigned int mask;
+    int db;
+    int newDigc;
+    int newDigd;
+    int newNsid;
+    int err;
+    int *pIds;
+    int opened;
+
+    count = 0;
+    err = 0;
+    pIds = 0;
+    if (flags & 0x01000000) {
+        err = TDbQryGetCount(cursor.mUnknown0, &n);
+        if (err == 0) {
+            count = n;
+            pIds = DbUtilAlloc(n * 4, 0);
+            err = DbFindUnusedTeamIds(0, 0x4D414554, pIds, &count);
+        }
+    }
+    inTats = 0;
+    inTeams = 0;
+    if (err == 0) {
+        unsigned short i;
+
+        for (i = 0; i < 3; i++) {
+            unsigned int bit = DBMTTS_BIT(tables, i);
+
+            if (bit == (1 << (i & 7))) {
+                if (TDbTblExists(0x54415453, DbCacheGetTableId(i)) == 0) {
+                    ((unsigned char *)&inTats)[i >> 3] |= bit;
+                } else {
+                    ((unsigned char *)&inTeams)[i >> 3] |= bit;
+                }
+            }
+        }
+    }
+    opened = 0;
+    if (DbTeamsIsOpen() == 0) {
+        err = DbTeamsOpen();
+        opened = err == 0;
+    }
+    if (err == 0) {
+        do {
+            err = TDbCompilePerformOp(0, lbl_802B32D8, &cursor, &slot, &team, &oldTeam, &type, &res,
+                                      &digc, &digd, &nsid, &applied);
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3384, &teft, team);
+            if (QUERY_STATUS_ACCEPTED(err) == 1) {
+                if (err != 0) {
+                    teft = 0;
+                    err = 0;
+                }
+            }
+            if (err != 0) {
+                break;
+            }
+            if (type != 5 && teft == 0) {
+                mask = tables & ~applied;
+                if ((DbMttsSlotFunc)p->mUnknown4 != 0) {
+                    ((DbMttsSlotFunc)p->mUnknown4)(team, type, &mask, &flags);
+                }
+                if (mask != 0) {
+                    if ((((unsigned char *)&flags)[0] & 1) && team == oldTeam) {
+                        unsigned short j;
+
+                        for (j = 0; j < count; j++) {
+                            if (pIds[j] != 1023) {
+                                team = pIds[j];
+                                pIds[j] = 1023;
+                                break;
+                            }
+                        }
+                    }
+                    err = TDbCompilePerformOp(0, lbl_802B33B8, &rows, oldTeam);
+                    if (err != 0) {
+                        break;
+                    }
+                    if (rows != 0) {
+                        if (inTats & mask) {
+                            err = DbCacheCopyRows(p->mUnknown0, oldTeam, team, 0x54415453, 1,
+                                                  inTats & mask, flags);
+                        }
+                        if (err != 0) {
+                            break;
+                        }
+                        if (inTeams & mask) {
+                            err = DbTeamsLoad(res, &db);
+                            if (err != 0) {
+                                break;
+                            }
+                            err = DbCacheCopyRows(p->mUnknown0, 1023, team, db, 0, inTeams & mask,
+                                                  flags);
+                        }
+                    } else {
+                        err = DbTeamsLoad(res, &db);
+                        if (err != 0) {
+                            break;
+                        }
+                        err = DbCacheCopyRows(p->mUnknown0, 1023, team, db, 0, mask, flags);
+                    }
+                    if (err != 0) {
+                        break;
+                    }
+                    err = TDbCompilePerformOp(0, lbl_802B33F8, team, applied | mask, slot);
+                }
+            }
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3438, &newDigc, &newDigd, &newNsid, team);
+            if (digc == 3) {
+                digc = newDigc;
+            }
+            if (digd == 15) {
+                digd = newDigd;
+            }
+            if (nsid == 7) {
+                nsid = newNsid;
+            }
+            if (err != 0) {
+                break;
+            }
+            err = fn_8022A558(slot, digc, digd, nsid);
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3494, digc, digd, nsid, team);
+            if (err != 0) {
+                break;
+            }
+            err = DbNiomRunCallback();
+        } while (err == 0);
+        if (QUERY_STATUS_ACCEPTED(err) == 1) {
+            err = 0;
+        }
+    }
+    if (opened == 1) {
+        if (err == 0) {
+            err = DbTeamsClose();
+        } else {
+            DbTeamsClose();
+        }
+    }
+    if (pIds != 0) {
+        DbUtilFree(pIds);
     }
     return err;
 }
