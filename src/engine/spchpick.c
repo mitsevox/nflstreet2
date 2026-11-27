@@ -1061,25 +1061,30 @@ unsigned int iSPCH_EACrandom(void)
     unsigned int sum = seedX[5] + seedX[4];
     unsigned int carry = sum < seedX[5] || sum < seedX[4];
     seedX[4] = sum;
-    unsigned int old = seedX[3];
-    sum = sum + old + carry;
+    unsigned int old3 = seedX[3];
+    sum = sum + old3 + carry;
     seedX[3] = sum;
-    carry = sum < old;
-    old = seedX[2];
-    sum = sum + old + carry;
+    unsigned int old2 = seedX[2];
+    carry = sum < old3;
+    sum = sum + old2 + carry;
     seedX[2] = sum;
-    carry = sum < old;
-    old = seedX[1];
-    sum = sum + old + carry;
+    unsigned int old1 = seedX[1];
+    carry = sum < old2;
+    sum = sum + old1 + carry;
     seedX[1] = sum;
-    carry = sum < old;
+    carry = sum < old1;
     sum = sum + seedX[0] + carry;
     seedX[0] = sum;
     if (++seedX[5] == 0) {
         if (++seedX[4] == 0) {
             if (++seedX[3] == 0) {
                 if (++seedX[2] == 0) {
-                    if (++seedX[1] == 0) seedX[0] = ++sum;
+                    if (++seedX[1] == 0) {
+                        // FAKEMATCH: re-read of the stored word keeps the
+                        // incremented value in its own register (mr r3,r0).
+                        seedX[0] = sum + 1;
+                        sum = seedX[0];
+                    }
                 }
             }
         }
