@@ -446,45 +446,54 @@ int SNDAEMSI_updatecreate(int *p)
 int SNDAEMSI_updatedestroy(DestroyState_t *p)
 {
     if (p->mDestroy != 0) {
-        AemsClass_t *c = p->mpClass;
-        AemsInstance_t *inst = p->mpInstance;
-        SndAemsTimerClient_t *timer;
+        AemsInstance_t *inst;
         unsigned char *data;
+        unsigned char *client;
         int *offsets;
         int i;
 
-        if (inst == c->mpInstances)
-            c->mpInstances = inst->mpNext;
-        if (inst->mpPrev != 0)
-            inst->mpPrev->mpNext = inst->mpNext;
-        if (inst->mpNext != 0)
-            inst->mpNext->mpPrev = inst->mpPrev;
-        timer = &p->mpInstance->mTimer;
-        if (timer == sndaems.mpTimerClients)
-            sndaems.mpTimerClients = timer->mpNext;
-        if (timer->mpPrev != 0)
-            timer->mpPrev->mpNext = timer->mpNext;
-        if (timer->mpNext != 0)
-            timer->mpNext->mpPrev = timer->mpPrev;
+        {
+            AemsInstance_t **head = &p->mpClass->mpInstances;
+            AemsInstance_t *unlinked = p->mpInstance;
+
+            if (unlinked == *head)
+                *head = unlinked->mpNext;
+            if (unlinked->mpPrev != 0)
+                unlinked->mpPrev->mpNext = unlinked->mpNext;
+            if (unlinked->mpNext != 0)
+                unlinked->mpNext->mpPrev = unlinked->mpPrev;
+        }
+        {
+            SndAemsTimerClient_t **head = &sndaems.mpTimerClients;
+            SndAemsTimerClient_t *unlinked = &p->mpInstance->mTimer;
+
+            if (unlinked == *head)
+                *head = unlinked->mpNext;
+            if (unlinked->mpPrev != 0)
+                unlinked->mpPrev->mpNext = unlinked->mpNext;
+            if (unlinked->mpNext != 0)
+                unlinked->mpNext->mpPrev = unlinked->mpPrev;
+        }
         inst = p->mpInstance;
         data = inst->mData;
         if (p->mpClass->mHasDestructor) {
             p->mpObject->UnsubscribeDestructorFast(&((AemsDestructorClient_t *)data)->mClient);
             data = inst->mData + sizeof(AemsDestructorClient_t);
         }
+        client = data;
         for (i = 0; i < p->mpClass->mNumGlobals; i++) {
-            Csis::GlobalVariable::UnsubscribeFast(&((AemsVariableClient_t *)data)->mHandle,
-                                                  &((AemsVariableClient_t *)data)->mClient);
-            data += sizeof(AemsVariableClient_t);
+            Csis::GlobalVariable::UnsubscribeFast(&((AemsVariableClient_t *)client)->mHandle,
+                                                  &((AemsVariableClient_t *)client)->mClient);
+            client += sizeof(AemsVariableClient_t);
         }
         if (p->mpClass->mHasMemberData) {
-            p->mpObject->UnsubscribeMemberDataFast(&((AemsMemberDataClient_t *)data)->mClient);
-            data += ((AemsMemberDataClient_t *)data)->mNumParams * 4 + 20;
+            p->mpObject->UnsubscribeMemberDataFast(&((AemsMemberDataClient_t *)client)->mClient);
+            client += ((AemsMemberDataClient_t *)client)->mNumParams * 4 + 20;
         }
         for (i = 0; i < p->mpClass->mNumFunctions; i++) {
-            Csis::Function::UnsubscribeFast(&((AemsFunctionClient_t *)data)->mHandle,
-                                            &((AemsFunctionClient_t *)data)->mClient);
-            data += ((AemsFunctionClient_t *)data)->mNumParams * 4 + 28;
+            Csis::Function::UnsubscribeFast(&((AemsFunctionClient_t *)client)->mHandle,
+                                            &((AemsFunctionClient_t *)client)->mClient);
+            client += ((AemsFunctionClient_t *)client)->mNumParams * 4 + 28;
         }
         offsets = p->mpClass->mStateOffsets;
         for (i = 0; i < p->mpClass->mNumPlayers; i++) {

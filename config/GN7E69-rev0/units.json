@@ -25755,14 +25755,8 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80267114",
-          "end": "0x802671D0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
           "start": "0x80266E88",
-          "end": "0x80266EC0"
+          "end": "0x802671D0"
         },
         {
           "section": ".text",
@@ -25803,10 +25797,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "SNDAEMSI_updatedestroy",
-            "evidence": "evidence.tsv source-form 0x80266EC0-0x80267114"
-          },
           {
             "function": "UpdateControlClass",
             "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"

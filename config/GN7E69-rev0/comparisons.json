@@ -28779,11 +28779,6 @@
       ],
       "functions": [
         {
-          "symbol": "SNDAEMSI_updatedestroy",
-          "start": "0x80266EC0",
-          "end": "0x80267114"
-        },
-        {
           "symbol": "UpdateControlClass",
           "start": "0x802671D0",
           "end": "0x8026739C"
