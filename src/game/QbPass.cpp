@@ -83,8 +83,8 @@ void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
 void PlayerActionAnimSteerPassReady(Object_80039F5C *, int, float);
 int ScrmTestPlayFlag(int);
-void fn_800A02B4(void);
-void fn_800A02FC(void);
+void DefPredApplyQbRunMod(void);
+void DefPredRefreshRatings(void);
 
 int fn_801486A0(void);
 int fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
@@ -589,8 +589,8 @@ int QbPassUpdate(Object_80039F5C *player) {
         --state->mUnknown6;
     } else if (ScrmTestPlayFlag(0) == 1) {
 
-        fn_800A02B4();
-        fn_800A02FC();
+        DefPredApplyQbRunMod();
+        DefPredRefreshRatings();
         memset(&message, 0, 4);
         message.mId = 1;
         fn_800F053C(0, player->mpState, &message, player);

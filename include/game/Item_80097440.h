@@ -151,7 +151,7 @@ struct Block_8009D474 {
     int mUnknown98;
 };
 
-/* One of the 24 four-float boxes fn_8009E674 lays out at +0x18 of
+/* One of the 24 four-float boxes DefCoverBuildZones lays out at +0x18 of
    State_8011F4EC. */
 struct Box_8009E674 {
     float mUnknown0;

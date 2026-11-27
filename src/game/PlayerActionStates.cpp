@@ -845,7 +845,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     own.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     own.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     Vec2Add(&own, &own, &goal);
-    if (fn_8009F780() && fn_801BE648(p->mpUnknown792) != 86) {
+    if (DefCoverIsAlignHeld() && fn_801BE648(p->mpUnknown792) != 86) {
     pBlock->mUnknown49 = 0;
     if (pTactics->mUnknown4) {
         unsigned char slot = pTactics->mUnknown32[p->mIdBytes[1]];
@@ -1073,7 +1073,7 @@ extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut,
                 fn_800FE03C(p, pOut);
             }
         }
-    } else if (pBlock->mUnknown49 && fn_8009F780() && ScrmOffenseAnyPlaced()) {
+    } else if (pBlock->mUnknown49 && DefCoverIsAlignHeld() && ScrmOffenseAnyPlaced()) {
         pOut->mX = pBlock->mUnknown40.mX;
         pOut->mY = pBlock->mUnknown40.mY;
     } else {

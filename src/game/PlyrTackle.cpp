@@ -840,7 +840,7 @@ extern "C" int PlyrAlignEnter(Object_80039F5C *p) {
 
 extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
-extern "C" int fn_8009F780(void);
+extern "C" int DefCoverIsAlignHeld(void);
 extern "C" int PlyrAlignIsFree(Object_80039F5C *p);
 extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int angle);
 extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
@@ -892,7 +892,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
     PlayerActionGetAlignSpot(p, &target, &heading);
     if ((fabsf(p->mMotion.mPos.mX - target.mX) > 1.0f || fabsf(p->mMotion.mPos.mY - target.mY) > 1.0f) &&
         !(pState->mUnknown24 && pState->mUnknown30) && !pState->mUnknown36 && !PlayerActionAnimIsReactionAlt(p) &&
-        !(pState->mUnknown49 && fn_8009F780()) && !pState->mUnknown0) {
+        !(pState->mUnknown49 && DefCoverIsAlignHeld()) && !pState->mUnknown0) {
         pState->mUnknown1 = 1;
     }
     if (pState->mUnknown0 && p->mUnknown8 == 255) {

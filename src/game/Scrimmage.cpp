@@ -63,8 +63,8 @@ void DivotRestartRecords(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
 int GameClockIsTimerRunning(int index);
-void fn_8009E0EC(void);
-void fn_800A0230(void);
+void DefCoverStartPlay(void);
+void DefPredPostAudio(void);
 int fn_800A7FD8(void);
 void fn_800A8F08(void);
 int fn_800A937C(void);
@@ -423,7 +423,7 @@ extern "C" void ScrmStartPlay(void)
     fn_800AD910(3, 0.0f);
     fn_8011F3A8();
     BallSetCurrentTarget(0);
-    fn_8009E0EC();
+    DefCoverStartPlay();
     fn_8011875C();
     fn_800FAD2C();
     PlayTrackUpdateSummary();
@@ -482,7 +482,7 @@ extern "C" void ScrmStartPlay(void)
     }
     fn_800B82AC(ScrmGetDefenseTeam());
     fn_800A8F08();
-    fn_800A0230();
+    DefPredPostAudio();
 }
 
 extern "C" int ScrmCanSnap(void)

@@ -13402,17 +13402,17 @@
           "end": "0x8009DA10"
         },
         {
-          "symbol": "fn_8009DA10",
+          "symbol": "DefCoverInterruptPlayer",
           "start": "0x8009DA10",
           "end": "0x8009DA90"
         },
         {
-          "symbol": "fn_8009DA90",
+          "symbol": "DefCoverInitReceivers",
           "start": "0x8009DA90",
           "end": "0x8009DB54"
         },
         {
-          "symbol": "fn_8009DB54",
+          "symbol": "DefCoverFlipFormation",
           "start": "0x8009DB54",
           "end": "0x8009DBB4"
         },
@@ -13422,22 +13422,22 @@
           "end": "0x8009DD10"
         },
         {
-          "symbol": "fn_8009DD10",
+          "symbol": "DefCoverClearState",
           "start": "0x8009DD10",
           "end": "0x8009DD88"
         },
         {
-          "symbol": "fn_8009DD88",
+          "symbol": "DefCoverShouldSwitchMark",
           "start": "0x8009DD88",
           "end": "0x8009DE9C"
         },
         {
-          "symbol": "fn_8009DE9C",
+          "symbol": "DefCoverPreSnapInit",
           "start": "0x8009DE9C",
           "end": "0x8009DEFC"
         },
         {
-          "symbol": "fn_8009DEFC",
+          "symbol": "DefCoverSetupFormation",
           "start": "0x8009DEFC",
           "end": "0x8009E01C"
         },
@@ -13447,12 +13447,12 @@
           "end": "0x8009E0EC"
         },
         {
-          "symbol": "fn_8009E0EC",
+          "symbol": "DefCoverStartPlay",
           "start": "0x8009E0EC",
           "end": "0x8009E138"
         },
         {
-          "symbol": "fn_8009E138",
+          "symbol": "DefCoverUpdate",
           "start": "0x8009E138",
           "end": "0x8009E180"
         },
@@ -13462,17 +13462,17 @@
           "end": "0x8009E458"
         },
         {
-          "symbol": "fn_8009E458",
+          "symbol": "DefCoverResetDefenders",
           "start": "0x8009E458",
           "end": "0x8009E58C"
         },
         {
-          "symbol": "fn_8009E58C",
+          "symbol": "DefCoverSortReceivers",
           "start": "0x8009E58C",
           "end": "0x8009E674"
         },
         {
-          "symbol": "fn_8009E674",
+          "symbol": "DefCoverBuildZones",
           "start": "0x8009E674",
           "end": "0x8009E9A4"
         },
@@ -13482,7 +13482,7 @@
           "end": "0x8009E9C8"
         },
         {
-          "symbol": "fn_8009E9C8",
+          "symbol": "DefCoverGetStrongSide",
           "start": "0x8009E9C8",
           "end": "0x8009E9EC"
         },
@@ -13517,7 +13517,7 @@
           "end": "0x8009F058"
         },
         {
-          "symbol": "fn_8009F058",
+          "symbol": "DefCoverIsFacingPlayer",
           "start": "0x8009F058",
           "end": "0x8009F0B8"
         },
@@ -13527,7 +13527,7 @@
           "end": "0x8009F13C"
         },
         {
-          "symbol": "fn_8009F13C",
+          "symbol": "DefCoverIsPlayingBall",
           "start": "0x8009F13C",
           "end": "0x8009F168"
         },
@@ -13542,7 +13542,7 @@
           "end": "0x8009F5A4"
         },
         {
-          "symbol": "fn_8009F5A4",
+          "symbol": "DefCoverScaleBallChance",
           "start": "0x8009F5A4",
           "end": "0x8009F6B4"
         },
@@ -13557,7 +13557,7 @@
           "end": "0x8009F780"
         },
         {
-          "symbol": "fn_8009F780",
+          "symbol": "DefCoverIsAlignHeld",
           "start": "0x8009F780",
           "end": "0x8009F7A4"
         },
@@ -13612,27 +13612,27 @@
           "end": "0x8009FF94"
         },
         {
-          "symbol": "fn_8009FF94",
+          "symbol": "DefPredSetResult",
           "start": "0x8009FF94",
           "end": "0x8009FFA4"
         },
         {
-          "symbol": "fn_8009FFA4",
+          "symbol": "DefPredGetResult",
           "start": "0x8009FFA4",
           "end": "0x8009FFB4"
         },
         {
-          "symbol": "fn_8009FFB4",
+          "symbol": "DefPredSetGuess",
           "start": "0x8009FFB4",
           "end": "0x8009FFC4"
         },
         {
-          "symbol": "fn_8009FFC4",
+          "symbol": "DefPredGetGuess",
           "start": "0x8009FFC4",
           "end": "0x8009FFD4"
         },
         {
-          "symbol": "fn_8009FFD4",
+          "symbol": "DefPredScoreGuess",
           "start": "0x8009FFD4",
           "end": "0x800A0134"
         },
@@ -13642,17 +13642,17 @@
           "end": "0x800A0230"
         },
         {
-          "symbol": "fn_800A0230",
+          "symbol": "DefPredPostAudio",
           "start": "0x800A0230",
           "end": "0x800A02B4"
         },
         {
-          "symbol": "fn_800A02B4",
+          "symbol": "DefPredApplyQbRunMod",
           "start": "0x800A02B4",
           "end": "0x800A02FC"
         },
         {
-          "symbol": "fn_800A02FC",
+          "symbol": "DefPredRefreshRatings",
           "start": "0x800A02FC",
           "end": "0x800A039C"
         },
@@ -13687,17 +13687,17 @@
           "end": "0x800A061C"
         },
         {
-          "symbol": "fn_800A061C",
+          "symbol": "PlayResultSetRef",
           "start": "0x800A061C",
           "end": "0x800A0624"
         },
         {
-          "symbol": "fn_800A0624",
+          "symbol": "PlayResultInitState",
           "start": "0x800A0624",
           "end": "0x800A0684"
         },
         {
-          "symbol": "fn_800A0684",
+          "symbol": "PlayResultInit",
           "start": "0x800A0684",
           "end": "0x800A06F4"
         },
@@ -13707,42 +13707,42 @@
           "end": "0x800A0EB8"
         },
         {
-          "symbol": "fn_800A0EB8",
+          "symbol": "PlayResultApplyDowns",
           "start": "0x800A0EB8",
           "end": "0x800A1470"
         },
         {
-          "symbol": "fn_800A1470",
+          "symbol": "PlayResultStepCanStart",
           "start": "0x800A1470",
           "end": "0x800A1478"
         },
         {
-          "symbol": "fn_800A1478",
+          "symbol": "PlayResultStepIsBusy",
           "start": "0x800A1478",
           "end": "0x800A14A8"
         },
         {
-          "symbol": "fn_800A14A8",
+          "symbol": "PlayResultStepFinish",
           "start": "0x800A14A8",
           "end": "0x800A14E4"
         },
         {
-          "symbol": "fn_800A14E4",
+          "symbol": "PlayResultAwardScore",
           "start": "0x800A14E4",
           "end": "0x800A1620"
         },
         {
-          "symbol": "fn_800A1620",
+          "symbol": "PlayResultComputeGain",
           "start": "0x800A1620",
           "end": "0x800A16C8"
         },
         {
-          "symbol": "fn_800A16C8",
+          "symbol": "PlayResultSelect",
           "start": "0x800A16C8",
           "end": "0x800A1738"
         },
         {
-          "symbol": "fn_800A1738",
+          "symbol": "PlayResultSetSummaryKind",
           "start": "0x800A1738",
           "end": "0x800A1A58"
         },
@@ -13757,12 +13757,12 @@
           "end": "0x800A1A84"
         },
         {
-          "symbol": "fn_800A1A84",
+          "symbol": "PlayResultBuild",
           "start": "0x800A1A84",
           "end": "0x800A1C50"
         },
         {
-          "symbol": "fn_800A1C50",
+          "symbol": "PlayResultStepPoll",
           "start": "0x800A1C50",
           "end": "0x800A1C74"
         },

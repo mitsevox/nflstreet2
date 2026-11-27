@@ -436,7 +436,7 @@ int fn_8009FE24(Object_80039F5C *p);
 int fn_800B0F98(void);
 int fn_800B146C(void);
 void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut);
-int fn_8009F780(void);
+int DefCoverIsAlignHeld(void);
 int ScrmOffenseAnyPlaced(void);
 void PlyrAlignGetCallTarget(Object_80039F5C *p, FieldPoint_t *pOut);
 void Vec2FromAngle(FieldPoint_t *pOut, int angle, float magnitude);

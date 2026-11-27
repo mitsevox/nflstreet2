@@ -85,7 +85,7 @@ int CatchUpAdjustFumbleChance(int team, int value);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
 void PlyrGetJointBallTransform(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
 int fn_8009D86C(void);
-void fn_8009E458(void);
+void DefCoverResetDefenders(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800A7EB8(int team);
 int fn_800A7EE0(int team);
@@ -1373,7 +1373,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     }
     CamGameResumeAll();
     if (resolved) {
-        fn_8009E458();
+        DefCoverResetDefenders();
     }
 }
 

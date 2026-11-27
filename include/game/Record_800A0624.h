@@ -3,7 +3,7 @@
 
 #include "game/ScrmPlayResult.h"
 
-/* 24 bytes cleared by fn_800A0624. */
+/* 24 bytes cleared by PlayResultInitState. */
 struct Record_800A0624 {
     unsigned char mUnknown0;
     unsigned char mUnknown1[3];
@@ -14,7 +14,7 @@ struct Record_800A0624 {
     union { unsigned char mUnknown14[4]; float mFloat14; };
 };
 
-/* 32 bytes cleared by fn_800A0684. */
+/* 32 bytes cleared by PlayResultInit. */
 struct Record_800A0684 {
     int mUnknown0;
     int mUnknown4;

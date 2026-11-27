@@ -6044,39 +6044,39 @@ extern "C" int GameClockIsTimerRunning(int index);
 
 extern "C" int fn_8009D9F8(int index);
 
-extern "C" void fn_8009DA10(Object_80039F5C *p);
+extern "C" void DefCoverInterruptPlayer(Object_80039F5C *p);
 
-extern "C" void fn_8009DA90(void);
+extern "C" void DefCoverInitReceivers(void);
 
-extern "C" void fn_8009DB54(int flag);
+extern "C" void DefCoverFlipFormation(int flag);
 
 extern "C" int fn_8009DBB4(State_8011F4EC *p);
 
-extern "C" void fn_8009DD10(State_8011F4EC *p);
+extern "C" void DefCoverClearState(State_8011F4EC *p);
 
-extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int DefCoverShouldSwitchMark(Object_80039F5C *p, Object_80039F5C *pOther);
 
-extern "C" void fn_8009DE9C(void);
+extern "C" void DefCoverPreSnapInit(void);
 
-extern "C" void fn_8009DEFC(int flag);
+extern "C" void DefCoverSetupFormation(int flag);
 
 extern "C" void fn_8009E01C(void);
 
-extern "C" void fn_8009E0EC(void);
+extern "C" void DefCoverStartPlay(void);
 
-extern "C" void fn_8009E138(void);
+extern "C" void DefCoverUpdate(void);
 
 extern "C" int fn_8009E180(Object_80039F5C *p);
 
-extern "C" void fn_8009E458(void);
+extern "C" void DefCoverResetDefenders(void);
 
-extern "C" void fn_8009E58C(void);
+extern "C" void DefCoverSortReceivers(void);
 
-extern "C" void fn_8009E674(void);
+extern "C" void DefCoverBuildZones(void);
 
 extern "C" int fn_8009E9A4(void);
 
-extern "C" int fn_8009E9C8(void);
+extern "C" int DefCoverGetStrongSide(void);
 
 extern "C" void fn_8009E9EC(Object_80039F5C *p, int index, FieldPoint_t *pOut);
 
@@ -6090,23 +6090,23 @@ extern "C" int fn_8009EF6C(Object_80039F5C *p);
 
 extern "C" int fn_8009EFDC(int index);
 
-extern "C" int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
+extern "C" int DefCoverIsFacingPlayer(Object_80039F5C *p, Object_80039F5C *pOther, int angle);
 
 extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle);
 
-extern "C" int fn_8009F13C(Object_80039F5C *p);
+extern "C" int DefCoverIsPlayingBall(Object_80039F5C *p);
 
 extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity, Vector_80039F5C *pOther, float speed);
 
 extern "C" int fn_8009F258(Object_80039F5C *p);
 
-extern "C" void fn_8009F5A4(unsigned int *pValue);
+extern "C" void DefCoverScaleBallChance(unsigned int *pValue);
 
 extern "C" int fn_8009F6B4(void);
 
 extern "C" int fn_8009F778(void);
 
-extern "C" int fn_8009F780(void);
+extern "C" int DefCoverIsAlignHeld(void);
 
 extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
 
@@ -6118,57 +6118,57 @@ extern "C" int fn_8009FD7C(Object_80039F5C *p, Object_80039F5C *pOther);
 
 extern "C" int fn_8009FE24(Object_80039F5C *p);
 
-extern "C" void fn_8009FF94(unsigned int value);
+extern "C" void DefPredSetResult(unsigned int value);
 
-extern "C" unsigned int fn_8009FFA4(void);
+extern "C" unsigned int DefPredGetResult(void);
 
-extern "C" void fn_8009FFB4(unsigned int value);
+extern "C" void DefPredSetGuess(unsigned int value);
 
-extern "C" unsigned int fn_8009FFC4(void);
+extern "C" unsigned int DefPredGetGuess(void);
 
-extern "C" void fn_8009FFD4(void);
+extern "C" void DefPredScoreGuess(void);
 
 extern "C" float fn_800A0134(int team,int unused,int index);
 
-extern "C" void fn_800A0230(void);
+extern "C" void DefPredPostAudio(void);
 
-extern "C" void fn_800A02B4(void);
+extern "C" void DefPredApplyQbRunMod(void);
 
-extern "C" void fn_800A02FC(void);
+extern "C" void DefPredRefreshRatings(void);
 
 extern "C" void fn_800A039C(LivePlayPhase *pObject);
 
-extern "C" void fn_800A061C(int a, int *p, int value);
+extern "C" void PlayResultSetRef(int a, int *p, int value);
 
-extern "C" void fn_800A0624(Record_800A0624 *p);
+extern "C" void PlayResultInitState(Record_800A0624 *p);
 
-extern "C" void fn_800A0684(Record_800A0684 *p);
+extern "C" void PlayResultInit(Record_800A0684 *p);
 
 extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *out);
 
-extern "C" void fn_800A0EB8(Record_800A0624 *state,ScrmPlayResult_t *out);
+extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *out);
 
-extern "C" int fn_800A1470(void *unused);
+extern "C" int PlayResultStepCanStart(void *unused);
 
-extern "C" int fn_800A1478(void *unused);
+extern "C" int PlayResultStepIsBusy(void *unused);
 
-extern "C" void fn_800A14A8(void *context);
+extern "C" void PlayResultStepFinish(void *context);
 
-extern "C" void fn_800A14E4(ScrmPlayResult_t *pResult, unsigned char update);
+extern "C" void PlayResultAwardScore(ScrmPlayResult_t *pResult, unsigned char update);
 
-extern "C" void fn_800A1620(ScrmPlayResult_t *out);
+extern "C" void PlayResultComputeGain(ScrmPlayResult_t *out);
 
-extern "C" ScrmPlayResult_t *fn_800A16C8(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pOther, unsigned char *pUpdate);
+extern "C" ScrmPlayResult_t *PlayResultSelect(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pOther, unsigned char *pUpdate);
 
-extern "C" void fn_800A1738(ScrmPlayResult_t *out);
+extern "C" void PlayResultSetSummaryKind(ScrmPlayResult_t *out);
 
 extern "C" void fn_800A1A58(void);
 
 extern "C" void fn_800A1A80(void);
 
-extern "C" void fn_800A1A84(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSaved);
+extern "C" void PlayResultBuild(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSaved);
 
-extern "C" int fn_800A1C50(void);
+extern "C" int PlayResultStepPoll(void);
 
 extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input);
 
@@ -14895,7 +14895,7 @@ extern "C" int fn_8009D9F8(int index)
     return pEntry->mUnknown10;
 }
 
-extern "C" void fn_8009DA10(Object_80039F5C *p)
+extern "C" void DefCoverInterruptPlayer(Object_80039F5C *p)
 {
     Message_800F01CC message;
 
@@ -14907,7 +14907,7 @@ extern "C" void fn_8009DA10(Object_80039F5C *p)
     fn_800F01CC(0, p->mpState, &message, p);
 }
 
-extern "C" void fn_8009DA90(void)
+extern "C" void DefCoverInitReceivers(void)
 {
     int team = ScrmGetOffenseTeam();
     State_8011F4EC *p = fn_8011F4EC();
@@ -14926,7 +14926,7 @@ extern "C" void fn_8009DA90(void)
     }
 }
 
-extern "C" void fn_8009DB54(int flag)
+extern "C" void DefCoverFlipFormation(int flag)
 {
     unsigned char team;
     PlayBookFormation_t *pObject;
@@ -14985,7 +14985,7 @@ extern "C" int fn_8009DBB4(State_8011F4EC *p)
     return result;
 }
 
-extern "C" void fn_8009DD10(State_8011F4EC *p)
+extern "C" void DefCoverClearState(State_8011F4EC *p)
 {
     unsigned int i;
 
@@ -14999,12 +14999,12 @@ extern "C" void fn_8009DD10(State_8011F4EC *p)
     }
 }
 
-extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int DefCoverShouldSwitchMark(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
 
     if (p != 0 && pOther != 0 && SyncRandGetFloat(0) < p->mRatings[8] / 255.0f
-        && fn_8009F058(p, pOther, 0x400000) != 0) {
+        && DefCoverIsFacingPlayer(p, pOther, 0x400000) != 0) {
         Object_80039F5C *pCarrier = BallGetCurrentHolder();
 
         if (pCarrier != 0) {
@@ -15025,7 +15025,7 @@ extern "C" int fn_8009DD88(Object_80039F5C *p, Object_80039F5C *pOther)
     return result;
 }
 
-extern "C" void fn_8009DE9C(void)
+extern "C" void DefCoverPreSnapInit(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
 
@@ -15035,19 +15035,19 @@ extern "C" void fn_8009DE9C(void)
         p->mUnknown1C5 = 0;
     }
     fn_800C1C34();
-    fn_8009DD10(p);
+    DefCoverClearState(p);
     fn_800FBAA8();
-    fn_8009E674();
+    DefCoverBuildZones();
 }
 
-extern "C" void fn_8009DEFC(int flag)
+extern "C" void DefCoverSetupFormation(int flag)
 {
     State_8011F4EC *p = fn_8011F4EC();
     int team;
     PlayBookFormation_t *pObject;
     PlayBookFormation_t *pOther;
 
-    fn_8009DA90();
+    DefCoverInitReceivers();
     team = ScrmGetDefenseTeam();
     pObject = PlayBookGetFormation((unsigned char)team);
     pOther = PlayBookGetFormation(ScrmGetOffenseTeam());
@@ -15062,7 +15062,7 @@ extern "C" void fn_8009DEFC(int flag)
             p->mUnknown1A8 = 0;
         }
         if (pOther->mUnknown8.mUnknownF != 0) {
-            fn_8009DB54(flag);
+            DefCoverFlipFormation(flag);
         }
         p->mUnknown1A9 = 1;
     } else {
@@ -15099,25 +15099,25 @@ extern "C" void fn_8009E01C(void)
     }
 }
 
-extern "C" void fn_8009E0EC(void)
+extern "C" void DefCoverStartPlay(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
 
-    fn_8009DA90();
+    DefCoverInitReceivers();
     p->mUnknown1A2 = 0;
     p->mUnknown1A8 = fn_8009DBB4(p);
-    fn_8009E674();
+    DefCoverBuildZones();
     fn_800A5D94();
 }
 
-extern "C" void fn_8009E138(void)
+extern "C" void DefCoverUpdate(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
 
-    fn_8009E58C();
+    DefCoverSortReceivers();
     p->mUnknown14--;
     if (p->mUnknown14 & 0x8000) {
-        fn_8009E674();
+        DefCoverBuildZones();
     }
 }
 
@@ -15211,7 +15211,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_8009E458(void)
+extern "C" void DefCoverResetDefenders(void)
 {
     int i = 0;
     int team = ScrmGetDefenseTeam();
@@ -15236,13 +15236,13 @@ extern "C" void fn_8009E458(void)
             if (p->mUnknown9[0] == 1) {
                 fn_800F01CC(0, p->mpState, &message, p);
             } else {
-                fn_8009DA10(p);
+                DefCoverInterruptPlayer(p);
             }
             break;
         default:
             if (p->mUnknown9[0] != 1 && p->mpState->mId != 11 && p->mpState->mId != 16
                 && p->mpState->mId != 17 && p->mpState->mId != 10 && p->mpState->mId != 12) {
-                fn_8009DA10(p);
+                DefCoverInterruptPlayer(p);
             } else {
                 fn_800F053C(0, p->mpState, &message, p);
             }
@@ -15251,7 +15251,7 @@ extern "C" void fn_8009E458(void)
     }
 }
 
-extern "C" void fn_8009E58C(void)
+extern "C" void DefCoverSortReceivers(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
     int team = ScrmGetOffenseTeam();
@@ -15284,7 +15284,7 @@ extern "C" void fn_8009E58C(void)
     }
 }
 
-extern "C" void fn_8009E674(void)
+extern "C" void DefCoverBuildZones(void)
 {
     State_8011F4EC *p = fn_8011F4EC();
     Box_8009E674 *pBoxes;
@@ -15346,7 +15346,7 @@ extern "C" int fn_8009E9A4(void)
     return fn_8011F4EC()->mUnknown0;
 }
 
-extern "C" int fn_8009E9C8(void)
+extern "C" int DefCoverGetStrongSide(void)
 {
     return fn_8011F4EC()->mUnknown1A8;
 }
@@ -15540,7 +15540,7 @@ extern "C" int fn_8009EFDC(int index)
     return pEntry->mUnknownC == ScrmGetSidelineX() ? 0 : -1;
 }
 
-extern "C" int fn_8009F058(Object_80039F5C *p, Object_80039F5C *pOther, int angle)
+extern "C" int DefCoverIsFacingPlayer(Object_80039F5C *p, Object_80039F5C *pOther, int angle)
 {
     FieldPoint_t delta;
 
@@ -15560,7 +15560,7 @@ extern "C" int fn_8009F0B8(Object_80039F5C *p, int angle)
     return MathAngleDiff(heading, p->mMotion.mFacing + fn_800C8BAC(p, 0)) < angle;
 }
 
-extern "C" int fn_8009F13C(Object_80039F5C *p)
+extern "C" int DefCoverIsPlayingBall(Object_80039F5C *p)
 {
     if (p->mpState->mId == 28 || p->mUnknown16 == 2) {
         return 1;
@@ -15589,12 +15589,12 @@ extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity,
 
 /* Rolls whether p goes for the ball in flight to the current target. In
    state 22, with the target being p's mark (or a mark in state 23), the
-   chance is 450 when p faces the ball or the mark qualifies (fn_8009F13C),
+   chance is 450 when p faces the ball or the mark qualifies (DefCoverIsPlayingBall),
    otherwise twice the landing time capped at 35 while the ball descends; a
    p not on the target's mark gets 1700 when facing the ball. In states 40
    and 92 the chance is 350 when facing, twice the landing time capped at 35
    while the ball descends, otherwise 2400. The chance is adjusted by
-   fn_8009F5A4, CatchUpAdjustDefendBallChance and fn_800ACAF8 and scaled by lbl_803EA9C0 under
+   DefCoverScaleBallChance, CatchUpAdjustDefendBallChance and fn_800ACAF8 and scaled by lbl_803EA9C0 under
    the fn_8011E188 threshold, then rolled against rating 8. With no current
    target it returns 1. */
 extern "C" int fn_8009F258(Object_80039F5C *p)
@@ -15621,7 +15621,7 @@ extern "C" int fn_8009F258(Object_80039F5C *p)
             int facing = fn_8009F0B8(p, fn_800AD2CC(p->mIdBytes[2], 0));
 
             if (pTarget == pMark || (pMark != 0 && pMark->mpState->mId == 23)) {
-                if (facing || fn_8009F13C(pMark)) {
+                if (facing || DefCoverIsPlayingBall(pMark)) {
                     chance = 450;
                 } else if (velocity.mZ < 0.0f) {
                     float time;
@@ -15657,7 +15657,7 @@ extern "C" int fn_8009F258(Object_80039F5C *p)
             break;
         }
         if (!result && chance != 0) {
-            fn_8009F5A4(&chance);
+            DefCoverScaleBallChance(&chance);
             chance = CatchUpAdjustDefendBallChance(ScrmGetDefenseTeam(), chance);
             fn_800ACAF8(ScrmGetDefenseTeam(), &chance);
             if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF && (float)fn_8011E188() < lbl_803EA9BC) {
@@ -15676,7 +15676,7 @@ extern "C" int fn_8009F258(Object_80039F5C *p)
 /* Scales *pValue down once BallGetLandingPoint gives the ball's spot: to 85% when
    PlayTrackMatchesGainFlags accepts that spot, then by a quarter of twice the
    PlayTrackGetPlayIdRate factor (capped at 1). */
-extern "C" void fn_8009F5A4(unsigned int *pValue)
+extern "C" void DefCoverScaleBallChance(unsigned int *pValue)
 {
     float scale = 0.25f;
     Ball_t *pBall;
@@ -15739,7 +15739,7 @@ extern "C" int fn_8009F778(void)
     return 0;
 }
 
-extern "C" int fn_8009F780(void)
+extern "C" int DefCoverIsAlignHeld(void)
 {
     return fn_8011F4EC()->mUnknown10;
 }
@@ -15772,7 +15772,7 @@ extern "C" int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut)
                 continue;
             }
             index = fn_800F06F4(0, p->mpState, 22, 0xFFFF);
-            if (fn_800FC0C4(pOther) == p->mpState[index].mUnknown1 && fn_8009DD88(p, pOther)) {
+            if (fn_800FC0C4(pOther) == p->mpState[index].mUnknown1 && DefCoverShouldSwitchMark(p, pOther)) {
                 if (ppOut) {
                     *ppOut = pOther;
                 }
@@ -15995,43 +15995,43 @@ int DefPred::Shutdown()
     return 1;
 }
 
-extern "C" void fn_8009FF94(unsigned int value)
+extern "C" void DefPredSetResult(unsigned int value)
 {
     gDefPred.mpState.mp->mUnknown0 = value;
 }
 
-extern "C" unsigned int fn_8009FFA4(void)
+extern "C" unsigned int DefPredGetResult(void)
 {
     return gDefPred.mpState.mp->mUnknown0;
 }
 
-extern "C" void fn_8009FFB4(unsigned int value)
+extern "C" void DefPredSetGuess(unsigned int value)
 {
     gDefPred.mpState.mp->mUnknown4 = value;
 }
 
-extern "C" unsigned int fn_8009FFC4(void)
+extern "C" unsigned int DefPredGetGuess(void)
 {
     return gDefPred.mpState.mp->mUnknown4;
 }
 
-/* Scores the play prediction stored by fn_8009FFB4 (1 run, 2
-   pass, 3 trick) into the value fn_8009FF94 stores, printing the result
+/* Scores the play prediction stored by DefPredSetGuess (1 run, 2
+   pass, 3 trick) into the value DefPredSetResult stores, printing the result
    while lbl_803EA9E0 is set. */
-extern "C" void fn_8009FFD4(void)
+extern "C" void DefPredScoreGuess(void)
 {
-    switch (fn_8009FFC4()) {
+    switch (DefPredGetGuess()) {
     case 0:
-        fn_8009FF94(0);
+        DefPredSetResult(0);
         break;
     case 1:
         if (fn_8011F1A4() && !fn_8011F37C()) {
-            fn_8009FF94(1);
+            DefPredSetResult(1);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Run");
             }
         } else {
-            fn_8009FF94(2);
+            DefPredSetResult(2);
             if (lbl_803EA9E0) {
                 HudShowAlert("Incorrectly Predicted Run");
             }
@@ -16039,12 +16039,12 @@ extern "C" void fn_8009FFD4(void)
         break;
     case 2:
         if (fn_8011F1CC() && !fn_8011F37C()) {
-            fn_8009FF94(4);
+            DefPredSetResult(4);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Pass");
             }
         } else {
-            fn_8009FF94(5);
+            DefPredSetResult(5);
             if (lbl_803EA9E0) {
                 HudShowAlert("Incorrectly Predicted Pass");
             }
@@ -16052,12 +16052,12 @@ extern "C" void fn_8009FFD4(void)
         break;
     case 3:
         if (fn_8011F37C()) {
-            fn_8009FF94(4);
+            DefPredSetResult(4);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Trick");
             }
         } else {
-            fn_8009FF94(5);
+            DefPredSetResult(5);
             if (lbl_803EA9E0) {
                 HudShowAlert("Incorrectly Predicted Trick");
             }
@@ -16077,7 +16077,7 @@ static const float lbl_80297E5C[10] = {1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.85f, 1.0
 extern "C" float fn_800A0134(int team,int unused,int index)
 {
     float result=1.0f;
-    unsigned int kind=fn_8009FFA4();
+    unsigned int kind=DefPredGetResult();
     if(team==ScrmGetDefenseTeam()) {
         switch(kind) {
         case 1:result=lbl_80297D94[index];break;
@@ -16091,9 +16091,9 @@ extern "C" float fn_800A0134(int team,int unused,int index)
     return result;
 }
 
-extern "C" void fn_800A0230(void)
+extern "C" void DefPredPostAudio(void)
 {
-    switch (fn_8009FFA4()) {
+    switch (DefPredGetResult()) {
     case 0:
         break;
     case 1:
@@ -16109,15 +16109,15 @@ extern "C" void fn_800A0230(void)
     }
 }
 
-extern "C" void fn_800A02B4(void)
+extern "C" void DefPredApplyQbRunMod(void)
 {
-    if(fn_8009FFC4()==1) {
-        fn_8009FF94(3);
+    if(DefPredGetGuess()==1) {
+        DefPredSetResult(3);
         if(lbl_803EA9E0)HudShowAlert("QB LOS Run Modif.");
     }
 }
 
-extern "C" void fn_800A02FC(void)
+extern "C" void DefPredRefreshRatings(void)
 {
     for (int team = 0; team <= 1; team++) {
         int count = ScrmGetTeamPlayerCount((unsigned char)team);
@@ -16193,7 +16193,7 @@ void LivePlayPhase::OnUpdate(float dt)
         fn_80120720((unsigned int)dt);
         fn_800FB314();
         fn_800FB768();
-        fn_8009E138();
+        DefCoverUpdate();
         fn_800A615C();
         SndgEventUpdateDelayed();
         BallGetCurrentHolder();
@@ -16211,12 +16211,12 @@ void LivePlayPhase::OnExit()
     fn_800A61A8();
 }
 
-extern "C" void fn_800A061C(int a, int *p, int value)
+extern "C" void PlayResultSetRef(int a, int *p, int value)
 {
     *p = value;
 }
 
-extern "C" void fn_800A0624(Record_800A0624 *p)
+extern "C" void PlayResultInitState(Record_800A0624 *p)
 {
     MemFill(p, sizeof(Record_800A0624), 0, 4);
     p->mUnknown0 = 0;
@@ -16225,7 +16225,7 @@ extern "C" void fn_800A0624(Record_800A0624 *p)
     fn_8009BD2C(0, &p->mUnknown10);
 }
 
-extern "C" void fn_800A0684(Record_800A0684 *p)
+extern "C" void PlayResultInit(Record_800A0684 *p)
 {
     MemFill(p, sizeof(Record_800A0684), 0, 4);
     fn_8009BD2C(0, &p->mUnknown0);
@@ -16250,7 +16250,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             PlayTrackSetKind(team,1);
             if(fn_8011F524())PlayTrackSetResult(team,6);
             to.mY=point.mY;to.mX=fn_8011F4D4();
-            PlayTrackSetDirection(team,point,to,fn_8009E9C8());
+            PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());
         }
         PlayTrackSetFlag10(team,fn_8011F37C());
         tracked=true;
@@ -16268,7 +16268,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
         case 28:
             if(!placed){out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}
             state->mUnknown10=e->mUnknown4;SpchIGSetTackler(e->mUnknown4);
-            fn_800A061C((int)state,&out->mUnknown00,state->mUnknown10);
+            PlayResultSetRef((int)state,&out->mUnknown00,state->mUnknown10);
             if(tracked) {
                 if(fabsf(e->mUnknownC-point.mX)>4.0f)PlayTrackSetResult(team,5);
                 else if(fn_8011F1CC() && !(e->mUnknown10>=point.mY))PlayTrackSetResult(team,4);
@@ -16300,7 +16300,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             i=count;
             if(tracked) {
                 to.mX=e->mUnknownC;to.mY=e->mUnknown10;
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,1);
+                PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());PlayTrackSetResult(team,1);
             }
             break;
         case 2:
@@ -16311,7 +16311,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             SpchIGSetPassCatcher(e->mUnknown0);out->mUnknown18|=0x10000;
             if(tracked) {
                 to.mX=e->mUnknownC;to.mY=e->mUnknown10;
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());
+                PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());
                 PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
             }
             break;
@@ -16319,7 +16319,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             ref=e->mUnknown0;out->mUnknown18|=0x400;SpchIGSetTurnoverPlayer(e->mUnknown0);
             if(tracked) {
                 to.mX=e->mUnknownC;to.mY=e->mUnknown10;
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,3);
+                PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());PlayTrackSetResult(team,3);
             }
             break;
         case 4:case 8:
@@ -16346,7 +16346,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             if(tracked && !special && fn_8011F1CC() && fn_8009BCE8(&e->mUnknown0)) {
                 PlayTrackSetKind(team,1);PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
                 to.mX=e->mUnknownC;to.mY=e->mUnknown10;
-                PlayTrackSetDirection(team,point,to,fn_8009E9C8());PlayTrackSetResult(team,5);
+                PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());PlayTrackSetResult(team,5);
             }
             break;
         case 16:out->mUnknown18|=0x4000;break;
@@ -16360,7 +16360,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
     }
 }
 
-extern "C" void fn_800A0EB8(Record_800A0624 *state,ScrmPlayResult_t *out)
+extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *out)
 {
     Object_80039F5C *ballPlayer=BallGetCurrentHolder();
     bool removed=false,process=true;
@@ -16446,17 +16446,17 @@ extern "C" void fn_800A0EB8(Record_800A0624 *state,ScrmPlayResult_t *out)
     if(fn_801486A0()==3)out->mUnknown18&=~4;
 }
 
-extern "C" int fn_800A1470(void *unused)
+extern "C" int PlayResultStepCanStart(void *unused)
 {
     return 1;
 }
 
-extern "C" int fn_800A1478(void *unused)
+extern "C" int PlayResultStepIsBusy(void *unused)
 {
-    return fn_800A1C50() != 1;
+    return PlayResultStepPoll() != 1;
 }
 
-extern "C" void fn_800A14A8(void *context)
+extern "C" void PlayResultStepFinish(void *context)
 {
     Pair_800A14A8 *p=(Pair_800A14A8 *)context;
     fn_800A1C74(p->mpFirst, p->mpSecond);
@@ -16464,7 +16464,7 @@ extern "C" void fn_800A14A8(void *context)
     AudmonEventPost(124, 0);
 }
 
-extern "C" void fn_800A14E4(ScrmPlayResult_t *pResult, unsigned char update)
+extern "C" void PlayResultAwardScore(ScrmPlayResult_t *pResult, unsigned char update)
 {
     unsigned char team = pResult->mUnknown1C;
     signed char delta = pResult->mUnknown1D;
@@ -16503,7 +16503,7 @@ extern "C" void fn_800A14E4(ScrmPlayResult_t *pResult, unsigned char update)
     }
 }
 
-extern "C" void fn_800A1620(ScrmPlayResult_t *out)
+extern "C" void PlayResultComputeGain(ScrmPlayResult_t *out)
 {
     float y=ScrmGetBallSpot().mY,finalY=out->mUnknown08.mY;
     if(ScrmGetOffenseTeam()!=ScrmGetSnapOffense())y=-y;
@@ -16514,7 +16514,7 @@ extern "C" void fn_800A1620(ScrmPlayResult_t *out)
     out->mUnknown14=distance;
 }
 
-extern "C" ScrmPlayResult_t *fn_800A16C8(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pOther, unsigned char *pUpdate)
+extern "C" ScrmPlayResult_t *PlayResultSelect(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pOther, unsigned char *pUpdate)
 {
     unsigned char update = 1;
     int flags = fn_800B2314();
@@ -16534,7 +16534,7 @@ extern "C" ScrmPlayResult_t *fn_800A16C8(ScrmPlayResult_t *pResult, ScrmPlayResu
     return pResult;
 }
 
-extern "C" void fn_800A1738(ScrmPlayResult_t *out)
+extern "C" void PlayResultSetSummaryKind(ScrmPlayResult_t *out)
 {
     int mode=ScrmGetWinner();
     if(mode!=2) {
@@ -16598,23 +16598,23 @@ extern "C" void fn_800A1A80(void)
 {
 }
 
-extern "C" void fn_800A1A84(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSaved)
+extern "C" void PlayResultBuild(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSaved)
 {
     Record_800A0624 state;
 
     lbl_802D7C64[0].mUnknown4 = 0;
-    fn_800A0684((Record_800A0684 *)pResult);
-    fn_800A0624(&state);
+    PlayResultInit((Record_800A0684 *)pResult);
+    PlayResultInitState(&state);
     PlayResultApplyEvents(&state, pResult);
-    fn_800A0EB8(&state, pResult);
-    fn_800A1620(pResult);
+    PlayResultApplyDowns(&state, pResult);
+    PlayResultComputeGain(pResult);
     if ((ScrmGetSnapOffense() != ScrmGetOffenseTeam() && !(pResult->mUnknown18 & 4))
         || (ScrmGetSnapOffense() == ScrmGetOffenseTeam() && (pResult->mUnknown18 & 4))) {
         pResult->mUnknown18 |= 8;
     }
     ClockRuleApplyPlayEvents();
     *pSaved = *pResult;
-    fn_800A1738(pResult);
+    PlayResultSetSummaryKind(pResult);
     switch (fn_800A2178()) {
     case 0:
         if (pResult->mUnknown18 & 0x8000) {
@@ -16640,7 +16640,7 @@ extern "C" void fn_800A1A84(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSaved)
     }
 }
 
-extern "C" int fn_800A1C50(void)
+extern "C" int PlayResultStepPoll(void)
 {
     fn_800B2320();
     return 1;
@@ -16650,7 +16650,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
 {
     unsigned char update=1;
     ScrmPlayResult_t *value=result;
-    result=fn_800A16C8(result,input,&update);
+    result=PlayResultSelect(result,input,&update);
     if(lbl_802D7C64[0].mUnknown5==1) {
         fn_800B14E4();lbl_802D7C64[0].mUnknown5=0;
     } else {
@@ -16658,7 +16658,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
             if(result==input)fn_80094BBC(value);
             if(result->mUnknown18&0x2000 || result==input)ScrmSetPlayResult(result);
         }
-        fn_800A14E4(result,update);
+        PlayResultAwardScore(result,update);
         if(result->mUnknown18&8 && result->mUnknown1D==2 && fn_801486A0()!=4 && GameOptionsGet(14)==0) {
             int score=fn_800C8774(ScrmGetOffenseTeam());
             if(score>=GameOptionsGet(1)) {
@@ -16713,7 +16713,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
 extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
 {
     Step_800C4460 *step;
-    fn_800A1A84(result,value);
+    PlayResultBuild(result,value);
     FieldPoint_t pos=result->mUnknown08;
     ScrmSetMarkerSpot(pos);
     if(fn_800B2320())fn_800B2564(result,value);
@@ -16723,9 +16723,9 @@ extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
         fn_800B9A6C(lbl_803EAB84,step);
     }
     step=(Step_800C4460 *)fn_800B9A44(lbl_803EAB84);
-    step->mpCallback0=fn_800A1470;
-    step->mpCallback4=fn_800A1478;
-    step->mpCallback8=fn_800A14A8;
+    step->mpCallback0=PlayResultStepCanStart;
+    step->mpCallback4=PlayResultStepIsBusy;
+    step->mpCallback8=PlayResultStepFinish;
     step->mContext.mpFirst=result;step->mContext.mpSecond=value;
     fn_800B9A6C(lbl_803EAB84,step);
 }
@@ -18060,7 +18060,7 @@ extern "C" int fn_800A506C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 {
     int result = 0;
 
-    if (pPair->mUnknown0 == 0 && fn_8009F058(p, pTarget, 0x400000) != 0) {
+    if (pPair->mUnknown0 == 0 && DefCoverIsFacingPlayer(p, pTarget, 0x400000) != 0) {
         result = 1;
     }
     return result;
@@ -18079,7 +18079,7 @@ extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 {
     int result = 0;
 
-    if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(p, pOther, 0x400000) != 0) {
+    if (DefCoverIsFacingPlayer(p, pTarget, 0x400000) != 0 && DefCoverIsFacingPlayer(p, pOther, 0x400000) != 0) {
         result = SyncRandGetFloat(0) < 0.33f;
     }
     return result;
@@ -18095,7 +18095,7 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     int result = 0;
 
     if (pPair->mUnknown0 <= 2) {
-        if (fn_8009F058(p, pTarget, 0x400000) != 0) {
+        if (DefCoverIsFacingPlayer(p, pTarget, 0x400000) != 0) {
             switch (p->mUnknown2914) {
             case 13:
             case 14:
@@ -18164,7 +18164,7 @@ extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
 
     if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
         result = fn_800A54F4(p, pTarget, pOther, pPair);
-    } else if (fn_8009F058(p, pTarget, 0x400000) != 0 && fn_8009F058(pTarget, p, 0x400000) != 0
+    } else if (DefCoverIsFacingPlayer(p, pTarget, 0x400000) != 0 && DefCoverIsFacingPlayer(pTarget, p, 0x400000) != 0
                && Vec2Distance(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 7.0f) {
         int limit = 256 / (pPair->mUnknown0 + 1);
 
@@ -19199,7 +19199,7 @@ extern "C" void fn_800A7514(int team)
                 fn_800AEEDC(ScrmGetOffenseTeam());
                 fn_8011F3A8();
                 PlyrRouteShowTeam(0, ScrmGetOffenseTeam());
-                fn_8009FFD4();
+                DefPredScoreGuess();
                 for (side = 0; side <= 1; side++) {
                     PlayBookFormation_t *pRoster = PlayBookGetFormation(side);
                     unsigned int count = ScrmGetTeamPlayerCount(side);
@@ -27690,8 +27690,8 @@ void PostPlayPhase::OnEnter(float dt)
     lbl_803EAB7C = 0;
     lbl_803EAB7D = 0;
     lbl_803EAB7E = 0;
-    fn_8009FF94(0);
-    fn_8009FFB4(0);
+    DefPredSetResult(0);
+    DefPredSetGuess(0);
 }
 
 void PostPlayPhase::OnUpdate(float dt)
@@ -30003,7 +30003,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             fn_8011F3A8();
         }
         PlyrRouteShowTeam(0, team);
-        fn_8009FFD4();
+        DefPredScoreGuess();
         AudmonEventPost(0x18, 0);
         for (t = 0; t <= 1; t++) {
             PlayBookFormation_t *pTeam = PlayBookGetFormation(t);
@@ -30766,12 +30766,12 @@ void PreSnapPhase::OnEnter(float dt)
     PassIconObjSetEnabled(1);
     ParticlesResetEvents();
     fn_8010A220();
-    fn_8009DE9C();
+    DefCoverPreSnapInit();
     if (fn_801486A0() != 0 && fn_801486A0() != 1) {
         ScrmAlignTeam(ScrmGetOffenseTeam());
         ScrmAlignTeam(ScrmGetDefenseTeam());
     }
-    fn_8009DEFC(1);
+    DefCoverSetupFormation(1);
     if (fn_801486A0() != 0) {
         SetupCamera();
     }
@@ -31048,20 +31048,20 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
         switch (kind) {
         case 107:
         case 108:
-            fn_8009FFB4(0);
+            DefPredSetGuess(0);
             handled = 1;
             break;
         case 109:
-            fn_8009FFB4(1);
+            DefPredSetGuess(1);
             handled = 1;
             break;
         case 110:
-            fn_8009FFB4(2);
+            DefPredSetGuess(2);
             handled = 1;
             break;
         case 111:
         case 112:
-            fn_8009FFB4(3);
+            DefPredSetGuess(3);
             handled = 1;
             break;
         case 91:
@@ -31078,8 +31078,8 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
         }
     }
     if (handled) {
-        fn_8009FFD4();
-        fn_800A02FC();
+        DefPredScoreGuess();
+        DefPredRefreshRatings();
         AudmonEventPost(24, 0);
         HudHideEvent3D(team);
         if (kind == 108) {
