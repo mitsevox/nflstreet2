@@ -527,7 +527,8 @@ int _LZHDecodeNewBlock(void)
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
     lbl_803ED478->mUnknown18 = 1;
-    lbl_803ED428 = 0;
+    // FAKEMATCH: volatile store keeps the callback address in a register (evidence.tsv 0x802830F0)
+    *(int (*volatile *)(void))&lbl_803ED428 = 0;
     return 0;
 }
 
@@ -637,8 +638,9 @@ int _LZHDecodeInput(void)
             }
             else
             {
+                unsigned char *pBits = lbl_802C28D0;
                 distance = lbl_802C28EE[symbol];
-                distance += _LZHReadBits(lbl_802C28D0[symbol]);
+                distance += _LZHReadBits(pBits[symbol]);
             }
             distance = (lbl_803ED43C - (distance + 0x8000)) & 0x7FFF;
             do
@@ -915,9 +917,10 @@ int _LZHMemDecodeNewBlock(void)
         return 0;
     }
     lbl_803ED4B4 = _LZHMemReadBits(32);
-    lbl_803ED434 = 0;
     lbl_803ED49C = 0;
     lbl_803ED4A0 = 0;
+    // FAKEMATCH: volatile store keeps the callback address in a register (evidence.tsv 0x80284030)
+    *(int (*volatile *)(void))&lbl_803ED434 = 0;
     return 0;
 }
 

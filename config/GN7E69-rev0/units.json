@@ -29746,7 +29746,7 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 23 of 37 functions exact, the 14 holdouts keep the original bytes (_LZHProcess and _LZHMemProcess made exact and linked by lane k1e).",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 24 of 37 functions exact, the 13 holdouts keep the original bytes (_LZHProcess, _LZHMemProcess and _LZHMemDecodeNewBlock made exact and linked by lane k1e).",
       "sections": [
         {
           "section": ".text",
@@ -29765,6 +29765,12 @@
           "placement": ".text",
           "start": "0x8028257C",
           "end": "0x8028291C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80284030",
+          "end": "0x8028410C"
         },
         {
           "section": ".text",
@@ -29824,10 +29830,6 @@
             "evidence": "evidence.tsv source-form 0x80283E48-0x80284030"
           },
           {
-            "function": "_LZHMemDecodeNewBlock",
-            "evidence": "evidence.tsv source-form 0x80284030-0x8028410C"
-          },
-          {
             "function": "_LZHMemDecodeInput",
             "evidence": "evidence.tsv source-form 0x8028410C-0x80284700"
           },
@@ -29844,7 +29846,7 @@
             "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out fn_802822E0, fn_802824A8, fn_8028291C, fn_80282D70, fn_80282F24, fn_802830F0, fn_802832CC, fn_80283660, fn_80283E48, fn_80284030, fn_8028410C, fn_80284E70, fn_80284FB8, fn_802855EC (lane k1e, 2026-11-27: fn_80282654 _LZHProcess and fn_80282740 _LZHMemProcess made exact and linked)."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out fn_802822E0, fn_802824A8, fn_8028291C, fn_80282D70, fn_80282F24, fn_802830F0, fn_802832CC, fn_80283660, fn_80283E48, fn_8028410C, fn_80284E70, fn_80284FB8, fn_802855EC (lane k1e, 2026-11-27: fn_80282654 _LZHProcess and fn_80282740 _LZHMemProcess and fn_80284030 _LZHMemDecodeNewBlock made exact and linked)."
       }
     },
     {
