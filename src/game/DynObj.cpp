@@ -1653,6 +1653,8 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
             p->mUnknown8++;
             Quat_801EB488 rotation;
             Vector_80039F5C position;
+            Vector_80039F5C offset;
+            ParticleSpawnRecord_t record;
             if (p->mUnknown40) {
                 Vector_80039F5C direction;
                 direction.mX = -pObject->mUnknown348;
@@ -1661,14 +1663,15 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
                 int angle = MathArcTan2(direction.mZ, direction.mX);
                 int heading = MathArcTan2(direction.mY, direction.mX);
                 QuatFromEulerYZX(&rotation, angle, heading, 0);
-                position = pObject->mUnknown360;
+                position.mX = pObject->mUnknown360.mX;
+                position.mY = pObject->mUnknown360.mY;
+                position.mZ = pObject->mUnknown360.mZ;
             } else {
                 QuatFromEuler(&rotation, (int)(p->mUnknown24[2] * 46603.3789f),
                             (int)(p->mUnknown24[1] * 46603.3789f), (int)(p->mUnknown24[0] * 46603.3789f));
                 QuatMultiply(&rotation, &rotation, &pObject->mState.mUnknown88);
                 MatPushUnit();
                 MatRotQuat(&rotation);
-                Vector_80039F5C offset;
                 Vec3Mat33Mul(&offset, p->mUnknown12);
                 MatPop();
                 position.mX = pObject->mState.mUnknown0;
@@ -1677,15 +1680,14 @@ void BigObjEmitParticles(void *pData, float time, BigObjInst *pObject, BigObj_t 
                 Vec3Add(&position, &position, &offset);
             }
             ParticlesSpawnAt(p->mUnknown0, &position.mX, &rotation.mX, (ParticleSource_t *)pOwner->mUnknown332);
-            ParticleSpawnRecord_t record;
             record.mId = p->mUnknown0;
-            record.mPos[0] = position.mX;
-            record.mPos[1] = position.mY;
-            record.mPos[2] = position.mZ;
             record.mRot[0] = rotation.mX;
             record.mRot[1] = rotation.mY;
             record.mRot[2] = rotation.mZ;
             record.mRot[3] = rotation.mW;
+            record.mPos[0] = position.mX;
+            record.mPos[1] = position.mY;
+            record.mPos[2] = position.mZ;
             record.mpSource = (ParticleSource_t *)pOwner->mUnknown332;
             ParticleSysReplayRecordSpawn(record);
         }
