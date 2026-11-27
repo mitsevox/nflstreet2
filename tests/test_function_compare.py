@@ -53,6 +53,21 @@ class ExportSemantics(unittest.TestCase):
         self.assertEqual(units['src/done.c']['measures']['complete_units'], 1)
 
 
+class LinkedRanges(unittest.TestCase):
+    def test_a_holdout_pool_counts_as_linked(self):
+        # A holdout pool keeps the target's words, so a comparison treats it like the unit's sections.
+        pool = {'section': '.rodata', 'start': '0x80004010', 'end': '0x80004014'}
+        sections = [{'start': '0x80003110', 'end': '0x80003118'}, {'start': '0x80004008', 'end': '0x80004010'}]
+        held = [{'function': 'b', 'evidence': 'x', 'pool': pool}, {'function': 'c', 'evidence': 'y'}]
+        expected = [('src/unit.c', 0x80003110, 0x80003118), ('src/unit.c', 0x80004008, 0x80004010),
+                    ('src/unit.c', 0x80004010, 0x80004014)]
+        for holdouts in ({'functions': held, 'evidence': 'notes'}, held):
+            units = [{'source': 'src/unit.c', 'sections': sections, 'holdouts': holdouts},
+                     {'source': 'src/plain.c', 'sections': [{'start': '0x80003200', 'end': '0x80003208'}]}]
+            self.assertEqual(function_compare.linked_ranges(units, sb.address),
+                             expected[:2] + [('src/plain.c', 0x80003200, 0x80003208)] + expected[2:])
+
+
 class PublicDefinitions(unittest.TestCase):
     def test_global_and_weak_definitions_resolve_other_files(self):
         symbols = [{"name": "Global", "bind": sb.STB_GLOBAL, "shndx": 1},

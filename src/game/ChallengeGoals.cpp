@@ -39,7 +39,7 @@ int ScrmGetSnapOffense(void);
 int ScrmGetTeamScore(unsigned char side);
 int ScrmGetScoreGoal(int *pValue);
 int ScrmGetWinner(void);
-int fn_8022B7A4(int handle, int tag, void *pValue);
+int DbMttsGetTeamColumn(int handle, int tag, void *pValue);
 
 static int _Challenge_iMode = 3;
 static Entry_80219044 _Challenge_aGoalEntries[4];
@@ -107,7 +107,7 @@ int ChallengeGoalCheckSpstMax(int side, unsigned int value)
 {
     unsigned int stat;
 
-    fn_8022B7A4(side, 0x73707374, &stat);
+    DbMttsGetTeamColumn(side, 0x73707374, &stat);
     if (stat >= value) {
         int current = DriveLogGetTeam();
 
@@ -124,8 +124,8 @@ int ChallengeGoalCheckNsstTotal(int side, int other, unsigned int value)
     unsigned int b;
     unsigned int total;
 
-    fn_8022B7A4(side, 0x6E737374, &a);
-    fn_8022B7A4(other, 0x6E737374, &b);
+    DbMttsGetTeamColumn(side, 0x6E737374, &a);
+    DbMttsGetTeamColumn(other, 0x6E737374, &b);
     total = a + b;
     if (total > value) {
         return 1;
@@ -155,9 +155,9 @@ int ChallengeGoalCheckScoreStats(int side, unsigned int value)
     unsigned int b;
     unsigned int c;
 
-    fn_8022B7A4(side, 0x74727374, &a);
-    fn_8022B7A4(side, 0x74507374, &b);
-    fn_8022B7A4(side, 0x64647374, &c);
+    DbMttsGetTeamColumn(side, 0x74727374, &a);
+    DbMttsGetTeamColumn(side, 0x74507374, &b);
+    DbMttsGetTeamColumn(side, 0x64647374, &c);
     if (fn_800B65A0(side) == 0xFF) {
         return a + b + c > value;
     }
@@ -200,7 +200,7 @@ int ChallengeGoalCheckSpstReached(int side, unsigned int value, int flag)
 {
     unsigned int stat;
 
-    fn_8022B7A4(side, 0x73707374, &stat);
+    DbMttsGetTeamColumn(side, 0x73707374, &stat);
     if (stat >= value) {
         int current = DriveLogGetTeam();
 
@@ -217,8 +217,8 @@ int ChallengeGoalCheckNsstReached(int side, int other, unsigned int value)
     unsigned int a;
     unsigned int b;
 
-    fn_8022B7A4(side, 0x6E737374, &a);
-    fn_8022B7A4(other, 0x6E737374, &b);
+    DbMttsGetTeamColumn(side, 0x6E737374, &a);
+    DbMttsGetTeamColumn(other, 0x6E737374, &b);
     if (a + b >= value) {
         return 3;
     }
@@ -261,8 +261,8 @@ int ChallengeGoalCheckApstRatio(int side, unsigned int value)
     int b;
     unsigned int scaled;
 
-    fn_8022B7A4(side, 0x61707374, &a);
-    fn_8022B7A4(side, 0x6E737374, &b);
+    DbMttsGetTeamColumn(side, 0x61707374, &a);
+    DbMttsGetTeamColumn(side, 0x6E737374, &b);
     scaled = (float)a / (float)b * 100.0f;
     return scaled < value ? 2 : 0;
 }
@@ -272,8 +272,8 @@ int ChallengeGoalCheckTrstOrTpst(int side, int value)
     unsigned int a;
     unsigned int b;
 
-    fn_8022B7A4(side, 0x74507374, &a);
-    fn_8022B7A4(side, 0x74727374, &b);
+    DbMttsGetTeamColumn(side, 0x74507374, &a);
+    DbMttsGetTeamColumn(side, 0x74727374, &b);
     if (b != 0 || a != 0) {
         return 1;
     }
@@ -287,9 +287,9 @@ int ChallengeGoalCheckSpstVsScoreStats(int side, int value)
     int c;
     int total;
 
-    fn_8022B7A4(side, 0x73707374, &a);
-    fn_8022B7A4(side, 0x74507374, &b);
-    fn_8022B7A4(side, 0x74727374, &c);
+    DbMttsGetTeamColumn(side, 0x73707374, &a);
+    DbMttsGetTeamColumn(side, 0x74507374, &b);
+    DbMttsGetTeamColumn(side, 0x74727374, &c);
     total = b + c;
     if (total >= a) {
         return 0;
@@ -307,10 +307,10 @@ int ChallengeGoalCheckScoreStatsZero(int side)
     unsigned int c;
     unsigned int d;
 
-    fn_8022B7A4(side, 0x74727374, &a);
-    fn_8022B7A4(side, 0x74507374, &b);
-    fn_8022B7A4(side, 0x64647374, &c);
-    fn_8022B7A4(side, 0x64317374, &d);
+    DbMttsGetTeamColumn(side, 0x74727374, &a);
+    DbMttsGetTeamColumn(side, 0x74507374, &b);
+    DbMttsGetTeamColumn(side, 0x64647374, &c);
+    DbMttsGetTeamColumn(side, 0x64317374, &d);
     if (fn_800B65A0(side) != 0xFF) {
         if (a == 0 && b == 0 && c == 0 && d == 0) {
             return 2;
@@ -326,8 +326,8 @@ int ChallengeGoalCheckApstMinusCpst(int side, unsigned int value)
     unsigned int a;
     unsigned int b;
 
-    fn_8022B7A4(side, 0x61707374, &a);
-    fn_8022B7A4(side, 0x63707374, &b);
+    DbMttsGetTeamColumn(side, 0x61707374, &a);
+    DbMttsGetTeamColumn(side, 0x63707374, &b);
     return a - b > value;
 }
 

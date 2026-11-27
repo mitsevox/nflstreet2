@@ -85,7 +85,7 @@ extern void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 
 extern int ResLooseFileOpen(ResFile_t *pRes, int index);
 extern void AuxRamDownload(void *pDest, unsigned int source, unsigned int length);
-extern int fn_801C2D88(char *pBuffer, unsigned int size, const char *pFormat, ...);
+extern int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 
 extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
                          void (*pDone)(int, int, void *), void *pArg);
@@ -534,9 +534,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
                     cache = 0;
                 }
                 if (pRes->pName == 0) {
-                    fn_801C2D88(label, sizeof(label), "RLR:%i:%i", index, pRes->mFile);
+                    snprintf(label, sizeof(label), "RLR:%i:%i", index, pRes->mFile);
                 } else {
-                    fn_801C2D88(label, sizeof(label), "RLR%i:%s", index, pRes->pName);
+                    snprintf(label, sizeof(label), "RLR%i:%s", index, pRes->pName);
                 }
                 label[31] = 0;
                 GCmpSetLabel(label);
@@ -577,9 +577,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             src.mPos = 0;
             dst.mSize = size;
             if (pRes->pName == 0) {
-                fn_801C2D88(label, sizeof(label), "RLR-%i-%i", index, pRes->mFile);
+                snprintf(label, sizeof(label), "RLR-%i-%i", index, pRes->mFile);
             } else {
-                fn_801C2D88(label, sizeof(label), "%i%s", index, pRes->pName);
+                snprintf(label, sizeof(label), "%i%s", index, pRes->pName);
             }
             label[31] = 0;
             GCmpSetLabel(label);
@@ -603,7 +603,7 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
     } else if (pRes->mState == 3) {
         char name[16];
 
-        fn_801C2D88(name, 15, "%s", pRes->pName);
+        snprintf(name, 15, "%s", pRes->pName);
         name[9] = name[12];
         name[10] = name[13];
         name[11] = 0;
@@ -629,9 +629,9 @@ static int _ResLoadRes(ResFile_t *pRes, unsigned int index, unsigned int *pBuffe
             dst.mSize = size;
             dst.pData = fn_801D2BB0(1, dst.mSize, _Res_uMemAllocFlags, 0);
             if (pRes->pName == 0) {
-                fn_801C2D88(label, sizeof(label), "RLR;%i;%i", index, pRes->mFile);
+                snprintf(label, sizeof(label), "RLR;%i;%i", index, pRes->mFile);
             } else {
-                fn_801C2D88(label, sizeof(label), "RLR%i;%s", index, pRes->pName);
+                snprintf(label, sizeof(label), "RLR%i;%s", index, pRes->pName);
             }
             label[31] = 0;
             GCmpSetLabel(label);
@@ -2046,9 +2046,9 @@ int ResLoadAll(ResFile_t *pRes, int heap, int bulk)
                         dst.mSize = size;
                         dst.pData = pDst;
                         if (pRes->pName == 0) {
-                            fn_801C2D88(label, sizeof(label), "RLA:%i:%i", index, pRes->mFile);
+                            snprintf(label, sizeof(label), "RLA:%i:%i", index, pRes->mFile);
                         } else {
-                            fn_801C2D88(label, sizeof(label), "RLA%i:%s", index, pRes->pName);
+                            snprintf(label, sizeof(label), "RLA%i:%s", index, pRes->pName);
                         }
                         label[31] = 0;
                         GCmpSetLabel(label);

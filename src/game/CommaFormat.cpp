@@ -1,6 +1,6 @@
 /* Writes an integer as decimal text with commas between groups of three digits. */
 extern "C" {
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 unsigned int strlen(const char *pText);
 }
 
@@ -16,7 +16,7 @@ extern "C" void CommaFormatInt(int value, char *pOut, int size)
     int i;
     int count;
 
-    fn_801C2D88(digits, sizeof(digits), "%d", value);
+    snprintf(digits, sizeof(digits), "%d", value);
     length = strlen(digits);
     lead = length % 3;
     count = 0;

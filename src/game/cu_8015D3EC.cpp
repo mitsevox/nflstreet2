@@ -27,7 +27,7 @@ void PlyrModelLodInit(ModelLod_802DF190 *pLod, ModelLod_802DF190 *pSource, AnimS
 void PlyrModelLodBindSkeleton(ModelLod_802DF190 *pLod, AnimSkeleton_t *pSkeleton);
 void PlyrRenderBindPartTable(int a);
 void PlyrRenderUnbindPartTable(void);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int FileSetMemAllocFlags(int value);
 void GlibSyncFrame(void);
 int MemGetSizeByAddr(int a, void *p);
@@ -1126,7 +1126,7 @@ int fn_8015F5BC(const char *pName)
         *p = 0;
     }
     name[0] = 0;
-    fn_801C2D88(name, sizeof(name), "HEAD_MODEL_%s_2700", pName);
+    snprintf(name, sizeof(name), "HEAD_MODEL_%s_2700", pName);
     id = ResFindIndexByName(lbl_803ECAD8, name);
     if (id == -1) {
         id = 0x1D8;
@@ -1141,7 +1141,7 @@ static int _PlayerHeadFindCapModel(int cap, const char *pName)
     int id;
 
     name[0] = 0;
-    fn_801C2D88(name, sizeof(name), "HEAD_MODEL_CAP%02d_%s_2700", cap, pName);
+    snprintf(name, sizeof(name), "HEAD_MODEL_CAP%02d_%s_2700", cap, pName);
     id = ResFindIndexByName(lbl_803ECAD8, name);
     if (id == -1) {
         id = 0x1D8;
@@ -1179,9 +1179,9 @@ void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, P
         }
         name[0] = 0;
         if (hat) {
-            fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%sHAT_2700", pName);
+            snprintf(name, sizeof(name), "HAIR_MODEL_%sHAT_2700", pName);
         } else {
-            fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%s_2700", pName);
+            snprintf(name, sizeof(name), "HAIR_MODEL_%s_2700", pName);
         }
         id = ResFindIndexByName(lbl_803ECAD4, name);
         if (id != -1) {
@@ -1189,9 +1189,9 @@ void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, P
         }
         name[0] = 0;
         if (hat) {
-            fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%sHAT_1500", pName);
+            snprintf(name, sizeof(name), "HAIR_MODEL_%sHAT_1500", pName);
         } else {
-            fn_801C2D88(name, sizeof(name), "HAIR_MODEL_%s_1500", pName);
+            snprintf(name, sizeof(name), "HAIR_MODEL_%s_1500", pName);
         }
         id = ResFindIndexByName(lbl_803ECAD4, name);
         if (id != -1) {

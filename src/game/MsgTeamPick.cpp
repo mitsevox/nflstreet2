@@ -135,8 +135,8 @@ void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int TeamLogoGetHandle(int a);
 void TeamTablesPurgeCreated(int tag);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 void SortArray(int a, void *pBase, int count, int size, int (*pCompare)(TeamPickPlayer_t *, TeamPickPlayer_t *), int b,
                  int c, int d);
 int TDbTblDestroy(int handle, int table);
@@ -740,11 +740,11 @@ int MsgTeamPickCompareNames(TeamPickPlayer_t *pA, TeamPickPlayer_t *pB)
     if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, pA->mId, 0)) {
         PlayerDbGetLastName(&_MsgTeamPick_PlayerCursor, last, 15);
         PlayerDbGetFirstName(&_MsgTeamPick_PlayerCursor, first, 12);
-        fn_801C2D88(nameA, 27, "%s%s", last, first);
+        snprintf(nameA, 27, "%s%s", last, first);
         if (PlayerDbSeekId(&_MsgTeamPick_PlayerCursor, pB->mId, 0)) {
             PlayerDbGetLastName(&_MsgTeamPick_PlayerCursor, last, 15);
             PlayerDbGetFirstName(&_MsgTeamPick_PlayerCursor, first, 12);
-            fn_801C2D88(nameB, 27, "%s%s", last, first);
+            snprintf(nameB, 27, "%s%s", last, first);
             return strncmp(nameA, nameB, 27);
         }
     }
@@ -842,12 +842,12 @@ void MsgTeamPickFormatName(char *pDest, int unused, int abbreviate)
     PlayerDbGetLastName(&_MsgTeamPick_PlayerCursor, last, 15);
     if (abbreviate) {
         if (first[0] == 0 || first[0] == ' ') {
-            fn_801C2E18(pDest, "%s", last);
+            sprintf(pDest, "%s", last);
         } else {
-            fn_801C2E18(pDest, "%c. %s", first[0], last);
+            sprintf(pDest, "%c. %s", first[0], last);
         }
     } else {
-        fn_801C2E18(pDest, "%s %s", first, last);
+        sprintf(pDest, "%s %s", first, last);
     }
 }
 
@@ -1471,8 +1471,8 @@ void MsgTeamPickGetPlayerInfo(int row, int *pId, int *pTeam, int *pValues, char 
 
         unsigned int height = PlayerDbGetHeight(&_MsgTeamPick_PlayerCursor);
         int weight = PlayerDbGetWeight(&_MsgTeamPick_PlayerCursor);
-        fn_801C2D88(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
-        fn_801C2D88(pWeight, weightSize, "%d lbs", weight);
+        snprintf(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
+        snprintf(pWeight, weightSize, "%d lbs", weight);
     }
 }
 

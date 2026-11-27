@@ -19331,14 +19331,34 @@
           "end": "0x8022B414"
         },
         {
-          "symbol": "fn_8022B414",
+          "symbol": "DbMttsGetPlayerColumn",
           "start": "0x8022B414",
           "end": "0x8022B580"
         },
         {
-          "symbol": "fn_8022B7A4",
+          "symbol": "DbMttsUpdatePlayerColumn",
+          "start": "0x8022B580",
+          "end": "0x8022B7A4"
+        },
+        {
+          "symbol": "DbMttsGetTeamColumn",
           "start": "0x8022B7A4",
           "end": "0x8022B8C8"
+        },
+        {
+          "symbol": "DbMttsUpdateTeamColumn",
+          "start": "0x8022B8C8",
+          "end": "0x8022BAB4"
+        },
+        {
+          "symbol": "fn_8022BAB4",
+          "start": "0x8022BAB4",
+          "end": "0x8022BD30"
+        },
+        {
+          "symbol": "fn_8022BD30",
+          "start": "0x8022BD30",
+          "end": "0x8022BF60"
         },
         {
           "symbol": "fn_8022BF60",

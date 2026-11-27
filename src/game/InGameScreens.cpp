@@ -204,7 +204,7 @@ void RecordsEnd(void);
 void RecordsSeekRow(int type, int row);
 int RecordsGetValue(int column);
 int RecordsGetText(int type, int row, int column, char *text, int size);
-int fn_8022B7A4(int handle, int tag, void *pValue);
+int DbMttsGetTeamColumn(int handle, int tag, void *pValue);
 int ScrmGetScoreGoal(int *pValue);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
@@ -224,7 +224,7 @@ extern char lbl_8031BDD4[];
 extern void *gUISMainInfo;
 
 void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 void GameTextFormatInitialAndName(Object_80056584 *pObject, char *pOut, int b);
 int MsgGameGetPlayerPortrait(int id);
 int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned char *pBlue);
@@ -243,7 +243,7 @@ void PlayBookSetLoadFlags(unsigned int flags);
 void PlayBookClearLoadFlags(unsigned int flags);
 void PlayBookDbLoadSetByOrder(int tag, int handle, int index, PlaybookTeamView *pOwner, Info_8006719C *pInfo);
 int PlayBookDbLoadPlay(int tag, int handle, int index, PlayBookPlay_t *pRecord);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 void PlayArtReadPositions(int tag, Info_8006719C *pInfo, PlayBookPlay_t *pRecord, int a, int b, signed char c, int team, int index);
 void PlayArtReadRoutes(int tag, PlayBookPlay_t *pRecord, int a, int b, int team, int index);
 void PlayArtBuild(int tag, PlayBookPlay_t *pRecord, int a, int b, int c, int team, int index, int first,
@@ -527,7 +527,7 @@ int GameStatsReadTag(int handle, int tag)
 {
     int value;
 
-    fn_8022B7A4(handle, tag, &value);
+    DbMttsGetTeamColumn(handle, tag, &value);
     return value;
 }
 
@@ -622,7 +622,7 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
     if (*pMode == 2) {
         *pMode = 0;
     }
-    fn_801C2D88(pBuffer, size, "%d:%02d", MINUTES_OF(fn_8009D990(2)), SECONDS_OF(fn_8009D990(2)));
+    snprintf(pBuffer, size, "%d:%02d", MINUTES_OF(fn_8009D990(2)), SECONDS_OF(fn_8009D990(2)));
 }
 
 /* Message handler of the game stats screen; pArgs is the screen's argument
@@ -663,9 +663,9 @@ void InGameJumpBallGetSlot(int index, char *pOut, int b, char *pText0, int size0
     MiniGameSlotInfo_t info;
 
     fn_80152940(lbl_8031BDD4, index, &info);
-    fn_801C2D88(pText0, size0, "%d", info.mUnknown4);
-    fn_801C2D88(pText1, size1, "%d", info.mUnknown12);
-    fn_801C2D88(pText2, size2, "%d", info.mUnknown16);
+    snprintf(pText0, size0, "%d", info.mUnknown4);
+    snprintf(pText1, size1, "%d", info.mUnknown12);
+    snprintf(pText2, size2, "%d", info.mUnknown16);
     Object_80056584 *pObject = info.mpObject;
     if (pObject) {
         GameTextFormatInitialAndName(pObject, pOut, b);
@@ -848,11 +848,11 @@ void InGamePlayCallLoadSlot(int team, unsigned int a, int b)
             PlayBookDbLoadPlay(_InGameScreens_pPlayArt->mUnknown4[team], _InGameScreens_pPlayArt->mpSlots[team][b].mUnknown8.mUnknown0,
                         _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC, &_InGameScreens_pPlayArt->mpSlots[team][b].mUnknownCB0);
         PlayBookClearLoadFlags(2);
-        fn_801C2E18(_InGameScreens_pPlayCall->mpTexts[team][b], "%s",
+        sprintf(_InGameScreens_pPlayCall->mpTexts[team][b], "%s",
                     _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownCB0.mUnknown1F3);
     } else {
         _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC = -1;
-        fn_801C2E18(_InGameScreens_pPlayCall->mpTexts[team][b], "%s", "Locked");
+        sprintf(_InGameScreens_pPlayCall->mpTexts[team][b], "%s", "Locked");
     }
 }
 
@@ -1272,7 +1272,7 @@ void InGamePlayCallLoadList(unsigned char team, int index, int flag)
                     database, &cursor, table);
         i = 0;
         while (i < count && TDbCompilePerformOp(0, "fetch from \x8a 'DPSU' into \x80\n", &cursor, &number) == 0) {
-            fn_801C2E18(text, "%02d", number);
+            sprintf(text, "%02d", number);
             for (unsigned int j = 0; j < count; j++) {
                 PlayBookDbLoadPlay(tag, handle, j, &record);
                 if (strncmp(record.mUnknown1F0, text, 2) == 0) {
@@ -1501,7 +1501,7 @@ void InGameFindPlayName(char *pDest, int size, int number, int flag)
         TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                     &handle, index + 1, object.mUnknown0);
         unsigned short count = PlayBookDbCountPlays(tag, handle);
-        fn_801C2E18(text, "%02d", number);
+        sprintf(text, "%02d", number);
         for (; j < count; j++) {
             PlayBookDbLoadPlay(tag, handle, j, &record);
             if (strncmp(record.mUnknown1F0, text, 2) == 0) {
@@ -1622,7 +1622,7 @@ void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
     int value = 0;
     UISProcessHint(gUISMainInfo, 0x8000000E, 1, &value);
     if (pad != -1) {
-        fn_801C2E18(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
+        sprintf(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
         int active = 1;
         if (fn_800B6644(pad) == 0) {
             active = 0;
@@ -1642,7 +1642,7 @@ void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
             }
         }
     } else {
-        fn_801C2E18(pText, "Pause");
+        sprintf(pText, "Pause");
     }
 }
 
@@ -2129,9 +2129,9 @@ void InGameHudOpen(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, in
     pValues[0] = GameTextGetHomeTeam(); pValues[1] = GameTextGetAwayTeam();
     if (GameOptionsGet(14) != 1) {
         {MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1];
-        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(0));}
+        snprintf(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(0));}
         {MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2];
-        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(1));}
+        snprintf(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(1));}
     } else {
         strcpy(((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1]->mpText, "");
         strcpy(((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2]->mpText, "");
@@ -2201,7 +2201,7 @@ void InGameFormatClock(char *pText, int *pRed, int *pGreen, int *pBlue)
         if (seconds) seconds--;
         else {minutes--; seconds = 59;}
     }
-    fn_801C2E18(pText, "%d:%02d.%01d", minutes, seconds, remainder / 100);
+    sprintf(pText, "%d:%02d.%01d", minutes, seconds, remainder / 100);
     if (pRed && pGreen && pBlue) {
         if (minutes == 0 && (seconds <= 9 || (seconds == 10 && remainder == 0))) {
             *pRed = 200; *pGreen = 0; *pBlue = 0;
@@ -2481,8 +2481,8 @@ void InGameGetVenueInfo(char *pFirst,int firstSize,char *pLast,int lastSize,int 
     EnvSelect(fn_800A3444());EnvGetUIName(pFirst,firstSize);EnvGetEVLO(pLast,lastSize);EnvRelease();
     TDbCompilePerformOp(0,"use 'EVAS' select 'KTFH' into \x82 from 'DFSH' where 'DIVE' = \x80\n",pValue,fn_800A3444());
     switch(GameOptionsGet(14)) {
-    case 0:fn_801C2E18(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);break;
-    case 1:fn_801C2E18(pLabel,"Style Points");*pResult=GameOptionsGet(2);break;
+    case 0:sprintf(pLabel,"Touchdowns");*pResult=GameOptionsGet(1);break;
+    case 1:sprintf(pLabel,"Style Points");*pResult=GameOptionsGet(2);break;
     }
 }
 int _InGameScreens_aHudOffsets[4] = {0, 0, 0x40, 0x40};
@@ -2510,13 +2510,13 @@ void InGameRewardFormatLogo(char *pText,int size,int id)
 {
     char name[24];DbCursor query;
     LogoListOpen(&query);LogoListFind(&query,id+45,0);LogoListGetName(&query,name,21);LogoListClose(&query);
-    fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[5],name);
+    snprintf(pText,size,_InGameScreens_apRewardFormats[5],name);
 }
 void InGameRewardFormatPlay(char *pText,int size,int id,int defensive)
 {
     char name[64];InGameFindPlayName(name,64,(unsigned char)id,defensive);
-    if(defensive) fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[3],name);
-    else fn_801C2D88(pText,size,_InGameScreens_apRewardFormats[7],name);
+    if(defensive) snprintf(pText,size,_InGameScreens_apRewardFormats[3],name);
+    else snprintf(pText,size,_InGameScreens_apRewardFormats[7],name);
 }
 int InGameRewardFormat(char *pText,int size,int kind,int value)
 {
@@ -2713,7 +2713,7 @@ int InGameResetMsg(unsigned int id,MenuArg_t *,int,int *) {
     PauseRequestClose(); break; default: return 0;}
     return 1;
 }
-void InGameFormatCompletions(int team,char *text,int size) {int a=ScrmGetGoalCount(team);int b=ScrmGetGoalTotal(team);fn_801C2D88(text,size,"%d for %d",a,b);}
+void InGameFormatCompletions(int team,char *text,int size) {int a=ScrmGetGoalCount(team);int b=ScrmGetGoalTotal(team);snprintf(text,size,"%d for %d",a,b);}
 void InGameGetPlayerColor(int team,unsigned char index,int *color) {
     HudLookupColor(MiniGameOpenFieldGetPlayerColor(MiniGameGetCurrent(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
@@ -2744,9 +2744,9 @@ void InGameGetTimedStats(int team,char *name,int nameSize,char *first,int firstS
     unsigned char foundTeam=0,foundIndex=0;bool found=false;
     Stats_8005C4A4 stats;fn_8014F3E4(MiniGameGetCurrent(),team,&stats);
     unsigned int minutes=stats.mTime/60,seconds=stats.mTime%60;
-    fn_801C2D88(first,firstSize,"%d",stats.mUnknown4);
-    if(seconds<10)fn_801C2D88(time,timeSize,"%d:0%d",minutes,seconds);else fn_801C2D88(time,timeSize,"%d:%d",minutes,seconds);
-    fn_801C2D88(last,lastSize,"%d",stats.mUnknown12);
+    snprintf(first,firstSize,"%d",stats.mUnknown4);
+    if(seconds<10)snprintf(time,timeSize,"%d:0%d",minutes,seconds);else snprintf(time,timeSize,"%d:%d",minutes,seconds);
+    snprintf(last,lastSize,"%d",stats.mUnknown12);
     Object_80039F5C *pPlayer=stats.mpPlayer;
     if(pPlayer) {
         GameTextFormatInitialAndName((Object_80056584 *)pPlayer,name,nameSize);
@@ -2771,7 +2771,7 @@ int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
 void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
     Stats_8005C844 stats;fn_8014BA20(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
+    snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
 }
 int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
@@ -2793,7 +2793,7 @@ void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *se
     Stats_8005CAE4 stats;
     DbCursor cursor;
     fn_8014CCE8(MiniGameGetCurrent(),team,&stats);
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
+    snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }
@@ -2812,7 +2812,7 @@ int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) 
     return 1;
 }
 void InGameFormatPossessionCount(int team,int *other,char *text,int size) {
-    DbCursor query; int value;fn_80155CF0(MiniGameGetCurrent(),team,other,&value);fn_801C2D88(text,size,"%d",value);
+    DbCursor query; int value;fn_80155CF0(MiniGameGetCurrent(),team,other,&value);snprintf(text,size,"%d",value);
 }
 void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
     Record_8005CE10 record;fn_80155C44(MiniGameGetCurrent(),team,index,&record);
@@ -2820,19 +2820,19 @@ void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,cha
     Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;}
     else {
-    if(value-11<9 || value%10>3 || value%10==0)fn_801C2D88(ordinal,ordinalSize,"%dth Possession",value);
-    else if(value%10==1)fn_801C2D88(ordinal,ordinalSize,"%dst Possession",value);
-    else if(value%10==2)fn_801C2D88(ordinal,ordinalSize,"%dnd Possession",value);
-    else if(value%10==3)fn_801C2D88(ordinal,ordinalSize,"%drd Possession",value);
+    if(value-11<9 || value%10>3 || value%10==0)snprintf(ordinal,ordinalSize,"%dth Possession",value);
+    else if(value%10==1)snprintf(ordinal,ordinalSize,"%dst Possession",value);
+    else if(value%10==2)snprintf(ordinal,ordinalSize,"%dnd Possession",value);
+    else if(value%10==3)snprintf(ordinal,ordinalSize,"%drd Possession",value);
     char event[32],player[32],conversion[32],outcome[32];
-    switch(record.mEvent) {case 0:fn_801C2E18(event,"Receiving TD ");break;case 1:fn_801C2E18(event,"Rushing TD ");break;case 6:fn_801C2E18(event,"Interception ");break;case 5:fn_801C2E18(event,"Safety ");break;case 7:fn_801C2E18(event,"Fumble Recovered ");break;case 8:fn_801C2E18(event,"Turnover On Downs");break;}
-    if(!p)*player=0;else fn_801C2E18(player,"by %s",p->mUnknown2927+21);
+    switch(record.mEvent) {case 0:sprintf(event,"Receiving TD ");break;case 1:sprintf(event,"Rushing TD ");break;case 6:sprintf(event,"Interception ");break;case 5:sprintf(event,"Safety ");break;case 7:sprintf(event,"Fumble Recovered ");break;case 8:sprintf(event,"Turnover On Downs");break;}
+    if(!p)*player=0;else sprintf(player,"by %s",p->mUnknown2927+21);
     if(record.mConversion==9) {*outcome=0;*conversion=0;}
     else {
-        switch(record.mConversion) {case 4:fn_801C2E18(conversion,"Two Point Conversion ");break;case 3:fn_801C2E18(conversion,"One Point Conversion ");break;case 2:if(record.mFlag)fn_801C2E18(conversion,"Defensive Conversion ");else fn_801C2E18(conversion,"Defensive TD ");break;}
-        if(record.mFlag || record.mConversion==2)fn_801C2E18(outcome,"by %s",other->mUnknown2927+21);else fn_801C2E18(outcome,"Failed");
+        switch(record.mConversion) {case 4:sprintf(conversion,"Two Point Conversion ");break;case 3:sprintf(conversion,"One Point Conversion ");break;case 2:if(record.mFlag)sprintf(conversion,"Defensive Conversion ");else sprintf(conversion,"Defensive TD ");break;}
+        if(record.mFlag || record.mConversion==2)sprintf(outcome,"by %s",other->mUnknown2927+21);else sprintf(outcome,"Failed");
     }
-    fn_801C2D88(text,size,"%s%s\n%s%s",event,player,conversion,outcome);
+    snprintf(text,size,"%s%s\n%s%s",event,player,conversion,outcome);
     }
 }
 int InGameScoringSummaryMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
@@ -2849,9 +2849,9 @@ int InGameLegendUnlockMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     case 0x80000001: {
         char name[20]="";const char *extra="";char *text=p[1].pParams->mpText;int size=p[1].pParams->mLength;
         *p[0].pi=fn_800A3444();
-        switch(fn_800A3444()) {case 0:fn_801C2E18(name,"Randall Cunningham");break;case 1:fn_801C2E18(name,"Mike Singletary");break;case 2:fn_801C2E18(name,"Cris Carter");break;case 3:fn_801C2E18(name,"Jack Lambert");break;case 4:fn_801C2E18(name,"Anthony Munoz");break;case 5:fn_801C2E18(name,"Darrell Green");break;case 6:fn_801C2E18(name,"Mean Joe Greene");break;case 7:fn_801C2E18(name,"Bo Jackson");break;case 8:fn_801C2E18(name,"Joey Browner");break;case 9:fn_801C2E18(name,"Sterling Sharpe");break;default:fn_801C2E18(name,"Super Secret");break;}
+        switch(fn_800A3444()) {case 0:sprintf(name,"Randall Cunningham");break;case 1:sprintf(name,"Mike Singletary");break;case 2:sprintf(name,"Cris Carter");break;case 3:sprintf(name,"Jack Lambert");break;case 4:sprintf(name,"Anthony Munoz");break;case 5:sprintf(name,"Darrell Green");break;case 6:sprintf(name,"Mean Joe Greene");break;case 7:sprintf(name,"Bo Jackson");break;case 8:sprintf(name,"Joey Browner");break;case 9:sprintf(name,"Sterling Sharpe");break;default:sprintf(name,"Super Secret");break;}
         if(_InGameScreens_bLegendsUnlocked) {_InGameScreens_bLegendsUnlocked=0;extra="\n\nYou have unlocked the NFL Legends Team!";}
-        fn_801C2D88(text,size,"You have unlocked\n%s for\nthe Pickup Pool!%s",name,extra);break;
+        snprintf(text,size,"You have unlocked\n%s for\nthe Pickup Pool!%s",name,extra);break;
     }
     case 0x80000002:break;
     case 0x80000003:PauseRequestClose();break;

@@ -25,7 +25,7 @@ extern int fn_801D2BD0(void *p);
 extern void *MemReallocMem(void *allocation, int size, int c, int d);
 extern void SysSetLastErrorFunc(int err);
 extern char *strnzcpy(char *pDest, const char *pSource, int size);
-extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+extern int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 
 static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
@@ -319,7 +319,7 @@ void GCmpSetLabel(const char *pName)
     if (pName == 0) {
         strnzcpy(_GCmp_szLabel, "GCMP.LIB", 32);
     } else {
-        fn_801C2D88(_GCmp_szLabel, 32, "%s", pName);
+        snprintf(_GCmp_szLabel, 32, "%s", pName);
         _GCmp_szLabel[31] = 0;
     }
 }

@@ -47,7 +47,7 @@ void ResStreamReleaseBuffer(int loader, void *pData);
 void ResStreamReleaseAllBuffers(int loader);
 void ResStreamClose(int loader);
 void memcpy(void *pDest, void *pSrc, unsigned int size);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 char *strchr(const char *pString, int c);
 int FileSetMemAllocFlags(int value);
 void *fn_801D2BB0(int a, int size, int c, int d);
@@ -588,7 +588,7 @@ void PlaTexCacheSetFace(int player, const char *pName, int force)
     int id;
 
     name[0] = 0;
-    fn_801C2D88(name, sizeof(name), "PLATEX_FACE_%s", pName);
+    snprintf(name, sizeof(name), "PLATEX_FACE_%s", pName);
     id = PlaTexCacheFindTexture(name);
     if (id == -1) {
         id = PlaTexCacheFindTexture("PLATEX_TEMPLATE_FACE");
@@ -610,7 +610,7 @@ int PlaTexCacheGetCapFaceId(int index)
         id = PlaTexCacheFindTexture("PLATEX_TEMPLATE_FACE");
     } else {
         name[0] = 0;
-        fn_801C2D88(name, 24, "PLATEX_FACE_CAP%02d", index);
+        snprintf(name, 24, "PLATEX_FACE_CAP%02d", index);
         id = PlaTexCacheFindTexture(name);
     }
     return id;
