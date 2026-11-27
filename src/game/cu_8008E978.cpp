@@ -7742,7 +7742,7 @@ extern "C" int PlyrContactCanHit(Object_80039F5C *p, Object_80039F5C *pOther);
 
 extern "C" void PlyrContactGetAnimIds(Object_80039F5C *p, int value, int *pA, int *pB, int *pC);
 
-extern "C" int PlyrContactRollBreakChance(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value);
+extern "C" int PlyrContactGetTackleChance(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value);
 
 extern "C" int PlyrContactGetDodgeChance(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value, int chance);
 
@@ -7796,7 +7796,7 @@ extern "C" int PlyrContactStartEngage(Object_80039F5C *p, unsigned short key, un
 
 extern "C" void PlyrContactFinish(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 
-extern "C" int PlyrIsBreakTackleAnim(Object_80039F5C *p);
+extern "C" int PlyrIsTackleAnim(Object_80039F5C *p);
 
 extern "C" int fn_800C8704(int *pA, int *pB);
 
@@ -7972,11 +7972,11 @@ extern "C" int PlyrContactPlayTestDistance(Group_800CC98C *p, Play_800CCEBC *pPl
 
 extern "C" int PlyrContactPlayTestNodes(Group_800CC98C *pGroup, Play_800CCEBC *pPlay);
 
-extern "C" int PlyrContactPlayTestWalls(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle);
+extern "C" int PlyrContactPlayHitsWall(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle);
 
 extern "C" int PlyrContactPlayPlaceAtWall(Group_800CC98C *p, Play_800CCEBC *pPlay, int key);
 
-extern "C" int PlyrContactIsBetween(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC);
+extern "C" int PlyrContactIsOutsideSpan(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC);
 
 extern "C" int PlyrContactPlayIsValid(Group_800CC98C *pGroup, Play_800CCEBC *pPlay, int a);
 
@@ -8188,7 +8188,7 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
             p->mUnknown1240.mUnknown2=(signed char)AnimSeqGetOpcodeParameter();
             if(p->mUnknown1240.mUnknown2!=7) {
                 PlyrContactFinish(p,0,p->mUnknown1240.mUnknown0,0);
-                if(PlyrIsBreakTackleAnim(p) && p->mpState->mId==16) p->mFlags|=0x10000;
+                if(PlyrIsTackleAnim(p) && p->mpState->mId==16) p->mFlags|=0x10000;
             } else {
                 PhysPlayerHitObject(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
             }
@@ -32591,7 +32591,7 @@ extern "C" int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *
                     Vec2Rotate(&offset, (FieldPoint_t *)&target, turn);
                     Vec2Sub(&target, &offset, &target);
                     Vec2Add(&target, &target, &pCommand->mUnknown12);
-                    if (PlyrContactIsBetween((FieldPoint_t *)&a, (FieldPoint_t *)&b, (FieldPoint_t *)&target)) {
+                    if (PlyrContactIsOutsideSpan((FieldPoint_t *)&a, (FieldPoint_t *)&b, (FieldPoint_t *)&target)) {
                         continue;
                     }
                     target.mZ = pCommand->mUnknown12.mZ;
@@ -33562,7 +33562,7 @@ extern "C" void PlyrContactGetAnimIds(Object_80039F5C *p, int value, int *pA, in
     }
 }
 
-extern "C" int PlyrContactRollBreakChance(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value)
+extern "C" int PlyrContactGetTackleChance(Object_80039F5C *p, Object_800C6640 *pSource, Object_80039F5C *pOther, int value)
 {
     Object_80039F5C *pTarget;
     float *pStats;
@@ -34174,7 +34174,7 @@ extern "C" void PlyrContactUpdateDefender(Object_80039F5C *p)
         return;
     }
     key = pOther->mUnknown2914;
-    chance = PlyrContactRollBreakChance(pOther, 0, p, key);
+    chance = PlyrContactGetTackleChance(pOther, 0, p, key);
     if (chance != 0 && !fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p)) {
         chance = 100;
     }
@@ -34311,7 +34311,7 @@ extern "C" void PlyrContactUpdateCarrier(Object_80039F5C *p)
     }
     pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
     key = p->mUnknown2914;
-    chance = PlyrContactRollBreakChance(p, (Object_800C6640 *)&p->mUnknown560, 0, key);
+    chance = PlyrContactGetTackleChance(p, (Object_800C6640 *)&p->mUnknown560, 0, key);
     if (chance != 0) {
         if (!fn_800A7F30(p->mIdBytes[2]) && pOther != 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
             chance = 100;
@@ -34566,7 +34566,7 @@ extern "C" void PlyrContactFinish(Object_80039F5C *p, Object_80039F5C *pOther, i
     float local[12];
 }
 
-extern "C" int PlyrIsBreakTackleAnim(Object_80039F5C *p)
+extern "C" int PlyrIsTackleAnim(Object_80039F5C *p)
 {
     switch (fn_801BE648(p->mpUnknown792)) {
     case 94:
@@ -36720,7 +36720,7 @@ extern "C" int PlyrContactPlayTestNodes(Group_800CC98C *pGroup, Play_800CCEBC *p
     return result;
 }
 
-extern "C" int PlyrContactPlayTestWalls(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
+extern "C" int PlyrContactPlayHitsWall(Group_800CC98C *p, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle)
 {
     Record_800C432C table;
     Vector_80039F5C start;
@@ -36782,7 +36782,7 @@ extern "C" int PlyrContactPlayPlaceAtWall(Group_800CC98C *p, Play_800CCEBC *pPla
     return result;
 }
 
-extern "C" int PlyrContactIsBetween(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC)
+extern "C" int PlyrContactIsOutsideSpan(Delta_800CC6A8 *pA, Delta_800CC6A8 *pB, Delta_800CC6A8 *pC)
 {
     float a = pA->mX - pC->mX;
     float b = pB->mX - pC->mX;
@@ -37433,14 +37433,14 @@ extern "C" int PlyrContactCommandHitWall(Group_800CC98C *p, Command_800CEE74 *pR
         Vec2Rotate(&rotated, &delta, difference);
         Vec2Sub(&delta, &rotated, &delta);
         Vec2Add(&delta, &delta, &pRecord->mUnknown12);
-        if (PlyrContactIsBetween((Delta_800CC6A8 *)&a, (Delta_800CC6A8 *)&b, (Delta_800CC6A8 *)&delta)) continue;
+        if (PlyrContactIsOutsideSpan((Delta_800CC6A8 *)&a, (Delta_800CC6A8 *)&b, (Delta_800CC6A8 *)&delta)) continue;
         delta.mZ = pRecord->mUnknown12.mZ;
         float distance;
         float factor;
         int valid = 1;
         Vec3ClosestPointOnSegment(&a, &b, &delta, &point, &distance, &factor);
         if (distance >= lbl_803EAC7C) continue;
-        if (PlyrContactPlayTestWalls(p, pRecord, &point, angle)) continue;
+        if (PlyrContactPlayHitsWall(p, pRecord, &point, angle)) continue;
         if (lbl_803EAC8C != 0) {
             float current = Vec2DistanceSqr(&delta, &pRecord->mUnknown32);
             float chosen = Vec2DistanceSqr(&point, &pRecord->mUnknown32);

@@ -18022,7 +18022,7 @@
           "end": "0x800C6048"
         },
         {
-          "symbol": "PlyrContactRollBreakChance",
+          "symbol": "PlyrContactGetTackleChance",
           "start": "0x800C6048",
           "end": "0x800C6640"
         },
@@ -18157,7 +18157,7 @@
           "end": "0x800C8694"
         },
         {
-          "symbol": "PlyrIsBreakTackleAnim",
+          "symbol": "PlyrIsTackleAnim",
           "start": "0x800C8694",
           "end": "0x800C8704"
         },
@@ -18597,7 +18597,7 @@
           "end": "0x800CCF68"
         },
         {
-          "symbol": "PlyrContactPlayTestWalls",
+          "symbol": "PlyrContactPlayHitsWall",
           "start": "0x800CCF68",
           "end": "0x800CD0BC"
         },
@@ -18607,7 +18607,7 @@
           "end": "0x800CD170"
         },
         {
-          "symbol": "PlyrContactIsBetween",
+          "symbol": "PlyrContactIsOutsideSpan",
           "start": "0x800CD170",
           "end": "0x800CD21C"
         },
