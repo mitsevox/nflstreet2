@@ -22825,7 +22825,7 @@
     {
       "source": "src/engine/lzm.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzm.c and its function, name and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the four holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (.sdata 0x803EC578, .sbss 0x803ED414, .data 0x80301940 GCmpTypeLZM).",
+      "evidence": "evidence.tsv unit row of src/engine/lzm.c and its function, name and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the three holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (.sdata 0x803EC578, .sbss 0x803ED414, .data 0x80301940 GCmpTypeLZM).",
       "sections": [
         {
           "section": ".text",
@@ -22849,12 +22849,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80281C68",
-          "end": "0x80281C74"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802821E4",
           "end": "0x802821E8"
         },
         {
@@ -22889,13 +22883,9 @@
           {
             "function": "_LZMCoProcess",
             "evidence": "evidence.tsv source-form 0x80281940-0x80281C68"
-          },
-          {
-            "function": "_LZMDecProcess",
-            "evidence": "evidence.tsv source-form 0x80281C74-0x802821E4"
           }
         ],
-        "evidence": "merge notes of the wave p1 lane p1g pull request: src/engine/lzm.c holds out sFlushBuffer, sFlushMatch, _LZMCoProcess, _LZMDecProcess."
+        "evidence": "merge notes of the wave p1 lane p1g pull request: src/engine/lzm.c holds out sFlushBuffer, sFlushMatch, _LZMCoProcess (lane 8 merge notes, 2026-11-27: _LZMDecProcess made exact)."
       }
     },
     {
@@ -25760,8 +25750,14 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 62 of 74 functions exact, the 12 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 68 of 74 functions exact, the 6 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80267114",
+          "end": "0x802671D0"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -25772,18 +25768,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8026739C",
-          "end": "0x80267894"
+          "end": "0x80268B88"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80267C70",
-          "end": "0x802687AC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80268F54",
+          "start": "0x80268DA8",
           "end": "0x80269084"
         },
         {
@@ -25818,36 +25808,12 @@
             "evidence": "evidence.tsv source-form 0x80266EC0-0x80267114"
           },
           {
-            "function": "UpdateCallFunction",
-            "evidence": "evidence.tsv source-form 0x80267114-0x802671D0"
-          },
-          {
             "function": "UpdateControlClass",
             "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"
           },
           {
-            "function": "SNDAEMSI_updateenvelope",
-            "evidence": "evidence.tsv source-form 0x80267894-0x80267A1C"
-          },
-          {
-            "function": "SNDAEMSI_updatetable",
-            "evidence": "evidence.tsv source-form 0x80267A1C-0x80267C70"
-          },
-          {
-            "function": "SNDAEMSI_playerupdatebank",
-            "evidence": "evidence.tsv source-form 0x802687AC-0x8026898C"
-          },
-          {
-            "function": "SNDAEMSI_updateplayer",
-            "evidence": "evidence.tsv source-form 0x8026898C-0x80268B88"
-          },
-          {
             "function": "SNDAEMSI_updateoscillator",
             "evidence": "evidence.tsv source-form 0x80268B88-0x80268DA8"
-          },
-          {
-            "function": "SNDAEMSI_updateramp",
-            "evidence": "evidence.tsv source-form 0x80268DA8-0x80268F54"
           },
           {
             "function": "SNDAEMSI_CreateModuleInstance",
@@ -25862,7 +25828,7 @@
             "evidence": "evidence.tsv source-form 0x802694AC-0x802697D8"
           }
         ],
-        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out SNDAEMSI_updatedestroy, UpdateCallFunction, UpdateControlClass, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer, SNDAEMSI_updateoscillator, SNDAEMSI_updateramp, SNDAEMSI_CreateModuleInstance, SNDAEMS_removemodulebank, SNDAEMSI_resolvemodulebank; their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
+        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out SNDAEMSI_updatedestroy, UpdateControlClass, SNDAEMSI_updateoscillator, SNDAEMSI_CreateModuleInstance, SNDAEMS_removemodulebank, SNDAEMSI_resolvemodulebank (lane 8 merge notes, 2026-11-27: UpdateCallFunction, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer and SNDAEMSI_updateramp made exact); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
       }
     },
     {
@@ -29643,8 +29609,20 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 21 of 37 functions exact, the 16 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 27 of 37 functions exact, the 10 holdouts keep the original bytes.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80283E48",
+          "end": "0x8028410C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80282F24",
+          "end": "0x80283660"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -29666,7 +29644,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80282800",
+          "start": "0x80282740",
           "end": "0x8028291C"
         },
         {
@@ -29703,10 +29681,6 @@
             "evidence": "evidence.tsv source-form 0x80282654-0x80282740"
           },
           {
-            "function": "_LZHMemProcess",
-            "evidence": "evidence.tsv source-form 0x80282740-0x80282800"
-          },
-          {
             "function": "_LZHEncodeInput",
             "evidence": "evidence.tsv source-form 0x8028291C-0x80282D70"
           },
@@ -29715,28 +29689,8 @@
             "evidence": "evidence.tsv source-form 0x80282D70-0x80282F24"
           },
           {
-            "function": "_LZHEncodeCodeBuffer",
-            "evidence": "evidence.tsv source-form 0x80282F24-0x802830F0"
-          },
-          {
-            "function": "_LZHDecodeNewBlock",
-            "evidence": "evidence.tsv source-form 0x802830F0-0x802832CC"
-          },
-          {
-            "function": "_LZHDecodeInput",
-            "evidence": "evidence.tsv source-form 0x802832CC-0x80283660"
-          },
-          {
             "function": "_LZHDecodeInputFull",
             "evidence": "evidence.tsv source-form 0x80283660-0x80283E48"
-          },
-          {
-            "function": "_LZHReadBits",
-            "evidence": "evidence.tsv source-form 0x80283E48-0x80284030"
-          },
-          {
-            "function": "_LZHMemDecodeNewBlock",
-            "evidence": "evidence.tsv source-form 0x80284030-0x8028410C"
           },
           {
             "function": "_LZHMemDecodeInput",
@@ -29755,7 +29709,7 @@
             "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out fn_802822E0, fn_802824A8, fn_80282654, fn_80282740, fn_8028291C, fn_80282D70, fn_80282F24, fn_802830F0, fn_802832CC, fn_80283660, fn_80283E48, fn_80284030, fn_8028410C, fn_80284E70, fn_80284FB8, fn_802855EC."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHProcess, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact)."
       }
     },
     {

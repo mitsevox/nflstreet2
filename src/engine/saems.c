@@ -395,6 +395,20 @@ typedef struct AemsModuleBank_t {
 // FAKEMATCH: the module bank list head read through a constant address (sndaems + 4) instead of sndaems.mpModuleBanks, for the target's folded sndaems+4 accesses
 #define AEMS_MODULE_BANKS (*(SndAemsModuleBankLink_t **)((char *)&sndaems + 4))
 
+static __inline int _SNDAEMSI_round(float x)
+{
+    return (int)(!(x < 0.0f) ? x + 0.5f : x - 0.5f);
+}
+
+static __inline int _SNDAEMSI_clamp(int value, int min, int max)
+{
+    if (value < min)
+        return min;
+    if (value > max)
+        return max;
+    return value;
+}
+
 int SNDAEMS_removemodulebank(int handle);
 int SNDAEMSI_updatedestroy(DestroyState_t *p);
 void SNDAEMSI_timerupdate(void *unused);
@@ -501,17 +515,7 @@ int UpdateCallFunction(CallFunctionState_t *p)
 
         input = (CallFunctionInput_t *)&ranges[p->mNumParams];
         for (i = 0; i < p->mNumParams; i++) {
-            int value = input->mParams[i];
-            int clamped;
-
-            if (value < ranges[i].mMin) {
-                clamped = ranges[i].mMin;
-            } else {
-                clamped = value;
-                if (value > ranges[i].mMax)
-                    clamped = ranges[i].mMax;
-            }
-            input->mParams[i] = clamped;
+            input->mParams[i] = _SNDAEMSI_clamp(input->mParams[i], ranges[i].mMin, ranges[i].mMax);
         }
     } else {
         input = (CallFunctionInput_t *)p->mRanges;
@@ -543,17 +547,7 @@ int UpdateControlClass(ControlClassState_t *p)
         if (p->mpObject == 0) {
             if (p->mClamp) {
                 for (i = 0; i < p->mNumParams; i++) {
-                    int value = input->mParams[i];
-                    int clamped;
-
-                    if (value < ranges[i].mMin) {
-                        clamped = ranges[i].mMin;
-                    } else {
-                        clamped = value;
-                        if (value > ranges[i].mMax)
-                            clamped = ranges[i].mMax;
-                    }
-                    input->mParams[i] = clamped;
+                    input->mParams[i] = _SNDAEMSI_clamp(input->mParams[i], ranges[i].mMin, ranges[i].mMax);
                 }
             }
             if (Csis::Class::CreateInstanceFast(&p->mHandle, input->mParams, &p->mpObject) < 0)
@@ -564,25 +558,16 @@ int UpdateControlClass(ControlClassState_t *p)
             return 0;
         if (p->mClamp) {
             for (i = 0; i < p->mNumParams; i++) {
-                int value = input->mParams[i];
-                int clamped;
-
-                if (value < ranges[i].mMin) {
-                    clamped = ranges[i].mMin;
-                } else {
-                    clamped = value;
-                    if (value > ranges[i].mMax)
-                        clamped = ranges[i].mMax;
-                }
-                input->mParams[i] = clamped;
+                input->mParams[i] = _SNDAEMSI_clamp(input->mParams[i], ranges[i].mMin, ranges[i].mMax);
             }
         }
         p->mpObject->SetMemberDataFast(input->mParams);
     }
-    if (p->mpObject == 0)
-        return 0;
-    p->mpObject->GetRefCount(&refs);
-    return refs;
+    if (p->mpObject != 0) {
+        p->mpObject->GetRefCount(&refs);
+        return refs;
+    }
+    return 0;
 }
 
 /* A set-global-variable module: the Csis handle, the value range, the last input and the input. */
@@ -806,7 +791,7 @@ int SNDAEMSI_updateenvelope(EnvelopeState_80267858 *p)
         p->mLevel = 0.0f;
     }
     p->mLastInput = *input;
-    return (int)(!(p->mLevel < 0.0f) ? p->mLevel + 0.5f : p->mLevel - 0.5f);
+    return _SNDAEMSI_round(p->mLevel);
 }
 
 /* A lookup table module: the table (entry type, entry count, input range, index scale and the
@@ -862,7 +847,7 @@ int SNDAEMSI_updatetable(TableState_t *p)
         } else {
             float pos = (float)index * t->mScale;
             float start = pos - 0.5f;
-            int first = (int)(!(start < 0.0f) ? start + 0.5f : start - 0.5f);
+            int first = _SNDAEMSI_round(start);
             int next = first + 1;
             float a;
             float b;
@@ -882,7 +867,7 @@ int SNDAEMSI_updatetable(TableState_t *p)
                 b = t->mEntries.mInts[next];
             }
             value = pos * (b - a) + a;
-            index = (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+            index = _SNDAEMSI_round(value);
             p->mOutput = index;
         }
     }
@@ -1001,14 +986,14 @@ int SNDAEMSI_updatescale(ScaleState_80267EC4 *p)
     for (i = 1; i < p->mCount; i++)
         value *= p->mValues[i];
     value *= p->mScale;
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 int SNDAEMSI_updatescale2(Scale2State_80267F80 *p)
 {
     float value = (float)p->mA * (float)p->mB * p->mScale;
 
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 int SNDAEMSI_updateadd(Args_80267D84 *p)
@@ -1346,17 +1331,14 @@ int SNDAEMSI_playerupdatebank(PlayerState_t *p)
         float msPerFrame = 1000.0f / (float)v->m20;
         int frame = SNDPLATFORM_getcurframe(voice);
         float ms = (float)frame * msPerFrame;
-        int value;
 
-        value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
-        ((PlayerTimes_t *)input)->mPosition = value;
+        ((PlayerTimes_t *)input)->mPosition = _SNDAEMSI_round(ms);
         if (v->m18 <= 0) {
             ms = (float)((unsigned int)v->m14 - frame) * msPerFrame;
-            value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+            ((PlayerTimes_t *)input)->mRemaining = _SNDAEMSI_round(ms);
         } else {
-            value = 0;
+            ((PlayerTimes_t *)input)->mRemaining = 0;
         }
-        ((PlayerTimes_t *)input)->mRemaining = value;
     }
     return 1;
 }
@@ -1383,15 +1365,13 @@ int SNDAEMSI_updateplayer(PlayerState_t *p)
                 SNDAEMSplayerunpausefn[p->mType](p);
             } else if (!(p->mMode == 2 && p->mPrevMode == 1)) {
                 int index = p->mSample;
-                PlayerSampleList_t *list = p->mpSamples;
-                int count = list->mCount;
 
-                if (index >= count)
-                    index = count - 1;
+                if (index >= p->mpSamples->mCount)
+                    index = p->mpSamples->mCount - 1;
                 else if (index < 0)
                     index = 0;
-                p->mType = list->mSamples[index].mType;
-                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &list->mSamples[index]);
+                p->mType = p->mpSamples->mSamples[index].mType;
+                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &p->mpSamples->mSamples[index]);
                 if (p->mHandle.mHandle < 0)
                     SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
             }
@@ -1429,15 +1409,12 @@ int SNDAEMSI_updateoscillator(OscillatorState_t *p)
         return 0;
     step = Snd::gVariableTimerPeriod / (float)p->mPeriod;
     amplitude = (float)p->mAmplitude;
-    if (!(p->mPhase < 1.0f)) {
-        do {
-            p->mPhase -= 1.0f;
-        } while (p->mPhase >= 1.0f);
-    }
+    while (p->mPhase >= 1.0f)
+        p->mPhase -= 1.0f;
     if (p->mWaveform == 0) {
         float angle = p->mPhase * 1024.0f;
 
-        value = (float)iSNDsin((int)(!(angle < 0.0f) ? angle + 0.5f : angle - 0.5f)) * (1.0f / 65536.0f) * amplitude;
+        value = (float)iSNDsin(_SNDAEMSI_round(angle)) * (1.0f / 65536.0f) * amplitude;
     } else if (p->mWaveform == 1) {
         if (!(p->mPhase < 0.5f))
             value = amplitude;
@@ -1455,7 +1432,7 @@ int SNDAEMSI_updateoscillator(OscillatorState_t *p)
         value = shape * amplitude;
     }
     p->mPhase += step;
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 /* A ramp: the current value, the per-tick rate, the target and time it was set up for, the ramp
@@ -1483,7 +1460,10 @@ int SNDAEMSI_updateramp(RampState_t *p)
             p->mValue = target;
             return p->mTarget;
         }
-        p->mRate = (target - p->mValue) * Snd::gVariableTimerPeriod / (float)p->mTime * (1.0f / 4096.0f);
+        p->mRate = target - p->mValue;
+        p->mRate *= Snd::gVariableTimerPeriod;
+        p->mRate /= (float)p->mTime;
+        p->mRate *= 1.0f / 4096.0f;
     }
     p->mValue = p->mRate * (float)p->mScale + p->mValue;
     if (!(p->mRate < 0.0f)) {
@@ -1493,7 +1473,7 @@ int SNDAEMSI_updateramp(RampState_t *p)
         if (!(p->mValue >= (float)p->mTarget))
             p->mValue = (float)p->mTarget;
     }
-    return (int)(!(p->mValue < 0.0f) ? p->mValue + 0.5f : p->mValue - 0.5f);
+    return _SNDAEMSI_round(p->mValue);
 }
 
 int SNDAEMSI_updateaddmax(Object_80268F54 *p)

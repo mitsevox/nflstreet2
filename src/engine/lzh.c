@@ -18,7 +18,6 @@ extern unsigned char lbl_803B7678[];
 extern unsigned char lbl_803B775C[];
 extern unsigned char lbl_803B785C[];
 extern unsigned char lbl_803B7DD4[];
-extern int lbl_803ED42C;
 extern short lbl_803ED484;
 extern unsigned int (*lbl_803ED460)(short count);
 void _LZHHuffWriteHuffData(LZHCodeSet_t *p);
@@ -39,9 +38,14 @@ extern unsigned char lbl_803ED420;
 extern unsigned char lbl_803ED421;
 extern unsigned char lbl_803ED422;
 extern int lbl_803ED424;
-extern int (*lbl_803ED428)(void);
+typedef struct LZHStage_t
+{
+    int (*mpProcess)(void);
+    int mCodeIndex;
+} LZHStage_t;
+extern LZHStage_t lbl_803ED428;
 extern int lbl_803ED430;
-extern int (*lbl_803ED434)(void);
+extern LZHStage_t lbl_803ED434;
 extern unsigned short lbl_803ED43C;
 extern unsigned short lbl_803ED43E;
 extern unsigned char *lbl_803ED440;
@@ -134,7 +138,7 @@ int _LZHCoStart(void)
     lbl_803ED45C = 0;
     lbl_803ED47E = 0;
     lbl_803ED498 = 1;
-    lbl_803ED428 = _LZHEncodeNewBlock;
+    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
     lbl_803ED444 = 0;
@@ -180,7 +184,7 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
         lbl_803ED440 = fn_801D2BB0(1, 0x8000, 0, 0);
     }
     lbl_803ED498 = 1;
-    lbl_803ED428 = _LZHDecodeNewBlock;
+    lbl_803ED428.mpProcess = _LZHDecodeNewBlock;
     return 0;
 }
 
@@ -189,7 +193,7 @@ int _LZHMemDecStart(LZHBlock_t *a, LZHBlock_t *b)
     SysEnterCriticalSectionFunc(&lbl_803B541C);
     lbl_803ED430 = 2;
     lbl_803ED49C = lbl_803ED4A0 = 0;
-    lbl_803ED434 = _LZHMemDecodeNewBlock;
+    lbl_803ED434.mpProcess = _LZHMemDecodeNewBlock;
     return 1;
 }
 
@@ -220,14 +224,14 @@ int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
     }
     lbl_803ED420 = 1;
     lbl_803ED474 = a;
-    lbl_803ED48C = a->mUnknown00 + a->mUnknown08;
+    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
     lbl_803ED488 = a->mUnknown04 - a->mUnknown08;
     lbl_803ED490 = b->mUnknown04 - b->mUnknown08;
-    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
+    lbl_803ED48C = a->mUnknown00 + a->mUnknown08;
     lbl_803ED478 = b;
-    if (lbl_803ED428 != 0) {
+    if (lbl_803ED428.mpProcess != 0) {
         do {
-            switch ((unsigned char)lbl_803ED428()) {
+            switch ((unsigned char)lbl_803ED428.mpProcess()) {
             case 0:
                 break;
             case 1:
@@ -237,7 +241,7 @@ int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
                 lbl_803ED420 = 0;
                 return 3;
             }
-        } while (lbl_803ED428 != 0);
+        } while (lbl_803ED428.mpProcess != 0);
     }
     lbl_803ED420 = 0;
     return 1;
@@ -250,10 +254,10 @@ int _LZHMemProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
     lbl_803ED4A8 = a->mUnknown00 + a->mUnknown08;
     lbl_803ED4AC = b->mUnknown04 - b->mUnknown08;
     lbl_803ED4B0 = b->mUnknown00 + b->mUnknown08;
-    if (lbl_803ED434 != 0) {
+    if (lbl_803ED434.mpProcess != 0) {
         do {
-            lbl_803ED434();
-        } while (lbl_803ED434 != 0);
+            lbl_803ED434.mpProcess();
+        } while (lbl_803ED434.mpProcess != 0);
     }
     a->mUnknown08 = a->mUnknown04 - lbl_803ED4A4;
     b->mUnknown08 = b->mUnknown04 - lbl_803ED4AC;
@@ -268,11 +272,11 @@ int _LZHEncodeNewBlock(void)
         _LZHWriteBits(32, lbl_803ED498);
         _LZHFlushBitBuffer();
         lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-        lbl_803ED428 = _LZHEncodeNewBlockEOF;
+        lbl_803ED428.mpProcess = _LZHEncodeNewBlockEOF;
     } else {
         _LZHWriteBits(1, 0);
         lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-        lbl_803ED428 = _LZHEncodeInput;
+        lbl_803ED428.mpProcess = _LZHEncodeInput;
         lbl_803ED45C = 0;
     }
     return 0;
@@ -286,7 +290,7 @@ int _LZHEncodeNewBlockEOF(void)
         return 2;
     }
     lbl_803ED478->mUnknown18 = 1;
-    lbl_803ED428 = 0;
+    lbl_803ED428.mpProcess = 0;
     return 0;
 }
 
@@ -437,27 +441,31 @@ void _LZHEncodeCodeBufferStart(void)
     _LZHHuffWriteHuffData(&lbl_802C2848);
     _LZHHuffWriteHuffData(&lbl_802C2854);
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = _LZHEncodeCodeBuffer;
-    lbl_803ED42C = 0;
+    lbl_803ED428.mpProcess = _LZHEncodeCodeBuffer;
+    lbl_803ED428.mCodeIndex = 0;
+}
+
+static __inline void _LZHWriteCode(LZHCodeSet_t *p, int sym)
+{
+    _LZHWriteBits(p->mpCodes[sym].mUnknown02, p->mpCodes[sym].mUnknown00);
 }
 
 int _LZHEncodeCodeBuffer(void)
 {
     unsigned short d;
     unsigned char n;
-    unsigned char code;
+    int code;
     _LZHFlushByteBuffer();
-    while ((unsigned int)lbl_803ED42C < lbl_803ED45C) {
+    while ((unsigned int)lbl_803ED428.mCodeIndex < lbl_803ED45C) {
         if (lbl_803ED490 == 0) {
             lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04;
             return 2;
         }
-        d = lbl_803ED458[lbl_803ED42C];
-        n = lbl_803ED454[lbl_803ED42C++];
+        n = lbl_803ED454[lbl_803ED428.mCodeIndex];
+        d = lbl_803ED458[lbl_803ED428.mCodeIndex++];
         if (d != 0) {
             code = lbl_803B7678[n];
-            _LZHWriteBits(lbl_802C2848.mpCodes[code + 257].mUnknown02,
-                         lbl_802C2848.mpCodes[code + 257].mUnknown00);
+            _LZHWriteCode(&lbl_802C2848, code + 257);
             if ((unsigned int)(code - 8) <= 18) {
                 _LZHWriteBits(lbl_802C2878[code], (short)(n - lbl_802C2894[code]));
             }
@@ -466,29 +474,31 @@ int _LZHEncodeCodeBuffer(void)
             } else {
                 code = lbl_803B785C[(d - 1) >> 7];
             }
-            _LZHWriteBits(lbl_802C2854.mpCodes[code].mUnknown02,
-                         lbl_802C2854.mpCodes[code].mUnknown00);
+            _LZHWriteCode(&lbl_802C2854, code);
             if (code > 3) {
                 _LZHWriteBits(lbl_802C28D0[code], (unsigned short)(d - lbl_802C28EE[code]));
             }
         } else {
-            _LZHWriteBits(lbl_802C2848.mpCodes[n].mUnknown02,
-                         lbl_802C2848.mpCodes[n].mUnknown00);
+            _LZHWriteCode(&lbl_802C2848, n);
         }
     }
-    _LZHWriteBits(lbl_802C2848.mpCodes[256].mUnknown02,
-                 lbl_802C2848.mpCodes[256].mUnknown00);
+    _LZHWriteCode(&lbl_802C2848, 256);
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = _LZHEncodeNewBlock;
+    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     return 0;
+}
+
+/* Takes the next byte of the compressed input. */
+static __inline unsigned char _LZHNextInByte(void)
+{
+    return *lbl_803ED48C++;
 }
 
 int _LZHDecodeNewBlock(void)
 {
     lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
     while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0) {
-        lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-        lbl_803ED48C++;
+        lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
         lbl_803ED47E = lbl_803ED484;
         lbl_803ED488--;
         lbl_803ED484 = (lbl_803ED484 + 1) & 0xFF;
@@ -511,9 +521,9 @@ int _LZHDecodeNewBlock(void)
         SysExitCriticalSectionFunc(&lbl_803B543C);
         lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
         if (lbl_803ED422 != 0) {
-            lbl_803ED428 = _LZHDecodeInputFull;
+            lbl_803ED428.mpProcess = _LZHDecodeInputFull;
         } else {
-            lbl_803ED428 = _LZHDecodeInput;
+            lbl_803ED428.mpProcess = _LZHDecodeInput;
         }
         return 0;
     }
@@ -523,7 +533,7 @@ int _LZHDecodeNewBlock(void)
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
     lbl_803ED478->mUnknown18 = 1;
-    lbl_803ED428 = 0;
+    lbl_803ED428.mpProcess = 0;
     return 0;
 }
 
@@ -578,8 +588,7 @@ int _LZHDecodeInput(void)
         lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
         while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0)
         {
-            lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-            lbl_803ED48C++;
+            lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
             lbl_803ED47E = lbl_803ED484++;
             lbl_803ED488--;
             lbl_803ED484 &= 0xFF;
@@ -633,8 +642,9 @@ int _LZHDecodeInput(void)
             }
             else
             {
+                unsigned char bits = lbl_802C28D0[symbol];
                 distance = lbl_802C28EE[symbol];
-                distance += _LZHReadBits(lbl_802C28D0[symbol]);
+                distance += _LZHReadBits(bits);
             }
             distance = (lbl_803ED43C - (distance + 0x8000)) & 0x7FFF;
             do
@@ -659,7 +669,7 @@ int _LZHDecodeInput(void)
     }
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - lbl_803ED488;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - lbl_803ED490;
-    lbl_803ED428 = _LZHDecodeNewBlock;
+    lbl_803ED428.mpProcess = _LZHDecodeNewBlock;
     return 0;
 }
 
@@ -826,7 +836,7 @@ int _LZHDecodeInputFull(void)
     lbl_803ED490 = remaining;
     lbl_803ED474->mUnknown08 = lbl_803ED474->mUnknown04 - avail;
     lbl_803ED478->mUnknown08 = lbl_803ED478->mUnknown04 - remaining;
-    lbl_803ED428 = _LZHDecodeNewBlock;
+    lbl_803ED428.mpProcess = _LZHDecodeNewBlock;
     return 0;
 }
 
@@ -876,8 +886,7 @@ unsigned int _LZHReadBits(short n)
         lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
         while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0)
         {
-            lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-            lbl_803ED48C++;
+            lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
             lbl_803ED47E = lbl_803ED484++;
             lbl_803ED488--;
             lbl_803ED484 &= 0xFF;
@@ -907,13 +916,13 @@ int _LZHMemDecodeNewBlock(void)
         _LZHHuffDecodeBuildTree(&lbl_802C286C);
         _LZHHuffDecodeBuildTable(&lbl_802C286C);
         SysExitCriticalSectionFunc(&lbl_803B543C);
-        lbl_803ED434 = _LZHMemDecodeInput;
+        lbl_803ED434.mpProcess = _LZHMemDecodeInput;
         return 0;
     }
     lbl_803ED4B4 = _LZHMemReadBits(32);
-    lbl_803ED434 = 0;
     lbl_803ED49C = 0;
     lbl_803ED4A0 = 0;
+    lbl_803ED434.mpProcess = 0;
     return 0;
 }
 
@@ -1057,7 +1066,7 @@ int _LZHMemDecodeInput(void)
     lbl_803ED4A8 = pIn;
     lbl_803ED4AC = remaining;
     lbl_803ED4B0 = pOut;
-    lbl_803ED434 = _LZHMemDecodeNewBlock;
+    lbl_803ED434.mpProcess = _LZHMemDecodeNewBlock;
     return 0;
 }
 

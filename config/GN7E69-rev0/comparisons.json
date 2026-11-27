@@ -28756,7 +28756,7 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 12 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 62 functions are exact and linked.",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 6 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 68 functions are exact and linked (6 made exact by lane 8, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
@@ -28784,44 +28784,14 @@
           "end": "0x80267114"
         },
         {
-          "symbol": "UpdateCallFunction",
-          "start": "0x80267114",
-          "end": "0x802671D0"
-        },
-        {
           "symbol": "UpdateControlClass",
           "start": "0x802671D0",
           "end": "0x8026739C"
         },
         {
-          "symbol": "SNDAEMSI_updateenvelope",
-          "start": "0x80267894",
-          "end": "0x80267A1C"
-        },
-        {
-          "symbol": "SNDAEMSI_updatetable",
-          "start": "0x80267A1C",
-          "end": "0x80267C70"
-        },
-        {
-          "symbol": "SNDAEMSI_playerupdatebank",
-          "start": "0x802687AC",
-          "end": "0x8026898C"
-        },
-        {
-          "symbol": "SNDAEMSI_updateplayer",
-          "start": "0x8026898C",
-          "end": "0x80268B88"
-        },
-        {
           "symbol": "SNDAEMSI_updateoscillator",
           "start": "0x80268B88",
           "end": "0x80268DA8"
-        },
-        {
-          "symbol": "SNDAEMSI_updateramp",
-          "start": "0x80268DA8",
-          "end": "0x80268F54"
         },
         {
           "symbol": "SNDAEMSI_CreateModuleInstance",
