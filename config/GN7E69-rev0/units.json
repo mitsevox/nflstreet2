@@ -1182,10 +1182,6 @@
     "DbFindUnusedTeamIds": {
       "address": "0x8022C628",
       "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
-    },
-    "gClearCycle": {
-      "address": "0x803EBB14",
-      "evidence": "evidence.tsv data/name rows for gClearCycle; original-owned speech-library small data."
     }
   },
   "units": [
