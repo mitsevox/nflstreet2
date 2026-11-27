@@ -70,14 +70,14 @@ void IdctColumn(int *pIn, int *pOut)
 
 void IdctRow(int *pIn, int *pOut)
 {
-    int d17 = pIn[1] - pIn[7];
-    int d53 = pIn[5] - pIn[3];
     int s17 = pIn[1] + pIn[7];
     int s53 = pIn[5] + pIn[3];
+    int d53 = pIn[5] - pIn[3];
+    int d17 = pIn[1] - pIn[7];
     int m26 = IDCT_MUL(pIn[2] - pIn[6], 46341);
-    int mz = IDCT_MUL(d53 + d17, 25080);
     int m17 = IDCT_MUL(d17, 85627);
     int ms = IDCT_MUL(s17 - s53, 46341);
+    int mz = IDCT_MUL(d53 + d17, 25080);
     int m53 = IDCT_MUL(d53, 35468);
     int e2 = pIn[2] + pIn[6] + m26;
     int e0 = pIn[0] + pIn[4];
