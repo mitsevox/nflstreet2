@@ -37,7 +37,6 @@ typedef struct SndStreamBufferTag_t {
     unsigned char mStream;
 } SndStreamBufferTag_t;
 
-SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
 void SNDSTRMI_removerequest(int id);
 int SNDSTRMI_numcreated(void);
 
@@ -172,8 +171,9 @@ void SNDSTRMI_startstream(SndStreamChannel_t *channel)
 int SNDSTRMI_calcdatarate(SndSampleFormat_t *format)
 {
     int bits = 0;
-    int rate = format->mRate * format->mChannels;
+    int rate = format->mRate;
 
+    rate *= format->mChannels;
     if (format->mCodec == 10) {
         bits = 136;
     } else if (format->mCodec == 4) {
@@ -457,7 +457,7 @@ int SNDSTRMI_numcreated(void)
 extern "C" int SNDPKTPLAY_create(SndPacketReleaseFn_t release, SndPacketFramesDoneFn_t callback,
                                  void *context, void *memory, unsigned int size);
 
-int fn_8026DE00(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
+int SNDSTRMI_create(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
 {
     SndStreamChannel_t *channel;
     SndStreamRequest_t *requests;
@@ -491,14 +491,15 @@ found:
     size -= numRequests * sizeof(SndStreamRequest_t);
     player = (unsigned char *)memory;
     n = SNDPKTPLAY_overhead(numPackets);
-    size -= n;
     memory = (unsigned char *)memory + n;
+    size -= n;
     SNDLINKI_init(&channel->mRequests);
     SNDLINKI_init(&channel->mFreeRequests);
     for (i = 0; i < numRequests; i++) {
         SNDLINKI_push(&channel->mFreeRequests, &requests[i].mLink);
     }
-    channel->mBuffer =
+    // FAKEMATCH: volatile store keeps the target's reload of mBuffer for the error test and its register split of i and channel
+    *(volatile int *)&channel->mBuffer =
         SNDPKTPLAY_create(SNDSTRMI_releasecallback, SNDSTRMI_framescallback, channel, player,
                           SNDPKTPLAY_overhead(numPackets));
     if (channel->mBuffer < 0) {
@@ -530,8 +531,8 @@ found:
         SndStreamSpeaker_t *speaker = &channel->mSpeakers[i];
 
         speaker->mIndex = i;
-        speaker->mAzimuthOn = 0;
         speaker->mVolume = vol;
+        speaker->mAzimuthOn = 0;
         speaker->mAzimuth = -1000000.0f;
     }
     channel->mPanned = 1;
@@ -590,7 +591,7 @@ extern "C" {
 
 int SNDSTRM_create(SndPlayOpts_t *opts, int a, int b, void *memory, int size)
 {
-    return fn_8026DE00(opts, a, b, memory, size, 0, 0);
+    return SNDSTRMI_create(opts, a, b, memory, size, 0, 0);
 }
 
 int SNDSTRM_destroy(int stream)

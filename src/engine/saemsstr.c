@@ -2,8 +2,9 @@
    and play-option setters. Each clamps a module output and passes it to the stream function of
    the same parameter; the table lists them in the order of the bank and option tables. */
 
+struct SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
+
 extern "C" {
-int fn_8026D610(int handle, int value);
 int SNDSTRM_setazimuth(int handle, float azimuth, int time);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_highpass(int handle, int value);
@@ -49,7 +50,7 @@ void SNDAEMSI_streamvol(int handle, int value)
 
 void SNDAEMSI_streamazimuth(int handle, int value)
 {
-    fn_8026D610(handle, value);
+    SNDSTRMI_getstreamptr(handle);
     SNDSTRM_setazimuth(handle, (float)(value & 0xFFFF) * (360.0f / 65535.0f), -1);
 }
 
