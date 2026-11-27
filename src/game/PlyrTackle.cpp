@@ -2224,11 +2224,11 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
         step = MathAngleDiff(heading, p->mMotion.mFacing);
     else step = limit;
     step = (((heading - p->mMotion.mFacing) & 0xFFFFFF) > 0x800000 ? p->mMotion.mFacing - step : p->mMotion.mFacing + step) & 0xFFFFFF;
-    heading = (heading - step) & 0xFFFFFF;
     p->mUnknown512.mUnknown0 = 1.0f;
     p->mUnknown512.mUnknown14 = 6;
-    p->mUnknown512.mUnknown8 = step;
     p->mUnknown512.mUnknown4 = step;
+    p->mUnknown512.mUnknown8 = step;
+    heading = (heading - step) & 0xFFFFFF;
     state->mUnknown9 = _PlyrTackle_aAimOctants[((heading + 0x100000) >> 21) & 7];
     if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         switch (state->mUnknown9) {
