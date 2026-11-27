@@ -41,7 +41,7 @@ extern "C" int PATHI_switchvoice(unsigned int flags)
     return 0;
 }
 
-extern "C" int PATHI_sortprojects(void)
+extern "C" void PATHI_sortprojects(void)
 {
     int i = 0;
     for (; i < 4; ++i) {
@@ -55,7 +55,6 @@ extern "C" int PATHI_sortprojects(void)
             }
         }
     }
-    return i;
 }
 
 extern "C" void PATHI_serviceproject(void)

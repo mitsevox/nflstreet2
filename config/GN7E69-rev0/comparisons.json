@@ -24156,7 +24156,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Four full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Three full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24178,11 +24178,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "iSPCH_GetPhraseBank",
-          "start": "0x801AFD04",
-          "end": "0x801AFDFC"
-        },
         {
           "symbol": "iSPCH_ChooseSamples",
           "start": "0x801B0050",
@@ -27023,32 +27018,6 @@
           "symbol": "XmlGetAttrFloats",
           "start": "0x8021743C",
           "end": "0x802176E8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/pathserv.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, complete native data row and HOLDOUT 0x801B3568-0x801B3724. Only the integer-return sort remains a comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B343C",
-          "end": "0x801B3AD0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA58",
-          "end": "0x802AEA60"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_sortprojects",
-          "start": "0x801B3568",
-          "end": "0x801B3724"
         }
       ]
     },

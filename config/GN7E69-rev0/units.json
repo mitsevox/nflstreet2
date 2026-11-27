@@ -27286,19 +27286,13 @@
     },
     {
       "source": "src/engine/pathserv.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, name, source-form and data rows. Seven exact routines and complete native header string link. Only the integer-return project sort retains original bytes.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, name, source-form and data rows. All eight routines are exact and link with the complete native header string.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B343C",
-          "end": "0x801B3568"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B3724",
           "end": "0x801B3AD0"
         },
         {
@@ -27307,16 +27301,7 @@
           "start": "0x802AEA58",
           "end": "0x802AEA60"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_sortprojects",
-            "evidence": "evidence.tsv source-form 0x801B3568-0x801B3724"
-          }
-        ],
-        "evidence": "merge notes of the pull request linking the exact pathserv.c functions"
-      }
+      ]
     },
     {
       "source": "src/engine/pathtrack.c",
@@ -29707,18 +29692,12 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Four documented holdouts (iSPCH_GetPhraseBank, iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Three documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AF75C",
-          "end": "0x801AFD04"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AFDFC",
           "end": "0x801B0050"
         },
         {
@@ -29748,10 +29727,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "iSPCH_GetPhraseBank",
-            "evidence": "evidence.tsv source-form 0x801AFD04-0x801AFDFC"
-          },
           {
             "function": "iSPCH_ChooseSamples",
             "evidence": "evidence.tsv source-form 0x801B0050-0x801B01E8"
