@@ -87,7 +87,7 @@ void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value
 int fn_80178360(void);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 int fn_80178308(void);
@@ -465,7 +465,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     float distance;
     int result = 0;
     int found = 0;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     Ball_t *pBall = BallGet(state->mUnknown43);
     int kind = BallStateGet(pBall, &owner);
     BallGetPosition(pBall, &ballPos);

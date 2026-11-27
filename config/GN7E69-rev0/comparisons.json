@@ -3951,7 +3951,7 @@
           "end": "0x800F6E30"
         },
         {
-          "symbol": "fn_800F6E30",
+          "symbol": "AssignSteerLateralToTarget",
           "start": "0x800F6E30",
           "end": "0x800F70D0"
         },
@@ -3961,7 +3961,7 @@
           "end": "0x800F722C"
         },
         {
-          "symbol": "fn_800F722C",
+          "symbol": "AssignSteerLateralByGap",
           "start": "0x800F722C",
           "end": "0x800F7314"
         },
@@ -4021,7 +4021,7 @@
           "end": "0x800F8D2C"
         },
         {
-          "symbol": "fn_800F8D2C",
+          "symbol": "AssignBlockApproachUpdate",
           "start": "0x800F8D2C",
           "end": "0x800F9024"
         },
@@ -4941,7 +4941,7 @@
           "end": "0x8010A2DC"
         },
         {
-          "symbol": "fn_8010A2DC",
+          "symbol": "PlyrTryQueueMsg62",
           "start": "0x8010A2DC",
           "end": "0x8010A4E8"
         },
@@ -5546,7 +5546,7 @@
           "end": "0x80113E74"
         },
         {
-          "symbol": "fn_80113E74",
+          "symbol": "PlyrHitImpactUpdate",
           "start": "0x80113E74",
           "end": "0x801147D4"
         },
@@ -6271,7 +6271,7 @@
           "end": "0x80120384"
         },
         {
-          "symbol": "fn_80120384",
+          "symbol": "AssignFlagsByBallHeading",
           "start": "0x80120384",
           "end": "0x8012055C"
         },
