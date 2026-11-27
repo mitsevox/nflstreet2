@@ -44,12 +44,8 @@ typedef struct LZHStage_t
     int mCodeIndex;
 } LZHStage_t;
 extern LZHStage_t lbl_803ED428;
-typedef struct LZHMemStage_t
-{
-    int mState;
-    int (*mpProcess)(void);
-} LZHMemStage_t;
-extern LZHMemStage_t lbl_803ED430;
+extern int lbl_803ED430;
+extern LZHStage_t lbl_803ED434;
 extern unsigned short lbl_803ED43C;
 extern unsigned short lbl_803ED43E;
 extern unsigned char *lbl_803ED440;
@@ -100,7 +96,7 @@ int _LZHInit(void)
     if (lbl_803EC584 == 0) {
         lbl_803EC584 = 1;
         lbl_803ED424 = 0;
-        lbl_803ED430.mState = 0;
+        lbl_803ED430 = 0;
         SysInitCriticalSectionFunc(&lbl_803B53FC);
         SysInitCriticalSectionFunc(&lbl_803B541C);
         SysInitCriticalSectionFunc(&lbl_803B543C);
@@ -112,7 +108,7 @@ int _LZHInit(void)
 
 int _LZHShutdown(void)
 {
-    if (lbl_803EC584 != 0 && lbl_803ED424 == 0 && lbl_803ED430.mState == 0) {
+    if (lbl_803EC584 != 0 && lbl_803ED424 == 0 && lbl_803ED430 == 0) {
         SysShutdownCriticalSectionFunc(&lbl_803B53FC);
         SysShutdownCriticalSectionFunc(&lbl_803B541C);
         SysShutdownCriticalSectionFunc(&lbl_803B543C);
@@ -195,9 +191,9 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
 int _LZHMemDecStart(LZHBlock_t *a, LZHBlock_t *b)
 {
     SysEnterCriticalSectionFunc(&lbl_803B541C);
-    lbl_803ED430.mState = 2;
+    lbl_803ED430 = 2;
     lbl_803ED49C = lbl_803ED4A0 = 0;
-    lbl_803ED430.mpProcess = _LZHMemDecodeNewBlock;
+    lbl_803ED434.mpProcess = _LZHMemDecodeNewBlock;
     return 1;
 }
 
@@ -217,7 +213,7 @@ void _LZHDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode)
 
 void _LZHMemDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
-    lbl_803ED430.mState = 0;
+    lbl_803ED430 = 0;
     SysExitCriticalSectionFunc(&lbl_803B541C);
 }
 
@@ -258,10 +254,10 @@ int _LZHMemProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
     lbl_803ED4A8 = a->mUnknown00 + a->mUnknown08;
     lbl_803ED4AC = b->mUnknown04 - b->mUnknown08;
     lbl_803ED4B0 = b->mUnknown00 + b->mUnknown08;
-    if (lbl_803ED430.mpProcess != 0) {
+    if (lbl_803ED434.mpProcess != 0) {
         do {
-            lbl_803ED430.mpProcess();
-        } while (lbl_803ED430.mpProcess != 0);
+            lbl_803ED434.mpProcess();
+        } while (lbl_803ED434.mpProcess != 0);
     }
     a->mUnknown08 = a->mUnknown04 - lbl_803ED4A4;
     b->mUnknown08 = b->mUnknown04 - lbl_803ED4AC;
@@ -920,13 +916,13 @@ int _LZHMemDecodeNewBlock(void)
         _LZHHuffDecodeBuildTree(&lbl_802C286C);
         _LZHHuffDecodeBuildTable(&lbl_802C286C);
         SysExitCriticalSectionFunc(&lbl_803B543C);
-        lbl_803ED430.mpProcess = _LZHMemDecodeInput;
+        lbl_803ED434.mpProcess = _LZHMemDecodeInput;
         return 0;
     }
     lbl_803ED4B4 = _LZHMemReadBits(32);
     lbl_803ED49C = 0;
     lbl_803ED4A0 = 0;
-    lbl_803ED430.mpProcess = 0;
+    lbl_803ED434.mpProcess = 0;
     return 0;
 }
 
@@ -1070,7 +1066,7 @@ int _LZHMemDecodeInput(void)
     lbl_803ED4A8 = pIn;
     lbl_803ED4AC = remaining;
     lbl_803ED4B0 = pOut;
-    lbl_803ED430.mpProcess = _LZHMemDecodeNewBlock;
+    lbl_803ED434.mpProcess = _LZHMemDecodeNewBlock;
     return 0;
 }
 
