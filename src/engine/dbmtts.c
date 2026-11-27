@@ -1164,11 +1164,21 @@ int fn_8022BAB4(int key, int a, int margin, int b)
     _DbMttsSetColInt(&aTerms[2], 0x4000D, _DbColKey(0x52505354, 0x706F7374), b);
     err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
     if (err == 23) {
-        _DbMttsSetCol(&aCols[0], key, 0x52505354, 0x44494754);
-        _DbMttsSetCol(&aCols[1], cls, 0x52505354, 0x63647374);
-        _DbMttsSetCol(&aCols[2], 1, 0x52505354, 0x61707374);
-        _DbMttsSetCol(&aCols[3], a, 0x52505354, 0x63707374);
-        _DbMttsSetCol(&aCols[4], b, 0x52505354, 0x706F7374);
+        aCols[0].mCol = 0x44494754;
+        aCols[0].mUnk0 = key;
+        aCols[0].mUnk4 = 0x52505354;
+        aCols[1].mCol = 0x63647374;
+        aCols[1].mUnk0 = cls;
+        aCols[1].mUnk4 = 0x52505354;
+        aCols[2].mCol = 0x61707374;
+        aCols[2].mUnk0 = 1;
+        aCols[2].mUnk4 = 0x52505354;
+        aCols[3].mCol = 0x63707374;
+        aCols[3].mUnk0 = a;
+        aCols[3].mUnk4 = 0x52505354;
+        aCols[4].mUnk4 = 0x52505354;
+        aCols[4].mCol = 0x706F7374;
+        aCols[4].mUnk0 = b;
         fn_801F9718_SetEnd(&aCols[5]);
         err = TDbInsertRow(0, 0x52505354, aCols, 0, 0);
     }
