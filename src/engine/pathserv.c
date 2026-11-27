@@ -41,7 +41,7 @@ extern "C" int PATHI_switchvoice(unsigned int flags)
     return 0;
 }
 
-extern "C" int PATHI_sortprojects(void)
+extern "C" void PATHI_sortprojects(void)
 {
     int i = 0;
     for (; i < 4; ++i) {
@@ -55,7 +55,6 @@ extern "C" int PATHI_sortprojects(void)
             }
         }
     }
-    return i;
 }
 
 extern "C" void PATHI_serviceproject(void)
@@ -86,12 +85,12 @@ extern "C" void PATHI_serviceproject(void)
         }
 
         if (track->mPauseTime && track->mPauseTime <= gPathMilliseconds + halfPeriod) {
-            track->mUnknown100->vfn_05(1);
+            track->mUnknown100->Pause(1);
             track->mPauseTime = 0;
             track->mUnknown8.word |= 0x40;
         }
         if (track->mResumeTime && track->mResumeTime <= gPathMilliseconds + halfPeriod) {
-            track->mUnknown100->vfn_05(0);
+            track->mUnknown100->Pause(0);
             track->mResumeTime = 0;
             track->mUnknown8.word &= ~0x40;
         }
@@ -107,7 +106,7 @@ extern "C" void PATHI_serviceproject(void)
         if (track->mUnknownF0 >= 0)
             ready = 0;
         else
-            ready = track->mUnknown100->vfn_08();
+            ready = track->mUnknown100->ReadyForNewRequest();
         if (!ready)
             continue;
 

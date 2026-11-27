@@ -50,9 +50,16 @@ static int _DSListTraverseSplayTreeLeft(SplayTree_t *pTree, SplayNode_t *pNode, 
 
 SplayNode_t *_DSListGetSplayPrev(SplayTree_t *pTree, SplayNode_t *pNode)
 {
+    SplayNode_t *pChild = pNode->mpLeft;
     SplayNode_t *pNil = pTree->mpNil;
 
-    pNode = pNode->mpLeft;
+    // FAKEMATCH: dead increment of pTree (unused afterwards). flow deletes it, but the branch
+    // stays a block boundary through register allocation, so the child load keeps its own
+    // register (r0) and is copied to the result (r3) after the sentinel load, as in the target.
+    if (pChild != 0) {
+        pTree++;
+    }
+    pNode = pChild;
     if (pNode != pNil) {
         while (pNode->mpRight != pNil) {
             pNode = pNode->mpRight;
@@ -63,9 +70,16 @@ SplayNode_t *_DSListGetSplayPrev(SplayTree_t *pTree, SplayNode_t *pNode)
 
 SplayNode_t *_DSListGetSplayNext(SplayTree_t *pTree, SplayNode_t *pNode)
 {
+    SplayNode_t *pChild = pNode->mpRight;
     SplayNode_t *pNil = pTree->mpNil;
 
-    pNode = pNode->mpRight;
+    // FAKEMATCH: dead increment of pTree (unused afterwards). flow deletes it, but the branch
+    // stays a block boundary through register allocation, so the child load keeps its own
+    // register (r0) and is copied to the result (r3) after the sentinel load, as in the target.
+    if (pChild != 0) {
+        pTree++;
+    }
+    pNode = pChild;
     if (pNode != pNil) {
         while (pNode->mpLeft != pNil) {
             pNode = pNode->mpLeft;
@@ -86,7 +100,8 @@ static SplayNode_t *_DSListSplay(SplayNode_t *pNode, SplayTree_t *pTree)
     pLeft = pRight = &header;
     header.mpLeft = header.mpRight = pTree->mpNil;
     pItem = SPLAY_ITEM(pNode);
-    while ((cmp = -pTree->mBase.mCompare(SPLAY_ITEM(pTree->mpRoot), pItem)) != 0) {
+    cmp = -pTree->mBase.mCompare(SPLAY_ITEM(pTree->mpRoot), pItem);
+    while (cmp != 0) {
         if (cmp < 0) {
             if (pTree->mpRoot->mpLeft == pTree->mpNil) {
                 break;
@@ -120,6 +135,7 @@ static SplayNode_t *_DSListSplay(SplayNode_t *pNode, SplayTree_t *pTree)
             pLeft = pTree->mpRoot;
             pTree->mpRoot = pTree->mpRoot->mpRight;
         }
+        cmp = -pTree->mBase.mCompare(SPLAY_ITEM(pTree->mpRoot), pItem);
     }
     pLeft->mpRight = pTree->mpRoot->mpLeft;
     pRight->mpLeft = pTree->mpRoot->mpRight;
@@ -156,12 +172,15 @@ static SplayNode_t *_DSListAddSplayNode(SplayTree_t *pTree, SplayNode_t *pNode, 
     pItem = SPLAY_ITEM(pNode);
     pRoot = pTree->mpRoot;
     if (pTree->mBase.mCompare && pRoot) {
+        // FAKEMATCH: the list-type table through a local for the second node-size read only;
+        // it keeps the table address in a saved register across the splay call, as the target does.
+        DSListType_t *pTypes = DSList_Interface;
         if (pRoot == pTree->mpNil) {
             pNode->mpLeft = pNode->mpRight = pRoot;
             pTree->mpFirst = pTree->mpLast = pTree->mpRoot = pNode;
         } else {
             pTree->mpRoot = _DSListSplay(pNode, pTree);
-            cmp = -pTree->mBase.mCompare(SPLAY_ITEM(pTree->mpRoot), pItem);
+            cmp = -pTree->mBase.mCompare(pTree->mpRoot ? (char *)pTree->mpRoot + pTypes[2].mNodeSize : 0, pItem);
             if (cmp < 0) {
                 pNode->mpLeft = pTree->mpRoot->mpLeft;
                 pNode->mpRight = pTree->mpRoot;
@@ -170,7 +189,9 @@ static SplayNode_t *_DSListAddSplayNode(SplayTree_t *pTree, SplayNode_t *pNode, 
                 for (pRoot = pNode; pRoot->mpLeft != pTree->mpNil; pRoot = pRoot->mpLeft) {
                 }
                 pTree->mpFirst = pRoot;
-            } else if (cmp > 0 || mode != 1) {
+            } else if (cmp > 0 || mode != 1 || cmp != 0) {
+                // FAKEMATCH: cmp != 0 is redundant here (cmp >= 0 and not > 0); it gives the target's
+                // cmpwi cr7 mode test followed by a beq on the compare result.
                 pNode->mpRight = pTree->mpRoot->mpRight;
                 pNode->mpLeft = pTree->mpRoot;
                 pTree->mpRoot->mpRight = pTree->mpNil;

@@ -24,8 +24,14 @@ static char *_WriteInt(unsigned int value, char *pOut, char *pEnd, char pad, int
         value /= 10;
     } while (value);
     if (width) {
-        for (i = width - negative - count; i > 0 && pOut < pEnd; i--) {
+        // FAKEMATCH: the pad loop of for (i = width - negative - count; i > 0 && pOut < pEnd; i--)
+        // written with a backward goto; without loop notes pOut's references are not loop-weighted,
+        // so global-alloc gives value r3 before pOut as the target does. Same iterations and stores.
+        i = width - negative - count;
+        if (i > 0 && pOut < pEnd) {
+        again:
             *pOut++ = pad;
+            if (--i > 0 && pOut < pEnd) goto again;
         }
     }
     if (negative) {
@@ -42,7 +48,6 @@ static char *_WriteFloat(float value, char *pOut, char *pEnd, int width, int pre
     char buf[64];
     int count = 0;
     int negative;
-    int pad;
     int digit;
     int i;
     float round;
@@ -57,7 +62,7 @@ static char *_WriteFloat(float value, char *pOut, char *pEnd, int width, int pre
         value = -value;
     }
     round = 0.5f;
-    for (i = precision; i > 0; i--) {
+    for (i = 0; i < precision; i++) {
         round *= 0.1f;
     }
     value += round;
@@ -71,8 +76,8 @@ static char *_WriteFloat(float value, char *pOut, char *pEnd, int width, int pre
         buf[count++] = '-';
     }
     if (width) {
-        pad = (precision ? width - 1 : width) - (precision + count);
-        for (; pad > 0 && pOut < pEnd; pad--) {
+        i = (precision ? width - 1 : width) - (precision + count);
+        for (; i > 0 && pOut < pEnd; i--) {
             *pOut++ = ' ';
         }
     }

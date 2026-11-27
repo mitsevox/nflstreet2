@@ -70,32 +70,31 @@ void *SNDARAM_alloc(int size)
             length = _SndAram_sState.mUpper - start;
         } else {
             for (; index < _SndAram_sState.mCount; index++) {
+                SndAramAllocation_t *pAllocs = _SndAram_sState.mpAllocations;
                 if (index == 0) {
                     start = _SndAram_sState.mLower;
-                    length = _SndAram_sState.mpAllocations[index].mStart - start;
                 } else {
-                    start = _SndAram_sState.mpAllocations[index - 1].mStart +
-                            _SndAram_sState.mpAllocations[index - 1].mLength;
-                    length = _SndAram_sState.mpAllocations[index].mStart - start;
+                    start = pAllocs[index - 1].mStart + pAllocs[index - 1].mLength;
                 }
+                length = pAllocs[index].mStart - start;
                 SNDARAM_constrain(&start, &length);
                 if (size <= length) {
-                    break;
+                    for (int i = _SndAram_sState.mCount; i > index; i--) {
+                        _SndAram_sState.mpAllocations[i] = _SndAram_sState.mpAllocations[i - 1];
+                    }
+                    goto insert;
                 }
             }
-            if (index == _SndAram_sState.mCount) {
-                start = _SndAram_sState.mpAllocations[index - 1].mStart +
-                        _SndAram_sState.mpAllocations[index - 1].mLength;
-                length = _SndAram_sState.mUpper - start;
-            }
+            start = _SndAram_sState.mpAllocations[index - 1].mStart +
+                    _SndAram_sState.mpAllocations[index - 1].mLength;
+            length = _SndAram_sState.mUpper - start;
         }
         SNDARAM_constrain(&start, &length);
         if (size <= length) {
-            for (int i = _SndAram_sState.mCount; i > index; i--) {
-                _SndAram_sState.mpAllocations[i] = _SndAram_sState.mpAllocations[i - 1];
-            }
-            _SndAram_sState.mpAllocations[index].mStart = start;
-            _SndAram_sState.mpAllocations[index].mLength = size;
+        insert:
+            SndAramAllocation_t *pAlloc = _SndAram_sState.mpAllocations;
+            pAlloc[index].mStart = start;
+            pAlloc[index].mLength = size;
             _SndAram_sState.mCount++;
             return (void *)(start << 5);
         }
@@ -108,7 +107,8 @@ unsigned int SNDARAM_free(void *address)
 {
     unsigned int start = (unsigned int)address >> 5;
     for (int index = 0; index < _SndAram_sState.mCount; index++) {
-        if (_SndAram_sState.mpAllocations[index].mStart == start) {
+        SndAramAllocation_t *pAlloc = _SndAram_sState.mpAllocations + index;
+        if (pAlloc->mStart == start) {
             _SndAram_sState.mCount--;
             for (; index < _SndAram_sState.mCount; index++) {
                 _SndAram_sState.mpAllocations[index] = _SndAram_sState.mpAllocations[index + 1];

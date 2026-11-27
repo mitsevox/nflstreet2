@@ -43,6 +43,35 @@ void _AnimTranSetTransOutWgt(AnimStInfo_t *p, unsigned short key, int frames)
     }
 }
 
+static inline int _AnimTranPlayTransitionAnim(AnimStInfo_t *p, int i, AnimHeader_t *pObject, AnimChannel_t *pRecords,
+                                              unsigned short key, AnimTranInfo_t *pTransition, void *pOwner)
+{
+    int file;
+    int index;
+    int result;
+
+    p->mUnknown4[i].mUnknown6 = AnimFileGetTransitionStateFromObjType(pObject->mUnknown2);
+    file = AnimFileGetSlotFromFileNum(pObject->mUnknown2, pTransition->mUnknownC);
+    if (file != 0xFFFFFF &&
+        (index = AnimChanStartAnimPerState(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f, 0xFFFF,
+                                           pOwner, p->mUnknown4[i].mUnknown6)) != -1) {
+        float duration = AnimSeqGetLife(pRecords[index].mUnknown4C.mpUnknown0);
+        unsigned int fade = duration * (1.0f - pTransition->mUnknown8) * 0.5f;
+        unsigned int hold = (unsigned int)duration - fade * 2;
+
+        AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, fade, -1.0f, 0.0f);
+        AnimWgtSetLinearInAndOut(&p->mUnknown4[i + 1].mUnknown4C, fade, hold, -1.0f, 1.0f);
+        AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f, p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
+        duration = (float)hold + (float)fade;
+        AnimStSetStateDelay(p, key, duration);
+        AnimChanSetDelayByState(pObject, pRecords, key, duration);
+        result = 0;
+    } else {
+        result = 1;
+    }
+    return result;
+}
+
 void _AnimTranDoTransition(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
                  unsigned short previous, int state, void *pOwner)
 {
@@ -106,33 +135,9 @@ void _AnimTranDoTransition(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t
                         AnimWgtSet(&p->mUnknown4[i].mUnknown4C, 0, 0.0f, 0, 0.0f);
                         fallback = 0;
                         break;
-                    case 3: {
-                        int file;
-                        int index;
-
-                        p->mUnknown4[i].mUnknown6 = AnimFileGetTransitionStateFromObjType(pObject->mUnknown2);
-                        file = AnimFileGetSlotFromFileNum(pObject->mUnknown2, pTransition->mUnknownC);
-                        if (file != 0xFFFFFF &&
-                            (index = AnimChanStartAnimPerState(pObject, pRecords, (unsigned short)file, pTransition->mUnknownE, 1.0f,
-                                                 0xFFFF, pOwner, p->mUnknown4[i].mUnknown6)) != -1) {
-                            float duration = AnimSeqGetLife(pRecords[index].mUnknown4C.mpUnknown0);
-                            unsigned int fade = duration * (1.0f - pTransition->mUnknown8) * 0.5f;
-                            unsigned int hold = (unsigned int)duration - fade * 2;
-                            float delay;
-
-                            AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, fade, -1.0f, 0.0f);
-                            AnimWgtSetLinearInAndOut(&p->mUnknown4[i + 1].mUnknown4C, fade, hold, -1.0f, 1.0f);
-                            AnimWgtSetLinear(&p->mUnknown4[i + 2].mUnknown4C, fade, 0.0f,
-                                        p->mUnknown4[i + 2].mUnknown4C.mUnknown4);
-                            delay = (float)hold + (float)fade;
-                            AnimStSetStateDelay(p, key, delay);
-                            AnimChanSetDelayByState(pObject, pRecords, key, delay);
-                            fallback = 0;
-                        } else {
-                            fallback = 1;
-                        }
+                    case 3:
+                        fallback = _AnimTranPlayTransitionAnim(p, i, pObject, pRecords, key, pTransition, pOwner);
                         break;
-                    }
                     }
                 }
             }

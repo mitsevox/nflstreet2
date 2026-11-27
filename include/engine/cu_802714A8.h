@@ -57,15 +57,15 @@ typedef struct SndPlayOpts_t {
 
 /* A packet player's stream format (copied whole into the player at +0x60): halfword +0x0, channel
    count +0x2, byte +0x3. */
-typedef struct Info_80274464 {
+typedef struct SndPacketFormat_t {
     unsigned short m0;
     unsigned char m2;
     unsigned char m3;
-} Info_80274464;
+} SndPacketFormat_t;
 
 /* The per-channel start parameters of a packet player: per-channel halfwords +0xC and data
    pointers +0x18. */
-typedef struct Struct_80274464 {
+typedef struct SndPacketAttr_t {
     unsigned short m0;
     unsigned char mUnknown2;
     unsigned char m3;
@@ -76,7 +76,7 @@ typedef struct Struct_80274464 {
     unsigned char mUnknownA[2];
     unsigned short mC[6];
     void *m18[8];
-} Struct_80274464;
+} SndPacketAttr_t;
 
 typedef struct Record_803A6DF0 {
     int m0;
@@ -133,7 +133,7 @@ typedef struct Record_803A6DF0 {
     unsigned short m8E;
 } Record_803A6DF0;
 
-typedef struct Struct_803A6C24 {
+typedef struct SndGlobalState_t {
     unsigned short m0;
     unsigned short m2;
     unsigned char m4;
@@ -178,7 +178,7 @@ typedef struct Struct_803A6C24 {
     unsigned char m231;
     unsigned char mUnknown232[2];
     int m234;
-} Struct_803A6C24;
+} SndGlobalState_t;
 
 typedef struct Setup_80272EC4 {
     int m0;
@@ -317,7 +317,7 @@ extern "C" {
 extern void *(*lbl_803B53E4)(int size);
 extern void (*lbl_803B53E8)(void *p);
 extern int (*lbl_80301000)(void *dst, void *src, int size);
-extern Struct_803A6C24 lbl_803A6C24;
+extern SndGlobalState_t lbl_803A6C24;
 extern SndSoftwareMixerState_t sndmix;
 
 int SNDI_memcpy(void *dst, void *src, int size);

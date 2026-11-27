@@ -37,22 +37,23 @@ typedef struct MemInitParams_t {
     MemHeapDesc_t *mpHeap;
 } MemInitParams_t;
 
-extern int lbl_803EBCC4;
-extern void (*lbl_803EBCD4)(void);
-extern unsigned short lbl_803EBCD8;
-extern unsigned char lbl_803EBCDA;
-extern unsigned char lbl_803EBCDB;
-extern unsigned char lbl_803EBCDC;
-extern unsigned char lbl_803EBCE4;
-extern int lbl_803EBCE8;
-extern MemHeap_t *lbl_803EBCC8;
-extern MemHeap_t *lbl_803EBCCC;
-extern int lbl_803EBCD0;
-extern MemHeapRange_t lbl_80384BC0[16];
-extern void (*lbl_803EBCEC)(void);
-extern int (*lbl_803EBCF0)(int a, void *pAddr);
-extern int (*lbl_803EBCF4)(int ident, int flags, const char *pMessage, int d);
-extern SysCriticalSection_t lbl_803E92AC;
+static int _Mem_heapCreatedByLib = 0;
+static MemHeap_t *_Mem_pHeapList = 0;
+static MemHeap_t *_Mem_pHeapDefault = 0;
+static int _Mem_iHeapCount = 0;
+static void (*_Mem_HeapPrint)(void) = 0;
+static unsigned short _Mem_uHeapDebug = 0;
+static unsigned char _Mem_uConsistCheck = 0;
+static unsigned char _Mem_uMemoryFill = 0x80;
+static unsigned char _Mem_bForceLabel = 0;
+static unsigned int _Mem_uDebugOptions = 0;
+static unsigned char _Mem_bTimeStampIsCounter = 0;
+static int _Mem_uSerialCounter = 0;
+static void (*_Mem_CheckSentinelAll)(void) = 0;
+static int (*_Mem_CheckSentinel)(int a, void *pAddr) = 0;
+static int (*_Mem_HeapBreakdown)(int ident, int flags, const char *pMessage, int d) = 0;
+static MemHeapRange_t _Mem_pAddrToHeap[16];
+SysCriticalSection_t _Mem_Crit;
 extern const char lbl_802AF9BC[];
 extern const char lbl_802AF628[];
 extern const char lbl_802AF9A4[];
@@ -65,12 +66,12 @@ extern int sprintf(char *pDst, const char *pFormat, ...);
 static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset);
 void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset);
 extern int SysGetSystemTime(void);
-int fn_801D2130(MemHeapDesc_t *pParams);
+int MemInitHeap(MemHeapDesc_t *pParams);
 extern int fn_801D2570(int ident);
 
 static MemHeap_t *_FindHeapByIdent(int id)
 {
-    MemHeap_t *pHeap = lbl_803EBCCC;
+    MemHeap_t *pHeap = _Mem_pHeapDefault;
 
     if (id == -1) {
         id = 1;
@@ -78,7 +79,7 @@ static MemHeap_t *_FindHeapByIdent(int id)
     if (id == 0 && pHeap) {
         return pHeap;
     }
-    for (pHeap = lbl_803EBCC8; pHeap && pHeap->mId != id; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap && pHeap->mId != id; pHeap = pHeap->mpNext) {
     }
     return pHeap;
 }
@@ -86,19 +87,19 @@ static MemHeap_t *_FindHeapByIdent(int id)
 static MemHeap_t *_FindHeapByAddr(char *pAddr)
 {
     int lo = 0;
-    int hi = lbl_803EBCD0 - 1;
+    int hi = _Mem_iHeapCount - 1;
     int mid;
     MemHeap_t *pHeap;
     MemHeap_t *pSub;
 
     while (lo <= hi) {
         mid = (lo + hi) / 2;
-        if (pAddr < lbl_80384BC0[mid].mpStart) {
+        if (pAddr < _Mem_pAddrToHeap[mid].mpStart) {
             hi = mid - 1;
-        } else if (pAddr >= lbl_80384BC0[mid].mpEnd) {
+        } else if (pAddr >= _Mem_pAddrToHeap[mid].mpEnd) {
             lo = mid + 1;
         } else {
-            pHeap = lbl_80384BC0[mid].mpHeap;
+            pHeap = _Mem_pAddrToHeap[mid].mpHeap;
             for (pSub = pHeap->mpSub; pSub; pSub = pSub->mpSub) {
                 if (pAddr >= pSub->mpStart && pAddr < pSub->mpEnd) {
                     pHeap = pSub;
@@ -120,19 +121,19 @@ static void _BuildHeapAddrTable(void)
     int i;
 
     i = 0;
-    for (pHeap = lbl_803EBCC8; pHeap; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap; pHeap = pHeap->mpNext) {
         if (!pHeap->mpParent && i < 16) {
-            lbl_80384BC0[i].mpStart = pHeap->mpStart;
-            lbl_80384BC0[i].mpEnd = pHeap->mpEnd;
-            lbl_80384BC0[i].mId = pHeap->mId;
-            lbl_80384BC0[i].mpHeap = pHeap;
+            _Mem_pAddrToHeap[i].mpStart = pHeap->mpStart;
+            _Mem_pAddrToHeap[i].mpEnd = pHeap->mpEnd;
+            _Mem_pAddrToHeap[i].mId = pHeap->mId;
+            _Mem_pAddrToHeap[i].mpHeap = pHeap;
             i++;
         }
     }
-    lbl_803EBCD0 = i;
-    for (i = 1; i < lbl_803EBCD0; i++) {
-        pRange = &lbl_80384BC0[i];
-        pPrev = &lbl_80384BC0[i - 1];
+    _Mem_iHeapCount = i;
+    for (i = 1; i < _Mem_iHeapCount; i++) {
+        pRange = &_Mem_pAddrToHeap[i];
+        pPrev = &_Mem_pAddrToHeap[i - 1];
         if (pPrev->mpStart > pRange->mpStart) {
             tmp = *pPrev;
             *pPrev = *pRange;
@@ -248,15 +249,17 @@ static int _ShortenBlock(MemBlock_t *pBlock, int size)
         size = 16;
     }
     size = (size + 15) & ~15;
-    pTail = pBlock->mpTail;
+    rem = (unsigned int)pBlock->mpTail;
     need = size + 4;
-    n = (char *)pTail - (char *)*pTail - need;
+    n = rem - (unsigned int)*(void **)rem - need;
+    pTail = (void **)rem;
     if (n < 32) {
         return -1;
     }
     pNext = (char *)pBlock + size + 0x10;
     n = pBlock->mpHeap->mDebugSize;
-    rem = (unsigned int)(pNext + n + 12) & 15;
+    rem = (unsigned int)(pNext + n + 12);
+    rem &= 15;
     if (rem) {
         rem = 16 - rem;
         if (n == 0 && rem < 2) {
@@ -327,7 +330,11 @@ static MemBlock_t *_SplitBlock(MemBlock_t *pBlock, int align, int offset, int si
     }
     pHeap = pBlock->mpHeap;
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = ((unsigned int)(pStart + n + 12) + offset) % (unsigned int)align;
+    /* FAKEMATCH: the padding variable holds the candidate data address first, which gives the
+       target's (start + n + 12) + offset sum order and its remainder register. */
+    extra = (unsigned int)(pStart + n + 12);
+    extra += offset;
+    rem = extra % (unsigned int)align;
     if (rem) {
         extra = align - rem;
         if (n == 0 && extra < 2) {
@@ -436,7 +443,6 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
     unsigned int used;
     MemHeap_t *pHeap;
     unsigned int rem;
-    unsigned int extra;
     unsigned int end;
     int hdr;
     char *pNewStart;
@@ -488,13 +494,16 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
         return 0;
     }
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = ((unsigned int)pStart + (n + 12)) % 16u;
+    /* FAKEMATCH: the dead end-address variable is reused for the rest block's header address and
+       its padding, which gives the target's remainder and used-size registers. */
+    end = (unsigned int)(pStart + n + 12);
+    rem = end & 15;
     if (rem) {
-        extra = 16 - rem;
-        if (n == 0 && extra < 2) {
-            extra += 16;
+        end = 16 - rem;
+        if (n == 0 && end < 2) {
+            end += 16;
         }
-        n += extra;
+        n += end;
     }
     restSize = total - used;
     pRestBlock = (MemBlock_t *)(pStart + n);
@@ -579,9 +588,9 @@ static void _DebugSetup(MemDebugInfo_t *pInfo, const char *pFile, unsigned int l
     }
     pInfo->mName[i] = 0;
     pInfo->mExtra = extra;
-    if (lbl_803EBCE4) {
-        pInfo->mSerial = lbl_803EBCE8;
-        lbl_803EBCE8++;
+    if (_Mem_bTimeStampIsCounter) {
+        pInfo->mSerial = _Mem_uSerialCounter;
+        _Mem_uSerialCounter++;
     } else {
         pInfo->mSerial = SysGetSystemTime();
     }
@@ -595,14 +604,14 @@ int MemInit(MemInitParams_t *pParams)
 {
     int result = 0;
 
-    SysInitCriticalSectionFunc(&lbl_803E92AC);
-    lbl_803EBCC8 = 0;
-    lbl_803EBCCC = 0;
-    lbl_803EBCD4 = _PrintDefault;
+    SysInitCriticalSectionFunc(&_Mem_Crit);
+    _Mem_pHeapList = 0;
+    _Mem_pHeapDefault = 0;
+    _Mem_HeapPrint = _PrintDefault;
     if (pParams != 0) {
-        result = fn_801D2130(pParams->mpHeap);
+        result = MemInitHeap(pParams->mpHeap);
         if (result == 0) {
-            lbl_803EBCC4 = pParams->mpHeap->mId;
+            _Mem_heapCreatedByLib = pParams->mpHeap->mId;
         }
     }
     return result;
@@ -610,20 +619,20 @@ int MemInit(MemInitParams_t *pParams)
 
 int MemShutdown(void)
 {
-    if (lbl_803EBCC4 != 0) {
-        fn_801D2570(lbl_803EBCC4);
+    if (_Mem_heapCreatedByLib != 0) {
+        fn_801D2570(_Mem_heapCreatedByLib);
     }
-    while (lbl_803EBCC8 != 0) {
-        fn_801D2570(lbl_803EBCC8->mId);
+    while (_Mem_pHeapList != 0) {
+        fn_801D2570(_Mem_pHeapList->mId);
     }
-    lbl_803EBCC8 = 0;
-    lbl_803EBCCC = 0;
-    lbl_803EBCDC = 0;
-    SysShutdownCriticalSectionFunc(&lbl_803E92AC);
+    _Mem_pHeapList = 0;
+    _Mem_pHeapDefault = 0;
+    _Mem_bForceLabel = 0;
+    SysShutdownCriticalSectionFunc(&_Mem_Crit);
     return 0;
 }
 
-int fn_801D2130(MemHeapDesc_t *pParams)
+int MemInitHeap(MemHeapDesc_t *pParams)
 {
     int ownsMemory = 0;
     int ident = pParams->mId;
@@ -639,7 +648,7 @@ int fn_801D2130(MemHeapDesc_t *pParams)
     char *pEnd;
     char *pData;
 
-    for (pScan = lbl_803EBCC8; pScan != 0; pScan = pScan->mpNext) {
+    for (pScan = _Mem_pHeapList; pScan != 0; pScan = pScan->mpNext) {
         if (ident == pScan->mId) {
             return 0x10004;
         }
@@ -658,7 +667,7 @@ int fn_801D2130(MemHeapDesc_t *pParams)
             size = 0;
         }
     } else {
-        for (pScan = lbl_803EBCC8; pScan != 0; pScan = pScan->mpNext) {
+        for (pScan = _Mem_pHeapList; pScan != 0; pScan = pScan->mpNext) {
             if (pStart < pScan->mpEnd && pStart + size > pScan->mpStart) {
                 size = 0;
                 break;
@@ -697,13 +706,13 @@ int fn_801D2130(MemHeapDesc_t *pParams)
     pHeap->mpEnd = pEnd;
     pHeap->mDebugBytes = 0;
     pHeap->mUnk74 = 0x7FFFFFFF;
-    pHeap->mDebugSize = lbl_803EBCD8;
+    pHeap->mDebugSize = _Mem_uHeapDebug;
     pHeap->mpSelf = pHeap;
     pHeap->mSize = size;
-    pHeap->mDebug = lbl_803EBCDA;
+    pHeap->mDebug = _Mem_uConsistCheck;
     pHeap->mMinLargestFree = size;
     pHeap->mOwnsMemory = ownsMemory;
-    pHeap->mFill = lbl_803EBCDB;
+    pHeap->mFill = _Mem_uMemoryFill;
     strcpy(pHeap->mName, pParams->mName);
     if (pBlock->mOffset > 0x6B) {
         pInfo = (MemDebugInfo_t *)((char *)pBlock - (pBlock->mOffset - 0xC));
@@ -722,8 +731,8 @@ int fn_801D2130(MemHeapDesc_t *pParams)
     _FreeListInsert(pHeap, (MemNode_t *)pData);
     pHeap->mUsedBytes = pHeap->mSize - pHeap->mFreeBytes;
     ((MemBlock_t *)((char *)pBlock->mpTail + 4 + *(short *)((char *)pBlock->mpTail + 4)) - 1)->mpHeap = pHeap;
-    pHeap->mpNext = lbl_803EBCC8;
-    lbl_803EBCC8 = pHeap;
+    pHeap->mpNext = _Mem_pHeapList;
+    _Mem_pHeapList = pHeap;
     if (pParent != 0) {
         pHeap->mpSub = pParent->mpSub;
         pParent->mpSub = pHeap;
@@ -732,8 +741,8 @@ int fn_801D2130(MemHeapDesc_t *pParams)
     }
     pHeap->mpParent = pParent;
     _BuildHeapAddrTable();
-    if (lbl_803EBCCC == 0) {
-        lbl_803EBCCC = pHeap;
+    if (_Mem_pHeapDefault == 0) {
+        _Mem_pHeapDefault = pHeap;
     }
     return 0;
 }
@@ -744,7 +753,7 @@ void *MemCustomHeap(int ident, int parentIdent, char *pStart, unsigned int size,
     MemHeap_t *pHeap;
     int total;
 
-    for (pHeap = lbl_803EBCC8; pHeap != 0; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap != 0; pHeap = pHeap->mpNext) {
         if (ident == pHeap->mId || (pStart < pHeap->mpEnd && pStart + size > pHeap->mpStart)) {
             goto fail;
         }
@@ -759,15 +768,15 @@ void *MemCustomHeap(int ident, int parentIdent, char *pStart, unsigned int size,
     }
     memset(pHeap, 0, total);
     pHeap->mId = ident;
+    pHeap->mpSelf = pHeap;
+    pHeap->mpStart = pStart;
     pHeap->mSize = size;
     pHeap->mpEnd = pStart + size;
-    pHeap->mDebugSize = lbl_803EBCD8;
+    pHeap->mDebugSize = _Mem_uHeapDebug;
+    pHeap->mDebug = _Mem_uConsistCheck;
     pHeap->mpFuncs = pFuncs;
-    pHeap->mpStart = pStart;
-    pHeap->mDebug = lbl_803EBCDA;
-    pHeap->mpSelf = pHeap;
-    pHeap->mpNext = lbl_803EBCC8;
-    lbl_803EBCC8 = pHeap;
+    pHeap->mpNext = _Mem_pHeapList;
+    _Mem_pHeapList = pHeap;
     _BuildHeapAddrTable();
     return pHeap + 1;
 fail:
@@ -776,7 +785,7 @@ fail:
 
 int fn_801D2570(int ident)
 {
-    MemHeap_t **ppLink = &lbl_803EBCC8;
+    MemHeap_t **ppLink = &_Mem_pHeapList;
     MemHeap_t *pHeap;
     MemHeap_t *pParent;
     int freeStart = 0;
@@ -819,15 +828,15 @@ int fn_801D2570(int ident)
 
 void MemCheckSentinelAll(int ident)
 {
-    if (lbl_803EBCEC != 0) {
-        lbl_803EBCEC();
+    if (_Mem_CheckSentinelAll != 0) {
+        _Mem_CheckSentinelAll();
     }
 }
 
 int MemHeapBreakdown(int ident, int flags, const char *pMessage)
 {
-    if (lbl_803EBCF4 != 0) {
-        lbl_803EBCF4(ident, flags | 0x20, pMessage, 0);
+    if (_Mem_HeapBreakdown != 0) {
+        _Mem_HeapBreakdown(ident, flags | 0x20, pMessage, 0);
     }
     return 0;
 }
@@ -844,7 +853,7 @@ int fn_801D2730(void)
 
     for (ident = 1;; ident++) {
         if ((ident & -ident) != ident) {
-            for (pHeap = lbl_803EBCC8; pHeap != 0; pHeap = pHeap->mpNext) {
+            for (pHeap = _Mem_pHeapList; pHeap != 0; pHeap = pHeap->mpNext) {
                 if (pHeap->mId == ident) {
                     break;
                 }
@@ -858,12 +867,12 @@ int fn_801D2730(void)
 
 void MemSetDefaultHeap(int ident)
 {
-    lbl_803EBCCC = _FindHeapByIdent(ident);
+    _Mem_pHeapDefault = _FindHeapByIdent(ident);
 }
 
 int fn_801D27A0(void)
 {
-    MemHeap_t *pHeap = lbl_803EBCCC;
+    MemHeap_t *pHeap = _Mem_pHeapDefault;
     int ident = 1;
 
     if (pHeap != 0) {
@@ -903,8 +912,8 @@ unsigned int fn_801D27F4(int ident)
 
 int MemCheckSentinel(int a, void *pAddr)
 {
-    if (lbl_803EBCF0 != 0) {
-        lbl_803EBCF0(a, pAddr);
+    if (_Mem_CheckSentinel != 0) {
+        _Mem_CheckSentinel(a, pAddr);
     }
     return 0;
 }
@@ -939,7 +948,7 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
     if (pHeap->mDebug) {
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     align = 16;
     if (flags & 0x20) {
         align = 32;
@@ -964,10 +973,10 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
         pBlock = _FindAndSplit(&pHeap->mRoot, align, offset, size);
     }
     if (pBlock == 0) {
-        if (lbl_803EBCF4 != 0) {
-            lbl_803EBCF4(pHeap->mId, 18, 0, size);
+        if (_Mem_HeapBreakdown != 0) {
+            _Mem_HeapBreakdown(pHeap->mId, 18, 0, size);
         }
-        SysExitCriticalSectionFunc(&lbl_803E92AC);
+        SysExitCriticalSectionFunc(&_Mem_Crit);
     fail:
         if (pHeap->mpFailHook != 0) {
             pHeap->mpFailHook(pHeap->mId, size);
@@ -1001,7 +1010,7 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
             pHeap->mMaxDebugBytes = pHeap->mDebugBytes;
         }
     }
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return pBlock + 1;
 }
 
@@ -1042,7 +1051,7 @@ int fn_801D2BD0(void *pAddr)
         MemCheckSentinel(pHeap->mId, pAddr);
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pHeap->mUsedBytes -= ((char *)pBlock->mpTail - (char *)*pBlock->mpTail) + pBlock->mOffset;
     pHeap->mNumUsed--;
     pHeap->mFreeCount++;
@@ -1094,7 +1103,7 @@ int fn_801D2BD0(void *pAddr)
     pBlock->mState = 0;
     ((MemNode_t *)(pBlock + 1))->mSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
     _FreeListInsert(pHeap, (MemNode_t *)(pBlock + 1));
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return 0;
 }
 
@@ -1123,7 +1132,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
         MemCheckSentinel(ident, pAddr);
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pNext = (MemBlock_t *)((char *)pBlock->mpTail + 4 + *(short *)((char *)pBlock->mpTail + 4)) - 1;
     oldSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
     if (pNext->mState == 0) {
@@ -1148,7 +1157,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
         pNew = _MemAllocInternal(ident, size, flags, offset);
         if (pNew == 0) {
             fn_801D2BD0(pAddr);
-            SysExitCriticalSectionFunc(&lbl_803E92AC);
+            SysExitCriticalSectionFunc(&_Mem_Crit);
             return 0;
         }
         memcpy(pNew, pAddr, oldSize);
@@ -1169,7 +1178,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
             pHeap->mDebugBytes += pInfo->mSize;
         }
     }
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return pAddr;
 }
 
@@ -1193,10 +1202,10 @@ int MemGetSizeByAddr(int a, void *pAddr)
     if (pHeap->mDebug) {
         MemCheckSentinel(a, pAddr);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pTail = ((void ***)pAddr)[-1];
     size = (char *)pTail - (char *)*pTail - 4;
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return size;
 }
 
@@ -1242,7 +1251,7 @@ void fn_801D3318(int ident, const char *pLabel)
     if (pLabel == 0) {
         pLabel = lbl_802AF9BC;
     }
-    for (pHeap = lbl_803EBCC8; pHeap != 0; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap != 0; pHeap = pHeap->mpNext) {
         if (ident == -1 || ident == pHeap->mId) {
             pOut = pHeap->mLabels[pHeap->mLabelDepth];
             for (i = 0; i != 15 && pLabel[i] != 0; i++) {
@@ -1257,7 +1266,7 @@ void fn_801D339C(int ident)
 {
     MemHeap_t *pHeap;
 
-    for (pHeap = lbl_803EBCC8; pHeap != 0; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap != 0; pHeap = pHeap->mpNext) {
         if (ident == -1 || ident == pHeap->mId) {
             if (pHeap->mLabelDepth < 5) {
                 pHeap->mLabelDepth++;
@@ -1271,7 +1280,7 @@ void fn_801D342C(int ident)
 {
     MemHeap_t *pHeap;
 
-    for (pHeap = lbl_803EBCC8; pHeap != 0; pHeap = pHeap->mpNext) {
+    for (pHeap = _Mem_pHeapList; pHeap != 0; pHeap = pHeap->mpNext) {
         if (ident == -1 || ident == pHeap->mId) {
             if (pHeap->mLabelDepth != 0) {
                 pHeap->mLabelDepth--;

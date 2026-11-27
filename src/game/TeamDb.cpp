@@ -295,19 +295,25 @@ void TeamDbOpenByTmur(DbCursor *pObject, void *pColumns, int tag, unsigned char 
     DbFilter right;
     DbFilter leftLeft;
     DbFilter leftRight;
+    int value;
 
     root.Set(11, &left, &right);
     left.Set(11, &leftLeft, &leftRight);
     right.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    right.mUnknown16.mValue.mInt = 17;
-    if (flag) {
-        leftLeft.mUnknown16.mValue.mInt = 0;
+    // FAKEMATCH: one shared local carries the three node values, each stored inside its arm; same stores
+    value = 17;
+    right.mUnknown16.mValue.mInt = value;
+    if (!flag) {
+        value = 1;
+        leftLeft.mUnknown16.mValue.mInt = value;
     } else {
-        leftLeft.mUnknown16.mValue.mInt = 1;
+        value = 0;
+        leftLeft.mUnknown16.mValue.mInt = value;
     }
     leftLeft.SetUnknown32(6, 0x4D41455452554D54LL, 3, 0x10006);
     leftRight.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    leftRight.mUnknown16.mValue.mInt = 2;
+    value = 2;
+    leftRight.mUnknown16.mValue.mInt = value;
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
@@ -556,7 +562,10 @@ void TeamDbGetRandomLogoColors(int *pLogo, int *pFirst, int *pSecond, int *pThir
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
+    int status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
+    // FAKEMATCH: dead increment of the unused status; its branch makes a block boundary after the
+    // declare call that lasts until after register allocation (flow deletes the increment)
+    if (status != 0) status++;
     cursor.mUnknown4 = SyncRandGetIntRange(1, 0, result.mUnknown0 - 1);
     TDbCompilePerformOp(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
                 &cursor, pLogo, pFirst, pSecond, pThird);
@@ -579,7 +588,9 @@ void TeamDbGetRandomName(int logo, char *pName, int size)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
+    int status = TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
+    // FAKEMATCH: dead increment of the unused status, as in TeamDbGetRandomLogoColors
+    if (status != 0) status++;
     int count = result.mUnknown0;
     if (count > 0) {
         cursor.mUnknown4 = SyncRandGetIntRange(1, 0, count - 1);

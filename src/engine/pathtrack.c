@@ -50,7 +50,7 @@ extern "C" IPathTrack *PATH_createstreamimp(int flags, int a, float b)
         int result = Path::IPathToSnd::sndimp->CreateStreamTrack(&track, a, b, rate);
         if (track && result >= 0) {
             p->mUnknown100 = track;
-            track->vfn_22(p->mUnknownD0);
+            track->SetName(p->mUnknownD0);
             track->SetFilePath(&p->mUnknown50);
             track->SetTrackInfo(PATHI_trackinfo(p->mUnknown0));
         }
@@ -102,7 +102,7 @@ extern "C" IPathTrack *PATH_createbankobject(int flags)
         if (track) {
             p->mUnknown8.halves.high = pfstate->mUnknown10;
             p->mUnknown100 = track;
-            track->vfn_22(p->mUnknownD0);
+            track->SetName(p->mUnknownD0);
             track->SetFilePath(&p->mUnknown50);
             track->SetTrackInfo(PATHI_trackinfo(p->mUnknown0));
         }
@@ -244,9 +244,9 @@ extern "C" void PATHI_dispatchtrackstate(int state)
                 PathTrack_t *p = pfstate->mUnknown40[j];
                 if (p && !(p->mUnknown8.word & 0x40) && p->mUnknown100) {
                     if (state)
-                        p->mUnknown100->vfn_03();
+                        p->mUnknown100->UpdateStatus();
                     else
-                        p->mUnknown100->vfn_06();
+                        p->mUnknown100->CheckStatus();
                 }
             }
         }

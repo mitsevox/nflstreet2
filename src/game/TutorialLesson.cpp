@@ -386,8 +386,8 @@ void HudStop(void);
 int MsgGameTakePendingChoice(void);
 void RumbleStopAll(void);
 void RumbleEnable(unsigned char enabled);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 unsigned int strlen(const char *pText);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
@@ -1770,7 +1770,7 @@ void TutorialPostPlay::ShowResults()
             mUnknown12 = 0;
             pName = TutorialGetLessonObject()->GetDoneText();
             if (pName == 0) pName = "";
-            fn_801C2D88(text, 255, "%s\n\n%s", _Tutorial_szCategoryDone, pName);
+            snprintf(text, 255, "%s\n\n%s", _Tutorial_szCategoryDone, pName);
             MsgBoxShow("Tutorial Results", text, "|^Done");
         }
         mUnknown8 = 0;
@@ -1841,7 +1841,7 @@ void TutorialPreGame::ShowIntroScreen()
         if (pInfo != 0) {
             TutorialSetHudVisible(0);
             if (TutorialIsContinuing()) {
-                fn_801C2E18(text, "%s\n\nDo you want to continue?", pInfo);
+                sprintf(text, "%s\n\nDo you want to continue?", pInfo);
                 MsgBoxShow("Tutorial Information", text, "|^Continue|Quit");
             } else {
                 MsgBoxShow("Tutorial Information", pInfo, "|^Done");
@@ -2102,7 +2102,7 @@ void TutorialPostPlay::OnUpdate(float dt)
                         if (pInfo == 0) {
                             pInfo = "";
                         }
-                        fn_801C2D88(text, 0xFF, "%s\n\n%s", _Tutorial_szCategoryDone, pInfo);
+                        snprintf(text, 0xFF, "%s\n\n%s", _Tutorial_szCategoryDone, pInfo);
                         MsgBoxShow("Tutorial Results", text, "|^Done");
                     }
                     break;

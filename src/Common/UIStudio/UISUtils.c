@@ -7,8 +7,8 @@
 #include "UIStudio/UIStudio.h"
 #include "engine/cu_8021A438.h"
 
-extern Float32 lbl_8039F858[4];
-extern Float32 lbl_8039F868[4];
+static Float32 _UISUtils_afColorMultiplier[4];
+static Float32 _UISUtils_afColorAdditive[4];
 
 Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
@@ -158,28 +158,28 @@ Float32 *UISGetActionPtrValue(Uint32 Action, UISControlInfoT *pControlInfo)
 
 Float32 *UISGetColorMultipler(void)
 {
-    return lbl_8039F858;
+    return _UISUtils_afColorMultiplier;
 }
 
 Float32 *UISGetColorAdditive(void)
 {
-    return lbl_8039F868;
+    return _UISUtils_afColorAdditive;
 }
 
 void UISSetColorMultipler(Float32 a, Float32 b, Float32 c, Float32 d)
 {
-    lbl_8039F858[0] = a;
-    lbl_8039F858[3] = d;
-    lbl_8039F858[1] = b;
-    lbl_8039F858[2] = c;
+    _UISUtils_afColorMultiplier[0] = a;
+    _UISUtils_afColorMultiplier[3] = d;
+    _UISUtils_afColorMultiplier[1] = b;
+    _UISUtils_afColorMultiplier[2] = c;
 }
 
 void UISSetColorAdditive(Float32 a, Float32 b, Float32 c, Float32 d)
 {
-    lbl_8039F868[0] = a;
-    lbl_8039F868[3] = d;
-    lbl_8039F868[1] = b;
-    lbl_8039F868[2] = c;
+    _UISUtils_afColorAdditive[0] = a;
+    _UISUtils_afColorAdditive[3] = d;
+    _UISUtils_afColorAdditive[1] = b;
+    _UISUtils_afColorAdditive[2] = c;
 }
 
 /* Writes Value in decimal to pDst, stopping at pEnd; returns the end of the
@@ -253,7 +253,13 @@ char *_WriteFloat(char *pDst, char *pEnd, Int32 Width, Int32 Precision, Float32 
         Buffer[Length++] = '-';
     }
     if (Width != 0) {
-        Count = (Precision != 0 ? Width - 1 : Width) - (Precision + Length);
+        Digit = Precision + Length;
+        if (Precision != 0) {
+            Count = Width - 1;
+            Count -= Digit;
+        } else {
+            Count = Width - Digit;
+        }
         for (; Count > 0; Count--) {
             Buffer[Length++] = ' ';
         }
@@ -320,7 +326,10 @@ char *_WriteString(const char *pString, char *pDst, char *pEnd, Int32 Width, Int
             Count++;
         }
     }
-    while (*pString != 0 && pDst != pEnd) {
+    while (*pString != 0) {
+        if (pDst == pEnd) {
+            break;
+        }
         *pDst++ = *pString++;
         Count++;
     }
@@ -335,6 +344,7 @@ char *_WriteString(const char *pString, char *pDst, char *pEnd, Int32 Width, Int
 
 Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs)
 {
+    Int32 *pParam;
     char *pOut;
     char *pStart;
     char *pEnd;
@@ -354,7 +364,9 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
     if (pStart == NULL || Size == 0 || pFormat == NULL) {
         return -1;
     }
-    while ((c = *pFormat++) != 0 && pOut < pEnd) {
+    if ((c = *pFormat++) != 0 && pOut < pEnd) {
+        pParam = pArgs;
+        do {
         if (c == '%') {
             bUnsigned = 0;
             Width = 0;
@@ -390,10 +402,10 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
             }
             switch (c) {
             case 'c':
-                *pOut++ = *pArgs++;
+                *pOut++ = *pParam++;
                 break;
             case 's':
-                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
+                pString = ((UIGTextBuffer_t *)*pParam++)->pText;
                 if (pString != NULL) {
                     pOut = _WriteString(pString, pOut, pEnd, Width, Precision, bLeft);
                 } else {
@@ -404,15 +416,15 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
                 bUnsigned = 1;
             case 'd':
             case 'i':
-                pOut = _WriteInt(*pArgs++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
+                pOut = _WriteInt(*pParam++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
                 break;
             case 'f':
-                pOut = _WriteFloat(pOut, pEnd, Width, Precision, *(Float32 *)pArgs++);
+                pOut = _WriteFloat(pOut, pEnd, Width, Precision, *(Float32 *)pParam++);
                 break;
             case 'X':
             case 'p':
             case 'x':
-                pOut = _WriteHex(*pArgs++, pOut, pEnd, Width, Pad, Case);
+                pOut = _WriteHex(*pParam++, pOut, pEnd, Width, Pad, Case);
                 break;
             default:
                 if (c != 0) {
@@ -420,9 +432,10 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
                 }
                 break;
             }
-        } else {
+        } else if (c != 0) {
             *pOut++ = c;
         }
+        } while ((c = *pFormat++) != 0 && pOut < pEnd);
     }
     *pOut = 0;
     return pOut - pStart;

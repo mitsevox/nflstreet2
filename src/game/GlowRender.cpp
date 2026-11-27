@@ -87,16 +87,14 @@ void ParticleTrailDraw(ParticleTrailSet_t *p)
         if (trail->mCount > 1) {
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, (unsigned short)(trail->mCount + 2));
             color.mUnknownC = p->mUnknown240.mUnknownC;
-            unsigned char r = (unsigned char)(color.mUnknown0 * 255.0f);
-            unsigned char g = (unsigned char)(color.mUnknown4 * 255.0f);
-            unsigned char b = (unsigned char)(color.mUnknown8 * 255.0f);
-            unsigned char a = (unsigned char)(color.mUnknownC * 255.0f);
             int toggle = trail->mToggle;
-            int other = !toggle;
             GXPosition3f32(trail->mSource[toggle].mX, trail->mSource[toggle].mY, trail->mSource[toggle].mZ);
-            GXColor4u8(r, g, b, a);
-            GXPosition3f32(trail->mSource[other].mX, trail->mSource[other].mY, trail->mSource[other].mZ);
-            GXColor4u8(r, g, b, a);
+            GXColor4u8((unsigned char)(color.mUnknown0 * 255.0f), (unsigned char)(color.mUnknown4 * 255.0f),
+                       (unsigned char)(color.mUnknown8 * 255.0f), (unsigned char)(color.mUnknownC * 255.0f));
+            toggle = !toggle;
+            GXPosition3f32(trail->mSource[toggle].mX, trail->mSource[toggle].mY, trail->mSource[toggle].mZ);
+            GXColor4u8((unsigned char)(color.mUnknown0 * 255.0f), (unsigned char)(color.mUnknown4 * 255.0f),
+                       (unsigned char)(color.mUnknown8 * 255.0f), (unsigned char)(color.mUnknownC * 255.0f));
             for (unsigned int j = 0; j < trail->mCount; ++j) {
                 if (p->mUnknown23C) {
                     ParticleTrailColor_t *entry = &gParticleTrail_aPointColors[j];

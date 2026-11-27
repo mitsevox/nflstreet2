@@ -19,9 +19,9 @@
 #include "game/Ball.h"
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/TDbCompilePerformOp.h"
+#include "game/DefPred.h"
 
 extern "C" {
-extern char lbl_8030C070[];
 extern void *gpReplay;
 extern void *gLevelData;
 
@@ -141,11 +141,11 @@ void TutorialLessonStart(void);
 void TutorialLessonStop(void);
 void RouteArrowSysInit(int a);
 void RouteArrowSysShutdown(void);
-void fn_8015E654(int a);
-void fn_8015E6C4(void);
-void fn_8015E6C8(void);
-void fn_8015E950(int a, int b);
-void fn_8015E994(void);
+void PlaModelSetLodMode(int a);
+void PlaModelInitPlayerModels(void);
+void PlaModelResetPlayerModels(void);
+void PlaModelInitMorphHead(int a, int b);
+void PlaModelFreeMorphHead(void);
 void PlaTexCacheInit(int a);
 void PlaTexCacheLoadDefaults(void);
 void PlaTexCacheShutdown(void);
@@ -608,7 +608,7 @@ int GameIntf::Shutdown()
     return 1;
 }
 
-static ModuleDependency sGamePlayDependencies[] = { &gGameState, &gGameObjList, &gIGMisc, &gUIS, &gCamScript, &gPenalty, &gScrmRule, &gJoyMsg, &gGRand, &gStatics, &gClock, &gGameBrk, &gPlyr, &gBall, &gPlyrCtrl, &gSndgIG, &gPursuit, &gPlayInfo, &gAudmon, &gAnimintf, &gAss, &gVptMgr, lbl_8030C070, 0 };
+static ModuleDependency sGamePlayDependencies[] = { &gGameState, &gGameObjList, &gIGMisc, &gUIS, &gCamScript, &gPenalty, &gScrmRule, &gJoyMsg, &gGRand, &gStatics, &gClock, &gGameBrk, &gPlyr, &gBall, &gPlyrCtrl, &gSndgIG, &gPursuit, &gPlayInfo, &gAudmon, &gAnimintf, &gAss, &gVptMgr, &gDefPred, 0 };
 GamePlay gGamePlay;
 
 ModuleDependency *GamePlay::GetDependencies() { return sGamePlayDependencies; }
@@ -975,11 +975,11 @@ int Plyr::Init()
     ResTrackLabel("PlyrObjsInitStart");
     PlaTexCacheInit(14);
     PlaTexCacheLoadDefaults();
-    fn_8015E654(1);
-    fn_8015E6C4();
-    fn_8015E950(1, 1);
+    PlaModelSetLodMode(1);
+    PlaModelInitPlayerModels();
+    PlaModelInitMorphHead(1, 1);
     PlyrObjsCreate(14, GameObjList::GetListHandle(), 0);
-    fn_8015E994();
+    PlaModelFreeMorphHead();
     ResTrackLabel("PlyrObjsInitFinish");
     ResTrackLabel("PlaStateInitStart");
     PlyrMgrRegister(14);
@@ -994,7 +994,7 @@ int Plyr::Shutdown()
 {
     PlyrMgrReset();
     PlyrObjsDestroy(GameObjList::GetListHandle());
-    fn_8015E6C8();
+    PlaModelResetPlayerModels();
     PlaTexCacheShutdown();
     return 1;
 }

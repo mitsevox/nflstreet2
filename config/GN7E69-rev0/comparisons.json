@@ -3376,47 +3376,6 @@
       ]
     },
     {
-      "source": "src/game/TeamTables.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018C344",
-          "end": "0x8018C688"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AA1FC",
-          "end": "0x802AA334"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "TeamTablesCopy",
-          "start": "0x8018C344",
-          "end": "0x8018C3EC"
-        },
-        {
-          "symbol": "TeamTablesDestroy",
-          "start": "0x8018C3EC",
-          "end": "0x8018C438"
-        },
-        {
-          "symbol": "TeamTablesDeleteTeamPlayers",
-          "start": "0x8018C438",
-          "end": "0x8018C48C"
-        },
-        {
-          "symbol": "TeamTablesPurgeCreated",
-          "start": "0x8018C48C",
-          "end": "0x8018C688"
-        }
-      ]
-    },
-    {
       "source": "src/game/Assign.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/Assign.cpp), its data rows and the linker/source-form rows of its three discarded stand-ins. The 79 comparison fragments of the range are merged into this one translation unit (all 631 functions in address order); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",
@@ -9712,7 +9671,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials. Its three .bss file statics are placed by the storage map (data rows 0x8030BC2C, 0x8030BC88, 0x8030BC98).",
       "sections": [
         {
           "section": ".text",
@@ -9736,7 +9695,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030BC2C",
-          "end": "0x8030BC58"
+          "end": "0x8030BCA8"
         },
         {
           "section": ".ctors",
@@ -9947,6 +9906,23 @@
           "start": "0x800834A0",
           "end": "0x800834CC"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
+        }
       ]
     },
     {
@@ -10073,7 +10049,7 @@
     {
       "source": "src/game/TeamDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the one non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -10570,7 +10546,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim. Data rows 0x8030AA7C-0x8030AA88 (.bss) and 0x803EC820-0x803EC844 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -10583,6 +10559,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "functions": [
@@ -11235,7 +11223,7 @@
     {
       "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds, PlayerRecordWriteById and PlayerQueryOpen stay registered here as its partials (their HOLDOUT source-form rows).",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds and PlayerRecordWriteById stay registered here as its partials (their HOLDOUT source-form rows).",
       "sections": [
         {
           "section": ".text",
@@ -19006,7 +18994,7 @@
           "end": "0x80219044"
         },
         {
-          "symbol": "fn_80219044",
+          "symbol": "UISLoadModalScreen",
           "start": "0x80219044",
           "end": "0x80219070"
         },
@@ -19026,7 +19014,7 @@
           "end": "0x802196B4"
         },
         {
-          "symbol": "fn_80219854",
+          "symbol": "UISInternalProcessEvent",
           "start": "0x80219854",
           "end": "0x8021992C"
         },
@@ -19138,82 +19126,6 @@
       ]
     },
     {
-      "source": "src/engine/dbyalp.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The drafts compile only their float pools into .rodata (the query strings are referenced through neutral external labels), placed over the file's native .rodata (data row 0x802B2430). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802297D8",
-          "end": "0x80229E88"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B2430",
-          "end": "0x802B2CA0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbYalpLoadWeightTable",
-          "start": "0x802297D8",
-          "end": "0x802299FC"
-        },
-        {
-          "symbol": "DbYalpModuleInit",
-          "start": "0x802299FC",
-          "end": "0x80229A70"
-        },
-        {
-          "symbol": "DbYalpModuleShutdown",
-          "start": "0x80229A70",
-          "end": "0x80229AA4"
-        },
-        {
-          "symbol": "DbFindUnusedPlayerIds",
-          "start": "0x80229AA4",
-          "end": "0x80229C98"
-        },
-        {
-          "symbol": "DbYalpGetLowRating",
-          "start": "0x80229C98",
-          "end": "0x80229CB0"
-        },
-        {
-          "symbol": "DbYalpGetHighRating",
-          "start": "0x80229CB0",
-          "end": "0x80229CC4"
-        },
-        {
-          "symbol": "DbYalpGetRatingWeight",
-          "start": "0x80229CC4",
-          "end": "0x80229CE4"
-        },
-        {
-          "symbol": "DbYalpGetWeightSum",
-          "start": "0x80229CE4",
-          "end": "0x80229CFC"
-        },
-        {
-          "symbol": "DbYalpGetOverallRating",
-          "start": "0x80229CFC",
-          "end": "0x80229E78"
-        },
-        {
-          "symbol": "DbYalpBeginGame",
-          "start": "0x80229E78",
-          "end": "0x80229E80"
-        },
-        {
-          "symbol": "DbYalpResumeGame",
-          "start": "0x80229E80",
-          "end": "0x80229E88"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbmtts.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022A428-0x8022C0E0 (src/engine/dbmtts.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -19252,7 +19164,12 @@
           "end": "0x8022A624"
         },
         {
-          "symbol": "fn_8022AB6C",
+          "symbol": "fn_8022A624",
+          "start": "0x8022A624",
+          "end": "0x8022AB6C"
+        },
+        {
+          "symbol": "DbMttsReadSlots",
           "start": "0x8022AB6C",
           "end": "0x8022AC80"
         },
@@ -19262,7 +19179,7 @@
           "end": "0x8022ACEC"
         },
         {
-          "symbol": "fn_8022ACEC",
+          "symbol": "DbMttsInsertTeamRow",
           "start": "0x8022ACEC",
           "end": "0x8022AD64"
         },
@@ -19282,7 +19199,7 @@
           "end": "0x8022AF5C"
         },
         {
-          "symbol": "fn_8022AF5C",
+          "symbol": "DbMttsInsertPlayerRow",
           "start": "0x8022AF5C",
           "end": "0x8022B02C"
         },
@@ -19297,19 +19214,39 @@
           "end": "0x8022B2CC"
         },
         {
-          "symbol": "fn_8022B2CC",
+          "symbol": "DbMttsSetPlayerColumn",
           "start": "0x8022B2CC",
           "end": "0x8022B414"
         },
         {
-          "symbol": "fn_8022B414",
+          "symbol": "DbMttsGetPlayerColumn",
           "start": "0x8022B414",
           "end": "0x8022B580"
         },
         {
-          "symbol": "fn_8022B7A4",
+          "symbol": "DbMttsUpdatePlayerColumn",
+          "start": "0x8022B580",
+          "end": "0x8022B7A4"
+        },
+        {
+          "symbol": "DbMttsGetTeamColumn",
           "start": "0x8022B7A4",
           "end": "0x8022B8C8"
+        },
+        {
+          "symbol": "DbMttsUpdateTeamColumn",
+          "start": "0x8022B8C8",
+          "end": "0x8022BAB4"
+        },
+        {
+          "symbol": "DbMttsAddTeamPassStat",
+          "start": "0x8022BAB4",
+          "end": "0x8022BD30"
+        },
+        {
+          "symbol": "DbMttsAddTeamRushStat",
+          "start": "0x8022BD30",
+          "end": "0x8022BF60"
         },
         {
           "symbol": "fn_8022BF60",
@@ -19805,7 +19742,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
-          "end": "0x802355E4"
+          "end": "0x80235010"
         },
         {
           "section": ".rodata",
@@ -20001,7 +19938,7 @@
           "end": "0x80234908"
         },
         {
-          "symbol": "fn_80234908",
+          "symbol": "ModelPassShadersClear",
           "start": "0x80234908",
           "end": "0x8023491C"
         },
@@ -20134,51 +20071,6 @@
           "symbol": "fn_80234F74",
           "start": "0x80234F74",
           "end": "0x80235010"
-        },
-        {
-          "symbol": "fn_80235328",
-          "start": "0x80235328",
-          "end": "0x802353CC"
-        },
-        {
-          "symbol": "fn_802353CC",
-          "start": "0x802353CC",
-          "end": "0x802353D0"
-        },
-        {
-          "symbol": "fn_802353D0",
-          "start": "0x802353D0",
-          "end": "0x802353D4"
-        },
-        {
-          "symbol": "fn_802353D4",
-          "start": "0x802353D4",
-          "end": "0x802353D8"
-        },
-        {
-          "symbol": "fn_802353D8",
-          "start": "0x802353D8",
-          "end": "0x802353E8"
-        },
-        {
-          "symbol": "fn_802353E8",
-          "start": "0x802353E8",
-          "end": "0x802353F8"
-        },
-        {
-          "symbol": "fn_802353F8",
-          "start": "0x802353F8",
-          "end": "0x80235510"
-        },
-        {
-          "symbol": "fn_80235510",
-          "start": "0x80235510",
-          "end": "0x80235588"
-        },
-        {
-          "symbol": "fn_80235588",
-          "start": "0x80235588",
-          "end": "0x802355E4"
         },
         {
           "symbol": "fn_802338D4",
@@ -20357,135 +20249,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_8025E148.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x8025E148-0x8025FBD4 (src/engine/cu_8025E148.c), its compiler, source-form, function and name rows and the exact data rows 0x802B7268-0x802B72B0 (.rodata), 0x802FF4A8-0x802FF4B0 (.data) and 0x803A6A08-0x803A6A28 (.bss). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025E148",
-          "end": "0x8025FBD4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7268",
-          "end": "0x802B72B0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FF4A8",
-          "end": "0x802FF4B0"
-        },
-        {
-          "section": ".sdata2",
-          "placement": ".data6",
-          "start": "0x803ED9C4",
-          "end": "0x803EDDC4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6A08",
-          "end": "0x803A6A28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8025E148",
-          "start": "0x8025E148",
-          "end": "0x8025E1D8"
-        },
-        {
-          "symbol": "__main",
-          "start": "0x8025E1D8",
-          "end": "0x8025E210"
-        },
-        {
-          "symbol": "__ashldi3",
-          "start": "0x8025E210",
-          "end": "0x8025E250"
-        },
-        {
-          "symbol": "__ashrdi3",
-          "start": "0x8025E250",
-          "end": "0x8025E290"
-        },
-        {
-          "symbol": "__divdi3",
-          "start": "0x8025E290",
-          "end": "0x8025E80C"
-        },
-        {
-          "symbol": "__fixunssfdi",
-          "start": "0x8025E850",
-          "end": "0x8025EA08"
-        },
-        {
-          "symbol": "__floatdidf",
-          "start": "0x8025EA08",
-          "end": "0x8025EA64"
-        },
-        {
-          "symbol": "__floatdisf",
-          "start": "0x8025EA64",
-          "end": "0x8025EB14"
-        },
-        {
-          "symbol": "__lshrdi3",
-          "start": "0x8025EB14",
-          "end": "0x8025EB54"
-        },
-        {
-          "symbol": "__moddi3",
-          "start": "0x8025EB54",
-          "end": "0x8025F088"
-        },
-        {
-          "symbol": "__pure_virtual",
-          "start": "0x8025F088",
-          "end": "0x8025F0A8"
-        },
-        {
-          "symbol": "__udivdi3",
-          "start": "0x8025F0A8",
-          "end": "0x8025F58C"
-        },
-        {
-          "symbol": "__umoddi3",
-          "start": "0x8025F58C",
-          "end": "0x8025FA24"
-        },
-        {
-          "symbol": "__cmpdi2",
-          "start": "0x8025FABC",
-          "end": "0x8025FAF8"
-        },
-        {
-          "symbol": "fn_8025FAF8",
-          "start": "0x8025FAF8",
-          "end": "0x8025FB08"
-        },
-        {
-          "symbol": "fn_8025FB08",
-          "start": "0x8025FB08",
-          "end": "0x8025FB34"
-        },
-        {
-          "symbol": "fn_8025FB34",
-          "start": "0x8025FB34",
-          "end": "0x8025FB68"
-        },
-        {
-          "symbol": "fn_8025FB68",
-          "start": "0x8025FB68",
-          "end": "0x8025FBD4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/vfprintf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file unit row 0x8026247C-0x802645AC, complete function rows, unchanged engine_c compiler profile and full readonly constant pool. Every original body is measured at its full extent.",
@@ -20567,7 +20330,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows). Data row 0x803192BC-0x803192F4 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -20580,6 +20343,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "functions": [
@@ -20647,9 +20416,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015D3EC.cpp",
+      "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -20690,102 +20459,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8015D3EC",
+          "symbol": "PlaModelLoadBodies",
           "start": "0x8015D3EC",
           "end": "0x8015D4E0"
         },
         {
-          "symbol": "fn_8015D4E0",
+          "symbol": "PlaModelFreeBodies",
           "start": "0x8015D4E0",
           "end": "0x8015D550"
         },
         {
-          "symbol": "fn_8015D550",
+          "symbol": "PlaModelLoadHands",
           "start": "0x8015D550",
           "end": "0x8015D68C"
         },
         {
-          "symbol": "fn_8015D68C",
+          "symbol": "PlaModelFreeHands",
           "start": "0x8015D68C",
           "end": "0x8015D718"
         },
         {
-          "symbol": "fn_8015D718",
+          "symbol": "PlaModelLoadBaseHead",
           "start": "0x8015D718",
           "end": "0x8015D7C0"
         },
         {
-          "symbol": "fn_8015D7C0",
+          "symbol": "PlaModelFreeBaseHead",
           "start": "0x8015D7C0",
           "end": "0x8015D81C"
         },
         {
-          "symbol": "fn_8015D81C",
+          "symbol": "PlaModelAllocPlayerBuffers",
           "start": "0x8015D81C",
           "end": "0x8015D998"
         },
         {
-          "symbol": "fn_8015D998",
+          "symbol": "PlaModelFreePlayerBuffers",
           "start": "0x8015D998",
           "end": "0x8015DA7C"
         },
         {
-          "symbol": "fn_8015DA7C",
+          "symbol": "PlaModelPostInit",
           "start": "0x8015DA7C",
           "end": "0x8015DA80"
         },
         {
-          "symbol": "fn_8015DA80",
+          "symbol": "PlaModelLoadHair",
           "start": "0x8015DA80",
           "end": "0x8015DD3C"
         },
         {
-          "symbol": "fn_8015DD3C",
+          "symbol": "PlaModelLoadHat",
           "start": "0x8015DD3C",
           "end": "0x8015DE3C"
         },
         {
-          "symbol": "fn_8015DE3C",
+          "symbol": "PlaModelLoadGlasses",
           "start": "0x8015DE3C",
           "end": "0x8015DF3C"
         },
         {
-          "symbol": "fn_8015DF3C",
+          "symbol": "PlaModelLoadJewel",
           "start": "0x8015DF3C",
           "end": "0x8015E0B8"
         },
         {
-          "symbol": "fn_8015E0B8",
+          "symbol": "PlaModelQueuePart",
           "start": "0x8015E0B8",
           "end": "0x8015E1F0"
         },
         {
-          "symbol": "fn_8015E1F0",
+          "symbol": "PlaModelFaceReadDone",
           "start": "0x8015E1F0",
           "end": "0x8015E200"
         },
         {
-          "symbol": "fn_8015E200",
+          "symbol": "PlaModelHairReadDone",
           "start": "0x8015E200",
           "end": "0x8015E210"
         },
         {
-          "symbol": "fn_8015E210",
+          "symbol": "PlaModelHatReadDone",
           "start": "0x8015E210",
           "end": "0x8015E220"
         },
         {
-          "symbol": "fn_8015E220",
+          "symbol": "PlaModelGlassesReadDone",
           "start": "0x8015E220",
           "end": "0x8015E230"
         },
         {
-          "symbol": "fn_8015E230",
+          "symbol": "PlaModelJewelReadDone",
           "start": "0x8015E230",
           "end": "0x8015E240"
         },
         {
-          "symbol": "fn_8015E240",
+          "symbol": "PlaModelLoadMorphHead",
           "start": "0x8015E240",
           "end": "0x8015E2FC"
         },
@@ -20800,42 +20569,42 @@
           "end": "0x8015E548"
         },
         {
-          "symbol": "fn_8015E548",
+          "symbol": "PlaModelOpenArchives",
           "start": "0x8015E548",
           "end": "0x8015E620"
         },
         {
-          "symbol": "fn_8015E620",
+          "symbol": "PlaModelInit",
           "start": "0x8015E620",
           "end": "0x8015E654"
         },
         {
-          "symbol": "fn_8015E654",
+          "symbol": "PlaModelSetLodMode",
           "start": "0x8015E654",
           "end": "0x8015E65C"
         },
         {
-          "symbol": "fn_8015E65C",
+          "symbol": "PlaModelShutdown",
           "start": "0x8015E65C",
           "end": "0x8015E684"
         },
         {
-          "symbol": "fn_8015E684",
+          "symbol": "PlaModelLoadSharedModels",
           "start": "0x8015E684",
           "end": "0x8015E6C4"
         },
         {
-          "symbol": "fn_8015E6C4",
+          "symbol": "PlaModelInitPlayerModels",
           "start": "0x8015E6C4",
           "end": "0x8015E6C8"
         },
         {
-          "symbol": "fn_8015E6C8",
+          "symbol": "PlaModelResetPlayerModels",
           "start": "0x8015E6C8",
           "end": "0x8015E714"
         },
         {
-          "symbol": "fn_8015E714",
+          "symbol": "PlaModelFreeSharedModels",
           "start": "0x8015E714",
           "end": "0x8015E73C"
         },
@@ -20850,12 +20619,12 @@
           "end": "0x8015E950"
         },
         {
-          "symbol": "fn_8015E950",
+          "symbol": "PlaModelInitMorphHead",
           "start": "0x8015E950",
           "end": "0x8015E994"
         },
         {
-          "symbol": "fn_8015E994",
+          "symbol": "PlaModelFreeMorphHead",
           "start": "0x8015E994",
           "end": "0x8015E9F4"
         },
@@ -20865,7 +20634,7 @@
           "end": "0x8015EB00"
         },
         {
-          "symbol": "fn_8015EB00",
+          "symbol": "PlaModelClearHair",
           "start": "0x8015EB00",
           "end": "0x8015EB4C"
         },
@@ -20875,7 +20644,7 @@
           "end": "0x8015EC28"
         },
         {
-          "symbol": "fn_8015EC28",
+          "symbol": "PlaModelClearHat",
           "start": "0x8015EC28",
           "end": "0x8015EC74"
         },
@@ -20885,7 +20654,7 @@
           "end": "0x8015ED50"
         },
         {
-          "symbol": "fn_8015ED50",
+          "symbol": "PlaModelClearGlasses",
           "start": "0x8015ED50",
           "end": "0x8015ED9C"
         },
@@ -20925,12 +20694,12 @@
           "end": "0x8015F35C"
         },
         {
-          "symbol": "fn_8015F35C",
+          "symbol": "PlaModelBeginFaceCache",
           "start": "0x8015F35C",
           "end": "0x8015F388"
         },
         {
-          "symbol": "fn_8015F388",
+          "symbol": "PlaModelEndFaceCache",
           "start": "0x8015F388",
           "end": "0x8015F3FC"
         },
@@ -20950,7 +20719,7 @@
           "end": "0x8015F638"
         },
         {
-          "symbol": "fn_8015F638",
+          "symbol": "PlaModelGetHairStyleModels",
           "start": "0x8015F638",
           "end": "0x8015F6E8"
         },
@@ -20965,27 +20734,27 @@
           "end": "0x8015F958"
         },
         {
-          "symbol": "fn_8015F958",
+          "symbol": "PlaModelLoadHairAsync",
           "start": "0x8015F958",
           "end": "0x8015FB38"
         },
         {
-          "symbol": "fn_8015FB38",
+          "symbol": "PlaModelLoadHatAsync",
           "start": "0x8015FB38",
           "end": "0x8015FC54"
         },
         {
-          "symbol": "fn_8015FC54",
+          "symbol": "PlaModelLoadGlassesAsync",
           "start": "0x8015FC54",
           "end": "0x8015FD70"
         },
         {
-          "symbol": "fn_8015FD70",
+          "symbol": "PlaModelLoadJewelAsync",
           "start": "0x8015FD70",
           "end": "0x8015FE4C"
         },
         {
-          "symbol": "fn_8015FE4C",
+          "symbol": "PlaModelFinishAsyncLoads",
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
@@ -23353,7 +23122,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); the six non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); its one non-exact function, PlayAlignIssuePlayerRoute, stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -23485,53 +23254,6 @@
           "symbol": "PlayAlignBuildSegmentStrip",
           "start": "0x801660A0",
           "end": "0x80166110"
-        }
-      ]
-    },
-    {
-      "source": "src/game/PlayArt.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp). Draft comparisons of the unlinked functions 0x80166110-0x80167094 behind DECOMP_COMPARE; the linked tail 0x80167094-0x80167910 keeps its units.json placement and the original bytes stay linked for the drafts.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80166110",
-          "end": "0x80167910"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4850",
-          "end": "0x802A4908"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031D38C",
-          "end": "0x8036167C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PlayArtBuildArrowQuad",
-          "start": "0x80166110",
-          "end": "0x801662A8"
-        },
-        {
-          "symbol": "PlayArtAddQuad",
-          "start": "0x801662A8",
-          "end": "0x8016631C"
-        },
-        {
-          "symbol": "PlayArtBuildRoute",
-          "start": "0x8016631C",
-          "end": "0x80166BE8"
-        },
-        {
-          "symbol": "PlayArtSetPlayerColors",
-          "start": "0x80166BE8",
-          "end": "0x80167094"
         }
       ]
     },
@@ -23816,7 +23538,7 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; the first four and native state link, the two allocator loops remain registered partials.",
+      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; five and the native state link, the SNDARAM_alloc loop remains a registered partial.",
       "sections": [
         {
           "section": ".text",
@@ -23836,11 +23558,6 @@
           "symbol": "SNDARAM_alloc",
           "start": "0x80279960",
           "end": "0x80279B24"
-        },
-        {
-          "symbol": "SNDARAM_free",
-          "start": "0x80279B24",
-          "end": "0x80279BC0"
         }
       ]
     },
@@ -23951,40 +23668,9 @@
       ]
     },
     {
-      "source": "src/engine/animmotroot.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8 and the HOLDOUT source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset, which keep the original code while AnimMotRotateHalfTurn and the pool link.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BCA74",
-          "end": "0x801BCF40"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDC0",
-          "end": "0x802AEDC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "AnimMotBlendRootAngle",
-          "start": "0x801BCA74",
-          "end": "0x801BCCAC"
-        },
-        {
-          "symbol": "AnimMotBlendRootOffset",
-          "start": "0x801BCCAC",
-          "end": "0x801BCEEC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes. Data rows 0x8037EC7C-0x8037F860 (.bss) and 0x803ECEBC-0x803ECEC0 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -23997,6 +23683,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "functions": [
@@ -24156,7 +23854,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Four full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Two full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24179,11 +23877,6 @@
       ],
       "functions": [
         {
-          "symbol": "iSPCH_GetPhraseBank",
-          "start": "0x801AFD04",
-          "end": "0x801AFDFC"
-        },
-        {
           "symbol": "iSPCH_ChooseSamples",
           "start": "0x801B0050",
           "end": "0x801B01E8"
@@ -24192,11 +23885,6 @@
           "symbol": "iSPCH_MakeSampleRequests",
           "start": "0x801B0EA4",
           "end": "0x801B10AC"
-        },
-        {
-          "symbol": "iSPCH_EACrandom",
-          "start": "0x801B1934",
-          "end": "0x801B1A3C"
         }
       ]
     },
@@ -24367,7 +24055,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -24380,6 +24068,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "functions": [
@@ -24896,7 +24590,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and five HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These five full partial bodies retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
+      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and the HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These partial bodies (two after round 5 lane 3, 2026-11-27) retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
       "sections": [
         {
           "section": ".text",
@@ -24942,24 +24636,9 @@
           "end": "0x801DE010"
         },
         {
-          "symbol": "_sumGasMotionForces",
-          "start": "0x801DE04C",
-          "end": "0x801DE114"
-        },
-        {
-          "symbol": "ParticleLibInit",
-          "start": "0x801DE1E0",
-          "end": "0x801DE410"
-        },
-        {
           "symbol": "ParticleLibShutdown",
           "start": "0x801DE410",
           "end": "0x801DE4F8"
-        },
-        {
-          "symbol": "ParticleObjInitState",
-          "start": "0x801DE794",
-          "end": "0x801DE7F4"
         }
       ],
       "discarded": [
@@ -25157,13 +24836,25 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the five holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the two holdouts as partials and keep the exact functions measured. The file defines its .sdata state run 0x803EBCC4-0x803EBCF8 (_Mem_heapCreatedByLib through _Mem_HeapBreakdown, data rows) and the 16-entry address table 0x80384BC0 (.bss _Mem_pAddrToHeap, data row 0x80384BC0-0x80384CC0); the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D134C",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCC4",
+          "end": "0x803EBCF8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384BC0",
+          "end": "0x80384CC0"
         }
       ],
       "functions": [
@@ -25243,7 +24934,7 @@
           "end": "0x801D2130"
         },
         {
-          "symbol": "fn_801D2130",
+          "symbol": "MemInitHeap",
           "start": "0x801D2130",
           "end": "0x801D2478"
         },
@@ -25367,7 +25058,7 @@
     {
       "source": "src/engine/memorycard.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
+      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.67%: one cross-jumped branch in the case-2 result switch; see the store-block source-form row and its HOLDOUT row).",
       "sections": [
         {
           "section": ".text",
@@ -25595,7 +25286,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with MemCardMgrEnablePolling, MemCardMgrFormatDate and MemCardMgrGetFileSize.",
+      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with MemCardMgrGetFileSize (MemCardMgrEnablePolling and MemCardMgrFormatDate exact and linked since round 6).",
       "sections": [
         {
           "section": ".text",
@@ -25736,7 +25427,7 @@
           "end": "0x801D671C"
         },
         {
-          "symbol": "fn_801D671C",
+          "symbol": "MemCardMgrGetPort",
           "start": "0x801D671C",
           "end": "0x801D6724"
         },
@@ -25751,7 +25442,7 @@
           "end": "0x801D673C"
         },
         {
-          "symbol": "fn_801D673C",
+          "symbol": "MemCardMgrGetCardType",
           "start": "0x801D673C",
           "end": "0x801D6754"
         },
@@ -25786,7 +25477,7 @@
           "end": "0x801D6850"
         },
         {
-          "symbol": "fn_801D6850",
+          "symbol": "MemCardMgrGetFileType",
           "start": "0x801D6850",
           "end": "0x801D685C"
         },
@@ -25806,7 +25497,7 @@
           "end": "0x801D6918"
         },
         {
-          "symbol": "fn_801D6918",
+          "symbol": "MemCardMgrGetLastAction",
           "start": "0x801D6918",
           "end": "0x801D6924"
         },
@@ -25831,7 +25522,7 @@
           "end": "0x801D6B24"
         },
         {
-          "symbol": "fn_801D6B24",
+          "symbol": "MemCardMgrGetFileTitle",
           "start": "0x801D6B24",
           "end": "0x801D6B4C"
         },
@@ -26755,96 +26446,6 @@
       ]
     },
     {
-      "source": "src/engine/splytree.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are drafted at 90.62% (the target loads the child into r0 and copies it to r3 after loading the tree sentinel; see the compiler row).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7684",
-          "end": "0x801C7F70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_DSListTraverseSplayTreeRight",
-          "start": "0x801C7684",
-          "end": "0x801C7730"
-        },
-        {
-          "symbol": "_DSListTraverseSplayTreeLeft",
-          "start": "0x801C7730",
-          "end": "0x801C77DC"
-        },
-        {
-          "symbol": "_DSListGetSplayPrev",
-          "start": "0x801C77DC",
-          "end": "0x801C7810"
-        },
-        {
-          "symbol": "_DSListGetSplayNext",
-          "start": "0x801C7810",
-          "end": "0x801C7844"
-        },
-        {
-          "symbol": "_DSListSplay",
-          "start": "0x801C7844",
-          "end": "0x801C7A34"
-        },
-        {
-          "symbol": "_DSListInitSplayTree",
-          "start": "0x801C7A34",
-          "end": "0x801C7A60"
-        },
-        {
-          "symbol": "_DSListDelSplayTree",
-          "start": "0x801C7A60",
-          "end": "0x801C7A98"
-        },
-        {
-          "symbol": "_DSListAddSplayNode",
-          "start": "0x801C7A98",
-          "end": "0x801C7C1C"
-        },
-        {
-          "symbol": "_DSListInitSplayNode",
-          "start": "0x801C7C1C",
-          "end": "0x801C7C44"
-        },
-        {
-          "symbol": "_DSListGetSplayNode",
-          "start": "0x801C7C44",
-          "end": "0x801C7D1C"
-        },
-        {
-          "symbol": "_DSListRemoveSplayNode",
-          "start": "0x801C7D1C",
-          "end": "0x801C7E00"
-        },
-        {
-          "symbol": "_DSListTraverseSplayTree",
-          "start": "0x801C7E00",
-          "end": "0x801C7E30"
-        },
-        {
-          "symbol": "_DSListSearchSplayTree",
-          "start": "0x801C7E30",
-          "end": "0x801C7EDC"
-        },
-        {
-          "symbol": "_DSListOptimizeSplayTree",
-          "start": "0x801C7EDC",
-          "end": "0x801C7EE4"
-        },
-        {
-          "symbol": "DSListInitSplayTreeModule",
-          "start": "0x801C7EE4",
-          "end": "0x801C7F70"
-        }
-      ]
-    },
-    {
       "source": "src/engine/LLFont.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801CD79C-0x801CE138 and its function, name, compiler and data rows. FontLLUploadPalettes remains a measured holdout at 0x801CDE98-0x801CDFE4. The other eight functions and both data sections are linked.",
@@ -26922,7 +26523,7 @@
     {
       "source": "src/engine/t3db_table.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (86.0%: register allocation and frame); the rest of the file is linked through units.json.",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (88.00%: register allocation); the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -27027,124 +26628,6 @@
       ]
     },
     {
-      "source": "src/engine/pathserv.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, complete native data row and HOLDOUT 0x801B3568-0x801B3724. Only the integer-return sort remains a comparison.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B343C",
-          "end": "0x801B3AD0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA58",
-          "end": "0x802AEA60"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_sortprojects",
-          "start": "0x801B3568",
-          "end": "0x801B3724"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/pathvol.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B45D0",
-          "end": "0x801B51AC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEB90",
-          "end": "0x802AEC08"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATH_volume",
-          "start": "0x801B45D0",
-          "end": "0x801B4728"
-        },
-        {
-          "symbol": "PATH_fade",
-          "start": "0x801B4728",
-          "end": "0x801B4824"
-        },
-        {
-          "symbol": "PATHI_fade",
-          "start": "0x801B4898",
-          "end": "0x801B4960"
-        },
-        {
-          "symbol": "PATHI_customsfxfade",
-          "start": "0x801B4960",
-          "end": "0x801B49C4"
-        },
-        {
-          "symbol": "PATHI_customdrylevelfade",
-          "start": "0x801B49C4",
-          "end": "0x801B4A24"
-        },
-        {
-          "symbol": "PATHI_setfadevolume",
-          "start": "0x801B4A24",
-          "end": "0x801B4CE4"
-        },
-        {
-          "symbol": "PATHI_setsfxfadevolume",
-          "start": "0x801B4CE4",
-          "end": "0x801B4F50"
-        },
-        {
-          "symbol": "PATHI_setdrylevelfadevolume",
-          "start": "0x801B4F50",
-          "end": "0x801B51AC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/pathnode.c",
-      "profile": "path_cxx",
-      "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B6780",
-          "end": "0x801B7778"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AED00",
-          "end": "0x802AED50"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_choosesynchtime",
-          "start": "0x801B6A18",
-          "end": "0x801B6CB4"
-        },
-        {
-          "symbol": "PATHI_enternode",
-          "start": "0x801B6ED0",
-          "end": "0x801B7178"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
       "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
@@ -27173,21 +26656,6 @@
           "symbol": "PATHI_serviceaction",
           "start": "0x801B7880",
           "end": "0x801B845C"
-        },
-        {
-          "symbol": "PATHI_conditiondone",
-          "start": "0x801B845C",
-          "end": "0x801B84E4"
-        },
-        {
-          "symbol": "PATHI_trackstatus",
-          "start": "0x801B8580",
-          "end": "0x801B864C"
-        },
-        {
-          "symbol": "PATHI_getvalue",
-          "start": "0x801B864C",
-          "end": "0x801B89B0"
         }
       ]
     },
@@ -28594,32 +28062,6 @@
       ]
     },
     {
-      "source": "src/engine/flowman.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional flowman.cpp unit row and StopModuleList HOLDOUT source-form row. The other sixteen functions and complete native vtable link from the same source file.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CBC50",
-          "end": "0x801CC350"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF388",
-          "end": "0x802AF3B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StopModuleList__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC168",
-          "end": "0x801CC1DC"
-        }
-      ]
-    },
-    {
       "source": "src/game/InGameGroup.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x800325E8-0x80032EE8, data rows and HOLDOUT source-form row 0x80032790-0x80032E70. Only the static initializer remains a comparison; the two code runs, native data and ctor/dtor entries link.",
@@ -28756,7 +28198,7 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 6 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 68 functions are exact and linked (6 made exact by lane 8, 2026-11-27).",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 3 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 71 functions are exact and linked (6 made exact by lane 8 and 3 by round 5 lane 5, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
@@ -28779,11 +28221,6 @@
       ],
       "functions": [
         {
-          "symbol": "SNDAEMSI_updatedestroy",
-          "start": "0x80266EC0",
-          "end": "0x80267114"
-        },
-        {
           "symbol": "UpdateControlClass",
           "start": "0x802671D0",
           "end": "0x8026739C"
@@ -28792,16 +28229,6 @@
           "symbol": "SNDAEMSI_updateoscillator",
           "start": "0x80268B88",
           "end": "0x80268DA8"
-        },
-        {
-          "symbol": "SNDAEMSI_CreateModuleInstance",
-          "start": "0x80269084",
-          "end": "0x80269260"
-        },
-        {
-          "symbol": "SNDAEMS_removemodulebank",
-          "start": "0x802692B8",
-          "end": "0x80269484"
         },
         {
           "symbol": "SNDAEMSI_resolvemodulebank",
@@ -28843,29 +28270,9 @@
       ]
     },
     {
-      "source": "src/engine/spchrule.c",
-      "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0, the speech_cxx comparison profile and evidence.tsv source-form 0x801B22E0-0x801B2368. The other fifteen native routines link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B1CFC",
-          "end": "0x801B23A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "iSPCH_GetSampleSizeData",
-          "start": "0x801B22E0",
-          "end": "0x801B2368"
-        }
-      ]
-    },
-    {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its holdout UIGImageNodeRender (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
@@ -29014,78 +28421,6 @@
           "symbol": "UIGCSRestorePalette",
           "start": "0x80220CA4",
           "end": "0x80220CDC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/uigtext.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/uigtext.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout UIGTextLayout 0x80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221BF0",
-          "end": "0x80222EC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1FA0",
-          "end": "0x802B1FC0"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039F9B8",
-          "end": "0x8039FDB8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "UIGTextGetCursorPos",
-          "start": "0x80221BF0",
-          "end": "0x80221D30"
-        },
-        {
-          "symbol": "UIGTextGetLine",
-          "start": "0x80221D30",
-          "end": "0x80221D5C"
-        },
-        {
-          "symbol": "UIGTextFreeLines",
-          "start": "0x80221D5C",
-          "end": "0x80221DB0"
-        },
-        {
-          "symbol": "UIGTextLayout",
-          "start": "0x80221DB0",
-          "end": "0x80222220"
-        },
-        {
-          "symbol": "UIGLibTextLoad",
-          "start": "0x80222764",
-          "end": "0x802227B0"
-        },
-        {
-          "symbol": "UIGLibTextUnLoad",
-          "start": "0x80222E0C",
-          "end": "0x80222E54"
-        },
-        {
-          "symbol": "UIGTextCopyBuffer",
-          "start": "0x80222E54",
-          "end": "0x80222EC4"
-        },
-        {
-          "symbol": "UIGLibTextObjAction",
-          "start": "0x80222220",
-          "end": "0x80222764"
-        },
-        {
-          "symbol": "UIGLibTextDraw",
-          "start": "0x802227B0",
-          "end": "0x80222E0C"
         }
       ]
     },
@@ -29675,11 +29010,6 @@
       ],
       "functions": [
         {
-          "symbol": "_WriteInt",
-          "start": "0x801C20F0",
-          "end": "0x801C21D0"
-        },
-        {
           "symbol": "_WriteFloat",
           "start": "0x801C21D0",
           "end": "0x801C2428"
@@ -29751,7 +29081,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); all 20 functions written, 16 exact; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 18 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29774,146 +29104,14 @@
       ],
       "functions": [
         {
-          "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
-          "start": "0x8026D200",
-          "end": "0x8026D278"
-        },
-        {
-          "symbol": "SNDSTRMI_startstream__FP18SndStreamChannel_t",
-          "start": "0x8026D278",
-          "end": "0x8026D53C"
-        },
-        {
-          "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
-          "start": "0x8026D53C",
-          "end": "0x8026D5B4"
-        },
-        {
-          "symbol": "SNDSTRMI_destroyall__Fv",
-          "start": "0x8026D5B4",
-          "end": "0x8026D610"
-        },
-        {
-          "symbol": "SNDSTRMI_getstreamptr__Fi",
-          "start": "0x8026D610",
-          "end": "0x8026D644"
-        },
-        {
-          "symbol": "SNDSTRMI_removerequest__Fi",
-          "start": "0x8026D644",
-          "end": "0x8026D6AC"
-        },
-        {
-          "symbol": "SNDSTRMI_releasecallback__FPvT0",
-          "start": "0x8026D6AC",
-          "end": "0x8026D6E8"
-        },
-        {
-          "symbol": "SNDSTRMI_framescallback__FiUiPv",
-          "start": "0x8026D6E8",
-          "end": "0x8026D790"
-        },
-        {
-          "symbol": "SNDSTRMI_parseheader__FiP16SndStreamChunk_t",
-          "start": "0x8026D790",
-          "end": "0x8026D9CC"
-        },
-        {
           "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
           "start": "0x8026D9CC",
           "end": "0x8026DAE4"
         },
         {
-          "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
-          "start": "0x8026DAE4",
-          "end": "0x8026DB5C"
-        },
-        {
-          "symbol": "SNDSTRMI_isheld__FP18SndStreamChannel_t",
-          "start": "0x8026DB5C",
-          "end": "0x8026DC38"
-        },
-        {
-          "symbol": "SNDSTRMI_service__Fv",
-          "start": "0x8026DC38",
-          "end": "0x8026DDB8"
-        },
-        {
-          "symbol": "SNDSTRMI_numcreated__Fv",
-          "start": "0x8026DDB8",
-          "end": "0x8026DE00"
-        },
-        {
-          "symbol": "fn_8026DE00",
+          "symbol": "SNDSTRMI_create",
           "start": "0x8026DE00",
           "end": "0x8026E160"
-        },
-        {
-          "symbol": "SNDSTRMI_queue__FiiPcii",
-          "start": "0x8026E160",
-          "end": "0x8026E280"
-        },
-        {
-          "symbol": "SNDSTRM_create",
-          "start": "0x8026E280",
-          "end": "0x8026E2A8"
-        },
-        {
-          "symbol": "SNDSTRM_destroy",
-          "start": "0x8026E2A8",
-          "end": "0x8026E364"
-        },
-        {
-          "symbol": "SNDSTRM_queuefile",
-          "start": "0x8026E364",
-          "end": "0x8026E388"
-        },
-        {
-          "symbol": "SNDSTRM_purge",
-          "start": "0x8026E388",
-          "end": "0x8026E4C0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/smidi.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 10 functions are exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026B898",
-          "end": "0x8026C39C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FFCD0",
-          "end": "0x802FFCD4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6E60",
-          "end": "0x803A7624"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
-          "start": "0x8026BA60",
-          "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-          "start": "0x8026BC9C",
-          "end": "0x8026BE48"
-        },
-        {
-          "symbol": "SNDI_midiprocesstick__Fi",
-          "start": "0x8026BF04",
-          "end": "0x8026C0C0"
         }
       ]
     },

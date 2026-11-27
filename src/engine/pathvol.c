@@ -34,7 +34,7 @@ extern "C" void PATH_volume(int flags, signed char volume)
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
                         p->mUnknown2 = volume;
                         if (p->mUnknown1A & 0x80)
-                            p->mUnknown100->vfn_13((signed char)p->mUnknown3 * volume / 100);
+                            p->mUnknown100->SetVolume((signed char)p->mUnknown3 * volume / 100);
                     }
                 }
             }
@@ -73,7 +73,7 @@ extern "C" void PATHI_volume(PathTrack_t *p, int value)
 {
     p->mUnknown3 = value;
     if (p->mUnknown1A & 0x80)
-        p->mUnknown100->vfn_13((signed char)p->mUnknown3 * (signed char)p->mUnknown2 / 100);
+        p->mUnknown100->SetVolume((signed char)p->mUnknown3 * (signed char)p->mUnknown2 / 100);
 }
 
 extern "C" void PATHI_fade(PathTrack_t *p, int a, int b, int c)
@@ -114,18 +114,20 @@ extern "C" void PATHI_setfadevolume(PathTrack_t *p)
     curve.mRising = delta >= 0.0f;
     float t = (float)(gPathMilliseconds - p->mUnknown10) / (float)curve.mTime;
     if (!(t < 1.0f)) {
-        p->mUnknown100->vfn_13((signed char)p->mUnknown3 * (signed char)p->mUnknown2 / 100);
-        p->mUnknown10 = 0;
+        p->mUnknown100->SetVolume((signed char)p->mUnknown3 * (signed char)p->mUnknown2 / 100);
         p->mUnknown3 = p->mUnknown1A;
         p->mUnknown18 = -1;
-        p->mUnknown19 = -1;
-        p->mUnknown1A = -1;
+        // FAKEMATCH: factor is still -1.0f in this arm; storing it gives the shape and target bytes their own -1 register
+        p->mUnknown1A = factor;
+        p->mUnknown19 = factor;
+        p->mUnknown10 = 0;
     } else {
         if (curve.mRising)
             t = 1.0f - t;
         switch (curve.mShape) {
         case 2:
-            t = t * t;
+            factor = 1.0f - t * t;
+            break;
         case 1:
             factor = 1.0f - t;
             break;
@@ -140,7 +142,8 @@ extern "C" void PATHI_setfadevolume(PathTrack_t *p)
             delta = -delta;
         if (factor < 0.0f || factor > 1.0f)
             return;
-        p->mUnknown100->vfn_13((int)((delta * factor + base) * (float)(signed char)p->mUnknown2 * 0.01f));
+        factor = delta * factor + base;
+        p->mUnknown100->SetVolume((int)(factor * (float)(signed char)p->mUnknown2 * 0.01f));
     }
 }
 
@@ -154,17 +157,19 @@ extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
     curve.mRising = delta >= 0.0f;
     float t = (float)(gPathMilliseconds - p->mUnknown1C) / (float)curve.mTime;
     if (!(t < 1.0f)) {
-        p->mUnknown100->vfn_17(p->mUnknown8.bits.mUnknown1, p->mUnknown26);
+        p->mUnknown100->SetFXSendLevel(p->mUnknown8.bits.mUnknown1, p->mUnknown26);
         p->mUnknown24 = -1;
+        // FAKEMATCH: factor is still -1.0f in this arm; storing it gives the shape and target bytes their own -1 register
+        p->mUnknown26 = factor;
+        p->mUnknown25 = factor;
         p->mUnknown1C = 0;
-        p->mUnknown25 = -1;
-        p->mUnknown26 = -1;
     } else {
         if (curve.mRising)
             t = 1.0f - t;
         switch (curve.mShape) {
         case 2:
-            t = t * t;
+            factor = 1.0f - t * t;
+            break;
         case 1:
             factor = 1.0f - t;
             break;
@@ -179,7 +184,8 @@ extern "C" void PATHI_setsfxfadevolume(PathTrack_t *p)
             delta = -delta;
         if (factor < 0.0f || factor > 1.0f)
             return;
-        p->mUnknown100->vfn_17(p->mUnknown8.bits.mUnknown1, (int)(delta * factor + base));
+        factor = delta * factor + base;
+        p->mUnknown100->SetFXSendLevel(p->mUnknown8.bits.mUnknown1, (int)factor);
     }
 }
 
@@ -193,17 +199,19 @@ extern "C" void PATHI_setdrylevelfadevolume(PathTrack_t *p)
     curve.mRising = delta >= 0.0f;
     float t = (float)(gPathMilliseconds - p->mUnknown28) / (float)curve.mTime;
     if (!(t < 1.0f)) {
-        p->mUnknown100->vfn_15(p->mUnknown32);
+        p->mUnknown100->SetDryLevel(p->mUnknown32);
         p->mUnknown30 = -1;
+        // FAKEMATCH: factor is still -1.0f in this arm; storing it gives the shape and target bytes their own -1 register
+        p->mUnknown32 = factor;
+        p->mUnknown31 = factor;
         p->mUnknown28 = 0;
-        p->mUnknown31 = -1;
-        p->mUnknown32 = -1;
     } else {
         if (curve.mRising)
             t = 1.0f - t;
         switch (curve.mShape) {
         case 2:
-            t = t * t;
+            factor = 1.0f - t * t;
+            break;
         case 1:
             factor = 1.0f - t;
             break;
@@ -218,6 +226,7 @@ extern "C" void PATHI_setdrylevelfadevolume(PathTrack_t *p)
             delta = -delta;
         if (factor < 0.0f || factor > 1.0f)
             return;
-        p->mUnknown100->vfn_15((int)(delta * factor + base));
+        factor = delta * factor + base;
+        p->mUnknown100->SetDryLevel((int)factor);
     }
 }

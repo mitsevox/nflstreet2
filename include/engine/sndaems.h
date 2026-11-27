@@ -26,7 +26,7 @@ typedef struct Voice_803A6C24 {
     unsigned short mUnknown8E;
 } Voice_803A6C24;
 
-typedef struct Object_803A6C24 {
+typedef struct SndGlobalVoiceView_t {
     unsigned char mUnknown0[0x34];
     unsigned char m34;
     unsigned char mUnknown35[0x137];
@@ -37,13 +37,13 @@ typedef struct Object_803A6C24 {
     unsigned char mUnknown174[48];
     void (*mUnknown1A4[10])(void *);
     Voice_803A6C24 *mUnknown1CC;
-} Object_803A6C24;
+} SndGlobalVoiceView_t;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern Object_803A6C24 lbl_803A6C24;
+extern SndGlobalVoiceView_t lbl_803A6C24;
 
 #ifdef __cplusplus
 }

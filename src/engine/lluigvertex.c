@@ -24,18 +24,18 @@
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
 
-extern Float32 lbl_803A0400[][2];
-extern GXColor lbl_803A1400[];
+extern Float32 UIGArcVertexCoords[][2];
+extern GXColor UIGArcVertexColors[];
 
 void LLUIGVertexSend(UIGNode_t *pNode, Int32 Index, Float32 *pCoord)
 {
-    GXPosition3f32(lbl_803A0400[Index][0], lbl_803A0400[Index][1], 0.0f);
+    GXPosition3f32(UIGArcVertexCoords[Index][0], UIGArcVertexCoords[Index][1], 0.0f);
     // FAKEMATCH: the flag test reads the node's first word (lwz/rlwinm) where Flags is a halfword
     if ((*(Uint32 *)pNode & 0x60000) != 0x40000) {
-        GXColor4u8(lbl_803A1400[Index].r, lbl_803A1400[Index].g, lbl_803A1400[Index].b,
-                   lbl_803A1400[Index].a);
+        GXColor4u8(UIGArcVertexColors[Index].r, UIGArcVertexColors[Index].g, UIGArcVertexColors[Index].b,
+                   UIGArcVertexColors[Index].a);
     } else {
-        GXColor4u8(0xFF, 0xFF, 0xFF, lbl_803A1400[Index].a);
+        GXColor4u8(0xFF, 0xFF, 0xFF, UIGArcVertexColors[Index].a);
     }
     if (pNode->Flags & 4) {
         GXTexCoord2f32(pCoord[0], pCoord[1]);

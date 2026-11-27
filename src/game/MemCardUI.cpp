@@ -60,7 +60,7 @@ int MemCardFilesIsUsed(int type, int index);
 int MemCardFilesFindNameOnPort(int value, int type, const char *name, unsigned int *pIndex);
 int MemCardUtilGetSaveType(int a);
 void MemCardGetNewSaveSpace(int *pA, int *pB);
-int fn_801D6850(void);
+int MemCardMgrGetFileType(void);
 }
 
 static void (*_MemCardUI_pEnterCallback)(int, int *) = 0;
@@ -119,8 +119,8 @@ void MemCardUIResetIdle(void)
 
 void MemCardUIExit(void)
 {
-    if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-        MemCardMgrUnmount(fn_801D671C());
+    if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+        MemCardMgrUnmount(MemCardMgrGetPort());
     }
     MemCardMgrSetPort(-1);
     if (_MemCardUI_pExitCallback != 0) {
@@ -138,8 +138,8 @@ int MemCardUIRunCheckCallback(int *p0, int *p4, int *p8, int *p12)
     if (result != 0) {
         result = 1;
     } else {
-        if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            MemCardMgrUnmount(fn_801D671C());
+        if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+            MemCardMgrUnmount(MemCardMgrGetPort());
         }
         result = 0;
     }
@@ -163,7 +163,7 @@ int MemCardUIFindNthFile(int a, int count)
 
 int MemCardUIProbePort(unsigned int slot)
 {
-    if (slot <= 1 && slot != fn_801D671C()) {
+    if (slot <= 1 && slot != MemCardMgrGetPort()) {
         MemCardMgrSetPort(slot);
         MemCardMgrStartOperation(8);
         return 1;
@@ -174,7 +174,7 @@ int MemCardUIProbePort(unsigned int slot)
 int MemCardUIProbeNextPort(int a)
 {
     if (a != 0) {
-        if (fn_801D671C() != 0) {
+        if (MemCardMgrGetPort() != 0) {
             return 0;
         }
         MemCardMgrSetPort(1);
@@ -193,8 +193,8 @@ void MemCardUIUnmountAndClearChanges(void)
     int a = 0;
     int b = 0;
 
-    if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-        MemCardMgrUnmount(fn_801D671C());
+    if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+        MemCardMgrUnmount(MemCardMgrGetPort());
     }
     MemCGetDeviceChanges(&a, &b);
 }
@@ -204,7 +204,7 @@ int MemCardUIHasPortChanged(void)
     int a = 0;
     int b = 0;
     int result = MemCGetDeviceChanges(&a, &b);
-    int slot = fn_801D671C();
+    int slot = MemCardMgrGetPort();
 
     if (result != 0) {
         result = ((a | b) >> slot) & 1;
@@ -214,8 +214,8 @@ int MemCardUIHasPortChanged(void)
 
 void MemCardUIUnmountPort(void)
 {
-    if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-        MemCardMgrUnmount(fn_801D671C());
+    if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+        MemCardMgrUnmount(MemCardMgrGetPort());
     }
 }
 
@@ -339,7 +339,7 @@ void MemCardUIScanOtherGame(int a)
 
 void MemCardUIRestoreGameCode(void)
 {
-    MemCUnMountAlt(fn_801D671C());
+    MemCUnMountAlt(MemCardMgrGetPort());
     MemCardMgrSetGameCode("GN7E-69", 0);
 }
 
@@ -423,8 +423,8 @@ int MemCardUISaveOverFile(int a, int index, int b)
 
 void MemCardUIFinish(void)
 {
-    if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-        MemCardMgrUnmount(fn_801D671C());
+    if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+        MemCardMgrUnmount(MemCardMgrGetPort());
     }
     MemCardMgrSetPort(-1);
     if (_MemCardUI_pExitCallback != 0) {
@@ -459,7 +459,7 @@ int MemCardUICheckSaveSpace(int a, int b, int *pError)
             ok = 0;
         }
         if (ok) {
-            MemCardFilesSetSlotLocation(a, b, fn_801D671C(), index);
+            MemCardFilesSetSlotLocation(a, b, MemCardMgrGetPort(), index);
         }
     }
     return ok;
@@ -477,7 +477,7 @@ void MemCardUIGetTitle(TextRecord_t *pRecord)
 {
     char name[32];
 
-    fn_801D6B24(name, 32);
+    MemCardMgrGetFileTitle(name, 32);
     strncpy(pRecord->mUnknown8, name, pRecord->mUnknown4);
 }
 
@@ -515,7 +515,7 @@ void MemCardUIStartScan(int a, int *pB, int c, int d, int e)
     if (e != 0) {
         MemCardUIBeginPortScan(d, 0);
     } else {
-        MemCardUIBeginPortScan(d, fn_801D671C());
+        MemCardUIBeginPortScan(d, MemCardMgrGetPort());
     }
     if (_MemCardUI_pEnterCallback != 0) {
         _MemCardUI_pEnterCallback(a, pB);
@@ -529,8 +529,8 @@ int MemCardUIProbeNext(int *pSlot)
     if (_MemCardUI_bProbePending) {
         MemCardMgrStartOperation(8);
         _MemCardUI_bProbePending = 0;
-        *pSlot = fn_801D671C();
-    } else if (MemCardUIStepPort(fn_801D671C(), _MemCardUI_iPortStep, &slot) != 0) {
+        *pSlot = MemCardMgrGetPort();
+    } else if (MemCardUIStepPort(MemCardMgrGetPort(), _MemCardUI_iPortStep, &slot) != 0) {
         MemCardMgrSetPort(slot);
         MemCardMgrStartOperation(8);
         *pSlot = slot;
@@ -558,7 +558,7 @@ void MemCardUIGetSavePort(int a, int b, int *pOut)
 
 int MemCardUIGetPort(void)
 {
-    return fn_801D671C();
+    return MemCardMgrGetPort();
 }
 
 void MemCardUISetPort(int slot)
@@ -805,17 +805,17 @@ int MemCardUIHandleFunction(unsigned int id, MemCardUIArgs_t *pParams, int c, in
         MemCardGetNewSaveSpace((int *)pParams->mUnknown0, (int *)pParams->mUnknown4);
         break;
     case 531:
-        if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            MemCardMgrUnmount(fn_801D671C());
+        if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+            MemCardMgrUnmount(MemCardMgrGetPort());
         }
         MemCardMgrSetPort(-1);
-        if (fn_801D6850() == 1) {
+        if (MemCardMgrGetFileType() == 1) {
             GameOptionsShutdown();
         }
         break;
     case 532:
         MemCardMgrEnablePolling(0);
-        if (fn_801D6850() == 1) {
+        if (MemCardMgrGetFileType() == 1) {
             GameOptionsInit(0);
         }
         break;

@@ -168,7 +168,7 @@ struct Stream_802743A0 {
     int m25E0;
 };
 
-struct State_803A8D60 {
+struct SndDrvState_t {
     Channel_803A8D60 m0[48];
     unsigned char mUnknownC00[0x800];
     float m1400;
@@ -198,7 +198,7 @@ struct State_803A8D60 {
     unsigned char mUnknownC078[0x48];
 };
 
-struct Struct_80270E04 {
+struct SNDIPATCHHEADER {
     short m0;
     unsigned char mUnknown2;
     signed char m3;
@@ -252,11 +252,6 @@ struct Struct_80270E04 {
     unsigned char unk_0xFC[4];
 };
 
-struct Struct_802753AC {
-    unsigned char mUnknown0[0x3F];
-    unsigned char m3F;
-};
-
 struct Node_803B4E20 {
     Node_803B4E20 *m0;
 };
@@ -298,7 +293,7 @@ extern int MPEGuse_MMX;
 
 extern "C" {
 extern unsigned short SNDDRV_dolbypl2balances[256][4];
-extern State_803A8D60 snddrv;
+extern SndDrvState_t snddrv;
 extern int sndmixwritelog;
 extern void (*MIXoutputfn)(void **outputs, int count);
 extern int _Mix_iUnused;
@@ -379,11 +374,11 @@ void SNDDRV_fillbufwithpackets(int index, Stream_802743A0 *stream, Record_803A6D
 void iSNDserve(void);
 void SNDPLATFORM_getvoicerange(u32 flags, int *a, int *b);
 int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, int b, int c);
-int SNDPLATFORM_asyncresolvetimbre(Struct_80270E04 *p, int value, int *base);
+int SNDPLATFORM_asyncresolvetimbre(SNDIPATCHHEADER *p, int value, int *base);
 int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream);
 int SNDPLATFORM_outputlatency(void);
 int SNDPLATFORM_timemult(int index, int value);
-int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p);
 int SNDPLATFORM_stop(int index);
 void *SNDPLATFORM_memalloc(int unused, int size);
 int SNDPLATFORM_memfree(int unused, void *p);
@@ -394,7 +389,7 @@ void SNDI_mutexalloc(void);
 void SNDI_mutexfree(void);
 void SNDI_mutexlock(void);
 void SNDI_mutexunlock(void);
-int SNDPLATFORM_ModeSetUp(Struct_802753AC *p, int mode);
+int SNDPLATFORM_ModeSetUp(struct SNDSYSOPTS *opts, int mode);
 float *MIX_getwetbuffer(int index);
 void MIX_createFxglobals(void);
 void MIX_destroyFxglobals(void);

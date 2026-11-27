@@ -37,7 +37,6 @@ typedef struct SndStreamBufferTag_t {
     unsigned char mStream;
 } SndStreamBufferTag_t;
 
-SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
 void SNDSTRMI_removerequest(int id);
 int SNDSTRMI_numcreated(void);
 
@@ -172,8 +171,9 @@ void SNDSTRMI_startstream(SndStreamChannel_t *channel)
 int SNDSTRMI_calcdatarate(SndSampleFormat_t *format)
 {
     int bits = 0;
-    int rate = format->mRate * format->mChannels;
+    int rate = format->mRate;
 
+    rate *= format->mChannels;
     if (format->mCodec == 10) {
         bits = 136;
     } else if (format->mCodec == 4) {
@@ -384,10 +384,11 @@ int SNDSTRMI_isheld(SndStreamChannel_t *channel)
                 request->mHold = 0;
                 return 0;
             }
-            if (channel->mFreeRequests.mCount > 0 || STREAM_state(channel->mpTap) != 0) {
+            if (channel->mFreeRequests.mCount <= 0 && STREAM_state(channel->mpTap) == 0) {
+                request->mHold = 0;
+            } else {
                 return 1;
             }
-            request->mHold = 0;
         }
     }
     return 0;
@@ -456,23 +457,21 @@ int SNDSTRMI_numcreated(void)
 extern "C" int SNDPKTPLAY_create(SndPacketReleaseFn_t release, SndPacketFramesDoneFn_t callback,
                                  void *context, void *memory, unsigned int size);
 
-int fn_8026DE00(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
+int SNDSTRMI_create(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
 {
     SndStreamChannel_t *channel;
     SndStreamRequest_t *requests;
     unsigned char *player;
-    unsigned char *p;
     float *fxlevels;
     void *stap;
-    int stream = 0;
     int id;
     int n;
-    int i;
+    int i = 0;
     float vol;
 
     SNDSYS_entercritical();
-    for (; stream < lbl_803A6C24.m1C.m22; stream++) {
-        if (lbl_803A7648[stream] == 0) {
+    for (; i < lbl_803A6C24.m1C.m22; i++) {
+        if (lbl_803A7648[i] == 0) {
             goto found;
         }
     }
@@ -482,23 +481,25 @@ int fn_8026DE00(void *opts, int numRequests, int numPackets, void *memory, int s
 found:
     channel = (SndStreamChannel_t *)memory;
     fxlevels = (float *)(channel + 1);
-    p = (unsigned char *)memory + sizeof(SndStreamChannel_t) + lbl_8030002C * sizeof(float);
-    size = size - sizeof(SndStreamChannel_t) - lbl_8030002C * sizeof(float);
-    id = stream;
+    memory = (unsigned char *)memory + sizeof(SndStreamChannel_t) + lbl_8030002C * sizeof(float);
+    size -= sizeof(SndStreamChannel_t);
+    size -= lbl_8030002C * sizeof(float);
+    id = i;
     memset(channel, 0, sizeof(SndStreamChannel_t));
-    requests = (SndStreamRequest_t *)p;
-    p += numRequests * sizeof(SndStreamRequest_t);
+    requests = (SndStreamRequest_t *)memory;
+    memory = (unsigned char *)memory + numRequests * sizeof(SndStreamRequest_t);
     size -= numRequests * sizeof(SndStreamRequest_t);
-    player = p;
+    player = (unsigned char *)memory;
     n = SNDPKTPLAY_overhead(numPackets);
+    memory = (unsigned char *)memory + n;
     size -= n;
-    p += n;
     SNDLINKI_init(&channel->mRequests);
     SNDLINKI_init(&channel->mFreeRequests);
     for (i = 0; i < numRequests; i++) {
         SNDLINKI_push(&channel->mFreeRequests, &requests[i].mLink);
     }
-    channel->mBuffer =
+    // FAKEMATCH: volatile store keeps the target's reload of mBuffer for the error test and its register split of i and channel
+    *(volatile int *)&channel->mBuffer =
         SNDPKTPLAY_create(SNDSTRMI_releasecallback, SNDSTRMI_framescallback, channel, player,
                           SNDPKTPLAY_overhead(numPackets));
     if (channel->mBuffer < 0) {
@@ -509,7 +510,7 @@ found:
         channel->mpTap = (void *)tap;
         channel->mSharedTap = 1;
     } else {
-        stap = STREAM_create(numRequests + 2, 1, 1, p, size);
+        stap = STREAM_create(numRequests + 2, 1, 1, memory, size);
         if (stap == 0) {
             SNDPKTPLAY_destroy(channel->mBuffer);
             SNDSYS_leavecritical();
@@ -530,8 +531,8 @@ found:
         SndStreamSpeaker_t *speaker = &channel->mSpeakers[i];
 
         speaker->mIndex = i;
-        speaker->mAzimuthOn = 0;
         speaker->mVolume = vol;
+        speaker->mAzimuthOn = 0;
         speaker->mAzimuth = -1000000.0f;
     }
     channel->mPanned = 1;
@@ -590,7 +591,7 @@ extern "C" {
 
 int SNDSTRM_create(SndPlayOpts_t *opts, int a, int b, void *memory, int size)
 {
-    return fn_8026DE00(opts, a, b, memory, size, 0, 0);
+    return SNDSTRMI_create(opts, a, b, memory, size, 0, 0);
 }
 
 int SNDSTRM_destroy(int stream)

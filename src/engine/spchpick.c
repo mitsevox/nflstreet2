@@ -269,10 +269,11 @@ int iSPCH_GetPhraseBank(SpchEventKey_t *key, SpchEventParm_t *event, SpchPhraseB
     int id = key->mId;
     int mode = key->mUnknown3;
     int index = key->mUnknown2;
-    out->mBankIndex = -1;
     int value = -1;
-    out->mSubBank = -1;
-    out->mHandle = -1;
+    int slot = -1;
+    out->mSubBank = slot;
+    out->mHandle = slot;
+    out->mBankIndex = slot;
     switch (mode) {
     case 0:
         out->mBankIndex = iSPCH_FindBank(id, &value);
@@ -283,13 +284,11 @@ int iSPCH_GetPhraseBank(SpchEventKey_t *key, SpchEventParm_t *event, SpchPhraseB
         out->mHandle = value;
         break;
     case 2:
-        {
-            int slot = iSPCH_FindBank(id, &value);
-            if (iSPCH_TestSubBankBounds(slot, event[index].mWord)) out->mSubBank = event[index].mHalfwords[1];
-            else value = -1;
-            out->mBankIndex = slot;
-            out->mHandle = value;
-        }
+        slot = iSPCH_FindBank(id, &value);
+        if (iSPCH_TestSubBankBounds(slot, event[index].mWord)) out->mSubBank = event[index].mHalfwords[1];
+        else value = -1;
+        out->mBankIndex = slot;
+        out->mHandle = value;
         break;
     }
     return out->mHandle >= 0;
@@ -1062,25 +1061,30 @@ unsigned int iSPCH_EACrandom(void)
     unsigned int sum = seedX[5] + seedX[4];
     unsigned int carry = sum < seedX[5] || sum < seedX[4];
     seedX[4] = sum;
-    unsigned int old = seedX[3];
-    sum = sum + old + carry;
+    unsigned int old3 = seedX[3];
+    sum = sum + old3 + carry;
     seedX[3] = sum;
-    carry = sum < old;
-    old = seedX[2];
-    sum = sum + old + carry;
+    unsigned int old2 = seedX[2];
+    carry = sum < old3;
+    sum = sum + old2 + carry;
     seedX[2] = sum;
-    carry = sum < old;
-    old = seedX[1];
-    sum = sum + old + carry;
+    unsigned int old1 = seedX[1];
+    carry = sum < old2;
+    sum = sum + old1 + carry;
     seedX[1] = sum;
-    carry = sum < old;
+    carry = sum < old1;
     sum = sum + seedX[0] + carry;
     seedX[0] = sum;
     if (++seedX[5] == 0) {
         if (++seedX[4] == 0) {
             if (++seedX[3] == 0) {
                 if (++seedX[2] == 0) {
-                    if (++seedX[1] == 0) seedX[0] = ++sum;
+                    if (++seedX[1] == 0) {
+                        // FAKEMATCH: re-read of the stored word keeps the
+                        // incremented value in its own register (mr r3,r0).
+                        seedX[0] = sum + 1;
+                        sum = seedX[0];
+                    }
                 }
             }
         }

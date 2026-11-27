@@ -15,7 +15,7 @@ void SNDPKTPLAYI_flushcallbackdata(void);
 int SNDPKTPLAY_purge(int index, int a, int b);
 void SNDI_checkplayopts(SndPlayOpts_t *opts);
 void iSNDcalcpitch(int index);
-int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p);
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p);
 void SNDVOICEI_free(int value);
 extern float lbl_80300028;
 int SNDVOICEI_alloc(int count, int priority, int *handle, int rate, int format);
@@ -83,7 +83,7 @@ found:
     return i;
 }
 
-int SNDPKTPLAY_start(int index, Info_80274464 *info, Struct_80274464 *params, SndPlayOpts_t *opts)
+int SNDPKTPLAY_start(int index, SndPacketFormat_t *info, SndPacketAttr_t *params, SndPlayOpts_t *opts)
 {
     SndPacketPlayer_t *stream;
     Record_803A6DF0 *record;

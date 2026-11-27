@@ -29,7 +29,7 @@ void ArenaSetupInit(void);
 void ArenaSetupShutdown(void);
 int MemInit(MemInitParams_t *pConfig);
 int MemShutdown(void);
-int fn_801D2130(MemPoolDesc_t *pArena);
+int MemInitHeap(MemPoolDesc_t *pArena);
 int fn_801D2570(int id);
 void MemSetDefaultHeap(int a);
 int SysInit(SysInitParams_t *pDesc);
@@ -61,14 +61,14 @@ int Sys::Init()
     ArenaSetupInit();
     _Sys_MemInitParams.mpArena = MemPoolGetDesc(1);
     MemInit(&_Sys_MemInitParams);
-    fn_801D2130(MemPoolGetDesc(0x20));
-    fn_801D2130(MemPoolGetDesc(0x100));
+    MemInitHeap(MemPoolGetDesc(0x20));
+    MemInitHeap(MemPoolGetDesc(0x100));
     pDb = MemPoolGetDesc(2);
     VMAlloc(pDb->mUnknownC, pDb->mUnknown10);
-    fn_801D2130(MemPoolGetDesc(2));
+    MemInitHeap(MemPoolGetDesc(2));
     pDebug = MemPoolGetDesc(8);
     if (pDebug->mUnknown10 != 0) {
-        fn_801D2130(pDebug);
+        MemInitHeap(pDebug);
     }
     pAuxRam = MemPoolGetDesc(0x10);
     MemInitExternHeap(0x10, 1, (char *)pAuxRam->mUnknownC, pAuxRam->mUnknown10, 0x20, 0x20);

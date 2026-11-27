@@ -4,7 +4,7 @@
 extern "C" {
 extern char lbl_800034A0[];
 
-int fn_801D2130(MemPoolDesc_t *pObject);
+int MemInitHeap(MemPoolDesc_t *pObject);
 int ChallengeGoalCheckMargin(int side, int limit, int flag);
 int fn_801D2570(int id);
 void MemSnapshotRestore(char *pStart, char *pEnd);
@@ -31,14 +31,14 @@ int FEDLL::Init()
 }
 
 /* Copies the code range lbl_800034A0-ChallengeGoalCheckMargin to ARAM, then passes record
-   0x40 to fn_801D2130. */
+   0x40 to MemInitHeap. */
 int FEDLL::Shutdown()
 {
     MemPoolDesc_t *pObject = MemPoolGetDesc(0x40);
     pObject->mUnknown10 = (char *)ChallengeGoalCheckMargin - lbl_800034A0;
     MemSnapshotSave(lbl_800034A0, (char *)ChallengeGoalCheckMargin);
     pObject->mUnknown10 = 0x209C0;
-    fn_801D2130(pObject);
+    MemInitHeap(pObject);
     sShutdown = 1;
     return 1;
 }

@@ -139,10 +139,10 @@ void PATHI_memfree(void *p);
 extern unsigned int gPathMilliseconds;
 extern PathSndProject_t *pfstate;
 int SNDSTRM_overhead(int count, int requests);
-int fn_8026E280(SndPlayOpts_t *opts, int count, int requests, void *buffer, int size);
-void fn_8026E2A8(int handle);
-int fn_8026E364(int handle, int key, void *path, int offset);
-int fn_8026E388(int handle);
+int SNDSTRM_create(SndPlayOpts_t *opts, int count, int requests, void *buffer, int size);
+void SNDSTRM_destroy(int handle);
+int SNDSTRM_queuefile(int handle, int key, void *path, int offset);
+int SNDSTRM_purge(int handle);
 int SNDSTRM_drylevel(int handle, int level);
 int SNDSTRM_fxlevel(int handle, int send, int level);
 int SNDSTRM_modifyhold(int request, int hold);
@@ -312,7 +312,7 @@ int PathToSnd::CreateStreamTrack(IPathTrack **track, int count, float seconds, i
         buffer = PATHI_memalloc(size);
         handle = -108;
         if (buffer != 0) {
-            handle = fn_8026E280(stream->GetPlayOpts(), count, requests, buffer, size);
+            handle = SNDSTRM_create(stream->GetPlayOpts(), count, requests, buffer, size);
         }
         stream->AttachStreamInstance(handle, (char *)buffer);
     }
@@ -812,7 +812,7 @@ PathTrackSndStream::PathTrackSndStream(int count)
 PathTrackSndStream::~PathTrackSndStream()
 {
     if (mHandle >= 0) {
-        fn_8026E2A8(mHandle);
+        SNDSTRM_destroy(mHandle);
         if (mpBuffer != 0) {
             PATHI_memfree(mpBuffer);
         }
@@ -991,7 +991,7 @@ int PathTrackSndStream::Play(int node, unsigned int offset, int count, int key, 
     if (mpCache != 0 && (int)(offset << 7) < mCacheSize) {
         result = AudioVoiceForwardData(mHandle, key, mpCache, offset << 7);
     } else {
-        result = fn_8026E364(mHandle, key, &mPath, offset << 7);
+        result = SNDSTRM_queuefile(mHandle, key, &mPath, offset << 7);
     }
     if (result >= 0) {
         unk_0x18 = mMaxRequests;
@@ -1015,7 +1015,7 @@ int PathTrackSndStream::Stop()
 {
     int result;
     SNDSYS_entercritical();
-    result = fn_8026E388(mHandle);
+    result = SNDSTRM_purge(mHandle);
     SNDSYS_leavecritical();
     mStatus.mReady = 1;
     UpdateStatus();

@@ -400,13 +400,17 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
     case 20: RouteArrowAddCut(p, pCommand + 1, pPoint); break;
     case 52:
         p->mPendingTurn = pCommand[1];
-        if (p->mPendingTurn == 7) RouteArrowFlushTurn(p, pPoint, pCommand[2] << 17);
-        else if (p->mPendingTurn == 8 || p->mPendingTurn == 9) {
+        switch (p->mPendingTurn) {
+        case 7: RouteArrowFlushTurn(p, pPoint, pCommand[2] << 17); break;
+        case 8: case 9: {
             RouteArrowCmd_t command;
             memset(&command, 0, 4);
             command.mType = 3; command.mArgs[0] = 8;
-            command.mArgs[1] = p->mStartX > ScrmGetBallSpot().mX ? 64 : 0;
+            if (p->mStartX > ScrmGetBallSpot().mX) command.mArgs[1] = 64;
+            else command.mArgs[1] = 0;
             RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
+            break;
+        }
         }
         break;
     case 47:
@@ -558,7 +562,10 @@ void RouteArrowBuild(RouteArrow_t *p)
             more = (pCommand[0] >> 7) ^ 1;
             more &= RouteArrowAddCommand(p, &command.mType, &point, hasOther);
             pCommand += 4;
-            more = pCommand[0] ? more : 0;
+            // FAKEMATCH: the next command byte passes through a byte local before it gates more; same result
+            unsigned char c = pCommand[0];
+            if (c) c = more;
+            more = c;
         } else more = 0;
     } while (more);
     RouteArrowSetStyle(p, &command.mType, hasOther);

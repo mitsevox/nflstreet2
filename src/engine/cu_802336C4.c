@@ -358,7 +358,8 @@ extern void TMClipResetExtent(void *p);
 extern void TMBufferNew(void *p, int a, int b);
 extern void TMBufferDelete(void *p);
 extern void TMBufferReset(void *p);
-extern void TMBlendSetWeights(short *pValues, int count);
+/* FAKEMATCH: declared returning int (the src/engine/tmblend.c definition is void; the result is never used), which gives fn_80233760's argument move order. */
+extern int TMBlendSetWeights(short *pValues, int count);
 extern void TMBlendBegin(void *p);
 extern void TMBlendEnd(void);
 extern void TMBlendBindModel(void *p);
@@ -407,7 +408,9 @@ extern int DbUserGetDb(int key);
 extern int DbCacheCreate(int key, Cache_8022F8A8 **ppCache);
 extern int DbCacheCopyRows(unsigned short id, int a, int b, int c, int d, int e, int f);
 void ScaleBlockReset(Block_802349CC *pBlock);
-extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
+struct TMRenderState_t;
+struct TMGeomNode_t;
+extern void ModelObjEnvMapTexCoords(struct TMRenderState_t *pState, struct TMGeomNode_t *pNode);
 extern void LLCacheLockedEnable(void);
 extern void _MathSinCos16(int angle, void *pTable, float *pSin, float *pCos);
 extern float _Math_Taylor[];
@@ -584,7 +587,6 @@ int DbCacheCopy(int a, int b, int c, int key, int e, int f);
 int DbOccpModuleInit(int handle);
 void DbOccpModuleShutdown(void);
 int DbOccpQueryNone(void);
-int DbOccpQueryBlocking(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
 int DbManagerInitModules(void);
 void DbManagerShutdownModules(void);
 int DbManagerPushGameDb(void);
@@ -657,7 +659,7 @@ void fn_80234844(Desc_802345F8 *pDesc);
 void fn_8023488C(void *p, int a);
 void fn_802348AC(void *p);
 void fn_802348CC(int a);
-void fn_80234908(void);
+void ModelPassShadersClear(void);
 void fn_80234994(Array_8023491C *pArray);
 void fn_802349B8(Array_8023491C *pArray, int value);
 void fn_80234A14(Part_80234A30 *pPart, int mask);
@@ -711,6 +713,7 @@ void fn_80233728(Block_802336C4 *pBlock)
     TMBufferDelete(pBlock);
 }
 
+/* Re-blends the block's model geometry with the given blend weights and flushes it for the GPU. */
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count)
 {
     TMModelResetChannels(pBlock->mUnknown10);
@@ -1266,9 +1269,10 @@ void fn_802348CC(int a)
     lbl_803ED024 = TMShaderLibGetShader(lbl_802B715C);
 }
 
-void fn_80234908(void)
+void ModelPassShadersClear(void)
 {
-    lbl_803ED024 = 0;
+    /* FAKEMATCH: the volatile store keeps the address in r9 (addi r9,r13 / stw 0(r9)). */
+    *(volatile int *)&lbl_803ED024 = 0;
     lbl_803ED020 = 0;
 }
 
@@ -1511,114 +1515,4 @@ void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char
     pDstImage = TexGetPaletteByIndex(pSprite->mpUnknown40, pDst->mUnknown8 + offset);
     pSrcImage = TexGetPaletteByIndex(pData, pSrc->mUnknown8 + offset);
     LLTexCopyFlush(pDstImage->mpUnknown8, pSrcImage->mpUnknown8, pDstImage->mUnknown4);
-}
-
-void fn_80235328(Owner_80235328 *pOwner, int key)
-{
-    Source_80235328 *pSource = pOwner->mpUnknown8;
-    Table_803E96E8 *pTable = &lbl_803E96E8;
-    Group_803E96E8 *pGroup = pTable->mpUnknown12;
-    Range_80216190 *pRange;
-    unsigned short *pIndex;
-    int i;
-
-    if (pGroup != 0) {
-        pRange = TMSwapGetState(pGroup, 0, key);
-        if (pRange != 0) {
-            pIndex = &pGroup->mpUnknown12[pRange->mUnknown16];
-            for (i = 0; i < pRange->mUnknown18; i++) {
-                fn_80235010(pTable, pSource->mpUnknown0 + pIndex[i] * 24);
-            }
-        }
-    }
-}
-
-void fn_802353CC(void *p)
-{
-}
-
-void fn_802353D0(void *p)
-{
-}
-
-void fn_802353D4(Object_80235588 *p, int flags)
-{
-}
-
-void fn_802353D8(Object_80235588 *p, int flags)
-{
-    p->mUnknown0 |= flags;
-}
-
-void fn_802353E8(Object_80235588 *p, int flags)
-{
-    p->mUnknown0 &= ~flags;
-}
-
-void fn_802353F8(Object_80235588 *p, int flags)
-{
-    int old = p->mUnknown4;
-
-    p->mUnknown4 = 0;
-    if (flags & 0xC000) {
-        p->mUnknown4 = 1;
-    }
-    if (flags & 1) {
-        p->mUnknown4 = 4;
-    }
-    if (flags == 0x02000000) {
-        p->mUnknown4 = 2;
-    }
-    if (flags == 0x04000000) {
-        p->mUnknown4 = 3;
-    }
-    if (flags & 0x10000000) {
-        p->mUnknown4 = 5;
-    }
-    if (flags & 0x20000000) {
-        p->mUnknown4 = 6;
-    }
-    if (flags & 0x2000) {
-        p->mUnknown4 = 17;
-    }
-    if (flags & 0x200) {
-        p->mUnknown4 = 18;
-    }
-    if (flags & 0x400) {
-        p->mUnknown4 = 19;
-    }
-    if (old != p->mUnknown4) {
-        TMClipResetExtent(p->mUnknown152);
-        if (p->mUnknown4 == -1) {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
-        } else {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
-        }
-    }
-}
-
-void fn_80235510(Object_80235588 *p, int mode)
-{
-    int old = p->mUnknown4;
-
-    p->mUnknown4 = mode;
-    if (old != mode) {
-        TMClipResetExtent(p->mUnknown152);
-        if (p->mUnknown4 == -1) {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
-        } else {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
-        }
-    }
-}
-
-void fn_80235588(Object_80235588 *p, int a)
-{
-    p->mUnknown0 = 0x4000;
-    p->mUnknown4 = -1;
-    p->mpUnknown88 = 0;
-    p->mpUnknown84 = 0;
-    p->mUnknown184 = 0;
-    TMModelReset(&p->mUnknown100);
-    TMMaterialListAlloc(p->mUnknown92, 0);
 }

@@ -138,7 +138,7 @@ extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
 
 void MemCardMgrSetState(int state);
-int fn_801D673C(int port);
+int MemCardMgrGetCardType(int port);
 void MemCardMgrMakeFilePath(char *pBuffer, int size, const char *pName, const char *pUnused);
 void MemCardMgrMakeEntryPath(char *pBuffer, int size, const char *pName);
 void MemCardMgrMakeDirPattern(char *pBuffer, int size, const char *pName);
@@ -271,7 +271,7 @@ void MemCardMgrUpdateProbe(void)
             } else {
                 _MemCardMgr_CardInfo.mCardType[_MemCardMgr_iPort] = 0;
             }
-            MemCardMgrFormatCardType(fn_801D673C(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
+            MemCardMgrFormatCardType(MemCardMgrGetCardType(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
             _MemCardMgr_iResult = result;
             _MemCardMgr_bResultReady = 1;
             strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
@@ -369,6 +369,9 @@ void MemCardMgrEnablePolling(int enable)
             _MemCardMgr_cPollDelay = 1;
         }
     } else {
+        // FAKEMATCH: dead test and increment of the flag; the join it leaves
+        // ends cse's jump equivalence enable == 0, so the zero is stored with li.
+        if (_MemCardMgr_iIdleState) enable++;
         result = 0;
         while (MemCAsyncPoll(&result) == 0) {
         }
@@ -423,7 +426,7 @@ void MemCardMgrSetPort(int port)
     _MemCardMgr_iPort = port;
 }
 
-int fn_801D671C(void)
+int MemCardMgrGetPort(void)
 {
     return _MemCardMgr_iPort;
 }
@@ -438,7 +441,7 @@ int MemCardMgrGetFreeEntries(void)
     return _MemCardMgr_CardInfo.mUnknown4;
 }
 
-int fn_801D673C(int port)
+int MemCardMgrGetCardType(int port)
 {
     return _MemCardMgr_CardInfo.mCardType[port];
 }
@@ -480,7 +483,7 @@ int MemCardMgrGetSlot(void)
     return _MemCardMgr_Op.mUnknownC;
 }
 
-int fn_801D6850(void)
+int MemCardMgrGetFileType(void)
 {
     return _MemCardMgr_Op.mUnknown4;
 }
@@ -510,7 +513,7 @@ void MemCardMgrSetFileOptions(int a, int b)
     _MemCardMgr_Op.mUnknownF0 = b;
 }
 
-char *fn_801D6918(void)
+char *MemCardMgrGetLastAction(void)
 {
     return _MemCardMgr_Op.mLastAction;
 }
@@ -579,7 +582,7 @@ int MemCardMgrGetMaxFiles(int type)
     return _MemCardMgr_pTypes[type].mMaxFiles;
 }
 
-void fn_801D6B24(char *pDst, int size)
+void MemCardMgrGetFileTitle(char *pDst, int size)
 {
     strcpy(pDst, _MemCardMgr_Op.mTitle);
 }
@@ -1380,7 +1383,7 @@ void MemCardMgrUpdate(void)
     case 0x1032:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
-            MemCardMgrFormatCardType(fn_801D673C(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
+            MemCardMgrFormatCardType(MemCardMgrGetCardType(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
             _MemCardMgr_bResultReady = poll;
             _MemCardMgr_iResult = result;
             strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
@@ -1499,13 +1502,14 @@ int MemCardMgrCompareGameCode(const char *pA, const char *pB)
 void MemCardMgrFormatDate(char *pBuffer, int unused, MemCDirEntry_t *pEntry)
 {
     Str3_t suffix;
-    unsigned short hour = pEntry->mHour;
-    int minute = pEntry->mMinute;
-    int month = pEntry->mMonth;
-    int day = pEntry->mDay;
-    int year;
+    unsigned short hour;
+    int minute, month, day, year;
 
+    minute = pEntry->mMinute;
+    month = pEntry->mMonth;
+    day = pEntry->mDay;
     year = pEntry->mYear;
+    hour = pEntry->mHour;
 
     if (hour == 0) {
         hour = 12;

@@ -57,7 +57,7 @@ void SyncStateNotifyGroup(SyncStateGroup_t *p);
 static DSList_t *_SyncState_pGroups;
 extern void MemSetDefaultHeap(int ident);
 extern char *MemGetHeapStart(int ident);
-extern void fn_801D2130(void *pConfig);
+extern void MemInitHeap(void *pConfig);
 extern void fn_801D2570(int ident);
 void SyncStateDetachGroup(SyncStateGroup_t *p);
 void SyncStateFreeCopy(SyncStateGroup_t *p);
@@ -211,7 +211,7 @@ SyncStateGroup_t *SyncStateNewGroup(int key, int count, int size, SyncStateHeapD
     SyncStateGroup_t *p;
 
     _SyncState_HeapDesc = *pConfig;
-    fn_801D2130(&_SyncState_HeapDesc);
+    MemInitHeap(&_SyncState_HeapDesc);
     p = SyncStateAddGroup(key, count, size, _SyncState_HeapDesc.mHeap);
     p->mpHandles = DSNewList(_SyncState_HeapDesc.mHeap, 0, count, sizeof(SyncStateHandle_t),
                                  (int (*)(void *, void *))SyncStateCompareHandles, 0);

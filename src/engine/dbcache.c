@@ -432,7 +432,9 @@ void DbCacheUpdateHandler(int ready, unsigned short id, unsigned char *pDone);
 int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable);
 int DbCacheDeleteRows(int key, int db, unsigned int tableMask);
 extern void ScaleBlockReset(void *p);
-extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
+struct TMRenderState_t;
+struct TMGeomNode_t;
+extern void ModelObjEnvMapTexCoords(struct TMRenderState_t *pState, struct TMGeomNode_t *pNode);
 extern void fn_80236F00(void);
 
 void DbOccpUpdateHandler(void *p, int mode, unsigned char *pDone);
@@ -607,7 +609,6 @@ int DbCacheCopy(int a, int b, int c, int key, int e, int f);
 int DbOccpModuleInit(int handle);
 void DbOccpModuleShutdown(void);
 int DbOccpQueryNone(void);
-int DbOccpQueryBlocking(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
 int DbManagerInitModules(void);
 void DbManagerShutdownModules(void);
 int DbManagerPushGameDb(void);
@@ -680,7 +681,7 @@ void fn_80234844(Desc_802345F8 *pDesc);
 void fn_8023488C(void *p, int a);
 void fn_802348AC(void *p);
 void fn_802348CC(int a);
-void fn_80234908(void);
+void ModelPassShadersClear(void);
 void fn_80234994(Array_8023491C *pArray);
 void fn_802349B8(Array_8023491C *pArray, int value);
 void fn_80234A14(Part_80234A30 *pPart, int mask);
@@ -1002,6 +1003,7 @@ static inline void _DbCacheSetAndExpr(TDbExpr_t *pExpr, TDbExpr_t *pA, TDbExpr_t
     pExpr->mRight.mValue.p = pB;
 }
 
+/* Creates a new table with the columns of cache table index and copies the rows of team key into it (all rows for key 1023). */
 int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable)
 {
     TDbColInfo_801F9AB8 aCols[254];
@@ -1064,10 +1066,10 @@ int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable
     }
     if (found == 1) {
         err = TDbQryCreateTbl(db, table, cursor, aKeys, 0);
-        /* Redundant (found is already 1): kept for the target's dead 0/23 test at 0x8023031C/20
-           (holdout, see its HOLDOUT row). */
+        /* FAKEMATCH: dead store (ok is reset before its next read); keeps the target's unused
+           0/23 test at 0x8023031C/20 and the found test after the call. */
         if (err == 0 || err == 23) {
-            found = 1;
+            ok = 1;
         }
     }
     if (found == 1) {
@@ -1330,6 +1332,7 @@ int DbCacheDeleteRows(int key, int db, unsigned int tableMask)
     unsigned int *pMask = &tableMask;
     unsigned short i;
     int err;
+    int andOp;
 
     err = 0;
     if (key != 1023) {
@@ -1347,6 +1350,7 @@ int DbCacheDeleteRows(int key, int db, unsigned int tableMask)
             }
         }
     }
+    andOp = 0x20009;
     for (i = 0; i <= 2; i++) {
         if (DBCACHE_BIT_IS_SET(pMask, i) && TDbTblExists(db, _DbCache_aTables[i].mUnknown0) == 0) {
             if (key == 1023) {
@@ -1357,7 +1361,11 @@ int DbCacheDeleteRows(int key, int db, unsigned int tableMask)
                 _DbCacheSetTable(&aTables[0], _DbCache_aTables[i].mUnknown0, 2, &where);
                 _DbCacheSetTable(&aTables[1], -1, 2, 0);
             } else {
-                _DbCacheSetAndExpr(&where, &match, &join);
+                where.mOp = andOp;
+                where.mLeft.mType = 11;
+                where.mLeft.mValue.p = &match;
+                where.mRight.mType = 11;
+                where.mRight.mValue.p = &join;
                 _DbCacheSetValueExpr(&match, _DbCacheColKey(_DbCache_aTables[i].mUnknown4, 0x44494754), key);
                 _DbCacheSetJoinExpr(&join, _DbCacheColKey(_DbCache_aTables[i].mUnknown0, _DbCache_aTables[i].mUnknown8),
                                     _DbCacheColKey(_DbCache_aTables[i].mUnknown4, _DbCache_aTables[i].mUnknown8));

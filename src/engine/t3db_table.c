@@ -36,10 +36,10 @@ void _TDbTblFillColHeader(TDbTable_t *pTable, TDbColumn_t *pFields)
             TDbColumn_t *pDst = &pTable->mColumns[j + 1];
             TDbColumn_t *pSrc = &pFields[i];
 
-            pDst->mUnknown8 = pSrc->mUnknown8;
             pDst->mType = pSrc->mType;
             pDst->mBitCount = pSrc->mBitCount;
             pDst->mBitOffset = -1;
+            pDst->mUnknown8 = pSrc->mUnknown8;
         }
         if (pFields[i].mBitCount == 32) {
             halfOffset += 32;

@@ -27,14 +27,6 @@ struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
-typedef struct Record_802297D8 {
-    float mUnknown0;
-    float mUnknown4;
-    float aUnknown8[10];
-    float mUnknown30;
-} Record_802297D8;
-
-extern Record_802297D8 lbl_803A20A4[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
@@ -65,20 +57,20 @@ extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
 extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
-extern char lbl_802B37E4[];
-extern char lbl_802B3824[];
+extern char _DbSrpt_szDeclareTeamsByFlagQuery[];
+extern char _DbSrpt_szDeclareTeamsByFlagTypeQuery[];
 int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int DbCacheDeleteRows(int id, int a, int b);
-extern char lbl_802B3610[];
-extern char lbl_802B3698[];
+extern char _DbSrpt_szFetchTeamIdQuery[];
+extern char _DbSrpt_szDeclareSrptQuery[];
 extern char lbl_802B479C[];
 extern char lbl_802B4828[];
 extern char lbl_802B5CB4[];
 extern char lbl_802B5CF0[];
 extern int TDbExists(int db);
-extern char lbl_802B3888[];
-extern char lbl_802B36C4[];
+extern char _DbSrpt_szDeclareTeamIdsQuery[];
+extern char _DbSrpt_szFetchSrptQuery[];
 extern int TDbTblExists(int db, int tbl);
 extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
 extern int TDbTblColExists(int db, int tbl, int col);
@@ -95,19 +87,6 @@ int DbLoadTeamList(void);
 int DbLeagueLoad(void);
 void DbLeagueFree(void);
 
-typedef struct Record_8022D5A4 {
-    unsigned short mUnknown0;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-} Record_8022D5A4;
-
-typedef struct Record_8022D874 {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    char mUnknown9[3];
-} Record_8022D874;
-
 extern char lbl_802B48C4[];
 extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
@@ -120,28 +99,21 @@ unsigned short DbThcdGetMaxDepth(int index);
 
 #include "engine/DbNiomHandlers.h"
 
-typedef struct Object_8022A59C {
+typedef struct DbMttsCursor_t {
     unsigned short mUnknown0;
     int mUnknown4;
-} Object_8022A59C;
+} DbMttsCursor_t;
 
-typedef struct Node_8022CC6C {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    short mUnknown6;
-    unsigned short mUnknown8;
-    char mUnknown10[2];
-    struct Node_8022CC6C *mpUnknown12;
-    struct Node_8022CC6C *mpUnknown16;
-} Node_8022CC6C;
-
-void DbUslpSortOpen(Node_8022CC6C **ppHead);
-
-extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
+int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, unsigned int tables, int flags);
+extern int DbCacheGetTableId(int index);
+extern int DbCacheCopyRows(unsigned short id, int key, int value, int db, int mode,
+                           unsigned int tableMask, int flags);
+extern char lbl_802B32D8[];
+extern char lbl_802B3384[];
+extern char lbl_802B33B8[];
+extern char lbl_802B33F8[];
+extern char lbl_802B3438[];
+extern char lbl_802B3494[];
 extern int DbCacheOpen(int key, unsigned short *pId);
 extern int DbCacheClose(unsigned short id);
 extern int DbLockAcquire(void);
@@ -206,17 +178,18 @@ extern void (*_DbNiom_pCallback)(int);
 extern int _DbNiom_iCallbackArg;
 extern unsigned char _DbNiom_bModeActive;
 extern unsigned char _DbNiom_bEnding;
-extern Object_8022A59C *_DbNiom_pCursor;
 extern int (*_DbNiom_pModeEnd)(void);
 extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
 extern int (*_DbNiom_pModeReset)(int a, int b);
 extern int (*_DbNiom_pModeResume)(void);
 extern int (*_DbNiom_pModeFn16)(void);
-extern int lbl_803EC020[2];
+extern int lbl_803EC020[1];
 extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbCol_801F9718 *pCols);
 extern int TDbQrySetFirstRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbCol_801F9718 *pCols, void *pResult, int callback);
+extern int TDbQryUpdateExpr(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere,
+                            unsigned long long *pKeys, TDbExpr_t *pTerms, void *pRes, int cb);
 /* Set index per column letter ('A'/'a' first); neutral label. */
 extern unsigned char lbl_802FA614[];
 extern int *lbl_803EC010[1];
@@ -233,9 +206,9 @@ extern int (*_DbSrpt_pBeginGameFunc)(int a, int b, int c, int d);
 extern int (*_DbSrpt_pResumeGameFunc)(int a, int b, int c, int d);
 
 int DbNiomCloseCursor(void);
-int fn_8022A59C(int a, Object_8022A59C **ppOut);
-int fn_8022AB6C(Object_8022A59C *p, int a, int b);
-int fn_8022AC80(Object_8022A59C *p);
+int fn_8022A59C(int a, DbMttsCursor_t **ppOut);
+int DbMttsReadSlots(DbMttsCursor_t *p, int a, int b);
+int fn_8022AC80(DbMttsCursor_t *p);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
 void DbUtilRandomInit(void);
@@ -244,7 +217,6 @@ int DbUtilRandomRange(unsigned int low, unsigned int high);
 void *DbUslpAllocNodes(void);
 void DbUslpFreeNodes(void *p);
 void DbUslpClearLists(void);
-Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
 void *DbUslpAllocEntries(void);
 void DbUslpFreeEntries(void *p);
 void DbUslpCloseSlotCursor(void);
@@ -448,14 +420,11 @@ int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
-int fn_8022A59C(int a, Object_8022A59C **ppOut);
-int fn_8022AB6C(Object_8022A59C *p, int a, int b);
-int fn_8022AC80(Object_8022A59C *p);
-int fn_8022ACEC(int key, int unused, int col, int value, int index);
+int DbMttsInsertTeamRow(int key, int unused, int col, int value, int index);
 int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount);
 int fn_8022AEFC(unsigned int value);
 int fn_8022AF54(int a, int b);
-int fn_8022AF5C(int key, int unused, int col, int value, int set, int index);
+int DbMttsInsertPlayerRow(int key, int unused, int col, int value, int set, int index);
 int fn_8022B02C(Callbacks_8022B02C *pCallbacks);
 void fn_8022B200(void);
 int fn_8022BF60(void);
@@ -480,11 +449,6 @@ void *DbUslpAllocNodes(void);
 void DbUslpFreeNodes(void *p);
 void DbBuildPendingNodeList(void *pPairs);
 void DbUslpClearLists(void);
-void DbUslpSortOpen(Node_8022CC6C **ppHead);
-Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
-Node_8022CC6C *DbUslpFindPlayer(Node_8022CC6C **ppHead, unsigned short key);
-void DbUslpListRemove(Node_8022CC6C **ppHead, Node_8022CC6C *p);
-void DbUslpListPush(Node_8022CC6C **ppHead, Node_8022CC6C *p);
 void *DbUslpAllocEntries(void);
 void DbUslpFreeEntries(void *p);
 int DbUslpOpenSlotCursor(int a, int b, int c);
@@ -605,10 +569,10 @@ int fn_8022A558(int a, int b, int c, int d)
     return TDbCompilePerformOp(0, lbl_802B3180, b, c, d, a);
 }
 
-int fn_8022A59C(int a, Object_8022A59C **ppOut)
+int fn_8022A59C(int a, DbMttsCursor_t **ppOut)
 {
     int err = DbLockAcquire();
-    Object_8022A59C *p = DbUtilAlloc(8, 0);
+    DbMttsCursor_t *p = DbUtilAlloc(8, 0);
 
     p->mUnknown4 = a;
     p->mUnknown0 = -1;
@@ -624,10 +588,188 @@ int fn_8022A59C(int a, Object_8022A59C **ppOut)
     return err;
 }
 
-int fn_8022AB6C(Object_8022A59C *p, int a, int b)
+typedef void (*DbMttsSlotFunc)(int team, int type, unsigned int *pMask, int *pFlags);
+
+#define DBMTTS_BIT(set, i) (((unsigned char *)&(set))[(i) >> 3] & (1 << ((i) & 7)))
+
+/* Walks the 'MTTS' rows of the open cursor: for each slot whose team is not a
+   placeholder, copies the slot team's rows into the cache, writes the team and its
+   applied table bits back to the slot, and fills the team's 'DIGC', 'DIGD' and 'NSID'
+   defaults from 'MAET'. */
+int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, unsigned int tables, int flags)
+{
+    unsigned short n;
+    unsigned short count;
+    unsigned char teft;
+    unsigned short rows;
+    unsigned int inTats;
+    unsigned int inTeams;
+    int slot;
+    int team;
+    int oldTeam;
+    int type;
+    int res;
+    int digc;
+    int digd;
+    int nsid;
+    unsigned int applied;
+    unsigned int mask;
+    int db;
+    int newDigc;
+    int newDigd;
+    int newNsid;
+    int err;
+    int *pIds;
+    int opened;
+
+    count = 0;
+    err = 0;
+    pIds = 0;
+    if (flags & 0x01000000) {
+        err = TDbQryGetCount(cursor.mUnknown0, &n);
+        if (err == 0) {
+            count = n;
+            pIds = DbUtilAlloc(n * 4, 0);
+            err = DbFindUnusedTeamIds(0, 0x4D414554, pIds, &count);
+        }
+    }
+    inTats = 0;
+    inTeams = 0;
+    if (err == 0) {
+        unsigned short i;
+
+        for (i = 0; i < 3; i++) {
+            unsigned int bit = DBMTTS_BIT(tables, i);
+
+            if (bit == (1 << (i & 7))) {
+                if (TDbTblExists(0x54415453, DbCacheGetTableId(i)) == 0) {
+                    ((unsigned char *)&inTats)[i >> 3] |= bit;
+                } else {
+                    ((unsigned char *)&inTeams)[i >> 3] |= bit;
+                }
+            }
+        }
+    }
+    opened = 0;
+    if (DbTeamsIsOpen() == 0) {
+        err = DbTeamsOpen();
+        opened = err == 0;
+    }
+    if (err == 0) {
+        do {
+            err = TDbCompilePerformOp(0, lbl_802B32D8, &cursor, &slot, &team, &oldTeam, &type, &res,
+                                      &digc, &digd, &nsid, &applied);
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3384, &teft, team);
+            if (QUERY_STATUS_ACCEPTED(err) == 1) {
+                if (err != 0) {
+                    teft = 0;
+                    err = 0;
+                }
+            }
+            if (err != 0) {
+                break;
+            }
+            if (type != 5 && teft == 0) {
+                mask = tables & ~applied;
+                if ((DbMttsSlotFunc)p->mUnknown4 != 0) {
+                    ((DbMttsSlotFunc)p->mUnknown4)(team, type, &mask, &flags);
+                }
+                if (mask != 0) {
+                    if ((((unsigned char *)&flags)[0] & 1) && team == oldTeam) {
+                        unsigned short j;
+
+                        for (j = 0; j < count; j++) {
+                            if (pIds[j] != 1023) {
+                                team = pIds[j];
+                                pIds[j] = 1023;
+                                break;
+                            }
+                        }
+                    }
+                    err = TDbCompilePerformOp(0, lbl_802B33B8, &rows, oldTeam);
+                    if (err != 0) {
+                        break;
+                    }
+                    if (rows != 0) {
+                        if (inTats & mask) {
+                            err = DbCacheCopyRows(p->mUnknown0, oldTeam, team, 0x54415453, 1,
+                                                  inTats & mask, flags);
+                        }
+                        if (err != 0) {
+                            break;
+                        }
+                        if (inTeams & mask) {
+                            err = DbTeamsLoad(res, &db);
+                            if (err != 0) {
+                                break;
+                            }
+                            err = DbCacheCopyRows(p->mUnknown0, 1023, team, db, 0, inTeams & mask,
+                                                  flags);
+                        }
+                    } else {
+                        err = DbTeamsLoad(res, &db);
+                        if (err != 0) {
+                            break;
+                        }
+                        err = DbCacheCopyRows(p->mUnknown0, 1023, team, db, 0, mask, flags);
+                    }
+                    if (err != 0) {
+                        break;
+                    }
+                    err = TDbCompilePerformOp(0, lbl_802B33F8, team, applied | mask, slot);
+                }
+            }
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3438, &newDigc, &newDigd, &newNsid, team);
+            if (digc == 3) {
+                digc = newDigc;
+            }
+            if (digd == 15) {
+                digd = newDigd;
+            }
+            if (nsid == 7) {
+                nsid = newNsid;
+            }
+            if (err != 0) {
+                break;
+            }
+            err = fn_8022A558(slot, digc, digd, nsid);
+            if (err != 0) {
+                break;
+            }
+            err = TDbCompilePerformOp(0, lbl_802B3494, digc, digd, nsid, team);
+            if (err != 0) {
+                break;
+            }
+            err = DbNiomRunCallback();
+        } while (err == 0);
+        if (QUERY_STATUS_ACCEPTED(err) == 1) {
+            err = 0;
+        }
+    }
+    if (opened == 1) {
+        if (err == 0) {
+            err = DbTeamsClose();
+        } else {
+            DbTeamsClose();
+        }
+    }
+    if (pIds != 0) {
+        DbUtilFree(pIds);
+    }
+    return err;
+}
+
+/* Opens a cursor over the 'MTTS' team-slot rows in slot order and reads them through p. */
+int DbMttsReadSlots(DbMttsCursor_t *p, int a, int b)
 {
     struct QueryCursor cursor;
-    int err;
+    int err = 0;
 
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -649,7 +791,7 @@ int fn_8022AB6C(Object_8022A59C *p, int a, int b)
     return err;
 }
 
-int fn_8022AC80(Object_8022A59C *p)
+int fn_8022AC80(DbMttsCursor_t *p)
 {
     int err = 0;
 
@@ -665,7 +807,8 @@ int fn_8022AC80(Object_8022A59C *p)
     return err;
 }
 
-int fn_8022ACEC(int key, int unused, int col, int value, int index)
+/* Adds a team row: 'DIGT' set to key and column col set to value. */
+int DbMttsInsertTeamRow(int key, int unused, int col, int value, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
@@ -743,11 +886,12 @@ int fn_8022AF54(int a, int b)
     return 0;
 }
 
-int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
+/* Adds a player row: 'DIGP' set to key and column col set to value; retries once on status 19. */
+int DbMttsInsertPlayerRow(int key, int unused, int col, int value, int set, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
-    int err;
+    int err = 0;
 
     table = lbl_803EC010[set][index];
     aCols[0].mUnk0 = key;
@@ -788,11 +932,16 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
         count = lbl_803EC014[i];
         for (j = 0; j < count; j++) {
             table = lbl_803EC010[i][j];
-            if (TDbTblExists(0, table) == 0) {
-                status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
-            } else {
-                lbl_803EC018[i][j] = 0;
-                lbl_803EC01C[i][j] = 0;
+            {
+                TDbCol_801F9718 **ppCols = &lbl_803EC018[i][j];
+                unsigned char *pCount = &lbl_803EC01C[i][j];
+
+                if (TDbTblExists(0, table) == 0) {
+                    status = fn_8022AD64(table, ppCols, pCount);
+                } else {
+                    *ppCols = 0;
+                    *pCount = 0;
+                }
             }
             if (status != 0) {
                 break;
@@ -802,12 +951,19 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
             break;
         }
     }
-    for (i = 0; i < 1 && status == 0; i++) {
-        table = lbl_803EC020[i];
-        if (TDbTblExists(0, table) == 0) {
-            status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
-        } else {
-            lbl_803ED01C[i] = 0;
+    if (status == 0) {
+        for (i = 0; i < 1; i++) {
+            unsigned char *pCount = &lbl_803ED01C[i];
+
+            table = lbl_803EC020[i];
+            if (TDbTblExists(0, table) == 0) {
+                status = fn_8022AD64(table, &lbl_803EC024[i], pCount);
+            } else {
+                *pCount = 0;
+            }
+            if (status != 0) {
+                break;
+            }
         }
     }
     if (status == 0) {
@@ -852,10 +1008,61 @@ static inline unsigned long long _DbColKey(unsigned int table, unsigned int col)
     return ((unsigned long long)table << 32) | col;
 }
 
+/* One table reference of a query's table list (as dboccp.c's _DbOccpSetTable). */
+static inline void _DbMttsSetTable(TDbSQLTableRef_801FDC18 *pRef, unsigned int id, unsigned int join,
+                                   TDbExpr_t *pExpr)
+{
+    pRef->mExpr = pExpr;
+    pRef->mId = id;
+    pRef->mJoinType = join;
+}
+
+/* One column of a column list: its value, table and column code. */
+static inline void _DbMttsSetCol(TDbCol_801F9718 *pCol, int value, int table, int col)
+{
+    pCol->mUnk4 = table;
+    pCol->mCol = col;
+    pCol->mUnk0 = value;
+}
+
+/* column op unsigned value */
+static inline void _DbMttsSetColUInt(TDbExpr_t *pExpr, int op, unsigned int table, unsigned int col, int value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = _DbColKey(table, col);
+    pExpr->mRight.mType = TDB_TYPE_UINT;
+    pExpr->mRight.mValue.i = value;
+}
+
+/* column op integer */
+static inline void _DbMttsSetColInt(TDbExpr_t *pExpr, int op, unsigned long long col, int value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = col;
+    pExpr->mRight.mType = TDB_TYPE_INT;
+    /* FAKEMATCH: the integer stored through a pointer to the value field, for the target's frame-based store address in DbMttsAddTeamRushStat; the same field is set. */
+    {
+        int *pValue = &pExpr->mRight.mValue.i;
+        *pValue = value;
+    }
+}
+
+/* sub-expression op sub-expression */
+static inline void _DbMttsSetSubSub(TDbExpr_t *pExpr, int op, TDbExpr_t *pLeft, TDbExpr_t *pRight)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_UINT;
+    pExpr->mLeft.mValue.p = pLeft;
+    pExpr->mRight.mType = TDB_TYPE_EXPR_UINT;
+    pExpr->mRight.mValue.p = pRight;
+}
+
 /* Writes value into column col of the 'DIGP' row key of the set selected by the column's
-   third letter; when no row matched (23) the row is added through 0x8022AF5C. Returns 131
+   third letter; when no row matched (23) the row is added through DbMttsInsertPlayerRow. Returns 131
    for a column letter without a set. */
-int fn_8022B2CC(int key, unsigned int col, int value)
+int DbMttsSetPlayerColumn(int key, unsigned int col, int value)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -871,35 +1078,26 @@ int fn_8022B2CC(int key, unsigned int col, int value)
     } else {
         index = lbl_802FA614[c - 65];
     }
-    if (index < 0) {
-        return 131;
-    }
-    table = lbl_803EC010[0][index];
-    aCols[0].mUnk0 = value;
-    aCols[0].mUnk4 = table;
-    aCols[0].mCol = col;
-    fn_801F9718_SetEnd(&aCols[1]);
-    expr.mLeft.mType = 6;
-    expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
-    expr.mRight.mType = 3;
-    expr.mRight.mValue.i = key;
-    expr.mOp = 0x10003;
-    aTables[0].mId = table;
-    aTables[0].mJoinType = 2;
-    aTables[0].mExpr = &expr;
-    aTables[1].mId = -1;
-    aTables[1].mJoinType = 2;
-    aTables[1].mExpr = 0;
-    err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
-    if (err == 23) {
-        err = fn_8022AF5C(key, -1, col, value, 0, index);
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        _DbMttsSetCol(&aCols[0], value, table, col);
+        fn_801F9718_SetEnd(&aCols[1]);
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+        if (err == 23) {
+            err = DbMttsInsertPlayerRow(key, -1, col, value, 0, index);
+        }
+    } else {
+        err = 131;
     }
     return err;
 }
 
 /* Reads column col of the 'DIGP' row key of the set selected by the column's third letter
    into *pOut; returns 131 for a letter without a set, 132 when no row matched. */
-int fn_8022B414(int key, unsigned int col, int *pOut)
+int DbMttsGetPlayerColumn(int key, unsigned int col, int *pOut)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -910,7 +1108,8 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
     int err;
     int ok;
 
-    *pOut = 0;
+    err = 0;
+    *pOut = err;
     c = (col >> 8) & 0xFF;
     if (c > 96) {
         index = lbl_802FA614[c - 97];
@@ -923,17 +1122,9 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
         aCols[0].mUnk4 = table;
         aCols[0].mCol = col;
         fn_801F9718_SetEnd(&aCols[1]);
-        expr.mLeft.mType = 6;
-        expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
-        expr.mRight.mType = 3;
-        expr.mRight.mValue.i = key;
-        expr.mOp = 0x10003;
-        aTables[0].mId = table;
-        aTables[0].mJoinType = 2;
-        aTables[0].mExpr = &expr;
-        aTables[1].mId = -1;
-        aTables[1].mJoinType = 2;
-        aTables[1].mExpr = 0;
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
         err = TDbQryGetSingleRow(0, aTables, 0, aCols);
         ok = 0;
         if (err == 0 || err == 23 || err == 21 || err == 20) {
@@ -952,9 +1143,67 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
     return err;
 }
 
+/* Sets column col of the 'DIGP' row key of the set selected by the column's third letter, by
+   the column's kind (0x8022AEFC): kind 2 stores value, kinds 0 and 3 update the column with the
+   expression ops 0x4000D and 0x40013 of value; when no row matched (23) the row is added through
+   DbMttsInsertPlayerRow. Returns 130 for another kind, 131 for a letter without a set. */
+int DbMttsUpdatePlayerColumn(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    unsigned long long aKeys[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    TDbExpr_t term;
+    unsigned int c;
+    signed char index;
+    int table;
+    int err;
+
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
+        switch (fn_8022AEFC(col)) {
+        case 0:
+            aKeys[0] = _DbColKey(table, col);
+            aKeys[1] = -1;
+            _DbMttsSetColInt(&term, 0x4000D, _DbColKey(table, col), value);
+            err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+            break;
+        case 2:
+            _DbMttsSetCol(&aCols[0], value, table, col);
+            fn_801F9718_SetEnd(&aCols[1]);
+            err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+            break;
+        case 3:
+            aKeys[0] = _DbColKey(table, col);
+            aKeys[1] = -1;
+            _DbMttsSetColInt(&term, 0x40013, _DbColKey(table, col), value);
+            err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+            break;
+        default:
+            err = 130;
+            break;
+        }
+        if (err == 23) {
+            err = DbMttsInsertPlayerRow(key, -1, col, value, 0, (unsigned char)index);
+        }
+    } else {
+        err = 131;
+    }
+    return err;
+}
+
 /* Reads column col of the row of the first table whose 'DIGT' column equals value; returns
    0 with the value in *pOut, 132 when the query ended without a row, or the query error. */
-int fn_8022B7A4(int value, int col, int *pOut)
+int DbMttsGetTeamColumn(int value, int col, int *pOut)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -970,17 +1219,9 @@ int fn_8022B7A4(int value, int col, int *pOut)
     aCols[0].mUnk4 = table;
     aCols[0].mCol = col;
     fn_801F9718_SetEnd(&aCols[1]);
-    expr.mLeft.mType = 6;
-    expr.mLeft.mValue.l = _DbColKey(table, 0x44494754);
-    expr.mRight.mType = 3;
-    expr.mRight.mValue.i = value;
-    expr.mOp = 0x10003;
-    aTables[0].mId = table;
-    aTables[0].mJoinType = 2;
-    aTables[0].mExpr = &expr;
-    aTables[1].mId = -1;
-    aTables[1].mJoinType = 2;
-    aTables[1].mExpr = 0;
+    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494754, value);
+    _DbMttsSetTable(&aTables[0], table, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
     err = TDbQryGetSingleRow(0, aTables, 0, aCols);
     ok = 0;
     if (err == 0 || err == 23 || err == 21 || err == 20) {
@@ -992,6 +1233,153 @@ int fn_8022B7A4(int value, int col, int *pOut)
         } else {
             err = 132;
         }
+    }
+    return err;
+}
+
+/* Sets column col of the row of the first team table whose 'DIGT' column equals key, by the
+   column's kind as DbMttsUpdatePlayerColumn does; when no row matched (23) the row is added through
+   DbMttsInsertTeamRow. Returns 130 for a kind without an update. */
+int DbMttsUpdateTeamColumn(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    unsigned long long aKeys[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    TDbExpr_t term;
+    int table;
+    int err = 0;
+
+    table = lbl_803EC020[0];
+    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494754, key);
+    _DbMttsSetTable(&aTables[0], table, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    switch (fn_8022AEFC(col)) {
+    case 0:
+        aKeys[0] = _DbColKey(table, col);
+        aKeys[1] = -1;
+        _DbMttsSetColInt(&term, 0x4000D, _DbColKey(table, col), value);
+        err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+        break;
+    case 2:
+        _DbMttsSetCol(&aCols[0], value, table, col);
+        fn_801F9718_SetEnd(&aCols[1]);
+        err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+        break;
+    case 3:
+        aKeys[0] = _DbColKey(table, col);
+        aKeys[1] = -1;
+        _DbMttsSetColInt(&term, 0x40013, _DbColKey(table, col), value);
+        err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+        break;
+    default:
+        err = 130;
+        break;
+    }
+    if (err == 23) {
+        err = DbMttsInsertTeamRow(key, -1, col, value, 0);
+    }
+    return err;
+}
+
+/* The score-margin class of a game result: 0 below -9, 1 from -9 to 8, 2 above 8. */
+static inline int _DbMarginClass(int margin)
+{
+    return margin < -9 ? 0 : (margin <= 8 ? 1 : 2);
+}
+
+/* Adds one pass play to the 'RPST' row of team key and the class of margin: 'apst' counts
+   the plays, 'cpst' and 'post' add a and b; when no row matched (23) the row is inserted with
+   these values. */
+int DbMttsAddTeamPassStat(int key, int a, int margin, int b)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbExpr_t expr;
+    TDbExpr_t keyExpr;
+    TDbExpr_t classExpr;
+    TDbExpr_t aTerms[3];
+    unsigned long long aKeys[4];
+    TDbCol_801F9718 aCols[6];
+    int cls;
+    int err;
+
+    cls = _DbMarginClass(margin);
+    _DbMttsSetSubSub(&expr, 0x20009, &keyExpr, &classExpr);
+    _DbMttsSetColUInt(&keyExpr, 0x10003, 0x52505354, 0x44494754, key);
+    _DbMttsSetColUInt(&classExpr, 0x10003, 0x52505354, 0x63647374, cls);
+    _DbMttsSetTable(&aTables[0], 0x52505354, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    aKeys[0] = _DbColKey(0x52505354, 0x61707374);
+    aKeys[1] = _DbColKey(0x52505354, 0x63707374);
+    aKeys[2] = _DbColKey(0x52505354, 0x706F7374);
+    aKeys[3] = -1;
+    _DbMttsSetColInt(&aTerms[0], 0x4000D, _DbColKey(0x52505354, 0x61707374), 1);
+    _DbMttsSetColInt(&aTerms[1], 0x4000D, _DbColKey(0x52505354, 0x63707374), a);
+    _DbMttsSetColInt(&aTerms[2], 0x4000D, _DbColKey(0x52505354, 0x706F7374), b);
+    err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
+    if (err == 23) {
+        aCols[0].mCol = 0x44494754;
+        aCols[0].mUnk0 = key;
+        aCols[0].mUnk4 = 0x52505354;
+        aCols[1].mCol = 0x63647374;
+        aCols[1].mUnk0 = cls;
+        aCols[1].mUnk4 = 0x52505354;
+        aCols[2].mCol = 0x61707374;
+        aCols[2].mUnk0 = 1;
+        aCols[2].mUnk4 = 0x52505354;
+        aCols[3].mCol = 0x63707374;
+        aCols[3].mUnk0 = a;
+        aCols[3].mUnk4 = 0x52505354;
+        aCols[4].mUnk4 = 0x52505354;
+        aCols[4].mCol = 0x706F7374;
+        aCols[4].mUnk0 = b;
+        fn_801F9718_SetEnd(&aCols[5]);
+        err = TDbInsertRow(0, 0x52505354, aCols, 0, 0);
+    }
+    return err;
+}
+
+/* Adds one rushing play to the 'DRST' row of team key and the class of margin: 'arst' counts
+   the plays and 'rost' adds a; when no row matched (23) the row is inserted with these values. */
+int DbMttsAddTeamRushStat(int key, int margin, int a)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t expr;
+    TDbExpr_t keyExpr;
+    TDbExpr_t classExpr;
+    unsigned long long aKeys[3];
+    TDbCol_801F9718 aCols[5];
+    int cls;
+    int err;
+
+    cls = _DbMarginClass(margin);
+    _DbMttsSetSubSub(&expr, 0x20009, &keyExpr, &classExpr);
+    _DbMttsSetColUInt(&keyExpr, 0x10003, 0x44525354, 0x44494754, key);
+    _DbMttsSetColUInt(&classExpr, 0x10003, 0x44525354, 0x63647374, cls);
+    _DbMttsSetTable(&aTables[0], 0x44525354, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    aKeys[2] = -1;
+    aKeys[0] = _DbColKey(0x44525354, 0x61727374);
+    aKeys[1] = _DbColKey(0x44525354, 0x726F7374);
+    _DbMttsSetColInt(&aTerms[0], 0x4000D, _DbColKey(0x44525354, 0x61727374), 1);
+    _DbMttsSetColInt(&aTerms[1], 0x4000D, _DbColKey(0x44525354, 0x726F7374), a);
+    err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
+    if (err == 23) {
+        aCols[0].mCol = 0x44494754;
+        aCols[0].mUnk0 = key;
+        aCols[0].mUnk4 = 0x44525354;
+        aCols[1].mCol = 0x63647374;
+        aCols[1].mUnk0 = cls;
+        aCols[1].mUnk4 = 0x44525354;
+        aCols[2].mCol = 0x61727374;
+        aCols[2].mUnk0 = 1;
+        aCols[2].mUnk4 = 0x44525354;
+        aCols[3].mUnk4 = 0x44525354;
+        aCols[3].mCol = 0x726F7374;
+        aCols[3].mUnk0 = a;
+        fn_801F9718_SetEnd(&aCols[4]);
+        err = TDbInsertRow(0, 0x44525354, aCols, 0, 0);
     }
     return err;
 }

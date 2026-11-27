@@ -101,7 +101,7 @@ void MatRotY(int a);
 void MatRotZ(int a);
 void MatTranslate(Vec3_801DE1E0 *pPos);
 void MatStore(float (*m)[4]);
-void fn_801D2130(ParticleHeapDef_t *pType);
+void MemInitHeap(ParticleHeapDef_t *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
@@ -440,13 +440,19 @@ static void _sumGasMotionForces(ParticleSysObj_t *pObj)
     z = force.z;
     for (i = 0; i < pObj->mCount; i++) {
         PsysParticle_t *pParticle = pObj->mppParticles[i];
+        float fx;
+        float fy;
+        float fz;
 
-        pParticle->mForce.x += x;
-        pParticle->mForce.y += y;
-        pParticle->mForce.z += z;
-        pParticle->mForce.x += pParticle->mVel.x * -0.45f;
-        pParticle->mForce.y += pParticle->mVel.y * -0.45f;
-        pParticle->mForce.z += pParticle->mVel.z * -0.45f;
+        fx = pParticle->mForce.x + x;
+        fy = pParticle->mForce.y + y;
+        fz = pParticle->mForce.z + z;
+        fx += pParticle->mVel.x * -0.45f;
+        fy += pParticle->mVel.y * -0.45f;
+        fz += pParticle->mVel.z * -0.45f;
+        pParticle->mForce.x = fx;
+        pParticle->mForce.y = fy;
+        pParticle->mForce.z = fz;
     }
 }
 
@@ -479,6 +485,7 @@ float ParticleGetRandom(void)
 
 void ParticleLibInit(ParticleLibParms_t *pDesc)
 {
+    int size;
 
     partLibState.mUnknown00 = pDesc->mUnknown00;
     partLibState.mUnknown60 = pDesc->mUnknown04;
@@ -501,9 +508,11 @@ void ParticleLibInit(ParticleLibParms_t *pDesc)
     if (partLibState.mUnknown64) {
         partLibState.mHeap = fn_801D2730();
         gPoolHeapDef.mUnknown08 = partLibState.mHeap;
-        partLibState.mUnknown68 = (pDesc->mUnknown14 + 15) & ~15;
-        gPoolHeapDef.mUnknown10 = partLibState.mUnknown68;
-        fn_801D2130(&gPoolHeapDef);
+        size = pDesc->mUnknown14;
+        size = (size + 15) & ~15;
+        partLibState.mUnknown68 = size;
+        gPoolHeapDef.mUnknown10 = size;
+        MemInitHeap(&gPoolHeapDef);
     } else {
         partLibState.mUnknown68 = 0;
         partLibState.mHeap = 0;
@@ -526,11 +535,18 @@ void ParticleLibInit(ParticleLibParms_t *pDesc)
     Vec3Mat33Mul(&partLibState.mUnknown78, &partLibState.mUnknown78);
     MatStore(partLibState.mUnknown20);
     MatPop();
+    partLibState.mUnknown8C.mUnknownE = 0;
     partLibState.mUnknown8C.mppUnknown0 = 0;
     partLibState.mUnknown8C.mppUnknown4 = 0;
     partLibState.mUnknown8C.mppUnknown8 = 0;
-    partLibState.mUnknown8C.mUnknownE = 0;
     gPartLibIsInit = 1;
+}
+
+static inline void _ParticleCopyVec3(Vec3_801DE1E0 *pDst, Vec3_801DE1E0 *pSrc)
+{
+    pDst->x = pSrc->x;
+    pDst->y = pSrc->y;
+    pDst->z = pSrc->z;
 }
 
 void ParticleLibShutdown(void)
@@ -548,10 +564,7 @@ void ParticleLibShutdown(void)
     pState->mUnknown64 = 0;
     pState->mUnknown00 = 0;
     pState->mUnknown74 = 0.0f;
-    pState->mUnknown1C = 0;
-    pState->mUnknown78.x = gGravNorm.x;
-    pState->mUnknown78.y = gGravNorm.y;
-    pState->mUnknown78.z = gGravNorm.z;
+    _ParticleCopyVec3(&pState->mUnknown78, &gGravNorm);
     pState->mHeap = 0;
     pState->mUnknown68 = 0;
     pState->mpUnknown04 = 0;
@@ -561,6 +574,7 @@ void ParticleLibShutdown(void)
     pState->mUnknown62 = 0;
     pState->mpRandom = 0;
     pState->mUnknown84 = 0;
+    pState->mUnknown1C = 0;
     pState->mUnknown18 = 0;
     MatPush();
     MatMakeUnit();
@@ -651,8 +665,6 @@ void ParticleObjInitParms(ParticleSysObj_t *pDst, ParticleTemplate_t *pSrc)
 void ParticleObjInitState(ParticleSysObj_t *pObj)
 {
     pObj->mCount = 0;
-    pObj->mUnknown35B = 0;
-    pObj->mUnknown3D0 = 0.0f;
     pObj->mUnknown3AC = 0.0f;
     pObj->mUnknown3B0 = 0.0f;
     pObj->mUnknown2B6 = 0;
@@ -665,6 +677,8 @@ void ParticleObjInitState(ParticleSysObj_t *pObj)
     pObj->mUnknown35A = 0;
     pObj->mUnknown3C8 = 0.0f;
     pObj->mUnknown3CC = 0.0f;
+    pObj->mUnknown35B = 0;
+    pObj->mUnknown3D0 = 0.0f;
     pObj->mUnknown2B0 = 1.0f / pObj->mUnknown090;
 }
 
