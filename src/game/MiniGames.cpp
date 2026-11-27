@@ -18,7 +18,7 @@
 #include "game/TDbCompilePerformOp.h"
 #include "game/GameModeType.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/PauseMenu.h"
 #include "game/LivePlayPhase.h"
 #include "game/Class_80297B50.h"
@@ -1961,7 +1961,7 @@ void MiniGame2MinuteGameEndC::vfn_03(float dt)
     fn_8009D8CC(1);
     MiniGameGetCurrent()->vfn_12();
     MiniGameGetCurrent()->vfn_17(lbl_802DE3D0);
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
 
@@ -2757,7 +2757,7 @@ void MiniGame4On4GameEndC::vfn_03(float dt)
     fn_8009D8CC(1);
     MiniGameGetCurrent()->vfn_12();
     MiniGameGetCurrent()->vfn_17(lbl_802DE95C);
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
 
@@ -3253,7 +3253,7 @@ void MiniGameCrushCarrierGameEndC::vfn_03(float dt)
 {
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     MiniGameGetCurrent()->vfn_12();
     MiniGameGetCurrent()->vfn_16(lbl_802DE9CC);
     Class_80297B90::vfn_03(dt);
@@ -4691,7 +4691,7 @@ void MiniGameJumpBallGameEndC::vfn_03(float dt)
     }
     MiniGameGetCurrent()->vfn_12();
     MiniGameGetCurrent()->vfn_16(lbl_802DEA78);
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     if (StoryEventsGetCurrentEvent()) {
         StoryEventsSetRewardPenalty(fn_801529C0(&lbl_8031BDD4));
     }
@@ -5794,7 +5794,7 @@ void MiniGameOpenFieldGameEndC::vfn_03(float dt)
     fn_8009D8CC(1);
     MiniGameGetCurrent()->vfn_12();
     MiniGameGetCurrent()->vfn_16(lbl_802DEB78);
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
 
@@ -6386,7 +6386,7 @@ void fn_801556D0(unsigned int kind, int value, int flag)
 
 void MiniGameQuickStrikeGameEndC::vfn_03(float dt)
 {
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     MiniGameGetCurrent()->vfn_12();
     Class_80297B90::vfn_03(dt);
 }

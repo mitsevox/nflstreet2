@@ -88,7 +88,7 @@
 #include "game/ResOpenDevice.h"
 #include "game/ResLoad.h"
 #include "game/LevelSurface.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_80218FC4.h"
 #include "game/Vec3Magnitude.h"
@@ -13816,7 +13816,7 @@ extern "C" void fn_8009BA10(int value)
     args[3] = (int)&lbl_8030E6D0;
     lbl_8030E6D0.mLength = strlen(lbl_803EA994);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+        UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
     }
     lbl_803EA99B = value;
 }
@@ -19171,7 +19171,7 @@ extern "C" void fn_800A7514(int team)
             fn_800A65BC();
             args[0] = team;
             args[1] = 1;
-            fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
+            UISProcessHint(gUISMainInfo, 0x80000016, 2, args);
             if (TutorialIsActive() == 0 && team == fn_80178320() && fn_800B65A0(fn_80178308()) == 0xFF) {
                 Object_80039F5C *p = PlyrFindByRole(fn_80178308(), 0, 0);
                 unsigned char side;
@@ -19229,7 +19229,7 @@ extern "C" void fn_800A7A0C(int team)
     HudResetGameBreaker(team);
     args[0] = team;
     args[1] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x80000016, 2, args);
+    UISProcessHint(gUISMainInfo, 0x80000016, 2, args);
     StyleTrackerSetMeter(team, 0, 0);
     fn_800A65BC();
     if (lbl_803EAA4D != 0) {
@@ -20696,7 +20696,7 @@ void Class_80297B90::vfn_06()
     if (ChallengeIsActive() == 0) {
         SndgMusicPumpFrame(0);
         fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
-        fn_8021D7B8(gUISMainInfo, 0x80000035, 0, 0);
+        UISProcessHint(gUISMainInfo, 0x80000035, 0, 0);
     }
 }
 
@@ -20704,7 +20704,7 @@ void Class_80297B90::vfn_07()
 {
     if (ChallengeIsActive() == 0) {
         SndgSfxPlay(119, 0);
-        fn_8021D7B8(gUISMainInfo, 0x80000034, 0, 0);
+        UISProcessHint(gUISMainInfo, 0x80000034, 0, 0);
         fn_8021956C(gUISMainInfo, 3, 5, 1);
     }
 }
@@ -25230,7 +25230,7 @@ void Class_80297B50::vfn_04(float dt)
         Arg_8021D7B8 arg;
         lbl_803EAB28 = count;
         arg.i = count;
-        fn_8021D7B8(gUISMainInfo, 0x80000007, 1, &arg);
+        UISProcessHint(gUISMainInfo, 0x80000007, 1, &arg);
         if (count <= 5) {
             AudmonEventPost(20, 0);
         }

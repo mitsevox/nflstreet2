@@ -14,7 +14,7 @@
 #include "game/GameModeType.h"
 #include "game/MemCardUtil.h"
 #include "game/fn_80218FC4.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 
 extern "C" {
 extern char gMainFEGroup[];
@@ -392,7 +392,7 @@ unsigned char FELoop::Update()
         }
         if (MsgMainMenuIsShown() || MsgStartScreenIsShown()) {
             if (++_FELoop_uIdleFrames > (int)(60.0f / gFrameTimeScale) * 75) {
-                fn_8021D7B8(gUISMainInfo, 0x80000038, 0, 0);
+                UISProcessHint(gUISMainInfo, 0x80000038, 0, 0);
                 SndgMusicFadeOut(0xFA, 1);
                 _FELoop_bIdleTimeout = 1;
             }

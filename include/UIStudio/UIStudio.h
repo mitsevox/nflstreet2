@@ -195,13 +195,13 @@ typedef struct UISRateFnc_t {
 } UISRateFncT;
 
 /* Word stack used when calling into screen code (20 bytes); pTop is stored to
-   and then advanced. */
+   and then advanced, pCode is the script byte code being run. */
 typedef struct UISRunState_t {
     Int32 *pStackStart;   /* 0x00 */
     Int32 *pStackCurrent; /* 0x04 */
     Int32 *pStackEnd;     /* 0x08 */
-    Int32 *pTop;  /* 0x0C */
-    Int32 unk_10; /* 0x10 */
+    Int32 *pTop;          /* 0x0C */
+    Uint8 *pCode;         /* 0x10 */
 } UISRunStateT;
 
 /* 40-byte modal record: the screen a modal screen was loaded over and the
@@ -236,7 +236,7 @@ typedef struct UISInfo_t {
     UISControlFncT *pControlFnc;    /* 0x1C */
     void *pCallback20;              /* 0x20 */
     UISScreenActivatedFncT *pScreenActivatedFnc; /* 0x24 */
-    void *pCallback28;              /* 0x28 */
+    void (*pCallback28)(Uint16, Uint16, char *); /* 0x28: (group, screen, text) */
     void (*pCallback2C)(void);              /* 0x2C: called before the screens are drawn */
     void (*pCallback30)(void);              /* 0x30: called after the screens are drawn */
     void (*pCallback34)(Uint16, Uint16);    /* 0x34: called before each screen (group, screen) */
@@ -295,11 +295,20 @@ void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, 
 void UISInternalActivateControl(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
                  Uint16 Arg6);
 void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
+void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID);
+void UISUpdateVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
 
-/* UI Studio functions outside UIStudio.c whose names are not yet established. */
-Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
-void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
+/* UI Studio functions of UISStack.c, UISUtils.c and UISActionProcess.c called from other files. */
+Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
+                  UISControlStateT *pControlState);
+Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
+Int32 UISExecuteFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
+                  UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
+                  Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult);
+void UISMoveScreenDrawPosition(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
+void UISDoHint(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
+void UISAddThreadAction(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
                  UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6);
-void fn_8021DDF4(UISInfoT *pInfo, Int32 Arg1);
+void UISProcessThreadAction(UISInfoT *pInfo, Int32 Arg1);
 
 #endif

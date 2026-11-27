@@ -83,7 +83,7 @@ void _UIGArcBuildFan(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors, 
     memcpy(&Color0, pNode->u.t.unk_14, sizeof(Color0));
     memcpy(&Color1, pNode->u.t.unk_18, sizeof(Color1));
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGArcPalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGArcPalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
         if (pPalette != 0) {
             if (Color0.r > pPalette->mCount) Color0.r = pPalette->mCount - 1;
             if (Color1.r > pPalette->mCount) Color1.r = pPalette->mCount - 1;
@@ -227,7 +227,7 @@ void _UIGArcBuildStrip(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors
     memcpy(&Color0, pNode->u.t.unk_14, sizeof(Color0));
     memcpy(&Color1, pNode->u.t.unk_18, sizeof(Color1));
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGArcPalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGArcPalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
         if (pPalette != 0) {
             if (Color0.r >= pPalette->mCount) Color0.r = pPalette->mCount - 1;
             if (Color1.r >= pPalette->mCount) Color1.r = pPalette->mCount - 1;

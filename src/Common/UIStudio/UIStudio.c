@@ -13,9 +13,9 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
                  Int32 bFirstPass);
 static Int32 _ParseMaps(UISInfoT *pInfo, UISScreenT *pScreen, UISRunStateT *pStackInfo, Uint32 Control,
                   Int32 Channel, Int32 EventID, Int32 nParam, Int32 *pParam, Uint8 *pbActive);
-Int32 fn_8021C654(UISControlT *pControl, Uint32 ID);
-Int32 fn_8021C6A8(UISControlT *pControl, Int32 Flags, Uint32 ID);
-Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
+Int32 UISFindEventPC(UISControlT *pControl, Uint32 ID);
+Int32 UISFindSubControlEventPC(UISControlT *pControl, Int32 Flags, Uint32 ID);
+Int32 UISExecuteFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
                   UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
                   Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult);
 Int32 PatchScrData(UISScreenDataT *pNewBase);
@@ -26,10 +26,10 @@ static Int32 _UISInternalReInitScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 Sc
                   Int32 Count, Int32 *pArgs);
 static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, Int32 FncID);
 static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS);
-UISColorVectorT *fn_8021CA3C(void);
-UISColorVectorT *fn_8021CA48(void);
-void fn_8021CA54(Float32 a, Float32 b, Float32 c, Float32 d);
-void fn_8021CA70(Float32 a, Float32 b, Float32 c, Float32 d);
+UISColorVectorT *UISGetColorMultipler(void);
+UISColorVectorT *UISGetColorAdditive(void);
+void UISSetColorMultipler(Float32 a, Float32 b, Float32 c, Float32 d);
+void UISSetColorAdditive(Float32 a, Float32 b, Float32 c, Float32 d);
 
 /* Draw-pass word cleared before each screen; its address is passed to the draw functions. */
 static UISParamT _GlobalScreenParam;
@@ -38,13 +38,13 @@ static void (*_UIStudio_pEventHook)(void);
 /* Tested before the next screen is activated after an unload. */
 static Uint8 _UIS_ShuttingDown = 0;
 
-Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
+Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState);
-Int32 fn_8021D9D4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
+Int32 UISThreadProcessHints(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID);
 void *memmove(void *dst, const void *src, Uint32 n);
 int sprintf(char *s, const char *format, ...);
 Uint8 UISIsShuttingDown(UISInfoT *pInfo);
-UISControlStateT *fn_8021D37C(UISScreenT *pScreen, UISControlStateT *pControlInfo);
+UISControlStateT *UISFindSiblingEnableControl(UISScreenT *pScreen, UISControlStateT *pControlInfo);
 
 /* Runs the screen's static objects that have not run yet, then every action
    function under control Control and the controls it links to. */
@@ -249,13 +249,13 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
             }
         }
         if (pControl->pState->pOwner != 0) {
-            OldMultipler = *fn_8021CA3C();
-            OldAdditive = *fn_8021CA48();
+            OldMultipler = *UISGetColorMultipler();
+            OldAdditive = *UISGetColorAdditive();
             pCurMultipler = &pControl->pState->MultiplerFactor;
             pCurAdditive = &pControl->pState->AdditiveFactor;
-            fn_8021CA54(OldMultipler.r * pCurMultipler->r, OldMultipler.g * pCurMultipler->g,
+            UISSetColorMultipler(OldMultipler.r * pCurMultipler->r, OldMultipler.g * pCurMultipler->g,
                         OldMultipler.b * pCurMultipler->b, OldMultipler.a * pCurMultipler->a);
-            fn_8021CA70(OldAdditive.r + pCurAdditive->r, OldAdditive.g + pCurAdditive->g,
+            UISSetColorAdditive(OldAdditive.r + pCurAdditive->r, OldAdditive.g + pCurAdditive->g,
                         OldAdditive.b + pCurAdditive->b, OldAdditive.a + pCurAdditive->a);
             pInfo->pControlFnc(1, (Uint8 *)pControl->pState + 8);
             for (Node = 0; Node < pControl->NumNodes; Node++) {
@@ -276,8 +276,8 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
                     }
                 }
             }
-            fn_8021CA54(OldMultipler.r, OldMultipler.g, OldMultipler.b, OldMultipler.a);
-            fn_8021CA70(OldAdditive.r, OldAdditive.g, OldAdditive.b, OldAdditive.a);
+            UISSetColorMultipler(OldMultipler.r, OldMultipler.g, OldMultipler.b, OldMultipler.a);
+            UISSetColorAdditive(OldAdditive.r, OldAdditive.g, OldAdditive.b, OldAdditive.a);
             pInfo->pControlFnc(2, (Uint8 *)pControl->pState + 8);
         }
     }
@@ -312,22 +312,22 @@ static Int32 _ParseMaps(UISInfoT *pInfo, UISScreenT *pScreen, UISRunStateT *pSta
                 rVal = _ParseMaps(pInfo, pScreen, pStackInfo, pMap->Value, Channel, EventID, nParam,
                                    pParam, (Uint8 *)&bLocalProcess);
                 if (bLocalProcess == 1) {
-                    pcEvent = fn_8021C6A8(pControl, (Uint16)pMap->Value, EventID);
+                    pcEvent = UISFindSubControlEventPC(pControl, (Uint16)pMap->Value, EventID);
                     if (pcEvent != 0 &&
-                        fn_8021C760(pInfo, pScreen, pControl->pState, pStackInfo, pcEvent, nParam,
+                        UISExecuteFnc(pInfo, pScreen, pControl->pState, pStackInfo, pcEvent, nParam,
                                     pParam, 0, 0, 1, Channel, 0) == 2) {
                         return 2;
                     }
                 }
             }
         }
-        fn_8021DDF4(pInfo, 1);
-        pcEvent = fn_8021C654(pControl, EventID);
+        UISProcessThreadAction(pInfo, 1);
+        pcEvent = UISFindEventPC(pControl, EventID);
         if ((EventID == -6 || EventID == -7) && (Int32)pControl->pState != pParam[2]) {
             pcEvent = 0;
         }
         if (pcEvent != 0) {
-            rVal = fn_8021C760(pInfo, pScreen, pControl->pState, pStackInfo, pcEvent, nParam, pParam,
+            rVal = UISExecuteFnc(pInfo, pScreen, pControl->pState, pStackInfo, pcEvent, nParam, pParam,
                                0, 0, 1, Channel, 0);
         }
     }
@@ -408,7 +408,7 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
                 } else {
                     nParam = 2;
                 }
-                fn_8021C760(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo, pStackInfo,
+                UISExecuteFnc(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo, pStackInfo,
                             (Int32)pRateFnc->pFnc, nParam, RateParams, 0, 0, 0, -1,
                             &ReturnParam.iValue);
                 fAcel = ReturnParam.fValue;
@@ -432,14 +432,14 @@ static void _ParseRateFncs(UISInfoT *pInfo, Uint32 MS)
                     pRateFnc->State = UISRATE_UNLOAD;
                     if (pRateFnc->AnimationData.pEndFnc != 0) {
                         RateParams[0] = pRateFnc->RateFncID;
-                        fn_8021C760(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo,
+                        UISExecuteFnc(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo,
                                     pStackInfo, (Int32)pRateFnc->AnimationData.pEndFnc, 1,
                                     RateParams, 0, 0, 0, -1, 0);
                     } else {
-                        pEndRateFncPC = fn_8021C654(pScreen->pData->pControls, -14);
+                        pEndRateFncPC = UISFindEventPC(pScreen->pData->pControls, -14);
                         if (pEndRateFncPC != 0) {
                             RateParams[0] = pRateFnc->RateFncID;
-                            fn_8021C760(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo,
+                            UISExecuteFnc(pInfo, pScreen, (UISControlStateT *)pRateFnc->pControlInfo,
                                         pStackInfo, pEndRateFncPC, 1, RateParams, 0, 0, 0, -1, 0);
                         }
                     }
@@ -667,7 +667,7 @@ Int32 UISInternalLoadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Ui
     Int32 bNotLoaded;
     Uint8 Done;
 
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     if (Screen < pInfo->NumScreens) {
         _UISInternalReInitScreen(pInfo, GroupID, ScreenID, ParentGroupID, ParentScreenID, Count, pArgs);
         return 0;
@@ -732,7 +732,7 @@ static Int32 _UISInternalReInitScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 Sc
     UISScreenT *pScreen;
     Uint8 Done;
 
-    pScreen = &pInfo->Screens[fn_8021C5EC(pInfo, GroupID, ScreenID)];
+    pScreen = &pInfo->Screens[UISFindScreen(pInfo, GroupID, ScreenID)];
     _UISKillRateFncsInScreen(pInfo, pScreen);
     pScreen->pData->pControls[0].pState->bEnabled = 1;
     Done = 0;
@@ -769,7 +769,7 @@ static Int32 _UISInternalLoad(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
         iActiveGroup = pScreen->GroupID;
         iActiveScreen = pScreen->ScreenID;
     }
-    bScreenLoaded = fn_8021C5EC(pInfo, GroupID, ScreenID) < pInfo->NumScreens;
+    bScreenLoaded = UISFindScreen(pInfo, GroupID, ScreenID) < pInfo->NumScreens;
     if (bScreenLoaded == 1) {
         _UISInternalReInitScreen(pInfo, GroupID, ScreenID, (Uint16)iActiveGroup, (Uint16)iActiveScreen, Count,
                     pArgs);
@@ -788,12 +788,12 @@ static Int32 _UISInternalLoad(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
     }
     rVal = UISInternalLoadScreen(pInfo, GroupID, ScreenID, iActiveGroup, iActiveScreen, Count, pArgs);
     if (bModal) {
-        Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+        Screen = UISFindScreen(pInfo, GroupID, ScreenID);
         if (Screen < pInfo->NumScreens) {
             pModal = &pInfo->ScreenRefs[Modal];
             pScreen = &pInfo->Screens[Screen];
             pModal->pControlState = pScreen->pData->pControls[0].pState;
-            Screen = fn_8021C5EC(pInfo, iActiveGroup, iActiveScreen);
+            Screen = UISFindScreen(pInfo, iActiveGroup, iActiveScreen);
             if (Screen < pInfo->NumScreens) {
                 pModal->pScreen = &pInfo->Screens[Screen];
             }
@@ -813,7 +813,7 @@ Int32 fn_80218FC4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, 
         Action.s.ScreenID = ScreenID;
         Action.s.unk_04 = -1;
         Action.s.unk_06 = -1;
-        fn_8021D904(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
+        UISAddThreadAction(GroupID, ScreenID, pInfo, 0, &Action, Arg3, pArg4);
         return 1;
     }
     return _UISInternalLoad(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
@@ -846,14 +846,14 @@ static Uint8 UISInternalUnloadModal(UISInfoT *pInfo, Uint16 GroupID, Uint16 Scre
                 return 1;
             }
             pInfo->ActiveScreen =
-                fn_8021C5EC(pInfo, pModal->pScreen->GroupID, pModal->pScreen->ScreenID);
+                UISFindScreen(pInfo, pModal->pScreen->GroupID, pModal->pScreen->ScreenID);
             if (pInfo->ActiveScreen < pInfo->NumScreens) {
                 pStackBase = pModal->pRestoreStack;
                 if (pStackBase != 0) {
                     pStackInfo = pModal->pRestoreState;
                     *pStackInfo = pModal->StackState;
                     pStackInfo->pTop[-1] = iRetVal;
-                    if (fn_8021A45C(pInfo, pModal->pRestoreStack, pStackInfo, pModal->pScreen,
+                    if (UISStackProcess(pInfo, pModal->pRestoreStack, pStackInfo, pModal->pScreen,
                                     pModal->pControlState) != 3) {
                         pStackInfo->pTop = pStackBase;
                     }
@@ -892,7 +892,7 @@ Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
     Uint32 nRateFnc;
     Uint32 Idx;
 
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     if (Screen < pInfo->NumScreens) {
         pScreen = &pInfo->Screens[Screen];
         ParentGroupID = pScreen->ParentGroupID;
@@ -917,7 +917,7 @@ Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
         pInfo->Flags |= 2;
         _ParseMaps(pInfo, pScreen, &pInfo->RunState, 0, -1, -3, 0, 0, &Done);
         pInfo->Flags &= ~2;
-        fn_8021D9D4(pInfo, GroupID, ScreenID);
+        UISThreadProcessHints(pInfo, GroupID, ScreenID);
         _ParseInitialize(pInfo, pScreen, 0, -3);
         _ParseTransforms(pInfo, 3, pScreen, 0);
         nRateFnc = pInfo->NumRateFncs;
@@ -952,7 +952,7 @@ Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
         }
         if (pInfo->ActiveScreen == -1) {
             if (pInfo->NumScreens != 0) {
-                pInfo->ActiveScreen = fn_8021C5EC(pInfo, ParentGroupID, ParentScreenID);
+                pInfo->ActiveScreen = UISFindScreen(pInfo, ParentGroupID, ParentScreenID);
                 if (pInfo->ActiveScreen < pInfo->NumScreens) {
                     pScreen = &pInfo->Screens[pInfo->ActiveScreen];
                 } else {
@@ -967,7 +967,7 @@ Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, 
                     Action.s.GroupID = pScreen->GroupID;
                     Action.s.ScreenID = pScreen->ScreenID;
                     if (!_UIS_ShuttingDown) {
-                        fn_8021D904(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, 0);
+                        UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 3, &Action, 0, 0);
                     }
                 }
             } else {
@@ -986,9 +986,9 @@ void fn_8021956C(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 bProces
     Action.s.GroupID = GroupID;
     Action.s.ScreenID = ScreenID;
     Arg = 0;
-    fn_8021D904(GroupID, ScreenID, pInfo, 1, &Action, 1, &Arg);
+    UISAddThreadAction(GroupID, ScreenID, pInfo, 1, &Action, 1, &Arg);
     if (bProcess) {
-        fn_8021DDF4(pInfo, 0);
+        UISProcessThreadAction(pInfo, 0);
     }
 }
 
@@ -998,9 +998,9 @@ void fn_802195E4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 
     Action.s.GroupID = GroupID;
     Action.s.ScreenID = ScreenID;
-    fn_8021D904(GroupID, ScreenID, pInfo, 3, &Action, 0, 0);
+    UISAddThreadAction(GroupID, ScreenID, pInfo, 3, &Action, 0, 0);
     if (!(pInfo->Flags & 2)) {
-        fn_8021DDF4(pInfo, 0);
+        UISProcessThreadAction(pInfo, 0);
     }
 }
 
@@ -1036,10 +1036,10 @@ void UISProcessEvent(UISInfoT *pInfo, Uint32 Channel, Int32 Message, Int32 nPara
     Int32 bDontProcessEvent;
     Uint8 bProcess;
 
-    fn_8021DDF4(pInfo, 0);
+    UISProcessThreadAction(pInfo, 0);
     Modal = pInfo->NumScreenRefs - 1;
     if (Modal >= 0) {
-        pInfo->ActiveScreen = fn_8021C5EC(pInfo, pInfo->ScreenRefs[Modal].GroupID,
+        pInfo->ActiveScreen = UISFindScreen(pInfo, pInfo->ScreenRefs[Modal].GroupID,
                                           pInfo->ScreenRefs[Modal].ScreenID);
     }
     if (AllScreens) {
@@ -1108,8 +1108,8 @@ void UISDrawObjects(UISInfoT *pInfo, Uint32 Ticks)
     UISScreenT *pScreen;
 
     Tick = 0;
-    fn_8021CA54(1.0f, 1.0f, 1.0f, 1.0f);
-    fn_8021CA70(0.0f, 0.0f, 0.0f, 0.0f);
+    UISSetColorMultipler(1.0f, 1.0f, 1.0f, 1.0f);
+    UISSetColorAdditive(0.0f, 0.0f, 0.0f, 0.0f);
     for (; Tick < Ticks; Tick++) {
         _ParseRateFncs(pInfo, pInfo->MSPerTick);
     }
@@ -1139,7 +1139,7 @@ void UISIdleProcess(UISInfoT *pInfo, Int32 Arg1)
     Int32 NumScreens;
     Uint8 Done;
 
-    fn_8021DDF4(pInfo, 0);
+    UISProcessThreadAction(pInfo, 0);
     NumScreens = pInfo->NumScreens;
     for (Screen = 0; Screen < NumScreens; Screen++) {
         pInfo->Flags |= 2;
@@ -1159,7 +1159,7 @@ void *UISFindStaticObject(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint
     UISObjectRefT *pRef;
 
     pObject = 0;
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     if (Screen < pInfo->NumScreens) {
         pScreen = &pInfo->Screens[Screen];
         for (Object = 0; Object < pScreen->pData->NumObjects; Object++) {
@@ -1201,7 +1201,7 @@ void UISInternalActivateControl(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, In
     pControlInfo = (UISControlStateT *)ControlInfo;
     pTableEntry = (Int32 *)TableEntry;
     nSlot = -1;
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     pTarget = 0;
     if (Screen >= pInfo->NumScreens) {
         return;
@@ -1229,12 +1229,12 @@ void UISInternalActivateControl(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, In
         }
     }
     if (bActivate == 1) {
-        pOldEnabled = fn_8021D37C(pScreen, pControlInfo);
+        pOldEnabled = UISFindSiblingEnableControl(pScreen, pControlInfo);
         if (pOldEnabled != 0) {
             UISInternalActivateControl(pInfo, 0, 0, (Int32)pOldEnabled, 0, ScreenID, GroupID);
         }
     }
-    pcEvent = fn_8021C654(pTarget, nEvent);
+    pcEvent = UISFindEventPC(pTarget, nEvent);
     pTarget->pState->bEnabled = bActivate;
     if (pTableEntry != 0) {
         nSlot = pTableEntry[0];
@@ -1248,13 +1248,13 @@ void UISInternalActivateControl(UISInfoT *pInfo, Int32 bActivate, Int16 iDir, In
     aArgs[0] = iDir;
     aArgs[1] = nSlot;
     if (pcEvent != 0) {
-        fn_8021C760(pInfo, pScreen, pTarget->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0, 0, 0,
+        UISExecuteFnc(pInfo, pScreen, pTarget->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0, 0, 0,
                     0, 0);
     }
     if (pParent != 0) {
-        pcEvent = fn_8021C6A8(pParent, (Uint16)Control, nEvent);
+        pcEvent = UISFindSubControlEventPC(pParent, (Uint16)Control, nEvent);
         if (pcEvent != 0) {
-            fn_8021C760(pInfo, pScreen, pParent->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0,
+            UISExecuteFnc(pInfo, pScreen, pParent->pState, &pInfo->RunState, pcEvent, 2, aArgs, 0,
                         0, 0, 0, 0);
         }
     }
@@ -1276,7 +1276,7 @@ void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID,
         pInfo->Flags &= ~2;
     }
     if (bActivate && !UISIsShuttingDown(pInfo)) {
-        Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+        Screen = UISFindScreen(pInfo, GroupID, ScreenID);
         if (Screen < pInfo->NumScreens) {
             pScreen = &pInfo->Screens[Screen];
             if (pScreen->bWaitingToBeUnloaded == 0) {
