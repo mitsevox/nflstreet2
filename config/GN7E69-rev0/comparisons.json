@@ -29442,11 +29442,6 @@
       ],
       "functions": [
         {
-          "symbol": "_WriteInt",
-          "start": "0x801C20F0",
-          "end": "0x801C21D0"
-        },
-        {
           "symbol": "_WriteFloat",
           "start": "0x801C21D0",
           "end": "0x801C2428"
