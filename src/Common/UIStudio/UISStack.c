@@ -24,7 +24,7 @@ double fabs(double);
 typedef void UISMessageFncT(Int32 Message, Uint16 GroupID, Uint16 ScreenID, Int32 Count,
                             Int32 *pArgs, Int32 *pResult);
 
-void UISStringFormat(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs);
+void UISStringFormat(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs);
 
 extern Int32 lbl_8039F808[20];
 
@@ -190,7 +190,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                 pObject = NULL;
             }
             pArgs = *ppTop - Count;
-            pInfo->ActionFncs[Fnc](pObject, Value, Count, pArgs, (Int32)(pArgs - 1));
+            pInfo->ActionFncs[Fnc].pFnc(pObject, Value, Count, pArgs, (Int32)(pArgs - 1));
             break;
         }
         case 118: {
@@ -213,7 +213,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             (*ppTop)--;
             pArgs = *ppTop - Count;
             pCode = *ppCode;
-            ((UISMessageFncT *)pInfo->pCallback0C)(*pArgs, pScreen->GroupID, pScreen->ScreenID,
+            ((UISMessageFncT *)pInfo->pMessageFnc)(*pArgs, pScreen->GroupID, pScreen->ScreenID,
                                                   Count, pArgs + 1, pArgs - 1);
             *ppCode = pCode;
             break;
@@ -640,7 +640,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 76: {
             Uint32 Count;
             Uint32 i;
-            Buffer_80222E54 *pFormat;
+            UIGTextBuffer_t *pFormat;
 
             Count = *--*ppTop;
             for (i = 0; i < Count; i++) {
@@ -650,8 +650,8 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                     (*ppTop)--;
                 }
             }
-            pFormat = (Buffer_80222E54 *)*--*ppTop;
-            UISStringFormat(pScreen->pData, (Buffer_80222E54 *)*--*ppTop, pFormat, Count, lbl_8039F808);
+            pFormat = (UIGTextBuffer_t *)*--*ppTop;
+            UISStringFormat(pScreen->pData, (UIGTextBuffer_t *)*--*ppTop, pFormat, Count, lbl_8039F808);
             break;
         }
         case 119: {
