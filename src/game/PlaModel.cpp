@@ -1,7 +1,12 @@
+/* Player models: opens the pla*.dat model archives (plamodel, plaface, plahair, plarosterhair,
+   plahat, plaglass, plajewel), loads the body, hand and base head models, each player's hair,
+   face, hat, glasses and jewellery models (directly, queued and read once per id, or
+   asynchronously with a completion callback), binds them to their skeletons and looks up the
+   face and hair models of real players by name. */
 #include "game/Object_8003DEC4.h"
 #include "game/DbCursor.h"
 #include "game/Object_80233EAC.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "game/PlayerLook.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"

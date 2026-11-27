@@ -10,7 +10,7 @@
 #include "game/FEPlyrLoad.h"
 #include "game/Object_8003DEC4.h"
 #include "game/PlayerLook.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80233CBC.h"
 

@@ -1,5 +1,5 @@
-#ifndef GAME_CU_8015D3EC_H
-#define GAME_CU_8015D3EC_H
+#ifndef GAME_PLAMODEL_H
+#define GAME_PLAMODEL_H
 
 #include "game/Object_80233EAC.h"
 

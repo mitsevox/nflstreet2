@@ -13,7 +13,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/MemPoolDesc.h"
 #include "game/PadInput.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "engine/periph.h"
 #include "engine/remap.h"
 
