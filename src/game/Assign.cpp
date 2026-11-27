@@ -3580,7 +3580,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 extern "C" int fn_80106618(Object_80039F5C *p);
 extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 extern "C" void fn_80106A60(Object_80039F5C *p);
-extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock);
+extern "C" void AssignBlockUpdatePassCoverage(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock);
 extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo);
 extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index);
 extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn);
@@ -3734,7 +3734,7 @@ extern "C" void fn_80121264(Object_80039F5C *p, Plan_80121264 *pPlan);
 extern "C" int fn_801218EC(FieldPoint_t *pPos, Entry_80120E98 *pA, Entry_80120E98 *pB);
 extern "C" int fn_80121918(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 extern "C" int fn_80121BE8(FieldPoint_t *pA, FieldPoint_t *pB, FieldPoint_t *pTarget, int angle, int heading, float distB, float distA);
-extern "C" void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle);
+extern "C" void AssignGapAdjustHeading(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle);
 extern "C" void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 extern "C" void fn_801227DC(Object_80039F5C *p, Plan_80121264 *pPlan, Entry_801230B8 *pEntry);
 extern "C" Entry_801230B8 *fn_801230B8(Plan_80121264 *pPlan);
@@ -4720,7 +4720,7 @@ extern "C" void fn_800F181C(int index, int which) {
     lbl_803EAE18->mpEntries[index].mpUnknown4 = lbl_802EE938[which];
 }
 
-extern "C" void fn_800F1858(Object_80039F5C *p) {
+extern "C" void AssignBlockEngageBegin(Object_80039F5C *p) {
     short *pRatings = p->mRatings;
     Block_800F0C6C *pBlock = (Block_800F0C6C *)&p->mUnknown336;
     int index = 0xFFFF;
@@ -4731,18 +4731,18 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
 
     fn_800A8954(1, p->mIdBytes[2], p);
     fn_8009BD60(p);
-    side = 6;
     a = 0.4f;
     b = 0.05f;
     switch (p->mpState->mUnknown2) {
-    case 0:
-        side = 6;
-        break;
     case 1:
         side = 6;
         break;
     case 2:
         side = 3;
+        break;
+    case 0:
+    default:
+        side = 6;
         break;
     }
     if (p->mUnknown776 == 1) {
@@ -4884,7 +4884,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
         p->mFlags |= 8;
     } else {
         PlayerMoveBegin(p, 1, 34);
-        fn_800F1858(p);
+        AssignBlockEngageBegin(p);
     }
 }
 
@@ -5090,7 +5090,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
         if (PlayerMoveGetKind(p) == 4) {
             fn_800F1C68(p);
         } else {
-            fn_800F1858(p);
+            AssignBlockEngageBegin(p);
         }
         p->mUnknown512.mUnknown14 = 0;
         pBlock->mUnknown6 = 2;
@@ -13394,7 +13394,7 @@ extern "C" void fn_80106A60(Object_80039F5C *p) {
     }
 }
 
-extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock) {
+extern "C" void AssignBlockUpdatePassCoverage(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock) {
     Ball_t *pBall = BallGet(pBlock->mUnknown64);
     Object_80039F5C *pOther = BallGetTarget(pBall);
     int result = pBlock->mUnknown49;
@@ -13551,14 +13551,19 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock)
             case 2:
             case 3:
                 if (ballTime > time - 5.0f || distance < 5.0f) {
-                    result = 3;
                     if (pBlock->mUnknown24 == pBlock->mUnknown20) {
                         if (pBlock->mUnknown54 == 0) {
                             result = 2;
+                            break;
                         }
-                    } else if (time < otherTime) {
-                        result = 2;
+                    } else {
+                        result = 3;
+                        if (time < otherTime) {
+                            result = 2;
+                        }
+                        break;
                     }
+                    result = 3;
                 } else {
                     result = 1;
                 }
@@ -14331,7 +14336,7 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
                 fn_801076F0(p, pOther, &res, (Input_801076F0 *)&info);
                 fn_801077D8(p, pOther, (Block_800F4A74_801077D8 *)pBlock, (Info_800F3A6C *)&res, &info);
             }
-            fn_80106C24(p, (Block_800F4A74_80104C9C *)pBlock);
+            AssignBlockUpdatePassCoverage(p, (Block_800F4A74_80104C9C *)pBlock);
             switch (pBlock->mUnknown49) {
             case 0:
                 active = 1;
@@ -17125,11 +17130,14 @@ extern "C" void fn_801100E8(Object_80039F5C *p)
     fn_8009BD60(p);
     switch (p->mpState->mUnknown2) {
     case 1:
-    default:
         side = 6;
         break;
     case 2:
         side = 3;
+        break;
+    case 0:
+    default:
+        side = 6;
         break;
     }
     if (p->mUnknown776 == 1) {
@@ -24962,7 +24970,7 @@ int fn_80121BE8(FieldPoint_t *pA, FieldPoint_t *pB, FieldPoint_t *pTarget, int a
 }
 
 extern "C" {
-void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
+void AssignGapAdjustHeading(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
 {
     FieldPoint_t *pPos = (FieldPoint_t *)&p->mMotion.mPos;
     int flagsB = pEntry->mpUnknown4->mUnknown36;
@@ -25002,9 +25010,8 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
             adjust = 1;
             weight = MathCos(MathAngleDiff(heading, 0x400000));
         } else if (pEntry->mUnknown24 > 8.0f && MathAngleDiff(pEntry->mUnknown16, angle) > 0x271C71 &&
-                   MathAngleDiff(pEntry->mUnknown16, facing) > 0x271C71) {
-            pEntry->mUnknown16 = angle;
-        } else if (inside && pPos->mY > ScrmGetGoalLineY() - 5.0f && fn_801486A0()) {
+                       MathAngleDiff(pEntry->mUnknown16, facing) > 0x271C71
+                   || inside && pPos->mY > ScrmGetGoalLineY() - 5.0f && fn_801486A0()) {
             pEntry->mUnknown16 = angle;
         }
     } else if ((flagsA & 2) && (flagsB & 1) || (flagsA & 1) && (flagsB & 2)) {
@@ -25013,12 +25020,15 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         if (flagsA & 2) {
             delta = pEntry->mpUnknown4->mUnknown8;
             pOther = pEntry->mpUnknown0;
+            if (delta.mY < pOther->mUnknown8.mY) {
+                adjust = 1;
+            }
         } else {
             delta = pEntry->mpUnknown0->mUnknown8;
             pOther = pEntry->mpUnknown4;
-        }
-        if (delta.mY < pOther->mUnknown8.mY) {
-            adjust = 1;
+            if (delta.mY < pOther->mUnknown8.mY) {
+                adjust = 1;
+            }
         }
         if (adjust) {
             Vec2Sub(&delta, &delta, &pEntry->mUnknown8);
@@ -25032,15 +25042,13 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
     } else if ((flagsA & 8) && (flagsB & 1) || (flagsA & 1) && (flagsB & 8) || (flagsA & 8) && (flagsB & 2) ||
                (flagsA & 2) && (flagsB & 8)) {
         if (pEntry->mUnknown20 > 1.5f && pEntry->mUnknown24 > 4.0f || !fn_801486A0()) {
-            Entry_80120E98 *pEnd;
-
             if (flagsA & 3) {
-                pEnd = pEntry->mpUnknown0;
+                delta = pEntry->mpUnknown0->mUnknown8;
+                heading = (pEntry->mpUnknown0->mUnknown20 + 0x800000) & 0xFFFFFF;
             } else {
-                pEnd = pEntry->mpUnknown4;
+                delta = pEntry->mpUnknown4->mUnknown8;
+                heading = (pEntry->mpUnknown4->mUnknown20 + 0x800000) & 0xFFFFFF;
             }
-            delta = pEnd->mUnknown8;
-            heading = (pEnd->mUnknown20 + 0x800000) & 0xFFFFFF;
             if (MathAngleDiff(heading, pEntry->mUnknown16) > 0x400000 &&
                 MathAngleDiff(pEntry->mUnknown16, facing) > 0x200000) {
                 pEntry->mUnknown16 = angle;
@@ -25060,15 +25068,13 @@ void fn_80121CB0(Object_80039F5C *p, Entry_801230B8 *pEntry, int angle)
         if (fabsf(pPos->mX) > fabsf(pEntry->mUnknown8.mX)) {
             pEntry->mUnknown16 = angle;
         } else if (pEntry->mUnknown24 > 4.0f) {
-            Entry_80120E98 *pEnd;
-
             if (flagsA & 3) {
-                pEnd = pEntry->mpUnknown0;
+                delta = pEntry->mpUnknown0->mUnknown8;
+                weight = pEntry->mpUnknown0->mUnknown28;
             } else {
-                pEnd = pEntry->mpUnknown4;
+                delta = pEntry->mpUnknown4->mUnknown8;
+                weight = pEntry->mpUnknown4->mUnknown28;
             }
-            delta = pEnd->mUnknown8;
-            weight = pEnd->mUnknown28;
             if (weight < 2.0f) {
                 adjust = 1;
                 weight *= 0.175f;
@@ -25164,7 +25170,7 @@ void fn_80122670(Object_80039F5C *p, Plan_80121264 *pPlan, int angle)
         Vec2Sub(&delta, &pEntry->mpUnknown0->mUnknown8, &pEntry->mpUnknown4->mUnknown8);
         pEntry->mUnknown24 = Vec2Magnitude(&delta);
         pEntry->mUnknown28 = 0.0f;
-        fn_80121CB0(p, pEntry, angle);
+        AssignGapAdjustHeading(p, pEntry, angle);
         if (fn_80121918(p, pPlan, pEntry)) {
             pPlan->mUnknown2372++;
         }
