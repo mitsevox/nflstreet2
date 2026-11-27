@@ -8,7 +8,7 @@
 #include "engine/t3db_cols.h"
 #include "game/TDbCompilePerformOp.h"
 
-typedef int (*DbOccpQueryFunc)(const char *pWhere, int b, int orderTable, int orderCol, int orderDir,
+typedef int (*DbOccpQueryFunc)(const char *pWhere, int b, unsigned long long orderKey, int orderDir,
                                struct QueryCursor *pCursor);
 
 extern int TDbTblFindUnusedId(int db, int *pTable);
@@ -46,9 +46,9 @@ static inline unsigned long long _DbOccpKey(unsigned int table, unsigned int col
 
 static inline void _DbOccpSetCol(TDbCol_801F9718 *pCol, int table, int col)
 {
-    pCol->mUnk0 = 0;
-    pCol->mUnk4 = table;
     pCol->mCol = col;
+    pCol->mUnk4 = table;
+    pCol->mUnk0 = 0;
 }
 
 static inline void _DbOccpSetColEnd(TDbCol_801F9718 *pCol)
@@ -185,7 +185,7 @@ static void _DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned 
     *pDone = 1;
 }
 
-int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryPassing(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     TDbCol_801F9718 aCols[11];
     TDbSQLTableRef_801FDC18 aTables[2];
@@ -216,7 +216,7 @@ int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateWithHandler(0, aTables, 0, _DbOccp_iHandlerTag, aCols, 2, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -225,7 +225,7 @@ int DbOccpQueryPassing(const char *pWhere, int b, int orderTable, int orderCol, 
     return err;
 }
 
-int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryRushing(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -254,7 +254,7 @@ int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -263,7 +263,7 @@ int DbOccpQueryRushing(const char *pWhere, int b, int orderTable, int orderCol, 
     return err;
 }
 
-int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryReceiving(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[4];
     TDbExpr_t aTerms[3];
@@ -298,7 +298,7 @@ int DbOccpQueryReceiving(const char *pWhere, int b, int orderTable, int orderCol
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -312,7 +312,7 @@ int DbOccpQueryNone(void)
     return 3;
 }
 
-int DbOccpQueryBlocking(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryBlocking(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     int table;
     int err;
@@ -322,14 +322,14 @@ int DbOccpQueryBlocking(const char *pWhere, int b, int orderTable, int orderCol,
                               "declare \x8a cursor for select into \x8c 'LOGP'.'DIGP' and 'YALP'.'DIGT' and 'LOGP'.'apog' "
                               "and 'LOGP'.'asog' from 'LOGP' inner join 'YALP' on 'YALP'.'DIGP' = 'LOGP'.'DIGP' where "
                               "\x8f order by \x8c.\x8c \x8e\n",
-                              pCursor, table, pWhere, orderTable, orderCol, orderDir);
+                              pCursor, table, pWhere, (int)(orderKey >> 32), (int)orderKey, orderDir);
     if (_DbOccpAccepted(err)) {
         /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
     }
     return err;
 }
 
-int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryDefense(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -361,7 +361,7 @@ int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -370,7 +370,7 @@ int DbOccpQueryDefense(const char *pWhere, int b, int orderTable, int orderCol, 
     return err;
 }
 
-int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryKicking(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -404,7 +404,7 @@ int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -413,7 +413,7 @@ int DbOccpQueryKicking(const char *pWhere, int b, int orderTable, int orderCol, 
     return err;
 }
 
-int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryPunting(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -448,7 +448,7 @@ int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
@@ -457,7 +457,7 @@ int DbOccpQueryPunting(const char *pWhere, int b, int orderTable, int orderCol, 
     return err;
 }
 
-int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, int orderDir, struct QueryCursor *pCursor)
+int DbOccpQueryReturns(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];
     TDbExpr_t aTerms[2];
@@ -492,7 +492,7 @@ int DbOccpQueryReturns(const char *pWhere, int b, int orderTable, int orderCol, 
         err = TDbQryUpdateExpr(_DbOccp_iDb, aTables, 0, aKeys, aTerms, 0, 0);
         if (_DbOccpAccepted(err)) {
             err = TDbCompilePerformOp(0, "declare \x8a cursor for select * from \x8c order by \x8c.\x8c \x8e\n",
-                                      pCursor, table, orderTable, orderCol, orderDir);
+                                      pCursor, table, (int)(orderKey >> 32), (int)orderKey, orderDir);
             if (_DbOccpAccepted(err)) {
                 /* FAKEMATCH: empty accepted test after the last query, only for the target's trailing mr. r3,r3 (a plain return drops it) */
             }
