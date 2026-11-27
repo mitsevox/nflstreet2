@@ -25,12 +25,12 @@ extern int TDbTblExists(int db, int tbl);
 extern int DbCacheDeleteRows(int id, int a, int b);
 int DbTatsCopyTblDestroy(int db, int tbl);
 
-extern char lbl_802B3610[];
-extern char lbl_802B3698[];
-extern char lbl_802B36C4[];
-extern char lbl_802B37E4[];
-extern char lbl_802B3824[];
-extern char lbl_802B3888[];
+extern char _DbSrpt_szFetchTeamIdQuery[];
+extern char _DbSrpt_szDeclareSrptQuery[];
+extern char _DbSrpt_szFetchSrptQuery[];
+extern char _DbSrpt_szDeclareTeamsByFlagQuery[];
+extern char _DbSrpt_szDeclareTeamsByFlagTypeQuery[];
+extern char _DbSrpt_szDeclareTeamIdsQuery[];
 
 static DbSrptRow_t _DbSrpt_aRows[11];
 static unsigned char _DbSrpt_bHasTable = 0;
@@ -54,7 +54,7 @@ int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a)
     count = 0;
     if (status == 0) {
         while (status == 0) {
-            status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
+            status = TDbCompilePerformOp(0, _DbSrpt_szFetchTeamIdQuery, &cursor, &id);
             if (status == 0) {
                 pIds[count] = id;
                 count++;
@@ -92,9 +92,9 @@ int DbSrptModuleInit(DbSrptCallbacks_t *pCallbacks)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3698, &cursor);
+    status = TDbCompilePerformOp(0, _DbSrpt_szDeclareSrptQuery, &cursor);
     while (status == 0) {
-        status = TDbCompilePerformOp(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
+        status = TDbCompilePerformOp(0, _DbSrpt_szFetchSrptQuery, &cursor, &index, &a, &b, &c, &d);
         if (status == 0) {
             _DbSrpt_aRows[index].mUnknown0 = a;
             _DbSrpt_aRows[index].mUnknown2 = b;
@@ -144,7 +144,7 @@ int DbSrptDeleteUnflaggedTeams(int a)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B37E4, &cursor, 0);
+    status = TDbCompilePerformOp(0, _DbSrpt_szDeclareTeamsByFlagQuery, &cursor, 0);
     if (status == 0) {
         status = DbSrptDeleteCursorTeams(cursor, a);
     }
@@ -169,7 +169,7 @@ int DbSrptDeleteUnflaggedTypedTeams(int a)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3824, &cursor, 0, 5, 1);
+    status = TDbCompilePerformOp(0, _DbSrpt_szDeclareTeamsByFlagTypeQuery, &cursor, 0, 5, 1);
     if (status == 0) {
         status = DbSrptDeleteCursorTeams(cursor, a);
     }
@@ -199,13 +199,13 @@ int DbFindUnusedTeamIds(int db, int tbl, int *pIds, unsigned short *pCount)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3888, db, &cursor, tbl);
+    status = TDbCompilePerformOp(0, _DbSrpt_szDeclareTeamIdsQuery, db, &cursor, tbl);
     prev = -1;
     next = -1;
     last = 1023;
     count = 0;
     while (status == 0 && count < *pCount) {
-        status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
+        status = TDbCompilePerformOp(0, _DbSrpt_szFetchTeamIdQuery, &cursor, &id);
         if (status == 0) {
             if (id > prev + 1) {
                 next = prev + 1;

@@ -27,14 +27,6 @@ struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
-typedef struct Record_802297D8 {
-    float mUnknown0;
-    float mUnknown4;
-    float aUnknown8[10];
-    float mUnknown30;
-} Record_802297D8;
-
-extern Record_802297D8 lbl_803A20A4[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
@@ -65,20 +57,20 @@ extern char lbl_802B56F4[];
 extern char lbl_802B5744[];
 extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
-extern char lbl_802B37E4[];
-extern char lbl_802B3824[];
+extern char _DbSrpt_szDeclareTeamsByFlagQuery[];
+extern char _DbSrpt_szDeclareTeamsByFlagTypeQuery[];
 int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int DbCacheDeleteRows(int id, int a, int b);
-extern char lbl_802B3610[];
-extern char lbl_802B3698[];
+extern char _DbSrpt_szFetchTeamIdQuery[];
+extern char _DbSrpt_szDeclareSrptQuery[];
 extern char lbl_802B479C[];
 extern char lbl_802B4828[];
 extern char lbl_802B5CB4[];
 extern char lbl_802B5CF0[];
 extern int TDbExists(int db);
-extern char lbl_802B3888[];
-extern char lbl_802B36C4[];
+extern char _DbSrpt_szDeclareTeamIdsQuery[];
+extern char _DbSrpt_szFetchSrptQuery[];
 extern int TDbTblExists(int db, int tbl);
 extern int TDbTblColEnum(int db, int tbl, TDbColInfo_801F9AB8 *pCols, unsigned int *pCount);
 extern int TDbTblColExists(int db, int tbl, int col);
@@ -95,19 +87,6 @@ int DbLoadTeamList(void);
 int DbLeagueLoad(void);
 void DbLeagueFree(void);
 
-typedef struct Record_8022D5A4 {
-    unsigned short mUnknown0;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-} Record_8022D5A4;
-
-typedef struct Record_8022D874 {
-    int mUnknown0;
-    int mUnknown4;
-    unsigned char mUnknown8;
-    char mUnknown9[3];
-} Record_8022D874;
-
 extern char lbl_802B48C4[];
 extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
@@ -120,28 +99,12 @@ unsigned short DbThcdGetMaxDepth(int index);
 
 #include "engine/DbNiomHandlers.h"
 
-typedef struct Object_8022A59C {
+typedef struct DbMttsCursor_t {
     unsigned short mUnknown0;
     int mUnknown4;
-} Object_8022A59C;
+} DbMttsCursor_t;
 
-typedef struct Node_8022CC6C {
-    unsigned char mUnknown0;
-    unsigned char mUnknown1;
-    unsigned char mUnknown2;
-    unsigned char mUnknown3;
-    unsigned char mUnknown4;
-    unsigned char mUnknown5;
-    short mUnknown6;
-    unsigned short mUnknown8;
-    char mUnknown10[2];
-    struct Node_8022CC6C *mpUnknown12;
-    struct Node_8022CC6C *mpUnknown16;
-} Node_8022CC6C;
-
-void DbUslpSortOpen(Node_8022CC6C **ppHead);
-
-extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
+extern int fn_8022A624(DbMttsCursor_t *p, struct QueryCursor cursor, int a, int b);
 extern int DbCacheOpen(int key, unsigned short *pId);
 extern int DbCacheClose(unsigned short id);
 extern int DbLockAcquire(void);
@@ -206,7 +169,6 @@ extern void (*_DbNiom_pCallback)(int);
 extern int _DbNiom_iCallbackArg;
 extern unsigned char _DbNiom_bModeActive;
 extern unsigned char _DbNiom_bEnding;
-extern Object_8022A59C *_DbNiom_pCursor;
 extern int (*_DbNiom_pModeEnd)(void);
 extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
 extern int (*_DbNiom_pModeReset)(int a, int b);
@@ -235,9 +197,9 @@ extern int (*_DbSrpt_pBeginGameFunc)(int a, int b, int c, int d);
 extern int (*_DbSrpt_pResumeGameFunc)(int a, int b, int c, int d);
 
 int DbNiomCloseCursor(void);
-int fn_8022A59C(int a, Object_8022A59C **ppOut);
-int fn_8022AB6C(Object_8022A59C *p, int a, int b);
-int fn_8022AC80(Object_8022A59C *p);
+int fn_8022A59C(int a, DbMttsCursor_t **ppOut);
+int fn_8022AB6C(DbMttsCursor_t *p, int a, int b);
+int fn_8022AC80(DbMttsCursor_t *p);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
 void DbUtilRandomInit(void);
@@ -246,7 +208,6 @@ int DbUtilRandomRange(unsigned int low, unsigned int high);
 void *DbUslpAllocNodes(void);
 void DbUslpFreeNodes(void *p);
 void DbUslpClearLists(void);
-Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
 void *DbUslpAllocEntries(void);
 void DbUslpFreeEntries(void *p);
 void DbUslpCloseSlotCursor(void);
@@ -450,9 +411,6 @@ int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
-int fn_8022A59C(int a, Object_8022A59C **ppOut);
-int fn_8022AB6C(Object_8022A59C *p, int a, int b);
-int fn_8022AC80(Object_8022A59C *p);
 int fn_8022ACEC(int key, int unused, int col, int value, int index);
 int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount);
 int fn_8022AEFC(unsigned int value);
@@ -482,11 +440,6 @@ void *DbUslpAllocNodes(void);
 void DbUslpFreeNodes(void *p);
 void DbBuildPendingNodeList(void *pPairs);
 void DbUslpClearLists(void);
-void DbUslpSortOpen(Node_8022CC6C **ppHead);
-Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
-Node_8022CC6C *DbUslpFindPlayer(Node_8022CC6C **ppHead, unsigned short key);
-void DbUslpListRemove(Node_8022CC6C **ppHead, Node_8022CC6C *p);
-void DbUslpListPush(Node_8022CC6C **ppHead, Node_8022CC6C *p);
 void *DbUslpAllocEntries(void);
 void DbUslpFreeEntries(void *p);
 int DbUslpOpenSlotCursor(int a, int b, int c);
@@ -607,10 +560,10 @@ int fn_8022A558(int a, int b, int c, int d)
     return TDbCompilePerformOp(0, lbl_802B3180, b, c, d, a);
 }
 
-int fn_8022A59C(int a, Object_8022A59C **ppOut)
+int fn_8022A59C(int a, DbMttsCursor_t **ppOut)
 {
     int err = DbLockAcquire();
-    Object_8022A59C *p = DbUtilAlloc(8, 0);
+    DbMttsCursor_t *p = DbUtilAlloc(8, 0);
 
     p->mUnknown4 = a;
     p->mUnknown0 = -1;
@@ -626,7 +579,7 @@ int fn_8022A59C(int a, Object_8022A59C **ppOut)
     return err;
 }
 
-int fn_8022AB6C(Object_8022A59C *p, int a, int b)
+int fn_8022AB6C(DbMttsCursor_t *p, int a, int b)
 {
     struct QueryCursor cursor;
     int err;
@@ -651,7 +604,7 @@ int fn_8022AB6C(Object_8022A59C *p, int a, int b)
     return err;
 }
 
-int fn_8022AC80(Object_8022A59C *p)
+int fn_8022AC80(DbMttsCursor_t *p)
 {
     int err = 0;
 

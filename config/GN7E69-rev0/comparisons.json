@@ -19035,7 +19035,7 @@
           "end": "0x80219044"
         },
         {
-          "symbol": "fn_80219044",
+          "symbol": "UISLoadModalScreen",
           "start": "0x80219044",
           "end": "0x80219070"
         },
@@ -19055,7 +19055,7 @@
           "end": "0x802196B4"
         },
         {
-          "symbol": "fn_80219854",
+          "symbol": "UISInternalProcessEvent",
           "start": "0x80219854",
           "end": "0x8021992C"
         },

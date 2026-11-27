@@ -802,6 +802,30 @@
     "__CTOR_LIST__": {
       "address": "0x80289A20",
       "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
+    },
+    "_DbSrpt_szFetchTeamIdQuery": {
+      "address": "0x802B3610",
+      "evidence": "evidence.tsv data and name rows for 0x802B3610 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
+    },
+    "_DbSrpt_szDeclareSrptQuery": {
+      "address": "0x802B3698",
+      "evidence": "evidence.tsv data and name rows for 0x802B3698 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
+    },
+    "_DbSrpt_szFetchSrptQuery": {
+      "address": "0x802B36C4",
+      "evidence": "evidence.tsv data and name rows for 0x802B36C4 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
+    },
+    "_DbSrpt_szDeclareTeamsByFlagQuery": {
+      "address": "0x802B37E4",
+      "evidence": "evidence.tsv data and name rows for 0x802B37E4 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
+    },
+    "_DbSrpt_szDeclareTeamsByFlagTypeQuery": {
+      "address": "0x802B3824",
+      "evidence": "evidence.tsv data and name rows for 0x802B3824 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
+    },
+    "_DbSrpt_szDeclareTeamIdsQuery": {
+      "address": "0x802B3888",
+      "evidence": "evidence.tsv data and name rows for 0x802B3888 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
     }
   },
   "units": [
