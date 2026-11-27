@@ -13452,12 +13452,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8008E978",
-          "end": "0x8008E9B0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8008EB18",
           "end": "0x8008FF44"
         },
         {
@@ -13776,39 +13770,35 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8008E9B0",
-            "evidence": "evidence.tsv source-form 0x8008E9B0-0x8008EB18"
-          },
-          {
-            "function": "fn_8008FF44",
+            "function": "PlayResultSeqStart",
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
           },
           {
-            "function": "fn_80090558",
+            "function": "AnimSeqPushPlayersFromArea",
             "evidence": "evidence.tsv source-form 0x80090558-0x80090BDC"
           },
           {
-            "function": "fn_800919F0",
+            "function": "AnimSeqReleaseTaggedBalls",
             "evidence": "evidence.tsv source-form 0x800919F0-0x80091AD0"
           },
           {
-            "function": "fn_80094C4C",
+            "function": "AnimSeqQueueEntryStart",
             "evidence": "evidence.tsv source-form 0x80094C4C-0x80094D94"
           },
           {
-            "function": "fn_800955D8",
+            "function": "AnimSeqListRoleCandidates",
             "evidence": "evidence.tsv source-form 0x800955D8-0x80095FD8"
           },
           {
-            "function": "fn_800975EC",
+            "function": "StateAnimListSetState",
             "evidence": "evidence.tsv source-form 0x800975EC-0x8009780C"
           },
           {
-            "function": "fn_80097A88",
+            "function": "CatchAnimComputeTiming",
             "evidence": "evidence.tsv source-form 0x80097A88-0x8009817C"
           },
           {
-            "function": "fn_8009817C",
+            "function": "CatchAnimSearch",
             "evidence": "evidence.tsv source-form 0x8009817C-0x80098EAC"
           },
           {
@@ -13980,7 +13970,7 @@
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 51 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 50 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

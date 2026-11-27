@@ -755,9 +755,9 @@ extern "C" {
 extern int lbl_803EA9A0;
 }
 
-/* The callback data of the 'anms' entry 0x802D72C8 (fn_8008FF44 fills it):
+/* The callback data of the 'anms' entry 0x802D72C8 (PlayResultSeqStart fills it):
    the slot handle, then the request the character was started from.
-   fn_8008FF44 clears 0xFF bytes of it, so the record is at least 255 bytes;
+   PlayResultSeqStart clears 0xFF bytes of it, so the record is at least 255 bytes;
    only these first 240 are known. */
 struct Request_8008FF44 {
     int mHandle;
@@ -5444,7 +5444,7 @@ struct Turn_800CBBAC {
 
 extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p);
 
-extern "C" void fn_8008E9B0(Object_80039F5C *p);
+extern "C" void PlayerMoveAnimUpdateTurn(Object_80039F5C *p);
 
 extern "C" void PlayerAnimLoadResident(int id,int flag,void *data);
 
@@ -5478,7 +5478,7 @@ extern "C" void PlayerAnimUnloadFrontEndFiles(void);
 
 extern "C" int AnmsGetLeadPlayer(Object_8008FF28 *p,Record_8008FF28 *record);
 
-extern "C" int fn_8008FF44(int value, int *pData);
+extern "C" int PlayResultSeqStart(int value, int *pData);
 
 extern "C" int AnmsCelebUpdate(int *p);
 
@@ -5490,7 +5490,7 @@ extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot);
 
 extern "C" int AnimSeqVirtualLoad(Params_80092E54 *pRequest, void *pData, int size);
 
-extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p);
+extern "C" void AnimSeqPushPlayersFromArea(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p);
 
 extern "C" void AnmsClearObjectsFromArea(void);
 
@@ -5516,7 +5516,7 @@ extern "C" void AnmsStopBallAnims(int index);
 
 extern "C" int AnmsBindCastProps(int index);
 
-extern "C" void fn_800919F0(int index);
+extern "C" void AnimSeqReleaseTaggedBalls(int index);
 
 extern "C" int AnmsSetupCastBalls(Character_80093BCC *pCharacter, Actor_801C009C *pActor);
 
@@ -5670,7 +5670,7 @@ extern "C" void AnmsQueueEntryReset(Entry_80094BC4 *p);
 
 extern "C" void AnmsQueueResetEntries(Entry_80094BC4 *p, int count);
 
-extern "C" int fn_80094C4C(Entry_80094BC4 *p);
+extern "C" int AnimSeqQueueEntryStart(Entry_80094BC4 *p);
 
 extern "C" int AnmsQueueEntryUpdate(Entry_80094BC4 *p);
 
@@ -5694,7 +5694,7 @@ extern "C" void AnmsGetReplayEventPlayer(int id, Object_80039F5C **ppObject, uns
 
 extern "C" void AnmsGetPlayersByRole(unsigned int position, Object_80039F5C **ppOut, unsigned short *pCount);
 
-extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut, unsigned short *pCount);
+extern "C" int AnimSeqListRoleCandidates(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject, Object_80039F5C **ppOut, unsigned short *pCount);
 
 extern "C" int AnmsIsPlayerReady(Object_80039F5C *p);
 
@@ -5768,7 +5768,7 @@ extern "C" void CatchAnimFreeAllMirrorTables(void);
 
 extern "C" void CatchAnimPackHandle(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow);
 
-extern "C" void fn_800975EC(unsigned short id, int flag, int index);
+extern "C" void StateAnimListSetState(unsigned short id, int flag, int index);
 
 extern "C" int CatchIsBallNotFreeFlight(Object_80039F5C *p, Ball_t *pBall);
 
@@ -5776,9 +5776,9 @@ extern "C" int CatchIsNearSidelineFacingOut(Object_80039F5C *p);
 
 extern "C" void CatchAnimSetupSlide(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos, float time, int *pTurn, Ball_t *pBall);
 
-extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pScale, int *pTurn);
+extern "C" float CatchAnimComputeTiming(Object_80039F5C *p, int handle, Ball_t *pBall, float *pScale, int *pTurn);
 
-extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, float range, Block_800997F4 *pBlock, int filter, float *pZone, unsigned char loose, int kind, int side);
+extern "C" int CatchAnimSearch(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, float range, Block_800997F4 *pBlock, int filter, float *pZone, unsigned char loose, int kind, int side);
 
 extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side);
 
@@ -8105,7 +8105,7 @@ static void (*const lbl_80297D68[11])(Object_80039F5C *) = {
     PlayerMoveAnimUpdateLimited,
     PlayerMoveAnimUpdateSpecial,
     PlayerMoveAnimUpdateSpecial,
-    fn_8008E9B0,
+    PlayerMoveAnimUpdateTurn,
     PlayerMoveAnimUpdateDefault,
     PlayerMoveAnimUpdateHold,
 };
@@ -8116,7 +8116,7 @@ extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p)
     lbl_80297D68[p->mUnknown512.mUnknown14](p);
 }
 
-extern "C" void fn_8008E9B0(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateTurn(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
     PlyrMoveCmd_t *next=&p->mUnknown528;
@@ -8138,9 +8138,12 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;
     } else {
-        next->mUnknown14=1;
-        next->mUnknown4=current->mUnknown4;
-        next->mUnknown8=current->mUnknown8;
+        // FAKEMATCH: the do-while(0) block weights these pointer uses by loop depth so the next pointer outranks current in register allocation.
+        do {
+            next->mUnknown14=1;
+            next->mUnknown4=current->mUnknown4;
+            next->mUnknown8=current->mUnknown8;
+        } while(0);
         p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     }
     if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)
@@ -8437,7 +8440,7 @@ extern "C" int AnmsGetLeadPlayer(Object_8008FF28 *p,Record_8008FF28 *record)
     return record->mUnknown4?p->mUnknown20:0;
 }
 
-extern "C" int fn_8008FF44(int value, int *pData)
+extern "C" int PlayResultSeqStart(int value, int *pData)
 {
     Request_8008FF44 *pRequest = (Request_8008FF44 *)pData;
     unsigned short *rows[50];
@@ -8628,7 +8631,7 @@ extern "C" int AnimSeqVirtualLoad(Params_80092E54 *pRequest, void *pData, int si
    box, and not one of character's own players, is pushed out past the far
    side by a random 2 to 7 units; for character kinds up to 2 the player is
    first stopped. */
-extern "C" void fn_80090558(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p)
+extern "C" void AnimSeqPushPlayersFromArea(Character_80093BCC *pCharacter, Actor_801C009C *pActor, Object_80039F5C *p)
 {
     float length = AnimSeqncrGetLength(pActor);
     unsigned char i;
@@ -8789,7 +8792,7 @@ extern "C" void AnmsClearObjectsFromArea(void)
    0 and 0x800000 on each call; otherwise character kind 1 takes
    fn_800A9D84's spot facing 0x400000, kinds 0 and 5 keep it, and other kinds (kind 3 with sub-kind up to 7 faces 0x400000,
    the rest face 0x800000 for positive x) are clamped to x in [-1, 1] and
-   y within ScrmGetEndLineY() - 8. fn_80090558 then runs, and every player
+   y within ScrmGetEndLineY() - 8. AnimSeqPushPlayersFromArea then runs, and every player
    gets its frame spot and facing from AnmsGetCastSpot unless actor flag
    0x400 is set. */
 
@@ -8841,7 +8844,7 @@ extern "C" int AnmsPlaceCast(int index)
         }
         pCharacter->mUnknown8 |= 0x20;
     }
-    fn_80090558(pCharacter, pActor, p);
+    AnimSeqPushPlayersFromArea(pCharacter, pActor, p);
     for (i = 0; i < pActor->mUnknown4; i++) {
         Vector_80039F5C spot;
         int angle;
@@ -9134,7 +9137,7 @@ extern "C" int AnmsBindCastProps(int index)
     return result;
 }
 
-extern "C" void fn_800919F0(int index)
+extern "C" void AnimSeqReleaseTaggedBalls(int index)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(index);
     unsigned short i = 0;
@@ -9941,7 +9944,7 @@ extern "C" void AnmsEndScene(int handle)
             }
         }
         AnmsStopCamShot(handle);
-        fn_800919F0(handle);
+        AnimSeqReleaseTaggedBalls(handle);
         AnmsStopBallAnims(handle);
         AnmsCastEnableCollision(handle);
         AnmsHideOccluders(handle, 0);
@@ -10734,7 +10737,7 @@ extern "C" void AnmsQueueResetEntries(Entry_80094BC4 *p, int count)
    degrees, flag 2 moves it to the entry's spot. Returns whether a handle
    was granted. */
 
-extern "C" int fn_80094C4C(Entry_80094BC4 *p)
+extern "C" int AnimSeqQueueEntryStart(Entry_80094BC4 *p)
 {
     Object_80039F5C *pFirst = fn_8009BCE8((int *)&p->mpUnknown0);
     Params_80092E54 request;
@@ -10830,7 +10833,7 @@ extern "C" void AnmsQueueUpdate(void)
         case 0:
             break;
         case 1:
-            if (fn_80094C4C(p) == 1) {
+            if (AnimSeqQueueEntryStart(p) == 1) {
                 p->mUnknown24 = 2;
             } else {
                 p->mUnknown24 = 4;
@@ -10920,7 +10923,7 @@ extern "C" int AnmsCastPickNearest(int key, Params_80092E54 *pRequest, Actor_801
 
             target.mX = pObject->mMotion.mPos.mX + pFrame->mUnknown28;
             target.mY = pObject->mMotion.mPos.mY + pFrame->mUnknown32;
-            found = fn_800955D8(pActor, i, pObject, pCandidates, &count);
+            found = AnimSeqListRoleCandidates(pActor, i, pObject, pCandidates, &count);
             for (j = 0; j < count; j++) {
                 Object_80039F5C *p = pCandidates[j];
 
@@ -11066,7 +11069,7 @@ extern "C" void AnmsGetPlayersByRole(unsigned int position, Object_80039F5C **pp
     *pCount = count;
 }
 
-extern "C" int fn_800955D8(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
+extern "C" int AnimSeqListRoleCandidates(Actor_801C009C *pActor, unsigned short index, Object_80039F5C *pObject,
                            Object_80039F5C **ppOut, unsigned short *pCount)
 {
     unsigned short count = 0;
@@ -11357,7 +11360,7 @@ extern "C" int AnmsGetPinnedPlayer(int index)
 }
 
 /* Picks and checks the first player for request: the held one, or else the
-   first one fn_800955D8 lists for the actor. When flag is set and the
+   first one AnimSeqListRoleCandidates lists for the actor. When flag is set and the
    request has a 'BALL' frame, a new pick is dropped unless BallFindHeldBy (on
    the player) or AnmsIsCastOverride holds. Unless request flag 0x40 is set, a new
    pick is also dropped when fn_800AD9B4 returns 4 and it is a kind 1 player
@@ -11394,7 +11397,7 @@ extern "C" int AnmsCastScene(Params_80092E54 *pRequest, int flag)
         unsigned short count;
         unsigned char found;
 
-        fn_800955D8(pActor, 0, 0, list, &count);
+        AnimSeqListRoleCandidates(pActor, 0, 0, list, &count);
         p = list[0];
         if (p != 0) {
             found = 0;
@@ -12035,7 +12038,7 @@ extern "C" void CatchAnimPackHandle(unsigned char kind, int handle, unsigned cha
     *pLow = value;
 }
 
-extern "C" void fn_800975EC(unsigned short id, int flag, int index)
+extern "C" void StateAnimListSetState(unsigned short id, int flag, int index)
 {
     if (lbl_8030C2B8[index].mUnknown0 != id) {
         lbl_8030C2B8[index].mUnknown0 = id;
@@ -12073,7 +12076,7 @@ extern "C" void fn_800975EC(unsigned short id, int flag, int index)
                     memcpy(&lbl_8030C2B8[index].mUnknown8[lbl_8030C2B8[index].mUnknownBEC[group]], &slot, sizeof(slot));
                 }
                 lbl_8030C2B8[index].mUnknownBFA[group]++;
-                for (j = group + 1; j <= 6; j++) {
+                for (j = group; ++j <= 6;) {
                     lbl_8030C2B8[index].mUnknownBEC[j]++;
                 }
             }
@@ -12154,7 +12157,7 @@ extern "C" void CatchAnimSetupSlide(Object_80039F5C *p, Item_80097440 *pItem, Ve
    speed and the turn are worked out. *pScale gets the time ratio, *pTurn 0;
    the time, the absolute facing and the turn per unit time go to
    lbl_803EC92C. Returns the playback speed. */
-extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pScale, int *pTurn)
+extern "C" float CatchAnimComputeTiming(Object_80039F5C *p, int handle, Ball_t *pBall, float *pScale, int *pTurn)
 {
     float ratio = 0.0f;
     float speed = 1.0f;
@@ -12302,7 +12305,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
    by the record's time plus delay) passes closest to; the score adds reach, height and direction
    terms. pBlock, when given, holds the best record per side (+0/+4 or +8/+16 by kind). Returns
    the record handle, or 0x1FFFFFFF when none qualifies. */
-extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay,
+extern "C" int CatchAnimSearch(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay,
                            Ball_t *pBall, int first, int last, float range, Block_800997F4 *pBlock, int filter,
                            float *pZone, unsigned char loose, int kind, int side)
 {
@@ -12603,7 +12606,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
 }
 
 /* The simpler catch search fn_80099AD0 and fn_80099C80 use: same record walk and ball flight as
-   fn_8009817C, scored on reach distance and height error only. */
+   CatchAnimSearch, scored on reach distance and height error only. */
 extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay,
                            Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side)
 {
@@ -12786,18 +12789,18 @@ extern "C" void fn_80099568(int kind)
     switch (kind) {
     case 1:
     case 3:
-        fn_800975EC(67, 1, 0);
-        fn_800975EC(225, 1, 1);
-        fn_800975EC(227, 1, 2);
+        StateAnimListSetState(67, 1, 0);
+        StateAnimListSetState(225, 1, 1);
+        StateAnimListSetState(227, 1, 2);
         break;
     case 0:
     case 2:
-        fn_800975EC(67, 1, 0);
+        StateAnimListSetState(67, 1, 0);
         break;
     case 4:
-        fn_800975EC(67, 0, 0);
-        fn_800975EC(225, 0, 1);
-        fn_800975EC(227, 0, 2);
+        StateAnimListSetState(67, 0, 0);
+        StateAnimListSetState(225, 0, 1);
+        StateAnimListSetState(227, 0, 2);
         break;
     }
 }
@@ -12842,7 +12845,7 @@ extern "C" int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, f
         if (e != 0) {
             flags = 2;
         }
-        result = fn_8009817C(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
+        result = CatchAnimSearch(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, range, pBlock, b, c, d, flags, 0);
     }
     return result;
 }
@@ -12912,7 +12915,7 @@ extern "C" int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, Block
                     kind = 4;
                     break;
                 }
-                result = fn_8009817C(p, &end, angle, key + lbl_803EA944, pBall, kind, kind, range, pBlock, a, b, c, 1,
+                result = CatchAnimSearch(p, &end, angle, key + lbl_803EA944, pBall, kind, kind, range, pBlock, a, b, c, 1,
                                      flags);
                 if (pBlock != 0) {
                     if (pBlock->mUnknown8 == last) {
@@ -13071,7 +13074,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         lbl_803EC92C->mUnknown4.mUnknown4 = 0.0f;
         lbl_803EC92C->mUnknown4.mUnknown8 = 0.0f;
         lbl_803EC92C->mUnknown4.mUnknownC = 0.0f;
-        duration = fn_80097A88(p, handle, BallGet(kind), &blend, (int *)&value);
+        duration = CatchAnimComputeTiming(p, handle, BallGet(kind), &blend, (int *)&value);
         index = (handle >> 29) & 3;
         key = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown0;
         group = lbl_8030C2B8[index].mUnknown8[handle & 0x1FFFFFFF].mUnknown2;
@@ -38063,7 +38066,7 @@ Entry_802D71D8 lbl_802D71D8[17] = {81, 0, 0, 64, 1, 0, 72, 1, 0, 73, 1, 0, 78, 0
 Vector_80039F5C lbl_802D72A4 = {0.0f, 0.0f, 0.0f};
 Vector_80039F5C lbl_802D72B0 = {0.0f, 0.0f, 0.0f};
 State_802D72BC lbl_802D72BC = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-Entry_8009B87C lbl_802D72C8 = {fn_8008FF44, AnmsCelebUpdate, AnmsCelebStop, (float (*)(int *))AnmsCelebGetTime};
+Entry_8009B87C lbl_802D72C8 = {PlayResultSeqStart, AnmsCelebUpdate, AnmsCelebStop, (float (*)(int *))AnmsCelebGetTime};
 Record_80093E4C lbl_802D72D8[14] = {0, 105, 0, 0, 0, 0, 0, 1, 103, 0, 0, 0, 0, 0, 2, 111, 0, 0, 0, 0, 0, 3, 122, 0, 0, 0, 0, 0, 4, 102, 0, 0, 0, 0, 0, 5, 106, 0, 0, 0, 0, 0, 6, 100, 0, 0, 0, 0, 0, 7, 121, 0, 0, 0, 0, 0, 8, 109, 0, 0, 0, 0, 0, 9, 104, 0, 0, 0, 0, 0, 10, 108, 0, 0, 0, 0, 0, 11, 101, 0, 0, 0, 0, 0, 12, 110, 0, 0, 0, 0, 0, 13, 107, 0, 0, 0, 0, 0};
 Record_80093E4C lbl_802D73B8[66] = {0, 7, 0, 0, 0, 0, 0, 1, 8, 0, 0, 0, 0, 0, 2, 13, 0, 0, 0, 0, 0, 3, 14, 0, 0, 0, 0, 0, 4, 9, 0, 0, 0, 0, 0, 5, 10, 0, 0, 0, 0, 0, 6, 11, 0, 0, 0, 0, 0, 7, 12, 0, 0, 0, 0, 0, 8, 31, 0, 0, 0, 0, 0, 9, 59, 0, 0, 0, 0, 0, 10, 34, 0, 0, 0, 0, 0, 11, 33, 0, 0, 0, 0, 0, 12, 19, 0, 0, 0, 0, 0, 13, 32, 0, 0, 0, 0, 0, 14, 15, 0, 0, 0, 0, 0, 15, 16, 0, 0, 0, 0, 0, 16, 30, 0, 0, 0, 0, 0, 17, 21, 0, 0, 0, 0, 0, 18, 27, 0, 0, 0, 0, 0, 19, 28, 0, 0, 0, 0, 0, 20, 26, 0, 0, 0, 0, 0, 21, 23, 0, 0, 0, 0, 0, 22, 22, 0, 0, 0, 0, 0, 23, 24, 0, 0, 0, 0, 0, 24, 25, 0, 0, 0, 0, 0, 25, 18, 0, 0, 0, 0, 0, 26, 29, 0, 0, 0, 0, 0, 27, 117, 0, 0, 0, 0, 0, 28, 41, 0, 0, 0, 0, 0, 29, 50, 0, 0, 0, 0, 0, 30, 58, 0, 0, 0, 0, 0, 31, 54, 0, 0, 0, 0, 0, 32, 61, 0, 0, 0, 0, 0, 34, 43, 0, 0, 0, 0, 0, 34, 43, 0, 0, 0, 0, 0, 35, 44, 0, 0, 0, 0, 0, 36, 48, 0, 0, 0, 0, 0, 37, 35, 0, 0, 0, 0, 0, 38, 36, 0, 0, 0, 0, 0, 39, 60, 0, 0, 0, 0, 0, 40, 42, 0, 0, 0, 0, 0, 41, 47, 0, 0, 0, 0, 0, 42, 49, 0, 0, 0, 0, 0, 43, 63, 0, 0, 0, 0, 0, 44, 64, 0, 0, 0, 0, 0, 45, 45, 0, 0, 0, 0, 0, 46, 37, 0, 0, 0, 0, 0, 47, 38, 0, 0, 0, 0, 0, 48, 39, 0, 0, 0, 0, 0, 49, 40, 0, 0, 0, 0, 0, 50, 55, 0, 0, 0, 0, 0, 51, 56, 0, 0, 0, 0, 0, 52, 57, 0, 0, 0, 0, 0, 53, 52, 0, 0, 0, 0, 0, 54, 46, 0, 0, 0, 0, 0, 55, 116, 0, 0, 0, 0, 0, 56, 51, 0, 0, 0, 0, 0, 57, 1, 0, 0, 0, 0, 0, 58, 2, 0, 0, 0, 0, 0, 59, 120, 0, 0, 0, 0, 0, 60, 119, 0, 0, 0, 0, 0, 61, 3, 0, 0, 0, 0, 0, 62, 4, 0, 0, 0, 0, 0, 63, 5, 0, 0, 0, 0, 0, 64, 6, 0, 0, 0, 0, 0, 65, 118, 0, 0, 0, 0, 0};
 Record_80093E4C lbl_802D77D8[3] = {0, 124, 0, 0, 0, 0, 0, 1, 999, 0, 0, 0, 0, 0, 2, 123, 0, 0, 0, 0, 0};
