@@ -768,11 +768,11 @@ extern "C" int PlyrAlignTurnPhase(Table_80089904 *pTable, unsigned short key, vo
         if (MathAngleDiff(heading, p->mMotion.mFacing) > 46603) {
             fn_801BE760(p->mpUnknown792, key, 1);
             if (AnimChanGetNumActiveByState(p->mpUnknown796, p->mpUnknown800, 189)) {
-                AnimChannel_t *pChannels = p->mpUnknown800;
-                int channel = AnimChanGetStateChannelByIndex(p->mpUnknown796, pChannels, 189, 0);
-                pState->mUnknown64 = pChannels[channel].mUnknown48;
+                pEntries = p->mpUnknown800;
+                int channel = AnimChanGetStateChannelByIndex(p->mpUnknown796, pEntries, 189, 0);
+                pState->mUnknown64 = pEntries[channel].mUnknown48;
                 if (pState->mUnknown64 == 0.0f) {
-                    pState->mUnknown64 = AnimSeqGetTimeToOpcode(&pChannels[channel].mUnknown4C, 0xC004);
+                    pState->mUnknown64 = AnimSeqGetTimeToOpcode(&pEntries[channel].mUnknown4C, 0xC004);
                     if (pState->mUnknown64 == 0.0f) {
                         break;
                     }
@@ -1216,14 +1216,15 @@ void PlyrAlignReset(Object_80039F5C *p)
     if (pInfo->mUnknown5 == 0) {
         fn_800FBB70();
     }
-    PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
+    // FAKEMATCH: one pointer local is reused for the formation record so its register is shared with the info record's (r28), as the target allocates them; logic unchanged.
+    pInfo = (Record_8011F4E0 *)PlayBookGetFormation(p->mIdBytes[2]);
     pMessage = fn_800AEE20(p);
     if (pMessage == 0) {
-        if (pTeam->mUnknown8.mUnknownF == 0) {
+        if (((PlayBookFormation_t *)pInfo)->mUnknown8.mUnknownF == 0) {
             pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]),
                 (p->mId >> 8) & 255, (p->mId >> 16) & 255);
         } else {
-            unsigned char index = PlaySetGetEntry(pTeam, p->mIdBytes[1], 0)->mUnknownB;
+            unsigned char index = PlaySetGetEntry((PlayBookFormation_t *)pInfo, p->mIdBytes[1], 0)->mUnknownB;
             pMessage = (Message_800F01CC *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mIdBytes[2], index);
         }
     }
@@ -1433,10 +1434,12 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
     if (fn_800A7F58(p->mIdBytes[2]) == 0) {
         return 0;
     }
-    Object_80039F5C *pBall = BallGetCurrentHolder();
-    int defense = (int)(float)pOther->mRatings[7];
-    int offense = p->mRatings[9];
+    short *pOtherRatings = pOther->mRatings;
+    short *pRatings = p->mRatings;
     int facing = 0;
+    Object_80039F5C *pBall = BallGetCurrentHolder();
+    int defense = (int)(float)pOtherRatings[7];
+    int offense = pRatings[9];
     if (kind <= 5) {
         if (pA->mUnknown28 > pB->mUnknown28) {
             defense = (int)(defense * 0.75f);
@@ -1456,15 +1459,18 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
         Vec2Sub(&delta, (FieldPoint_t *)&pBall->mMotion.mPos, (FieldPoint_t *)&p->mMotion.mPos);
         int turn = MathAngleDiff(angle, MathArcTan2(delta.mY, delta.mX));
         if (turn <= 0x3FFFFF) {
-            defense -= (int)(defense * (MathSin(turn) * 0.5f));
+            float scale = MathSin(turn) * 0.5f;
+            defense -= (int)(defense * scale);
         } else {
             defense = (int)(defense * 0.5f);
-            defense += (int)(defense * (MathCos(turn) * 0.5f));
+            float scale = MathCos(turn) * 0.5f;
+            defense += (int)(defense * scale);
         }
     }
     offense = fn_800AC074(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
-        offense += (int)(offense * (PlayTrackGetPlayIdRate() * 0.5f));
+        float scale = PlayTrackGetPlayIdRate() * 0.5f;
+        offense += (int)(offense * scale);
     }
     if (offense < 0) {
         offense = 0;
@@ -2489,10 +2495,10 @@ extern "C" int PlyrTackleContest(Object_80039F5C *p, Object_80039F5C **ppLast) {
                         short rating = p->mRatings[5];
                         short ratingMax = pOther->mRatings[2] >= pOther->mRatings[0] ? pOther->mRatings[2] : pOther->mRatings[0];
                         short otherRollBase = (short)pOther->mUnknown2904Float;
-                        short otherLimit = (short)(ratingMax * _PlyrTackle_fOtherRatingScale + otherRollBase * _PlyrTackle_fOtherRollScale);
+                        short otherRoll = (short)(ratingMax * _PlyrTackle_fOtherRatingScale + otherRollBase * _PlyrTackle_fOtherRollScale);
                         short limit = (short)(rating * _PlyrTackle_fRatingScale + rollBase * _PlyrTackle_fRollScale);
                         short roll = SyncRandGetRange(0, limit);
-                        short otherRoll = SyncRandGetRange(0, otherLimit);
+                        otherRoll = SyncRandGetRange(0, otherRoll);
                         if (pOther->mMotion.mPos.mY < ScrmGetBallSpot().mY)
                             roll = (short)(roll * _PlyrTackle_fRollDamp);
                         if (roll > otherRoll) {

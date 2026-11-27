@@ -3276,24 +3276,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E4120",
-          "end": "0x800E4264"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E4494",
           "end": "0x800E513C"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E579C",
-          "end": "0x800E5EA4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E6328",
+          "start": "0x800E55B8",
           "end": "0x800E6984"
         },
         {
@@ -3318,7 +3306,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E8420",
-          "end": "0x800E8898"
+          "end": "0x800E8BE8"
         },
         {
           "section": ".text",
@@ -3364,20 +3352,8 @@
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
           },
           {
-            "function": "PlyrAlignTurnPhase",
-            "evidence": "evidence.tsv source-form 0x800E4264-0x800E4494"
-          },
-          {
             "function": "PlyrAlignInput",
             "evidence": "evidence.tsv source-form 0x800E513C-0x800E55B8"
-          },
-          {
-            "function": "PlyrAlignReset",
-            "evidence": "evidence.tsv source-form 0x800E55B8-0x800E579C"
-          },
-          {
-            "function": "PlyrEngageAiWinsShed",
-            "evidence": "evidence.tsv source-form 0x800E5EA4-0x800E6328"
           },
           {
             "function": "PlyrEngageGetInputDir",
@@ -3398,10 +3374,6 @@
           {
             "function": "PlyrTackleStart",
             "evidence": "evidence.tsv source-form 0x800E815C-0x800E8420"
-          },
-          {
-            "function": "PlyrTackleContest",
-            "evidence": "evidence.tsv source-form 0x800E8898-0x800E8BE8"
           },
           {
             "function": "PlyrTurnEnter",
