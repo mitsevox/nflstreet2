@@ -131,7 +131,7 @@ void fn_800C8270(Object_80039F5C *p);
 void fn_800C82C0(Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
-void fn_800D782C(Object_80039F5C *p);
+void PlyrBallHandUpdate(Object_80039F5C *p);
 void PlyrCollideClearExempt(Object_80039F5C *p);
 void RouteArrowHighlight(void *p);
 void PlyrMoveUpdate(Object_80039F5C *p, float f);
@@ -783,7 +783,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
         PlyrKeepInBounds(p);
         fn_800B2B90(&p->mMotion);
         fn_800C3404(p);
-        fn_800D782C(p);
+        PlyrBallHandUpdate(p);
     }
     for (i = 0; i < count; i++) {
     }

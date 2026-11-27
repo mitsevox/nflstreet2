@@ -1,3 +1,6 @@
+/* Glow and trail rendering: projects each glow to the screen, tests it against
+   the field depth, draws its flare and ghost quads, draws the players' particle
+   trails, and loads and frees the glow textures that GlowTrail.cpp uses. */
 #include "engine/viewport.h"
 #include "game/Glow.h"
 #include "game/ParticleTrail.h"
@@ -47,13 +50,13 @@ void TMTextureTexNew(void *, void *, int, int, int, int, int, int);
 void TMTextureClutNew(void *, void *, int, int, int);
 void TMTextureTexDelete(void *);
 void TMTextureClutDelete(void *);
-float fn_80197D08(float *, Vector_80039F5C *);
+float GlowProject(float *, Vector_80039F5C *);
 extern float lbl_803EB758[2];
 extern ParticleTrailColor_t gParticleTrail_aPointColors[];
 }
 
 extern "C" {
-void fn_8019723C(ParticleTrailSet_t *p)
+void ParticleTrailDraw(ParticleTrailSet_t *p)
 {
     if (!ParticleTrailIsEnabled()) return;
     ParticleTrailColor_t color;
@@ -124,7 +127,7 @@ static inline void _FxPosition(Vector_80039F5C *v)
     GXPosition3f32(v->mX, v->mY, v->mZ);
 }
 
-void fn_80197680(Glow_t *p)
+void GlowRender(Glow_t *p)
 {
     float projected[4];
     float saved[7];
@@ -137,7 +140,7 @@ void fn_80197680(Glow_t *p)
     float angle = 1.0f;
     float size = 0.0f;
     GXGetProjectionv(saved);
-    float visibility = fn_80197D08(projected, &p->mUnknown18);
+    float visibility = GlowProject(projected, &p->mUnknown18);
     screen[0] = projected[0];
     screen[1] = projected[1];
     if (p->mUnknown4 == 1) {
@@ -257,7 +260,7 @@ void fn_80197680(Glow_t *p)
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
 }
 
-float fn_80197D08(float *out, Vector_80039F5C *position)
+float GlowProject(float *out, Vector_80039F5C *position)
 {
     float clip[4];
     float normalized[3];
@@ -295,10 +298,10 @@ float fn_80197D08(float *out, Vector_80039F5C *position)
     return result;
 }
 
-void fn_80197E64(void) {}
-void fn_80197E68(void) {}
+void GlowRenderInit(void) {}
+void GlowRenderShutdown(void) {}
 
-void fn_80197E6C(GlowTexture_t *p)
+void GlowTextureLoad(GlowTexture_t *p)
 {
     GlowTexImage_t *texture = &p->mUnknown10;
     void *data = (void *)ResLoad(p->mUnknown0, p->mUnknown4, 1);
@@ -321,7 +324,7 @@ void fn_80197E6C(GlowTexture_t *p)
     } else texture->mUnknown54 = 0;
 }
 
-void fn_80197F84(GlowTexture_t *p)
+void GlowTextureUnload(GlowTexture_t *p)
 {
     TMTextureTexDelete(p->mUnknown10.mUnknown0);
     if (p->mUnknown10.mUnknown54) {
@@ -334,7 +337,7 @@ void fn_80197F84(GlowTexture_t *p)
 void GlowDraw(void *unused, Glow_t *p)
 {
     float projected[4];
-    float visibility = fn_80197D08(projected, &p->mUnknown18);
+    float visibility = GlowProject(projected, &p->mUnknown18);
     if (p->mUnknownC == 1) {
         float depth = projected[2] + 1.0f;
         depth = depth < 0.0f ? 0.0f : (depth > 1.0f ? 1.0f : depth);
@@ -350,7 +353,7 @@ void GlowDraw(void *unused, Glow_t *p)
             p->mUnknown11 = 0;
         }
     } else if (p->mUnknownC == 0 || p->mUnknownC == 2) p->mUnknown11 = 1;
-    if (visibility > 0.0f) fn_80197680(p);
+    if (visibility > 0.0f) GlowRender(p);
     else p->mUnknown11 = 0;
 }
 }

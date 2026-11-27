@@ -102,7 +102,7 @@ int fn_800C8704(int *pA, int *pB);
 void fn_800C9D6C(unsigned char a, unsigned char b);
 void fn_800C9E40(void);
 void fn_800C9E4C(unsigned char a, unsigned char b);
-void fn_800D77F0(void);
+void PlyrAnimReplayRegister(void);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 void fn_800F164C(int a);
@@ -1128,7 +1128,7 @@ int ReplayFrame::Init()
     SndgReplayRegister();
     ParticleSysReplayRegister();
     fn_800B4A4C();
-    fn_800D77F0();
+    PlyrAnimReplayRegister();
     ReplayBufferInit();
     return 1;
 }

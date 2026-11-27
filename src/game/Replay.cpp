@@ -222,7 +222,7 @@ void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, f
 int SyncTimeGetGameTime(void);
 
 /* Animation state and animation of each player ([team][index]), filled by
-   fn_800D7708. */
+   PlyrAnimReplayRead. */
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
 
@@ -1246,7 +1246,7 @@ extern "C" void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value) { p->mU
    0x209F0, PS2 0x1B4F30). Nothing on GameCube installs them, so the linker
    drops both; only their strings remain (0x8028A9F0-0x8028AB28). The PS2
    build reads the two animation tables through out-of-line getters of the
-   fn_800D77F0 file (0x271490, 0x2714C0) that GameCube also discards; with
+   PlyrAnimTurn.cpp file (0x271490, 0x2714C0) that GameCube also discards; with
    no GameCube address for them, the tables are read directly here, as the
    Xbox build does after inlining. State is taken from the lower table as on
    PS2 (Xbox reads the two the other way round). The window calls this slot

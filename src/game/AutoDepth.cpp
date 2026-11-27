@@ -14,7 +14,7 @@ void TstrDbOpen(DbCursor *pObject);
 void TstrDbClose(DbCursor *pObject);
 int TstrDbSeek(DbCursor *pObject, int value, int *pResult);
 int TstrDbGetPositionValue(DbCursor *pObject, int category);
-unsigned int fn_80081ECC(int category, int *pValues);
+unsigned int PlayerRatingsScore(int category, int *pValues);
 void SndService(void);
 }
 
@@ -117,7 +117,7 @@ void AutoDepthRatePlayer(AutoDepthPlayer_t *record, int *values, DbCursor *query
 {
     for (int i = 0; i < 14; i++) {
         int adjustment = TstrDbGetPositionValue(query, i);
-        unsigned int value = fn_80081ECC(i, values) * (adjustment + 100) / 200;
+        unsigned int value = PlayerRatingsScore(i, values) * (adjustment + 100) / 200;
         if (record->category == i) value = value * 1.1f;
         record->values[i] = value;
     }

@@ -1,3 +1,7 @@
+/* Player animation helpers: the "Animations" replay channel that records each
+   player's anim state and anim, the hand a player carries the ball in for the
+   current anim state, and the turning anim state that steps a player's facing
+   toward the commanded direction or the ball carrier over the anim's frames. */
 #include "game/State_800D7A4C.h"
 #include "game/Block_801BE60C.h"
 #include "game/Object_80039F5C.h"
@@ -15,13 +19,13 @@ extern "C" {
 void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                  unsigned int size, const char *pName);
-void fn_800D760C(BitStream_t *pStream);
-void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+void PlyrAnimReplayWrite(BitStream_t *pStream);
+void PlyrAnimReplayRead(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                  BitStream_t *pStream3, float t);
 int MathAngleDiff(int a, int b);
 float AnimSeqGetOpcodeTime(void *p, int key);
 void OSReport(const char *pMsg, ...);
-unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id);
+unsigned char PlyrBallHandFromAnim(Object_80039F5C *p, unsigned short id);
 void PlyrAnimTurnComputeStep(Object_80039F5C *p, Block_801BE60C *pBlock);
 void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *pState);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
@@ -62,7 +66,7 @@ static void _StrippedPrintBlankName(int wide)
 }
 }
 
-extern "C" void fn_800D760C(BitStream_t *pStream)
+extern "C" void PlyrAnimReplayWrite(BitStream_t *pStream)
 {
     unsigned short anim = 0;
 
@@ -83,7 +87,7 @@ extern "C" void fn_800D760C(BitStream_t *pStream)
     }
 }
 
-extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+extern "C" void PlyrAnimReplayRead(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
                             BitStream_t *pStream3, float t)
 {
     for (unsigned char team = 0; team <= 1; team++) {
@@ -105,9 +109,9 @@ extern "C" void fn_800D7708(BitStream_t *pStream0, BitStream_t *pStream1, BitStr
     }
 }
 
-extern "C" void fn_800D77F0(void)
+extern "C" void PlyrAnimReplayRegister(void)
 {
-    ReplayRegisterChannel(fn_800D760C, fn_800D7708, 448, "Animations");
+    ReplayRegisterChannel(PlyrAnimReplayWrite, PlyrAnimReplayRead, 448, "Animations");
 }
 
 // FAKEMATCH: invented unused static around the two target strings; its body exists only for them in .rodata
@@ -123,7 +127,7 @@ static void _StrippedCheckDownOpcodes(int anim, int hasPosition, int hasDown, in
 }
 }
 
-extern "C" void fn_800D782C(Object_80039F5C *p)
+extern "C" void PlyrBallHandUpdate(Object_80039F5C *p)
 {
     Ball_t *pBall = BallFindHeldBy(p);
     unsigned short id = fn_801BE648(p->mpUnknown792);
@@ -131,12 +135,12 @@ extern "C" void fn_800D782C(Object_80039F5C *p)
     if (pBall) {
         if (p->mUnknown776) {
             if (id != p->mUnknown778Unsigned) {
-                unsigned char value = fn_800D78C4(p, id);
+                unsigned char value = PlyrBallHandFromAnim(p, id);
                 p->mUnknown777 = value;
                 p->mUnknown776 = value;
             }
         } else {
-            unsigned char value = fn_800D78C4(p, id);
+            unsigned char value = PlyrBallHandFromAnim(p, id);
             p->mUnknown776 = value;
             p->mUnknown777 = value;
         }
@@ -147,7 +151,7 @@ extern "C" void fn_800D782C(Object_80039F5C *p)
     p->mUnknown778Unsigned = id;
 }
 
-extern "C" unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short id)
+extern "C" unsigned char PlyrBallHandFromAnim(Object_80039F5C *p, unsigned short id)
 {
     float best = -1.0f;
     int search = 1;
@@ -232,7 +236,7 @@ extern "C" void PlyrAnimTurnComputeStep(Object_80039F5C *p, Block_801BE60C *pBlo
     }
 }
 
-extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" void PlyrAnimTurnTowardCarrier(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     State_800D7A4C *pState = (State_800D7A4C *)&p->mUnknown336;
 
@@ -267,7 +271,7 @@ extern "C" void fn_800D7BC4(Object_80039F5C *p, Block_801BE60C *pBlock)
     }
 }
 
-extern "C" void fn_800D7D78(Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" void PlyrAnimRampLevels(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     if (p->mUnknown560.mFlags.mBytes[0] != 0) {
         unsigned char k = p->mUnknown560.mUnknown54;
@@ -339,10 +343,10 @@ extern "C" int fn_800D7E9C(Table_80089904 *pTable, unsigned short key, void *pRe
         break;
     case 2:
         if (fn_801BE648(p->mpUnknown792) == key) {
-            fn_800D7D78(p, pBlock);
+            PlyrAnimRampLevels(p, pBlock);
             if (pBlock->mUnknown0Word != 0) {
                 if (--pBlock->mUnknownCHalf > 0) {
-                    fn_800D7BC4(p, pBlock);
+                    PlyrAnimTurnTowardCarrier(p, pBlock);
                     p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown0Word) & 0xFFFFFF;
                     p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC =
                         (p->mpUnknown800[pBlock->mUnknown4Word].mUnknownC + pBlock->mUnknown0Word) & 0xFFFFFF;

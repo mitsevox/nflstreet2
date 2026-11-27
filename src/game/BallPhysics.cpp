@@ -35,7 +35,7 @@ int fn_800A33DC(void);
 void fn_800B1508(void);
 unsigned char fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
-void fn_800D782C(Object_80039F5C *p);
+void PlyrBallHandUpdate(Object_80039F5C *p);
 void LooseBallBroadcast(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
@@ -1008,7 +1008,7 @@ int BallStateHandoffTouch(Ball_t *pBall, void *pData, unsigned int type)
             mode = fn_800AD9B4();
             BallSetTarget(pBall, 0);
             BallGiveToPlayer(pBall, p);
-            fn_800D782C(p);
+            PlyrBallHandUpdate(p);
             BallSetTransferKind(pBall, 0);
             if (mode == 3) {
                 pRecord = fn_800B15FC();
