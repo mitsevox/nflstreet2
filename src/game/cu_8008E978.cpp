@@ -5442,7 +5442,7 @@ struct Turn_800CBBAC {
 
 /* forward declarations (merge) */
 
-extern "C" void fn_8008E978(Object_80039F5C *p);
+extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p);
 
 extern "C" void fn_8008E9B0(Object_80039F5C *p);
 
@@ -8095,7 +8095,7 @@ void PlayerMoveAnimUpdateSpecial(Object_80039F5C *p);
 void PlayerMoveAnimUpdateStand(Object_80039F5C *p);
 }
 
-/* Movement-state handlers indexed by the player's movement state (fn_8008E978). */
+/* Movement-state handlers indexed by the player's movement state (PlayerMoveAnimUpdateState). */
 static void (*const lbl_80297D68[11])(Object_80039F5C *) = {
     PlayerMoveAnimUpdateStand,
     PlayerMoveAnimUpdateMove,
@@ -8111,7 +8111,7 @@ static void (*const lbl_80297D68[11])(Object_80039F5C *) = {
 };
 
 
-extern "C" void fn_8008E978(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p)
 {
     lbl_80297D68[p->mUnknown512.mUnknown14](p);
 }

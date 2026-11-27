@@ -160,7 +160,7 @@ void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 CollideSet_t *PlyrMgrGetCollideSet(void);
 void PlyrPoseSetFromModel(Object_80039F5C *p);
 void PlyrPoseUpdate(void *p);
-void fn_8008E978(Object_80039F5C *p);
+void PlayerMoveAnimUpdateState(Object_80039F5C *p);
 void fn_8009C370(Object_80039F5C *p);
 void fn_8009CDEC(Object_80039F5C *p);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
@@ -816,7 +816,7 @@ extern "C" void PlyrMgrRunBrains(void)
     int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        fn_8008E978(&_PlyrMgr_pManager->mpPlayers[i].mObject);
+        PlayerMoveAnimUpdateState(&_PlyrMgr_pManager->mpPlayers[i].mObject);
     }
 }
 

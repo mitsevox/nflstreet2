@@ -11887,7 +11887,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8008E978",
+          "symbol": "PlayerMoveAnimUpdateState",
           "start": "0x8008E978",
           "end": "0x8008E9B0"
         },
@@ -18882,12 +18882,12 @@
           "end": "0x800CF7F4"
         },
         {
-          "symbol": "_GLOBAL_.I.fn_8008E978",
+          "symbol": "_GLOBAL_.I.PlayerMoveAnimUpdateState",
           "start": "0x800CF7F4",
           "end": "0x800CF820"
         },
         {
-          "symbol": "_GLOBAL_.D.fn_8008E978",
+          "symbol": "_GLOBAL_.D.PlayerMoveAnimUpdateState",
           "start": "0x800CF820",
           "end": "0x800CF84C"
         }
