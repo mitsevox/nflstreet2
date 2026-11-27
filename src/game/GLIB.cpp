@@ -1,5 +1,8 @@
 #include "game/Module.h"
 #include <dolphin/gx/GXStruct.h>
+#include "engine/llrender.h"
+
+extern RenderBin_t RenderBin_GameDefs[16];
 
 /* Parameter block passed to GlibInit, which copies all 44 bytes. */
 struct GlibParams_801CE138 {
@@ -18,7 +21,6 @@ struct GlibParams_801CE138 {
 };
 
 extern "C" {
-extern char lbl_802ED510[];
 
 int GlibInit(GlibParams_801CE138 *pParams);
 int GlibShutdown(void);
@@ -42,8 +44,8 @@ int GLIB::Init()
 {
     GlibInit(&sParams);
     GlibRenderInit();
-    GlibBinAllocList(lbl_802ED510, 16);
-    GlibRenderSetBinList(lbl_802ED510, 16);
+    GlibBinAllocList(RenderBin_GameDefs, 16);
+    GlibRenderSetBinList(RenderBin_GameDefs, 16);
     GlibRenderGetBin(14);
     GlibRenderSetDefaultBin();
     return 1;

@@ -8842,6 +8842,25 @@
       ]
     },
     {
+      "source": "src/game/renderbindef.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802ED510-0x802EDCD0 (src/game/renderbindef.cpp) and its data and name rows: the code-less file of the game render bins, its .rodata bin names and .data RenderBin_GameDefs (#1528 ruling 1, slot proof in the unit row).",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AD850",
+          "end": "0x802AD904"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802ED510",
+          "end": "0x802EDCD0"
+        }
+      ]
+    },
+    {
       "source": "src/game/TutorialDb.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80087F10-0x80088648 (src/game/TutorialDb.cpp) and its data rows.",

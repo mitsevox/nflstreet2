@@ -2,7 +2,8 @@
 #define ENGINE_LLRENDER_H
 
 typedef struct RenderBin_t {
-    unsigned char mUnk0[0x24];
+    const char *mpName;
+    unsigned char mUnk4[0x20];
     unsigned char mActive;
     int mUnk28;
     int mUnk2C;
