@@ -3376,47 +3376,6 @@
       ]
     },
     {
-      "source": "src/game/TeamTables.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the one non-exact function stays registered here as its partial.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018C344",
-          "end": "0x8018C688"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AA1FC",
-          "end": "0x802AA334"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "TeamTablesCopy",
-          "start": "0x8018C344",
-          "end": "0x8018C3EC"
-        },
-        {
-          "symbol": "TeamTablesDestroy",
-          "start": "0x8018C3EC",
-          "end": "0x8018C438"
-        },
-        {
-          "symbol": "TeamTablesDeleteTeamPlayers",
-          "start": "0x8018C438",
-          "end": "0x8018C48C"
-        },
-        {
-          "symbol": "TeamTablesPurgeCreated",
-          "start": "0x8018C48C",
-          "end": "0x8018C688"
-        }
-      ]
-    },
-    {
       "source": "src/game/Assign.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x800EFC68-0x80125F3C (src/game/Assign.cpp), its data rows and the linker/source-form rows of its three discarded stand-ins. The 79 comparison fragments of the range are merged into this one translation unit (all 631 functions in address order); the source is linked with holdouts (units.json), and the non-exact functions stay registered here as its partials.",

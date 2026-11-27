@@ -1259,14 +1259,14 @@
     },
     {
       "source": "src/game/TeamTables.cpp",
-      "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/TeamTables.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the one holdout TeamTablesPurgeCreated keeping its original bytes (two before round 5 lane 1, 2026-11-27); the .rodata linked whole.",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/TeamTables.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; the whole file linked (its last holdout TeamTablesPurgeCreated exact in round 6 lane 3, 2026-11-27; linked with holdouts from round 2 lane 5).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8018C344",
-          "end": "0x8018C48C"
+          "end": "0x8018C688"
         },
         {
           "section": ".rodata",
@@ -1274,16 +1274,7 @@
           "start": "0x802AA1FC",
           "end": "0x802AA334"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "TeamTablesPurgeCreated",
-            "evidence": "evidence.tsv source-form 0x8018C48C-0x8018C688"
-          }
-        ],
-        "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
-      }
+      ]
     },
     {
       "source": "src/game/Loading.cpp",
