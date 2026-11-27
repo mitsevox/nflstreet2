@@ -175,7 +175,7 @@ void UIGTextLayout(UIGText_t *pText)
     char c;
     char ch;
 
-    i = 0;
+    Line = 0;
     NumLines = 0;
     ppFont = (Font_t **)UIGLibraryGetItemData(UIGLibraryGetGlobal(1), pText->unk_03, pText->unk_02);
     LineStart = 0;
@@ -241,9 +241,9 @@ void UIGTextLayout(UIGText_t *pText)
                                 i = LineStart + 1;
                             }
                             _UIGText_aLines[NumLines].unk_00 = LineStart;
+                            _UIGText_aLines[NumLines].unk_02 = i;
                             NumLines++;
                             LineStart = i;
-                            _UIGText_aLines[NumLines - 1].unk_02 = i;
                             LastSpace = LineStart;
                             Width = 0;
                         }
@@ -260,34 +260,35 @@ void UIGTextLayout(UIGText_t *pText)
                     } else if (pText->Flags & 1) {
                         LastSpace = LineStart;
                         for (i = Pos - 1; LastSpace < i && Width > pText->unk_14;) {
-                            Width -= FontGetCharWidth(*ppFont, pString[i--]);
+                            Width -= FontGetCharWidth(*ppFont, pString[i]);
+                            i--;
                             if (LastSpace < i && Width > pText->unk_14) {
-                                Width -= FontGetCharWidth(*ppFont, pString[LastSpace++]);
+                                Width -= FontGetCharWidth(*ppFont, pString[LastSpace]);
+                                LastSpace++;
                             }
                         }
                         _UIGText_aLines[NumLines].unk_00 = LastSpace;
                         _UIGText_aLines[NumLines].unk_02 = i + 1;
                     } else {
-                        for (i = Pos - 1; Width > pText->unk_14 && i > 1;) {
-                            Width -= FontGetCharWidth(*ppFont, pString[i--]);
+                        for (i = Pos - 1; Width > pText->unk_14 && i > 1; i--) {
+                            Width -= FontGetCharWidth(*ppFont, pString[i]);
                         }
                         _UIGText_aLines[NumLines].unk_00 = LineStart;
                         _UIGText_aLines[NumLines].unk_02 = i + 1;
                     }
                 } else {
-                    _UIGText_aLines[NumLines].unk_02 = Pos;
                     _UIGText_aLines[NumLines].unk_00 = LineStart;
+                    _UIGText_aLines[NumLines].unk_02 = Pos;
                 }
-                NumLines++;
             } else {
-                _UIGText_aLines[NumLines].unk_02 = Pos;
                 _UIGText_aLines[NumLines].unk_00 = LineStart;
-                NumLines++;
+                _UIGText_aLines[NumLines].unk_02 = Pos;
                 TextWidth = FontGetTextWidth(*ppFont, &pString[LineStart], pText->Flags);
                 if (TextWidth > pText->unk_14) {
                     pText->unk_14 = TextWidth;
                 }
             }
+            NumLines++;
             pString[Pos] = c;
             pLine = NULL;
         }

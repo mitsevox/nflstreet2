@@ -19334,73 +19334,6 @@
       ]
     },
     {
-      "source": "src/engine/dbsrpt.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c). The whole native unit includes its .sdata and .bss and compares the holdout, whose original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022C0E0",
-          "end": "0x8022C894"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC030",
-          "end": "0x803EC03C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A2390",
-          "end": "0x803A23E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbSrptDeleteCursorTeams",
-          "start": "0x8022C0E0",
-          "end": "0x8022C214"
-        },
-        {
-          "symbol": "DbSrptModuleInit",
-          "start": "0x8022C214",
-          "end": "0x8022C3C8"
-        },
-        {
-          "symbol": "DbSrptModuleShutdown",
-          "start": "0x8022C3C8",
-          "end": "0x8022C410"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTeams",
-          "start": "0x8022C410",
-          "end": "0x8022C518"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTypedTeams",
-          "start": "0x8022C518",
-          "end": "0x8022C628"
-        },
-        {
-          "symbol": "DbFindUnusedTeamIds",
-          "start": "0x8022C628",
-          "end": "0x8022C81C"
-        },
-        {
-          "symbol": "DbSrptBeginGame",
-          "start": "0x8022C81C",
-          "end": "0x8022C858"
-        },
-        {
-          "symbol": "DbSrptResumeGame",
-          "start": "0x8022C858",
-          "end": "0x8022C894"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbtatscopy.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022EBF0-0x8022EF14 (src/engine/dbtatscopy.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -24223,7 +24156,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Twelve full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Four full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24246,54 +24179,14 @@
       ],
       "functions": [
         {
-          "symbol": "VoxEvent_GetSentenceParmMask",
-          "start": "0x801AFA14",
-          "end": "0x801AFA70"
-        },
-        {
           "symbol": "iSPCH_GetPhraseBank",
           "start": "0x801AFD04",
           "end": "0x801AFDFC"
         },
         {
-          "symbol": "iSPCH_SampleExists",
-          "start": "0x801AFEE8",
-          "end": "0x801AFF74"
-        },
-        {
           "symbol": "iSPCH_ChooseSamples",
           "start": "0x801B0050",
           "end": "0x801B01E8"
-        },
-        {
-          "symbol": "iSPCH_SentenceLength",
-          "start": "0x801B0208",
-          "end": "0x801B029C"
-        },
-        {
-          "symbol": "iSPCH_ShortRuleStatus",
-          "start": "0x801B0474",
-          "end": "0x801B04D4"
-        },
-        {
-          "symbol": "iSPCH_TestMatchParms",
-          "start": "0x801B05E4",
-          "end": "0x801B07A0"
-        },
-        {
-          "symbol": "iSPCH_RandomizeSentencePicks",
-          "start": "0x801B08DC",
-          "end": "0x801B0974"
-        },
-        {
-          "symbol": "iSPCH_IterateChoice",
-          "start": "0x801B0974",
-          "end": "0x801B0A18"
-        },
-        {
-          "symbol": "iSPCH_ConstantRuleSet",
-          "start": "0x801B0D5C",
-          "end": "0x801B0EA4"
         },
         {
           "symbol": "iSPCH_MakeSampleRequests",
@@ -27049,7 +26942,7 @@
     {
       "source": "src/engine/xmlread.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Ten functions and both data sections link through units.json. The two non-exact functions retain original bytes, with the HOLDOUT records at 0x802166F0 and 0x80216BFC.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Eleven functions and both data sections link through units.json. The non-exact function _XmlSkipElement retains original bytes, with the HOLDOUT record at 0x802166F0.",
       "sections": [
         {
           "section": ".text",
@@ -27189,11 +27082,6 @@
           "end": "0x801B4824"
         },
         {
-          "symbol": "fn_801B4824",
-          "start": "0x801B4824",
-          "end": "0x801B4898"
-        },
-        {
           "symbol": "PATHI_fade",
           "start": "0x801B4898",
           "end": "0x801B4960"
@@ -27245,29 +27133,14 @@
       ],
       "functions": [
         {
-          "symbol": "PATHI_sampleoffset",
-          "start": "0x801B6780",
-          "end": "0x801B67F8"
-        },
-        {
           "symbol": "PATHI_choosesynchtime",
           "start": "0x801B6A18",
           "end": "0x801B6CB4"
         },
         {
-          "symbol": "PATHI_timeremaining",
-          "start": "0x801B6CB4",
-          "end": "0x801B6D20"
-        },
-        {
           "symbol": "PATHI_enternode",
           "start": "0x801B6ED0",
           "end": "0x801B7178"
-        },
-        {
-          "symbol": "PATHI_queuenode",
-          "start": "0x801B7460",
-          "end": "0x801B7778"
         }
       ]
     },

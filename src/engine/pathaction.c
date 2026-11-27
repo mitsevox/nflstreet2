@@ -481,7 +481,7 @@ extern "C" void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Path
                 value = 127;
             if (value < 0)
                 value = 0;
-            fn_801B4824(p, (signed char)value);
+            PATHI_volume(p, (signed char)value);
             break;
         }
     }
