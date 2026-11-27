@@ -28,7 +28,7 @@ extern "C" int PATHI_beatinfo(PathTrack_t *p, PathBeatInfo_t *info)
     if (p->mUnknown4 < 0)
         return -1;
     PathMapEntry_t *node = PATHI_getnode(p->mUnknown4);
-    p->mUnknown100->vfn_07(&status);
+    p->mUnknown100->GetPathStatus(&status);
     if (info) {
         info->mBeatsPerBar = (node->mTimingAndBranches >> 8) & 15;
         info->mBeatUnit = (node->mLinkAndSync >> 4) & 15;
@@ -108,7 +108,7 @@ extern "C" int PATHI_timeremaining(PathTrack_t *p)
 {
     int sum = 0;
     for (int i = 0;; ++i) {
-        int value = p->mUnknown100->vfn_09(i);
+        int value = p->mUnknown100->TimeRemaining(i);
         if (value >= 0)
             sum += value;
         else
@@ -335,5 +335,5 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
             length /= node->mBits4.mBeats * (unsigned char)node->mTimingAndBranches;
     }
     int offset = PATHI_sampleoffset(p->mUnknown4);
-    return p->mUnknown4C = p->mUnknown100->vfn_11(p->mUnknown4, offset, beats, 0, length);
+    return p->mUnknown4C = p->mUnknown100->Play(p->mUnknown4, offset, beats, 0, length);
 }
