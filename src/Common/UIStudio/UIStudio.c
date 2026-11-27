@@ -139,8 +139,8 @@ static Int32 _DetermineVisibility(UISScreenT *pScreen, void **ppTarget, Int32 Ty
                 for (Item = 0; Item < NumItems; Item++) {
                     pEntry = &pNode->pEntries[Item];
                     if (pEntry->ID == 0xFFFF) {
-                        pControl = &pScreen->pData->pControls[pEntry->Value];
-                        Result = _DetermineVisibility(pScreen, ppTarget, 8, pControl);
+                        Result = _DetermineVisibility(pScreen, ppTarget, 8,
+                                             &pScreen->pData->pControls[pEntry->Value]);
                         if (Result != -1) {
                             return Result;
                         }

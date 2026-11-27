@@ -29,6 +29,19 @@
         "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
       }
     },
+    "uistudio_fastmath_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffast-math",
+        "-ffunction-sections"
+      ],
+      "evidence": "uistudio_fastmath (its evidence.tsv compiler row) plus -ffunction-sections, the named profile of the UI Studio unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of the file keep comparing with uistudio_fastmath.",
+      "source_root": {
+        "directory": "src",
+        "file_prefix": "../../../Source",
+        "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
+      }
+    },
     "dolphin_release": {
       "compiler": "mwcc",
       "flags": [
@@ -1592,13 +1605,19 @@
     },
     {
       "source": "src/Common/UIStudio/UIStudio.c",
-      "profile": "uistudio_fastmath",
-      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; wholly linked, all 39 functions exact. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
+      "profile": "uistudio_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 38 of 39 functions exact, the holdout _DetermineVisibility keeps the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802176E8",
+          "end": "0x802178E4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80217A7C",
           "end": "0x8021A068"
         },
         {
@@ -1619,7 +1638,16 @@
           "start": "0x803ECFE8",
           "end": "0x803ECFF0"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_DetermineVisibility",
+            "evidence": "evidence.tsv source-form 0x802178E4-0x80217A7C"
+          }
+        ],
+        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27; _ParseVisibility and PatchScrData since round 5 lane 4b-l of 2026-11-27)."
+      }
     },
     {
       "source": "src/Common/UIStudio/UISEvent.c",
