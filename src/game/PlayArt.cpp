@@ -344,17 +344,17 @@ void PlayArtBuildArrowQuad(PlayArtVertex_t *points, PlayArtVertex_t *out, int wi
     PlayArtVertex_t side;
     side.mX = -direction.mY;
     side.mY = -direction.mX;
-    side.mX = side.mX * 0.5f * (float)width;
-    side.mY = side.mY * 0.5f * (float)width;
+    side.mX *= 0.5f * width;
+    side.mY *= 0.5f * width;
+    direction.mX *= 0.5f * length;
+    direction.mY *= 0.5f * length;
     out[0].mX = points[0].mX + side.mX;
-    direction.mX = direction.mX * 0.5f * (float)length;
     out[0].mY = points[0].mY - side.mY;
-    direction.mY = direction.mY * 0.5f * (float)length;
     out[1].mX = points[0].mX - side.mX;
+    out[1].mY = points[0].mY + side.mY;
     out[2].mX = out[0].mX + direction.mX;
     out[2].mY = out[0].mY + direction.mY;
     out[3].mX = out[1].mX + direction.mX;
-    out[1].mY = points[0].mY + side.mY;
     out[3].mY = out[1].mY + direction.mY;
 }
 
