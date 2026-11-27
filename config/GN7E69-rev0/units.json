@@ -4070,7 +4070,7 @@
     {
       "source": "src/game/StoreDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded _StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the seven holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x80086C10-0x80087BE4 (src/game/StoreDb.cpp), its function, name and data rows and the linker row of the discarded _StoreGetStringById; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes (seven before round 5 lane 1, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
@@ -4082,12 +4082,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800872E8",
-          "end": "0x8008736C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800876C0",
           "end": "0x8008775C"
         },
         {
@@ -4124,22 +4118,6 @@
           {
             "function": "StoreCountItems",
             "evidence": "evidence.tsv source-form 0x80087128-0x800872E8"
-          },
-          {
-            "function": "StoreIsItemLocked",
-            "evidence": "evidence.tsv source-form 0x8008736C-0x80087460"
-          },
-          {
-            "function": "StoreIsItemNew",
-            "evidence": "evidence.tsv source-form 0x80087460-0x8008754C"
-          },
-          {
-            "function": "StoreClearItemNew",
-            "evidence": "evidence.tsv source-form 0x8008754C-0x80087600"
-          },
-          {
-            "function": "StoreUnlockItem",
-            "evidence": "evidence.tsv source-form 0x80087600-0x800876C0"
           },
           {
             "function": "StoreTeamCreate",
