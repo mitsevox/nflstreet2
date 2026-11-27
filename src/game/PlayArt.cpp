@@ -13,7 +13,7 @@
 #include "game/PlayBookDb.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/PlaySet.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/Message_800F01CC.h"
 #include "game/State_803EB098.h"
 #include "game/DbQueryTable.h"
@@ -65,7 +65,7 @@ void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayAr
         void *queue = PlayAlignGetRoute(record, (unsigned char)team, (unsigned short)index);
         unsigned char i;
         for (i = 0; i <= 3; ++i) {
-            if (fn_800F06F4(0, queue, (unsigned char)lbl_802E98E0[i], 0xFFFF) != 0xFFFF) {
+            if (PlyrStateQueueFind(0, queue, (unsigned char)lbl_802E98E0[i], 0xFFFF) != 0xFFFF) {
                 secondaryR = lbl_802E98F0[i][0];
                 secondaryG = lbl_802E98F0[i][1];
                 secondaryB = lbl_802E98F0[i][2];
@@ -130,7 +130,7 @@ void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayAr
                     r = (unsigned char)lbl_803EB3B8; g = (unsigned char)lbl_803EB3C0; b = (unsigned char)lbl_803EB3BC;
                     for (i = 0; i <= 2; ++i) {
                         if (slots[i][0] == index) {
-                            if (fn_800F06F4(0, queue, 19, 0xFFFF) != 0xFFFF || fn_800F06F4(0, queue, 21, 0xFFFF) != 0xFFFF) {
+                            if (PlyrStateQueueFind(0, queue, 19, 0xFFFF) != 0xFFFF || PlyrStateQueueFind(0, queue, 21, 0xFFFF) != 0xFFFF) {
                                 switch (i) {
                                 case 0: r = (unsigned char)lbl_803EB3E8; g = (unsigned char)lbl_803EB3EC; b = (unsigned char)lbl_803EB3F0; break;
                                 case 1: r = (unsigned char)lbl_803EB3F4; g = (unsigned char)lbl_803EB3F8; b = (unsigned char)lbl_803EB3FC; break;
@@ -329,7 +329,7 @@ PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
-void fn_800F0910(int, Message_800F01CC *);
+void PlyrStateMirrorMessage(int, Message_800F01CC *);
 int fn_800AD9B4(void);
 int PlayAlignHasSlots(PlayBookPlay_t *);
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);

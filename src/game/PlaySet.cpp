@@ -168,7 +168,7 @@ void PlaySetPointToRoleMate(Object_80039F5C *p)
         }
     }
     if (post) {
-        fn_800F03D8(0, p->mpState, &msg, p);
+        PlyrStateQueueAppend(0, p->mpState, &msg, p);
     }
 }
 }

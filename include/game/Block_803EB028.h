@@ -2,7 +2,7 @@
 #define GAME_BLOCK_803EB028_H
 
 /* 92-byte state allocated through SyncStateRegister under the id 'blck'
-   (fn_8011DF3C). */
+   (AssignEngageSysInit). */
 struct Block_803EB028 {
     int mUnknown0;
     char mUnknown4[80];

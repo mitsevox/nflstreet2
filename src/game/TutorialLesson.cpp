@@ -338,8 +338,8 @@ void fn_800BFAB4(PreSnapPhase *pObject);
 void fn_800C1CA0(void);
 void fn_800C1E50(void);
 void fn_800C87CC(int a, int b);
-void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-void fn_8011DF90(void);
+void PlyrStateQueueExitAndClear(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+void AssignEngageSysReset(void);
 void BallPrimeKickUp(Ball_t *pBall);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void BallSetSpinMode(Ball_t *pBall, int a);
@@ -787,7 +787,7 @@ void TutorialSetupPlays(void)
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
-            fn_800EFE60(0, pObject->mQueue, pObject);
+            PlyrStateQueueExitAndClear(0, pObject->mQueue, pObject);
         }
     }
     side = TutorialGetStepSide(TutorialGetLesson(), TutorialGetStep());
@@ -2126,7 +2126,7 @@ void TutorialPostPlay::OnExit()
     int angles[3];
 
     PostPlayPhase::OnExit();
-    fn_8011DF90();
+    AssignEngageSysReset();
     if (BallGetCurrentHolder()) {
         BallReleaseStill(BallGetCurrent(), 5, 0);
     }

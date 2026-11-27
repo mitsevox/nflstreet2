@@ -167,7 +167,7 @@ extern "C" void PlayerActionAnimPitchTryStart(Record_800DB074 *pRecord, Object_8
 {
     if (pRecord->mUnknown0 != 1 && pRecord->mUnknown1 != 1) {
         Ball_t *pBall = BallFindHeldBy(p);
-        if (pBall && fn_80106580(p, (p->mFlags >> 14) & 1)) {
+        if (pBall && PitchStartFromAction(p, (p->mFlags >> 14) & 1)) {
             PlayerActionAnimArmPitch(pRecord, p, pBall);
         }
     }
@@ -1683,7 +1683,7 @@ extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned sho
                 pA = fn_8009BCE8(&p->mUnknown336);
                 pB = p;
             }
-            float rate = fn_80114EE4(pA, pB);
+            float rate = PlyrHitGetPowerRatio(pA, pB);
             AnimSeqSetSpeed(&pEntries[pBlock->mUnknown1D].mUnknown4C, MathInverse(rate));
             break;
         }

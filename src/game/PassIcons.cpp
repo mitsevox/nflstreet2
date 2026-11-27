@@ -2,7 +2,7 @@
 
 #include "game/PassIconObj.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/Object_80039F5C.h"
 #include "game/fn_800AD9B4.h"
 
@@ -47,7 +47,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
                 if (pOther != 0) {
                     PlayBookPlay_t *pRecord = PlayBookGetPlay(ScrmGetOffenseTeam());
                     void *pResult = PlayAlignGetRoute(pRecord, ScrmGetOffenseTeam(), i);
-                    if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
+                    if (PlyrStateQueueFind(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {
                         result = 0;
                     }

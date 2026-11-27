@@ -108,14 +108,14 @@ void fn_800C9D6C(unsigned char a, unsigned char b);
 void fn_800C9E40(void);
 void fn_800C9E4C(unsigned char a, unsigned char b);
 void PlyrAnimReplayRegister(void);
-void fn_800EFD70(int a);
-void fn_800EFDD8(void);
-void fn_800F164C(int a);
-void fn_800F16F4(void);
-void fn_80118704(void);
-void fn_8011876C(void);
-void fn_8011DF3C(void);
-void fn_8011DF8C(void);
+void PlyrStateQueueInit(int a);
+void PlyrStateQueueShutdown(void);
+void AssignInputInit(int a);
+void AssignInputShutdown(void);
+void AssignZoneShiftInit(void);
+void AssignZoneShiftShutdown(void);
+void AssignEngageSysInit(void);
+void AssignEngageSysShutdown(void);
 void fn_8011F0D8(void);
 void fn_8011F174(void);
 void fn_8012055C(int a);
@@ -255,15 +255,15 @@ const char *Ass::GetName() { return "Ass"; }
 
 int Ass::Init()
 {
-    fn_800EFD70(33);
-    fn_80118704();
+    PlyrStateQueueInit(33);
+    AssignZoneShiftInit();
     return 1;
 }
 
 int Ass::Shutdown()
 {
-    fn_8011876C();
-    fn_800EFDD8();
+    AssignZoneShiftShutdown();
+    PlyrStateQueueShutdown();
     return 1;
 }
 
@@ -276,13 +276,13 @@ const char *AssJoy::GetName() { return "AssJoy"; }
 
 int AssJoy::Init()
 {
-    fn_800F164C(10);
+    AssignInputInit(10);
     return 1;
 }
 
 int AssJoy::Shutdown()
 {
-    fn_800F16F4();
+    AssignInputShutdown();
     return 1;
 }
 
@@ -375,13 +375,13 @@ const char *Block::GetName() { return "Block"; }
 
 int Block::Init()
 {
-    fn_8011DF3C();
+    AssignEngageSysInit();
     return 1;
 }
 
 int Block::Shutdown()
 {
-    fn_8011DF8C();
+    AssignEngageSysShutdown();
     return 1;
 }
 

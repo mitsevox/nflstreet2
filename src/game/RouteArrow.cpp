@@ -60,7 +60,7 @@ void RouteArrowShutdown(RouteArrow_t *p)
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec2Add.h"
 #include "game/Vec3Magnitude.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 
 static int _RouteArrow_iObjList;
 static unsigned int _RouteArrow_uNumShown;
@@ -78,9 +78,9 @@ Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
-void fn_800F0910(int, void *);
-int fn_800FC014(Object_80039F5C *, void *);
-Object_80039F5C *fn_800FC070(Object_80039F5C *, void *);
+void PlyrStateMirrorMessage(int, void *);
+int AssignGetCoverSlot(Object_80039F5C *, void *);
+Object_80039F5C *AssignGetCoverReceiver(Object_80039F5C *, void *);
 void fn_8009E9EC(int, int, FieldPoint_t *);
 float ScrmGetSidelineX(void);
 float ScrmGetEndLineY(void);
@@ -199,7 +199,7 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
     FieldPoint_t origin;
     origin = ScrmGetBallSpot();
     fn_8011F4E0();
-    unsigned char code = fn_800FC014(pPlayer, pCommand);
+    unsigned char code = AssignGetCoverSlot(pPlayer, pCommand);
     switch (code) {
     case 254:
         return;
@@ -214,7 +214,7 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
         RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
         return;
     }
-    Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
+    Object_80039F5C *pOther = AssignGetCoverReceiver(pPlayer, pCommand);
     if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
         pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(ScrmGetOffenseTeam()));
         if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
@@ -224,7 +224,7 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
                 Object_80039F5C *pCandidate = PlyrGet(ScrmGetOffenseTeam(), i);
                 PlayBookPlay_t *pRecord = PlayBookGetPlay(ScrmGetOffenseTeam());
                 void *pCommands = PlayAlignGetRoute(pRecord, ScrmGetOffenseTeam(), pCandidate->mIdBytes[1]);
-                if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
+                if (PlyrStateQueueFind(0, pCommands, 18, 0xffff) != 0xffff) {
                     pOther = pCandidate;
                     break;
                 }
@@ -272,7 +272,7 @@ void RouteArrowAddHook(RouteArrow_t *p, Vector_80039F5C *pPoint)
 {
     float length = 1.0f;
     if (ScrmIsFieldFlipped()) length = -1.0f;
-    unsigned short index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
+    unsigned short index = PlyrStateQueueFind(0, p->mpCommands, 19, 0xffff);
     int angle = index != 0xffff ? p->mpCommands[index * 4 + 2] << 17 : 0x400000;
     int turn;
     if (MathAngleDiff(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
@@ -553,7 +553,7 @@ void RouteArrowBuild(RouteArrow_t *p)
     do {
         command = *(RouteArrowCmd_t *)pCommand;
         command.mType &= 0x7f;
-        if (p->mbFlip) fn_800F0910(0, &command.mType);
+        if (p->mbFlip) PlyrStateMirrorMessage(0, &command.mType);
         if (command.mType) {
             more = (pCommand[0] >> 7) ^ 1;
             more &= RouteArrowAddCommand(p, &command.mType, &point, hasOther);
@@ -567,8 +567,8 @@ void RouteArrowBuild(RouteArrow_t *p)
         for (unsigned char i = 0; i <= 2; ++i) {
             // FAKEMATCH: slot byte addressed as pRecord + (i << 2) + 0x1C, not *pRecord->mUnknown1C[i]
             if (pPlayer->mIdBytes[1] == *((unsigned char *)pRecord + (i << 2) + 0x1C)) {
-                int index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
-                if (index == 0xffff && fn_800F06F4(0, p->mpCommands, 21, 0xffff) == index) continue;
+                int index = PlyrStateQueueFind(0, p->mpCommands, 19, 0xffff);
+                if (index == 0xffff && PlyrStateQueueFind(0, p->mpCommands, 21, 0xffff) == index) continue;
                 switch (i) {
                 case 0: ArrowSetColor(p->mArrow, 205, 8, 16); break;
                 case 1: ArrowSetColor(p->mArrow, 0, 169, 95); break;

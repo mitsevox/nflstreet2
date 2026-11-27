@@ -757,7 +757,7 @@ PlayBookTeam_t *PlayBookGetTeam(int team)
 extern "C" {
 int fn_801486A0(void);
 void PlayBookLoadCurrentPlay(int team);
-void fn_800FBAA8(void);
+void AssignCoverReset(void);
 void fn_8011F3A8(void);
 void PlayRealignTeam(int team);
 int ScrmGetOffenseTeam(void);
@@ -795,7 +795,7 @@ void PlayCallApplyPlay(int team, int value)
 {
     if (value & 0x8000) {
         PlayBookLoadCurrentPlay(team);
-        fn_800FBAA8();
+        AssignCoverReset();
         fn_8011F3A8();
         PlayRealignTeam(team);
         if (team == ScrmGetOffenseTeam())

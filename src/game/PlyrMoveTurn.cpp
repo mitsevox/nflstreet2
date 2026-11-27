@@ -3,7 +3,7 @@
    request, and the check that caps speed and turn rate in certain player states. */
 #include "engine/animchan.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/fn_801BE60C.h"
 #include "game/Ball.h"
 
@@ -147,11 +147,11 @@ void PlyrMoveTurnWithAnim(Object_80039F5C *p)
 
 int PlyrMoveInCappedState(Object_80039F5C *p)
 {
-    int first = fn_800F06F4(0, p->mpState, 26, 0xFFFF);
+    int first = PlyrStateQueueFind(0, p->mpState, 26, 0xFFFF);
     int result = 0;
-    int second = fn_800F06F4(0, p->mpState, 27, 0xFFFF);
-    int third = fn_800F06F4(0, p->mpState, 25, 0xFFFF);
-    int fourth = fn_800F06F4(0, p->mpState, 68, 0xFFFF);
+    int second = PlyrStateQueueFind(0, p->mpState, 27, 0xFFFF);
+    int third = PlyrStateQueueFind(0, p->mpState, 25, 0xFFFF);
+    int fourth = PlyrStateQueueFind(0, p->mpState, 68, 0xFFFF);
 
     if (first == 0xFFFF) {
         if (second == 0xFFFF) {

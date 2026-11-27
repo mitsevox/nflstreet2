@@ -26,13 +26,13 @@ void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
-void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
-void fn_8011E3EC(Object_80039F5C *p, int a);
+void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
+void AssignEngageSetMode(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
 int fn_801231E4(Object_80039F5C *p, int angle);
 void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
@@ -267,7 +267,7 @@ extern "C" int OptionRunThrow(Object_80039F5C *p, int kind, int arg)
             message.mId = 25;
             message.mUnknown1[0] = pTarget->mIdBytes[1];
             message.mUnknown1[1] = kind;
-            fn_800F00D4(0, pCurrent->mpState, &message, pCurrent);
+            PlyrStateQueuePush(0, pCurrent->mpState, &message, pCurrent);
         }
         if (kind == 9) {
             if (pControl->mUnknown68 == 0) {
@@ -327,19 +327,19 @@ extern "C" void OptionRunEnd(Object_80039F5C *p, int a, int b)
 
     memset(&message, 0, 4);
     message.mId = 1;
-    fn_800F053C(0, p->mpState, &message, p);
+    PlyrStateQueueSet(0, p->mpState, &message, p);
 }
 
 extern "C" void OptionRunGiveUp(Object_80039F5C *p)
 {
     Message_800F01CC message;
 
-    fn_8011E1BC(p, 0, 0, 1);
-    fn_8011E3EC(p, 2);
+    AssignEngageStart(p, 0, 0, 1);
+    AssignEngageSetMode(p, 2);
     memset(&message, 0, 4);
     message.mId = 33;
     message.mUnknown1[0] = 0;
-    fn_800F053C(0, p->mpState, &message, p);
+    PlyrStateQueueSet(0, p->mpState, &message, p);
 }
 
 extern "C" void OptionRunSwitchCamera(Object_80039F5C *p)

@@ -82,15 +82,15 @@ void fn_800CA3C4(void);
 void PlayerMoveResetAll(void);
 void PlayerActionAnimResetSteerFrames(void);
 void HuddleGetSpot(FieldPoint_t *pOut, int *pFacing, Object_80039F5C *p, int value);
-void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueueExitAndClear(int a, State_80039F5C *pQueue, Object_80039F5C *pObject);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FAD2C(void);
 void fn_800FAECC(int a);
-void fn_800FF6D8(Object_80039F5C *p);
+void PlyrSnapToMovePoint(Object_80039F5C *p);
 void fn_8010BEA4(void);
-void fn_8011875C(void);
-void fn_8011DF90(void);
-void fn_8011E068(void);
+void AssignZoneShiftReset(void);
+void AssignEngageSysReset(void);
+void AssignEngageSysStartPlay(void);
 void fn_8011F3A8(void);
 void fn_8011F574(void);
 void fn_80120618(void);
@@ -124,7 +124,7 @@ int fn_800A8444(int team);
 int GamebreakerGetSavedState(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
-void fn_8011DF90(void);
+void AssignEngageSysReset(void);
 int fn_8011F1CC(void);
 int fn_8011F2C4(void);
 void PassIconsHide(void);
@@ -177,13 +177,13 @@ extern "C" void ScrmPlayerToHuddle(Object_80039F5C *p)
     ballMessage.mId = 49;
     if (BallFindHeldBy(p) != 0) {
         if (BallGetCurrentHolder() == p) {
-            fn_800F053C(0, p->mpState, &ballMessage, p);
-            fn_800F03D8(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &ballMessage, p);
+            PlyrStateQueueAppend(0, p->mpState, &message, p);
         } else {
             BallReleaseStill(BallFindHeldBy(p), 5, 0);
         }
     } else {
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
     }
 }
 
@@ -200,7 +200,7 @@ extern "C" void ScrmTeamToHuddle(int team)
             p->mFlags |= 0x10;
         }
     }
-    fn_8011DF90();
+    AssignEngageSysReset();
 }
 
 extern "C" int ScrmIsHuddleFormed(void)
@@ -243,13 +243,13 @@ extern "C" void ScrmTeamPlaceInHuddle(int team)
             pState->mFacing = facing;
             pState->mUnknown48 = 0;
             pState->mUnknown50 = 1;
-            fn_800FF6D8(p);
+            PlyrSnapToMovePoint(p);
             break;
         default:
             if (BallFindHeldBy(p) != 0 && BallGetCurrentHolder() == p) {
                 BallReleaseStill(BallFindHeldBy(p), 5, 0);
             }
-            fn_800EFE60(0, p->mpState, p);
+            PlyrStateQueueExitAndClear(0, p->mpState, p);
             ScrmPlayerToHuddle(p);
             HuddleGetSpot(&point, &facing, p, 1);
             pState = (ScrmHuddleSpot_t *)&p->mUnknown336;
@@ -258,7 +258,7 @@ extern "C" void ScrmTeamPlaceInHuddle(int team)
             pState->mFacing = facing;
             pState->mUnknown48 = 0;
             pState->mUnknown50 = 1;
-            fn_800FF6D8(p);
+            PlyrSnapToMovePoint(p);
             break;
         }
         p->mFlags |= 0x40000;
@@ -274,20 +274,20 @@ extern "C" void ScrmPlayerSendLineUp(Object_80039F5C *p)
 
                 memset(&message, 0, 4);
                 message.mId = 70;
-                fn_800F03D8(0, p->mpState, &message, p);
+                PlyrStateQueueAppend(0, p->mpState, &message, p);
             } else {
                 Message_800F01CC message;
 
                 memset(&message, 0, 4);
                 message.mId = 69;
-                fn_800F03D8(0, p->mpState, &message, p);
+                PlyrStateQueueAppend(0, p->mpState, &message, p);
             }
         } else {
             Message_800F01CC message;
 
             memset(&message, 0, 4);
             message.mId = 42;
-            fn_800F03D8(0, p->mpState, &message, p);
+            PlyrStateQueueAppend(0, p->mpState, &message, p);
         }
     }
 }
@@ -357,18 +357,18 @@ extern "C" void ScrmSnapBall(void)
             message.mUnknown1[0] = pPasser->mIdBytes[1];
             message.mUnknown1[1] = 14;
             message.mUnknown1[2] = 0;
-            fn_800F00D4(0, pCarrier->mpState, &message, pCarrier);
+            PlyrStateQueuePush(0, pCarrier->mpState, &message, pCarrier);
         } else {
             memset(&message, 0, 4);
             message.mId = 25;
             message.mUnknown1[0] = pPasser->mIdBytes[1];
             message.mUnknown1[1] = 8;
-            fn_800F00D4(0, pCarrier->mpState, &message, pCarrier);
+            PlyrStateQueuePush(0, pCarrier->mpState, &message, pCarrier);
         }
         memset(&message, 0, 4);
         message.mId = 56;
         message.mUnknown1[0] = ScrmGetSnapFlag(pCarrier);
-        fn_800F00D4(0, pPasser->mpState, &message, pPasser);
+        PlyrStateQueuePush(0, pPasser->mpState, &message, pPasser);
 
         defense = ScrmGetDefenseTeam();
         for (team = 0; team < 2; team++) {
@@ -392,7 +392,7 @@ extern "C" void ScrmSnapBall(void)
                     memset(&message, 0, 4);
                     message.mId = 51;
                     message.mUnknown1[0] = (int)(delay * 32.0f);
-                    fn_800F00D4(0, p->mpState, &message, p);
+                    PlyrStateQueuePush(0, p->mpState, &message, p);
                 }
             }
         }
@@ -424,7 +424,7 @@ extern "C" void ScrmStartPlay(void)
     fn_8011F3A8();
     BallSetCurrentTarget(0);
     DefCoverStartPlay();
-    fn_8011875C();
+    AssignZoneShiftReset();
     fn_800FAD2C();
     PlayTrackUpdateSummary();
     fn_800FAECC(1);
@@ -449,7 +449,7 @@ extern "C" void ScrmStartPlay(void)
     fn_800B6C98();
     ClockRuleSnap();
     ScrmSnapBall();
-    fn_8011E068();
+    AssignEngageSysStartPlay();
     PlyrMgrStepStates();
     ReplayHandleCommand(gpReplay, 1, 0);
     if (fn_800A937C() == 0 && fn_800A9680() == 0) {
@@ -738,7 +738,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                 if (ScrmTestPlayFlag(4)) {
                     ScrmSetPlayFlag(4, 0);
                     ScrmChangePossession(0);
-                    fn_8011DF90();
+                    AssignEngageSysReset();
                 }
                 pRecord = fn_800B15FC();
                 fn_8009BD2C(p, &pRecord->mUnknown0);

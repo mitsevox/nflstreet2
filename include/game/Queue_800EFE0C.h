@@ -9,6 +9,6 @@ struct Queue_800EFE0C {
     Handlers_800EFC68 *mpHandlers;
 };
 
-extern "C" void fn_800EFE0C(int kind, Queue_800EFE0C *pQueue);
+extern "C" void PlyrStateQueueRegister(int kind, Queue_800EFE0C *pQueue);
 
 #endif

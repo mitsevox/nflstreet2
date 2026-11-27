@@ -38,8 +38,8 @@ void PlayerActionAnimPitchInit(void *pBlock, Object_80039F5C *p, Object_80039F5C
 void PlayerActionAnimPitchUpdate(void *pBlock, Object_80039F5C *p);
 void CarrierMoveStartWallAnim(Object_80039F5C *p);
 void CarrierMoveStartAnim(Object_80039F5C *p);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueueReplaceHead(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int b);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 void fn_8009BD60(Object_80039F5C *p);
@@ -240,7 +240,7 @@ extern "C" int CarrierMoveStart(Object_80039F5C *p, int a)
         result = 1;
         memset(&message, 0, 4);
         message.mId = 36;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
     }
     return result;
 }
@@ -313,7 +313,7 @@ extern "C" int CarrierMoveUpdate(Object_80039F5C *p)
         memset(&message, 0, 4);
         message.mId = 11;
         message.mUnknown1[0] = p->mUnknown9[0];
-        fn_800F05E4(0, p->mpState, &message, p);
+        PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         return 1;
     }
     return 0;

@@ -18,7 +18,7 @@
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include <string.h>
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
@@ -76,8 +76,8 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 Object_80039F5C *fn_800B6544(int index);
 void fn_800B67FC(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800B7FE8(Object_80039F5C *p);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueueReplaceHead(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_8010AEC4(Object_80039F5C *p);
 void Vec2Rotate(void *pOut, void *pIn, int angle);
 void fn_800D7A0C(Object_80039F5C *p, int a);
@@ -87,8 +87,8 @@ int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 void Vec2FromAngle(FieldPoint_t *pOut, int angle, float length);
-void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
-void fn_8011E3EC(Object_80039F5C *p, int a);
+void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
+void AssignEngageSetMode(Object_80039F5C *p, int a);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_801486A0(void);
 void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -436,11 +436,11 @@ extern "C" int HandoffIsMirrored(Object_80039F5C *p, HandoffBlock_t *state) {
         if (kind >= 6 && kind <= 11)
             result = 1;
         if (!result) {
-            int pending = fn_800F06F4(0, &p->mpState[1], 26, 0xFFFF) != 0xFFFF;
+            int pending = PlyrStateQueueFind(0, &p->mpState[1], 26, 0xFFFF) != 0xFFFF;
             if (pending)
                 result = 1;
         }
-        if (!result && fn_800F06F4(0, p->mpState, 18, 0xFFFF) != 0xFFFF) {
+        if (!result && PlyrStateQueueFind(0, p->mpState, 18, 0xFFFF) != 0xFFFF) {
             if (p->mUnknown2913 == 1) {
                 if (state->mUnknown7 == 3 || state->mUnknown7 == 4)
                     result = 1;
@@ -824,11 +824,11 @@ extern "C" int HandoffEnter(Object_80039F5C *p) {
         break;
     case 14:
         if (p->mpState[1].mId == 31) {
-            fn_8011E1BC(p, 0, 0, 1);
-            fn_8011E3EC(p, 1);
+            AssignEngageStart(p, 0, 0, 1);
+            AssignEngageSetMode(p, 1);
         } else if (p->mpState[1].mId == 33) {
-            fn_8011E1BC(p, 0, 0, 1);
-            fn_8011E3EC(p, 2);
+            AssignEngageStart(p, 0, 0, 1);
+            AssignEngageSetMode(p, 2);
         }
         break;
     }
@@ -855,18 +855,18 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
         if ((p->mUnknown560.mUnknown40 || pOther->mUnknown560.mUnknown40) && state->mUnknown4 != 3) {
             memset(&message, 0, 4);
             message.mId = 1;
-            fn_800F053C(0, p->mpState, &message, p);
+            PlyrStateQueueSet(0, p->mpState, &message, p);
             return 0;
         }
         break;
     }
-    if (fn_800F06F4(0, pOther->mpState, 27, 0xFFFF) == 0xFFFF && state->mUnknown8 != 14 && state->mUnknown4 != 3) {
+    if (PlyrStateQueueFind(0, pOther->mpState, 27, 0xFFFF) == 0xFFFF && state->mUnknown8 != 14 && state->mUnknown4 != 3) {
         memset(&message, 0, 4);
         message.mId = 1;
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         memset(&message, 0, 4);
         message.mId = 33;
-        fn_800F053C(0, pOther->mpState, &message, p);
+        PlyrStateQueueSet(0, pOther->mpState, &message, p);
         return 0;
     }
     switch (state->mUnknown4) {
@@ -884,8 +884,8 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
             case 1:
             case 3:
             case 5: {
-                int none = fn_800F06F4(0, pOther->mpState, 27, 0xFFFF);
-                if (none == 0xFFFF && fn_800F06F4(0, pOther->mpState, 21, 0xFFFF) == none) {
+                int none = PlyrStateQueueFind(0, pOther->mpState, 27, 0xFFFF);
+                if (none == 0xFFFF && PlyrStateQueueFind(0, pOther->mpState, 21, 0xFFFF) == none) {
                     if (fn_800B65A0(p->mIdBytes[2]) != 255 && !fn_8011F1A4())
                         PassIconsAreShown();
                     memset(&message, 0, 4);
@@ -893,7 +893,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                     message.mUnknown1[0] = 20;
                     message.mUnknown1[1] = 96;
                     message.mUnknown1[2] = 255;
-                    fn_800F05E4(0, p->mpState, &message, p);
+                    PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
                     return 0;
                 }
                 state->mUnknown4 = 1;
@@ -946,11 +946,11 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                 case 2:
                 case 4:
                 case 14:
-                    if (fn_800F06F4(0, pOther->mpState, 18, 0xFFFF) != 0xFFFF)
+                    if (PlyrStateQueueFind(0, pOther->mpState, 18, 0xFFFF) != 0xFFFF)
                         return 1;
                     memset(&message, 0, 4);
                     message.mId = 1;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     break;
                 case 1:
                 case 3:
@@ -1007,7 +1007,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                     message.mUnknown1[0] = 16;
                     message.mUnknown1[1] = p->mMotion.mUnknown32 >> 17;
                     message.mUnknown1[2] = 128;
-                    fn_800F053C(0, p->mpState, &message, p);
+                    PlyrStateQueueSet(0, p->mpState, &message, p);
                     break;
                 }
                 result = 1;
@@ -1102,19 +1102,19 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
     message.mId = 64;
     message.mUnknown1[0] = 18;
     message.mUnknown1[1] = 1;
-    fn_800F03D8(0, p->mpState, &message, p);
+    PlyrStateQueueAppend(0, p->mpState, &message, p);
     if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203)
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
     memset(&message, 0, 4);
     message.mId = 51;
     message.mUnknown1[0] = (int)(SyncRandGetFloat(0) * 32.0f);
-    fn_800F03D8(0, p->mpState, &message, p);
+    PlyrStateQueueAppend(0, p->mpState, &message, p);
     memset(&message, 0, 4);
     message.mId = 9;
     message.mUnknown1[0] = 203;
     message.mUnknown1[1] = 0;
     message.mUnknown1[2] = 255;
-    fn_800F03D8(0, p->mpState, &message, p);
+    PlyrStateQueueAppend(0, p->mpState, &message, p);
     int index;
     if (p->mIdBytes[2] == ScrmGetOffenseTeam())
         index = 0;
@@ -1123,7 +1123,7 @@ extern "C" void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState) {
     if (p->mIdBytes[1] == index) {
         memset(&message, 0, 4);
         message.mId = 71;
-        fn_800F03D8(0, p->mpState, &message, p);
+        PlyrStateQueueAppend(0, p->mpState, &message, p);
     }
 }
 
@@ -1302,7 +1302,7 @@ extern "C" int HuddleHoldUpdate(Object_80039F5C *p) {
             memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
             p->mUnknown512.mUnknown14 = 0;
         } else if (fn_801BE648(p->mpUnknown792) != 74 && fn_801BE648(p->mpUnknown792) != 203) {
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);

@@ -3,7 +3,7 @@
 #include "game/Vec2Distance.h"
 #include "game/StyleTracker.h"
 #include "game/ScrmGetBallSpot.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include "game/fn_800AD9B4.h"
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
@@ -1323,13 +1323,13 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
     }
     if (fn_801486A0() == 1) {
         resolved = 0;
-        if (fn_800F06F4(0, p->mpState, 0x5F, 0xFFFF) == 0xFFFF) {
+        if (PlyrStateQueueFind(0, p->mpState, 0x5F, 0xFFFF) == 0xFFFF) {
             memset(&message, 0, 4);
             message.mId = 0x5F;
             if (p->mpState->mId == 0x1C) {
-                fn_800F01CC(0, p->mpState, &message, p);
+                PlyrStateQueueInsertNext(0, p->mpState, &message, p);
             } else {
-                fn_800F053C(0, p->mpState, &message, p);
+                PlyrStateQueueSet(0, p->mpState, &message, p);
             }
         }
     }
@@ -1349,7 +1349,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             case 0x1F:
             case 0x21:
                 if (pMate->mUnknown1032 != 4) {
-                    fn_800F053C(0, pMate->mpState, &message, pMate);
+                    PlyrStateQueueSet(0, pMate->mpState, &message, pMate);
                 }
                 break;
             case 0x20:
@@ -1357,10 +1357,10 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
                     break;
                 }
             case 0x1C:
-                fn_800F01CC(0, pMate->mpState, &message, pMate);
+                PlyrStateQueueInsertNext(0, pMate->mpState, &message, pMate);
                 break;
             default:
-                fn_800F053C(0, pMate->mpState, &message, pMate);
+                PlyrStateQueueSet(0, pMate->mpState, &message, pMate);
                 break;
             }
         }

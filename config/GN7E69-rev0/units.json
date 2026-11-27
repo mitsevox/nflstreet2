@@ -14466,12 +14466,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800EFC68",
-          "end": "0x800F1858"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F1C68",
           "end": "0x800F30AC"
         },
         {
@@ -14604,12 +14598,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801050DC",
-          "end": "0x80106C24"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801074B4",
           "end": "0x80109E48"
         },
         {
@@ -14682,12 +14670,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80121BE8",
-          "end": "0x80121CB0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80122670",
           "end": "0x801227DC"
         },
         {
@@ -14742,10 +14724,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800F1858",
-            "evidence": "evidence.tsv source-form 0x800F1858-0x800F1C68"
-          },
-          {
             "function": "fn_800F30AC",
             "evidence": "evidence.tsv source-form 0x800F30AC-0x800F3284"
           },
@@ -14762,11 +14740,11 @@
             "evidence": "evidence.tsv source-form 0x800F6370-0x800F6790"
           },
           {
-            "function": "fn_800F69C0",
+            "function": "AssignTurnAwayFromPlayers",
             "evidence": "evidence.tsv source-form 0x800F69C0-0x800F6AD8"
           },
           {
-            "function": "fn_800F6B2C",
+            "function": "AssignSteerClampToField",
             "evidence": "evidence.tsv source-form 0x800F6B2C-0x800F6C90"
           },
           {
@@ -14778,7 +14756,7 @@
             "evidence": "evidence.tsv source-form 0x800F7798-0x800F7B64"
           },
           {
-            "function": "fn_800F8828",
+            "function": "AssignBlockApplySideFlag",
             "evidence": "evidence.tsv source-form 0x800F8828-0x800F88E4"
           },
           {
@@ -14814,7 +14792,7 @@
             "evidence": "evidence.tsv source-form 0x800FCE58-0x800FCFC0"
           },
           {
-            "function": "fn_800FD2AC",
+            "function": "PlyrRunLegEnter",
             "evidence": "evidence.tsv source-form 0x800FD2AC-0x800FD3F0"
           },
           {
@@ -14846,10 +14824,6 @@
             "evidence": "evidence.tsv source-form 0x80104D98-0x801050DC"
           },
           {
-            "function": "fn_80106C24",
-            "evidence": "evidence.tsv source-form 0x80106C24-0x801074B4"
-          },
-          {
             "function": "fn_80109E48",
             "evidence": "evidence.tsv source-form 0x80109E48-0x80109F34"
           },
@@ -14866,15 +14840,15 @@
             "evidence": "evidence.tsv source-form 0x801100E8-0x801101DC"
           },
           {
-            "function": "fn_80110B00",
+            "function": "CarrierSpinInput",
             "evidence": "evidence.tsv source-form 0x80110B00-0x80110C10"
           },
           {
-            "function": "fn_80113C20",
+            "function": "PlyrHitImpactEnter",
             "evidence": "evidence.tsv source-form 0x80113C20-0x80113E74"
           },
           {
-            "function": "fn_80114EE4",
+            "function": "PlyrHitGetPowerRatio",
             "evidence": "evidence.tsv source-form 0x80114EE4-0x80114F64"
           },
           {
@@ -14886,7 +14860,7 @@
             "evidence": "evidence.tsv source-form 0x80116410-0x801167C4"
           },
           {
-            "function": "fn_801167C4",
+            "function": "AssignZoneIsTargetCovered",
             "evidence": "evidence.tsv source-form 0x801167C4-0x80116880"
           },
           {
@@ -14906,10 +14880,6 @@
             "evidence": "evidence.tsv source-form 0x80121918-0x80121BE8"
           },
           {
-            "function": "fn_80121CB0",
-            "evidence": "evidence.tsv source-form 0x80121CB0-0x80122670"
-          },
-          {
             "function": "fn_801227DC",
             "evidence": "evidence.tsv source-form 0x801227DC-0x80123024"
           },
@@ -14918,7 +14888,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 44 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 41 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

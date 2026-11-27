@@ -26,12 +26,12 @@
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include <math.h>
 
 extern "C" {
 void fn_800A5A8C(int a, void *pA, void *pB);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 int MathAngleDiff(int a, int b);
@@ -148,7 +148,7 @@ extern "C" void PlayerCutPostChainedCut(Object_80039F5C *p, int value)
 
     message.mUnknown1[0] = p->mpState->mUnknown1;
     message.mUnknown1[2] = value;
-    fn_800F00D4(0, p->mpState, &message, p);
+    PlyrStateQueuePush(0, p->mpState, &message, p);
 }
 
 extern "C" void PlayerCutPostTurn(Object_80039F5C *p, int angle)
@@ -176,7 +176,7 @@ extern "C" void PlayerCutPostTurn(Object_80039F5C *p, int angle)
     case 0: case 16: default: return;
     }
     message.mId = 20;
-    fn_800F053C(0, p->mpState, &message, p);
+    PlyrStateQueueSet(0, p->mpState, &message, p);
 }
 
 extern "C" int PlayerCutEnter(Object_80039F5C *p)
@@ -237,7 +237,7 @@ extern "C" int PlayerCutUpdate(Object_80039F5C *p)
 
             memset(&message, 0, 4);
             message.mId = 21;
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
         }
         return 1;
     }

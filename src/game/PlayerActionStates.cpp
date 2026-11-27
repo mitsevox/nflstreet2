@@ -526,7 +526,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
             memset(&message, 0, 4);
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
-            fn_800F00D4(0, p->mpState, &message, p);
+            PlyrStateQueuePush(0, p->mpState, &message, p);
             CatchResetHeightBoost(p);
             return 1;
         }
@@ -654,7 +654,7 @@ extern "C" int PlayerActionCanDive(Object_80039F5C *p)
         }
         break;
     }
-    if (fn_8011E188() <= 30) {
+    if (AssignEngageSysGetFrames() <= 30) {
         result = 0;
     }
     return result;
@@ -668,7 +668,7 @@ extern "C" int PlayerActionTryDive(Object_80039F5C *p)
         result = 1;
         memset(&message, 0, 4);
         message.mId = 94;
-        fn_800F00D4(0, p->mpState, &message, p);
+        PlyrStateQueuePush(0, p->mpState, &message, p);
         fn_800AE7F0(13, p->mIdBytes[2], p);
         fn_800A8954(11, p->mIdBytes[2], p);
     }
@@ -716,7 +716,7 @@ extern "C" int PlayerActionDiveUpdate(Object_80039F5C *p)
         memset(&message, 0, 4);
         message.mId = 11;
         message.mUnknown1[0] = p->mUnknown9[0];
-        fn_800F05E4(0, p->mpState, &message, p);
+        PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
         pBlock1160->mUnknown52 = 0;
         result = 1;
     }

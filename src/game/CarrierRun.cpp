@@ -25,7 +25,7 @@
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_800F06F4.h"
+#include "game/PlyrStateQueueFind.h"
 #include <math.h>
 
 extern "C" {
@@ -41,11 +41,11 @@ void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
 int CatchUpAdjustMoveTimer(Object_80039F5C *p, int value);
-void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-void fn_800FD68C(Message_800F01CC *, void *, void *);
+void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
+void PlyrRunLegEncode(Message_800F01CC *, void *, void *);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
-void fn_8011168C(Object_80039F5C *p);
-int fn_80110824(Object_80039F5C *p, int a, int b, int c);
+void CarrierTightropeStart(Object_80039F5C *p);
+int CarrierSpinStart(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
@@ -103,7 +103,7 @@ int ScrmGetPlayTurnovers(void);
 float MathSin(int angle);
 int PlyrTackleRollKind(Object_80039F5C *p);
 int PlyrTackleStart(Object_80039F5C *p, int a, int b);
-int fn_80111090(Object_80039F5C *p, int a);
+int CarrierStiffArmStart(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
@@ -120,14 +120,14 @@ float fn_8012506C(Object_80039F5C *p, int kind);
 int fn_8011F59C(int a);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pOther, int kind);
 int fn_801067D8(Object_80039F5C *p);
-int fn_801064A4(Object_80039F5C *p, int a);
+int PitchStart(Object_80039F5C *p, int a);
 int ScrmIsNotReplay(void);
 int ScrmIsFieldFlipped(void);
 struct BigObj_t;
 BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
 float GameSkillJitterObstacleDistance(int team, float value);
 float SyncRandGetFloat(int a);
-int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
+int CarrierJukeStart(Object_80039F5C *p, int a, int b, int c);
 float fn_8011F4D4(void);
 int ScrmTestPlayFlag(int a);
 int CarrierRunTryJuke(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
@@ -148,7 +148,7 @@ extern "C" int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_8
 extern "C" int fn_80110EB0(Object_80039F5C *p, Object_80039F5C *pOther);
 
 extern "C" void fn_8009A8D4(void *p);
-extern "C" int fn_80103D6C(Object_80039F5C *p);
+extern "C" int AssignIsPassTarget(Object_80039F5C *p);
 extern "C" unsigned char fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
 
 extern "C" int fn_8009FB60(Object_80039F5C *p);
@@ -804,10 +804,10 @@ extern "C" int CarrierRunTryJuke(Object_80039F5C *p, Object_80039F5C *, float di
     }
     if (chance && SyncRandGetRange(0, 100) < chance) {
         if (!(ScrmGetDistanceToBounds(&p->mMotion.mPos) >= 5.0f)) {
-            if (fn_800F22D8(p, kind, side, 4)) {
+            if (CarrierJukeStart(p, kind, side, 4)) {
                 return 1;
             }
-        } else if (fn_800F22D8(p, kind, side, fn_800F2828(p, pOther))) {
+        } else if (CarrierJukeStart(p, kind, side, fn_800F2828(p, pOther))) {
             return 1;
         }
     }
@@ -830,7 +830,7 @@ extern "C" int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pO
             if ((direction - pMotion->mFacing & 0xFFFFFF) <= 0x7FFFFF) {
                 side = 2;
             }
-            if (fn_80110824(p, 2, side, 0)) {
+            if (CarrierSpinStart(p, 2, side, 0)) {
                 return 1;
             }
         }
@@ -890,7 +890,7 @@ extern "C" int CarrierRunTrySpin(Object_80039F5C *p, Object_80039F5C *pOther, fl
                 }
             }
             if (kind != 1 && SyncRandGetRange(0, 100) < ((unsigned int)(pRatings[0] >> 3) & 0x7FFFFFFF)
-                && fn_80110824(p, kind, side, fn_80110EB0(p, pOther))) {
+                && CarrierSpinStart(p, kind, side, fn_80110EB0(p, pOther))) {
                 return 1;
             }
         }
@@ -986,7 +986,7 @@ extern "C" int CarrierRunTryStiffArm(Object_80039F5C *p, Object_80039F5C *pOther
                     chance = 0;
                 }
             }
-            if (SyncRandGetRange(0, 100) < (unsigned int)chance && fn_80111090(p, side)) {
+            if (SyncRandGetRange(0, 100) < (unsigned int)chance && CarrierStiffArmStart(p, side)) {
                 return 1;
             }
         }
@@ -1038,7 +1038,7 @@ extern "C" int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *, float, 
         if (count + fn_8011F59C(1) > 1) result = 0;
     }
     if (result && fn_80105E90(p, other, 11)) {
-        result = fn_801064A4(p, fn_801067D8(p));
+        result = PitchStart(p, fn_801067D8(p));
     }
     return result;
 }
@@ -1123,7 +1123,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
     nearest = GameSkillJitterObstacleDistance(p->mIdBytes[2], nearest);
     if (found && !(nearest >= 3.0f)) {
         if (!(SyncRandGetFloat(0) >= 0.5f)) {
-            fn_800F22D8(p, 4, 1, 4);
+            CarrierJukeStart(p, 4, 1, 4);
         } else {
             CarrierMoveStart(p, 4);
         }
@@ -1299,7 +1299,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
         } else {
             message.mId = 33;
         }
-        fn_800F053C(0, p->mpState, &message, p);
+        PlyrStateQueueSet(0, p->mpState, &message, p);
         return 0;
     }
     if (PlyrTryQueueMsg62(p, 0, -1)) {
@@ -1366,7 +1366,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
     if (p->mpState->mId == 1) {
         CarrierRunCheckBlocked(p, pControl);
         CarrierRunCheckRunOut(p, pControl);
-        fn_8011168C(p);
+        CarrierTightropeStart(p);
     }
     return 0;
 }
