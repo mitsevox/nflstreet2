@@ -80,7 +80,7 @@ int TournamentClose(void);
 int TournamentOpen(int index);
 void UserStatsOpen(DbCursor *pObject, int index);
 void UserStatsClose(DbCursor *pObject);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 int MsgGameGetSetupState(void);
 void UserProfileSelect(signed char a, int b);
 void TeamTablesPurgeCreated(int tag);
@@ -793,7 +793,7 @@ int StoryTournamentOnGameEnd(void)
     if (_StoryTournament_pEvent == 0) {
         result = 0;
     } else {
-        int state = fn_80178AE0();
+        int state = ScrmGetWinner();
         result = 1;
         if (state == 1) {
             StoryTournamentRecordResult();

@@ -5,7 +5,7 @@
 
 extern "C" {
 void SpchIGGetPlayerCategory(int *pResult, int value);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 }
 
 static int _SpchIG_iStruggleTackler = 0;
@@ -15,7 +15,7 @@ extern "C" void SpchIGSayStruggleTackler(void)
     int result;
 
     SpchIGGetPlayerCategory(&result, _SpchIG_iStruggleTackler);
-    if (fn_80178320() == 0) {
+    if (ScrmGetDefenseTeam() == 0) {
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2022), 1, result);
     } else {
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4022), 1, result);

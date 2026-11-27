@@ -3,7 +3,7 @@
    gamebreakers) followed by a reply from the other team after a short pause, and one-off lines when
    an offensive player goes in motion or a defender shifts. */
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "engine/spchevnt.h"
 
 extern "C" {
@@ -13,11 +13,11 @@ void SpchIGGetScoreSituation(int *pResult);
 void SpchIGGetScoreMargin(int *pResult);
 void SpchIGGetPlayerCategory(int *pResult, int value);
 void SpchIGGetGamebreakerState(int *pResult);
-int fn_80177F70(void);
-int fn_80177F7C(void);
-int fn_80178194(void);
-int fn_80178308(void);
-int fn_80178360(void);
+int ScrmGetDown(void);
+int ScrmGetPlayDown(void);
+int ScrmGetYardsToGo(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetSnapDefense(void);
 int SysGetSystemTime(void);
 float SyncRandGetFloat(int stream);
 void SpchIGSayPreSnap(int side);
@@ -29,7 +29,7 @@ static float _SpchIG_fPreSnapDelay = 0.0f;
 extern "C" void SpchIGGetDownFlags(int *pResult)
 {
     *pResult = 16;
-    switch (fn_80177F70()) {
+    switch (ScrmGetDown()) {
     case 1:
         *pResult |= 1;
         break;
@@ -53,7 +53,7 @@ extern "C" void SpchIGGetDistanceFlags(int *pResult)
     int value;
 
     *pResult = 8;
-    value = fn_80178194();
+    value = ScrmGetYardsToGo();
     if (value == -1) {
         *pResult |= 4;
     } else if (value <= 5) {
@@ -65,7 +65,7 @@ extern "C" void SpchIGGetDistanceFlags(int *pResult)
 
 extern "C" void SpchIGGetLastPlayFlags(int *pResult)
 {
-    Object_8017886C *p = fn_8017886C();
+    ScrmPlayResult_t *p = ScrmGetPlayResult();
 
     *pResult = 0;
     if (!(p->mUnknown18 & 8)) {
@@ -90,7 +90,7 @@ extern "C" void SpchIGGetLastPlayFlags(int *pResult)
         if (p->mUnknown1D == 6 || p->mUnknown1D == 9) {
             *pResult |= 32;
         }
-    } else if (fn_80177F7C() != 6) {
+    } else if (ScrmGetPlayDown() != 6) {
         *pResult |= 4;
     }
     if (p->mUnknown1D == -2) {
@@ -110,7 +110,7 @@ extern "C" void SpchIGUpdatePreSnap(void)
 {
     if (_SpchIG_uPreSnapStartTime != 0) {
         if ((float)(SysGetSystemTime() - _SpchIG_uPreSnapStartTime) >= _SpchIG_fPreSnapDelay * 60.0f) {
-            SpchIGSayPreSnap(fn_80178360());
+            SpchIGSayPreSnap(ScrmGetSnapDefense());
             _SpchIG_uPreSnapStartTime = 0;
         }
     }
@@ -124,7 +124,7 @@ extern "C" void SpchIGSayDownAndDistance(void)
 
     SpchIGGetDownFlags(&result1);
     SpchIGGetDistanceFlags(&result2);
-    if (fn_80178360() == 0) {
+    if (ScrmGetSnapDefense() == 0) {
         SpchIGGetPlayerCategory(&result3, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2002), 3, result1, result2, result3);
     } else {
@@ -151,12 +151,12 @@ extern "C" void SpchIGSayPreSnap(int side)
     SpchIGGetGamebreakerState(&result4);
     SpchIGGetScoreMargin(&result5);
     if (side == 0) {
-        if (fn_80178360() == 0) {
+        if (ScrmGetSnapDefense() == 0) {
             gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2012), 3, result1, result2, result3);
         } else {
             gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x2003), 5, result1, result2, result3, result4, result5);
         }
-    } else if (fn_80178360() == 0) {
+    } else if (ScrmGetSnapDefense() == 0) {
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4003), 5, result1, result2, result3, result4, result5);
     } else {
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x4012), 3, result1, result2, result3);
@@ -167,7 +167,7 @@ extern "C" void SpchIGSayDefenseShift(void)
 {
     int result;
 
-    if (fn_80178360() == 0) {
+    if (ScrmGetSnapDefense() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x200C), 1, result);
     } else {
@@ -180,7 +180,7 @@ extern "C" void SpchIGSayOffenseMotion(void)
 {
     int result;
 
-    if (fn_80178308() == 0) {
+    if (ScrmGetOffenseTeam() == 0) {
         SpchIGGetPlayerCategory(&result, SpchIGGetTeamPlayer(0));
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x201A), 1, result);
     } else {

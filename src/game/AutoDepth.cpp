@@ -9,7 +9,7 @@
 
 extern "C" {
 int fn_801486A0(void);
-unsigned int fn_80178DC8(void);
+unsigned int ScrmGetRosterPlayerCount(void);
 void TstrDbOpen(DbCursor *pObject);
 void TstrDbClose(DbCursor *pObject);
 int TstrDbSeek(DbCursor *pObject, int value, int *pResult);
@@ -202,7 +202,7 @@ void AutoDepthFillChart(int value, int *list, int *ids)
     unsigned int score;
     int category;
     AutoDepthBuild(value, list, 0);
-    for (i = 0; i < fn_80178DC8(); i++) {
+    for (i = 0; i < ScrmGetRosterPlayerCount(); i++) {
         switch (fn_801486A0()) {
         case 3: category = _AutoDepth_aOffenseOrder3[i]; break;
         case 4: category = _AutoDepth_aOffenseOrder4[i]; break;
@@ -213,7 +213,7 @@ void AutoDepthFillChart(int value, int *list, int *ids)
         AutoDepthSetExcluded(id, 1);
     }
     AutoDepthSetAllExcluded(0);
-    for (i = 0; i < fn_80178DC8(); i++) {
+    for (i = 0; i < ScrmGetRosterPlayerCount(); i++) {
         switch (fn_801486A0()) {
         case 3: category = _AutoDepth_aDefenseOrder3[i]+7; break;
         case 4: category = _AutoDepth_aDefenseOrder4[i]+7; break;

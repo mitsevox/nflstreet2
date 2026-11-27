@@ -1,13 +1,13 @@
 #ifndef GAME_PLAN_80121264_H
 #define GAME_PLAN_80121264_H
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 /* 48-byte entry of Plan_80121264; the array fills +0 to +1440. */
 struct Entry_80120E98 {
-    Point_8017886C *mpUnknown0;
-    Point_8017886C *mpUnknown4;
-    Point_8017886C mUnknown8;
+    FieldPoint_t *mpUnknown0;
+    FieldPoint_t *mpUnknown4;
+    FieldPoint_t mUnknown8;
     int mUnknown16;
     int mUnknown20;
     int mUnknown24;
@@ -24,7 +24,7 @@ struct Entry_80120E98 {
 struct Entry_801230B8 {
     Entry_80120E98 *mpUnknown0;
     Entry_80120E98 *mpUnknown4;
-    Point_8017886C mUnknown8;
+    FieldPoint_t mUnknown8;
     int mUnknown16;
     float mUnknown20;
     float mUnknown24;

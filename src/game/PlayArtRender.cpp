@@ -3,11 +3,11 @@
    and frees. */
 
 #include "game/Vec2Distance.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/PlayArtState.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Object_80039F5C.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/ResLoad.h"
 #include <dolphin/mtx.h>
 #include <dolphin/gx/GXGeometry.h>
@@ -59,11 +59,11 @@ static unsigned char _PlayArtRender_aIconRows[6] = {2, 3, 0, 0, 1, 0};
 extern "C" {
 int fn_800BA6F8(void);
 int FELoopIsMainFEActive(void);
-int fn_80177F70(void);
-float fn_80178298(void);
-float fn_80178A2C(void);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetDown(void);
+float ScrmGetLineToGain(void);
+float ScrmGetGoalLineY(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 void MatSetStack(int);
 void MatPush(void);
 void MatPop(void);
@@ -170,7 +170,7 @@ extern "C" int PlayArtRenderSprite(int a,PlayArtQuadPoint_t *p,PlayArtVertex_t *
 {
     return PlayArtRenderTexQuad(a,p,uv,c,texture);
 }
-extern "C" int PlayArtRenderField(int a,Point_8017886C *)
+extern "C" int PlayArtRenderField(int a,FieldPoint_t *)
 {
     PlayArtQuadPoint_t p[4];
     PlayArtVertex_t uv[4];
@@ -186,7 +186,7 @@ extern "C" int PlayArtRenderField(int a,Point_8017886C *)
 extern "C" int PlayArtRenderRouteEnds(int a,PlayArtState_t *s,int)
 {
     int count;
-    if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
+    if (s->mUnknown2083) count = ScrmGetActivePlayerCount(ScrmGetOffenseTeam()); else count = ScrmGetActivePlayerCount(ScrmGetDefenseTeam());
     for (int i = 0; i < count; ++i) {
         for (int j = 0; j <= 11; ++j) {
             int kind = s->mUnknown19F0[i][j];
@@ -204,7 +204,7 @@ extern "C" int PlayArtRenderRouteEnds(int a,PlayArtState_t *s,int)
 extern "C" int PlayArtRenderPlayerIcons(int a,PlayArtState_t *s,int mirror)
 {
     int count;
-    if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
+    if (s->mUnknown2083) count = ScrmGetActivePlayerCount(ScrmGetOffenseTeam()); else count = ScrmGetActivePlayerCount(ScrmGetDefenseTeam());
     for (int i = 0; i < count; ++i) {
         if (s->mUnknown2134[i] <= 5) {
             PlayArtQuadPoint_t p[4];
@@ -237,7 +237,7 @@ extern "C" int PlayArtRenderRoutes(int a,PlayArtState_t *s,int)
 {
     int tiled=0;
     int count;
-    if (s->mUnknown2083) count = fn_80178D70(fn_80178308()); else count = fn_80178D70(fn_80178320());
+    if (s->mUnknown2083) count = ScrmGetActivePlayerCount(ScrmGetOffenseTeam()); else count = ScrmGetActivePlayerCount(ScrmGetDefenseTeam());
     int mode=-1;
     for (int i=0;i<count;++i) {
         int start=s->mUnknown940[i];int n=s->mUnknown940[i+1]-start;
@@ -266,9 +266,9 @@ extern "C" void PlayArtRenderDiagram(int a,PlayArtState_t *s,unsigned char mirro
 }
 extern "C" void PlayArtRenderAt(float x,float y,void *input,unsigned char mirror)
 {
-    PlayArtState_t *s=(PlayArtState_t *)input;GXColor c={255,255,255,255};float pos[3];pos[0]=x;pos[1]=y;pos[2]=0.0f;Mtx44 m;Point_8017886C point;
-    PlayArtRenderSetup();point=fn_80177FE0();Point_8017886C *pPoint=&point;
-    if(fn_80177F70()!=0&&fn_80177F70()!=6){float v=fn_80178298();if(v<fn_80178A2C()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())fn_80178298();}
+    PlayArtState_t *s=(PlayArtState_t *)input;GXColor c={255,255,255,255};float pos[3];pos[0]=x;pos[1]=y;pos[2]=0.0f;Mtx44 m;FieldPoint_t point;
+    PlayArtRenderSetup();point=ScrmGetBallSpot();FieldPoint_t *pPoint=&point;
+    if(ScrmGetDown()!=0&&ScrmGetDown()!=6){float v=ScrmGetLineToGain();if(v<ScrmGetGoalLineY()&&!fn_800BA6F8()&&!FELoopIsMainFEActive())ScrmGetLineToGain();}
     GXSetChanAmbColor(4,c);MatSetStack(VptGetMatrixStack());MatPush();MatScaleCol(1.0f,1.0f,0.0f);MatTranslate(pos);MatStore(m);GXLoadPosMtxImm(m,0);
     GXSetTevOp(GX_TEVSTAGE0, GX_REPLACE);GXSetBlendMode(0,0,0,5);int a=PlayArtRenderField(0,pPoint);GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);GXSetBlendMode(1,4,5,5);
     MatStore(m);GXLoadPosMtxImm(m,0);GXSetChanAmbColor(4,c);PlayArtRenderDiagram(a,s,mirror);GXSetBlendMode(0,0,0,5);MatPop();MatStore(m);GXLoadPosMtxImm(m,0);

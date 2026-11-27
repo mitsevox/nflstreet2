@@ -4,15 +4,15 @@
    camera around a target that can follow a player. Each frame the current
    shot is updated until its duration ends, then the next one starts; when
    the list is done the game returns to the normal camera. */
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/ScreenTransition.h"
 #include "game/GameCamera.h"
 #include "game/CamInterp.h"
 #include "game/CamEaseVec.h"
 #include "game/cammain.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmPlayResult.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Add.h"
 
@@ -109,7 +109,7 @@ void CamGameSelectCamera(int);
 GameCamera_t *CamGameGetCamera(int);
 void CamGameChangeType(int, int);
 void CamBallRequestRestart(void);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void BannerShow(unsigned short, unsigned short, int, int);
 void BannerClear(int);
 void GameTextSetLastPlayer(unsigned short);
@@ -235,7 +235,7 @@ extern "C" CamShotRecord_t *CamShotAllocRecord(CamShotState_t *p)
 }
 extern "C" void CamShotSetTeamBlockFlag(int team, int flag)
 {
-    int count = fn_80178D18((unsigned char)team);
+    int count = ScrmGetTeamPlayerCount((unsigned char)team);
     for (int i = 0; i < count; ++i) {
         Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
         if (p) {
@@ -248,7 +248,7 @@ extern "C" void CamShotSetTeamBlockFlag(int team, int flag)
 extern "C" void CamShotSetTeamPlayerFlag(int team, int flag)
 {
     if (fn_800AD9B4() == 1) {
-        int count = fn_80178D18((unsigned char)team);
+        int count = ScrmGetTeamPlayerCount((unsigned char)team);
         for (int i = 0; i < count; ++i) {
             Object_80039F5C *p = PlyrGet((unsigned char)team, (unsigned short)i);
             if (flag) p->mFlags &= ~0x10;
@@ -286,7 +286,7 @@ extern "C" void CamShotNextRecord(CamShotState_t *s)
                 while (b->mPosition.mZ.mStart > 360.0f) b->mPosition.mZ.mStart -= 360.0f;
                 while (b->mPosition.mZ.mTarget > 360.0f) b->mPosition.mZ.mTarget -= 360.0f;
             }
-            if (fn_801784C4()) { CamEaseVecFlip(&b->mPosition); CamEaseVecFlip(&b->mTarget); }
+            if (ScrmIsFieldFlipped()) { CamEaseVecFlip(&b->mPosition); CamEaseVecFlip(&b->mTarget); }
             if ((b->mFlags & 2) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, _CamShot_iFadeTime, 0x808080, 0);
             if ((b->mFlags & 0x100) && ScreenTransCanCapture(0x23000)) ScreenTransStart(1, 12, 0x808080, 0);
             break;
@@ -294,7 +294,7 @@ extern "C" void CamShotNextRecord(CamShotState_t *s)
         case 0: {
             CamShotFixed_t *b = &r->mData.m0;
             if (b->mCallback) { entry.mType = 0; entry.mpData = b; b->mCallback(&entry); }
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 b->mTarget.mX = -b->mTarget.mX; b->mTarget.mY = -b->mTarget.mY;
                 b->mY.mStart = -b->mY.mStart; b->mY.mValue = -b->mY.mValue; b->mY.mTarget = -b->mY.mTarget;
             }
@@ -336,7 +336,7 @@ extern "C" void CamShotAddFixed(CamShotState_t *s, CamShotFixedDesc_t *d)
     Vector_80039F5C pos, end;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     end.mX = d->mEndPosition.mX; end.mY = d->mEndPosition.mY; end.mZ = d->mEndPosition.mZ;
-    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); Vec2Add(&pos, &pos, &point); Vec2Add(&end, &end, &point); }
+    if (d->mFlags & 1) { FieldPoint_t point; point = ScrmGetBallSpot(); Vec2Add(&pos, &pos, &point); Vec2Add(&end, &end, &point); }
     b->mCallback = d->mCallback;
     pTarget->mX = d->mTarget.mX; pTarget->mY = d->mTarget.mY; pTarget->mZ = d->mTarget.mZ;
     b->mUnknown70 = d->mUnknown48; b->mUnknown72 = d->mUnknown4A;
@@ -358,7 +358,7 @@ extern "C" void CamShotAddFollow(CamShotState_t *s, CamShotFollowDesc_t *d)
     z.mX = d->mEndAngles.mX; z.mY = d->mEndAngles.mY; z.mZ = d->mEndAngles.mZ;
     pos.mX = d->mPosition.mX; pos.mY = d->mPosition.mY; pos.mZ = d->mPosition.mZ;
     target.mX = d->mTarget.mX; target.mY = d->mTarget.mY; target.mZ = d->mTarget.mZ;
-    if (d->mFlags & 1) { Point_8017886C point; point = fn_80177FE0(); Vec2Add(&pos, &pos, &point); Vec2Add(&target, &target, &point); }
+    if (d->mFlags & 1) { FieldPoint_t point; point = ScrmGetBallSpot(); Vec2Add(&pos, &pos, &point); Vec2Add(&target, &target, &point); }
     if (d->mRef) {
         Object_80039F5C *p = fn_8009BCE8(&d->mRef);
         if (p->mIdBytes[3] == 1) target.mZ += p->mUnknown2900 * 0.027777778f - 2.03f;

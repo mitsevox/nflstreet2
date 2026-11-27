@@ -37,8 +37,8 @@ int VptManagerPopCamera(void *pObject, void *pItem);
 int VptManagerReplaceCamera(void *pObject, void *pItem, void *pOther);
 void fn_800AD9C0(float value);
 void CamPlaySetYOffset(float value);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 void *CamCreate(int a, CameraDesc_t *pDesc);
 void CamDestroy(void *pCamera);
 void *SyncStateGetData(void *pHandle);
@@ -230,8 +230,8 @@ void CamGameSuspendAll(void)
     CamGameState_t *pState = _CamGame_pState;
     int unassigned = 0;
 
-    if (fn_800B65A0(fn_80178308()) == 0xFF) {
-        unassigned = fn_800B65A0(fn_80178320()) == 0xFF;
+    if (fn_800B65A0(ScrmGetOffenseTeam()) == 0xFF) {
+        unassigned = fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF;
     }
     if (!unassigned && fn_800AD9B4() == 3) {
         pState->mSet.mUnknown14 = 1;

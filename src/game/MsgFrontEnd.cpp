@@ -16,7 +16,7 @@
 #include "game/DepthChartSide.h"
 #include "game/SndgMusic.h"
 #include "game/GameOptions.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
@@ -191,8 +191,8 @@ int fn_801486A0(void);
 void fn_80148AF8(MiniGameC *pObject);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 int MsgGameGetSetupState(void);
 void MsgGameIgnoreValue(int a);
 void MsgGameSetSetupState(int a);
@@ -2345,7 +2345,7 @@ int MsgTeamSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int
         break;
     case 0x149:
         DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
-        *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
+        *pArgs[3].pi = ScrmGetActivePlayerCount(pArgs[0].i ? ScrmGetOffenseTeam() : ScrmGetDefenseTeam());
         break;
     case 0x14A: {
         int *pList = pArgs[1].pi;

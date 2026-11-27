@@ -45,7 +45,7 @@ CamCurveActorEntry_t *CamCurveGetActorEntry(GameCamera_t *);
 int FELoopIsMainFEActive(void);
 void CamSetFieldOfView(GameCamera_t *,float,float);
 CamCurveActorSettings_t *fn_800963EC(Character_80093BCC *);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 GameCamera_t *CamGameGetCamera(int);
 void CamFreeSetPos(GameCamera_t *,float,float,float);
 void CamFreeSetAngle(GameCamera_t *,int,int,int);
@@ -242,7 +242,7 @@ extern "C" void CamCurveProcess(GameCamera_t *camera)
         Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
         int mirror = 0;
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
-            if ((playback->mUnknownC & 0x10) && fn_801784C4() != 0) mirror = 1;
+            if ((playback->mUnknownC & 0x10) && ScrmIsFieldFlipped() != 0) mirror = 1;
             actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
             CamCurveApplyPlaybackCurves(camera, actor, playback->mUnknown24, mirror);
         }
@@ -278,7 +278,7 @@ extern "C" void CamCurveStart(GameCamera_t *camera)
         Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
         int mirror = 0;
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
-            if ((playback->mUnknownC & 0x10) && fn_801784C4() != 0) mirror = 1;
+            if ((playback->mUnknownC & 0x10) && ScrmIsFieldFlipped() != 0) mirror = 1;
             Actor_801C009C *actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
             CamCurveApplyPlaybackCurves(camera, actor, playback->mUnknown24, mirror);
         }

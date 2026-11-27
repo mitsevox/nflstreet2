@@ -1,10 +1,10 @@
 #ifndef GAME_SCRMRULESET_H
 #define GAME_SCRMRULESET_H
 
-/* Scoring and game-end rules of a scrimmage, defined in cu_80176F18: the score
+/* Scoring and game-end rules of a scrimmage, defined in ScrmRules.cpp: the score
    limit, the winner, the game clock and where the ball is placed. The current
    rule object is held in the scrimmage state block and called through the
-   fn_80178xxx wrappers. Arguments named team are 0 or 1. */
+   Scrm wrappers (ScrmGetWinner, ScrmAwardWin and the others). Arguments named team are 0 or 1. */
 class ScrmRuleSet {
 public:
     virtual int GetScoreLimit();

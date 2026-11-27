@@ -8,7 +8,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/MiniGameC.h"
 #include "game/Ball.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/AutoDepth.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_8009D990.h"
@@ -31,18 +31,18 @@
 #include "game/GameOptions.h"
 #include "game/fn_800F06F4.h"
 #include "game/fn_80218FC4.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/GameCamera.h"
 #include "game/cammain.h"
 #include "game/Record_800B15FC.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Vec2Distance.h"
 #include "game/fn_801D2B7C.h"
 #include "game/SyncStateRegister.h"
 #include "game/DbTableCursorInline.h"
 
 struct Vector_80039F5C;
-struct Point_8017886C;
+struct FieldPoint_t;
 struct Block_80170E64;
 class Record_8005CE10;
 
@@ -101,7 +101,7 @@ struct Entry_8015005C {
 struct Table_8015005C {
     Entry_8015005C mEntries[4];
     Vector_80039F5C mUnknown80;
-    Point_8017886C mUnknown92[3];
+    FieldPoint_t mUnknown92[3];
     unsigned char mUnknown116;
     unsigned char mUnknown117;
     unsigned char mCount;
@@ -779,7 +779,7 @@ void fn_800B6474(int index, unsigned char team);
 void fn_800B6658(Object_80039F5C *p);
 void fn_800B6714(Object_80039F5C *p, int index);
 void MiniGameBenchPlayer(Object_80039F5C *p);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 int fn_8022B414(int handle, unsigned int tag, int *pValue);
 void fn_80148D20(AutoDepthPlayer_t *pRecords, int *pValues,
                  DbCursor *pQuery);
@@ -802,18 +802,18 @@ int fn_800C8704(int *pFirst, int *pSecond);
 int fn_800C8744(int team);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
 int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
-void fn_80177F88(int value);
+void ScrmSetDown(int value);
 int fn_800A2178(void);
-void fn_80178CD8(int value);
-int fn_80178308(void);
-int fn_80178348(void);
-void fn_8017833C(int team);
+void ScrmPlaceBallForDrive(int value);
+int ScrmGetOffenseTeam(void);
+int ScrmGetSnapOffense(void);
+void ScrmSetOffenseTeam(int team);
 extern unsigned char lbl_803EB2B5;
 extern char *lbl_803EB2B0;
 extern void *gUISMainInfo;
 extern int lbl_802DE3D0[];
-int fn_801787DC(int team);
-void fn_801787FC(int team, short value);
+int ScrmGetTeamScore(int team);
+void ScrmSetTeamScore(int team, short value);
 void fn_800C87CC(int team, int value);
 void ClockRuleClearFlags(unsigned int mask);
 void ClockRuleSetFlags(unsigned int mask);
@@ -821,14 +821,14 @@ void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 void fn_8009D888(int index, int value);
 void fn_8009D944(int index);
-float fn_80178A2C(void);
-void fn_80178A20(float value);
-void fn_80178E88(float v);
-int fn_80178320(void);
-int fn_80178360(void);
-void fn_80178370(void);
-int fn_801783AC(int bit);
-void fn_801790D0(int team, float a, float b);
+float ScrmGetGoalLineY(void);
+void ScrmSetFirstDownInterval(float value);
+void ScrmSetDriveStartDistance(float v);
+int ScrmGetDefenseTeam(void);
+int ScrmGetSnapDefense(void);
+void ScrmEndPlay(void);
+int ScrmTestPlayFlag(int bit);
+void ScrmSetSetupDepth(int team, float a, float b);
 void HudClearEvent71(void);
 void TutorialReleasePause(void);
 int MsgBoxIsClosed(void);
@@ -861,7 +861,7 @@ void fn_800BFAB4(PreSnapPhase *pObject);
 void fn_800A039C(LivePlayPhase *pObject);
 void fn_800B9598(PostPlayPhase *pObject);
 void fn_800AACB8(Class_80297B90 *pObject);
-void fn_80178F20(ScrmRuleSet *pObject);
+void ScrmSetRuleSet(ScrmRuleSet *pObject);
 unsigned char DepthChartGetEntry(int group, int index, int *pValue);
 int PlayerDbSeekOriginalId(Object_8008044C *pObject, int a, int *pResult);
 int PlayerDbGetId(Object_8008044C *pObject);
@@ -894,7 +894,7 @@ void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
 void PlyrClearPendingMsg(Object_80039F5C *pPlayer, int value);
 void Vec2FromAngle(float *pOut, int angle, float length);
-float fn_80178A08(void);
+float ScrmGetSidelineX(void);
 extern int lbl_803EB2DC;
 extern Object_80039F5C *lbl_803EB2E0;
 extern int lbl_802DE9CC[];
@@ -907,8 +907,8 @@ GameCamera_t *CamGameGetCamera(int index);
 void CamPlaySetYOffset(float value);
 void PlaceSixPlayerFormation(void);
 void PlyrStarSetShown(int a, int b);
-float fn_80178A44(void);
-void fn_801780A8(Point_8017886C pos);
+float ScrmGetEndLineY(void);
+void ScrmSetBallSpot(FieldPoint_t pos);
 void CamGameSetFocusAll(int a, int b);
 void PlayerMoveResetAll(void);
 void fn_800B14E4(void);
@@ -925,12 +925,12 @@ void fn_800F0278(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Obje
                  unsigned char position);
 void fn_80120618(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-int fn_801787A0(void);
-int fn_80178508(void *pPos, float *pOut, int a);
-void fn_801783D0(int bit, int on);
+int ScrmIsNotReplay(void);
+int ScrmClassifyPosition(void *pPos, float *pOut, int a);
+void ScrmSetPlayFlag(int bit, int on);
 void PossFumble(Object_80039F5C *p);
 void fn_8014D210(Object_80039F5C *p, int a, int b);
-void fn_80177C44(int value);
+void ScrmSetPlayTurnovers(int value);
 void RefreshSixPlayerScoreRows(void *p);
 int BallStateGet(Ball_t *pBall, int *pOut);
 float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
@@ -970,25 +970,25 @@ void fn_8015013C(MiniGameJumpBallData *p, int id, int flag);
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void BallSetSpinMode(Ball_t *pBall, int value);
 void BallPrimeKickUp(Ball_t *pBall);
-void fn_8014FFC4(Point_8017886C *pPoint);
+void fn_8014FFC4(FieldPoint_t *pPoint);
 extern int lbl_802DEA78[];
-int fn_80177C38(void);
-void fn_80177C50(int a);
+int ScrmGetPlayTurnovers(void);
+void ScrmChangePossession(int a);
 void fn_8011DF90(void);
 void PlayBookRestoreSelection(int team);
 void fn_8009B924(void);
 int fn_801529C0(MiniGameJumpBallC *p);
 void *SyncStateGetData(void *pHandle);
 void PlyrStarSetBallRingEnabled(unsigned char value);
-Point_8017886C fn_80177FFC(int team);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 void HudSetScoreTableRows(int a);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 int MathAngleDiff(int a, int b);
 int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex);
 void fn_80152940(MiniGameJumpBallC *p, int index, MiniGameSlotInfo_t *pInfo);
 MiniGameOpenFieldData *fn_80155128(MiniGameC *p);
-int fn_800948E4(Object_8017886C *p);
-void fn_80177E6C(int a, int b);
+int fn_800948E4(ScrmPlayResult_t *p);
+void ScrmMirrorField(int a, int b);
 int FormationLineupSwapAllUser(int a, int b, int c, int d);
 void HudPost3AOff(void);
 void HudSetScoreTableHeaders(const char *pText0, const char *pText1);
@@ -1007,20 +1007,20 @@ extern int lbl_802DEB78[];
 char *strcpy(char *pDest, const char *pSource);
 extern int lbl_802DEB08[];
 extern int lbl_802DEB40[];
-int fn_80178EA0(int team);
-int fn_80178EE0(int team);
+int ScrmGetGoalTotal(int team);
+int ScrmGetGoalCount(int team);
 int MiniGameOpenFieldGetPlayerColor(MiniGameC *p, int team, unsigned char index);
 Object_80039F5C *fn_80154FC0(MiniGameOpenFieldC *p, int team, int index);
 extern unsigned char lbl_803EB2FC;
 extern unsigned char lbl_803EB2FD;
-int fn_80177F70(void);
+int ScrmGetDown(void);
 float SyncRandGetFloat(int stream);
-unsigned short fn_80178E94(void);
+unsigned short ScrmGetDriveCount(void);
 void fn_80155D7C(MiniGameC *p);
 extern char *lbl_803EB2F8;
 void fn_80155A7C(MiniGameC *p, unsigned char team, int kind, int value);
 void fn_80155BF4(MiniGameC *p, unsigned char team, int kind, int value, int flag);
-void fn_8017CAC0(void (*pCallback)(unsigned int, int, int));
+void ScrmStatSetEventCallback(void (*pCallback)(unsigned int, int, int));
 void fn_801556D0(unsigned int kind, int value, int flag);
 unsigned char fn_80155D38(MiniGameC *p, int team);
 }
@@ -1115,7 +1115,7 @@ void MiniGameLineUpPlayers(void)
             p->mUnknown512.mUnknown4 = 0x800000;
             p->mUnknown512.mUnknown0 = 0.14f;
             p->mFlags &= ~0x40000U;
-            p->mUnknown9[2] = (unsigned int)index < (unsigned int)fn_80178D70((unsigned char)team);
+            p->mUnknown9[2] = (unsigned int)index < (unsigned int)ScrmGetActivePlayerCount((unsigned char)team);
         }
     }
 }
@@ -1264,7 +1264,7 @@ void MiniGameC::AutoFillDepthChart(int value, int *pList, int *pIds, unsigned in
 int MiniGameC::IsWinnerUserTeam()
 {
     unsigned char result = 0;
-    unsigned char team = (unsigned char)fn_80178AE0();
+    unsigned char team = (unsigned char)ScrmGetWinner();
     if (team != 2) {
         result = fn_800B65A0(team) != 255;
     }
@@ -1855,12 +1855,12 @@ int MiniGame2MinuteScrmRulesC::GetGameTime()
 void MiniGame2MinuteScrmRulesC::ResetPlaySpot()
 {
     ScrmRuleSet::ResetPlaySpot();
-    fn_80177F88(1);
-    if(fn_800A2178()==0 || fn_800A2178()==11)fn_80178CD8(1);
-    int team=fn_80178308();
-    if(team!=fn_80178348()) {
-        fn_8017833C(fn_80178348());
-        fn_80178CD8(1);
+    ScrmSetDown(1);
+    if(fn_800A2178()==0 || fn_800A2178()==11)ScrmPlaceBallForDrive(1);
+    int team=ScrmGetOffenseTeam();
+    if(team!=ScrmGetSnapOffense()) {
+        ScrmSetOffenseTeam(ScrmGetSnapOffense());
+        ScrmPlaceBallForDrive(1);
     }
 }
 
@@ -1870,8 +1870,8 @@ int MiniGame2MinuteScrmRulesC::GetScoreLimit()
 int MiniGame2MinuteScrmRulesC::GetWinner()
 {
     int result = 2;
-    int first = fn_801787DC(0);
-    int second = fn_801787DC(1);
+    int first = ScrmGetTeamScore(0);
+    int second = ScrmGetTeamScore(1);
     if (lbl_803EB2B4 && fn_8009D990(1) == 0) {
         if (first > second) {
             result = 0;
@@ -1895,12 +1895,12 @@ void MiniGame2MinuteScrmRulesC::AwardWin(int team)
     lbl_803EB2B4 = 1;
     unsigned short points;
     if (team == 0) {
-        points = fn_801787DC(1);
+        points = ScrmGetTeamScore(1);
     } else {
-        points = fn_801787DC(0);
+        points = ScrmGetTeamScore(0);
     }
     int score = points + 1;
-    fn_801787FC(team, score);
+    ScrmSetTeamScore(team, score);
     fn_800C87CC(team, score);
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
@@ -1910,13 +1910,13 @@ void MiniGame2MinuteScrmRulesC::AwardWin(int team)
 void MiniGame2MinutePreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
-    fn_80178E88(fn_80178A2C() * 2.0f - 20.0f);
-    fn_801790D0(fn_80178308(), 0.0f, 0.0f);
-    fn_801790D0(fn_80178320(), 5.0f, 3.0f);
-    fn_80178A20(fn_80178A2C() * 2.0f);
+    ScrmSetDriveStartDistance(ScrmGetGoalLineY() * 2.0f - 20.0f);
+    ScrmSetSetupDepth(ScrmGetOffenseTeam(), 0.0f, 0.0f);
+    ScrmSetSetupDepth(ScrmGetDefenseTeam(), 5.0f, 3.0f);
+    ScrmSetFirstDownInterval(ScrmGetGoalLineY() * 2.0f);
     ClockRuleSetFlags(2048);
     lbl_803EB2B4 = 0;
-    fn_8017833C(1);
+    ScrmSetOffenseTeam(1);
     lbl_803EB2B5 = 0;
     HudClearEvent71();
     TutorialReleasePause();
@@ -1977,9 +1977,9 @@ void MiniGame2MinuteGameEndC::vfn_09()
 
 void MiniGame2MinutePlayCallC::vfn_03(float dt)
 {
-    MiniGameBenchPlayersFrom(fn_80178308(), 3);
-    MiniGameBenchPlayersFrom(fn_80178320(), 2);
-    if (fn_800B65A0(fn_80178308()) != 255) {
+    MiniGameBenchPlayersFrom(ScrmGetOffenseTeam(), 3);
+    MiniGameBenchPlayersFrom(ScrmGetDefenseTeam(), 2);
+    if (fn_800B65A0(ScrmGetOffenseTeam()) != 255) {
         Class_80297B50::vfn_03(dt);
     } else {
         BallResetToSpot();
@@ -1988,10 +1988,10 @@ void MiniGame2MinutePlayCallC::vfn_03(float dt)
 
 void MiniGame2MinutePlayCallC::vfn_04(float dt)
 {
-    if (fn_800B65A0(fn_80178308()) != 255) {
+    if (fn_800B65A0(ScrmGetOffenseTeam()) != 255) {
         Class_80297B50::vfn_04(dt);
     } else {
-        int team = fn_80178308();
+        int team = ScrmGetOffenseTeam();
         int other = team == 0;
         PlayBookSetFormationType(team, 1);
         PlayBookSetFormationType(other, 11);
@@ -2010,13 +2010,13 @@ void MiniGame2MinutePlayCallC::vfn_04(float dt)
 
 void MiniGame2MinutePlayCallC::vfn_05(float dt)
 {
-    if (fn_800B65A0(fn_80178308()) != 255) {
+    if (fn_800B65A0(ScrmGetOffenseTeam()) != 255) {
         Class_80297B50::vfn_05(dt);
     } else {
         fn_8009D888(0, 10);
         CamGameResumeAll();
-        ScrmTeamPlaceInHuddle(fn_80178308());
-        ScrmTeamPlaceInHuddle(fn_80178320());
+        ScrmTeamPlaceInHuddle(ScrmGetOffenseTeam());
+        ScrmTeamPlaceInHuddle(ScrmGetDefenseTeam());
         fn_8009D944(1);
         fn_8009D944(0);
         short value = 9 - SyncRandGetRange(0, 5);
@@ -2033,14 +2033,14 @@ void MiniGame2MinutePrePlayC::OnEnter(float dt)
 {
     MiniGameLineUpPlayers();
     PreSnapPhase::OnEnter(dt);
-    MiniGameBenchPlayersFrom(fn_80178308(), 3);
-    MiniGameBenchPlayersFrom(fn_80178320(), 2);
+    MiniGameBenchPlayersFrom(ScrmGetOffenseTeam(), 3);
+    MiniGameBenchPlayersFrom(ScrmGetDefenseTeam(), 2);
     short value = 9 - SyncRandGetRange(0, 5);
     lbl_803EABA4->fn_800C02EC(value);
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, ScrmGetOffenseTeam()));
 }
 
 void MiniGame2MinutePrePlayC::OnUpdate(float dt)
@@ -2048,7 +2048,7 @@ void MiniGame2MinutePrePlayC::OnUpdate(float dt)
     PreSnapPhase::OnUpdate(dt);
     MiniGameGetCurrent()->vfn_15();
     if (fn_8009D990(1) == 0) {
-        fn_80178370();
+        ScrmEndPlay();
     }
 }
 
@@ -2062,12 +2062,12 @@ void MiniGame2MinuteDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
     MiniGameGetCurrent()->vfn_15();
-    if (fn_8011F1CC() && fn_801783AC(0) && !fn_801783AC(13) && !fn_801783AC(1) &&
-        !fn_801783AC(20)) {
-        fn_80178370();
+    if (fn_8011F1CC() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
+        !ScrmTestPlayFlag(20)) {
+        ScrmEndPlay();
         HudShowAlert("Passer Cannot Run!");
-    } else if (fn_80178308() != fn_80178348()) {
-        fn_80178370();
+    } else if (ScrmGetOffenseTeam() != ScrmGetSnapOffense()) {
+        ScrmEndPlay();
     }
 }
 
@@ -2099,7 +2099,7 @@ void MiniGame2MinutePostPlayC::Finish(float dt)
         ClockRuleClearFlags(2048);
         fn_8009D8CC(1);
         ClockRuleClearFlags(16);
-        if (fn_80178AE0() == 2) {
+        if (ScrmGetWinner() == 2) {
             if (lbl_803EB2B4) {
                 lbl_803EB2B5 = 1;
             }
@@ -2108,8 +2108,8 @@ void MiniGame2MinutePostPlayC::Finish(float dt)
             } else {
                 fn_8009D964(1, 120);
             }
-            fn_8017833C(fn_80178360());
-            fn_80178CD8(1);
+            ScrmSetOffenseTeam(ScrmGetSnapDefense());
+            ScrmPlaceBallForDrive(1);
             lbl_803EB2B4 = !lbl_803EB2B4;
             fn_800AD910(5, 0.0f);
         } else {
@@ -2162,7 +2162,7 @@ void MiniGame2MinuteC::vfn_01()
     fn_800B9598(&mpUnknown1C->mUnknown10);
     fn_800AACB8(&mpUnknown1C->mUnknown14);
     mpUnknown1C->mUnknown18.ResetGame(2);
-    fn_80178F20(&mpUnknown1C->mUnknown18);
+    ScrmSetRuleSet(&mpUnknown1C->mUnknown18);
     mpUnknown1C->mUnknown38 = GameOptionsGet(19);
     if (mpUnknown1C->mUnknown38 != 0) {
         GameOptionsSet(19, 0);
@@ -2209,7 +2209,7 @@ void MiniGame2MinuteC::vfn_02()
     if (mpUnknown1C->mUnknown1C != 0) {
         GameOptionsSet(14, mpUnknown1C->mUnknown1C);
     }
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpUnknown1C;
     mpUnknown1C = 0;
 }
@@ -2221,7 +2221,7 @@ int MiniGame2MinuteC::vfn_08(int a)
 
 int MiniGame2MinuteC::vfn_05(int team)
 {
-    if (team == fn_80178308()) {
+    if (team == ScrmGetOffenseTeam()) {
         return 3;
     }
     return 2;
@@ -2271,7 +2271,7 @@ void fn_8014BA20(MiniGame2MinuteC *p, int team, Stats_8005C844 *pStats)
     for (unsigned char i = 0; i < 3; i++) {
         pStats->mpPlayers[i] = PlyrFindById(p->mpUnknown1C->mUnknown20[team][i]);
     }
-    pStats->mValues[0] = fn_801787DC((unsigned char)team);
+    pStats->mValues[0] = ScrmGetTeamScore((unsigned char)team);
     fn_8022B7A4(handle, 0x74727374, &value);
     pStats->mValues[1] += value;
     fn_8022B7A4(handle, 0x74507374, &value);
@@ -2291,17 +2291,17 @@ int MiniGame2MinuteC::vfn_32(int team, int kind)
     int result = 0;
     switch (kind) {
     case 16:
-        if (fn_801787DC(team) >= fn_801787DC((team + 1) & 1) - 3 && vfn_34(2, team, 100, 1)) {
+        if (ScrmGetTeamScore(team) >= ScrmGetTeamScore((team + 1) & 1) - 3 && vfn_34(2, team, 100, 1)) {
             result = 1;
         }
         break;
     case 20:
-        if (fn_801787DC(team) > 99) {
+        if (ScrmGetTeamScore(team) > 99) {
             result = 1;
         }
         break;
     case 21:
-        if (fn_801787DC(team) < 0) {
+        if (ScrmGetTeamScore(team) < 0) {
             result = 1;
         }
         break;
@@ -2318,7 +2318,7 @@ int MiniGame2MinuteC::vfn_33(int kind, int team)
     case 16:
     case 20:
     case 21:
-        return fn_801787DC(team);
+        return ScrmGetTeamScore(team);
     default:
         return MiniGameC::vfn_33(kind, team);
     }
@@ -2552,7 +2552,7 @@ void MiniGame4On4PostPlayC::ShowResultText()
     if (fn_800A2178() == 14) {
         changed = 1;
         strcpy(text, lbl_803EB2CC);
-    } else if (fn_80178308() != fn_80178348()) {
+    } else if (ScrmGetOffenseTeam() != ScrmGetSnapOffense()) {
         changed = 1;
         strcpy(text, lbl_803EB2C8);
     }
@@ -2596,7 +2596,7 @@ void MiniGame4On4DuringPlayC::OnUpdate(float dt)
     if (fn_800A937C() == 0) {
         unsigned char i;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pPlayer = PlyrGet(fn_80178308(), i);
+            Object_80039F5C *pPlayer = PlyrGet(ScrmGetOffenseTeam(), i);
             if (fn_800F06F4(0, pPlayer->mpState, 18, 0xFFFF) != 0xFFFF) {
                 clear = 0;
             }
@@ -2604,7 +2604,7 @@ void MiniGame4On4DuringPlayC::OnUpdate(float dt)
                 clear = 0;
             }
         }
-        if (clear || fn_801783AC(13) || fn_801783AC(1)) {
+        if (clear || ScrmTestPlayFlag(13) || ScrmTestPlayFlag(1)) {
             fn_8009D8CC(5);
         }
         Object_80039F5C *pCarrier = BallGetCurrentHolder();
@@ -2612,14 +2612,14 @@ void MiniGame4On4DuringPlayC::OnUpdate(float dt)
         if (pCarrier) {
             special = pCarrier->mpState->mId == 16;
         }
-        if (fn_8011F1CC() && fn_801783AC(0) && !fn_801783AC(13) && !fn_801783AC(1) &&
-            !fn_801783AC(20) && !mUnknown4 && !special) {
-            fn_80178370();
+        if (fn_8011F1CC() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
+            !ScrmTestPlayFlag(20) && !mUnknown4 && !special) {
+            ScrmEndPlay();
             HudShowAlert(lbl_803EB2BC);
-        } else if (fn_80178308() != fn_80178348()) {
-            fn_80178370();
+        } else if (ScrmGetOffenseTeam() != ScrmGetSnapOffense()) {
+            ScrmEndPlay();
         } else if (fn_8009D990(5) == 0 && !mUnknown4) {
-            fn_80178370();
+            ScrmEndPlay();
             HudShowAlert(lbl_803EB2C0);
         }
     }
@@ -2637,10 +2637,10 @@ void MiniGame4On4PrePlayC::OnEnter(float dt)
 void MiniGame4On4PreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
-    fn_80178E88(5.0f);
-    fn_801790D0(fn_80178308(), 0.0f, 0.0f);
-    fn_801790D0(fn_80178320(), 3.0f, 0.0f);
-    fn_80178A20(fn_80178A2C());
+    ScrmSetDriveStartDistance(5.0f);
+    ScrmSetSetupDepth(ScrmGetOffenseTeam(), 0.0f, 0.0f);
+    ScrmSetSetupDepth(ScrmGetDefenseTeam(), 3.0f, 0.0f);
+    ScrmSetFirstDownInterval(ScrmGetGoalLineY());
     fn_8009D964(5, 5);
     lbl_803EB2D0 = 1;
     lbl_803EB2D1 = 0;
@@ -2722,7 +2722,7 @@ void MiniGame4On4C::vfn_01()
     fn_800B9598(&mpUnknown1C->mUnknown14);
     fn_800AACB8(&mpUnknown1C->mUnknown1C);
     mpUnknown1C->mUnknown18.ResetGame(2);
-    fn_80178F20(&mpUnknown1C->mUnknown18);
+    ScrmSetRuleSet(&mpUnknown1C->mUnknown18);
 }
 
 void MiniGame4On4PreGameC::ShowIntroScreen()
@@ -2786,7 +2786,7 @@ void MiniGame4On4C::vfn_02()
         GameOptionsSet(1, mpUnknown1C->mUnknown24);
     }
     mUnknown20 = -1;
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpUnknown1C;
     mpUnknown1C = 0;
 }
@@ -2935,7 +2935,7 @@ void fn_8014CCE8(MiniGameC *p, int team, Stats_8005CAE4 *pStats)
     for (unsigned char i = 0; i < 4; i++) {
         pStats->mpPlayers[i] = PlyrFindById(ids[i]);
     }
-    pStats->mValues[0] = fn_801787DC((unsigned char)team);
+    pStats->mValues[0] = ScrmGetTeamScore((unsigned char)team);
     fn_8022B7A4(handle, 0x74727374, &value);
     pStats->mValues[1] += value;
     fn_8022B7A4(handle, 0x74507374, &value);
@@ -3189,10 +3189,10 @@ void PlaceSixPlayerFormation(void)
         float degrees = sector * sectorWidth + SyncRandGetRange(0, (unsigned int)sectorWidth);
         float radius = spread + 8.0f;
         Vec2FromAngle(&pPlayer->mMotion.mPos.mX, (int)(degrees * 46603.378f), radius);
-        pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX < -fn_80178A08() ? -fn_80178A08() :
-            (pPlayer->mMotion.mPos.mX > fn_80178A08() ? fn_80178A08() : pPlayer->mMotion.mPos.mX);
-        pPlayer->mMotion.mPos.mY = pPlayer->mMotion.mPos.mY < -fn_80178A2C() ? -fn_80178A2C() :
-            (pPlayer->mMotion.mPos.mY > fn_80178A2C() ? fn_80178A2C() : pPlayer->mMotion.mPos.mY);
+        pPlayer->mMotion.mPos.mX = pPlayer->mMotion.mPos.mX < -ScrmGetSidelineX() ? -ScrmGetSidelineX() :
+            (pPlayer->mMotion.mPos.mX > ScrmGetSidelineX() ? ScrmGetSidelineX() : pPlayer->mMotion.mPos.mX);
+        pPlayer->mMotion.mPos.mY = pPlayer->mMotion.mPos.mY < -ScrmGetGoalLineY() ? -ScrmGetGoalLineY() :
+            (pPlayer->mMotion.mPos.mY > ScrmGetGoalLineY() ? ScrmGetGoalLineY() : pPlayer->mMotion.mPos.mY);
         pPlayer->mUnknown512.mUnknown0 = 1.0f;
         pPlayer->mUnknown512.mUnknown4 = ((int)(degrees * 46603.378f) + 0x800000) & 0xFFFFFF;
         pPlayer->mMotion.mFacing = pPlayer->mUnknown512.mUnknown4;
@@ -3296,7 +3296,7 @@ void MiniGameCrushCarrierRulesC::ResetGame(int team)
 void MiniGameCrushCarrierRulesC::ResetPlaySpot()
 {
     ScrmRuleSet::ResetPlaySpot();
-    fn_80178CD8(0);
+    ScrmPlaceBallForDrive(0);
 }
 
 void MiniGameCrushCarrierRulesC::AwardWin(int team)
@@ -3456,10 +3456,10 @@ void MiniGameCrushCarrierPrePlayC::OnEnter(float dt)
     PlyrStarSetShown(1, 1);
     MiniGameBenchPlayersFrom(1, 1);
     MiniGameBenchPlayersFrom(0, 5);
-    Point_8017886C pos = {0.0f, 0.0f};
-    pos.mY = -fn_80178A44();
-    fn_801780A8(pos);
-    fn_8017833C(1);
+    FieldPoint_t pos = {0.0f, 0.0f};
+    pos.mY = -ScrmGetEndLineY();
+    ScrmSetBallSpot(pos);
+    ScrmSetOffenseTeam(1);
     Object_80039F5C *pPlayer = PlyrGet(1, 0);
     if (pPlayer != BallGetCurrentHolder()) {
         BallGiveToPlayer(BallGetCurrent(), pPlayer);
@@ -3573,12 +3573,12 @@ void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
     }
     LivePlayPhase::OnUpdate(dt);
     fn_800B14E4();
-    if (fn_801787A0() == 0) {
+    if (ScrmIsNotReplay() == 0) {
         BallGetPosition(BallGetCurrent(), &pos);
         if (pCarrier) {
-            if (fn_80178508(&pCarrier->mMotion, 0, 0) > 2) {
-                fn_801783D0(3, 1);
-                fn_80178370();
+            if (ScrmClassifyPosition(&pCarrier->mMotion, 0, 0) > 2) {
+                ScrmSetPlayFlag(3, 1);
+                ScrmEndPlay();
                 StyleTrackerEndPlay();
             } else if ((pCarrier->mFlags & 0x800) &&
                        (pCarrier->mpState->mId == 10 || pCarrier->mpState->mId == 16 ||
@@ -3587,13 +3587,13 @@ void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
             } else {
                 fn_8014D210(pCarrier, 130, 10);
             }
-        } else if (fn_80178508(&pos, 0, 0) > 2) {
-            fn_801783D0(3, 1);
-            fn_80178370();
+        } else if (ScrmClassifyPosition(&pos, 0, 0) > 2) {
+            ScrmSetPlayFlag(3, 1);
+            ScrmEndPlay();
         }
         if (!fn_8009D990(1)) {
-            fn_80177C44(1);
-            fn_80178370();
+            ScrmSetPlayTurnovers(1);
+            ScrmEndPlay();
             StyleTrackerEndPlay();
         }
     }
@@ -3624,7 +3624,7 @@ void MiniGameCrushCarrierPostPlayC::OnEnter(float dt)
     mUnknown12 = 0;
     fn_8009D8CC(1);
     if (fn_8009D990(1)) {
-        if (fn_801783AC(3)) {
+        if (ScrmTestPlayFlag(3)) {
             unsigned int best = 0xFFFFFFFF;
             mUnknown12 = 1;
             for (unsigned short i = 0; i <= 5; i++) {
@@ -3651,7 +3651,7 @@ void MiniGameCrushCarrierPostPlayC::OnEnter(float dt)
                     }
                 }
             }
-        } else if (fn_801783AC(3)) {
+        } else if (ScrmTestPlayFlag(3)) {
             mUnknown12 = 1;
         }
         if (!fn_8009D990(1)) {
@@ -3726,7 +3726,7 @@ void MiniGameCrushCarrierC::vfn_01()
     mpUnknown1C = pBlock;
     lbl_803EB2E0 = 0;
     pBlock->mpUnknown34 = new (0) MiniGameCrushCarrierScore[6];
-    fn_80178F20(&mpUnknown1C->mUnknown0);
+    ScrmSetRuleSet(&mpUnknown1C->mUnknown0);
     fn_800BC51C(&mpUnknown1C->mUnknown4);
     fn_800BFAB4(&mpUnknown1C->mUnknown8);
     fn_800A039C(&mpUnknown1C->mUnknown10);
@@ -3751,7 +3751,7 @@ void MiniGameCrushCarrierC::vfn_02()
         fn_8014DA90();
     }
     StyleTrackerSetAwardCallback(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     fn_800BC51C(0);
     fn_800BFAB4(0);
     fn_800A039C(0);
@@ -4101,10 +4101,10 @@ int fn_8014FF34(MiniGameCrushCarrierC *p)
     return result;
 }
 
-void fn_8014FFC4(Point_8017886C *p)
+void fn_8014FFC4(FieldPoint_t *p)
 {
     float width = fn_800A32B4();
-    float originY = fn_80177FE0().mY;
+    float originY = ScrmGetBallSpot().mY;
     if (!(width <= 6.0f)) {
         width = 6.0f;
     }
@@ -4203,7 +4203,7 @@ void MiniGameJumpBallRulesC::EndPlay()
 void MiniGameJumpBallPreGameC::OnEnter(float dt)
 {
     fn_800A8738(1);
-    fn_8017833C(0);
+    ScrmSetOffenseTeam(0);
     PreGamePhase::OnEnter(dt);
     HudSetScoreTableRows(4);
     HudSetScoreTableHeaders("Player", "Points");
@@ -4271,8 +4271,8 @@ void MiniGameJumpBallPreGameC::OnEnter(float dt)
         TutorialReleasePause();
         mUnknown4 = 0;
     }
-    fn_80178E88(fn_80178A2C() + -15.0f);
-    fn_80178CD8(0);
+    ScrmSetDriveStartDistance(ScrmGetGoalLineY() + -15.0f);
+    ScrmPlaceBallForDrive(0);
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned short i = 0; i <= 6; i++) {
             PlyrGet(team, i)->mpUnknown4->mUnknown20 &= ~1U;
@@ -4320,7 +4320,7 @@ void MiniGameJumpBallPrePlayC::OnEnter(float dt)
 {
     unsigned int i;
     unsigned int count;
-    Point_8017886C point;
+    FieldPoint_t point;
 
     PlyrMgrResetAll();
     count = fn_801530FC()->mCount;
@@ -4328,7 +4328,7 @@ void MiniGameJumpBallPrePlayC::OnEnter(float dt)
     PreSnapPhase::OnEnter(dt);
     fn_801530FC()->mUnknown117 = 0;
     fn_801527E0(&lbl_8031BDD4, 1);
-    point = fn_80177FE0();
+    point = ScrmGetBallSpot();
     for (i = 0; i < count; i++) {
         Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
         pPlayer->mMotion.mPos.mX = -(float)count * 1.125f + (float)i * 2.25f;
@@ -4452,11 +4452,11 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
     fn_80151BCC(pRules);
     if (noneFree) {
         fn_80151D9C(pRules);
-        if (fn_80178AE0() == 2) {
+        if (ScrmGetWinner() == 2) {
             MiniGameJumpBallStartRound(this);
         } else {
             fn_801530FC()->mUnknown117 = 1;
-            fn_80178370();
+            ScrmEndPlay();
         }
     }
 }
@@ -4474,10 +4474,10 @@ void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p)
     Table_8015005C *pTable = fn_801530FC();
     Vector_80039F5C position;
     int angles[3];
-    Point_8017886C origin;
+    FieldPoint_t origin;
     origin.mX = 0.0f;
     origin.mY = -15.0f;
-    fn_801780A8(origin);
+    ScrmSetBallSpot(origin);
     Ball_t *pCurrent = BallGetCurrent();
     unsigned char i;
     for (i = 0; i < count; i++) {
@@ -4517,7 +4517,7 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
 {
     fn_801527E0(&lbl_8031BDD4, 1);
     ResetBallsAndFieldPositions(p);
-    Point_8017886C origin = fn_80177FE0();
+    FieldPoint_t origin = ScrmGetBallSpot();
     unsigned int count = BallsGetCount();
     memset(p->mUnknown5, 0, 3);
     unsigned char first = SyncRandGetRange(0, 3);
@@ -4642,12 +4642,12 @@ void MiniGameJumpBallPostPlayC::OnExit()
     unsigned char team;
 
     PostPlayPhase::OnExit();
-    if (fn_80177C38() == 1 || fn_80177C38() == 3) {
-        fn_80177C50(1);
-        fn_80177C44(0);
+    if (ScrmGetPlayTurnovers() == 1 || ScrmGetPlayTurnovers() == 3) {
+        ScrmChangePossession(1);
+        ScrmSetPlayTurnovers(0);
     }
     fn_8011DF90();
-    team = fn_80178308();
+    team = ScrmGetOffenseTeam();
     PlayBookRestoreSelection(team);
 }
 
@@ -4656,7 +4656,7 @@ void MiniGameJumpBallPostPlayC::Finish(float dt)
     if (InGameOverlayGetState() != 4) {
         InGameOverlayReset();
     }
-    if (fn_80178AE0() == 2) {
+    if (ScrmGetWinner() == 2) {
         fn_800AD910(2, dt);
     } else {
         ClockRuleEndPeriod();
@@ -4745,7 +4745,7 @@ void MiniGameJumpBallC::vfn_01()
     if (allocate) {
         SyncStateCommit(pHandle);
     }
-    fn_80178F20(&mpUnknown1C->mUnknown32);
+    ScrmSetRuleSet(&mpUnknown1C->mUnknown32);
     fn_800BC51C(&mpUnknown1C->mUnknown0);
     fn_800BFAB4(&mpUnknown1C->mUnknown8);
     fn_800A039C(&mpUnknown1C->mUnknown12);
@@ -4772,7 +4772,7 @@ void MiniGameJumpBallC::vfn_02()
     if (mpUnknown1C->mpUnknown36->mUnknown120 != 0) {
         GameOptionsSet(14, mpUnknown1C->mpUnknown36->mUnknown120);
     }
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     if (fn_80149014()) {
         fn_801D2BD0(mpUnknown1C->mpUnknown36);
     }
@@ -4814,7 +4814,7 @@ void fn_80151BCC(MiniGameJumpBallC *p)
     count = p->mpUnknown1C->mpUnknown36->mUnknown119;
     for (i = 0; i < count; i++) {
         pPlayer = PlyrGet(0, i);
-        float limit = fn_80177FFC(0).mY;
+        float limit = ScrmGetTeamSetupSpot(0).mY;
         if (pPlayer->mMotion.mPos.mY > limit) {
             pPlayer->mMotion.mPos.mY = limit;
         }
@@ -4822,7 +4822,7 @@ void fn_80151BCC(MiniGameJumpBallC *p)
     count = p->mpUnknown1C->mpUnknown36->mCount;
     for (i = 0; i < count; i++) {
         pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
-        float limit = fn_80177FFC(1).mY + 5.0f;
+        float limit = ScrmGetTeamSetupSpot(1).mY + 5.0f;
         if (pPlayer->mMotion.mPos.mY < limit) {
             pPlayer->mMotion.mPos.mY = limit;
         }
@@ -4998,7 +4998,7 @@ int fn_8015228C(Object_80039F5C *p, unsigned char *pIndex)
         Ball_t *pBall = BallGet(i);
         if (BallIsVisible(pBall) && BallStateGet(pBall, 0) == 4) {
             Vector_80039F5C position;
-            Point_8017886C delta;
+            FieldPoint_t delta;
             BallGetLandingPoint(pBall, &position);
             Vec2Sub(&delta, &position, &p->mMotion.mPos);
             int direction = delta.Heading();
@@ -5160,10 +5160,10 @@ int MiniGameJumpBallC::vfn_23(AutoDepthPlayer_t *pRecords, unsigned int count)
 
 extern "C" {
 
-void fn_801528E0(MiniGameJumpBallC *p, Point_8017886C *pOut)
+void fn_801528E0(MiniGameJumpBallC *p, FieldPoint_t *pOut)
 {
     pOut->mX = 0.0f;
-    pOut->mY = fn_80177FE0().mY + 20.0f + 10.0f;
+    pOut->mY = ScrmGetBallSpot().mY + 20.0f + 10.0f;
 }
 
 char *lbl_803EB2F0 = "Open Field Showdown\n\nScore against your opponent in an open field situation, then stop your opponent from scoring in the very same situation.";
@@ -5389,8 +5389,8 @@ void fn_80153168(MiniGameJumpBallC *p, int index, unsigned char value)
 
 int MiniGameOpenFieldRulesC::GetScoreLimit()
 {
-    unsigned short score0 = fn_801787DC(0);
-    unsigned short score1 = fn_801787DC(1);
+    unsigned short score0 = ScrmGetTeamScore(0);
+    unsigned short score1 = ScrmGetTeamScore(1);
 
     unsigned short high;
 
@@ -5486,25 +5486,25 @@ void MiniGameOpenFieldRulesC::ResetPlaySpot()
 {
     int a = 1;
     MiniGameOpenFieldData *pRules = fn_80155128(MiniGameGetCurrent());
-    Object_8017886C *o = fn_8017886C();
-    if (fn_80178348() == fn_80178308()) {
+    ScrmPlayResult_t *o = ScrmGetPlayResult();
+    if (ScrmGetSnapOffense() == ScrmGetOffenseTeam()) {
         a = 0;
     }
     int kind = fn_800948E4(o);
     ScrmRuleSet::ResetPlaySpot();
     if (pRules->mpUnknown52->mUnknown32 == 2) {
-        pRules->mpUnknown52->mUnknown20[fn_80178348()]++;
+        pRules->mpUnknown52->mUnknown20[ScrmGetSnapOffense()]++;
         if (kind == 2) {
             if (a == 0) {
-                pRules->mpUnknown52->mUnknown24[fn_80178348()]++;
+                pRules->mpUnknown52->mUnknown24[ScrmGetSnapOffense()]++;
             } else {
-                pRules->mpUnknown52->mUnknown28[fn_80178360()]++;
-                if (pRules->mpUnknown52->mUnknown24[fn_80178348()] != 0) {
-                    pRules->mpUnknown52->mUnknown24[fn_80178348()]--;
+                pRules->mpUnknown52->mUnknown28[ScrmGetSnapDefense()]++;
+                if (pRules->mpUnknown52->mUnknown24[ScrmGetSnapOffense()] != 0) {
+                    pRules->mpUnknown52->mUnknown24[ScrmGetSnapOffense()]--;
                 }
             }
         } else {
-            pRules->mpUnknown52->mUnknown28[fn_80178360()]++;
+            pRules->mpUnknown52->mUnknown28[ScrmGetSnapDefense()]++;
         }
         Score_801531C4 *pScore = pRules->mpUnknown52;
         if (pScore->mUnknown20[0] >= pScore->mUnknown16 && pScore->mUnknown20[1] >= pScore->mUnknown16) {
@@ -5517,18 +5517,18 @@ void MiniGameOpenFieldRulesC::ResetPlaySpot()
             }
         }
         if (a == 0 ? kind != 8 : kind == 8) {
-            fn_8017833C(fn_80178320());
+            ScrmSetOffenseTeam(ScrmGetDefenseTeam());
         } else if (kind != 8) {
-            fn_80177E6C(0, 1);
+            ScrmMirrorField(0, 1);
         }
 
-        int team = fn_80178308();
-        if (fn_80178D70(team) == 2) {
+        int team = ScrmGetOffenseTeam();
+        if (ScrmGetActivePlayerCount(team) == 2) {
             FormationLineupSwapAllUser(1, team, 0, 2);
         }
-        fn_80178CD8(1);
+        ScrmPlaceBallForDrive(1);
     }
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(fn_80178348(), 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetSnapOffense(), 0);
 }
 
 void MiniGameOpenFieldRulesC::ResetGame(int team)
@@ -5548,7 +5548,7 @@ void MiniGameOpenFieldPreGameC::OnEnter(float dt)
 {
     PreGamePhase::OnEnter(dt);
     MiniGameGetCurrent()->vfn_14();
-    HudSetScoreTableRows(fn_80178D70(0) * 2);
+    HudSetScoreTableRows(ScrmGetActivePlayerCount(0) * 2);
     ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(0, 0);
     ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(1, 0);
     HudPost3AOff();
@@ -5598,7 +5598,7 @@ void MiniGameOpenFieldPreGameC::HideIntroScreen()
 void MiniGameOpenFieldPrePlayC::OnEnter(float dt)
 {
     MiniGameOpenFieldData *pRules = fn_80155128(MiniGameGetCurrent());
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
 
     MiniGameLineUpPlayers();
     PreSnapPhase::OnEnter(dt);
@@ -5608,14 +5608,14 @@ void MiniGameOpenFieldPrePlayC::OnEnter(float dt)
         pRules->mpUnknown52->mUnknown8 = SyncRandGetRange(0, 3);
     } while (pRules->mpUnknown52->mUnknown8 == pRules->mpUnknown52->mUnknown0[team] && SyncRandGetRange(0, 100) > 20);
     pRules->mpUnknown52->mUnknown0[team] = pRules->mpUnknown52->mUnknown8;
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(fn_80178308(), 1);
-    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(fn_80178320(), 0);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetOffenseTeam(), 1);
+    ((MiniGameOpenFieldC *)MiniGameGetCurrent())->vfn_35(ScrmGetDefenseTeam(), 0);
 
     unsigned int limit = pRules->mpUnknown52->mUnknown12;
     if (pRules->mUnknown44.GetGoalLimit() > limit && pRules->mpUnknown52->mUnknown20[0] == pRules->mpUnknown52->mUnknown20[1]) {
         HudShowAlert("Playoff Round!");
     }
-    if ((unsigned int)fn_80178D70(0) > 1) {
+    if ((unsigned int)ScrmGetActivePlayerCount(0) > 1) {
         unsigned int value = fn_8009D990(0);
         lbl_803EABA4->fn_800C02D4(value - 2);
         value = fn_8009D990(0);
@@ -5627,13 +5627,13 @@ void MiniGameOpenFieldPrePlayC::OnEnter(float dt)
     Ball_t *pBall = BallGetCurrent();
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, fn_80178308()));
+    BallGiveToPlayer(pBall, PlyrFindNearest(&pos, 0, ScrmGetOffenseTeam()));
 }
 
 void MiniGameOpenFieldPrePlayC::AssignControlledPlayers()
 {
     PreSnapPhase::AssignControlledPlayers();
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     unsigned char kind = PortDbCountSidePlayers(team);
     unsigned char first = fn_800B65A0(team);
     unsigned char second = fn_800B65D0(team);
@@ -5659,7 +5659,7 @@ void MiniGameOpenFieldPrePlayC::AssignControlledPlayers()
             fn_800B65C0(team, second);
         }
     }
-    team = fn_80178320();
+    team = ScrmGetDefenseTeam();
     kind = PortDbCountSidePlayers(team);
     first = fn_800B65A0(team);
     second = fn_800B65D0(team);
@@ -5691,7 +5691,7 @@ void MiniGameOpenFieldPlayCallC::vfn_03(float dt)
 
 void MiniGameOpenFieldPlayCallC::vfn_04(float dt)
 {
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     int other = !team;
     unsigned int flag = SyncRandGetRange(0, 100) & 1;
 
@@ -5704,7 +5704,7 @@ void MiniGameOpenFieldPlayCallC::vfn_04(float dt)
     PlayBookLoadCurrentPlay(other);
     fn_800B3EFC(team);
     fn_800B3EFC(other);
-    PlayBookLoadAudibles(fn_80178308());
+    PlayBookLoadAudibles(ScrmGetOffenseTeam());
     fn_800AD910(2, dt);
 }
 
@@ -5712,10 +5712,10 @@ void MiniGameOpenFieldPlayCallC::vfn_05(float dt)
 {
     fn_8009D888(0, 10);
     CamGameResumeAll();
-    ScrmTeamPlaceInHuddle(fn_80178308());
-    ScrmTeamPlaceInHuddle(fn_80178320());
-    fn_801790D0(fn_80178308(), 0.0f, 0.0f);
-    fn_801790D0(fn_80178320(), 18.0f, 0.0f);
+    ScrmTeamPlaceInHuddle(ScrmGetOffenseTeam());
+    ScrmTeamPlaceInHuddle(ScrmGetDefenseTeam());
+    ScrmSetSetupDepth(ScrmGetOffenseTeam(), 0.0f, 0.0f);
+    ScrmSetSetupDepth(ScrmGetDefenseTeam(), 18.0f, 0.0f);
 }
 
 void MiniGameOpenFieldDuringPlayC::OnEnter(float dt)
@@ -5728,14 +5728,14 @@ void MiniGameOpenFieldDuringPlayC::OnEnter(float dt)
 void MiniGameOpenFieldDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
-    if (fn_801787A0() == 0) {
+    if (ScrmIsNotReplay() == 0) {
         if (fn_8009D990(5) == 0) {
             HudShowAlert("Time Expired");
-            fn_80178370();
+            ScrmEndPlay();
         } else {
             unsigned int value;
 
-            if (fn_80177C38() % 2 != (mUnknown4 & 1)) {
+            if (ScrmGetPlayTurnovers() % 2 != (mUnknown4 & 1)) {
                 mUnknown4++;
                 fn_8009D8CC(5);
                 fn_8009D964(5, 20);
@@ -5852,8 +5852,8 @@ void MiniGameOpenFieldC::vfn_01()
     fn_800A039C(&mpUnknown1C->mUnknown32);
     fn_800B9598(&mpUnknown1C->mUnknown40);
     fn_800AACB8(&mpUnknown1C->mUnknown48);
-    fn_80178F20(&mpUnknown1C->mUnknown44);
-    fn_80178E88(fn_80178A2C() * 2.0f - 18.0f);
+    ScrmSetRuleSet(&mpUnknown1C->mUnknown44);
+    ScrmSetDriveStartDistance(ScrmGetGoalLineY() * 2.0f - 18.0f);
     mUnknown20 = GameOptionsGet(14);
     GameOptionsSet(14, 2);
 }
@@ -5867,7 +5867,7 @@ void MiniGameOpenFieldC::vfn_02()
     fn_800B9598(0);
     fn_800AACB8(0);
     GameOptionsSet(14, mUnknown20);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     if (fn_80149014()) {
         fn_801D2BD0(mpUnknown1C->mpUnknown52);
     }
@@ -5936,7 +5936,7 @@ void MiniGameOpenFieldC::AutoFillDepthChart(int value, int *pList, int *pIds, un
 
     AutoDepthFillChart(value, pList, pIds);
     first = pList[0];
-    if (fn_80178D70(0) == 1) {
+    if (ScrmGetActivePlayerCount(0) == 1) {
         for (i = 0; i <= 6; i++) {
             if (pIds[i] == first) {
                 pIds[i] = pIds[lbl_802DEB08[0]];
@@ -5998,9 +5998,9 @@ void MiniGameOpenFieldC::AutoFillDepthChart(int value, int *pList, int *pIds, un
 void MiniGameOpenFieldC::vfn_35(int team, int showColors)
 {
     char text[16];
-    int first = fn_80178EE0(team);
+    int first = ScrmGetGoalCount(team);
     int color = 255;
-    int second = fn_80178EA0(team);
+    int second = ScrmGetGoalTotal(team);
 
     fn_801C2E18(text, "%d / %d", first, second);
     if (mUnknown24 == 1) {
@@ -6111,7 +6111,7 @@ int MiniGameOpenFieldC::CheckAward(int team, int index, Object_80039F5C *pPlayer
     case 36: {
         int value = 0;
         if (PlayerHasAward(team, index, 39) == 0) {
-            value = fn_80178EE0(other) == 0;
+            value = ScrmGetGoalCount(other) == 0;
         }
         result = value;
         break;
@@ -6225,11 +6225,11 @@ int MiniGameOpenFieldC::vfn_21()
 
 int MiniGameQuickStrikeRulesC::GetScoreLimit()
 {
-    int mode = fn_80177F70();
-    int team = fn_80178308();
+    int mode = ScrmGetDown();
+    int team = ScrmGetOffenseTeam();
     int other = !team;
-    unsigned short score = fn_801787DC(team);
-    unsigned short otherScore = fn_801787DC(other);
+    unsigned short score = ScrmGetTeamScore(team);
+    unsigned short otherScore = ScrmGetTeamScore(other);
 
     int result;
 
@@ -6250,12 +6250,12 @@ int MiniGameQuickStrikeRulesC::GetScoreLimit()
 void MiniGameQuickStrikeRulesC::PlaceBallForDrive(int flip)
 {
     if (!lbl_803EB2FC) {
-        float distance = fn_80178A2C() * 2.0f -
+        float distance = ScrmGetGoalLineY() * 2.0f -
                          ((lbl_803EB2FD / 2) * 10.0f + 18.0f);
         if (!(distance >= 1.0f)) {
             distance = 1.0f;
         }
-        fn_80178E88(distance);
+        ScrmSetDriveStartDistance(distance);
         lbl_803EB2FC = 1;
         ++lbl_803EB2FD;
     }
@@ -6280,23 +6280,23 @@ int MiniGameQuickStrikeRulesC::IsNearWin(int team)
 void MiniGameQuickStrikeRulesC::ResetPlaySpot()
 {
     int a = 1;
-    Object_8017886C *o = fn_8017886C();
-    if (fn_80178348() == fn_80178308()) {
+    ScrmPlayResult_t *o = ScrmGetPlayResult();
+    if (ScrmGetSnapOffense() == ScrmGetOffenseTeam()) {
         a = 0;
     }
-    unsigned int score0 = fn_801787DC(0);
-    unsigned int score1 = fn_801787DC(1);
-    unsigned short flags = fn_80178E94();
+    unsigned int score0 = ScrmGetTeamScore(0);
+    unsigned int score1 = ScrmGetTeamScore(1);
+    unsigned short flags = ScrmGetDriveCount();
     lbl_803EB2FC = 0;
     ScrmRuleSet::ResetPlaySpot();
     if (mUnknown4 == 2) {
         if (o->mUnknown1D == -2) {
-            int team = fn_80178320();
+            int team = ScrmGetDefenseTeam();
             if ((team == 0 && score0 > score1) || (team == 1 && score0 < score1)) {
                 mUnknown4 = team;
             }
         } else if (o->mUnknown1D > 0) {
-            int team = fn_80178308();
+            int team = ScrmGetOffenseTeam();
             if (a) {
                 if ((team == 0 && score0 > score1) || (team == 1 && score0 < score1)) {
                     mUnknown4 = team;
@@ -6323,14 +6323,14 @@ void MiniGameQuickStrikeRulesC::ResetPlaySpot()
                 mUnknown4 = 1;
             }
         }
-        if (mUnknown4 != 2 && fn_80177F70() == 6) {
-            fn_80177F88(1);
+        if (mUnknown4 != 2 && ScrmGetDown() == 6) {
+            ScrmSetDown(1);
         }
     }
-    if (a && fn_80177F70() == 1) {
-        fn_80178CD8(1);
+    if (a && ScrmGetDown() == 1) {
+        ScrmPlaceBallForDrive(1);
     } else if (o->mUnknown18 & 0x900) {
-        fn_80178CD8(0);
+        ScrmPlaceBallForDrive(0);
     }
 }
 
@@ -6343,9 +6343,9 @@ void MiniGameQuickStrikeRulesC::ResetGame(int team)
 
 void MiniGameQuickStrikePreGameC::OnEnter(float dt)
 {
-    fn_80178E88(fn_80178A2C() * 2.0f - 18.0f);
+    ScrmSetDriveStartDistance(ScrmGetGoalLineY() * 2.0f - 18.0f);
     PreGamePhase::OnEnter(dt);
-    fn_80178A20(fn_80178A2C() * 2.0f);
+    ScrmSetFirstDownInterval(ScrmGetGoalLineY() * 2.0f);
     fn_80155D7C(MiniGameGetCurrent());
     lbl_803EB2FC = lbl_803EB2FD = 0;
     TutorialReleasePause();
@@ -6373,7 +6373,7 @@ extern "C" {
 
 void fn_801556D0(unsigned int kind, int value, int flag)
 {
-    int team = fn_80178348();
+    int team = ScrmGetSnapOffense();
 
     if (kind <= 1 || kind == 6 || kind == 7 || kind == 5 || kind == 8) {
         fn_80155A7C(MiniGameGetCurrent(), team, kind, value);
@@ -6413,9 +6413,9 @@ void MiniGameQuickStrikeC::vfn_01()
     }
     fn_800BC51C(&mpUnknown1C->mObject0);
     fn_800AACB8(&mpUnknown1C->mObject12);
-    fn_8017CAC0(fn_801556D0);
+    ScrmStatSetEventCallback(fn_801556D0);
     mpUnknown1C->mObject4.ResetGame(2);
-    fn_80178F20(&mpUnknown1C->mObject4);
+    ScrmSetRuleSet(&mpUnknown1C->mObject4);
 }
 
 void MiniGameQuickStrikeC::vfn_02()
@@ -6425,8 +6425,8 @@ void MiniGameQuickStrikeC::vfn_02()
     if (mpUnknown1C->mUnknown16 != 0) {
         GameOptionsSet(14, mpUnknown1C->mUnknown16);
     }
-    fn_80178F20(0);
-    fn_8017CAC0(0);
+    ScrmSetRuleSet(0);
+    ScrmStatSetEventCallback(0);
     delete mpUnknown1C;
     mpUnknown1C = 0;
 }
@@ -6435,9 +6435,9 @@ int MiniGameQuickStrikeC::vfn_08(int a)
 {
     int result = 0;
 
-    if (a && fn_80177F70() == 6) {
-        unsigned int first = fn_801787DC(fn_80178308());
-        unsigned int second = fn_801787DC(fn_80178320());
+    if (a && ScrmGetDown() == 6) {
+        unsigned int first = ScrmGetTeamScore(ScrmGetOffenseTeam());
+        unsigned int second = ScrmGetTeamScore(ScrmGetDefenseTeam());
 
         if (first < second) {
             if (second - first > 1) {
@@ -6514,7 +6514,7 @@ void fn_80155C44(MiniGameC *p, int team, int index, Record_8005CE10 *pOut)
 void fn_80155CF0(MiniGameC *p, int team, int *pFirst, int *pSecond)
 {
     *pFirst = fn_800C8744(team);
-    *pSecond = fn_801787DC(team);
+    *pSecond = ScrmGetTeamScore(team);
 }
 
 unsigned char fn_80155D38(MiniGameC *p, int team)

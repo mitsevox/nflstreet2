@@ -23,7 +23,7 @@ GameCamera_t *CamGameGetCamera(int index);
 int PassIconsAreShown(void);
 int PassIconGetPosition(int index, Vector_80039F5C *pOut);
 int PassIconsWereShown(void);
-float fn_80178A44(void);
+float ScrmGetEndLineY(void);
 void MatSetStack(int a);
 void MatPush(void);
 void MatPop(void);
@@ -64,7 +64,7 @@ extern "C" int PassIconObjDraw(PassIconObj_t *pInstance)
             Vector_80039F5C pos;
 
             pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
-            scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (fn_80178A44() * 2.0f) * 2.0f + 0.3f;
+            scale = fabsf(pInstance->mUnknown04.mY - pCamera->mHeader.mUnknown04[1]) / (ScrmGetEndLineY() * 2.0f) * 2.0f + 0.3f;
             MatSetStack(VptGetMatrixStack());
             MatPush();
             pos = *pPos;

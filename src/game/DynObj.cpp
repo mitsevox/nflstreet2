@@ -29,7 +29,7 @@
 #include "game/AudmonEvent.h"
 #include "game/cu_8008E978.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/AnimChanStartAnim.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
@@ -180,9 +180,9 @@ void PhysDampAngular(BigObj_t *pOwner, float value);
 void PhysSetObjectPosition(BigObj_t *pOwner, float *pPos);
 void LevelSetSurface(int a, int b);
 int fn_800A3444(void);
-int fn_801784C4(void);
-float fn_80178A08(void);
-float fn_80178A44(void);
+int ScrmIsFieldFlipped(void);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
 void BigObjAnimBlendPose(BigObjPhysics_t *pExtra, BigObj_t *pItem, int a, int b);
@@ -578,9 +578,9 @@ void BigObjRestoreState(BigObj_t *pObject)
 void BigObjKeepInBounds(BigObj_t *pObject)
 {
     float y = fabsf(pObject->mUnknown472->mState.mUnknown4);
-    int outY = y > fn_80178A44() + lbl_803EA4E8;
+    int outY = y > ScrmGetEndLineY() + lbl_803EA4E8;
     float x = fabsf(pObject->mUnknown472->mState.mUnknown0);
-    int outX = x > fn_80178A08() + lbl_803EA4E8;
+    int outX = x > ScrmGetSidelineX() + lbl_803EA4E8;
 
     if (outX || outY) {
         Vector_80039F5C pos;
@@ -591,14 +591,14 @@ void BigObjKeepInBounds(BigObj_t *pObject)
         if (outX) {
             float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
-            pos.mX = pObject->mUnknown472->mState.mUnknown0 < 0.0f ? lbl_803EA4EC - fn_80178A08() + margin
-                                                                 : fn_80178A08() - (lbl_803EA4EC + margin);
+            pos.mX = pObject->mUnknown472->mState.mUnknown0 < 0.0f ? lbl_803EA4EC - ScrmGetSidelineX() + margin
+                                                                 : ScrmGetSidelineX() - (lbl_803EA4EC + margin);
         }
         if (outY) {
             float margin = lbl_803EA4F0 * SyncRandGetFloat(0);
 
-            pos.mY = pObject->mUnknown472->mState.mUnknown4 < 0.0f ? lbl_803EA4EC - fn_80178A44() + margin
-                                                                 : fn_80178A44() - (lbl_803EA4EC + margin);
+            pos.mY = pObject->mUnknown472->mState.mUnknown4 < 0.0f ? lbl_803EA4EC - ScrmGetEndLineY() + margin
+                                                                 : ScrmGetEndLineY() - (lbl_803EA4EC + margin);
         }
         pObject->mUnknown472->mState.mUnknown0 = pos.mX;
         pObject->mUnknown472->mState.mUnknown4 = pos.mY;
@@ -632,8 +632,8 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
         if (pOwner->mUnknown476 && pOwner->mUnknown476->mUnknown20 != -1) {
             Vector_80039F5C from;
             Vector_80039F5C to;
-            Point_8017886C center;
-            Point_8017886C offset;
+            FieldPoint_t center;
+            FieldPoint_t offset;
 
             from.mX = pObject->mState.mUnknown0;
             from.mY = pObject->mState.mUnknown4;
@@ -641,11 +641,11 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
             to.mX = pObject->mState.mUnknown0;
             to.mY = pObject->mState.mUnknown4;
             to.mZ = pObject->mState.mUnknown8;
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 from.mX = -from.mX;
                 from.mY = -from.mY;
             }
-            center = fn_80177FE0();
+            center = ScrmGetBallSpot();
             Vec2Sub(&offset, &from, &center);
             {
                 float length = Vec2Magnitude(&offset);
@@ -658,7 +658,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
                         Vec2Scale(&offset, &offset, 6.0f / length);
                     }
                     Vec2Add(&to, &center, &offset);
-                    if (fn_801784C4()) {
+                    if (ScrmIsFieldFlipped()) {
                         to.mX = -to.mX;
                         to.mY = -to.mY;
                     }
@@ -694,7 +694,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
             pos.mY = pObject->mUnknown360.mY;
             pos.mZ = pObject->mUnknown360.mZ;
             t = pObject->mUnknown372;
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
             }
@@ -764,7 +764,7 @@ int BigObjOnAnimEvent(BigObjInst *pObject, BigObj_t *pOwner, int mode)
             pos.mX = pObject->mState.mUnknown0;
             pos.mY = pObject->mState.mUnknown4;
             pos.mZ = pObject->mState.mUnknown8;
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 pos.mX = -pos.mX;
                 pos.mY = -pos.mY;
             }
@@ -1834,14 +1834,14 @@ void Vec3RotateXYZ(void *, void *, int, int, int);
 void Vec2Normalize(void *, void *);
 void Vec3Scale(void *, void *, float);
 int PlyrContactResolve(Object_80039F5C *, int, int);
-void fn_80178718(Object_80039F5C *);
+void ScrmSetTackler(Object_80039F5C *);
 void PlyrContactSendHitFrom(Object_80039F5C *, int, int *, int, int *);
 int PlyrContactIsBeforeImpact(Object_80039F5C *);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *, float, float);
 int BallStateGet(Ball_t *, int *);
-int fn_80178508(void *, int, int);
+int ScrmClassifyPosition(void *, int, int);
 void BallApplyImpulse(Ball_t *, Vector_80039F5C *, Vector_80039F5C *);
-void fn_801783D0(int, int);
+void ScrmSetPlayFlag(int, int);
 void ClearBodyForces(RigidBody *);
 void AddBodyForceAtPoint(RigidBody *, Vector_80039F5C *, Vector_80039F5C *);
 void SetBodyLinearMomentum(RigidBody *, Vector_80039F5C *);
@@ -1980,7 +1980,7 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
              code == 0xD2 || code == 0xE0 || code == 0xE5 || code == 0xE4 || code == 0xE6 ||
              code == 0xEB || code == 0xE1 || code == 0xED || code == 0xEC || state == 0x32) &&
             (p->mFlags & 8)) return;
-        if (!fn_801784C4()) {
+        if (!ScrmIsFieldFlipped()) {
             Vec3RotateXYZ(&direction, &normal, 0, 0, 0x800000);
             Vec2Normalize(&direction, &direction);
         } else Vec2Normalize(&direction, &normal);
@@ -2013,14 +2013,14 @@ void PhysPushPlayer(RigidBody *pBody, unsigned int index, RigidBody *pOther,
             case 16: {
                 Object_80039F5C *pPartner = fn_8009BCE8(&p->mUnknown336);
                 if (!PlyrContactResolve(p, angle, facing)) return;
-                fn_80178718(pPartner);
+                ScrmSetTackler(pPartner);
                 p->mFlags = (p->mFlags | 0x10000) & ~0x80000;
                 return;
             }
             case 17: {
                 Object_80039F5C *pPartner = fn_8009BCE8(&p->mUnknown336);
                 if (!PlyrContactResolve(p, angle, facing)) return;
-                fn_80178718(p);
+                ScrmSetTackler(p);
                 pPartner->mFlags = (pPartner->mFlags | 0x10000) & ~0x80000;
                 return;
             }
@@ -2059,7 +2059,7 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
         impulse.mX = pImpulse->mX;
         impulse.mY = pImpulse->mY;
         impulse.mZ = pImpulse->mZ;
-        if (fn_801784C4()) { impulse.mX = -impulse.mX; impulse.mY = -impulse.mY; }
+        if (ScrmIsFieldFlipped()) { impulse.mX = -impulse.mX; impulse.mY = -impulse.mY; }
         if (BallStateGet(pBall, 0) == 4) {
             if (!(Vec3Magnitude(&impulse) <= 30.0f)) Vec3Scale(&impulse, &impulse, 4.15f);
             else Vec3Scale(&impulse, &impulse, 5.0f);
@@ -2071,7 +2071,7 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
         if (!(fabsf(impulse.mX) >= 0.05f) && !(fabsf(impulse.mY) >= 0.05f) && !(impulse.mZ <= 0.0f)) {
             impulse.mX += pBall->mState.mUnknown54.mX;
             impulse.mY += pBall->mState.mUnknown54.mY;
-            if (fn_80178508(&pBall->mState.mPos, 0, 1) > 2 && !lbl_803EA530) lbl_803EA530 = 1;
+            if (ScrmClassifyPosition(&pBall->mState.mPos, 0, 1) > 2 && !lbl_803EA530) lbl_803EA530 = 1;
         }
         if (!(impulse.mX * pBall->mState.mUnknown54.mX >= 0.0f)) position.mX = pBall->mState.mUnknown28.mX;
         else impulse.mX = 0.0f;
@@ -2082,7 +2082,7 @@ void PhysHitBall(Vector_80039F5C *pImpulse)
         Vec3Add(&impulse, &impulse, &noise);
         BallApplyImpulse(pBall, &impulse, &pBall->mState.mPos);
         BallSetPosition(pBall, &position);
-        fn_801783D0(24, 1);
+        ScrmSetPlayFlag(24, 1);
     }
 }
 
@@ -2529,7 +2529,7 @@ int Vec3Equal(void *, void *, float);
 int QuatIsEqual(void *, void *, float);
 void Vec3Normalize(void *, void *);
 float Vec3Distance(void *, void *);
-void fn_80178370(void);
+void ScrmEndPlay(void);
 void PhysDebugLine(Vec3_801DE1E0 *, Vec3_801DE1E0 *, int, int, int);
 int fn_800AD9B4(void);
 extern unsigned int lbl_803EA538;
@@ -2538,10 +2538,10 @@ void PhysUpdateBallRest(void)
 {
     if (lbl_803EA530) {
         Ball_t *pBall = BallGetCurrent();
-        if (fn_800AD9B4() == 3 && fn_80178508(&pBall->mState.mPos, 0, 1) > 2) {
+        if (fn_800AD9B4() == 3 && ScrmClassifyPosition(&pBall->mState.mPos, 0, 1) > 2) {
             if (!((float)lbl_803EA530++ <= gFrameTimeScale * 45.0f)) {
                 lbl_803EA530 = 0;
-                fn_80178370();
+                ScrmEndPlay();
             }
         } else lbl_803EA530 = 0;
     }
@@ -2573,7 +2573,7 @@ void PhysUpdatePlayers(void)
             fn_8009BF5C(pPlayer, 26, &b, 0);
             Vec3Add(&a, &b, &c);
             Vec3Scale(&a, &a, 0.5f);
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 a.mX = -a.mX;
                 a.mY = -a.mY;
                 angles.mUnknown8 += 0x800000;
@@ -2611,7 +2611,7 @@ void PhysUpdateBall(void)
     BallGetVelocity(pBall, &velocity);
     Vec3Scale(&velocity, &velocity, 60.0f);
     BallGetPosition(pBall, &position);
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         velocity.mX = -velocity.mX; velocity.mY = -velocity.mY;
         position.mX = -position.mX; position.mY = -position.mY;
     }
@@ -2847,7 +2847,7 @@ void PhysPlayerHitObject(Object_80039F5C *pPlayer)
     position.mX = pPlayer->mMotion.mPos.mX;
     position.mY = pPlayer->mMotion.mPos.mY;
     position.mZ = pPlayer->mMotion.mPos.mZ;
-    if (fn_801784C4()) { position.mX = -position.mX; position.mY = -position.mY; }
+    if (ScrmIsFieldFlipped()) { position.mX = -position.mX; position.mY = -position.mY; }
     Vector_80039F5C point;
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA524; i++) {
         if (lbl_80308F64[i].mKind == 4 || lbl_80308F64[i].mKind == 2) {
@@ -2897,7 +2897,7 @@ void PhysSetObjectPosition(BigObj_t *pOwner, float *pPos)
         if (pBody->mState) SetBodyPosition(pBody, (Vec3_801DE1E0 *)pPos);
     }
 }
-void PhysPushObjects(Point_8017886C *pCenter, float radius)
+void PhysPushObjects(FieldPoint_t *pCenter, float radius)
 {
     for (unsigned int i = 0; i < (unsigned int)lbl_803EA520; i++) {
         RigidBody *pBody = lbl_80308D0C[i];
@@ -2911,15 +2911,15 @@ void PhysPushObjects(Point_8017886C *pCenter, float radius)
         position.mX = from.mX;
         position.mY = from.mY;
         position.mZ = from.mZ;
-        if (fn_801784C4()) { from.mX = -from.mX; from.mY = -from.mY; }
-        Point_8017886C offset;
+        if (ScrmIsFieldFlipped()) { from.mX = -from.mX; from.mY = -from.mY; }
+        FieldPoint_t offset;
         Vec2Sub(&offset, &from, pCenter);
         float length = Vec2Magnitude(&offset);
         if (!(length >= radius)) {
             if (!(length > 0.001f)) { offset.mY = radius; offset.mX = 0.0f; }
             else Vec2Scale(&offset, &offset, radius / length);
             Vec2Add(&position, pCenter, &offset);
-            if (fn_801784C4()) { position.mX = -position.mX; position.mY = -position.mY; }
+            if (ScrmIsFieldFlipped()) { position.mX = -position.mX; position.mY = -position.mY; }
             if (pBody->mState) SetBodyPosition(pBody, (Vec3_801DE1E0 *)&position);
         }
     }

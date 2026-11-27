@@ -15,7 +15,7 @@ struct CollideTypeReg_t {
 };
 
 extern "C" {
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 }
 
@@ -220,7 +220,7 @@ extern "C" void CollideTestPair(CollideObject_t *pA, CollideObject_t *pB)
         Object_80039F5C *pObjectA = fn_8009BCE8(&pA->mUnknown28);
         Object_80039F5C *pObjectB = fn_8009BCE8(&pB->mUnknown28);
 
-        if ((pObjectA->mId >> 8 & 0xFF) == fn_80178320() && (pObjectB->mId >> 8 & 0xFF) == fn_80178320()) {
+        if ((pObjectA->mId >> 8 & 0xFF) == ScrmGetDefenseTeam() && (pObjectB->mId >> 8 & 0xFF) == ScrmGetDefenseTeam()) {
             pA->mUnknown18 += 0.4f;
             pB->mUnknown18 += 0.4f;
             detail = 0;

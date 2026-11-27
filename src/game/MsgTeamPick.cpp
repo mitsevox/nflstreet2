@@ -15,7 +15,7 @@
 #include "game/EditMenu.h"
 #include "game/DepthChartSide.h"
 #include "game/StoryTournament.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
 #include "game/StoryTeam.h"
 #include "game/StevTable.h"
@@ -125,8 +125,8 @@ int TournamentOpen(int index);
 int fn_801485D4(void);
 int fn_801486A0(void);
 void fn_80148AF8(MiniGameC *pObject);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
 int MsgGameGetSetupState(void);
@@ -1093,7 +1093,7 @@ void MsgTeamPickInitSixCaptains(void)
 
 void MsgTeamPickInitPairedCaptains(void)
 {
-    unsigned int count = fn_80178D70(0) * 2;
+    unsigned int count = ScrmGetActivePlayerCount(0) * 2;
     unsigned char team = GameInfoGet(2);
     unsigned char other = team == 0;
 
@@ -1188,7 +1188,7 @@ void MsgTeamPickInitState(void)
         MsgTeamPickInitSevenCaptains();
         break;
     case 3:
-        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(fn_80178308()));
+        MsgTeamPickInitTwoTeams(MiniGameGetCurrent()->vfn_05(ScrmGetOffenseTeam()));
         break;
     case 2:
         MsgTeamPickInitPairedCaptains();
@@ -2062,7 +2062,7 @@ int MsgTeamPickHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int *
         break;
     case 0x149:
         DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
-        *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
+        *pArgs[3].pi = ScrmGetActivePlayerCount(pArgs[0].i ? ScrmGetOffenseTeam() : ScrmGetDefenseTeam());
         break;
     case 0x14A: {
         int *pList = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);

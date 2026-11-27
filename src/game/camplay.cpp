@@ -3,7 +3,7 @@
    asks for one, can swing half way around the field on request, and keeps the camera inside
    the field limits. */
 
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/GameCamera.h"
 #include "game/GameOptions.h"
 #include <string.h>
@@ -222,7 +222,7 @@ void Vec3Add(void *,void *,void *);
 int MathArcSin(float);
 void CamFreeClearVelocity(GameCamera_t *);
 int fn_800AD9B4(void);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void CamMainProcess(void *,int,int,int);
 void CamMainWarpToDest(GameCamera_t *);
 void Orient3Lerp(void *,void *,void *,float);
@@ -241,13 +241,13 @@ void *BallGetCurrent(void);
 void BallGetPosition(void *,void *);
 int fn_801486A0(void);
 void CamMainSetOffset(GameCamera_t *,void *);
-int fn_801783AC(int);
-int fn_80178308(void);
+int ScrmTestPlayFlag(int);
+int ScrmGetOffenseTeam(void);
 void PlyrFindNearest(void *,float *,int);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void Orient3Add(void *,void *,void *);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 void CamMainFollowBall(GameCamera_t *);
 void CamMainFollow(void *,int,int,int);
 void AudmonEventPost(int,int);
@@ -331,9 +331,9 @@ void CamPlayStartOrbit(GameCamera_t *camera)
         camera->mUnknownE0 = 180.0f;
         camera->mUnknownE4 = 1;
         if (camera->mHeader.mUnknown04[0] > 0.0f) {
-            if (fn_801784C4()) _CamPlay_fOrbitDir = 1.0f; else _CamPlay_fOrbitDir = -1.0f;
+            if (ScrmIsFieldFlipped()) _CamPlay_fOrbitDir = 1.0f; else _CamPlay_fOrbitDir = -1.0f;
         } else {
-            if (fn_801784C4()) _CamPlay_fOrbitDir = -1.0f; else _CamPlay_fOrbitDir = 1.0f;
+            if (ScrmIsFieldFlipped()) _CamPlay_fOrbitDir = -1.0f; else _CamPlay_fOrbitDir = 1.0f;
         }
         state->mUnknown0[2] = 0;
         state->mUnknown0[1] = 0;
@@ -410,7 +410,7 @@ void CamPlayProcess(GameCamera_t *camera)
         float bound = _CamPlay_aDefs[camera->mUnknown9C].mUnknown8;
         velocity.mX = velocity.mX < -bound ? -bound : (velocity.mX > bound ? bound : velocity.mX);
     } else velocity.mX = velocity.mY = velocity.mZ = 0.0f;
-    fn_80177FE0();
+    ScrmGetBallSpot();
     CamPresetSetEaseRates(camera,0);
     switch (camera->mUnknownA0) {
     case 12:
@@ -438,8 +438,8 @@ void CamPlayProcess(GameCamera_t *camera)
             Vec3Lerp(&point,&_CamPlay_pViews[1],&state->mUnknown20,state->mUnknown38);
             Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&state->mUnknown2C,state->mUnknown38);
         }
-        if (fn_801783AC(0)) {
-            PlyrFindNearest(&velocity,&extra,fn_80178308());
+        if (ScrmTestPlayFlag(0)) {
+            PlyrFindNearest(&velocity,&extra,ScrmGetOffenseTeam());
             extra -= 4.0f;
             if (extra > 0.0f) {
                 blend = extra*0.16666667f;
@@ -462,7 +462,7 @@ void CamPlayProcess(GameCamera_t *camera)
             ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown60);
             Orient3Add(&angles,&angles,&offset);
         } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
-            int side = fn_80178320();
+            int side = ScrmGetDefenseTeam();
             Object_80039F5C *player = PlyrGet(side,*fn_8012078C()->mpUnknown4);
             if (player) {
                 float adjustment = player->mMotion.mPos.mY;

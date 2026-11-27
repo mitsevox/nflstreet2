@@ -48,7 +48,7 @@ void PlayArtRenderUnloadTextures(void);
 extern int lbl_802E98E0[];
 extern unsigned char lbl_802E98F0[][3];
 extern int lbl_803EB3B8, lbl_803EB3BC, lbl_803EB3C0, lbl_803EB3C4, lbl_803EB3C8, lbl_803EB3CC, lbl_803EB3D0, lbl_803EB3D4, lbl_803EB3D8, lbl_803EB3DC, lbl_803EB3E0, lbl_803EB3E4, lbl_803EB3E8, lbl_803EB3EC, lbl_803EB3F0, lbl_803EB3F4, lbl_803EB3F8, lbl_803EB3FC, lbl_803EB400, lbl_803EB404, lbl_803EB408;
-int fn_80177F70(void);
+int ScrmGetDown(void);
 int PauseIsOpen(void);
 
 void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
@@ -58,7 +58,7 @@ void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayAr
     unsigned char secondaryR = 231, secondaryG = 217, secondaryB = 50;
     unsigned char r = 130, g = 130, b = 130;
 
-    if (!fn_80177F70() && !PauseIsOpen()) {
+    if (!ScrmGetDown() && !PauseIsOpen()) {
         r = (unsigned char)lbl_803EB3D0; g = (unsigned char)lbl_803EB3D4; b = (unsigned char)lbl_803EB3D8;
     } else {
         int inherited = 1;
@@ -322,9 +322,9 @@ float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
 int DbTextToTag(const char *);
-int fn_80178308(void);
-unsigned int fn_80178D18(int);
-int fn_80178D70(int);
+int ScrmGetOffenseTeam(void);
+unsigned int ScrmGetTeamPlayerCount(int);
+int ScrmGetActivePlayerCount(int);
 PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
