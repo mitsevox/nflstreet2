@@ -15742,30 +15742,18 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts MemCardMgrEnablePolling, MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 64 exact functions and all of the file's data linked, the holdouts MemCardMgrUpdate and MemCardMgrGetFileSize keep the original bytes (MemCardMgrEnablePolling and MemCardMgrFormatDate promoted in round 6).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D5D30",
-          "end": "0x801D654C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D65B4",
           "end": "0x801D6F58"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D83F0",
-          "end": "0x801D84DC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D85A8",
           "end": "0x801D8618"
         },
         {
@@ -15808,23 +15796,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "MemCardMgrEnablePolling",
-            "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
-          },
-          {
             "function": "MemCardMgrUpdate",
             "evidence": "evidence.tsv source-form 0x801D6F58-0x801D83F0"
-          },
-          {
-            "function": "MemCardMgrFormatDate",
-            "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
           },
           {
             "function": "MemCardMgrGetFileSize",
             "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
           }
         ],
-        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618)."
+        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618); round 6 promoted MemCardMgrEnablePolling and MemCardMgrFormatDate, leaving MemCardMgrUpdate and MemCardMgrGetFileSize."
       }
     },
     {
