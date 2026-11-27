@@ -176,6 +176,16 @@ class SpecTest(unittest.TestCase):
         self.assertEqual(v.forbidden_added('x;', '??=pragma optimize off\nx;'), ['#pragma'])
         self.assertEqual(v.forbidden_added('x;', 'int y __attri\\\nbute__((x));'), ['__attribute__'])
         self.assertEqual(v.forbidden_added('x;', '#define C(a, b) a##b\nx;'), ['##'])
+        self.assertEqual(v.forbidden_added('x;', '??=pr??/\nagma optimize off\nx;'), ['#pragma'])
+        # A changed argument is a changed form (the tree's own cases).
+        self.assertEqual(v.forbidden_added('register int *n asm("r0");', 'register int *n asm("r31");'), ['asm'])
+        self.assertEqual(v.forbidden_added('#pragma implementation "phystime.h"', '#pragma implementation "DynObj.h"'),
+                         ['#pragma'])
+        self.assertEqual(v.forbidden_added('float x __attribute__((section(".sdata2")));',
+                                           'float x __attribute__((section(".sdata")));'), ['__attribute__'])
+        self.assertEqual(v.forbidden_added('x;', 'u8 b[4] ATTRIBUTE_ALIGN(32);'), ['__attribute__'])
+        # Moving a line that holds a form is no change.
+        self.assertEqual(v.forbidden_added('#pragma once\nint a;\nint b;', 'int a;\n#pragma once\nint b;'), [])
 
 
 class TrialOutputTest(unittest.TestCase):
@@ -200,6 +210,7 @@ class TrialOutputTest(unittest.TestCase):
     def test_wrong_constant_and_missing(self):
         self.assertEqual(v.parse_trial('f 0x80001000: WRONG CONSTANT (lfs reads (1.0))\n', 1),
                          ('WRONG CONSTANT', '', 'lfs reads (1.0)'))
+        self.assertEqual(v.parse_trial('f 0x80001000: WRONG CONSTANT (a) and (b)\n', 1)[2], '(a) and (b)')
         self.assertEqual(v.parse_trial('f: MISSING (the compiler did not emit it)\n', 1)[0], 'MISSING')
         self.assertEqual(v.parse_trial('trial: x.c:3: parse error\n', 1), ('ERROR', '', 'trial: x.c:3: parse error'))
 
@@ -286,6 +297,12 @@ class RunTest(unittest.TestCase):
         self.run_tool('--fresh')
         self.assertEqual((copy / 'include/h.h').read_text(), 'int y;')  # the copy was made again
 
+    def test_foreign_copy_is_refused(self):
+        write(self.work / 'w/copy0/precious.txt', 'not the tool\'s')
+        code, _ = self.run_tool('--jobs', '1')
+        self.assertEqual(code, 2)
+        self.assertTrue((self.work / 'w/copy0/precious.txt').exists())
+
     def test_one_run_per_folder(self):
         self.run_tool('--list')
         folder = self.root / 'build/variants/src_x_c_f_spec'
@@ -295,6 +312,11 @@ class RunTest(unittest.TestCase):
             fcntl.flock(holder, fcntl.LOCK_EX)
             with self.assertRaises(v.SpecError):
                 self.run_tool()
+        (self.work / 'w').mkdir()
+        with (self.work / 'w/.lock').open('w') as holder:  # the same --work, another results folder
+            fcntl.flock(holder, fcntl.LOCK_EX)
+            with self.assertRaises(v.SpecError):
+                self.run_tool('--out', str(self.work / 'other'))
 
     def test_limit_first_and_list(self):
         code, output = self.run_tool('--list')

@@ -25,13 +25,15 @@ Results and reused --work copies are stamped with a hash of what trial.py reads 
 variant: src/, include/, tools/ (but this file), config/ and build/source/report.json. A rerun with the same
 spec, function, source text and stamp resumes, skipping the variants already done (TIMEOUT rows
 are retried, ERROR rows only with --retry-errors); a changed stamp refuses the results (pass
---fresh) and recopies a reused copy. One run at a time holds a results folder.
+--fresh) and recopies a reused copy. One run at a time holds a results folder or a --work folder.
 
 A variant changes source text only. Before any trial, the command is refused when an option of
-the spec adds a `#pragma`, `_Pragma`, `__attribute__`, `asm` or `##` token paste that the
-original file does not have (compared as normalized occurrences, after line splices, comments,
-strings and digraphs are taken out), and each variant is checked the same way again just before
-its trial. This guards against plain and accidental forms; it is not a C preprocessor, so a
+the spec adds a `#pragma`, `_Pragma`, `__attribute__` (or types.h's ATTRIBUTE_ALIGN and
+AT_ADDRESS), `asm` or `##` token paste that the original file does not have. Occurrences are
+the lines holding a form, found after line splices, comments, literals and digraphs are taken
+out and compared with their literals kept: a line holding a form may move, but one that is
+added or changed in any way (a pragma swapped, an asm register renamed) counts. Each variant is
+checked the same way again just before its trial. This guards against plain and accidental forms; it is not a C preprocessor, so a
 macro that builds such a form from innocent pieces defined elsewhere is the reviewer's to catch.
 Compiler flags and profiles live in config/ and are never touched.
 
@@ -86,9 +88,10 @@ SKIPPED = {'.git', 'build/trial', 'build/variants', 'build/matching', 'build/ana
 # Source forms a variant may not add: per-function pragmas and attributes, inline assembly, and
 # token pasting (which could build them). Each is matched in normalized text (normalize) and
 # compared as a multiset of the lines it occurs on, so swapping one pragma for another is caught.
-FORBIDDEN = {'#pragma': re.compile(r'^[ \t]*#[ \t]*pragma\b.*$', re.M), '_Pragma': re.compile(r'^.*\b_Pragma\b.*$', re.M),
-             '__attribute__': re.compile(r'^.*\b__attribute__\b.*$', re.M),
-             'asm': re.compile(r'^.*\b(?:__asm__|__asm|asm)\b.*$', re.M), '##': re.compile(r'^.*##.*$', re.M)}
+# ATTRIBUTE_ALIGN and AT_ADDRESS are include/dolphin/types.h's spellings of __attribute__.
+FORBIDDEN = {'#pragma': re.compile(r'^[ \t]*#[ \t]*pragma\b'), '_Pragma': re.compile(r'\b_Pragma\b'),
+             '__attribute__': re.compile(r'\b(?:__attribute__|ATTRIBUTE_ALIGN|AT_ADDRESS)\b'),
+             'asm': re.compile(r'\b(?:__asm__|__asm|asm)\b'), '##': re.compile(r'##')}
 LEXEMES = re.compile(r'"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'|/\*.*?\*/|//[^\n]*', re.S)
 NAME = re.compile(r'[A-Za-z0-9_.+-]+')
 # What trial.py reads besides the variant, for the stamp.
@@ -279,22 +282,28 @@ def render(regions, picks, source_text):
 
 
 def normalize(text):
-    """Text as the preprocessor's later phases see it, roughly: digraphs and trigraphs for # mapped,
-    line splices joined, comments blanked, string and character literals emptied."""
-    text = text.replace('??=', '#').replace('%:', '#').replace('\\\n', '')
-    return LEXEMES.sub(lambda m: ' ' if m.group(0).startswith('/') else m.group(0)[0] * 2, text)
+    """Text as the preprocessor's later phases see it, roughly, twice over: (with string and
+    character literals emptied, with them kept), both with the digraphs and trigraphs for # and the
+    backslash mapped, line splices joined and comments blanked. Both have the same lines."""
+    text = text.replace('??=', '#').replace('%:', '#').replace('??/', '\\').replace('\\\n', '')
+    def blank(keep):
+        return lambda m: ' ' if m.group(0).startswith('/') else (m.group(0) if keep else m.group(0)[0] * 2)
+    return LEXEMES.sub(blank(False), text), LEXEMES.sub(blank(True), text)
+
+
+def occurrences(text, pattern):
+    """The lines holding a form, found where literals are emptied (a string that names a form is
+    none) and compared with their literals kept (a changed argument is a changed form)."""
+    emptied, kept = (t.split('\n') for t in normalize(text))
+    return collections.Counter(re.sub(r'#\s*', '#', ' '.join(k.split()))
+                               for e, k in zip(emptied, kept) if pattern.search(e))
 
 
 def forbidden_added(original, variant):
-    """The forbidden forms variant has that original does not, by normalized occurrence."""
-    before, after = normalize(original), normalize(variant)
-    found = []
-    for name, pattern in FORBIDDEN.items():
-        def lines(text):
-            return collections.Counter(re.sub(r'#\s*', '#', ' '.join(m.split())) for m in pattern.findall(text))
-        if lines(after) - lines(before):
-            found.append(name)
-    return found
+    """The forbidden forms variant has that original does not, by normalized occurrence: a line
+    holding one may move, but a changed or added one counts."""
+    return [name for name, pattern in FORBIDDEN.items()
+            if occurrences(variant, pattern) - occurrences(original, pattern)]
 
 
 def option_variants(regions):
@@ -376,6 +385,16 @@ def write_file(path, text):
 
 # One trial.
 
+def enclosed(text):
+    """Whether text is one parenthesized group: its first ( closes at its last character."""
+    depth = 0
+    for at, character in enumerate(text):
+        depth += {'(': 1, ')': -1}.get(character, 0)
+        if depth == 0:
+            return at == len(text) - 1 and at > 0
+    return False
+
+
 def parse_trial(output, returncode):
     """(status, score, first differing instruction) from trial.py's output."""
     status, score, first = None, '', ''
@@ -390,7 +409,7 @@ def parse_trial(output, returncode):
                 score = found.group(1) if found else ''
             elif status == 'WRONG CONSTANT':
                 first = match.group(4).strip()
-                if first.startswith('(') and first.endswith(')'):
+                if enclosed(first):
                     first = first[1:-1]
             continue
         row = DIFF_ROW.match(line)
@@ -501,7 +520,8 @@ def main(argv=None):
     parser.add_argument('--out', type=Path, help='results folder (default build/variants/<source>_<function>_<spec name>)')
     parser.add_argument('--fresh', action='store_true', help='discard earlier results in the folder')
     parser.add_argument('--work', type=Path, help='folder for the worker copies (default: a new temporary one, '
-                        'removed at the end); outside this checkout')
+                        'removed at the end); outside this checkout. Its copyN folders are the tool\'s own: one made '
+                        'from another state of the checkout is replaced, one without its copyN.stamp is refused')
     parser.add_argument('--keep-work', action='store_true', help='leave the worker copies in place')
     parser.add_argument('--retry-errors', action='store_true', help='rerun variants recorded as ERROR')
     parser.add_argument('--list', action='store_true', help='print the variants and exit without running')
@@ -568,18 +588,27 @@ def main(argv=None):
         started = time.monotonic()
         if not args.work:
             work = Path(tempfile.mkdtemp(prefix='variants-'))
+        work.mkdir(parents=True, exist_ok=True)
+        claim = (work / '.lock').open('w')  # one run at a time in a --work folder too
+        try:
+            fcntl.flock(claim, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            claim.close()
+            raise SpecError(f'another run is using {work}')
         jobs = max(1, min(args.jobs, len(pending)))
         lock, stop, interrupted = threading.Lock(), threading.Event(), threading.Event()
         tasks = queue.Queue()
         for index in pending:
             tasks.put(index)
-        failures = []
+        failures, finished = [], set()
 
         def worker(number):
             try:
                 copy = work / f'copy{number}'
                 marker = copy.parent / f'copy{number}.stamp'
-                if copy.exists() and (not marker.is_file() or marker.read_text() != checkout):
+                if copy.exists() and not marker.is_file():
+                    raise RuntimeError(f'{copy} has no {marker.name}, so this tool did not make it; move it away')
+                if copy.exists() and marker.read_text() != checkout:
                     shutil.rmtree(copy)  # made from another state of the checkout
                 if not copy.exists():
                     marker.unlink(missing_ok=True)
@@ -609,7 +638,8 @@ def main(argv=None):
                         rows[index] = row
                         with results.open('a') as handle:
                             handle.write('\t'.join(row[c] for c in COLUMNS) + '\n')
-                        done = sum(1 for i in pending if i in rows)
+                        finished.add(index)
+                        done = len(finished)
                         print(f"[{done}/{len(pending)}] {status} {score} {row['variant']}", flush=True)
                         if args.first and status == 'IDENTICAL':
                             stop.set()
@@ -635,6 +665,7 @@ def main(argv=None):
                     t.join()
                 raise
         finally:
+            claim.close()
             if not args.keep_work and not args.work:
                 shutil.rmtree(work, ignore_errors=True)
         if source_path.read_text() != original:
