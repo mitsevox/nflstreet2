@@ -64,7 +64,7 @@ void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *pState, float distanc
 Object_80039F5C *PursueGetTarget(void);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int *pOut);
 int BallStateGet(Ball_t *pBall, int *pOut);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 float PlayTrackGetPlayIdRate(void);
 float PlayTrackGetResult5Rate(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
@@ -117,7 +117,7 @@ extern "C" {
 int fn_800A8444(int team);
 int GamebreakerGetReadyType(int team);
 float SyncRandGetFloat(int stream);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 }
 
 static unsigned int _Pursue_auCloseTargetIds[4] = {96, 93, 174, 186};
@@ -178,7 +178,7 @@ extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
     } else {
         value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
     }
-    if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
+    if (MiniGameGetType() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
         value = (int)(value / 10.0f);
     }
     return value < 0 ? 0 : (value > 126 ? 126 : value);
@@ -550,7 +550,7 @@ extern "C" void PursueSquareHeading(Object_80039F5C *p, int *pAngle, Vector_8003
 extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, PursueState_t *pState, Lookup_8012078C *pContext,
                            int angle, Vector_80039F5C pos, float distance, int angle2)
 {
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     Object_800B26B0 *pMotion = &p->mMotion;
 
     if (pOther != 0) {
@@ -1292,7 +1292,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
 
     pMotion = &p->mMotion;
     pState = (PursueState_t *)&p->mUnknown336;
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         memset(&message, 0, sizeof(message));
         message.mId = 97;
         fn_800F053C(0, p->mpState, &message, p);
@@ -1365,7 +1365,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
         distance = Vec2Distance(pMotion, &pos);
     }
     pLookup = fn_8012078C();
-    if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
+    if ((p->mFlags & 0x4000) == 0 && (MiniGameGetType() != 0 || p->mUnknown8 == 0xFF)) {
         if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             memset(&message, 0, sizeof(message));
             message.mId = 33;
@@ -1386,7 +1386,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             pState->mUnknown12 = (255 - p->mRatings[5]) >> 4;
             pState->mUnknown12 = GameSkillScalePursueDelay(p, pState->mUnknown12);
             pState->mUnknown12 = fn_8009AF00(p->mIdBytes[2], pState->mUnknown12);
-            if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
+            if (MiniGameGetType() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
                 pState->mUnknown12 = (int)(pState->mUnknown12 * 0.1f);
             }
             if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
@@ -1405,7 +1405,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             dirLength = Vec2Magnitude(&dir);
             dirAngle = MathArcTan2(dir.mY, dir.mX);
             if (pOther != 0) {
-                if (fn_801486A0() == 2) {
+                if (MiniGameGetType() == 2) {
                     if (dirLength < PlyrMoveGetRatedSpeed(pOther, 0.4f, 1.0f)) {
                         ok = distance <= 3.0f;
                     }
@@ -1442,7 +1442,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     if (fn_800A5C04(p, pState->mUnknown8, pState->mUnknown8) != 0) {
         result = 0;
     } else {
-        if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
+        if ((p->mFlags & 0x4000) == 0 && (MiniGameGetType() != 0 || p->mUnknown8 == 0xFF)) {
             if (PursueUpdateHold(p, pState, pos) != 0) {
                 p->mUnknown512.mUnknown15 = pState->mUnknown16;
                 if (pState->mUnknown4 > 0.0f) {
@@ -1509,7 +1509,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
     *pOut = _Pursue_iTackleChance;
     if (pOther == 0 || fn_80124714(p, pOther, 0) != 0) {
         if (pOther != 0 && pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
-            && distance < _Pursue_fTackleRange * 0.5f && fn_801486A0() != 0) {
+            && distance < _Pursue_fTackleRange * 0.5f && MiniGameGetType() != 0) {
             result = 1;
             *pOut = PursueGetCloseTackleChance(pOther);
         } else if (pOther == 0 || pOther->mIdBytes[2] == p->mIdBytes[2]) {

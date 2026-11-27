@@ -263,7 +263,7 @@ extern "C" int PlayerActionCharAnimGetTime(Object_80039F5C *p, float *pA, float 
 
 extern "C" void PlayerActionDropBallRelease(Object_80039F5C *p, Block_800E0230 *pBlock, int a)
 {
-    if (p == BallGetCurrentHolder() && fn_801BE648(p->mpUnknown792) == 74 && fn_801486A0()) {
+    if (p == BallGetCurrentHolder() && fn_801BE648(p->mpUnknown792) == 74 && MiniGameGetType()) {
         PossReleaseBall(p);
     }
 }

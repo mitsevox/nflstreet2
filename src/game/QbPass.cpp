@@ -86,7 +86,7 @@ int ScrmTestPlayFlag(int);
 void DefPredApplyQbRunMod(void);
 void DefPredRefreshRatings(void);
 
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 int ScrmGetOffenseTeam(void);
@@ -108,7 +108,7 @@ float SyncRandGetFloat(int);
 
 int QbPassInSpecialMode(void)
 {
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     int low = 3;
     int result = 0;
     if (mode <= 4) result = mode >= low;
@@ -634,7 +634,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
         fn_801024FC(p, 4, choices[selection], 12, 0);
         return 1;
     }
-    if (fn_801486A0() != 4 && fn_801486A0() != 3 && (s->mUnknown18 || QbPassShouldRun(p))) {
+    if (MiniGameGetType() != 4 && MiniGameGetType() != 3 && (s->mUnknown18 || QbPassShouldRun(p))) {
         if (!(p->mMotion.mPos.mY <= ScrmGetBallSpot().mY - _QbPass_fRunLineMargin)) {
             Message_800F01CC m;
             memset(&m, 0, 4);

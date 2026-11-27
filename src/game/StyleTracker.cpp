@@ -249,7 +249,7 @@ int fn_800A8740(void);
 int GamebreakerGetSavedState(unsigned char index);
 void fn_800AE7F0(int a, int b, Object_80039F5C *p);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void TutorialSetMoveDone(int a, int b);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int ScrmGetPlayTurnovers(void);
@@ -711,7 +711,7 @@ extern "C" void StyleTrackerApplyAward(int side, int id, int scaled, int subtrac
                     StyleTrackerShowAward(side, message, value, arg);
                     StyleTrackerShowTotal(side, StyleTrackerGetTotal(side));
                 }
-                if (fn_801486A0() == 3 && text != 0) PlayResultAddScore(ScrmGetSnapOffense(), (signed char)text);
+                if (MiniGameGetType() == 3 && text != 0) PlayResultAddScore(ScrmGetSnapOffense(), (signed char)text);
             } else StyleTrackerTraceEvent(76);
         } else StyleTrackerTraceEvent(77);
     }
@@ -1014,7 +1014,7 @@ extern "C" int StyleTrackerCanAwardCombo(int a) {
     } else if (_StyleTracker_pState->mPlayYardage > 0) {
         result = 1;
     }
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         result = a == 1;
     }
     return result;
@@ -1103,7 +1103,7 @@ extern "C" void StyleTrackerAwardVictory(int team, unsigned int value) {
     } else {
         percent = value * 100 / limit;
     }
-    if (ChallengeIsActive() == 0 && fn_801486A0() != 5) {
+    if (ChallengeIsActive() == 0 && MiniGameGetType() != 5) {
         if (GamebreakerAnyFlagCleared() != 0 && fn_800A8444((unsigned char)team) != 0) {
             StyleTrackerAwardEvent(team, 107, percent);
         } else {
@@ -2625,7 +2625,7 @@ extern "C" void StyleTrackerHandleAudioEvent(AudmonEvent_t *pRecord) {
 
 extern "C" void StyleTrackerReset(void) {
     int changed = 0;
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     if (mode == 0) {
         if (_StyleTracker_iDatabaseVariant != 1) { _StyleTracker_iDatabaseVariant = 1; changed = 1; }
     } else if (_StyleTracker_iDatabaseVariant != 0) { _StyleTracker_iDatabaseVariant = 0; changed = 1; }

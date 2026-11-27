@@ -65,7 +65,7 @@ void CamGameSetModeAll(int a);
 void PassIconsHide(void);
 int PassIconsAreShown(void);
 void PassIconsClearReplayFlag(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetDefenseTeam(void);
 float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
@@ -330,7 +330,7 @@ extern "C" int CarrierRunCanUseSideline(Object_80039F5C *p)
     if (fn_800A8444(p->mIdBytes[2])) {
         result = GameOptionsGet(14) == 1;
     }
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 2:
     case 3:
@@ -611,7 +611,7 @@ extern "C" void CarrierRunKeepInBounds(Object_80039F5C *p, OptionRunControl_t *c
 {
     Object_800B26B0 *motion = &p->mMotion;
     int angle = control->mUnknown44;
-    if (fn_801486A0()) {
+    if (MiniGameGetType()) {
         if (MathAngleDiff(motion->mFacing, 0x400000) <= 0x3FFFFF) {
             if (!(motion->mPos.mX >= 3.0f - ScrmGetSidelineX())) {
                 if (MathAngleDiff(motion->mFacing, 0x800000) <= 0x438E38) angle = 0x400000;
@@ -1104,7 +1104,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
             }
         }
     }
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
 
     if (mode == 0 || mode == 2 || mode == 3 || mode == 1) return;
     Vector_80039F5C position;
@@ -1293,7 +1293,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
         fn_800A3B58(p, 2, 0);
     } else {
         memset(&message, 0, 4);
-        if (fn_801486A0() == 0) {
+        if (MiniGameGetType() == 0) {
             message.mId = 57;
             message.mUnknown1[0] = BallGetCurrentIndex();
         } else {
@@ -1402,7 +1402,7 @@ extern "C" void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *p
     pControl->mUnknown0 = 0;
     pControl->mUnknown56.mUnknown4 = 0;
     pControl->mUnknown56.mUnknown5 = 0;
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         if (!(p->mFlags & 0x400)) {
             unsigned char roll = SyncRandGetRange(0, 100);
 

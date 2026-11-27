@@ -322,7 +322,7 @@ Object_80039F5C *PlyrFindByPoid(int id);
 }
 
 extern "C" {
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 }
 
 extern "C" {
@@ -842,7 +842,7 @@ void LevelUnload(void);
 }
 
 extern "C" {
-int fn_801486A0(void);
+int MiniGameGetType(void);
 }
 
 extern "C" {
@@ -1184,11 +1184,11 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 }
 
 extern "C" {
-Object_80039F5C *fn_8015286C(void *pSet, int index);
+Object_80039F5C *MiniGameJumpBallGetPlayer(void *pSet, int index);
 }
 
 extern "C" {
-extern char lbl_8031BDD4[];
+extern char gMiniGameJumpBall[];
 }
 
 extern "C" {
@@ -2164,11 +2164,11 @@ extern Table_800AA80C lbl_802D8194;
 extern "C" int ResSync(int a);
 
 extern "C" {
-int fn_8014F448(MiniGameC *p);
+int MiniGameCrushCarrierGetLeader(MiniGameC *p);
 }
 
 extern "C" {
-int fn_8015264C(void *p);
+int MiniGameJumpBallGetLeader(void *p);
 }
 
 extern "C" {
@@ -4586,7 +4586,7 @@ short TutorialScaleCpuRating(int team, int unused, short value);
 }
 
 extern "C" {
-short fn_80148698(int team, int index, short value);
+short MiniGameAdjustRating(int team, int index, short value);
 }
 
 struct Record_800B4DE4 {
@@ -4747,7 +4747,7 @@ void PassIconsClearReplayFlag(void);
 }
 
 extern "C" {
-int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
+int MiniGameJumpBallPickBall(Object_80039F5C *p, unsigned char *pIndex);
 }
 
 extern "C" {
@@ -10467,7 +10467,7 @@ extern "C" int AnmsCelebRollChance(int kind)
 {
     int result = 1;
 
-    if ((fn_801485D4() != 0 && MiniGameGetCurrent()->mUnknown8[12] == 0) || ScrmGetWinner() != 2 || ChallengeIsActive() != 0) {
+    if ((MiniGameIsEnabled() != 0 && MiniGameGetCurrent()->mUnknown8[12] == 0) || ScrmGetWinner() != 2 || ChallengeIsActive() != 0) {
         result = 0;
     } else if (kind != 14) {
         if ((kind == 1 && ScrmGetPlayDown() != 4) || lbl_802D79D8[kind] == 0) {
@@ -15199,7 +15199,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
     } else {
         switch (BallStateGet(pBall, 0)) {
         case 4:
-            if (BallGetTarget(BallGetCurrent()) != 0 || fn_801486A0() == 1) {
+            if (BallGetTarget(BallGetCurrent()) != 0 || MiniGameGetType() == 1) {
                 return 4;
             }
             break;
@@ -16288,7 +16288,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             else if((state->mUnknown4==3 || state->mUnknown4==5) && state->mWord8==1) {
                 if(!(state->mFloat14>=e->mUnknown10 || e->mUnknown10<=ScrmGetGoalLineY())) {
                     out->mUnknown08.mX=0.0f;out->mUnknown08.mY=-e->mUnknown10;
-                    if(fn_801486A0()!=2)out->mUnknown18|=4;
+                    if(MiniGameGetType()!=2)out->mUnknown18|=4;
                     out->mUnknown18|=0x100;
                     ScrmStatAddTeamGiveaway((unsigned short)ScrmGetOffenseTeam(),1);StyleTrackerOnTouchback(1);
                 } else {
@@ -16376,7 +16376,7 @@ extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *ou
     int previous=ScrmGetDown();
     FieldPoint_t point=ScrmGetBallSpot();
     if(state->mUnknown0) {
-        if(fn_801486A0()==3 && ScrmGetOffenseTeam()!=ScrmGetSnapOffense()) {
+        if(MiniGameGetType()==3 && ScrmGetOffenseTeam()!=ScrmGetSnapOffense()) {
             out->mUnknown1D=-3;process=false;out->mUnknown18|=0x80;
         }
         if(process) {
@@ -16391,7 +16391,7 @@ extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *ou
                             fn_80093C3C(1,4,0);out->mUnknown04=1;out->mUnknown18|=0x844;
                             if(StyleTrackerGetWinner()==2)AudmonEventPostArgs(0x5D,0,ScrmGetSnapOffense(),0,0);
                             if(GameOptionsGet(14)==1)out->mUnknown18|=0x80;
-                            if(fn_801486A0()==4)out->mUnknown18|=0x80;
+                            if(MiniGameGetType()==4)out->mUnknown18|=0x80;
                         } else out->mUnknown04=previous+1;
                     }
                 } else {
@@ -16415,7 +16415,7 @@ extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *ou
                 if(!(out->mUnknown08.mY<=ScrmGetGoalLineY()) && !(fabsf(out->mUnknown08.mX)>=ScrmGetSidelineX()))out->mUnknown1D=6;
                 out->mUnknown04=1;out->mUnknown18|=0x44;
             }
-            if(fn_801486A0()==4 && ScrmGetPlayTurnovers()!=0) {
+            if(MiniGameGetType()==4 && ScrmGetPlayTurnovers()!=0) {
                 if(out->mUnknown1D==6)out->mUnknown1D=9;
                 else {out->mUnknown1D=3;out->mUnknown18|=0x80;}
             }
@@ -16452,7 +16452,7 @@ extern "C" void PlayResultApplyDowns(Record_800A0624 *state,ScrmPlayResult_t *ou
             }
         }
     } else out->mUnknown04=previous;
-    if(fn_801486A0()==3)out->mUnknown18&=~4;
+    if(MiniGameGetType()==3)out->mUnknown18&=~4;
 }
 
 extern "C" int PlayResultStepCanStart(void *unused)
@@ -16487,14 +16487,14 @@ extern "C" void PlayResultAwardScore(ScrmPlayResult_t *pResult, unsigned char up
             delta = 1;
         }
     }
-    if (fn_801486A0() == 3 && delta == 6) {
+    if (MiniGameGetType() == 3 && delta == 6) {
         delta = 7;
     }
-    if (fn_801486A0() == 4 && delta == -2) {
+    if (MiniGameGetType() == 4 && delta == -2) {
         delta = 5;
         team ^= 1;
     }
-    if (fn_801486A0() != 3) {
+    if (MiniGameGetType() != 3) {
         if (delta < 0) {
             delta = -delta;
             team ^= 1;
@@ -16586,7 +16586,7 @@ extern "C" void PlayResultSetSummaryKind(ScrmPlayResult_t *out)
         break;
     default:lbl_802D7C64[0].mUnknown0=6;break;
     }
-    if(fn_801485D4() && fn_801486A0()==2) {
+    if(MiniGameIsEnabled() && MiniGameGetType()==2) {
         switch(lbl_802D7C64[0].mUnknown0) {
         case 4:
         case 5:
@@ -16668,7 +16668,7 @@ extern "C" void PlayResultCommit(ScrmPlayResult_t *result,ScrmPlayResult_t *inpu
             if(result->mUnknown18&0x2000 || result==input)ScrmSetPlayResult(result);
         }
         PlayResultAwardScore(result,update);
-        if(result->mUnknown18&8 && result->mUnknown1D==2 && fn_801486A0()!=4 && GameOptionsGet(14)==0) {
+        if(result->mUnknown18&8 && result->mUnknown1D==2 && MiniGameGetType()!=4 && GameOptionsGet(14)==0) {
             int score=fn_800C8774(ScrmGetOffenseTeam());
             if(score>=GameOptionsGet(1)) {
                 Vector_80039F5C pos={0};
@@ -16714,7 +16714,7 @@ extern "C" void PlayResultCommit(ScrmPlayResult_t *result,ScrmPlayResult_t *inpu
         if(result->mUnknown18&0x2000 || fn_800B2314()&1)CelebrationBlocksStartForPlay((int)result);
         else ReplayHandleCommand(gpReplay,3,0);
         HudSetDown();
-        if(fn_801486A0()!=15)MiniGameGetCurrent()->vfn_14();
+        if(MiniGameGetType()!=15)MiniGameGetCurrent()->vfn_14();
         lbl_802D7C64[0].mUnknown4=1;
     }
 }
@@ -17038,8 +17038,8 @@ extern "C" void StadiumLoadConditions(void)
 
 extern "C" void StadiumPollMiniGame(void)
 {
-    if (fn_801485D4() != 0) {
-        fn_801486A0();
+    if (MiniGameIsEnabled() != 0) {
+        MiniGameGetType();
     }
 }
 
@@ -18971,7 +18971,7 @@ extern "C" int GamebreakerSelectCinemaType(int team)
     int result = 8;
     int allowed = 1;
 
-    if (fn_801486A0() == 4) {
+    if (MiniGameGetType() == 4) {
         allowed = 0;
     }
     if (team == ScrmGetOffenseTeam()) {
@@ -19652,7 +19652,7 @@ extern "C" int fn_800A8740(void)
         return 0;
     }
     if (GameModeTypeGet() == 7 || GameModeTypeGet() == 10) {
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
         case 1:
         case 2:
@@ -19883,7 +19883,7 @@ extern "C" void GamebreakerSceneAssignCast(unsigned int step)
             Object_80039F5C *p = PlyrGet((unsigned char)i, j);
             int slot = FormationLineupFindSlot(p->mUnknown2908, isOffense);
 
-            if (fn_801485D4() != 0 && fn_801486A0() == 4) {
+            if (MiniGameIsEnabled() != 0 && MiniGameGetType() == 4) {
                 if (lbl_8030F42C.mUnknown0 == 7) {
                     AnmsSetPinnedPlayer(AnmsGetPinnedTagIndex(lbl_802D8064[slot]), (int)p);
                 } else if (lbl_8030F42C.mUnknown0 == 4) {
@@ -19906,7 +19906,7 @@ extern "C" int GamebreakerSceneStartStep(void)
 {
     int changed = 0;
 
-    if (fn_801486A0() == 4 && lbl_8030F42C.mUnknown0 == 4) {
+    if (MiniGameGetType() == 4 && lbl_8030F42C.mUnknown0 == 4) {
         changed = lbl_8030F42C.mUnknown4 > 1;
     }
     if (lbl_8030F42C.mUnknown4 == 0 || changed) {
@@ -20478,17 +20478,17 @@ extern "C" void GameEndCastScene(Entry_800AA80C *pEntries, int index)
             }
         }
     } else {
-        unsigned int mode = fn_801486A0();
+        unsigned int mode = MiniGameGetType();
 
         if (mode <= 1) {
             int value = 0;
 
             switch (mode) {
             case 1:
-                value = fn_8015264C(lbl_8031BDD4);
+                value = MiniGameJumpBallGetLeader(gMiniGameJumpBall);
                 break;
             case 0:
-                value = fn_8014F448(MiniGameGetCurrent());
+                value = MiniGameCrushCarrierGetLeader(MiniGameGetCurrent());
                 break;
             }
             AnmsSetPinnedPlayer(0, value);
@@ -20569,7 +20569,7 @@ extern "C" void GameEndSelectScene(Class_80297B90 *p)
         || (ScrmGetWinner() == 2 && ScrmGetTeamScore(0) == ScrmGetTeamScore(1))) {
         lbl_803EAA88->mUnknown4 = 3;
     } else {
-        unsigned int mode = fn_801486A0();
+        unsigned int mode = MiniGameGetType();
 
         lbl_803EAA88->mpUnknown0 = lbl_803EAAA0;
         if (mode <= 2) {
@@ -21137,7 +21137,7 @@ void Class_80297B90::vfn_04(float dt)
             StoryTournamentOnGameEnd();
             PlyrNameTagEnable(0);
             FieldLinesEnable(0);
-            if (fn_801486A0() != 15 && lbl_803EAA88->mUnknown17 == 0) {
+            if (MiniGameGetType() != 15 && lbl_803EAA88->mUnknown17 == 0) {
                 PlayerObjSetDrawReady(0);
             }
             InGameStop();
@@ -22835,7 +22835,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
     Object_80039F5C *p = 0;
 
     if (fn_8011F1CC() != 0 && fn_8011F37C() == 0) {
-        if (fn_801486A0() == 4) {
+        if (MiniGameGetType() == 4) {
             Vector_80039F5C pos;
 
             BallGetPosition(BallGetCurrent(), &pos);
@@ -23768,7 +23768,7 @@ extern "C" int fn_800B0A2C(Object_80039F5C *p, int value)
             } else {
                 lbl_803EAB14->mUnknown2E0 = 2;
             }
-            if (fn_801486A0() == 2) {
+            if (MiniGameGetType() == 2) {
                 result = 0;
             }
         } else if (lbl_803EAB14->mUnknown2E0 != value && lbl_803EAB14->mUnknown2E0 == 2) {
@@ -25220,7 +25220,7 @@ extern "C" void fn_800B3AF4(void)
             PlayBookPickPage(team, (signed char)lbl_803EAB34->mUnknown34[0], (signed char)lbl_803EAB34->mUnknown34[1],
                         (signed char)lbl_803EAB34->mUnknown34[2]);
         }
-        if (fn_801486A0() != 2) {
+        if (MiniGameGetType() != 2) {
             fn_800B3078();
         } else {
             PauseUnblock();
@@ -25517,16 +25517,16 @@ extern "C" void fn_800B44D4(BitStream_t *pStream)
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned char index = 0; index <= 6; index++) {
             short *pRatings = PlyrGet(team, index)->mRatings;
-            fn_80191068(pStream, pRatings[0], 16);
-            fn_80191068(pStream, pRatings[1], 16);
-            fn_80191068(pStream, pRatings[2], 16);
-            fn_80191068(pStream, pRatings[3], 16);
-            fn_80191068(pStream, pRatings[4], 16);
-            fn_80191068(pStream, pRatings[5], 16);
-            fn_80191068(pStream, pRatings[6], 16);
-            fn_80191068(pStream, pRatings[7], 16);
-            fn_80191068(pStream, pRatings[8], 16);
-            fn_80191068(pStream, pRatings[9], 16);
+            WriteBitStream(pStream, pRatings[0], 16);
+            WriteBitStream(pStream, pRatings[1], 16);
+            WriteBitStream(pStream, pRatings[2], 16);
+            WriteBitStream(pStream, pRatings[3], 16);
+            WriteBitStream(pStream, pRatings[4], 16);
+            WriteBitStream(pStream, pRatings[5], 16);
+            WriteBitStream(pStream, pRatings[6], 16);
+            WriteBitStream(pStream, pRatings[7], 16);
+            WriteBitStream(pStream, pRatings[8], 16);
+            WriteBitStream(pStream, pRatings[9], 16);
         }
     }
 }
@@ -25572,7 +25572,7 @@ extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
             value = 255;
         }
         value = TutorialScaleCpuRating(team, i, value);
-        value = fn_80148698(team, i, value);
+        value = MiniGameAdjustRating(team, i, value);
         value = GameSkillAdjustRating(team, i, value);
         value = CatchUpAdjustRating(team, i, value);
         value = GamebreakerAdjustRating(team, index, i, value);
@@ -26251,7 +26251,7 @@ extern "C" int fn_800B6098(Object_80039F5C *p, Input_800B6D34 *pInput, int mode)
                     }
                     lbl_803EAB60->mpEntries[p->mUnknown8].mUnknown8 = 1;
                 } else if (elapsed >= lbl_803EAB58
-                           || (fn_801486A0() != 0 && (float)MathAngleDiff(p->mMotion.mFacing, 0xC00000) < 45.0f)) {
+                           || (MiniGameGetType() != 0 && (float)MathAngleDiff(p->mMotion.mFacing, 0xC00000) < 45.0f)) {
                     if (fn_80110824(p, 1, fn_800B5FC0(p, pInput), mode)) {
                         result = 1;
                         p->mFlags |= 0x4000;
@@ -26419,7 +26419,7 @@ extern "C" void fn_800B6714(Object_80039F5C *p, int index)
         }
         p->mUnknown8 = index;
         p->mFlags |= 0x400;
-        if (p->mIdBytes[2] == ScrmGetDefenseTeam() && fn_801486A0() != 0) {
+        if (p->mIdBytes[2] == ScrmGetDefenseTeam() && MiniGameGetType() != 0) {
             p->mUnknown9[1] = lbl_803EAB44;
         } else {
             p->mUnknown9[1] = 0;
@@ -26453,7 +26453,7 @@ extern "C" void fn_800B6868(int team, int index, int slot, int mode)
     Object_80039F5C *pOther;
     short tries;
 
-    if (fn_801486A0() != 0 && fn_801486A0() != 1) {
+    if (MiniGameGetType() != 0 && MiniGameGetType() != 1) {
         tries = 7;
         pTeam = PlayBookGetFormation(team);
         if (index != 0xFF) {
@@ -26488,7 +26488,7 @@ extern "C" void fn_800B6988(int index)
 {
     Object_80039F5C *pNew = 0;
 
-    if (fn_801486A0() != 0 && fn_801486A0() != 1 && fn_800AD9B4() == 3) {
+    if (MiniGameGetType() != 0 && MiniGameGetType() != 1 && fn_800AD9B4() == 3) {
         Vector_80039F5C vel;
         Vector_80039F5C target;
         Vector_80039F5C pos;
@@ -26871,7 +26871,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
     Input_800B6D34 input;
     int state;
 
-    if (fn_801486A0() == 1 && fn_801520C4(p, &index) != 0) {
+    if (MiniGameGetType() == 1 && MiniGameJumpBallPickBall(p, &index) != 0) {
         pBall = BallGet(index);
     } else {
         index = BallGetCurrentIndex();
@@ -26964,7 +26964,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
         return 0;
     }
     if ((input.mUnknown93 & 0x20)
-        && (BallStateGet(pBall, 0) == 5 || fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2)
+        && (BallStateGet(pBall, 0) == 5 || MiniGameGetType() == 0 || MiniGameGetType() == 1 || MiniGameGetType() == 2)
         && fn_80125510(p, 0) != 0) {
         p->mFlags |= 0x4000;
         return 0;
@@ -27300,7 +27300,7 @@ extern "C" void fn_800B86A4(int index)
 
 extern "C" void fn_800B876C(int index, unsigned int event, float value)
 {
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         return;
     }
     switch (event) {
@@ -27513,7 +27513,7 @@ int PostPlayPhase::GetResultText(char *pText)
             } else {
                 if (lbl_803EAB78->mUnknown104.mUnknown18 & 0x40) {
                     if (!(lbl_803EAB78->mUnknown104.mUnknown18 & 0x40000) && (ScrmGetPlayTurnovers() & 1) == 0
-                        && fn_801486A0() != 2) {
+                        && MiniGameGetType() != 2) {
                         strcpy(pText, firstDown);
                         changed = 1;
                     }
@@ -27662,7 +27662,7 @@ void PostPlayPhase::OnEnter(float dt)
     ParticleTrailSetEnabled(0);
     ScrmSetPlayFlag(21, 0);
     fn_800C4438(&lbl_803EAB78->mSequence);
-    if (fn_801486A0()) {
+    if (MiniGameGetType()) {
         SetupCamera();
     }
     fn_800B24C8();
@@ -28569,7 +28569,7 @@ extern "C" unsigned char fn_800BB0C4(void)
 extern "C" unsigned int fn_800BB0EC(void)
 {
     unsigned int index = 9999;
-    int checkFirst = fn_801486A0() == 3;
+    int checkFirst = MiniGameGetType() == 3;
     unsigned int count = ScrmGetActivePlayerCount(1);
     unsigned int limit = count < ScrmGetActivePlayerCount(0) ? count : ScrmGetActivePlayerCount(0);
 
@@ -29071,7 +29071,7 @@ extern "C" void fn_800BC190(int index, int value)
     } else {
         sides[0] = index & 1;
     }
-    if (fn_801485D4() != 0) {
+    if (MiniGameIsEnabled() != 0) {
         unsigned int mode = MiniGameGetCurrent()->vfn_05(0);
 
         if (mode <= 2) {
@@ -29283,7 +29283,7 @@ void PreGamePhase::UpdateIntroEnd(float dt)
     int state;
 
     if (lbl_803EABA3 == 0 && GameTipWasShown(14) == 0 && InGameIsDemo() == 0 &&
-        GameModeTypeIsSpecial() == 0 && TutorialIsActive() == 0 && fn_801485D4() == 0 &&
+        GameModeTypeIsSpecial() == 0 && TutorialIsActive() == 0 && MiniGameIsEnabled() == 0 &&
         (state = GameOptionsGet(14)) == 1) {
         HideIntroScreen();
         GameTipForceShow(14);
@@ -29331,7 +29331,7 @@ void PreGamePhase::OnUpdate(float dt)
 void PreGamePhase::OnExit()
 {
     if (GameTipWasShown(14) != 0 || InGameIsDemo() != 0 || GameModeTypeIsSpecial() != 0 ||
-        TutorialIsActive() != 0 || fn_801485D4() != 0 || GameOptionsGet(14) != 1) {
+        TutorialIsActive() != 0 || MiniGameIsEnabled() != 0 || GameOptionsGet(14) != 1) {
         HideIntroScreen();
     }
     lbl_803EC98C->mUnknown32 = 0;
@@ -29762,7 +29762,7 @@ extern "C" void fn_800BDA7C(void)
 
 extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
 {
-    int twoPlayer = fn_801486A0() == 2;
+    int twoPlayer = MiniGameGetType() == 2;
     Object_80039F5C *pObject = fn_800B6544(index);
     int valid = pObject != 0 ? pObject->mUnknown8 != 255 : 0;
     int team;
@@ -29902,7 +29902,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
     int home = ScrmGetOffenseTeam();
     int away = ScrmGetDefenseTeam();
     int owner = fn_800B65A0(team);
-    int practice = fn_801486A0() == 2;
+    int practice = MiniGameGetType() == 2;
     unsigned int action;
     int done;
 
@@ -30080,7 +30080,7 @@ extern "C" void fn_800BE4C8(int a, unsigned int msg, float value)
 {
     int team;
 
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         return;
     }
     team = fn_800B6644(a);
@@ -30653,7 +30653,7 @@ extern "C" int fn_800BF824(void)
     int result = 0;
 
     if (lbl_803EABA8->mUnknownB8 > 30) {
-        if (TutorialIsActive() == 0 && fn_801485D4() == 0 && ChallengeHasRecordFlag() != 0) {
+        if (TutorialIsActive() == 0 && MiniGameIsEnabled() == 0 && ChallengeHasRecordFlag() != 0) {
             GameTipForceShow(3);
         }
         lbl_803EABA8->mUnknownB8 = -1;
@@ -30776,12 +30776,12 @@ void PreSnapPhase::OnEnter(float dt)
     ParticlesResetEvents();
     fn_8010A220();
     DefCoverPreSnapInit();
-    if (fn_801486A0() != 0 && fn_801486A0() != 1) {
+    if (MiniGameGetType() != 0 && MiniGameGetType() != 1) {
         ScrmAlignTeam(ScrmGetOffenseTeam());
         ScrmAlignTeam(ScrmGetDefenseTeam());
     }
     DefCoverSetupFormation(1);
-    if (fn_801486A0() != 0) {
+    if (MiniGameGetType() != 0) {
         SetupCamera();
     }
     fn_8011DF90();
@@ -30834,7 +30834,7 @@ void PreSnapPhase::OnEnter(float dt)
     fn_800BF3F4(ScrmGetDefenseTeam());
     fn_800BD99C(ScrmGetOffenseTeam());
     fn_800BD99C(ScrmGetDefenseTeam());
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         break;
@@ -30868,7 +30868,7 @@ void PreSnapPhase::OnEnter(float dt)
     lbl_803EABA8->mUnknownAC = 0;
     lbl_803EABA8->mUnknownAB = 0;
     ScrmClearDriveBallPlaced();
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         for (i = 0; i <= 1; i++) {
             unsigned short k;
 
@@ -33087,7 +33087,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     int low;
     float ratio;
 
-    if (fn_801486A0() == 0 && (p == 0 || fn_800F06F4(0, p->mpState, 51, 0xFFFF) != 0xFFFF)) {
+    if (MiniGameGetType() == 0 && (p == 0 || fn_800F06F4(0, p->mpState, 51, 0xFFFF) != 0xFFFF)) {
         result = 0;
     }
     point = ScrmGetBallSpot();
@@ -33362,7 +33362,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
     }
     if (!stripped) {
         ok = 1;
-        if (!fn_801486A0() && (pOther == 0 || fn_800F06F4(0, pOther->mpState, 51, 0xFFFF) != 0xFFFF)) {
+        if (!MiniGameGetType() && (pOther == 0 || fn_800F06F4(0, pOther->mpState, 51, 0xFFFF) != 0xFFFF)) {
             ok = 0;
         }
         if (ok) {
@@ -33555,7 +33555,7 @@ extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther)
 
 extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int *pC)
 {
-    if (value == 0 && fn_801486A0() && !ScrmTestPlayFlag(0) && fn_8011F1CC() && BallGetCurrentHolder() == p) {
+    if (value == 0 && MiniGameGetType() && !ScrmTestPlayFlag(0) && fn_8011F1CC() && BallGetCurrentHolder() == p) {
         *pA = 94;
         *pB = 93;
         *pC = 164;
@@ -33593,7 +33593,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
         } else {
             pTarget = pOther;
         }
-        if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
+        if ((MiniGameGetType() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
             && pTarget != 0 && PlyrContactIsKnockable(p, value) && fn_800C5DE4(pTarget, p)) {
             if (fn_800C769C(pTarget, p)) {
                 return pTarget->mUnknown1221;
@@ -34156,7 +34156,7 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
 {
     int result = 0;
 
-    if (fn_801486A0()) {
+    if (MiniGameGetType()) {
         result = MathAngleDiff(0xC00000, p->mMotion.mFacing) <= 0x1FFFFF;
         if (fn_80114E7C(p)) {
             result = 1;
@@ -35003,7 +35003,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
     int result = 0;
     Object_80039F5C *p = 0;
 
-    if (fn_801486A0() != 1) {
+    if (MiniGameGetType() != 1) {
         Object_80039F5C *pCarrier = BallGetCurrentHolder();
         Ball_t *pBall = BallGetCurrent();
         int state = BallStateGet(pBall, 0);
@@ -35153,7 +35153,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
             unsigned int i;
 
             for (i = 0; i <= 3; i++) {
-                p = fn_8015286C(lbl_8031BDD4, i);
+                p = MiniGameJumpBallGetPlayer(gMiniGameJumpBall, i);
                 if (p->mUnknown8 == 255) {
                     if (index == count) {
                         fn_8009BD2C(p, pRef);

@@ -46,8 +46,8 @@ int MsgPlayerSelectGetSideProfile(int a);
 int UserRecGetCount(void);
 int UserProfileGetOldest(int a);
 void UserProfileCreate(int a, char *pText, int c);
-int fn_801486A0(void);
-void fn_80152940(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
+int MiniGameGetType(void);
+void MiniGameJumpBallGetEntryInfo(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int ScrmGetWinner(void);
 void PerCheckConnectAll(void);
 void PortDbOpenSides(DbCursor *pObject);
@@ -186,13 +186,13 @@ int MsgGameStreetEventHasOpenSlot(void)
     if (FELoopIsMainFEActive() == 0) {
         MiniGameSlotInfo_t info;
 
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
             result = 1;
             break;
         case 1:
             for (unsigned int i = 0; i <= 3; i++) {
-                fn_80152940(MiniGameGetCurrent(), i, &info);
+                MiniGameJumpBallGetEntryInfo(MiniGameGetCurrent(), i, &info);
                 if (info.mUnknown20 == 0xFF) {
                     result = 1;
                     break;
@@ -213,7 +213,7 @@ int MsgGameStreetEventHasOpenSlot(void)
 
 int MsgGameStreetEventCheckSide(void)
 {
-    if (fn_801486A0() != 15) {
+    if (MiniGameGetType() != 15) {
         return MiniGameGetCurrent()->IsWinnerUserTeam();
     }
     return fn_800B65A0(ScrmGetWinner()) != 0xFF;

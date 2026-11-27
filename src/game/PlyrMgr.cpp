@@ -111,7 +111,7 @@ extern "C" {
 
 FieldPoint_t ScrmGetTeamSetupSpot(int team);
 int GamebreakerIsCutscenePlaying(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetDefenseTeam(void);
 int ScrmIsFieldFlipped(void);
 int ScrmClassifyPosition(Vector_80039F5C *pPos, float *pOut, int a);
@@ -579,7 +579,7 @@ extern "C" void PlyrAnimPostUpdate(Object_80039F5C *p, PlyrModelView_t *pBlock)
 
 extern "C" void PlyrClampBehindLine(Object_80039F5C *p)
 {
-    if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && GamebreakerIsCutscenePlaying() == 0) {
+    if (fn_800AD9B4() == 2 && MiniGameGetType() != 0 && GamebreakerIsCutscenePlaying() == 0) {
         int team = ScrmGetDefenseTeam();
         if (team == p->mIdBytes[2]) {
             float limit = ScrmGetTeamSetupSpot(team).mY + 0.15625f + 1.1f;
@@ -595,7 +595,7 @@ extern "C" void PlyrKeepInBounds(Object_80039F5C *p)
     int mode = fn_800AD9B4();
 
     if (p->mUnknown9[2] != 0
-        && ((mode == 3 && GamebreakerIsCutscenePlaying() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
+        && ((mode == 3 && GamebreakerIsCutscenePlaying() == 0) || MiniGameGetType() == 0 || MiniGameGetType() == 1)
         && ScrmClassifyPosition(&p->mMotion.mPos, 0, 0) > 2) {
         if (++p->mUnknown3090 > 299) {
             if (p->mMotion.mPos.mX >= ScrmGetSidelineX()) {
@@ -714,7 +714,7 @@ extern "C" void PlyrMgrUpdate(void)
         if (p->mUnknown8 != 0xFF) {
             active = 1;
         }
-        if (replay == 0 && p->mIdBytes[2] == team && fn_801486A0() != 1) {
+        if (replay == 0 && p->mIdBytes[2] == team && MiniGameGetType() != 1) {
             fn_800C8330(p);
             fn_800C7794(p);
         }

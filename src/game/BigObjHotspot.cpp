@@ -67,7 +67,7 @@ static int _Hotspot_iPendingNext = 0;
 
 int fn_800AD9B4(void);
 Object_80039F5C *BallGetCurrentHolder(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetPlayTurnovers(void);
 void BigObjEmitParticles(void *, float, BigObjInst *, BigObj_t *);
 void DynObjSetPartState(BigObj_t *, int, int);
@@ -77,7 +77,7 @@ void TeamUnlock(int, int);
 void TeamDbOpenQuery(DbCursor *, int);
 void fn_8009BD2C(Object_80039F5C *, int *);
 int fn_800A3444(void);
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 int TutorialIsActive(void);
 void TutorialSetMoveDone(int, int);
 int ScrmIsFieldFlipped(void);
@@ -101,7 +101,7 @@ int HotspotClassifyPlay(HotspotPlay_t *pPlay)
     BigObj_t *pObject = pPlay->mpObject;
     int found = 0;
     int *pRef = &pPlay->mRef;
-    int state = fn_801486A0();
+    int state = MiniGameGetType();
     if (state == 0 || state == 2 || state == 3 || state == 1) {
         return 0;
     }
@@ -177,7 +177,7 @@ void HotspotRecordCapture(HotspotPlay_t *pPlay)
 {
     unsigned int index = fn_800A3444();
     int db = UserProfileGetSelected(_PlayerRefTeam(pPlay->mRef));
-    if (fn_801485D4() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
+    if (MiniGameIsEnabled() == 0 && TutorialIsActive() == 0 && db != -1 && index <= 9) {
         int handle = DbUserGetDb(DbUserGetId(db));
         int bit = 1 << index;
         DbTableCursor cursor;

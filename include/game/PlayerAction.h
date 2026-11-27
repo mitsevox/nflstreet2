@@ -98,7 +98,7 @@ int fn_8011F1F4(void);
 int fn_8011F2C4(void);
 int PassIconsAreShown(void);
 int PassIconsWereShown(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void TutorialSetMoveDone(int index, int value);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
@@ -262,7 +262,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 unsigned int fn_8011E188(void);
 int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pC, float e, float f, int d, float g);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void PossReleaseBall(Object_80039F5C *p);
 int ScrmGetOffenseTeam(void);

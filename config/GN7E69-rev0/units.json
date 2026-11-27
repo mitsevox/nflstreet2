@@ -571,10 +571,6 @@
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
     },
-    "ReadBitStream__FP11BitStream_tUi": {
-      "address": "0x80190F18",
-      "evidence": "evidence.tsv external row 0x80190F18 (ReadBitStream__FP11BitStream_tUi), name row 0x80190F18 and type row BitStream_t."
-    },
     "_stack_addr": {
       "address": "0x803FE4C0",
       "evidence": "doldecomp/dolsdk2004 revision2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSThread.c related declaration and repeated actual retained operands; outside the image, so the linked source build defines it as an absolute link-script symbol; no object storage claimed."
@@ -614,14 +610,6 @@
     "__init_cpp": {
       "address": "0x8023E838",
       "evidence": "Actual complete startup C call at8023E824 reaches original84-byte ctor-table loop entry8023E838, known table802CC668. Logical SDK spelling from coherent OOT6e449e; void(void) call signature. Original target debug name not claimed; original body remains linked, no fake definition."
-    },
-    "OpenBitStream__FP11BitStream_tPv15BitStreamMode_t": {
-      "address": "0x80190ED4",
-      "evidence": "evidence.tsv external row 0x80190ED4 (OpenBitStream__FP11BitStream_tPv15BitStreamMode_t), name row 0x80190ED4 and type row BitStream_t."
-    },
-    "CloseBitStream__FP11BitStream_t": {
-      "address": "0x80190EF0",
-      "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
     },
     "_ctors": {
       "address": "0x802CC668",
@@ -1300,6 +1288,19 @@
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
       }
+    },
+    {
+      "source": "src/game/bitstream.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80190ED4-0x80191200 (src/game/bitstream.cpp), its four function and name rows, and its compiler, type and source-form rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80190ED4",
+          "end": "0x80191200"
+        }
+      ]
     },
     {
       "source": "src/game/Loading.cpp",
@@ -9138,12 +9139,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801488D4",
-          "end": "0x80149154"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801492C4",
           "end": "0x8014CCE8"
         },
         {
@@ -9295,11 +9290,7 @@
             "evidence": "evidence.tsv source-form 0x80148814-0x801488D4"
           },
           {
-            "function": "vfn_16__9MiniGameCPCi",
-            "evidence": "evidence.tsv source-form 0x80149154-0x801492C4"
-          },
-          {
-            "function": "fn_8014CCE8",
+            "function": "MiniGame4On4GetTeamStats",
             "evidence": "evidence.tsv source-form 0x8014CCE8-0x8014CF44"
           },
           {
@@ -9311,19 +9302,19 @@
             "evidence": "evidence.tsv source-form 0x8014DDCC-0x8014E220"
           },
           {
-            "function": "vfn_12__21MiniGameCrushCarrierC",
+            "function": "UpdateRecords__21MiniGameCrushCarrierC",
             "evidence": "evidence.tsv source-form 0x8014F19C-0x8014F36C"
           },
           {
-            "function": "vfn_31__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
+            "function": "IsBestPlayerStat__21MiniGameCrushCarrierCiiiP15Object_80039F5Cii",
             "evidence": "evidence.tsv source-form 0x8014FDD0-0x8014FF2C"
           },
           {
-            "function": "fn_8014FF34",
+            "function": "MiniGameCrushCarrierGetUserRank",
             "evidence": "evidence.tsv source-form 0x8014FF34-0x8014FFC4"
           },
           {
-            "function": "fn_801502B4",
+            "function": "MiniGameJumpBallEndRound",
             "evidence": "evidence.tsv source-form 0x801502B4-0x8015034C"
           },
           {
@@ -9339,19 +9330,19 @@
             "evidence": "evidence.tsv source-form 0x80150AC4-0x80150DFC"
           },
           {
-            "function": "fn_80151B20",
+            "function": "MiniGameJumpBallIsTied",
             "evidence": "evidence.tsv source-form 0x80151B20-0x80151BCC"
           },
           {
-            "function": "fn_8015228C",
+            "function": "MiniGameJumpBallPickBallAhead",
             "evidence": "evidence.tsv source-form 0x8015228C-0x80152400"
           },
           {
-            "function": "vfn_12__17MiniGameJumpBallC",
+            "function": "UpdateRecords__17MiniGameJumpBallC",
             "evidence": "evidence.tsv source-form 0x8015247C-0x8015264C"
           },
           {
-            "function": "vfn_07__18MiniGameOpenFieldCii",
+            "function": "SetOption__18MiniGameOpenFieldCii",
             "evidence": "evidence.tsv source-form 0x80154528-0x80154588"
           }
         ],

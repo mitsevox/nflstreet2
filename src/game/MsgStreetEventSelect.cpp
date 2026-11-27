@@ -8,9 +8,9 @@
 
 extern "C" {
 void MsgMainMenuSetActivePad(int a);
-void fn_801485B4(void);
-void fn_801485C0(void);
-void fn_801485EC(int value);
+void MiniGameEnable(void);
+void MiniGameDisable(void);
+void MiniGameSetType(int value);
 int MsgGameGetSetupState(void);
 char *strncpy(char *pDest, const char *pSource, int count);
 int DbFileTblLoad(int a, int tag);
@@ -38,9 +38,9 @@ void MsgStreetEventSelectInit(int *pCount, int *pValue)
         _MsgStreetEventSelect_bOpen = 1;
         FELoopResetIdle();
         if (MsgGameGetSetupState() == 0) {
-            fn_801485C0();
+            MiniGameDisable();
         }
-        fn_801485B4();
+        MiniGameEnable();
     }
 }
 
@@ -49,10 +49,10 @@ void MsgStreetEventSelectShutdown(void)
     if (_MsgStreetEventSelect_bOpen != 0) {
         DbFileTblDestroy(0, 0x5444474D);
         if (_MsgStreetEventSelect_iPending >= 0 && _MsgStreetEventSelect_iPending <= 5) {
-            fn_801485EC(_MsgStreetEventSelect_iPending);
+            MiniGameSetType(_MsgStreetEventSelect_iPending);
             _MsgStreetEventSelect_iChosen = _MsgStreetEventSelect_iPending;
         } else {
-            fn_801485C0();
+            MiniGameDisable();
             _MsgStreetEventSelect_iChosen = 15;
         }
         _MsgStreetEventSelect_bOpen = 0;

@@ -62,8 +62,8 @@ int PlayAlignSetSlotValue(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord,
 void PlayArtSetFlip(signed char team, int a, int b);
 void PlayBookOffsetSpots(Vec2_t *pPoints, int count);
 int PlayAutoFlip(int team);
-int fn_801485D4(void);
-int fn_801486A0(void);
+int MiniGameIsEnabled(void);
+int MiniGameGetType(void);
 int ScrmGetDown(void);
 int ScrmGetOffenseTeam(void);
 float ScrmGetGoalLineY(void);
@@ -247,7 +247,7 @@ void PlayBookOpenDatabases(int a, int b, int c, int d, int e, int f)
         _PlayBook_pData->mUnknown4[0].mUnknown4 = 0x31444250;
         first = 2;
         second = 1;
-        if (fn_801485D4()) {
+        if (MiniGameIsEnabled()) {
             first = MiniGameGetCurrent()->mUnknown0;
             second = MiniGameGetCurrent()->mUnknown4;
         }
@@ -298,7 +298,7 @@ void PlayBookLoadCurrentPlay(int team)
     PlayBookClearLoadFlags(3);
     PlayBookSetLoadFlags(flags);
     if (ScrmGetOffenseTeam() == team && fn_800B65A0(team) == 0xFF && !fn_800BA6F8() &&
-        (!fn_801485D4() || fn_801486A0() != 2)) {
+        (!MiniGameIsEnabled() || MiniGameGetType() != 2)) {
         PlayAutoFlip(team);
     }
 }
@@ -755,7 +755,7 @@ PlayBookTeam_t *PlayBookGetTeam(int team)
 }
 
 extern "C" {
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void PlayBookLoadCurrentPlay(int team);
 void fn_800FBAA8(void);
 void fn_8011F3A8(void);
@@ -783,7 +783,7 @@ void fn_800B43AC(int value);
 
 int PlayCallGetPlaybookId(void)
 {
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 4: return 1;
     case 3: return 4;
     case 2: return MiniGameGetCurrent()->vfn_05(0) == 1 ? 2 : 3;
@@ -1294,7 +1294,7 @@ int ChallengeIsActive(void);
 int GamebreakerUpdateAiTrigger(int team);
 int GamebreakerGetPlayMode(int team);
 int fn_800C8744(int team);
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 int PlayBookGetDatabase(int team);
 int ScrmGetDown(void);
 int ScrmGetOffenseTeam(void);
@@ -1607,8 +1607,8 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
 
     PlayTrackGetRatingBias(team, &group1Bias, &group2Bias);
     PlayTrackGetGainTendency(team, &kind, &flags);
-    if (fn_801485D4())
-        preferred = MiniGameGetCurrent()->vfn_08(1);
+    if (MiniGameIsEnabled())
+        preferred = MiniGameGetCurrent()->GetPlayType(1);
 
     for (unsigned short i = 0; i < count; i++) {
         float scale = 1.0f;

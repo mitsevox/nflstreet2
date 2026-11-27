@@ -81,8 +81,8 @@ extern "C" void PlyrAnimReplayWrite(BitStream_t *pStream)
                     break;
                 }
             }
-            fn_80191068(pStream, id, 16);
-            fn_80191068(pStream, anim, 16);
+            WriteBitStream(pStream, id, 16);
+            WriteBitStream(pStream, anim, 16);
         }
     }
 }

@@ -52,7 +52,7 @@ int ScrmGetOffenseTeam(void);
 int ScrmTestPlayFlag(int bit);
 void ScrmSetPlayFlag(int bit, int on);
 int ScrmIsNotReplay(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int MathAngleDiff(int a, int b);
 void MatPushUnit(void);
 void MatPop(void);
@@ -878,7 +878,7 @@ int BallCanPlayerTouch(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int
         }
         break;
     }
-    if ((p->mFlags & 0x800) && !fn_801486A0() && (unsigned int)(p->mpState->mId - 10) <= 1) {
+    if ((p->mFlags & 0x800) && !MiniGameGetType() && (unsigned int)(p->mpState->mId - 10) <= 1) {
         result = 0;
     }
     return result;
@@ -962,7 +962,7 @@ void BallStateHeldExit(Ball_t *pBall)
 
 void BallStatePassHitGround(Ball_t *pBall, float dt)
 {
-    if (fn_800AD9B4() == 3 && (BallGetCurrent() == pBall || fn_801486A0() == 1)) {
+    if (fn_800AD9B4() == 3 && (BallGetCurrent() == pBall || MiniGameGetType() == 1)) {
         if (!ScrmTestPlayFlag(1)) {
             BallStateChange(pBall, 5, 0);
             PossEndIncompletePass();
@@ -982,7 +982,7 @@ void BallStatePitchHitGround(Ball_t *pBall, float dt)
 {
     BallSetTarget(pBall, 0);
     if (BallGetCurrent() == pBall && !ScrmIsNotReplay()) {
-        if (ScrmTestPlayFlag(1) || !fn_801486A0()) {
+        if (ScrmTestPlayFlag(1) || !MiniGameGetType()) {
             PossStartFumble();
         } else {
             PossEndIncompletePass();
@@ -1019,7 +1019,7 @@ int BallStateHandoffTouch(Ball_t *pBall, void *pData, unsigned int type)
                 fn_800B1508();
                 AudmonEventPostId(0x1E, &p->mMotion.mPos, p->mId, 1, 1, 0);
                 port = fn_800B65A0(p->mIdBytes[2]);
-                if (port != 0xFF && !(p->mFlags & 0x400) && fn_801486A0() != 0 && fn_801486A0() != 1) {
+                if (port != 0xFF && !(p->mFlags & 0x400) && MiniGameGetType() != 0 && MiniGameGetType() != 1) {
                     fn_800B6714(p, port);
                 }
             }

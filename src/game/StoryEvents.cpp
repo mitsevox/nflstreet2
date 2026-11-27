@@ -117,12 +117,12 @@ void UserStatsClose(DbCursor *pObject);
 void UserStatsSet(DbCursor *pObject, int index, int value);
 int UserStatsGet(DbCursor *pObject, unsigned int index);
 void UserInfoAddPoints(int db, int id);
-void fn_801485B4(void);
-int fn_801485D4(void);
-void fn_801485EC(int value);
-int fn_801486A0(void);
-void fn_80148AF8(MiniGameC *pObject);
-void fn_8014F3DC(int ticks);
+void MiniGameEnable(void);
+int MiniGameIsEnabled(void);
+void MiniGameSetType(int value);
+int MiniGameGetType(void);
+void MiniGameSetDepthCallbacks(MiniGameC *pObject);
+void MiniGameCrushCarrierSetTime(int ticks);
 void EditMenuBegin(int mode, int value);
 void UserProfileSelect(signed char a, int b);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
@@ -171,7 +171,7 @@ int ScrmGetWinner(void);
 Object_8008044C _StoryEvents_PlayerCursor;
 DbCursor _StoryEvents_UserStats;
 StevRow_t _StoryEvents_EventRow;
-extern MiniGameSettings_t lbl_8031BDD4;
+extern MiniGameSettings_t gMiniGameJumpBall;
 
 StoryMatch_t _StoryEvents_Match;
 int _StoryEvents_aaLineup[2][7];
@@ -421,8 +421,8 @@ int StoryEventsCreateAwayTeam(int *pTeam, int *pCopy)
     int etnr;
 
     full = count = 0;
-    if (_StoryEvents_pEvent->mItes == 1 && fn_801485D4()) {
-        switch (fn_801486A0()) {
+    if (_StoryEvents_pEvent->mItes == 1 && MiniGameIsEnabled()) {
+        switch (MiniGameGetType()) {
         case 1:
             full = 1;
         case 0:
@@ -489,8 +489,8 @@ int StoryEventsCreateHomeTeam(int *pTeam, int *pCopy, int *pCount)
     int team;
     int i;
 
-    if ((_StoryEvents_pEvent->mItes == 1 || _StoryEvents_pEvent->mItes == 2) && fn_801485D4()) {
-        switch (fn_801486A0()) {
+    if ((_StoryEvents_pEvent->mItes == 1 || _StoryEvents_pEvent->mItes == 2) && MiniGameIsEnabled()) {
+        switch (MiniGameGetType()) {
         case 1:
             second = 1;
             break;
@@ -514,7 +514,7 @@ int StoryEventsCreateHomeTeam(int *pTeam, int *pCopy, int *pCount)
         TeamDbCreatePlayers(*pTeam, _StoryEvents_aCreatePositions, counts, 7, ids2, 21);
         TeamDbAutoPickPlayers(0, 0, list, 7, ids2, 21);
         _StoryEvents_State.mUnknown2 = ids[0];
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
         case 1:
             StoryEventsScalePlayers(team, list, _StoryEvents_State.mUnknown2, 7, StoryEventsUpdateRatingScale());
@@ -571,7 +571,7 @@ void StoryEventsSetupTeams(void)
     } else {
         away = StoryEventsCreateAwayTeam(&awayTeam, &list[count]);
     }
-    if (_StoryEvents_pEvent->mItes == 1 && fn_801486A0() != 15) {
+    if (_StoryEvents_pEvent->mItes == 1 && MiniGameGetType() != 15) {
         StoryEventsBuildEventTables(away, awayTeam, list);
     }
     _StoryEvents_Match.mAway = away;
@@ -582,8 +582,8 @@ void StoryEventsSetupTeams(void)
 
 void StoryEventsSetupMatch(void)
 {
-    if (fn_801485D4()) {
-        fn_80148AF8(MiniGameGetCurrent());
+    if (MiniGameIsEnabled()) {
+        MiniGameSetDepthCallbacks(MiniGameGetCurrent());
     }
     StoryEventsSetupTeams();
     AutoDepthSetRateCallback(0);
@@ -613,55 +613,55 @@ void StoryEventsStartEvent(void)
     case 1: {
         StoryEventsSetRewardPenalty(0);
         int type = _StoryEvents_pEvent->mPes[0];
-        fn_801485B4();
+        MiniGameEnable();
         switch (type) {
         case 4:
-            fn_801485EC(4);
+            MiniGameSetType(4);
             break;
         case 3:
-            fn_801485EC(3);
+            MiniGameSetType(3);
             break;
         case 0:
-            fn_801485EC(0);
-            fn_8014F3DC(_StoryEvents_pEvent->mPes[3] * 60);
+            MiniGameSetType(0);
+            MiniGameCrushCarrierSetTime(_StoryEvents_pEvent->mPes[3] * 60);
             break;
         case 5:
-            fn_801485EC(5);
+            MiniGameSetType(5);
             break;
         case 1: {
-            fn_801485EC(1);
+            MiniGameSetType(1);
             // FAKEMATCH: reused local; value holds mPes[2], then mPes[1], then mPes[3]
             int value = _StoryEvents_pEvent->mPes[2];
-            lbl_8031BDD4.mUnknown40 = value == 1;
+            gMiniGameJumpBall.mUnknown40 = value == 1;
             value = _StoryEvents_pEvent->mPes[1];
             if (value < 0) {
                 value = _StoryEvents_pEvent->mPes[3];
                 if (value < 0) {
-                    lbl_8031BDD4.mUnknown32 = 1;
-                    lbl_8031BDD4.mUnknown36 = 0;
+                    gMiniGameJumpBall.mUnknown32 = 1;
+                    gMiniGameJumpBall.mUnknown36 = 0;
                 } else {
-                    lbl_8031BDD4.mUnknown32 = 0;
+                    gMiniGameJumpBall.mUnknown32 = 0;
                     // FAKEMATCH: the product goes back into value; it sets the target's register choice
                     value *= 60;
-                    lbl_8031BDD4.mUnknown36 = value;
+                    gMiniGameJumpBall.mUnknown36 = value;
                 }
             } else {
-                lbl_8031BDD4.mUnknown32 = value;
-                lbl_8031BDD4.mUnknown36 = 0;
+                gMiniGameJumpBall.mUnknown32 = value;
+                gMiniGameJumpBall.mUnknown36 = 0;
             }
             break;
         }
         case 2: {
             int enable = 1;
-            fn_801485EC(2);
+            MiniGameSetType(2);
             // FAKEMATCH: reused local; the outer switch's type holds mPes[2], then mPes[3]
             type = _StoryEvents_pEvent->mPes[2];
             if (type == 2) {
                 enable = 0;
             }
-            MiniGameGetCurrent()->vfn_07(0, enable);
+            MiniGameGetCurrent()->SetOption(0, enable);
             type = _StoryEvents_pEvent->mPes[3];
-            MiniGameGetCurrent()->vfn_07(1, type);
+            MiniGameGetCurrent()->SetOption(1, type);
             break;
         }
         }
@@ -670,8 +670,8 @@ void StoryEventsStartEvent(void)
     }
     case 2:
         if (_StoryEvents_pEvent->mPes[0] == 4) {
-            fn_801485B4();
-            fn_801485EC(4);
+            MiniGameEnable();
+            MiniGameSetType(4);
         }
         StoryEventsSetupMatch();
         break;
@@ -1516,7 +1516,7 @@ void StoryEventsBuildEventTables(int team, int id, int *pList)
         _StoryEvents_iPlayerTable = -1;
     }
     TDbTblFindUnusedId(0x54415453, &_StoryEvents_iPlayerTable);
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 1:
         TDbCompilePerformOp(&result, "use 'TATS' select into 'TATS'.\x8c * from 'YALP' where ('DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85 || 'DIGP' = \x85)\n", _StoryEvents_iPlayerTable, pList[0], pList[1], pList[2],
                     pList[3], pList[4], pList[5]);

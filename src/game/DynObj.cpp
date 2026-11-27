@@ -679,16 +679,16 @@ void BigObjAnimWritePose(AnimPose_t *pPose, BitStream_t *pStream, unsigned int c
         bits |= (unsigned long long)(pValue[2] >> 4) << 24;
         bits |= (unsigned long long)(pValue[3] >> 4) << 12;
         bits |= (unsigned long long)(pValue[4] >> 4);
-        fn_80191068(pStream, bits, 60);
+        WriteBitStream(pStream, bits, 60);
         pValue += 5;
     }
     bits = 0;
     for (i = 0; i < rest; i++) {
         bits |= (unsigned long long)(pValue[i] >> 4) << (rest - 1 - i) * 12;
     }
-    fn_80191068(pStream, bits, rest * 12);
+    WriteBitStream(pStream, bits, rest * 12);
     ReplayWritePacked3(pStream, pPose->mUnknown8, 16, 512.0f);
-    fn_80191068(pStream, pPose->mUnknown32 >> 8, 16);
+    WriteBitStream(pStream, pPose->mUnknown32 >> 8, 16);
 }
 
 void BigObjAnimReplayBlend(BigObj_t *pObject, BigObjInst *pLinked, BitStream_t *pStream0, BitStream_t *pStream1,

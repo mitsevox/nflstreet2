@@ -99,7 +99,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 int CamGameGetCurrentSlot(void);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetModeAll(int a);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void PlyrStarSetShown(int a, int b);
 void PlayAlignIssueTeamRoutes(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int team, int a);
 int PlayAlignIsPlayType11To18(PlayBookPlay_t *pRecord);
@@ -267,7 +267,7 @@ extern "C" void ScrmTeamPlaceInHuddle(int team)
 
 extern "C" void ScrmPlayerSendLineUp(Object_80039F5C *p)
 {
-    if (fn_801486A0() != 0 && fn_801486A0() != 1) {
+    if (MiniGameGetType() != 0 && MiniGameGetType() != 1) {
         if (ScrmGetOffenseTeam() == (p->mId >> 8 & 0xFF)) {
             if ((p->mId >> 16 & 0xFF) == 0) {
                 Message_800F01CC message;
@@ -488,7 +488,7 @@ extern "C" void ScrmStartPlay(void)
 extern "C" int ScrmCanSnap(void)
 {
     bool allowed = true;
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     int result;
 
     switch (mode) {
@@ -697,7 +697,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
     if (!ScrmTestPlayFlag(0)) {
         int ref;
 
-        if (fn_801486A0() != 3) {
+        if (MiniGameGetType() != 3) {
             margin = 0.3f;
         }
         if (ballPos.mY > pos.mY + margin) {
@@ -723,7 +723,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                 fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
                 crossed = 0;
             }
-            if (fn_801486A0() == 0) {
+            if (MiniGameGetType() == 0) {
                 crossed = 0;
             }
             if (crossed) {
@@ -784,7 +784,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
         if (GamebreakerGetSavedState(0) == 2 || GamebreakerGetSavedState(1) == 2) {
             conversion = 1;
         }
-        if ((fn_801486A0() == 4 || fn_801486A0() == 3) && fn_8011F1CC() != 0 && !ScrmTestPlayFlag(13) &&
+        if ((MiniGameGetType() == 4 || MiniGameGetType() == 3) && fn_8011F1CC() != 0 && !ScrmTestPlayFlag(13) &&
             !ScrmTestPlayFlag(1) && !ScrmTestPlayFlag(20) && !conversion) {
             return;
         }
@@ -849,7 +849,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
             }
             break;
         case 2:
-            if (fn_801486A0() == 2) {
+            if (MiniGameGetType() == 2) {
                 AudmonEventPostArgs(89, &ballPos, p->mIdBytes[2], 0, 0);
             }
             break;

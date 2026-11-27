@@ -311,10 +311,10 @@ int PlyrStarGetReplayBits(void) {
 void PlyrStarWriteReplay(PlyrStar_t *item, BitStream_t *stream) {
     if (item) {
         unsigned char active = (item->mUnknown20 >> 1) & 1;
-        fn_80191068(stream, active, 1);
-        fn_80191068(stream, PlyrGetIndex(item->mUnknown100), 5);
+        WriteBitStream(stream, active, 1);
+        WriteBitStream(stream, PlyrGetIndex(item->mUnknown100), 5);
     } else
-        fn_80191068(stream, 0, 6);
+        WriteBitStream(stream, 0, 6);
 }
 void PlyrStarReadReplay(PlyrStar_t *item, BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream_t *d,
                  float blend) {

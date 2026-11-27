@@ -32,7 +32,7 @@ int DbUserGetDb(int);
 void MemCardFilesResetSlot(int, int, int);
 void MemCardFilesRenameSlot(int, int, char *);
 int CheatIsNoneEnabled(void);
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 int fn_800A7E40(int);
 int fn_800A7E54(int);
 int fn_800A3444(void);
@@ -225,7 +225,7 @@ int UserProfileSaveRecords(unsigned char pad, int allowCreate)
             TDbCompilePerformOp(&result, "use 'EVAS' update 'RCSH' set 'KUSH' = \x88 and 'WGSH' = \x82 and 'LGSH' = \x82 and 'PTSH' = \x82 and 'TPSH' = \x82 and 'TRSH' = \x82 and 'TDSH' = \x82 and 'TSSH' = \x82 and 'CISH' = \x82 and 'RFSH' = \x82 and 'GTSH' = \x82 and '2TSH' = \x82 and 'TTSH' = \x82 and 'KSSH' = \x82 and 'WQSH' = \x82 and 'WOSH' = \x82 and 'LOSH' = \x82 and 'SOSH' = \x82 and 'AOSH' = \x82 where 'KUSH' = \x88\n", name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v14, v15, v16, v17, v18, name);
         }
     } else id = -1;
-    if (id != -1 && !fn_801485D4()) {
+    if (id != -1 && !MiniGameIsEnabled()) {
         int side = StyleTrackerGetTotal(pad);
         UserProfileAddStyleRecord(id, side);
         int a = fn_800A7E40(pad);

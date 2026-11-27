@@ -90,7 +90,7 @@ void Vec2FromAngle(FieldPoint_t *pOut, int angle, float length);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
@@ -216,7 +216,7 @@ extern "C" unsigned char TurnToPlayPickDirection(Object_80039F5C *p) {
     sector = ((angle + 0x100000) >> 21) & 7;
     goto lookup;
 facing:
-    if (!fn_801486A0())
+    if (!MiniGameGetType())
         angle = (MathArcTan2(p->mMotion.mPos.mY, p->mMotion.mPos.mX) + 0x800000) & 0xFFFFFF;
     else
         angle = (0x400000 - p->mMotion.mFacing) & 0xFFFFFF;
@@ -327,7 +327,7 @@ extern "C" int TurnToPlayUpdate(Object_80039F5C *p) {
     if (p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
         p->mFlags &= ~0x1000;
         Ball_t *pBall = BallFindHeldBy(p);
-        if (pBall && fn_801486A0())
+        if (pBall && MiniGameGetType())
             BallReleaseStill(pBall, 5, 0);
     }
     int kind = p->mUnknown9[0];
@@ -507,9 +507,9 @@ extern "C" void HandoffStartAnim(Object_80039F5C *p, HandoffBlock_t *state, unsi
         break;
     case 14:
         animation = 34;
-        if (fn_801486A0() == 3)
+        if (MiniGameGetType() == 3)
             p->mUnknown1008.mUnknown0 = 5;
-        else if (fn_801486A0() == 2)
+        else if (MiniGameGetType() == 2)
             p->mUnknown1008.mUnknown0 = 6;
         else
             p->mUnknown1008.mUnknown0 = 1;

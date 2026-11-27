@@ -35,13 +35,13 @@ extern "C" {
 extern CamFuncs_t CamFocusDef;
 extern CamFuncs_t CamFreeFloatDef;
 extern CamTypeDef_t _Replay_CamType;
-extern char lbl_8031BDD4[];
+extern char gMiniGameJumpBall[];
 
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 CamMode_t *CamPlayGetDefMode(int id);
 void CamPlayGetPosLimits(int id, int mode, float *pA, float *pB);
-int fn_801486A0(void);
-void fn_801527B8(void *p, Vector_80039F5C *pOut);
+int MiniGameGetType(void);
+void MiniGameJumpBallGetCameraSpot(void *p, Vector_80039F5C *pOut);
 int ScrmIsFieldFlipped(void);
 void CamConvertHdrToMatrix(void *p, GameCamera_t *pCamera);
 void CamSetZScale(GameCamera_t *pCamera, float value);
@@ -218,7 +218,7 @@ void _CamMainGetFocusPos(int kind, int ref, Vector_80039F5C *pOut)
     case 6:
         break;
     case 7:
-        fn_801527B8(lbl_8031BDD4, pOut);
+        MiniGameJumpBallGetCameraSpot(gMiniGameJumpBall, pOut);
         if (ScrmIsFieldFlipped()) {
             CamMainFlipPos(pOut);
         }
@@ -384,7 +384,7 @@ void CamMainInitDesc(CameraDesc_t *pDesc)
 
 void CamMainFollow(GameCamera_t *pCamera, unsigned int kind, int ref, int arg)
 {
-    if (fn_801486A0() == 1 && (kind == 1 || kind == 4)) {
+    if (MiniGameGetType() == 1 && (kind == 1 || kind == 4)) {
         kind = 7;
     }
     pCamera->mUnknownA8 = kind;

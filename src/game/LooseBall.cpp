@@ -89,7 +89,7 @@ void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetOffenseTeam(void);
 int ScrmIsNotReplay(void);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
@@ -117,7 +117,7 @@ extern "C" int LooseBallTryEngage(Object_80039F5C *p, Ball_t *pBall) {
                                               (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
         if (pOther && distance < _LooseBall_fEngageRange)
             result = fn_8011EAC0(p, pOther);
-        if (!fn_801486A0() && !result) {
+        if (!MiniGameGetType() && !result) {
             pOther = fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]),
                                  (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
             if (pOther && distance < _LooseBall_fEngageRange)
@@ -397,7 +397,7 @@ extern "C" void LooseBallBroadcast(int id) {
             value += (unsigned int)(Vec2Magnitude(&delta) * _LooseBall_fPriorityPerDist);
             value += (int)((255 - pOther->mRatings[0]) * _LooseBall_fPriorityPerRating);
             value += SyncRandGetRange(0, _LooseBall_iPriorityRandom);
-            if ((pOther->mFlags & 0x400) || !fn_801486A0())
+            if ((pOther->mFlags & 0x400) || !MiniGameGetType())
                 value = 0;
             switch (pOther->mpState->mId) {
             case 0:
@@ -576,11 +576,11 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 LooseBallSteer(p, state, &target);
                 if (LooseBallFindAnim(p, state, pBall, type, 0))
                     state->mUnknown40 = LooseBallStartAnim(p, 0, 0, 0);
-                else if ((fn_801486A0() || !(p->mFlags & 0x400)) && LooseBallTryEngage(p, pBall)) {
+                else if ((MiniGameGetType() || !(p->mFlags & 0x400)) && LooseBallTryEngage(p, pBall)) {
                     result = 0;
                     goto done;
                 }
-            } else if ((fn_801486A0() || !(p->mFlags & 0x400)) && LooseBallTryEngage(p, pBall)) {
+            } else if ((MiniGameGetType() || !(p->mFlags & 0x400)) && LooseBallTryEngage(p, pBall)) {
                 result = 0;
                 goto done;
             }
@@ -592,7 +592,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 }
             }
             if (state->mUnknown40 == 0xFFFF && (!(p->mFlags & 0x4000) || (((p->mFlags >> 14) & 1) && !found)) &&
-                (fn_801486A0() || p->mUnknown8 == 0xFF)) {
+                (MiniGameGetType() || p->mUnknown8 == 0xFF)) {
                 p->mUnknown512.mUnknown14 = 1;
                 p->mUnknown512.mUnknown8 = state->mUnknown36;
                 p->mUnknown512.mUnknown4 = state->mUnknown36;
@@ -604,7 +604,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
             Object_80039F5C *pHolder = BallGetHolder(pBall);
             if (pHolder) {
                 if (pHolder != p) {
-                    if (fn_801486A0()) {
+                    if (MiniGameGetType()) {
                     if (pHolder->mIdBytes[2] == p->mIdBytes[2]) {
                         memset(&message, 0, 4);
                         message.mId = 33;
@@ -624,7 +624,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                     message.mId = 1;
                     fn_800F053C(0, p->mpState, &message, p);
                 }
-            } else if (fn_801486A0()) {
+            } else if (MiniGameGetType()) {
                 memset(&message, 0, 4);
                 message.mId = 2;
                 fn_800F053C(0, p->mpState, &message, p);

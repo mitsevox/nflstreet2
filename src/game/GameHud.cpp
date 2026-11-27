@@ -19,7 +19,7 @@ int fn_800A8444(int team);
 int fn_800A8488(int team);
 Object_80039F5C *fn_800B6544(int index);
 int fn_800B6644(int index);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int TutorialIsActive(void);
 int ScrmGetDown(void);
 int ScrmGetOffenseTeam(void);
@@ -72,7 +72,7 @@ unsigned char HudGetPadSlot(int id)
 
         if (index != -1) {
             int side = fn_800B6644(index);
-            int mode = fn_801486A0();
+            int mode = MiniGameGetType();
 
             if (mode != 0 && mode != 1) {
                 if (side == 1) {
@@ -212,7 +212,7 @@ void HudReset(void)
 void HudStart(void)
 {
     HudReset();
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
     case 2:
@@ -386,7 +386,7 @@ void HudHidePressPrompt(int team)
 void HudStop(void)
 {
     HudReset();
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
     case 2:

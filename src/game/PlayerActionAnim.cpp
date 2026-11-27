@@ -517,7 +517,7 @@ extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
             } else {
                 result = flag == 0;
             }
-        } else if (fn_801486A0() == 1 && p->mpState->mId == 51) {
+        } else if (MiniGameGetType() == 1 && p->mpState->mId == 51) {
             result = 1;
         }
     }
@@ -1014,7 +1014,7 @@ extern "C" int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short
         fn_8009BD60(p);
         FieldPoint_t point;
         point = ScrmGetBallSpot();
-        if (point.mY - p->mMotion.mPos.mY > 2.5f || fn_801486A0() == 3 || fn_801486A0() == 2) {
+        if (point.mY - p->mMotion.mPos.mY > 2.5f || MiniGameGetType() == 3 || MiniGameGetType() == 2) {
             p->mUnknown1008.mUnknown0 = 2;
         } else {
             p->mUnknown1008.mUnknown0 = 1;
@@ -1438,7 +1438,7 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
             break;
         case 32:
             if (p->mUnknown1036) pOther = PlyrGet((p->mUnknown1036 >> 8) & 255, p->mpState->mUnknown3[0]);
-            else if (fn_801486A0() == 0 || fn_801486A0() == 1) pOther = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown3[0]);
+            else if (MiniGameGetType() == 0 || MiniGameGetType() == 1) pOther = PlyrGet(p->mIdBytes[2], p->mpState->mUnknown3[0]);
             else pOther = PlyrGet(p->mIdBytes[2] ^ 1, p->mpState->mUnknown3[0]);
             if (pOther->mUnknown1128[4] & 2) pBlock->mUnknown1F = 1;
             break;

@@ -40,7 +40,7 @@ int fn_800BA6F8(void);
 int fn_800BA864(void);
 int fn_800C47C4(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmIsFieldFlipped(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int a);
@@ -85,7 +85,7 @@ void BallMarkerUpdateEntry(int index)
     if (fn_800BA6F8() != 0 && fn_800BA864() != 0) {
         BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
-    } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
+    } else if ((MiniGameGetType() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)
                && BallGetSpinMode(pBall) != 0 && BallGetLandingPoint(pBall, &pEntry->mPosition) != 0) {
         pEntry->mEnabled = 1;
     }
@@ -131,7 +131,7 @@ void BallMarkerCreate(int handle)
 
     BallMarkerRegister(handle);
     desc = data;
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         _BallMarker_Table.mCount = 3;
     } else {
         _BallMarker_Table.mCount = 1;
@@ -181,7 +181,7 @@ int BallMarkerObjDraw(BallMarkerObj_t *pObject)
         TMRenderBindTexture(0, 0, 0);
         for (unsigned int i = 0; i < _BallMarker_Table.mCount; i++) {
             if (_BallMarker_Table.mEntries[i].mEnabled != 0) {
-                if (fn_801486A0() == 1 && BallGetCurrentIndex() == i) {
+                if (MiniGameGetType() == 1 && BallGetCurrentIndex() == i) {
                     ModelObjSetAmbientColor(pObject->mUnknown18, ConGetCurrentContext(),
                                0.341796875f, 0.0f, 0.0f, 1.0f);
                 } else {

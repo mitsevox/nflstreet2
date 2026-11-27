@@ -349,14 +349,14 @@ void CamGameSelectCamera(int a);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameSetFocusAll(int a, int b);
 void CamGameSetModeAll(int a);
-void fn_801485B4(void);
-void fn_801485EC(int mode);
-int fn_801485F4(void);
-void fn_80148644(void);
-int fn_801486A0(void);
+void MiniGameEnable(void);
+void MiniGameSetType(int mode);
+int MiniGameStart(void);
+void MiniGameStop(void);
+int MiniGameGetType(void);
 MiniGameC * MiniGameGetCurrent(void);
 void MiniGameReloadPlayer(Object_80039F5C *pObject);
-void fn_8014F3DC(int a);
+void MiniGameCrushCarrierSetTime(int a);
 void RouteArrowSetEnabled(int a);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookLoadAudibleTable(void);
@@ -956,7 +956,7 @@ int TutorialFinishCategory(void)
 {
     int done = 0;
     unsigned int lesson = TutorialGetLesson();
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
 
     if (lesson != 5) {
         int modes[5] = { 2, 3, 0, 4, 15 };
@@ -972,26 +972,26 @@ int TutorialFinishCategory(void)
         RouteArrowSetEnabled(1);
         PlyrNameTagEnable(1);
         if (mode != 15) {
-            fn_801485B4();
-            fn_801485EC(mode);
+            MiniGameEnable();
+            MiniGameSetType(mode);
             switch (mode) {
             case 2:
                 SpchIGSetCommentaryOn(0);
-                MiniGameGetCurrent()->vfn_07(0, 1);
-                MiniGameGetCurrent()->vfn_07(1, 5);
+                MiniGameGetCurrent()->SetOption(0, 1);
+                MiniGameGetCurrent()->SetOption(1, 5);
                 break;
             case 0:
                 ClockRuleClearFlags(0x800);
                 fn_8009D8CC(1);
                 fn_8009D964(1, 0);
                 SpchIGSetCommentaryOn(0);
-                fn_8014F3DC(180);
+                MiniGameCrushCarrierSetTime(180);
                 break;
             case 4:
                 if (fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) {
                     ScrmChangePossession(0);
                 }
-                MiniGameGetCurrent()->vfn_07(0, 21);
+                MiniGameGetCurrent()->SetOption(0, 21);
                 PlayBookSetFormationType(1, 1);
                 PlayBookSetIndices(1, 0, 0, 0);
                 PlayBookLoadCurrentPlay(1);
@@ -1002,7 +1002,7 @@ int TutorialFinishCategory(void)
                 break;
             }
             TutorialSetupRosters();
-            fn_801485F4();
+            MiniGameStart();
             SndgMusicResume();
             SndgApplyVolumeOptions();
             SndgMusicResume();
@@ -1031,7 +1031,7 @@ int TutorialFinishCategory(void)
             fn_800AD910(0, 0.0f);
             HudStop();
             InGamePlayCallDestroy();
-            fn_80148644();
+            MiniGameStop();
             fn_800C1CA0();
             fn_800C1E50();
             FieldLinesEnable(1);

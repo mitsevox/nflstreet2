@@ -39,7 +39,7 @@ void Vec2FromAngle(Vector_80039F5C *pVector, int angle, float length);
 float BallSweepToPart(CollideObject_t *pA, CollideObject_t *pB, unsigned char sub, Ball_t *pBall, Vector_80039F5C *pPos, unsigned char *pHit);
 CollideSet_t *StatcollGetSet(void);
 void ParticlesAddBallEvent(int a, Ball_t *pBall);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void MatSetStack(int a);
 void MatResetStack(void);
 void MatRotQuat(Quat_801EB488 *pRot);
@@ -447,7 +447,7 @@ void BallsResetScales(void)
 
 void BallReleaseStill(Ball_t *pBall, int a, int b)
 {
-    if (fn_801486A0() == 0 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 4)) {
+    if (MiniGameGetType() == 0 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 4)) {
         return;
     }
     BallStateChange(pBall, a, b);

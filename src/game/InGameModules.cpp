@@ -132,10 +132,10 @@ void ParticlesShutdown(void);
 void ScreenTintInit(int a);
 void ScreenTintShutdown(int a);
 void PassIconStateStart(void);
-int fn_801485D4(void);
-int fn_801485F4(void);
-void fn_80148644(void);
-int fn_801486A0(void);
+int MiniGameIsEnabled(void);
+int MiniGameStart(void);
+void MiniGameStop(void);
+int MiniGameGetType(void);
 int TutorialIsActive(void);
 void TutorialLessonStart(void);
 void TutorialLessonStop(void);
@@ -297,7 +297,7 @@ int Ball::Init()
 {
     int mode = 1;
 
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         mode = 3;
     }
     BallsStart(mode);
@@ -1337,7 +1337,7 @@ static void fn_80035DA0(unsigned char *pA, unsigned char *pB)
     unsigned char a;
     unsigned char b;
 
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         a = ScrmGetActivePlayerCount(0);
@@ -1444,16 +1444,16 @@ const char *MiniGame::GetName() { return "MiniGame"; }
 
 int MiniGame::Init()
 {
-    if (fn_801485D4()) {
-        fn_801485F4();
+    if (MiniGameIsEnabled()) {
+        MiniGameStart();
     }
     return 1;
 }
 
 int MiniGame::Shutdown()
 {
-    if (fn_801485D4()) {
-        fn_80148644();
+    if (MiniGameIsEnabled()) {
+        MiniGameStop();
     }
     return 1;
 }

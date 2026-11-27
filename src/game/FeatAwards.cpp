@@ -29,7 +29,7 @@ void UnlockListClose(DbCursor *pObject);
 int UnlockListSeek(DbCursor *pObject, int a, int key, int *pResult);
 void UnlockListReadItem(DbCursor *pObject, UnlockItem_t *pRecord);
 unsigned char UnlockListGetIndex(DbCursor *pObject);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int UserRecGetCount(void);
 int UserRecGetName(int index, char *pText);
 signed char UserProfileFindIndex(int a);
@@ -119,7 +119,7 @@ void FeatAwardModeFeat(DbCursor *pCursor, DbCursor *pOther, int db)
         key = 14;
         break;
     case 9:
-        index = fn_801486A0();
+        index = MiniGameGetType();
         key = _Feat_aiModeKey[index];
         break;
     default:

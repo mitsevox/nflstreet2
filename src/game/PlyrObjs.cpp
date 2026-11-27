@@ -78,7 +78,6 @@ void PlyrRenderDrawTrails();
 void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
 void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
-void fn_80190F18(BitStream_t *, int);
 void fn_800B4D7C();
 void fn_800B4A88();
 void fn_801BE030(int, void **);
@@ -608,12 +607,12 @@ void PlyrObjsWriteState(BitStream_t *stream) {
   for (unsigned int i = 0; i < _PlyrObjs_uNumPlayers; ++i) {
     Object_8003DEC4 *object = _PlyrObjs_ppPlayers[i];
     PlyrPoseWriteState(object, stream);
-    fn_80191068(stream, object->mUnknown5188.mUnknown568, 1);
-    fn_80191068(stream, (unsigned long long)object->mUnknown5188.mUnknown56C,
+    WriteBitStream(stream, object->mUnknown5188.mUnknown568, 1);
+    WriteBitStream(stream, (unsigned long long)object->mUnknown5188.mUnknown56C,
                 4);
-    fn_80191068(stream, (unsigned long long)object->mUnknown5188.mUnknown570,
+    WriteBitStream(stream, (unsigned long long)object->mUnknown5188.mUnknown570,
                 4);
-    fn_80191068(stream, (unsigned long long)object->mUnknown5188.mUnknown574,
+    WriteBitStream(stream, (unsigned long long)object->mUnknown5188.mUnknown574,
                 4);
   }
 }
@@ -623,20 +622,20 @@ void PlyrObjsReadState(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream
     Object_8003DEC4 *object = _PlyrObjs_ppPlayers[i];
     PlyrPoseReadState(object, a, b, c, d, t);
     object->mUnknown972 = LevelFindArea(object->mUnknown4);
-    fn_80190F18(b, 1);
-    fn_80190F18(a, 1);
+    ReadBitStream(b, 1);
+    ReadBitStream(a, 1);
     if (d)
-      fn_80190F18(d, 1);
+      ReadBitStream(d, 1);
     if (c)
-      fn_80190F18(c, 1);
-    fn_80190F18(b, 4);
-    fn_80190F18(b, 4);
-    fn_80190F18(b, 4);
-    fn_80190F18(a, 12);
+      ReadBitStream(c, 1);
+    ReadBitStream(b, 4);
+    ReadBitStream(b, 4);
+    ReadBitStream(b, 4);
+    ReadBitStream(a, 12);
     if (d)
-      fn_80190F18(d, 12);
+      ReadBitStream(d, 12);
     if (c)
-      fn_80190F18(c, 12);
+      ReadBitStream(c, 12);
   }
 }
 void PlyrObjsInitStateTables(int mode) {

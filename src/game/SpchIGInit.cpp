@@ -7,7 +7,7 @@ extern "C" {
 void SpchIGStart(void);
 void SpchIGStop(void);
 void SpchIGSetCommentaryOn(unsigned char value);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 unsigned int TutorialGetLesson(void);
 }
 
@@ -22,7 +22,7 @@ extern "C" void SpchIGInit(void)
         SpchIGStart();
         state = 1;
     } else {
-        if (fn_801486A0() == 0 || fn_801486A0() == 1 || fn_801486A0() == 2) {
+        if (MiniGameGetType() == 0 || MiniGameGetType() == 1 || MiniGameGetType() == 2) {
             SpchIGStart();
             SpchIGSetCommentaryOn(0);
         } else {

@@ -125,8 +125,8 @@ void BigObjSave(BitStream_t *pStream)
             if (BigObjGetItemSkeleton(pObject) != 0) {
                 BigObjAnimWritePose(&pObject->mUnknown172, pStream, pObject->mUnknown172.mUnknown4 - 1);
             }
-            fn_80191068(pStream, pObject->mUnknown232_31, 1);
-            fn_80191068(pStream, pObject->mUnknown300->mUnknown40, 8);
+            WriteBitStream(pStream, pObject->mUnknown232_31, 1);
+            WriteBitStream(pStream, pObject->mUnknown300->mUnknown40, 8);
             ReplayWritePacked3(pStream, &pObject->mPos.mX, 17, 256.0f);
             ReplayWritePacked4(pStream, &pObject->mRot.mX, 12, 1024.0f);
         }

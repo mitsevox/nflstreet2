@@ -22,7 +22,7 @@ int FormationLineupRevertTeam(int a);
 int FormationLineupFillTeam(int a, int *values);
 int FormationLineupReset(void);
 int fn_800B4A18(int a, int b, int c);
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
 int DbThcdSetSlotPlayer(int tag, int a, int b, int c);
@@ -179,8 +179,8 @@ int DepthChartCancel(int group)
 
 void DepthChartAutoFill(int group, int *list, int value)
 {
-    if (fn_801485D4()) {
-        MiniGameGetCurrent()->vfn_10(value, list, _DepthChart_aCommitted[group]);
+    if (MiniGameIsEnabled()) {
+        MiniGameGetCurrent()->FillDepthChart(value, list, _DepthChart_aCommitted[group]);
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
     }
@@ -190,7 +190,7 @@ void DepthChartAutoFill(int group, int *list, int value)
 
 void DepthChartAutoFillEx(int group, int *list, int value, int a, int b)
 {
-    if (fn_801485D4()) {
+    if (MiniGameIsEnabled()) {
         MiniGameGetCurrent()->AutoFillDepthChart(value, list, _DepthChart_aCommitted[group], a, b);
     } else {
         AutoDepthFillChart(value, list, _DepthChart_aCommitted[group]);
