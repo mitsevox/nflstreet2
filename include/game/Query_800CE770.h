@@ -4,7 +4,7 @@
 struct Object_80039F5C;
 
 /* 64-byte stack block that fn_800CE770 prepares before it is passed to
-   fn_800CE2B8 or fn_800CE510. Only the members the reconstructed callers
+   PlyrContactRunQuery or PlyrContactRunTripleQuery. Only the members the reconstructed callers
    access are declared; the rest stays opaque. */
 struct Query_800CE770 {
     Object_80039F5C *mpUnknown0;
@@ -35,8 +35,8 @@ struct Query_800CE770 {
 /* Parameter lists follow register use at the call sites only. */
 extern "C" {
 void fn_800CE770(Query_800CE770 *pQuery);
-int fn_800CE2B8(Query_800CE770 *pQuery);
-int fn_800CE510(Query_800CE770 *pQuery);
+int PlyrContactRunQuery(Query_800CE770 *pQuery);
+int PlyrContactRunTripleQuery(Query_800CE770 *pQuery);
 }
 
 #endif

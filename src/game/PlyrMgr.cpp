@@ -224,7 +224,7 @@ void PlayerMoveTickAll(void);
 void PlyrContactUpdate(Object_80039F5C *p);
 void PlyrContactUpdateDefender(Object_80039F5C *p);
 void PlyrContactHitWall(Object_80039F5C *p);
-void fn_800C89BC(Object_80039F5C *p);
+void PlyrTurnReset(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void fn_800A5E68(Object_80039F5C *p);
 void PlyrUpdateControlFlag(Object_80039F5C *p, int flag);
@@ -721,7 +721,7 @@ extern "C" void PlyrMgrUpdate(void)
         if (replay == 0) {
             PlyrContactHitWall(p);
         }
-        fn_800C89BC(p);
+        PlyrTurnReset(p);
         fn_800EFFA0(0, &p->mQueue[0], p, active);
         fn_800A5E68(p);
         PlyrUpdatePendingMsg(p);

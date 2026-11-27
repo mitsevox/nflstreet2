@@ -356,7 +356,7 @@ struct Object_80039F5C {
         };
         Block_800CC180 mUnknown336Block;
         /* State 17 keeps a packed player reference at +336 and a flag at +351
-           (fn_800CDE50). */
+           (PlyrContactStartTriple). */
         Link_800CDE50 mUnknown336Link;
         /* Per-state scratch: state 26 reads +344 as a word (PlyrContactIsKnockable);
            state 58 keeps a player reference at +352 (PlyrContactUpdateCarrier). */

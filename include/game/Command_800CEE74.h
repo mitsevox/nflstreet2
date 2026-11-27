@@ -49,7 +49,7 @@ struct Command_800CEE74 {
 extern "C" {
 void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 int fn_800C3BEC(Object_80039F5C *p, Command_800CEE74 *pCommand, int *pValue, int *pB);
-void fn_800CE804(Command_800CEE74 *pCommand, Table_80089904 *pTable, int index);
+void PlyrContactCommandSetAnchor(Command_800CEE74 *pCommand, Table_80089904 *pTable, int index);
 void fn_800CEE74(Command_800CEE74 *pCommand, Object_80039F5C *p, Object_80039F5C *pOther, void *pData, int a, int b, int flag);
 }
 

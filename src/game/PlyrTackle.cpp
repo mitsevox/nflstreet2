@@ -1332,7 +1332,7 @@ extern "C" int PlyrEngageTryAnims(Object_80039F5C *pOther, Object_80039F5C *p, i
                 query.mUnknown54 = PlyrEngageGetBallSide(p, *pList);
             }
             pList++;
-            result = fn_800CE510(&query);
+            result = PlyrContactRunTripleQuery(&query);
         }
         if (result != 0) {
             fn_8011E1BC(pOther, p, 0, 5);

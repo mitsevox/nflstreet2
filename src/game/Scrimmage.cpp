@@ -78,7 +78,7 @@ void PlyrCtrlSaveForPlay(void);
 void PlyrCtrlHoldTeamInput(int team);
 int fn_800BA6F8(void);
 void fn_800C9FC0(void);
-void fn_800CA3C4(void);
+void FocusSlotsPickReceivers(void);
 void PlayerMoveResetAll(void);
 void PlayerActionAnimResetSteerFrames(void);
 void HuddleGetSpot(FieldPoint_t *pOut, int *pFacing, Object_80039F5C *p, int value);
@@ -459,7 +459,7 @@ extern "C" void ScrmStartPlay(void)
     ScrmLogSnap();
     fn_80120618();
     fn_800C9FC0();
-    fn_800CA3C4();
+    FocusSlotsPickReceivers();
     if (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D9D8(4) == 0) {
         fn_8009D888(4, 0);
     }

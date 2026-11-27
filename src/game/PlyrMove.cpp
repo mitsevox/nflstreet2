@@ -14,7 +14,7 @@ void MotionApplyInput(Object_800B26B0 *pObject, unsigned char *a);
 void MotionAlignToFacing(Object_800B26B0 *pObject);
 float PlyrSurfaceScaleTurn(Object_80039F5C *p, float value);
 float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
-void fn_800CA8F4(Object_80039F5C *p);
+void FocusSlotsUpdatePlayerState(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
@@ -182,7 +182,7 @@ void PlyrMoveLatchRequest(Object_80039F5C *p)
 
     p->mUnknown512.mUnknown0 = p->mUnknown512.mUnknown0 >= 0.0f ? p->mUnknown512.mUnknown0 : 0.0f;
     pInput->mUnknown15 = 0;
-    fn_800CA8F4(p);
+    FocusSlotsUpdatePlayerState(p);
     if (pRequest->mUnknown15 == 0 || pInput->mUnknown12 == _PlyrMove_uHoldFrames) {
         if (p->mFlags & 0x4000) {
             if (pInput->mUnknown12 != 0) {

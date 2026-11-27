@@ -541,7 +541,7 @@ extern "C" int PlayerActionAnimIsPassPending(Object_80039F5C *p)
         }
     }
     if (result && p && !PlayerMoveGetKind(p)) {
-        fn_800CABF4(p, &shown, 0);
+        FocusSlotsFindPlayer(p, &shown, 0);
         if (shown) {
             TutorialSetMoveDone(21, 1);
         }
@@ -1443,7 +1443,7 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
             }
         }
         pBlock->mUnknownC.mUnknown4 = pBlock->mUnknownC.mUnknown0 = 0.0f;
-        fn_800CEDA4(pChosen, &pBlock->mUnknown4, &pBlock->mUnknown14, pOther, pBlock->mUnknown1F);
+        PlyrContactNodeToWorld(pChosen, &pBlock->mUnknown4, &pBlock->mUnknown14, pOther, pBlock->mUnknown1F);
         pBlock->mUnknown0 = 0.0f;
     } else {
         switch (p->mpState->mId) {
@@ -1460,7 +1460,7 @@ extern "C" void PlayerActionAnimFindAlignTarget(Object_80039F5C *p, Block_800DE3
         Pair_802270A4 point;
         int angle;
         pBlock->mUnknown1C = 0;
-        fn_800CEDA4(pFallback, &point, &angle, p, pBlock->mUnknown1F);
+        PlyrContactNodeToWorld(pFallback, &point, &angle, p, pBlock->mUnknown1F);
         PlayerActionAnimBuildAlignCommand(p, pBlock, fallbackKey, &point, angle, pFallback);
     }
 }
@@ -1502,13 +1502,13 @@ extern "C" void PlayerActionAnimBuildAlignCommand(Object_80039F5C *p, Block_800D
     case 181: case 186:
         AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, fn_8009BCE8(&p->mUnknown336), pData, angle, (unsigned short)key, pBlock->mUnknown1F);
-        fn_800CE804(&command.command, (Table_80089904 *)table, 0);
+        PlyrContactCommandSetAnchor(&command.command, (Table_80089904 *)table, 0);
         PlayerActionAnimSetupAlign(pBlock, p, &command.view);
         break;
     case 195: case 196: case 197: case 210: case 224: case 228: case 229: case 230: case 235: case 237:
         AnimFileGetStateAnimList(1, key, (Table_80089904 *)table);
         fn_800CEE74(&command.command, p, 0, 0, 0, (unsigned short)key, pBlock->mUnknown1F);
-        fn_800CE804(&command.command, (Table_80089904 *)table, pRecord->mUnknown0);
+        PlyrContactCommandSetAnchor(&command.command, (Table_80089904 *)table, pRecord->mUnknown0);
         PlayerActionAnimSetupAlign(pBlock, p, &command.view);
         break;
     }

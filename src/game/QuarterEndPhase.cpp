@@ -68,7 +68,7 @@ void CallbackListAdd(void (*pCallback)(int, unsigned int));
 void CallbackListRemove(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
 void PlayCallStopHuddleScene(void);
-void fn_800CC560(int a);
+void PlyrLineUpReset(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
 void PlyrStarSetShown(int a, int b);
@@ -409,7 +409,7 @@ void QuarterEndPhase::OnUpdate(float f)
         } else if (fn_8009D86C() == 5) {
             if (ClockRuleIsOvertime()) {
                 PlayBookSetupTeams();
-                fn_800CC560(1);
+                PlyrLineUpReset(1);
             }
         } else {
             ScrmTeamToHuddle(1);

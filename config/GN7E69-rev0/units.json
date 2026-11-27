@@ -13976,7 +13976,7 @@
             "evidence": "evidence.tsv source-form 0x800C9FC0-0x800CA14C"
           },
           {
-            "function": "fn_800CDE50",
+            "function": "PlyrContactStartTriple",
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
           }
         ],

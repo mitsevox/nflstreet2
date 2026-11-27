@@ -90,7 +90,7 @@ int fn_800A7EF4(unsigned char a);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
 float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
-void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
+void FocusSlotsFindPlayer(Object_80039F5C *p, unsigned char *pOut, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011F1CC(void);
@@ -476,7 +476,7 @@ extern float gFrameTimeScale;
 struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6[2]; Entry_800DE51C mEntries[1]; };
 extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short, unsigned short);
-void fn_800CEDA4(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
+void PlyrContactNodeToWorld(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
 void AnimMomentumInit(AnimMomentum_t *, Object_80039F5C *, int);
 void AnimMomentumUpdate(AnimMomentum_t *, Object_80039F5C *);
 void AnimMomentumUpdateLinked(AnimMomentum_t *, Object_80039F5C *);
