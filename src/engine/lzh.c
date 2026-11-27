@@ -40,6 +40,8 @@ static unsigned char _LZH_PCodeConvertLo[256];
 static unsigned char _LZH_PCodeConvertHi[256];
 static LZHHeapNode_t _LZH_Heap[286];
 static unsigned char _LZH_ByteBuffer[256];
+// FAKEMATCH: unreferenced storage the target keeps after _LZH_ByteBuffer, placed in this file by #1528 ruling 5
+static unsigned char _LZH_UnusedTail[9900];
 
 static unsigned char _LZH_IsCompleteOutBuffer;
 static int _LZH_Usage;

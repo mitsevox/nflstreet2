@@ -28729,7 +28729,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x803B53FC",
-          "end": "0x803B7ED4"
+          "end": "0x803BA580"
         },
         {
           "section": ".sdata",
