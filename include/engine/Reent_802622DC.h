@@ -1,7 +1,9 @@
 #ifndef ENGINE_REENT_802622DC_H
 #define ENGINE_REENT_802622DC_H
 
-/* C library state shared by vprintf.c, the exit-registration code and vfprintf.c. */
+/* C library reentrancy state: the standard streams, locale name, random seed and exit
+   registrations that vprintf.c, atexit.c, vfprintf.c and mbtowc_r.c reach through the
+   pointer impure.c defines. */
 
 typedef struct RuntimeFile_t
 {
@@ -23,15 +25,22 @@ typedef struct RuntimeExitBlock_t
 
 typedef struct Reent_802622DC
 {
-  char mUnknown0[8];
-  RuntimeFile_t *mUnknown8;
-  char mUnknownC[40];
+  int mUnknown0;
+  RuntimeFile_t *mStdin;
+  RuntimeFile_t *mStdout;
+  RuntimeFile_t *mStderr;
+  char mUnknown10[32];
+  int mCurrentCategory;
   const char *mLocaleName;
-  char mUnknown38[272];
+  char mUnknown38[32];
+  unsigned int mRandNext;
+  char mUnknown5C[236];
   RuntimeExitBlock_t *mExitBlock;
   RuntimeExitBlock_t mEmbeddedExitBlock;
+  char mUnknown1D4[16];
+  RuntimeFile_t mFiles[3];
 } Reent_802622DC;
 
-extern Reent_802622DC *lbl_803EC56C;
+extern Reent_802622DC *_impure_ptr;
 
 #endif

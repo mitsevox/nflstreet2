@@ -173,3 +173,16 @@ int DbNiomModeResume(void)
 {
     return _DbNiom_pModeResume();
 }
+
+int DbNiomUpdateMtts(int digt, int diot, int pytt, int irdt, int unls)
+{
+    return TDbCompilePerformOp(0,
+                               "update 'MTTS' set 'DIGT' = \x82 and 'DIOT' = \x82 and 'PYTT' = \x82 and 'IRDT' = \x82"
+                               " where ('UNLS' = \x82)\n",
+                               digt, diot, pytt, irdt, unls);
+}
+
+int DbNiomGetAscm(int *pAscm)
+{
+    return TDbCompilePerformOp(0, "select 'ASCM' into \x82 from 'NIOM'\n", pAscm);
+}

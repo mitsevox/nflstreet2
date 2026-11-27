@@ -68,7 +68,7 @@
 typedef unsigned long u_long;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
-extern int lbl_803EC558;
+extern int __mb_cur_max;
 char *add_separators(char *dst, char *start, char *end, int *pLen);
 
 static char _VF_acDigits[] = "0123456789abcdefghijklmnopqrstuvwxyz";
@@ -499,7 +499,7 @@ _vfprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	 */
 	for (;;) {
 	        cp = fmt;
-	        while ((n = _mbtowc_r(lbl_803EC56C, &wc, fmt, lbl_803EC558, &state)) > 0) {
+	        while ((n = _mbtowc_r(_impure_ptr, &wc, fmt, __mb_cur_max, &state)) > 0) {
 			fmt += n;
 			if (wc == '%') {
 				fmt--;

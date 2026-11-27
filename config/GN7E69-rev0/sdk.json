@@ -519,7 +519,7 @@
       "name": "src/dolphin/os/OSLink.c",
       "source": "src/dolphin/os/OSLink.c",
       "library": "OS",
-      "evidence": "Target singleton clears physical module-list head/tail/string-table words800030C8/CC/D0 exactly as donor __OSModuleInit; remaining linker functions not evidenced in this run.",
+      "evidence": "dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSLink.c: target singleton clears physical module-list head/tail/string-table words 800030C8/CC/D0 exactly as donor __OSModuleInit; the other linker functions are not target-retained, and their two OSReport strings are the .data 802FC420-802FC46F.",
       "sections": [
         {
           "section": ".text",
@@ -528,6 +528,15 @@
           "start_boundary": "provisional",
           "end_boundary": "provisional",
           "evidence": "Target singleton clears physical module-list head/tail/string-table words800030C8/CC/D0 exactly as donor __OSModuleInit; remaining linker functions not evidenced in this run. Target code cuts follow actual analysis function starts/ends; original object boundaries remain inferred."
+        },
+        {
+          "section": ".data4",
+          "start": "0x802FC420",
+          "end": "0x802FC46F",
+          "start_boundary": "exact",
+          "end_boundary": "exact",
+          "evidence": "dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSLink.c: the strings of Relocate and Undo, 'OSLink: unknown relocation type %3d' and 'OSUnlink: unknown relocation type %3d', the whole native .data; OSInterrupt.c's .data ends 802FC41C (4 pad bytes), OSMemory.c's starts 802FC470.",
+          "object_seed": true
         }
       ]
     },
@@ -2633,7 +2642,7 @@
         {
           "section": ".data5",
           "start": "0x803EC2D0",
-          "end": "0x803EC2D4",
+          "end": "0x803EC308",
           "start_boundary": "exact",
           "end_boundary": "exact",
           "evidence": "BFBB8fb1c232addcacf44932c10c4cede41b43f98f40 src/dolphin/src/exi/EXIBios.c full retained native layout and every resolved operand match target; original archive edges remain provisional.",

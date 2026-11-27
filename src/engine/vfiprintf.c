@@ -1,4 +1,4 @@
-/* Formats integer/string arguments and exposes the fixed C-locale conventions. */
+/* Formats integer/string arguments for the C library's printf family. */
 
 /*-
  * Copyright (c) 1990 The Regents of the University of California.
@@ -63,7 +63,7 @@
 typedef unsigned long u_long;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
-extern int lbl_803EC558;
+extern int __mb_cur_max;
 extern char *add_separators(char *dst, char *start, char *end, int *pLen);
 
 static char _VFI_acBuffer[128];
@@ -214,7 +214,7 @@ _vfiprintf_r(void *data, RuntimeFile_t *fp, const char *fmt0, va_list ap)
 	 */
 	for (;;) {
 	        cp = fmt;
-	        while ((n = _mbtowc_r(lbl_803EC56C, &wc, fmt, lbl_803EC558, &state)) > 0) {
+	        while ((n = _mbtowc_r(_impure_ptr, &wc, fmt, __mb_cur_max, &state)) > 0) {
 			fmt += n;
 			if (wc == '%') {
 				fmt--;
@@ -534,22 +534,4 @@ done:
 error:
 	return ret;
 	/* NOTREACHED */
-}
-
-/* Numeric and monetary defaults for the C locale. */
-static const struct RuntimeLocaleConv_t _VFI_sLocale = {
-    ".", "", "", "", "", "", "", "", "", "",
-    255, 255, 255, 255, 255, 255, 255, 255
-};
-
-/* Returns the fixed numeric and monetary convention record. */
-struct RuntimeLocaleConv_t *_localeconv_r(void *data)
-{
-    return (struct RuntimeLocaleConv_t *)&_VFI_sLocale;
-}
-
-/* Uses the shared runtime context for the conventional locale accessor. */
-struct RuntimeLocaleConv_t *localeconv(void)
-{
-    return _localeconv_r(lbl_803EC56C);
 }

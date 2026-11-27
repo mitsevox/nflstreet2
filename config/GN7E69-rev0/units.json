@@ -4553,7 +4553,32 @@
     {
       "source": "src/engine/dbniom.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function, name and data rows and the compiler and source-form rows of the range it was split from; every function exact, complete .text, .rodata 0x802B238C-0x802B23AC (its query literal) and .sdata 0x803EBFD8-0x803EC00C (data row 0x803EBFD8) linked. The 'MTTS'/'ASCM' queries 0x802B23AC-0x802B2430 after it keep their original bytes (rule 8, data row 0x802B23AC).",
+      "evidence": "evidence.tsv provisional unit row 0x80229470-0x802297D8 (src/engine/dbniom.c), its function, name and data rows, the linker rows 0x802B23AC-0x802B240C and 0x802B240C-0x802B2430 and the compiler and source-form rows of the range it was split from; every kept function exact, complete .text, .rodata 0x802B238C-0x802B2430 (its query literal and the queries of the two discarded functions) and .sdata 0x803EBFD8-0x803EC00C (data row 0x803EBFD8) linked.",
+      "link_roots": {
+        "symbols": [
+          "DbNiomInit",
+          "DbNiomShutdown",
+          "DbNiomSetHandlers",
+          "DbNiomIsModeActive",
+          "DbNiomBeginMode",
+          "DbNiomEndMode",
+          "DbNiomRunCallback",
+          "DbNiomOpenCursor",
+          "DbNiomReadCursor",
+          "DbNiomCloseCursor",
+          "DbNiomReadOnce",
+          "DbNiomSetModeFuncs",
+          "DbNiomClearModeFuncs",
+          "DbNiomModeLoad",
+          "DbNiomModeReset",
+          "DbNiomModeResume"
+        ],
+        "discarded": [
+          "DbNiomUpdateMtts",
+          "DbNiomGetAscm"
+        ],
+        "evidence": "evidence.tsv linker rows 0x802B23AC-0x802B240C and 0x802B240C-0x802B2430: the target keeps the sixteen listed functions (the whole .text range 0x80229470-0x802297D8 is their compiled code); DbNiomUpdateMtts and DbNiomGetAscm have no code in the target while their query strings remain in .rodata."
+      },
       "sections": [
         {
           "section": ".text",
@@ -4565,7 +4590,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B238C",
-          "end": "0x802B23AC"
+          "end": "0x802B2430"
         },
         {
           "section": ".sdata",
@@ -5215,13 +5240,25 @@
     {
       "source": "src/dolphin/os/OSLink.c",
       "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/os/OSLink.c and its evidence.tsv function/data rows; every function exact, promoted from comparison-only.",
+      "evidence": "sdk.json unit src/dolphin/os/OSLink.c and its evidence.tsv function/data rows; the retained __OSModuleInit exact, and the .data 0x802FC420-0x802FC46F of the discarded linker functions (data row 0x802FC420) linked; promoted from comparison-only.",
+      "link_roots": {
+        "symbols": [
+          "__OSModuleInit"
+        ],
+        "evidence": "evidence.tsv data row 0x802FC420-0x802FC46F: the target keeps only __OSModuleInit (0x8023BA60-0x8023BA78, the whole .text range); the module linker functions are not retained, while their two OSReport strings remain in .data."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8023BA60",
           "end": "0x8023BA78"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FC420",
+          "end": "0x802FC46F"
         }
       ]
     },
@@ -12677,7 +12714,7 @@
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EC2D0",
-          "end": "0x803EC2D4"
+          "end": "0x803EC308"
         },
         {
           "section": ".sbss",
@@ -18350,7 +18387,18 @@
     {
       "source": "src/engine/sn_malloc.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80262440-0x8026247C (src/engine/sn_malloc.c), its function, name, source-form and data rows; the one function and its .rodata string 0x802B733C-0x802B73BC are exact.",
+      "evidence": "evidence.tsv unit row 0x80262440-0x8026247C (src/engine/sn_malloc.c), its function, name, source-form and data rows and the linker row 0x802B73BC-0x802B7538; the one kept function and its .rodata 0x802B733C-0x802B7538 are exact, including the three strings of the discarded free, realloc and calloc stubs.",
+      "link_roots": {
+        "symbols": [
+          "malloc"
+        ],
+        "discarded": [
+          "free",
+          "realloc",
+          "calloc"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B73BC-0x802B7538: the target keeps malloc (0x80262440, called by atexit at 0x8026234C); free, realloc and calloc have no code in the target while their library-error strings remain in .rodata after malloc's."
+      },
       "sections": [
         {
           "section": ".text",
@@ -18362,7 +18410,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B733C",
-          "end": "0x802B73BC"
+          "end": "0x802B7538"
         }
       ]
     },
@@ -18671,6 +18719,31 @@
       ]
     },
     {
+      "source": "src/engine/impure.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802FF4D8-0x802FF7DC (src/engine/impure.c) and its data and name rows: the code-less C library file of the reentrancy block impure_data (.data 0x802FF4D8-0x802FF7DC), its \"C\" locale string (.rodata 0x802B77A8-0x802B77AC) and the pointer _impure_ptr (.sdata 0x803EC56C-0x803EC570).",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B77A8",
+          "end": "0x802B77AC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4D8",
+          "end": "0x802FF7DC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC56C",
+          "end": "0x803EC570"
+        }
+      ]
+    },
+    {
       "source": "src/engine/mbtowc_r.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv whole-file provisional unit row0x80266640-0x8026696C, function/name/compiler/source-form/type/field rows, exact24-byte locale-string pool and864-byte JIS table containers. Complete812-byte function and all888 native data bytes verified together.",
@@ -18698,19 +18771,19 @@
     {
       "source": "src/engine/vfiprintf.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv whole second-vfprintf.c grouping0x802645AC-0x80265D2C, four exact function/name/ABI rows, exact172 initialized data bytes and provisional128-byte staging allocation, type/field/compiler/source-form records. All functions and native sections are replaced together.",
+      "evidence": "evidence.tsv whole second-vfprintf.c grouping0x802645AC-0x80265D2C, four exact function/name/ABI rows, exact172 initialized data bytes and provisional128-byte staging allocation, type/field/compiler/source-form records. All functions and native sections are replaced together. The locale accessors _localeconv_r and localeconv and the fixed record that followed them moved to src/engine/locale.c (its unit row).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802645AC",
-          "end": "0x80265D2C"
+          "end": "0x80265CFC"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802B7608",
-          "end": "0x802B76AC"
+          "end": "0x802B7674"
         },
         {
           "section": ".bss",
@@ -18723,6 +18796,42 @@
           "placement": ".data5",
           "start": "0x803EC550",
           "end": "0x803EC558"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/locale.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x80265CFC-0x80265D2C (src/engine/locale.c), its function, name, data and linker rows; the two kept functions exact, .rodata 0x802B7674-0x802B76C8 (lconv, its strings and the discarded setlocale's locale names) and .sdata 0x803EC558-0x803EC56C (__mb_cur_max, lc_ctype, last_lc_ctype) linked.",
+      "link_roots": {
+        "symbols": [
+          "_localeconv_r",
+          "localeconv"
+        ],
+        "discarded": [
+          "_setlocale_r",
+          "setlocale"
+        ],
+        "evidence": "evidence.tsv linker row 0x802B76AC-0x802B76C8: the target keeps _localeconv_r and localeconv (0x80265CFC-0x80265D2C, the whole .text range); _setlocale_r and setlocale have no code in the target while their locale-name strings remain in .rodata and their two static buffers in .sdata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80265CFC",
+          "end": "0x80265D2C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7674",
+          "end": "0x802B76C8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC558",
+          "end": "0x803EC56C"
         }
       ]
     },
