@@ -25754,7 +25754,7 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 68 of 74 functions exact, the 6 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 71 of 74 functions exact, the 3 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
       "sections": [
         {
           "section": ".text",
@@ -25802,7 +25802,7 @@
             "evidence": "evidence.tsv source-form 0x802694AC-0x802697D8"
           }
         ],
-        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out SNDAEMSI_updatedestroy, UpdateControlClass, SNDAEMSI_updateoscillator, SNDAEMSI_CreateModuleInstance, SNDAEMS_removemodulebank, SNDAEMSI_resolvemodulebank (lane 8 merge notes, 2026-11-27: UpdateCallFunction, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer and SNDAEMSI_updateramp made exact); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
+        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out UpdateControlClass, SNDAEMSI_updateoscillator and SNDAEMSI_resolvemodulebank (lane 8 merge notes, 2026-11-27: UpdateCallFunction, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer and SNDAEMSI_updateramp made exact; round 5 lane 5 merge notes, 2026-11-27: SNDAEMSI_updatedestroy, SNDAEMSI_CreateModuleInstance and SNDAEMS_removemodulebank made exact); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
       }
     },
     {
