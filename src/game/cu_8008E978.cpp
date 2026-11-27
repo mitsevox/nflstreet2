@@ -1455,11 +1455,11 @@ void EvMonFire(int handle, int unknown);
 }
 
 extern "C" {
-void fn_800AFDD4(void (*pCallback)(int, unsigned int, float));
+void CallbackListAdd(void (*pCallback)(int, unsigned int, float));
 }
 
 extern "C" {
-void fn_800AFE20(void (*pCallback)(int, unsigned int, float));
+void CallbackListRemove(void (*pCallback)(int, unsigned int, float));
 }
 
 extern "C" {
@@ -2437,7 +2437,7 @@ struct Item_800AF13C {
     unsigned char mUnknownC[4];
 };
 
-/* 24-byte block allocated by fn_800AF630 at lbl_803EC978. */
+/* 24-byte block allocated by PlyrIKInit at lbl_803EC978. */
 struct Table_800AF71C {
     unsigned int mCount;
     void *mpUnknown4[5];
@@ -6860,61 +6860,61 @@ extern "C" void fn_800AEF74(Object_80039F5C *p, Message_800F01CC *pMessages);
 
 extern "C" int fn_800AF078(int team);
 
-extern "C" void fn_800AF088(void);
+extern "C" void HotRouteClearOffenseCmd31(void);
 
-extern "C" Item_800AF13C *fn_800AF13C(int key);
+extern "C" Item_800AF13C *ResHoldFind(int key);
 
-extern "C" int fn_800AF198(void *pItem, void *pContext, void *pResult);
+extern "C" int _ResHoldMatchKey(void *pItem, void *pContext, void *pResult);
 
 extern "C" void fn_800AF1BC(int a, int count);
 
 extern "C" void fn_800AF1FC(void);
 
-extern "C" void fn_800AF264(int key);
+extern "C" void ResHoldRelease(int key);
 
-extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource);
+extern "C" void PlyrIKCopyJoints(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource);
 
-extern "C" void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t);
+extern "C" void PlyrIKBlendJoints(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t);
 
-extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget);
+extern "C" void PlyrIKSolveChain(Entry_800AF82C *p, void *pResult, float *pTarget);
 
-extern "C" void fn_800AF4A8(Entry_800AF82C *p);
+extern "C" void PlyrIKUpdateEntry(Entry_800AF82C *p);
 
-extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count);
+extern "C" void PlyrIKInit(void *pRes, unsigned int index, unsigned int count);
 
-extern "C" void fn_800AF71C(void);
+extern "C" void PlyrIKShutdown(void);
 
-extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *pNameB, int value);
+extern "C" void PlyrIKCreateChain(int index, void *p, const char *pNameA, const char *pNameB, int value);
 
-extern "C" void fn_800AF804(Entry_800AF82C *p);
+extern "C" void PlyrIKClearEntries(Entry_800AF82C *p);
 
-extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c);
+extern "C" void PlyrIKSetupEntry(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c);
 
-extern "C" void fn_800AF87C(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count);
+extern "C" void PlyrIKSetTarget(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count);
 
-extern "C" void fn_800AF95C(Entry_800AF82C *p, int index, unsigned int count);
+extern "C" void PlyrIKReleaseTarget(Entry_800AF82C *p, int index, unsigned int count);
 
-extern "C" void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue);
+extern "C" void PlyrIKSetParams(Entry_800AF82C *p, int index, int *pValue);
 
-extern "C" int fn_800AF9E4(Entry_800AF82C *p, int index);
+extern "C" int PlyrIKIsActive(Entry_800AF82C *p, int index);
 
-extern "C" void fn_800AF9F4(Entry_800AF82C *p);
+extern "C" void PlyrIKUpdate(Entry_800AF82C *p);
 
-extern "C" int fn_800AFA60(void *p, int value);
+extern "C" int _CallbackListCreate(void *p, int value);
 
-extern "C" int fn_800AFAAC(void *p, int value);
+extern "C" int _CallbackListDestroy(void *p, int value);
 
-extern "C" int fn_800AFAD4(void *p, void *q);
+extern "C" int _CallbackListCompare(void *p, void *q);
 
-extern "C" int fn_800AFB70(void *p, void *pBuffer);
+extern "C" int _CallbackListSave(void *p, void *pBuffer);
 
-extern "C" int fn_800AFBD8(void *p, void *pBuffer);
+extern "C" int _CallbackListLoad(void *p, void *pBuffer);
 
-extern "C" int fn_800AFC28(void *p);
+extern "C" int _CallbackListGetSize(void *p);
 
-extern "C" int fn_800AFC5C(void *pItem, void *pContext, void *pResult);
+extern "C" int _CallbackListCallNode(void *pItem, void *pContext, void *pResult);
 
-extern "C" int fn_800AFC94(void *pItem, void *pContext, void *pResult);
+extern "C" int _CallbackListMatchNode(void *pItem, void *pContext, void *pResult);
 
 extern "C" void fn_800AFCB8(int value);
 
@@ -13913,7 +13913,7 @@ extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock)
     p->mUnknown9[2] = 1;
     p->mUnknown778 = -1;
     fn_800C89BC(p);
-    fn_800AF804((Entry_800AF82C *)p->mUnknown816);
+    PlyrIKClearEntries((Entry_800AF82C *)p->mUnknown816);
     fn_8009CF30((Block_8009C6F4 *)&p->mUnknown16, &pBlock->mUnknown44);
     fn_8009CF30((Block_8009C6F4 *)&p->mUnknown108, &pBlock->mUnknown44);
     fn_8009CF30((Block_8009C6F4 *)&p->mUnknown200, &pBlock->mUnknown44);
@@ -14066,7 +14066,7 @@ extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
         memset(&p->mUnknown108, 0, 92);
         memset(&p->mUnknown200, 0, 92);
         memset(p->mUnknown816, 0, sizeof(p->mUnknown816));
-        fn_800AF804((Entry_800AF82C *)p->mUnknown816);
+        PlyrIKClearEntries((Entry_800AF82C *)p->mUnknown816);
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
             fn_8009C370(p);
@@ -14222,7 +14222,7 @@ extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
     if (c == 0) {
         c = 6;
     }
-    fn_800AF87C(pEntries, b, &pEntry->mUnknown4, c);
+    PlyrIKSetTarget(pEntries, b, &pEntry->mUnknown4, c);
     return 2;
 }
 
@@ -14233,7 +14233,7 @@ extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 
     Entry_8009C684 *pEntry = 0;
 
     if (pBlock->mUnknown0 != 0 && pBlock->mUnknown0 != 4) {
-        fn_800AF82C(pEntries, b, pBlock->mpPose, 0, d);
+        PlyrIKSetupEntry(pEntries, b, pBlock->mpPose, 0, d);
         pBlock->mUnknown6 = b;
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pEntry = &pBlock->mEntries[pBlock->mUnknown4];
@@ -14272,12 +14272,12 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
     case 1:
         break;
     case 4:
-        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+        if (PlyrIKIsActive((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
             pBlock->mUnknown0 = 0;
         }
         break;
     case 3:
-        if (fn_800AF9E4((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
+        if (PlyrIKIsActive((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6) == 0) {
             pBlock->mUnknown0 = 1;
         }
         break;
@@ -14402,9 +14402,9 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
     fn_8009CBD8(p, &pos);
     pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, 0, b);
     if (p->mIdBytes[3] == 1) {
-        fn_800AF9C0(pEntries, 0, lbl_802D7C08);
+        PlyrIKSetParams(pEntries, 0, lbl_802D7C08);
     } else {
-        fn_800AF9C0(pEntries, 0, lbl_802D7C14);
+        PlyrIKSetParams(pEntries, 0, lbl_802D7C14);
     }
     PlyrPoseStartBlink((Object_8003DEC4 *)p->mpUnknown4);
     pBlock->mUnknownE = pBlock->mUnknownC = pBlock->mUnknown8 = 0;
@@ -14457,7 +14457,7 @@ extern "C" void fn_8009CDEC(Object_80039F5C *p)
     active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown200);
     fn_800C8AF0(p);
     if (active) {
-        fn_800AF9F4((Entry_800AF82C *)p->mUnknown816);
+        PlyrIKUpdate((Entry_800AF82C *)p->mUnknown816);
     }
     fn_8009CC28(p);
     fn_8009CB0C(p);
@@ -14469,7 +14469,7 @@ extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
         pBlock->mUnknown0 = 3;
-        fn_800AF95C((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
+        PlyrIKReleaseTarget((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
     }
 }
 
@@ -14502,7 +14502,7 @@ extern "C" void fn_8009CF78(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
         pBlock->mUnknown4 = pBlock->mUnknown4 == 0;
         pBlock->mEntries[pBlock->mUnknown4].mpCallback0 = 0;
         pBlock->mUnknown0 = 4;
-        fn_800AF95C((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
+        PlyrIKReleaseTarget((Entry_800AF82C *)p->mUnknown816, pBlock->mUnknown6, a);
         break;
     case 3:
         pBlock->mUnknown0 = 4;
@@ -20610,7 +20610,7 @@ extern "C" void fn_800AA8B8(void)
     }
 }
 
-/* Event callback registered through fn_800AFDD4; the float is not read. */
+/* Event callback registered through CallbackListAdd; the float is not read. */
 extern "C" void fn_800AA93C(int a, unsigned int value, float unused)
 {
     if (lbl_803EAA88->mUnknown15 == 0) {
@@ -20771,7 +20771,7 @@ void Class_80297B90::vfn_03(float dt)
     fn_800C1E50();
     lbl_803EAA99 = 0;
     lbl_803EAA88->mUnknown10 = 0;
-    fn_800AFDD4(fn_800AA93C);
+    CallbackListAdd(fn_800AA93C);
     AudmonEventPost(131, 0);
     ReplayHandleCommand(gpReplay, 3, 0);
     lbl_803EAA88->mUnknown4 = 19;
@@ -21166,7 +21166,7 @@ void Class_80297B90::vfn_05()
     lbl_803EAA99 = 0;
     fn_80094DF0();
     fn_800AB944(lbl_803EAA8C);
-    fn_800AFE20(fn_800AA93C);
+    CallbackListRemove(fn_800AA93C);
     BallGetModel(BallGetCurrent())->mUnknown20 |= 1;
     BallGetModel(BallGetCurrent())->mUnknown20 &= ~2;
     PlyrObjsSetDrawFlag(1);
@@ -22941,7 +22941,7 @@ extern "C" int fn_800AF078(int team)
     return lbl_803EAAF4->mUnknown268[team];
 }
 
-extern "C" void fn_800AF088(void)
+extern "C" void HotRouteClearOffenseCmd31(void)
 {
     int team = ScrmGetOffenseTeam();
     unsigned int count = ScrmGetTeamPlayerCount(team);
@@ -22956,17 +22956,17 @@ extern "C" void fn_800AF088(void)
     }
 }
 
-extern "C" Item_800AF13C *fn_800AF13C(int key)
+extern "C" Item_800AF13C *ResHoldFind(int key)
 {
     Item_800AF13C *pFound;
 
-    if (lbl_803EAB00 == 0 || DSSearchList(lbl_803EAB00, 0, &key, &pFound, fn_800AF198) != 2) {
+    if (lbl_803EAB00 == 0 || DSSearchList(lbl_803EAB00, 0, &key, &pFound, _ResHoldMatchKey) != 2) {
         pFound = 0;
     }
     return pFound;
 }
 
-extern "C" int fn_800AF198(void *pItem, void *pContext, void *pResult)
+extern "C" int _ResHoldMatchKey(void *pItem, void *pContext, void *pResult)
 {
     int result = -1;
 
@@ -22990,16 +22990,16 @@ extern "C" void fn_800AF1FC(void)
     while (pItem != 0) {
         Item_800AF13C *pNext = (Item_800AF13C *)DSNextListNode(lbl_803EAB00, pItem);
 
-        fn_800AF264(pItem->mUnknown8);
+        ResHoldRelease(pItem->mUnknown8);
         pItem = pNext;
     }
     DSDelList(lbl_803EAB00);
     lbl_803EAB00 = 0;
 }
 
-extern "C" void fn_800AF264(int key)
+extern "C" void ResHoldRelease(int key)
 {
-    Item_800AF13C *pItem = fn_800AF13C(key);
+    Item_800AF13C *pItem = ResHoldFind(key);
 
     if (pItem != 0) {
         ResUnLoad(pItem->mpUnknown0, pItem->mUnknown4);
@@ -23007,7 +23007,7 @@ extern "C" void fn_800AF264(int key)
     }
 }
 
-extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource)
+extern "C" void PlyrIKCopyJoints(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource)
 {
     unsigned int count = pChain->mUnknown8;
     unsigned int i;
@@ -23022,7 +23022,7 @@ extern "C" void fn_800AF2AC(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_80
     }
 }
 
-extern "C" void fn_800AF304(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t)
+extern "C" void PlyrIKBlendJoints(Chain_800AF404 *pChain, AnimPose_t *pPose, Source_800AF2AC *pSource, float t)
 {
     unsigned int count = pChain->mUnknown8;
     unsigned int i;
@@ -23060,7 +23060,7 @@ static void _StrippedFillZeroLimits(float *p)
 }
 }
 
-extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
+extern "C" void PlyrIKSolveChain(Entry_800AF82C *p, void *pResult, float *pTarget)
 {
     Chain_800AF404 *pChain = (Chain_800AF404 *)p->mpUnknown8;
 
@@ -23075,17 +23075,17 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
     }
 }
 
-extern "C" void fn_800AF4A8(Entry_800AF82C *p)
+extern "C" void PlyrIKUpdateEntry(Entry_800AF82C *p)
 {
     Vector_80039F5C *pMax;
     Vector_80039F5C *pAccel;
 
     if (p->mpUnknown14 != 0) {
-        fn_800AF404(p, lbl_8030F9FC, &p->mUnknown18.mX);
+        PlyrIKSolveChain(p, lbl_8030F9FC, &p->mUnknown18.mX);
         if (p->mUnknownC == 1.0f) {
-            fn_800AF2AC((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC);
+            PlyrIKCopyJoints((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC);
         } else {
-            fn_800AF304((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC, p->mUnknownC);
+            PlyrIKBlendJoints((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC, p->mUnknownC);
         }
         pMax = &lbl_802D8730[p->mUnknown3D];
         pAccel = &lbl_802D870C[p->mUnknown3D];
@@ -23093,8 +23093,8 @@ extern "C" void fn_800AF4A8(Entry_800AF82C *p)
         CamLerp(&p->mUnknown18.mY, &p->mUnknown24.mY, p->mpUnknown14->mY, pMax->mY, pAccel->mY);
         CamLerp(&p->mUnknown18.mZ, &p->mUnknown24.mZ, p->mpUnknown14->mZ, pMax->mZ, pAccel->mZ);
     } else {
-        fn_800AF404(p, lbl_8030F9FC, &p->mUnknown18.mX);
-        fn_800AF304((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC, 1.0f - p->mUnknownC);
+        PlyrIKSolveChain(p, lbl_8030F9FC, &p->mUnknown18.mX);
+        PlyrIKBlendJoints((Chain_800AF404 *)p->mpUnknown8, p->mpUnknown0, lbl_8030F9FC, 1.0f - p->mUnknownC);
     }
     if (p->mUnknown10 != 0.0f) {
         p->mUnknownC += p->mUnknown10;
@@ -23108,7 +23108,7 @@ extern "C" void fn_800AF4A8(Entry_800AF82C *p)
     }
 }
 
-extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
+extern "C" void PlyrIKInit(void *pRes, unsigned int index, unsigned int count)
 {
     unsigned int size;
     Item_800AF82C *pItems;
@@ -23129,7 +23129,7 @@ extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
     fn_801C4958(1);
 }
 
-extern "C" void fn_800AF71C(void)
+extern "C" void PlyrIKShutdown(void)
 {
     unsigned int count = lbl_803EC978->mCount;
     unsigned int i;
@@ -23142,7 +23142,7 @@ extern "C" void fn_800AF71C(void)
     lbl_803EAB04 = 0;
 }
 
-extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *pNameB, int value)
+extern "C" void PlyrIKCreateChain(int index, void *p, const char *pNameA, const char *pNameB, int value)
 {
     int a = CharSkelGetJointByName(p, pNameA);
     int b = CharSkelGetJointByName(p, pNameB);
@@ -23150,12 +23150,12 @@ extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *
     lbl_803EC978->mpUnknown4[index] = fn_801C47EC(p, a, b, value);
 }
 
-extern "C" void fn_800AF804(Entry_800AF82C *p)
+extern "C" void PlyrIKClearEntries(Entry_800AF82C *p)
 {
     memset(p, 0, 3 * sizeof(Entry_800AF82C));
 }
 
-extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c)
+extern "C" void PlyrIKSetupEntry(Entry_800AF82C *p, int index, AnimPose_t *pPose, int b, int c)
 {
     Entry_800AF82C *pEntry = p + index;
 
@@ -23168,7 +23168,7 @@ extern "C" void fn_800AF82C(Entry_800AF82C *p, int index, AnimPose_t *pPose, int
     pEntry->mUnknown3D = c;
 }
 
-extern "C" void fn_800AF87C(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count)
+extern "C" void PlyrIKSetTarget(Entry_800AF82C *pEntries, int index, Vector_80039F5C *pTarget, unsigned int count)
 {
     Entry_800AF82C *p = &pEntries[index];
 
@@ -23190,7 +23190,7 @@ extern "C" void fn_800AF87C(Entry_800AF82C *pEntries, int index, Vector_80039F5C
     p->mpUnknown14 = pTarget;
 }
 
-extern "C" void fn_800AF95C(Entry_800AF82C *p, int index, unsigned int count)
+extern "C" void PlyrIKReleaseTarget(Entry_800AF82C *p, int index, unsigned int count)
 {
     Entry_800AF82C *pEntry = p + index;
 
@@ -23201,7 +23201,7 @@ extern "C" void fn_800AF95C(Entry_800AF82C *p, int index, unsigned int count)
     }
 }
 
-extern "C" void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue)
+extern "C" void PlyrIKSetParams(Entry_800AF82C *p, int index, int *pValue)
 {
     Entry_800AF82C *pEntry = p + index;
 
@@ -23210,26 +23210,26 @@ extern "C" void fn_800AF9C0(Entry_800AF82C *p, int index, int *pValue)
     pEntry->mUnknown30[2] = pValue[2];
 }
 
-extern "C" int fn_800AF9E4(Entry_800AF82C *p, int index)
+extern "C" int PlyrIKIsActive(Entry_800AF82C *p, int index)
 {
     Entry_800AF82C *pEntry = p + index;
 
     return pEntry->mUnknown3C;
 }
 
-extern "C" void fn_800AF9F4(Entry_800AF82C *p)
+extern "C" void PlyrIKUpdate(Entry_800AF82C *p)
 {
     unsigned int count = lbl_803EC978->mCount;
     unsigned int i;
 
     for (i = 0; i < count; i++) {
         if (p[i].mUnknown0 != 0 && p[i].mUnknown3C != 0) {
-            fn_800AF4A8(&p[i]);
+            PlyrIKUpdateEntry(&p[i]);
         }
     }
 }
 
-extern "C" int fn_800AFA60(void *p, int value)
+extern "C" int _CallbackListCreate(void *p, int value)
 {
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
 
@@ -23237,13 +23237,13 @@ extern "C" int fn_800AFA60(void *p, int value)
     return 0;
 }
 
-extern "C" int fn_800AFAAC(void *p, int value)
+extern "C" int _CallbackListDestroy(void *p, int value)
 {
     DSDelList(((Block_800AFCB8 *)p)->mpUnknown4);
     return 0;
 }
 
-extern "C" int fn_800AFAD4(void *p, void *q)
+extern "C" int _CallbackListCompare(void *p, void *q)
 {
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
     Block_800AFCB8 *pOther = (Block_800AFCB8 *)q;
@@ -23258,7 +23258,7 @@ extern "C" int fn_800AFAD4(void *p, void *q)
     return result;
 }
 
-extern "C" int fn_800AFB70(void *p, void *pBuffer)
+extern "C" int _CallbackListSave(void *p, void *pBuffer)
 {
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
     char *pDest = (char *)pBuffer;
@@ -23270,7 +23270,7 @@ extern "C" int fn_800AFB70(void *p, void *pBuffer)
     return 1;
 }
 
-extern "C" int fn_800AFBD8(void *p, void *pBuffer)
+extern "C" int _CallbackListLoad(void *p, void *pBuffer)
 {
     Block_800AFCB8 *pBlock = (Block_800AFCB8 *)p;
 
@@ -23278,12 +23278,12 @@ extern "C" int fn_800AFBD8(void *p, void *pBuffer)
     return 1;
 }
 
-extern "C" int fn_800AFC28(void *p)
+extern "C" int _CallbackListGetSize(void *p)
 {
     return DSGetListMemSize(0, lbl_803EAB0C->mUnknown0, 4) + sizeof(Block_800AFCB8);
 }
 
-extern "C" int fn_800AFC5C(void *pItem, void *pContext, void *pResult)
+extern "C" int _CallbackListCallNode(void *pItem, void *pContext, void *pResult)
 {
     Context_800AFC5C *pArgs = (Context_800AFC5C *)pContext;
 
@@ -23291,7 +23291,7 @@ extern "C" int fn_800AFC5C(void *pItem, void *pContext, void *pResult)
     return 1;
 }
 
-extern "C" int fn_800AFC94(void *pItem, void *pContext, void *pResult)
+extern "C" int _CallbackListMatchNode(void *pItem, void *pContext, void *pResult)
 {
     if (((Item_800AFC5C *)pItem)->mpCallback0 == ((Item_800AFC5C *)pContext)->mpCallback0) {
         *(void **)pResult = pItem;
@@ -23304,8 +23304,8 @@ extern "C" void fn_800AFCB8(int value)
 {
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EAB0C, sizeof(Block_800AFCB8), 0, 0x6A6D7367);
 
-    SyncStateSetCallbacks(pHandle, fn_800AFA60, fn_800AFAAC, 0, fn_800AFAD4);
-    SyncStateSetSaveCallbacks(pHandle, fn_800AFB70, fn_800AFC28, fn_800AFBD8);
+    SyncStateSetCallbacks(pHandle, _CallbackListCreate, _CallbackListDestroy, 0, _CallbackListCompare);
+    SyncStateSetSaveCallbacks(pHandle, _CallbackListSave, _CallbackListGetSize, _CallbackListLoad);
     ((Block_800AFCB8 *)SyncStateGetData(pHandle))->mUnknown0 = value;
     SyncStateCommit(pHandle);
 }
@@ -23326,11 +23326,11 @@ extern "C" void fn_800AFD58(int a, int b, float c)
         args.mUnknown4 = b;
         args.mUnknown8 = c;
         pool = pBlock->mpUnknown4;
-        DSTraverseList(pool, DSGetListNode(pool, 0), &args, 0, fn_800AFC5C, 1);
+        DSTraverseList(pool, DSGetListNode(pool, 0), &args, 0, _CallbackListCallNode, 1);
     }
 }
 
-extern "C" void fn_800AFDD4(Callback_800AFC5C pCallback)
+extern "C" void CallbackListAdd(Callback_800AFC5C pCallback)
 {
     Item_800AFC5C *pItem = (Item_800AFC5C *)DSNewListNode(lbl_803EAB0C->mpUnknown4);
 
@@ -23338,7 +23338,7 @@ extern "C" void fn_800AFDD4(Callback_800AFC5C pCallback)
     DSAddListNode(lbl_803EAB0C->mpUnknown4, pItem, 1);
 }
 
-extern "C" void fn_800AFE20(Callback_800AFC5C pCallback)
+extern "C" void CallbackListRemove(Callback_800AFC5C pCallback)
 {
     Item_800AFC5C key;
     void *pFound;
@@ -23346,7 +23346,7 @@ extern "C" void fn_800AFE20(Callback_800AFC5C pCallback)
 
     key.mpCallback0 = pCallback;
     pool = lbl_803EAB0C->mpUnknown4;
-    DSTraverseList(pool, DSGetListNode(pool, 0), &key, &pFound, fn_800AFC94, 1);
+    DSTraverseList(pool, DSGetListNode(pool, 0), &key, &pFound, _CallbackListMatchNode, 1);
     DSDelListNode(lbl_803EAB0C->mpUnknown4, pFound);
 }
 
@@ -24154,7 +24154,7 @@ extern "C" void fn_800B17B4(void)
 {
     fn_800B14E4();
     *lbl_803EAB1C = 0;
-    fn_800AFDD4(fn_800B1758);
+    CallbackListAdd(fn_800B1758);
     ScrmQuarterEnd();
 }
 
@@ -24193,7 +24193,7 @@ extern "C" void fn_800B17F0(float value)
 extern "C" void fn_800B18D0(void)
 {
     fn_800B14E4();
-    fn_800AFE20(fn_800B1758);
+    CallbackListRemove(fn_800B1758);
     ScrmQuarterEnd();
 }
 
@@ -27665,7 +27665,7 @@ void PostPlayPhase::OnEnter(float dt)
     OnSequenceStart();
     fn_800C4460(&lbl_803EAB78->mSequence);
     if (ReplayIsShowing(gpReplay) == 0) {
-        fn_800AFDD4(fn_800B876C);
+        CallbackListAdd(fn_800B876C);
     }
     AudmonEventPost(123, 0);
     PassIconsHide();
@@ -27735,7 +27735,7 @@ void PostPlayPhase::OnExit()
     fn_80094DF0();
     ReplayHandleCommand(gpReplay, 3, 0);
     if (ReplayIsShowing(gpReplay) == 0) {
-        fn_800AFE20(fn_800B876C);
+        CallbackListRemove(fn_800B876C);
     }
     fn_800C4568(&lbl_803EAB78->mSequence);
     fn_800B63B0();
@@ -29197,7 +29197,7 @@ void PreGamePhase::OnEnter(float dt)
     if (practice) {
         fn_800BBB4C(this);
     }
-    fn_800AFDD4(fn_800BB694);
+    CallbackListAdd(fn_800BB694);
     PlyrObjsSetDrawFlag(0);
     fn_800B2670(0);
     fn_800C432C();
@@ -29363,7 +29363,7 @@ void PreGamePhase::OnExit()
     } else {
         BallResetToSpot();
     }
-    fn_800AFE20(fn_800BB694);
+    CallbackListRemove(fn_800BB694);
     AudmonEventPost(0x6e, 0);
     if (SpchIGGetTeamSceneSpeaker(0) != 0) {
         AudmonEventPostArgs(0x6d, 0, 0, 0, 0);
@@ -29956,12 +29956,12 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             PlayBookRestoreSelection(team);
             if (lbl_803EABA8->mUnknownC7 != 0) {
                 lbl_803EABA8->mUnknownC7 = 0;
-                fn_800AF088();
+                HotRouteClearOffenseCmd31();
             }
         } else if (action == 0xFD) {
             if (lbl_803EABA8->mUnknownC7 != 0) {
                 lbl_803EABA8->mUnknownC7 = 0;
-                fn_800AF088();
+                HotRouteClearOffenseCmd31();
             } else {
                 lbl_803EABA8->mUnknownC7 = 1;
                 fn_800AED9C(1);
@@ -30783,7 +30783,7 @@ void PreSnapPhase::OnEnter(float dt)
     ScrmSpotReset();
     AssignControlledPlayers();
     fn_8011F3A8();
-    fn_800AFDD4(fn_800BE4C8);
+    CallbackListAdd(fn_800BE4C8);
     PadInputSaveHandlers(lbl_803EABA8->mUnknown48);
     ConSetChannelInfo(-1, 3, lbl_802ECD44);
     for (i = 0; i <= 1; i++) {
@@ -30922,7 +30922,7 @@ void PreSnapPhase::OnExit(float dt)
     if ((fn_8009D86C() != 2 && fn_8009D86C() <= 3) || fn_8009D990(1) > 120 || fn_8009D990(1) == 0) {
         GameEventFlagsSetFlag0(0);
     }
-    fn_800AFE20(fn_800BE4C8);
+    CallbackListRemove(fn_800BE4C8);
     PadInputRestoreHandlers(lbl_803EABA8->mUnknown48);
     PadInputResetSlot(-1);
     fn_800B0DA4();
@@ -31832,7 +31832,7 @@ extern "C" void fn_800C2090(void)
     CamGameSetModeAll(1);
     CamGameSelectCamera(0);
     CamGameSetFocusAll(1, BallGetCurrentIndex());
-    fn_800AFDD4(fn_800C1E5C);
+    CallbackListAdd(fn_800C1E5C);
 }
 
 extern "C" void fn_800C20D8(void)
@@ -31841,7 +31841,7 @@ extern "C" void fn_800C20D8(void)
 
 extern "C" void fn_800C20DC(void)
 {
-    fn_800AFE20(fn_800C1E5C);
+    CallbackListRemove(fn_800C1E5C);
     fn_800BA804(0);
 }
 

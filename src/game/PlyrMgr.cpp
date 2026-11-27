@@ -198,7 +198,7 @@ int PlyrObjsGetPerTeam(void);
 void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
 void fn_8009BD48(int *pRef, int a, int b, int c);
 void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject);
-void fn_800AF804(void *p);
+void PlyrIKClearEntries(void *p);
 void SortListAdd(Object_8003DEC4 *pObject, short a, unsigned short b, int index);
 int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
 int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
@@ -473,7 +473,7 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     p->mpUnknown804 = pPlayer->mUnknown3604;
     p->mpUnknown808 = &pPlayer->mUnknown3096;
     p->mpUnknown812 = pPlayer->mUnknown3108;
-    fn_800AF804(p->mUnknown816);
+    PlyrIKClearEntries(p->mUnknown816);
     p->mUnknown512.mUnknown14 = 1;
     p->mpUnknown56 = &pObject->mUnknown44;
     p->mpUnknown148 = &pObject->mUnknown44;

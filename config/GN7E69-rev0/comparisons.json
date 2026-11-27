@@ -15552,17 +15552,17 @@
           "end": "0x800AF088"
         },
         {
-          "symbol": "fn_800AF088",
+          "symbol": "HotRouteClearOffenseCmd31",
           "start": "0x800AF088",
           "end": "0x800AF13C"
         },
         {
-          "symbol": "fn_800AF13C",
+          "symbol": "ResHoldFind",
           "start": "0x800AF13C",
           "end": "0x800AF198"
         },
         {
-          "symbol": "fn_800AF198",
+          "symbol": "_ResHoldMatchKey",
           "start": "0x800AF198",
           "end": "0x800AF1BC"
         },
@@ -15577,117 +15577,117 @@
           "end": "0x800AF264"
         },
         {
-          "symbol": "fn_800AF264",
+          "symbol": "ResHoldRelease",
           "start": "0x800AF264",
           "end": "0x800AF2AC"
         },
         {
-          "symbol": "fn_800AF2AC",
+          "symbol": "PlyrIKCopyJoints",
           "start": "0x800AF2AC",
           "end": "0x800AF304"
         },
         {
-          "symbol": "fn_800AF304",
+          "symbol": "PlyrIKBlendJoints",
           "start": "0x800AF304",
           "end": "0x800AF404"
         },
         {
-          "symbol": "fn_800AF404",
+          "symbol": "PlyrIKSolveChain",
           "start": "0x800AF404",
           "end": "0x800AF4A8"
         },
         {
-          "symbol": "fn_800AF4A8",
+          "symbol": "PlyrIKUpdateEntry",
           "start": "0x800AF4A8",
           "end": "0x800AF630"
         },
         {
-          "symbol": "fn_800AF630",
+          "symbol": "PlyrIKInit",
           "start": "0x800AF630",
           "end": "0x800AF71C"
         },
         {
-          "symbol": "fn_800AF71C",
+          "symbol": "PlyrIKShutdown",
           "start": "0x800AF71C",
           "end": "0x800AF790"
         },
         {
-          "symbol": "fn_800AF790",
+          "symbol": "PlyrIKCreateChain",
           "start": "0x800AF790",
           "end": "0x800AF804"
         },
         {
-          "symbol": "fn_800AF804",
+          "symbol": "PlyrIKClearEntries",
           "start": "0x800AF804",
           "end": "0x800AF82C"
         },
         {
-          "symbol": "fn_800AF82C",
+          "symbol": "PlyrIKSetupEntry",
           "start": "0x800AF82C",
           "end": "0x800AF87C"
         },
         {
-          "symbol": "fn_800AF87C",
+          "symbol": "PlyrIKSetTarget",
           "start": "0x800AF87C",
           "end": "0x800AF95C"
         },
         {
-          "symbol": "fn_800AF95C",
+          "symbol": "PlyrIKReleaseTarget",
           "start": "0x800AF95C",
           "end": "0x800AF9C0"
         },
         {
-          "symbol": "fn_800AF9C0",
+          "symbol": "PlyrIKSetParams",
           "start": "0x800AF9C0",
           "end": "0x800AF9E4"
         },
         {
-          "symbol": "fn_800AF9E4",
+          "symbol": "PlyrIKIsActive",
           "start": "0x800AF9E4",
           "end": "0x800AF9F4"
         },
         {
-          "symbol": "fn_800AF9F4",
+          "symbol": "PlyrIKUpdate",
           "start": "0x800AF9F4",
           "end": "0x800AFA60"
         },
         {
-          "symbol": "fn_800AFA60",
+          "symbol": "_CallbackListCreate",
           "start": "0x800AFA60",
           "end": "0x800AFAAC"
         },
         {
-          "symbol": "fn_800AFAAC",
+          "symbol": "_CallbackListDestroy",
           "start": "0x800AFAAC",
           "end": "0x800AFAD4"
         },
         {
-          "symbol": "fn_800AFAD4",
+          "symbol": "_CallbackListCompare",
           "start": "0x800AFAD4",
           "end": "0x800AFB70"
         },
         {
-          "symbol": "fn_800AFB70",
+          "symbol": "_CallbackListSave",
           "start": "0x800AFB70",
           "end": "0x800AFBD8"
         },
         {
-          "symbol": "fn_800AFBD8",
+          "symbol": "_CallbackListLoad",
           "start": "0x800AFBD8",
           "end": "0x800AFC28"
         },
         {
-          "symbol": "fn_800AFC28",
+          "symbol": "_CallbackListGetSize",
           "start": "0x800AFC28",
           "end": "0x800AFC5C"
         },
         {
-          "symbol": "fn_800AFC5C",
+          "symbol": "_CallbackListCallNode",
           "start": "0x800AFC5C",
           "end": "0x800AFC94"
         },
         {
-          "symbol": "fn_800AFC94",
+          "symbol": "_CallbackListMatchNode",
           "start": "0x800AFC94",
           "end": "0x800AFCB8"
         },
@@ -15707,12 +15707,12 @@
           "end": "0x800AFDD4"
         },
         {
-          "symbol": "fn_800AFDD4",
+          "symbol": "CallbackListAdd",
           "start": "0x800AFDD4",
           "end": "0x800AFE20"
         },
         {
-          "symbol": "fn_800AFE20",
+          "symbol": "CallbackListRemove",
           "start": "0x800AFE20",
           "end": "0x800AFE8C"
         },

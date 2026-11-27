@@ -64,8 +64,8 @@ void fn_800940F0(int handle);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 void fn_800AD910(int a, float b);
-void fn_800AFDD4(void (*pCallback)(int, unsigned int));
-void fn_800AFE20(void (*pCallback)(int, unsigned int));
+void CallbackListAdd(void (*pCallback)(int, unsigned int));
+void CallbackListRemove(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
 void fn_800B43C8(void);
 void fn_800CC560(int a);
@@ -215,7 +215,7 @@ void QuarterEndOnEvent(int a, unsigned int b);
 
 void QuarterEndFinish(void)
 {
-    fn_800AFE20(QuarterEndOnEvent);
+    CallbackListRemove(QuarterEndOnEvent);
     if (_QuarterEnd_pState->mUnknown11) {
         if (fn_8009D86C() != 6) {
             PauseOpenScreen(3, 1, -1);
@@ -402,7 +402,7 @@ void QuarterEndPhase::OnUpdate(float f)
         }
         _QuarterEnd_pState->mUnknown8 = 0;
         _QuarterEnd_pState->mUnknown10 = 1;
-        fn_800AFDD4(QuarterEndOnEvent);
+        CallbackListAdd(QuarterEndOnEvent);
         PlyrStarSetShown(1, 1);
         if (fn_8009D86C() == 6) {
             HudStop();
@@ -490,7 +490,7 @@ void QuarterEndPhase::OnExit()
     fn_800B14E4();
     if (_QuarterEnd_pState->mUnknown10) {
         _QuarterEnd_pState->mUnknown10 = 0;
-        fn_800AFE20(QuarterEndOnEvent);
+        CallbackListRemove(QuarterEndOnEvent);
     }
     ScrmQuarterEnd();
     _QuarterEnd_pState->mUnknown35 = 0;
