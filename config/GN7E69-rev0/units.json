@@ -707,17 +707,9 @@
       "address": "0x802739F8",
       "evidence": "evidence.tsv function and name rows for 0x802739F8 (iSNDserve, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/sserver.c (n1e naming wave)."
     },
-    "SNDPLATFORM_playtimbre": {
-      "address": "0x80273DF8",
-      "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
-    },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
       "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
-    },
-    "SNDPLATFORM_packetplay": {
-      "address": "0x80274464",
-      "evidence": "evidence.tsv function and name rows for 0x80274464 (SNDPLATFORM_packetplay, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/spktplay.c (n1e naming wave)."
     },
     "STREAM_kill": {
       "address": "0x801F7208",
@@ -26354,7 +26346,7 @@
     {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 5 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 3 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -26378,18 +26370,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80273D7C",
-          "end": "0x80273DF8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80274304",
-          "end": "0x80274464"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8027474C",
           "end": "0x802753F0"
         },
         {
@@ -26424,14 +26404,6 @@
           {
             "function": "iSNDserve",
             "evidence": "evidence.tsv source-form 0x802739F8-0x80273D7C"
-          },
-          {
-            "function": "SNDPLATFORM_playtimbre",
-            "evidence": "evidence.tsv source-form 0x80273DF8-0x80274304"
-          },
-          {
-            "function": "SNDPLATFORM_packetplay",
-            "evidence": "evidence.tsv source-form 0x80274464-0x8027474C"
           }
         ],
         "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
