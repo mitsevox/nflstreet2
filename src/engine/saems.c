@@ -1685,6 +1685,7 @@ int SNDAEMS_removemodulebank(int handle)
 
             for (i = 0; i < bank->mNumClasses; i++) {
                 AemsInstance_t *inst;
+                int *offsets = c->mStateOffsets;
 
                 Csis::Class::UnsubscribeConstructorFast(&c->mHandle, &c->mConstructor);
                 inst = c->mpInstances;
@@ -1696,7 +1697,7 @@ int SNDAEMS_removemodulebank(int handle)
                     SNDAEMSI_updatedestroy(destroy);
                     inst = next;
                 }
-                c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+                c = (AemsClass_t *)((char *)offsets + (c->mNumPlayers + c->mNumClasses) * 4);
             }
             if (bank->mpName != 0)
                 SNDMEMI_free(bank->mpName);
@@ -1704,12 +1705,17 @@ int SNDAEMS_removemodulebank(int handle)
                 SNDbankremove(bank->mBankA);
             if (bank->mBankB >= 0)
                 SNDbankremove(bank->mBankB);
-            if (&bank->mLink == AEMS_MODULE_BANKS)
-                AEMS_MODULE_BANKS = bank->mLink.mpNext;
-            if (bank->mLink.mpPrev != 0)
-                bank->mLink.mpPrev->mpNext = bank->mLink.mpNext;
-            if (bank->mLink.mpNext != 0)
-                bank->mLink.mpNext->mpPrev = bank->mLink.mpPrev;
+            {
+                SndAemsModuleBankLink_t **head = &AEMS_MODULE_BANKS;
+                SndAemsModuleBankLink_t *unlinked = &bank->mLink;
+
+                if (unlinked == *head)
+                    *head = unlinked->mpNext;
+                if (unlinked->mpPrev != 0)
+                    unlinked->mpPrev->mpNext = unlinked->mpNext;
+                if (unlinked->mpNext != 0)
+                    unlinked->mpNext->mpPrev = unlinked->mpPrev;
+            }
             if (AEMS_MODULE_BANKS == 0)
                 Snd::gVariableTimerList.Remove((SndStreamFader_t *)&sndaems.mTimerClient);
             SNDSYS_leavecritical();
@@ -1755,6 +1761,7 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
     int first;
     int i;
     unsigned char *base;
+    int offset;
     AemsFixupHeader_t *relocs;
     AemsCsisFixups_t *csis;
     AemsClass_t *c;
@@ -1762,11 +1769,16 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
     lbl_803A6C24.m1B4[0] = SNDAEMSI_restore;
     SNDSYS_entercritical();
     first = AEMS_MODULE_BANKS == 0;
-    bank->mLink.mpNext = AEMS_MODULE_BANKS;
-    bank->mLink.mpPrev = 0;
-    if (AEMS_MODULE_BANKS != 0)
-        AEMS_MODULE_BANKS->mpPrev = &bank->mLink;
-    AEMS_MODULE_BANKS = &bank->mLink;
+    {
+        SndAemsModuleBankLink_t **head = &AEMS_MODULE_BANKS;
+        SndAemsModuleBankLink_t *linked = &bank->mLink;
+
+        linked->mpNext = *head;
+        linked->mpPrev = 0;
+        if (*head != 0)
+            (*head)->mpPrev = linked;
+        *head = linked;
+    }
     for (i = 0; i < fixups->mCount; i++) {
         unsigned short *id = (unsigned short *)((char *)bank + fixups->mOffsets[i]);
         unsigned short *fn = (unsigned short *)&sndaemsfuncs[(id[0] << 16) | id[2]];
@@ -1774,37 +1786,41 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
         id[0] = fn[0];
         id[2] = fn[1];
     }
-    base = (unsigned char *)fixups - bank->mFixupHeaderOffset;
+    offset = (unsigned char *)fixups - (unsigned char *)bank;
+    base = (unsigned char *)bank + offset - bank->mFixupHeaderOffset;
     relocs = (AemsFixupHeader_t *)(base + bank->mRelocOffset);
     for (i = 0; i < relocs->mCount; i++)
         *(int *)((char *)bank + relocs->mOffsets[i]) += (int)bank;
     csis = (AemsCsisFixups_t *)(base + bank->mCsisOffset);
     for (i = 0; i < csis->mCount; i++) {
+        AemsCsisFixup_t *fixup = &csis->mFixups[i];
         Csis::InterfaceId id;
-        unsigned short *record = (unsigned short *)(base + csis->mFixups[i].mNameOffset);
+        unsigned short *record = (unsigned short *)(base + fixup->mNameOffset);
 
         ((unsigned short *)&id.mHash)[0] = record[0];
         ((unsigned short *)&id.mHash)[1] = record[1];
         id.mName = (const char *)(record + 2);
-        if (csis->mFixups[i].mKind == 0)
-            ((Csis::GlobalVariableHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
-        else if (csis->mFixups[i].mKind == 1)
-            ((Csis::ClassHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+        if (fixup->mKind == 0)
+            ((Csis::GlobalVariableHandle *)((char *)bank + fixup->mHandleOffset))->SetFast(&id);
+        else if (fixup->mKind == 1)
+            ((Csis::ClassHandle *)((char *)bank + fixup->mHandleOffset))->SetFast(&id);
         else
-            ((Csis::FunctionHandle *)((char *)bank + csis->mFixups[i].mHandleOffset))->SetFast(&id);
+            ((Csis::FunctionHandle *)((char *)bank + fixup->mHandleOffset))->SetFast(&id);
     }
     c = (AemsClass_t *)((char *)bank + bank->mClassOffset);
     for (i = 0; i < bank->mNumClasses; i++) {
+        int *offsets;
         int j;
 
         c->mConstructor.mCallback = SNDAEMSI_CreateModuleInstance;
         c->mConstructor.mContext = c;
-        c->mpTemplate = (char *)bank + (int)c->mpTemplate;
         c->mpUpdate = (void (*)(void *))((char *)bank + (int)c->mpUpdate);
+        c->mpTemplate = (char *)bank + (int)c->mpTemplate;
         Csis::Class::SubscribeConstructorFast(&c->mHandle, &c->mConstructor);
+        offsets = c->mStateOffsets;
         for (j = 0; j < c->mNumPlayers; j++)
-            *(AemsModuleBank_t **)((char *)c->mpTemplate + c->mStateOffsets[j]) = bank;
-        c = (AemsClass_t *)((char *)c->mStateOffsets + (c->mNumPlayers + c->mNumClasses) * 4);
+            *(AemsModuleBank_t **)((char *)c->mpTemplate + offsets[j]) = bank;
+        c = (AemsClass_t *)((char *)offsets + (c->mNumPlayers + c->mNumClasses) * 4);
     }
     if (name != 0 && name[0] != 0) {
         bank->mpName = (char *)SNDMEMI_allocz(strlen(name) + 1);
@@ -1814,10 +1830,11 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
         bank->mpName = 0;
     }
     if (first) {
-        SndAemsTimerClient_t *client = &sndaems.mTimerClient;
+        SndAemsState_t *state = &sndaems;
+        SndAemsTimerClient_t *client = &state->mTimerClient;
 
-        client->mpCallback = SNDAEMSI_timerupdate;
-        client->mpNext = (SndAemsTimerClient_t *)Snd::gVariableTimerList.mpHead;
+        state->mTimerClient.mpCallback = SNDAEMSI_timerupdate;
+        state->mTimerClient.mpNext = (SndAemsTimerClient_t *)Snd::gVariableTimerList.mpHead;
         client->mpPrev = 0;
         if (Snd::gVariableTimerList.mpHead != 0)
             Snd::gVariableTimerList.mpHead->mpPrev = (SndStreamFader_t *)client;
