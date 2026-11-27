@@ -1102,6 +1102,46 @@ class Holdouts(Fixture):
         with self.assertRaisesRegex(ValueError, "pool must start where"):
             self.held(manifest)
 
+    def test_a_holdout_pool_fails_closed(self):
+        pool = {"section": ".rodata", "start": "0x80004010", "end": "0x80004014"}
+        b = {"function": "b", "evidence": self.LOCATORS["b"], "pool": pool}
+        units, _, _ = self.held(self.held_manifest(functions=(b,)))
+        reaches = ((4, 5, 6, 8),)  # b loads its pool word, .rodata + 8
+        tail = ((0, 3, 1, 4), (4, 9, 1, 0), (8, 10, 1, 0))
+
+        def link(**native):
+            native.setdefault("b_relocations", ((0, 6, 10, 0),) + reaches)
+            native.setdefault("rodata_relocations", tail)
+            sb.link_object(dict(units[0], object=self.native(rodata_size=12, **native)))
+
+        link()  # the accepted shape, as in the test above
+        # A .rodata word before the cut that points into the tail is a data reference to the pool.
+        with self.assertRaisesRegex(ValueError, r"\.rodata reaches holdout b's pool \(section \+ 0x8\)"):
+            link(rodata_relocations=((0, 5, 1, 8), (4, 9, 1, 0), (8, 10, 1, 0)))
+        # An object that straddles the cut, or a global symbol in the tail, is not the holdout's pool.
+        across = {"name": "Across", "value": 4, "size": 8, "shndx": 4, "bind": sb.STB_LOCAL}
+        with self.assertRaisesRegex(ValueError, "Across lies in or across holdout b's pool"):
+            link(symbols=self.SYMBOLS + [across])
+        tail_global = {"name": "TailWord", "value": 8, "size": 4, "shndx": 4}
+        with self.assertRaisesRegex(ValueError, "TailWord lies in or across holdout b's pool"):
+            link(symbols=self.SYMBOLS + [tail_global])
+        # Another holdout of the same unit (a) may not reach b's pool either.
+        both = self.held_manifest(functions=({"function": "a", "evidence": self.LOCATORS["a"]}, b),
+                                  runs=(("0x80003120", "0x80003128"),))
+        units, _, _ = self.held(both)
+        link(a_relocations=((0, 7, 10, 0),))
+        with self.assertRaisesRegex(ValueError, r"\.text\.a reaches holdout b's pool"):
+            link(a_relocations=((0, 7, 10, 0),) + reaches)
+        # One pool per data section, and a pool ends inside its placement (.data2 ends at 0x80004020).
+        two = self.held_manifest(functions=({"function": "a", "evidence": self.LOCATORS["a"], "pool": pool}, b),
+                                 runs=(("0x80003120", "0x80003128"),))
+        with self.assertRaisesRegex(ValueError, "two holdouts keep a pool at the end of the same data section"):
+            self.held(two)
+        past = self.held_manifest(functions=(dict(b, pool=dict(pool, end="0x80004024")),))
+        with self.assertRaisesRegex(ValueError, "pool must start where"):
+            self.held(past)
+        self.held(self.held_manifest(functions=(dict(b, pool=dict(pool, end="0x80004020")),)))
+
     def test_manifest_holdouts(self):
         units, _, _ = self.held()
         unit = units[0]

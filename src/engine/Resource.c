@@ -85,7 +85,7 @@ extern void *MemReallocMem(void *pAddr, int size, int ident, int flags);
 
 extern int ResLooseFileOpen(ResFile_t *pRes, int index);
 extern void AuxRamDownload(void *pDest, unsigned int source, unsigned int length);
-extern int snprintf(char *pBuffer, unsigned int size, const char *pFormat, ...);
+extern int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 
 extern void *FileReadAsync(int handle, void *pBuffer, int size, int priority,
                          void (*pDone)(int, int, void *), void *pArg);
