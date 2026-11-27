@@ -84,7 +84,7 @@ void *UIGLibraryGetGlobal(int index);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 int fn_8022E558(void);
 int fn_8022E560(void);
-int fn_80219044(void *p, int a, int b, int c, Entry_80219044 **ppEntries);
+int UISLoadModalScreen(void *p, int a, int b, int c, Entry_80219044 **ppEntries);
 void fn_8021956C(void *p, int a, int b, int c);
 void FileDebugProcess(void);
 void SndgUpdate(int a);
@@ -570,7 +570,7 @@ void GameTextShowBusyDialog(int show, const char *pText, int a, int b)
             _GameText_apDialogEntries[0] = &_GameText_aDialogEntries[0];
             _GameText_apDialogEntries[1] = &_GameText_aDialogEntries[1];
             _GameText_apDialogEntries[2] = &_GameText_aDialogEntries[2];
-            fn_80219044(gUISSub2Info, 1, 3, 3, _GameText_apDialogEntries);
+            UISLoadModalScreen(gUISSub2Info, 1, 3, 3, _GameText_apDialogEntries);
             FileDebugProcess();
             SndgUpdate(1);
             UISGamePresentFrame();

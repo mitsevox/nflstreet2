@@ -425,6 +425,7 @@ static inline void _UIGImageNodeSendColorVertex(UIGNodeVertex_t *pV)
     GXColor4u8(pV->Color.r, pV->Color.g, pV->Color.b, pV->Color.a);
 }
 
+/* Sends a textured image node's vertices to the GPU: the quad, or a ten-vertex strip for a scaled node. */
 void UIGImageNodeSendTextured(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];
@@ -435,6 +436,7 @@ void UIGImageNodeSendTextured(UIGNode_t *pNode)
     Float32 T;
     Int32 i;
     UIGNodeQuad_t *pQuad;
+    Uint32 j;
 
     UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
@@ -470,16 +472,16 @@ void UIGImageNodeSendTextured(UIGNode_t *pNode)
         aT[1] = 0.5f - T;
         aT[2] = T + 0.5f;
         aT[3] = T + 0.5f;
-        for (i = 0; i < 4; i++) {
-            aVtx[i + 4].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
-            aVtx[i + 4].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
-            aVtx[i + 4].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
-            aVtx[i + 4].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
-            aVtx[i + 4].St[0] = UIGImageNodeLerpShort(aVtx[0].St[0], aVtx[1].St[0], aVtx[2].St[0], aVtx[3].St[0], aS[i], aT[i]);
-            aVtx[i + 4].St[1] = UIGImageNodeLerpShort(aVtx[0].St[1], aVtx[1].St[1], aVtx[2].St[1], aVtx[3].St[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
-            aVtx[i + 4].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
+        for (i = 0, j = 4; j < 8; j++, i++) {
+            aVtx[j].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
+            aVtx[j].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
+            aVtx[j].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
+            aVtx[j].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
+            aVtx[j].St[0] = UIGImageNodeLerpShort(aVtx[0].St[0], aVtx[1].St[0], aVtx[2].St[0], aVtx[3].St[0], aS[i], aT[i]);
+            aVtx[j].St[1] = UIGImageNodeLerpShort(aVtx[0].St[1], aVtx[1].St[1], aVtx[2].St[1], aVtx[3].St[1], aS[i], aT[i]);
+            aVtx[j].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
+            aVtx[j].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
+            aVtx[j].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
         }
     }
     if (pNode->Flags & 8) {
@@ -501,6 +503,7 @@ void UIGImageNodeSendTextured(UIGNode_t *pNode)
     }
 }
 
+/* Sends an untextured colour node's vertices to the GPU, as UIGImageNodeSendTextured does without texture coordinates. */
 void UIGImageNodeSendColored(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];
@@ -511,6 +514,7 @@ void UIGImageNodeSendColored(UIGNode_t *pNode)
     Float32 T;
     Int32 i;
     UIGNodeQuad_t *pQuad;
+    Uint32 j;
 
     UIGRenderGetColorState();
     pQuad = &pNode->u.v.Quad;
@@ -544,14 +548,14 @@ void UIGImageNodeSendColored(UIGNode_t *pNode)
         aT[1] = 0.5f - T;
         aT[2] = T + 0.5f;
         aT[3] = T + 0.5f;
-        for (i = 0; i < 4; i++) {
-            aVtx[i + 4].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
-            aVtx[i + 4].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
-            aVtx[i + 4].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
-            aVtx[i + 4].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
-            aVtx[i + 4].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
-            aVtx[i + 4].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
-            aVtx[i + 4].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
+        for (i = 0, j = 4; j < 8; j++, i++) {
+            aVtx[j].Color.r = UIGImageNodeLerpByte(aVtx[0].Color.r, aVtx[1].Color.r, aVtx[2].Color.r, aVtx[3].Color.r, aS[i], aT[i]);
+            aVtx[j].Color.g = UIGImageNodeLerpByte(aVtx[0].Color.g, aVtx[1].Color.g, aVtx[2].Color.g, aVtx[3].Color.g, aS[i], aT[i]);
+            aVtx[j].Color.b = UIGImageNodeLerpByte(aVtx[0].Color.b, aVtx[1].Color.b, aVtx[2].Color.b, aVtx[3].Color.b, aS[i], aT[i]);
+            aVtx[j].Color.a = UIGImageNodeLerpByte(aVtx[0].Color.a, aVtx[1].Color.a, aVtx[2].Color.a, aVtx[3].Color.a, aS[i], aT[i]);
+            aVtx[j].Pos[0] = UIGImageNodeLerpShort(aVtx[0].Pos[0], aVtx[1].Pos[0], aVtx[2].Pos[0], aVtx[3].Pos[0], aS[i], aT[i]);
+            aVtx[j].Pos[1] = UIGImageNodeLerpShort(aVtx[0].Pos[1], aVtx[1].Pos[1], aVtx[2].Pos[1], aVtx[3].Pos[1], aS[i], aT[i]);
+            aVtx[j].Pos[2] = UIGImageNodeLerpShort(aVtx[0].Pos[2], aVtx[1].Pos[2], aVtx[2].Pos[2], aVtx[3].Pos[2], aS[i], aT[i]);
         }
     }
     if (pNode->Flags & 8) {

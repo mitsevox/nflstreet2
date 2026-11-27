@@ -529,7 +529,6 @@ int DbCacheCopy(int a, int b, int c, int key, int e, int f);
 int DbOccpModuleInit(int handle);
 void DbOccpModuleShutdown(void);
 int DbOccpQueryNone(void);
-int DbOccpQueryBlocking(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
 int DbManagerInitModules(void);
 void DbManagerShutdownModules(void);
 int DbManagerPushGameDb(void);
