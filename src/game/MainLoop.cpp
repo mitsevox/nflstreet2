@@ -9,7 +9,7 @@ void FESndShutdown(void);
 int FlowModulePreStart(FlowModuleC *pNode);
 int FlowModuleStart(FlowModuleC *pNode, unsigned char flags);
 int FlowModuleStop(FlowModuleC *pNode, unsigned char flags);
-void fn_801D64EC(void);
+void MemCardMgrShutdown(void);
 int SndShutdown(void);
 }
 
@@ -40,7 +40,7 @@ void MainLoopRun(void)
 
     FESndShutdown();
     SndShutdown();
-    fn_801D64EC();
+    MemCardMgrShutdown();
     FlowModuleStop(&gSys, 0);
 }
 

@@ -31,7 +31,7 @@ unsigned int PerGetNumDevices();
 int PerGetDeviceStatus(int a);
 unsigned int PerGetDeviceTypeT(int a);
 void PerCheckConnectSingle(unsigned char a);
-unsigned int fn_801D6CB8(int, int);
+unsigned int MemCardMgrGetSlotDate(int, int);
 void MsgMemCardScanResetList(int, int *);
 void MsgMemCardScanRewind();
 int MsgMemCardScanNextEntry(int *, int *, int *, int *);
@@ -49,10 +49,10 @@ static MemCardListCallbacks_t _MsgMemCardScan_Callbacks = {
 extern "C" void MsgMemCardScanOpen()
 {
     MsgGameSetMemCardActive(1);
-    fn_801D685C("GN7E-69", 0);
-    fn_801D65B4(0);
-    fn_801D654C(1);
-    fn_801D6714(0);
+    MemCardMgrSetGameCode("GN7E-69", 0);
+    MemCardMgrSetIdleMode(0);
+    MemCardMgrEnablePolling(1);
+    MemCardMgrSetPort(0);
     MemCardUISetCallbacks(&_MsgMemCardScan_Callbacks);
 }
 
@@ -103,9 +103,9 @@ extern "C" void MsgMemCardScanIgnoreFlag(unsigned char value)
 extern "C" void MsgMemCardScanClose()
 {
     MsgGameSetMemCardActive(0);
-    fn_801D685C("GN7E-69", 0);
-    fn_801D6714(-1);
-    fn_801D654C(0);
+    MemCardMgrSetGameCode("GN7E-69", 0);
+    MemCardMgrSetPort(-1);
+    MemCardMgrEnablePolling(0);
     MemCardUIClearCallbacks();
     for (signed char i = UserRecGetCount() - 1; i >= 0; --i) {
         UserProfileTouch(i);
@@ -153,7 +153,7 @@ extern "C" void MsgMemCardScanSelectEntry(int key, int value)
 
 extern "C" int MsgMemCardScanConsiderFile(int key, int value)
 {
-    unsigned int score = fn_801D6CB8((signed char)value, key);
+    unsigned int score = MemCardMgrGetSlotDate((signed char)value, key);
     int changed = 0;
 
     if (key == 1) {

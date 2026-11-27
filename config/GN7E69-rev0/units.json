@@ -16126,7 +16126,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801D654C",
+            "function": "MemCardMgrEnablePolling",
             "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
           },
           {
@@ -16138,7 +16138,7 @@
             "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
           },
           {
-            "function": "fn_801D8618",
+            "function": "MemCardMgrGetFileSize",
             "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
           }
         ],
