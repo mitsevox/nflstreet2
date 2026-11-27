@@ -4500,7 +4500,7 @@
     {
       "source": "src/engine/dbcache.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the four holdouts, whose ranges keep the original bytes. The file's .data 0x802FB310-0x802FB368 (the three table tag records and the two cached-column records) and .sdata 0x803EC0E0-0x803EC0E4 (the cache list head) link from this file.",
+      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the three holdouts, whose ranges keep the original bytes. The file's .data 0x802FB310-0x802FB368 (the three table tag records and the two cached-column records) and .sdata 0x803EC0E0-0x803EC0E4 (the cache list head) link from this file.",
       "sections": [
         {
           "section": ".text",
@@ -4513,6 +4513,12 @@
           "placement": ".text",
           "start": "0x8022FEF8",
           "end": "0x8022FFD0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022FFD0",
+          "end": "0x802303A0"
         },
         {
           "section": ".text",
@@ -4546,10 +4552,6 @@
             "evidence": "evidence.tsv source-form 0x8022FC8C-0x8022FEF8"
           },
           {
-            "function": "DbCacheCreateScratchTable",
-            "evidence": "evidence.tsv source-form 0x8022FFD0-0x802303A0"
-          },
-          {
             "function": "DbCacheCopyRows",
             "evidence": "evidence.tsv source-form 0x80230400-0x80230CC8"
           },
@@ -4558,7 +4560,7 @@
             "evidence": "evidence.tsv source-form 0x80230D8C-0x802311C8"
           }
         ],
-        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out DbCacheUpdateHandler (0x8022FC8C), DbCacheCreateScratchTable (0x8022FFD0), DbCacheCopyRows (0x80230400) and DbCacheDeleteRows (0x80230D8C)."
+        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out DbCacheUpdateHandler (0x8022FC8C), DbCacheCopyRows (0x80230400) and DbCacheDeleteRows (0x80230D8C) (r5 lane 4, 2026-11-27: DbCacheCreateScratchTable exact and linked)."
       }
     },
     {

@@ -212,7 +212,7 @@ extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
 extern int (*_DbNiom_pModeReset)(int a, int b);
 extern int (*_DbNiom_pModeResume)(void);
 extern int (*_DbNiom_pModeFn16)(void);
-extern int lbl_803EC020[2];
+extern int lbl_803EC020[1];
 extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbCol_801F9718 *pCols);
 extern int TDbQrySetFirstRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
