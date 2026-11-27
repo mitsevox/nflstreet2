@@ -668,7 +668,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Count = *--*ppTop;
             for (i = 0; i < Count; i++) {
                 if (i < 20) {
-                    lbl_8039F808[Count - 1 - i] = *--*ppTop;
+                    lbl_8039F808[Count - i - 1] = *--*ppTop;
                 } else {
                     (*ppTop)--;
                 }
@@ -1158,10 +1158,12 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 117: {
-            Int32 Bit;
+            Int32 iController;
+            Int32 bEnabled;
 
-            Bit = *--pState->pTop;
-            *pState->pTop = (pScreen->unk_00 & (1 << Bit)) == 0;
+            iController = *--pState->pTop;
+            bEnabled = pScreen->unk_00 & (1 << iController);
+            *pState->pTop = bEnabled == 0;
             pState->pTop++;
             break;
         }
