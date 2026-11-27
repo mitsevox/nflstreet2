@@ -562,6 +562,7 @@ void RouteArrowBuild(RouteArrow_t *p)
             more = (pCommand[0] >> 7) ^ 1;
             more &= RouteArrowAddCommand(p, &command.mType, &point, hasOther);
             pCommand += 4;
+            // FAKEMATCH: the next command byte passes through a byte local before it gates more; same result
             unsigned char c = pCommand[0];
             if (c) c = more;
             more = c;

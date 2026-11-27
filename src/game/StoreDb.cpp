@@ -204,6 +204,7 @@ int StoreCountItems(int index)
     DbFilter both;
     DbFilter categoryFilter;
     unsigned short count;
+    // FAKEMATCH: the price filter is set up through an alias taken before the call; it only steers the base register
     DbFilter *pPrice = &priceFilter;
     const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int result = 0;

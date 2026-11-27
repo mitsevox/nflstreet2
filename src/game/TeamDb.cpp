@@ -300,6 +300,7 @@ void TeamDbOpenByTmur(DbCursor *pObject, void *pColumns, int tag, unsigned char 
     root.Set(11, &left, &right);
     left.Set(11, &leftLeft, &leftRight);
     right.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
+    // FAKEMATCH: one shared local carries the three node values, each stored inside its arm; same stores
     value = 17;
     right.mUnknown16.mValue.mInt = value;
     if (!flag) {

@@ -1,7 +1,8 @@
 /* Team and player table upkeep for the 'TATS' game database: copies a user
    profile's two tables into fresh 'TATS' tables and destroys them again, and
    deletes the created teams (team types 5 and 6) with their players and the
-   players of the tournament's teams from a database that is not in use. */
+   players of the tournament's teams when that database is loaded (TDbExists
+   returns 0). */
 #include "game/TDbCompilePerformOp.h"
 #include "game/QueryStatus.h"
 

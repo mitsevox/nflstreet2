@@ -112,6 +112,7 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
         int width = lbl_802E9964[step->mUnknown1C];
         if (record->mUnknown4Word) {
             int link = step->mUnknown18 == 15 ? i : step->mUnknown18;
+            // FAKEMATCH: the start floats +8/+0xC are read as one vertex through a cast, for the target's word copy
             if (!i) starts[0] = *(PlayArtVertex_t *)&record->mUnknown8;
             else if (link == i) starts[i] = ends[i-1];
             else starts[i] = ends[link];
