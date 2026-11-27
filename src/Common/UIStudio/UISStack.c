@@ -31,14 +31,16 @@ extern Int32 lbl_8039F808[20];
 #define UIS_FLOAT(Word) (*(Float32 *)&(Word))
 #define UIS_EPSILON 1e-7f
 
+typedef struct UISControlList_t {
+    Int32 nList;
+    Int32 ThisObject;
+    Int32 Offsets[1];
+} UISControlListT;
+
 Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState)
 {
     UISThreadActionT Action;
-    Uint16 CurGroupID;
-    Uint16 CurScreenID;
-    Int32 Index;
-    Int32 Param;
     Uint8 **ppCode;
     Int32 **ppTop;
     Int32 *pTop;
@@ -51,9 +53,6 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         Op = *pState->pCode;
         pState->pCode++;
         switch (Op) {
-        case 1:
-        case 106:
-            break;
         case 2:
         case 113: {
             Uint8 NumArgs;
@@ -154,6 +153,9 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                               pAcelFnc, MSDur, TargValue, AnimType);
             break;
         }
+        case 1:
+        case 106:
+            break;
         case 6: {
             UISControlInfoT *pControlInfo;
             Uint32 MSRate;
@@ -205,17 +207,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 11: {
-            Int32 Count;
-            Int32 *pArgs;
-            Uint8 *pCode;
+            Uint8 *pSavedPC;
+            Int32 *pParam;
+            Uint32 GameMessage;
+            Int32 *pReturn;
+            Uint32 nParam;
+            Uint16 Group = pScreen->GroupID;
+            Uint16 Screen = pScreen->ScreenID;
 
-            Count = *--*ppTop;
+            nParam = *--*ppTop;
             (*ppTop)--;
-            pArgs = *ppTop - Count;
-            pCode = *ppCode;
-            ((UISMessageFncT *)pInfo->pMessageFnc)(*pArgs, pScreen->GroupID, pScreen->ScreenID,
-                                                  Count, pArgs + 1, pArgs - 1);
-            *ppCode = pCode;
+            pParam = *ppTop - nParam;
+            GameMessage = *pParam;
+            pReturn = pParam - 1;
+            pSavedPC = *ppCode;
+            ((UISMessageFncT *)pInfo->pMessageFnc)(GameMessage, Group, Screen, nParam, pParam + 1, pReturn);
+            *ppCode = pSavedPC;
             break;
         }
         case 12: {
@@ -252,30 +259,40 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 15:
         case 16: {
             Int32 Value;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = **ppCode << 24;
+            a = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 16;
+            b = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 8;
+            c = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode;
+            d = **ppCode;
             (*ppCode)++;
+            Value = (a << 24) | (b << 16) | (c << 8) | d;
             **ppTop = Value;
             (*ppTop)++;
             break;
         }
         case 17: {
             Int32 Value;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode;
+            d = *pState->pCode;
             pState->pCode++;
+            Value = (a << 24) | (b << 16) | (c << 8) | d;
             *pState->pTop = Value;
             pState->pTop++;
             break;
@@ -305,10 +322,16 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 26:
             pTop[-1] = pTop[pTop[-1] - 1];
             break;
-        case 27:
-            pTop[pTop[-1] - 1] = pTop[-2];
+        case 27: {
+            Int32 Offset;
+            Int32 *pValue;
+
+            Offset = pTop[-1] - 1;
+            pValue = &pTop[Offset];
+            *pValue = pTop[-2];
             *ppTop -= 2;
             break;
+        }
         case 28: {
             Int32 Value;
             Int32 Value2;
@@ -393,10 +416,6 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         case 40:
             pTop[-2] = pTop[-2] / pTop[-1];
-            (*ppTop)--;
-            break;
-        case 90:
-            pTop[-2] = pTop[-2] % pTop[-1];
             (*ppTop)--;
             break;
         case 41: {
@@ -517,15 +536,20 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         case 67: {
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Offset = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode;
+            d = *pState->pCode;
             pState->pCode++;
+            Offset = (a << 24) | (b << 16) | (c << 8) | d;
             *pState->pTop = (Int32)pState->pCode;
             pState->pTop++;
             pState->pCode = _UISPatchFncPC(pInfo, (Uint8 *)pScreen->pData, Offset);
@@ -570,18 +594,32 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 6, &Action, 0, NULL);
             break;
         }
+        case 126: {
+            Int32 Value;
+
+            Value = *--*ppTop;
+            Action.s.GroupID = 0;
+            Action.s.ScreenID = 0;
+            Action.Words[1] = 0;
+            Action.Words[2] = Value;
+            Action.s.unk_0E = pScreen->GroupID;
+            Action.s.unk_0C = pScreen->ScreenID;
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 0, NULL);
+            break;
+        }
         case 71: {
             Int32 Value;
             Int32 *pOffset;
             Int32 *pList;
             void *pObject;
+            Int32 Index;
 
             Value = *--pState->pTop;
             pOffset = (Int32 *)*--pState->pTop;
             Index = *--pState->pTop;
             pList = (Int32 *)((Uint8 *)pScreen->pData + *pOffset);
-            if (Index < pList[0]) {
-                pObject = (Uint8 *)pScreen->pData + pList[Index + 2];
+            if (Index < ((UISControlListT *)pList)->nList) {
+                pObject = (Uint8 *)pScreen->pData + ((UISControlListT *)pList)->Offsets[Index];
                 if (pObject != pControlState || pControlState->bEnabled == 0) {
                     Action.s.GroupID = Value;
                     Action.s.ScreenID = 0;
@@ -645,7 +683,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Count = *--*ppTop;
             for (i = 0; i < Count; i++) {
                 if (i < 20) {
-                    lbl_8039F808[Count - 1 - i] = *--*ppTop;
+                    lbl_8039F808[Count - i - 1] = *--*ppTop;
                 } else {
                     (*ppTop)--;
                 }
@@ -665,15 +703,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             }
             break;
         }
-        case 120:
+        case 120: {
+            Uint16 CurGroupID;
+            Uint16 CurScreenID;
+
             fn_80219650(pInfo, &CurGroupID, &CurScreenID);
             (*ppTop)[-1] = (CurScreenID << 16) | CurGroupID;
             break;
-        case 77:
+        }
+        case 77: {
+            Int32 Param;
+
             Param = *--*ppTop;
             Action.Words[0] = *--*ppTop;
             UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 2, &Action, 1, &Param);
             break;
+        }
         case 78:
             *ppCode += 4;
             break;
@@ -735,8 +780,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             }
             break;
         }
-        case 84:
-        case 126: {
+        case 84: {
             Int32 Value;
 
             Value = *--*ppTop;
@@ -753,19 +797,25 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 107: {
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = **ppCode << 24;
+            a = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 16;
+            b = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 8;
+            c = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode;
+            d = **ppCode;
             (*ppCode)++;
-            Offset = **ppCode << 8;
+            Value = (a << 24) | (b << 16) | (c << 8) | d;
+            a = **ppCode;
             (*ppCode)++;
-            Offset |= **ppCode;
+            b = **ppCode;
             (*ppCode)++;
+            Offset = (a << 8) | b;
             Value += (*ppTop)[(Int16)Offset];
             if (Op == 107) {
                 **ppTop = Value;
@@ -778,19 +828,27 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 86: {
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = **ppCode << 24;
+            a = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 16;
+            b = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode << 8;
+            c = **ppCode;
             (*ppCode)++;
-            Value |= **ppCode;
+            Value = (a << 24) | (b << 16) | (c << 8);
+            c = **ppCode;
             (*ppCode)++;
-            Offset = **ppCode << 8;
+            Value |= c;
+            c = **ppCode;
             (*ppCode)++;
-            Offset |= **ppCode;
+            Offset = c << 8;
+            c = **ppCode;
             (*ppCode)++;
+            Offset |= c;
             *(Int32 *)(Value + (*ppTop)[(Int16)Offset]) = pTop[-1];
             (*ppTop)--;
             break;
@@ -798,23 +856,35 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 87: {
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode;
+            Value = (a << 24) | (b << 16) | (c << 8);
+            c = *pState->pCode;
             pState->pCode++;
-            Offset = *pState->pCode << 8;
+            Value |= c;
+            c = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode;
+            Offset = c << 8;
+            c = *pState->pCode;
             pState->pCode++;
+            Offset |= c;
             *pTop = Value + pTop[(Int16)Offset];
             pState->pTop++;
             break;
         }
+        case 90:
+            pTop[-2] = pTop[-2] % pTop[-1];
+            (*ppTop)--;
+            break;
         case 91:
         case 93:
         case 95:
@@ -831,6 +901,10 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Int32 Size;
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
             pArray = NULL;
             Element = 0;
@@ -854,18 +928,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             case 95:
             case 110:
                 bOnStack = 0;
-                Value = **ppCode << 24;
+                a = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode << 16;
+                b = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode << 8;
+                c = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode;
+                Value = (a << 24) | (b << 16) | (c << 8);
+                c = **ppCode;
                 (*ppCode)++;
-                Offset = **ppCode << 8;
+                Value |= c;
+                c = **ppCode;
                 (*ppCode)++;
-                Offset |= **ppCode;
+                Offset = c << 8;
+                c = **ppCode;
                 (*ppCode)++;
+                Offset |= c;
                 pArray = (Int32 *)(Value + (*ppTop)[(Int16)Offset]);
                 break;
             }
@@ -900,6 +978,10 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Int32 Size;
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
             pArray = NULL;
             Element = 0;
@@ -919,18 +1001,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                 bOnStack = 1;
                 break;
             case 96:
-                Value = **ppCode << 24;
+                a = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode << 16;
+                b = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode << 8;
+                c = **ppCode;
                 (*ppCode)++;
-                Value |= **ppCode;
+                Value = (a << 24) | (b << 16) | (c << 8);
+                c = **ppCode;
                 (*ppCode)++;
-                Offset = **ppCode << 8;
+                Value |= c;
+                c = **ppCode;
                 (*ppCode)++;
-                Offset |= **ppCode;
+                Offset = c << 8;
+                c = **ppCode;
                 (*ppCode)++;
+                Offset |= c;
                 pArray = (Int32 *)(Value + (*ppTop)[(Int16)Offset]);
                 break;
             }
@@ -951,15 +1037,20 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 99: {
             Int32 Count;
             Int32 i;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Count = **ppCode << 24;
+            a = **ppCode;
             (*ppCode)++;
-            Count |= **ppCode << 16;
+            b = **ppCode;
             (*ppCode)++;
-            Count |= **ppCode << 8;
+            c = **ppCode;
             (*ppCode)++;
-            Count |= **ppCode;
+            d = **ppCode;
             (*ppCode)++;
+            Count = (a << 24) | (b << 16) | (c << 8) | d;
             for (i = 0; i < Count; i++) {
                 pTop[i] = pTop[-1];
             }
@@ -968,30 +1059,40 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         }
         case 100: {
             Int32 Count;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Count = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode;
+            d = *pState->pCode;
             pState->pCode++;
+            Count = (a << 24) | (b << 16) | (c << 8) | d;
             pState->pTop = pTop - Count;
             break;
         }
         case 101: {
             Int32 Count;
             Int32 i;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Count = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Count |= *pState->pCode;
+            d = *pState->pCode;
             pState->pCode++;
+            Count = (a << 24) | (b << 16) | (c << 8) | d;
             for (i = 0; i < Count; i++) {
                 pTop[i] = pTop[i - Count];
             }
@@ -1008,6 +1109,10 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Int32 i;
             Int32 Value;
             Int32 Offset;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
             pArray = NULL;
             Total = 1;
@@ -1022,18 +1127,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                 bOnStack = 1;
                 break;
             case 104:
-                Value = *pState->pCode << 24;
+                a = *pState->pCode;
                 pState->pCode++;
-                Value |= *pState->pCode << 16;
+                b = *pState->pCode;
                 pState->pCode++;
-                Value |= *pState->pCode << 8;
+                c = *pState->pCode;
                 pState->pCode++;
-                Value |= *pState->pCode;
+                Value = (a << 24) | (b << 16) | (c << 8);
+                c = *pState->pCode;
                 pState->pCode++;
-                Offset = *pState->pCode << 8;
+                Value |= c;
+                c = *pState->pCode;
                 pState->pCode++;
-                Offset |= *pState->pCode;
+                Offset = c << 8;
+                c = *pState->pCode;
                 pState->pCode++;
+                Offset |= c;
                 pArray = (Int32 *)(Value + pTop[(Int16)Offset]);
                 break;
             }
@@ -1059,25 +1168,31 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 89: {
-            Int32 Value;
-            Int32 Offset;
-            Uint8 Type;
+            Uint32 Word;
+            Uint32 a;
+            Uint32 b;
+            Uint32 c;
+            Uint32 d;
 
-            Value = *pState->pCode << 24;
+            a = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 16;
+            b = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Value |= *pState->pCode;
+            Word = (a << 24) | (b << 16) | (c << 8);
+            c = *pState->pCode;
             pState->pCode++;
-            Offset = *pState->pCode << 8;
+            Word |= c;
+            c = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode;
+            d = c << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Type = *pState->pCode;
+            d |= c;
+            c = *pState->pCode;
             pState->pCode++;
-            UISUpdateVisibility(pInfo, pScreen, Type, (void *)(Value + pTop[(Int16)Offset]), pTop[-1]);
+            UISUpdateVisibility(pInfo, pScreen, c, (void *)(Word + pTop[(Int16)d]), pTop[-1]);
             pState->pTop--;
             break;
         }
@@ -1125,10 +1240,12 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 117: {
-            Int32 Bit;
+            Int32 iController;
+            Int32 bEnabled;
 
-            Bit = *--pState->pTop;
-            *pState->pTop = (pScreen->unk_00 & (1 << Bit)) == 0;
+            iController = *--pState->pTop;
+            bEnabled = pScreen->unk_00 & (1 << iController);
+            *pState->pTop = bEnabled == 0;
             pState->pTop++;
             break;
         }
