@@ -267,7 +267,9 @@ void PlayAlignIssueTeamRoutes(PlayBookFormation_t *object, PlayBookPlay_t *recor
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
     short count = 0;
-    if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
+    Record_8011F4E0 *info = fn_8011F4E0();
+    int kind = p->mUnknown2914;
+    if (info->mUnknown6 && (unsigned int)(kind - 17) <= 1) remap = !remap;
     unsigned char index;
     if (!remap) index = p->mIdBytes[1];
     else index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
@@ -326,12 +328,13 @@ unsigned char PlayAlignGetSlotPlayer(PlayBookFormation_t *object, PlayBookPlay_t
     }
     if (out) {
         if (slots && !override) {
-            if (!remap) *out = slots[slot][1];
+            // FAKEMATCH: slot bytes addressed as base + (index << 2), not slots[index][n]
+            if (!remap) *out = *((unsigned char *)slots + (slot << 2) + 1);
             else {
                 unsigned char n = PlaySetGetEntry(object, index, 0)->mUnknownB;
                 *out = 0;
                 for (int i = 0; i <= 2; ++i) {
-                    if (slots[i][0] == n) {*out = slots[i][1]; break;}
+                    if (*((unsigned char *)slots + (i << 2)) == n) {*out = *((unsigned char *)slots + (i << 2) + 1); break;}
                 }
             }
         } else *out = 0;
@@ -346,8 +349,9 @@ void PlayAlignSetSlotValue(PlayBookFormation_t *object, PlayBookPlay_t *record, 
         unsigned char (*slots)[4] = record->mUnknown1C;
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
         for (i = 0; i <= 2; ++i) {
-            if (index == slots[i][0]) {
-                slots[i][1] = value;
+            // FAKEMATCH: slot bytes addressed as base + (i << 2), not slots[i][n]
+            if (index == *((unsigned char *)slots + (i << 2))) {
+                *((unsigned char *)slots + (i << 2) + 1) = value;
                 return;
             }
         }
@@ -382,7 +386,8 @@ void PlayAlignSwapOuterSlots(PlayArtPlay_t *record, int force)
     if (PlayAlignHasSlots((PlayBookPlay_t *)record)) {
         PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
         for (unsigned char i = 0; i <= 2; ++i) {
-            unsigned char index = *record->mUnknown1C[i];
+            // FAKEMATCH: slot byte addressed as record + (i << 2) + 0x1C, not record->mUnknown1C[i][0]
+            unsigned char index = *((unsigned char *)record + (i << 2) + 0x1C);
             PlyrGet(fn_80178308(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
@@ -520,7 +525,8 @@ int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, u
         int steps = record->mUnknown4Word;
         memset(record->mUnknown1C, 0, 0x1B0);
         for (int j = 0; j < steps; ++j) {
-            char ax[8], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
+            // FAKEMATCH: ax sized 5 (the formatted name and its NUL) so it is not a DImode array
+            char ax[5], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
             fn_801C2E18(ax, "ax%02d", j+1);
             fn_801C2E18(ay, "ay%02d", j+1);
             fn_801C2E18(au, "au%02d", j+1);
