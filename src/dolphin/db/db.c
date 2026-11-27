@@ -8,6 +8,8 @@ extern void __DBExceptionDestination(void);
 void __DBExceptionDestinationAux(void);
 BOOL __DBIsExceptionMarked(__OSException exception);
 
+u8 DBStack[0x1000];
+u8 *DBStackEnd = DBStack + (sizeof(DBStack) - 8);
 DBInterface *__DBInterface = NULL;
 int DBVerbose;
 

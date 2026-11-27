@@ -833,6 +833,22 @@
           "object_seed": true
         },
         {
+          "section": ".bss",
+          "start": "0x803A4540",
+          "end": "0x803A5540",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "DBStack, the 4096-byte debugger stack of dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc src/db/db.c; the .sdata word DBStackEnd 0x803EC170 holds 0x803A5538 = DBStack + 0xFF8, the donor's DBStack + (sizeof(DBStack) - 8). It lies after OSReboot.c's .bss and before dvd.c's, the SDK order."
+        },
+        {
+          "section": ".data5",
+          "start": "0x803EC170",
+          "end": "0x803EC174",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "DBStackEnd of dolsdk2004 revision 2328b4164b1a98422a2255d83ce9a5a7548990cc src/db/db.c: one .sdata word, initial value 0x803A5538 = DBStack + 0xFF8; after OSThread.c's .sdata and before dvdfs.c's."
+        },
+        {
           "section": ".sbss",
           "start": "0x803ED0F0",
           "end": "0x803ED0F8",
@@ -2749,6 +2765,14 @@
       "library": "OS",
       "evidence": "Target cached font encoding leaf and OOT6e449e1748a02c12b4cb218453c529175b85364a complete small OSFont.c; one88-byte Cbody and2-byte initializedcache comparison, actualhalfword accesses/caller; relatedfile name and originalarchiveboundaries remain provisional. Linked in the source build.",
       "sections": [
+        {
+          "section": ".data4",
+          "start": "0x803019B8",
+          "end": "0x803024C2",
+          "start_boundary": "provisional",
+          "end_boundary": "provisional",
+          "evidence": "OSFont.c .data: the two font code tables HankakuToCode (0x803019B8, 384 bytes) and Zenkaku2Code (0x80301B38, 2442 bytes), byte-identical to dolsdk2004 2328b4164b1a98422a2255d83ce9a5a7548990cc src/os/OSFont.c; no retained code reads them (the SDK font functions that do are not in this executable), and they lie before dsp.c's linked .data 0x803024C8 in the SDK order where OSFont.c's .text precedes dsp.c's."
+        },
         {
           "section": ".data5",
           "start": "0x803EC5A8",

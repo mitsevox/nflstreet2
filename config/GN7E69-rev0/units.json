@@ -1023,10 +1023,6 @@
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
     },
-    "gExtVecs": {
-      "address": "0x802F4750",
-      "evidence": "evidence.tsv data and name rows for 0x802F4750 (12 .data bytes whose address SPCH_GetExtVecs of src/engine/sputil.c returns; they sit in the speech library's .data run, not at sputil.c's position, so the linked sputil.c does not define them and their owner file is open)."
-    },
     "_savegpr_23": {
       "address": "0x8025FA48",
       "evidence": "evidence.tsv external row for 0x8025FA48 (_savegpr_23)."
@@ -1043,38 +1039,6 @@
       "address": "0x8025FA98",
       "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     },
-    "gCallbacks": {
-      "address": "0x8037E0A0",
-      "evidence": "evidence.tsv data/name rows for 0x8037E0A0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gFilterSetting": {
-      "address": "0x8037E274",
-      "evidence": "evidence.tsv data/name rows for 0x8037E274 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gSPCH_Allocator": {
-      "address": "0x803EBAF8",
-      "evidence": "evidence.tsv data/name rows for 0x803EBAF8 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gSPCH_Initialized": {
-      "address": "0x803EBAFC",
-      "evidence": "evidence.tsv data/name rows for 0x803EBAFC (target extent, related name); speech-library storage, original-owned."
-    },
-    "gSPCH_AddEvent": {
-      "address": "0x803EBB10",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB10 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gGameNum": {
-      "address": "0x803ECEA0",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEA0 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gDataRate": {
-      "address": "0x803ECEA4",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEA4 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gEventDats": {
-      "address": "0x8037E0B4",
-      "evidence": "evidence.tsv data/name rows for 0x8037E0B4 (target extent, related name); speech-library storage, original-owned."
-    },
     "SFILTER_remove": {
       "address": "0x80279DF8",
       "evidence": "evidence.tsv function/name/source-form rows for 0x80279DF8; registered holdout of src/engine/sfilter.c. Its original code stays linked; called by src/engine/smixhip.c."
@@ -1083,45 +1047,9 @@
       "address": "0x80279E74",
       "evidence": "evidence.tsv function and name rows for 0x80279E74 (calcFIRCoeffs, sfir.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/sfhpffir8.c (SFILTER_modifyHPFFIR8)."
     },
-    "gVoxBanks": {
-      "address": "0x803EBB00",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB00 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gUniqueBankHandle": {
-      "address": "0x803EBB04",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB04 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gNumBanks": {
-      "address": "0x803EBB08",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB08 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gBankCount": {
-      "address": "0x803EBB0C",
-      "evidence": "evidence.tsv data/name rows for 0x803EBB0C (target extent, related name); speech-library storage, original-owned."
-    },
     "SNDI_validrendermode": {
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
-    },
-    "gVoxEvents": {
-      "address": "0x8037E0F4",
-      "evidence": "evidence.tsv data/name rows for 0x8037E0F4 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gVoxInGame": {
-      "address": "0x8037E234",
-      "evidence": "evidence.tsv data/name rows for 0x8037E234 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gPreLoadTicks": {
-      "address": "0x803ECEA8",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEA8 (target extent, related name); speech-library storage, original-owned."
-    },
-    "gLastTick": {
-      "address": "0x803ECEAC",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEAC (target extent, related name); speech-library storage, original-owned."
-    },
-    "gLastSubTick": {
-      "address": "0x803ECEB0",
-      "evidence": "evidence.tsv data/name rows for 0x803ECEB0 (target extent, related name); speech-library storage, original-owned."
     },
     "PATHI_enternode": {
       "address": "0x801B6ED0",
@@ -6118,6 +6046,12 @@
           "placement": ".text",
           "start": "0x80285A90",
           "end": "0x80285AE8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x803019B8",
+          "end": "0x803024C2"
         },
         {
           "section": ".sdata",
@@ -18367,6 +18301,18 @@
           "placement": ".sbss",
           "start": "0x803ED0F0",
           "end": "0x803ED0F8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A4540",
+          "end": "0x803A5540"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC170",
+          "end": "0x803EC174"
         }
       ]
     },
@@ -23459,7 +23405,7 @@
     {
       "source": "src/engine/spchinit.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs, taken to be a data-only spchdata.c's) are referenced through externals (external row 0x801AE3E4-0x801B2AD4), and the SPCHAUTHOR string spchlibauthor is defined by src/engine/spchauthor.cpp (spchlibauthor data row).",
+      "evidence": "evidence.tsv provisional unit row 0x801AF60C-0x801AF75C (src/engine/spchinit.c), its function and name rows and the speech_cxx compiler row; all four functions match the target, promoted from comparison-only. The file defines no data; the speech-library state it initializes (the leading speech data runs) is defined by the data-only src/engine/spchdata.c (its unit row), and the SPCHAUTHOR string spchlibauthor is defined by src/engine/spchauthor.cpp (spchlibauthor data row).",
       "sections": [
         {
           "section": ".text",
@@ -25858,7 +25804,7 @@
     {
       "source": "src/engine/spchbank.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x801B23A0-0x801B2AD4 (src/engine/spchbank.c), its function, name, type and source-form rows (FAKEMATCH row 0x801B2898 and 0x801B24C8) and the speech_cxx compiler row; all 17 functions exact, promoted from comparison-only. The file defines no data: the four bank-table .sdata words it uses (gVoxBanks, gUniqueBankHandle, gNumBanks, gBankCount, 0x803EBB00-0x803EBB10) and gGameNum stay original-owned speech-library storage like gSPCH_Initialized, referenced through externals (their data and name rows).",
+      "evidence": "evidence.tsv unit row 0x801B23A0-0x801B2AD4 (src/engine/spchbank.c), its function, name, type and source-form rows (FAKEMATCH row 0x801B2898 and 0x801B24C8) and the speech_cxx compiler row; all 17 functions exact, promoted from comparison-only. The file defines no data: the four bank-table .sdata words it uses (gVoxBanks, gUniqueBankHandle, gNumBanks, gBankCount, 0x803EBB00-0x803EBB10) and gGameNum are defined by the data-only src/engine/spchdata.c like gSPCH_Initialized (its unit row and their data and name rows).",
       "sections": [
         {
           "section": ".text",
@@ -25871,7 +25817,7 @@
     {
       "source": "src/engine/spchrslv.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x80266AF8-0x80266D00 (src/engine/spchrslv.c), its compiler, function, name and source-form rows; all four functions match the target (iSPCH_GetGlobalMatchParmAddr with the labelled rounded-size form, source-form row 0x80266AF8-0x80266B14), promoted from comparison-only. The file defines no data: the event-database slots gEventDats it searches are original-owned speech storage (units.json external). Part of the former src/engine/cu_80266A2C.c (split by c16a).",
+      "evidence": "evidence.tsv unit row 0x80266AF8-0x80266D00 (src/engine/spchrslv.c), its compiler, function, name and source-form rows; all four functions match the target (iSPCH_GetGlobalMatchParmAddr with the labelled rounded-size form, source-form row 0x80266AF8-0x80266B14), promoted from comparison-only. The file defines no data: the event-database slots gEventDats it searches are defined by the data-only src/engine/spchdata.c (its unit row). Part of the former src/engine/cu_80266A2C.c (split by c16a).",
       "sections": [
         {
           "section": ".text",
@@ -25882,9 +25828,40 @@
       ]
     },
     {
+      "source": "src/engine/spchdata.c",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x8037E0A0-0x8037E294 (src/engine/spchdata.c) and its data and name rows: the code-less file of the speech library's shared globals, its .data gExtVecs, .sdata gSPCH_Allocator..gClearCycle, .bss gCallbacks..gFilterSetting and .sbss gGameNum..gLastSubTick.",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4750",
+          "end": "0x802F475C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBAF8",
+          "end": "0x803EBB18"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E0A0",
+          "end": "0x8037E294"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEA0",
+          "end": "0x803ECEB4"
+        }
+      ]
+    },
+    {
       "source": "src/engine/spchevnt.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x801AE3E4-0x801AF60C (src/engine/spchevnt.c), its function, name, type and source-form rows (FAKEMATCH rows 0x801AE444, 0x801AE474, 0x801AE658, 0x801AE9A0) and the speech_cxx compiler row; all 46 functions exact, named from NASCAR 2005's spchevnt.c (same order, every size equal), promoted from comparison-only. It defines its own .sdata, the two file-static re-entry guards gAddEventStatus and gSPCHPlayStatus (0x803EBB18-0x803EBB20, their data rows: NASCAR 2005 lists both as locals under its spchevnt.c marker, and they sit between gSPCH_AddEvent and spchrand.c's gRandArrayIndex as in the gRandArray data row). The rest of the speech-library storage it uses (gCallbacks, gEventDats, gVoxEvents, gVoxInGame, gFilterSetting, gSPCH_Allocator, gGameNum, gDataRate, gPreLoadTicks, gLastTick, gLastSubTick) is global in NASCAR 2005 and belongs to the data-only spchdata.c that is linked before this file (gRandArray data row), so it stays original-owned, referenced through externals (their data and name rows).",
+      "evidence": "evidence.tsv unit row 0x801AE3E4-0x801AF60C (src/engine/spchevnt.c), its function, name, type and source-form rows (FAKEMATCH rows 0x801AE444, 0x801AE474, 0x801AE658, 0x801AE9A0) and the speech_cxx compiler row; all 46 functions exact, named from NASCAR 2005's spchevnt.c (same order, every size equal), promoted from comparison-only. It defines its own .sdata, the two file-static re-entry guards gAddEventStatus and gSPCHPlayStatus (0x803EBB18-0x803EBB20, their data rows: NASCAR 2005 lists both as locals under its spchevnt.c marker, and they sit between gSPCH_AddEvent and spchrand.c's gRandArrayIndex as in the gRandArray data row). The rest of the speech-library storage it uses (gCallbacks, gEventDats, gVoxEvents, gVoxInGame, gFilterSetting, gSPCH_Allocator, gGameNum, gDataRate, gPreLoadTicks, gLastTick, gLastSubTick) is global in NASCAR 2005 and belongs to the data-only src/engine/spchdata.c that is linked before this file (its unit row and the gRandArray data row).",
       "sections": [
         {
           "section": ".text",
@@ -27420,6 +27397,133 @@
           "placement": ".data3",
           "start": "0x802AECAC",
           "end": "0x802AECB4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/mpeghufftables.cpp",
+      "profile": "sound_cxx_data_sections",
+      "evidence": "evidence.tsv unit row 0x802B7BB0-0x802B926A (src/engine/mpeghufftables.cpp) and its data and name rows: a code-less file of the MPEG Layer III Huffman codebooks, each table its own -fdata-sections .rodata section.",
+      "sections": [
+        {
+          "section": ".rodata._15CMpegLayer3Base.sHuffTables",
+          "placement": ".data3",
+          "start": "0x802B7BB0",
+          "end": "0x802B7C30"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sHuffTableLinearBits",
+          "placement": ".data3",
+          "start": "0x802B7C30",
+          "end": "0x802B7C50"
+        },
+        {
+          "section": ".rodata._15CMpegLayer3Base.sHuffCountTables",
+          "placement": ".data3",
+          "start": "0x802B7C50",
+          "end": "0x802B7C60"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable1",
+          "placement": ".data3",
+          "start": "0x802B7C60",
+          "end": "0x802B7C6E"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable2",
+          "placement": ".data3",
+          "start": "0x802B7C6E",
+          "end": "0x802B7C90"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable3",
+          "placement": ".data3",
+          "start": "0x802B7C90",
+          "end": "0x802B7CB2"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable5",
+          "placement": ".data3",
+          "start": "0x802B7CB2",
+          "end": "0x802B7CF0"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable6",
+          "placement": ".data3",
+          "start": "0x802B7CF0",
+          "end": "0x802B7D2E"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable7",
+          "placement": ".data3",
+          "start": "0x802B7D2E",
+          "end": "0x802B7DBC"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable8",
+          "placement": ".data3",
+          "start": "0x802B7DBC",
+          "end": "0x802B7E4A"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable9",
+          "placement": ".data3",
+          "start": "0x802B7E4A",
+          "end": "0x802B7ED8"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable10",
+          "placement": ".data3",
+          "start": "0x802B7ED8",
+          "end": "0x802B7FD6"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable11",
+          "placement": ".data3",
+          "start": "0x802B7FD6",
+          "end": "0x802B80D4"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable12",
+          "placement": ".data3",
+          "start": "0x802B80D4",
+          "end": "0x802B81D2"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable13",
+          "placement": ".data3",
+          "start": "0x802B81D2",
+          "end": "0x802B85D0"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable15",
+          "placement": ".data3",
+          "start": "0x802B85D0",
+          "end": "0x802B89CE"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable16",
+          "placement": ".data3",
+          "start": "0x802B89CE",
+          "end": "0x802B8DCC"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTable24",
+          "placement": ".data3",
+          "start": "0x802B8DCC",
+          "end": "0x802B91CA"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTableCount0",
+          "placement": ".data3",
+          "start": "0x802B91CA",
+          "end": "0x802B924A"
+        },
+        {
+          "section": ".rodata._3Snd.gHuffTableCount1",
+          "placement": ".data3",
+          "start": "0x802B924A",
+          "end": "0x802B926A"
         }
       ]
     },
