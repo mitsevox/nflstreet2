@@ -5964,7 +5964,7 @@ extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
 extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
-extern "C" int fn_8009C7B4(Vector_80039F5C *pVec);
+extern "C" int PlyrTrackIsOutsideLimit(Vector_80039F5C *pVec);
 
 extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock);
 
@@ -14245,20 +14245,24 @@ extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 
     return pEntry;
 }
 
-extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
+extern "C" int PlyrTrackIsOutsideLimit(Vector_80039F5C *pVec)
 {
     FieldPoint_t point;
+    int angle;
 
     point.mX = pVec->mX;
     point.mY = pVec->mZ;
-    return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
+    angle = (point.Heading() - 0x400000) << 8 >> 8;
+
+    angle = abs(angle);
+    return angle > lbl_803EA9A4;
 }
 
 extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 {
     Entry_8009C684 *pEntry = &pBlock->mEntries[pBlock->mUnknown4];
 
-    if (pBlock->mUnknown0 == 2 && fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+    if (pBlock->mUnknown0 == 2 && PlyrTrackIsOutsideLimit(&pEntry->mUnknown4) == 1) {
         fn_8009CE88(p, pBlock, 6);
     }
     return pBlock->mUnknown0 > 1;
@@ -14289,7 +14293,7 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
         MatLoad((float *)p->mUnknown704);
         Vec3Mat34Mul(&pEntry->mUnknown4, &pEntry->mUnknown4);
         MatPop();
-        if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+        if (PlyrTrackIsOutsideLimit(&pEntry->mUnknown4) == 1) {
             fn_8009CE88(p, pBlock, 6);
         }
         break;
