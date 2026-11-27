@@ -31,6 +31,12 @@ extern Int32 lbl_8039F808[20];
 #define UIS_FLOAT(Word) (*(Float32 *)&(Word))
 #define UIS_EPSILON 1e-7f
 
+typedef struct UISControlList_t {
+    Int32 nList;
+    Int32 ThisObject;
+    Int32 Offsets[1];
+} UISControlListT;
+
 Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
                   UISControlStateT *pControlState)
 {
@@ -201,17 +207,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 11: {
-            Int32 Count;
-            Int32 *pArgs;
-            Uint8 *pCode;
+            Uint8 *pSavedPC;
+            Int32 *pParam;
+            Uint32 GameMessage;
+            Int32 *pReturn;
+            Uint32 nParam;
+            Uint16 Group = pScreen->GroupID;
+            Uint16 Screen = pScreen->ScreenID;
 
-            Count = *--*ppTop;
+            nParam = *--*ppTop;
             (*ppTop)--;
-            pArgs = *ppTop - Count;
-            pCode = *ppCode;
-            ((UISMessageFncT *)pInfo->pMessageFnc)(*pArgs, pScreen->GroupID, pScreen->ScreenID,
-                                                  Count, pArgs + 1, pArgs - 1);
-            *ppCode = pCode;
+            pParam = *ppTop - nParam;
+            GameMessage = *pParam;
+            pReturn = pParam - 1;
+            pSavedPC = *ppCode;
+            ((UISMessageFncT *)pInfo->pMessageFnc)(GameMessage, Group, Screen, nParam, pParam + 1, pReturn);
+            *ppCode = pSavedPC;
             break;
         }
         case 12: {
@@ -568,6 +579,19 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 6, &Action, 0, NULL);
             break;
         }
+        case 126: {
+            Int32 Value;
+
+            Value = *--*ppTop;
+            Action.s.GroupID = 0;
+            Action.s.ScreenID = 0;
+            Action.Words[1] = 0;
+            Action.Words[2] = Value;
+            Action.s.unk_0E = pScreen->GroupID;
+            Action.s.unk_0C = pScreen->ScreenID;
+            UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 5, &Action, 0, NULL);
+            break;
+        }
         case 71: {
             Int32 Value;
             Int32 *pOffset;
@@ -579,8 +603,8 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             pOffset = (Int32 *)*--pState->pTop;
             Index = *--pState->pTop;
             pList = (Int32 *)((Uint8 *)pScreen->pData + *pOffset);
-            if (Index < pList[0]) {
-                pObject = (Uint8 *)pScreen->pData + pList[Index + 2];
+            if (Index < ((UISControlListT *)pList)->nList) {
+                pObject = (Uint8 *)pScreen->pData + ((UISControlListT *)pList)->Offsets[Index];
                 if (pObject != pControlState || pControlState->bEnabled == 0) {
                     Action.s.GroupID = Value;
                     Action.s.ScreenID = 0;
@@ -741,8 +765,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             }
             break;
         }
-        case 84:
-        case 126: {
+        case 84: {
             Int32 Value;
 
             Value = *--*ppTop;
