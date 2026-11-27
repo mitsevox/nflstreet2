@@ -1383,15 +1383,14 @@ int SNDAEMSI_updateplayer(PlayerState_t *p)
                 SNDAEMSplayerunpausefn[p->mType](p);
             } else if (!(p->mMode == 2 && p->mPrevMode == 1)) {
                 int index = p->mSample;
-                PlayerSampleList_t *list = p->mpSamples;
-                int count = list->mCount;
+                int count = p->mpSamples->mCount;
 
                 if (index >= count)
                     index = count - 1;
                 else if (index < 0)
                     index = 0;
-                p->mType = list->mSamples[index].mType;
-                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &list->mSamples[index]);
+                p->mType = p->mpSamples->mSamples[index].mType;
+                p->mHandle = SNDAEMSplayerplayfn[p->mType](p, &p->mpSamples->mSamples[index]);
                 if (p->mHandle.mHandle < 0)
                     SNDAEMSI_playerresetoutputs((PlayerState_80268774 *)p);
             }

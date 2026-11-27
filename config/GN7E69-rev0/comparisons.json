@@ -28962,11 +28962,6 @@
           "end": "0x8026898C"
         },
         {
-          "symbol": "SNDAEMSI_updateplayer",
-          "start": "0x8026898C",
-          "end": "0x80268B88"
-        },
-        {
           "symbol": "SNDAEMSI_updateoscillator",
           "start": "0x80268B88",
           "end": "0x80268DA8"

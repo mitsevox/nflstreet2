@@ -215,19 +215,22 @@ void _LZHMemDecStop(LZHBlock_t *a, LZHBlock_t *b, int mode)
 
 int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
 {
+    int (**pFunc)(void);
+
     if (mode == 1) {
         return _LZHMemProcess(a, b, 1);
     }
     lbl_803ED420 = 1;
     lbl_803ED474 = a;
-    lbl_803ED48C = a->mUnknown00 + a->mUnknown08;
     lbl_803ED488 = a->mUnknown04 - a->mUnknown08;
+    lbl_803ED48C = a->mUnknown00 + a->mUnknown08;
     lbl_803ED490 = b->mUnknown04 - b->mUnknown08;
-    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
     lbl_803ED478 = b;
+    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
+    pFunc = &lbl_803ED428;
     if (lbl_803ED428 != 0) {
         do {
-            switch ((unsigned char)lbl_803ED428()) {
+            switch ((unsigned char)(*pFunc)()) {
             case 0:
                 break;
             case 1:
@@ -237,7 +240,7 @@ int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
                 lbl_803ED420 = 0;
                 return 3;
             }
-        } while (lbl_803ED428 != 0);
+        } while (*pFunc != 0);
     }
     lbl_803ED420 = 0;
     return 1;
@@ -251,9 +254,10 @@ int _LZHMemProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
     lbl_803ED4AC = b->mUnknown04 - b->mUnknown08;
     lbl_803ED4B0 = b->mUnknown00 + b->mUnknown08;
     if (lbl_803ED434 != 0) {
+        int (**pFunc)(void) = &lbl_803ED434;
         do {
-            lbl_803ED434();
-        } while (lbl_803ED434 != 0);
+            (*pFunc)();
+        } while (*pFunc != 0);
     }
     a->mUnknown08 = a->mUnknown04 - lbl_803ED4A4;
     b->mUnknown08 = b->mUnknown04 - lbl_803ED4AC;
