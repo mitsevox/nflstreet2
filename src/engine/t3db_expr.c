@@ -629,7 +629,7 @@ int _TDbExprCopy(TDbExpr_t *pSrc, TDbExpr_t **ppDst)
         *ppDst = 0;
         return 0;
     }
-    if (__TDbMemPoolAlloc(&lbl_803E9654, ppDst)) {
+    if (__TDbMemPoolAlloc(&_tDbGlobalExprPool, ppDst)) {
         return 2;
     }
     (*ppDst)->mOp = pSrc->mOp;
@@ -708,7 +708,7 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
                   || (pSrc->mRight.mType >= TDB_TYPE_EXPR_TRUNC && pSrc->mRight.mType <= TDB_TYPE_EXPR_FLOAT))) {
         return 3;
     }
-    err = __TDbMemPoolAlloc(&lbl_803E9654, ppDst);
+    err = __TDbMemPoolAlloc(&_tDbGlobalExprPool, ppDst);
     if (err) {
         return 2;
     }
@@ -842,14 +842,14 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
         if ((*ppDst)->mOp == 0x20009) {
             if (!rightTrue) {
                 pKeep = (*ppDst)->mRight.mValue.p;
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = pKeep;
             } else if (!leftTrue) {
                 pKeep = (*ppDst)->mLeft.mValue.p;
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = pKeep;
             } else {
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = 0;
             }
         } else if ((*ppDst)->mOp == 0x2000A) {
@@ -858,7 +858,7 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
             } else if (!rightTrue) {
                 _TDbExprFree((*ppDst)->mRight.mValue.p);
             }
-            __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+            __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
             *ppDst = 0;
         } else {
             if (leftTrue) {
@@ -880,7 +880,7 @@ int _TDbExprPrepare(TDbExpr_t *pSrc, TDbExpr_t **ppDst, TDbTable_t **ppTables, i
                 (*ppDst)->mRight.mType = TDB_TYPE_UINT;
             }
             if ((*ppDst)->mRight.mValue.u == 0 && (*ppDst)->mOp == 0x10005) {
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = 0;
             }
         }
@@ -903,7 +903,7 @@ void _TDbExprFree(TDbExpr_t *pExpr)
                 TDbExtMemFree(_tDbGlobalMemoryHeapID, pExpr->mRight.mValue.p, pExpr->mRight.mSize);
             }
         }
-        __TDbMemPoolFree(&lbl_803E9654, pExpr);
+        __TDbMemPoolFree(&_tDbGlobalExprPool, pExpr);
     }
 }
 

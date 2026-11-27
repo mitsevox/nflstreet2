@@ -1053,6 +1053,102 @@ class CodeDataAndStorageComparisons(ComparisonFixture):
             diagnostic_object.fragment(*arguments, {})
 
 
+class CommonReferences(unittest.TestCase):
+    """A comparison's own COMMON symbol is placed by its storage map or by a linked unit's mapped
+    COMMON address (commons), never by a configured external of the same name. The compiler is not
+    needed: the native object is written directly."""
+    LIS, ADDI = 0x3C600000, 0x38630000  # lis r3,0; addi r3,r3,0 (the relocations fill the halves)
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.directory = Path(temporary.name)
+
+    def native(self, addend):
+        """.text forming gCommon+addend with lis/addi (R_PPC_ADDR16_HA, R_PPC_ADDR16_LO); gCommon is
+        an 8-byte COMMON symbol (symbol table index 3: null, file, .text section, gCommon)."""
+        path = self.directory / 'native.o'
+        code = struct.pack('>II', self.LIS, self.ADDI)
+        sb.write_object(path, [{'name': '.text', 'type': sb.SHT_PROGBITS, 'flags': sb.SHF_ALLOC | sb.SHF_EXECINSTR,
+                                'size': len(code), 'data': code, 'align': 4}],
+                        [{'name': 'gCommon', 'value': 4, 'size': 8, 'shndx': sb.SHN_COMMON, 'type': sb.STT_OBJECT}])
+        data = bytearray(path.read_bytes())
+        shoff = struct.unpack_from('>I', data, 32)[0]
+        _, count, strings_index = struct.unpack_from('>HHH', data, 46)
+        headers = [list(struct.unpack_from('>IIIIIIIIII', data, shoff + i * 40)) for i in range(count)]
+        data = data[:shoff]
+        names = headers[strings_index]
+        strings = data[names[4]:names[4] + names[5]]
+        name = len(strings)
+        strings += b'.rela.text\0'
+        names[4], names[5] = len(data), len(strings)
+        data += strings + b'\0' * (-len(strings) % 4)
+        at = len(data)
+        for position, kind in ((2, 6), (6, 4)):
+            data += struct.pack('>IIi', position, (3 << 8) | kind, addend)
+        symtab = next(i for i, h in enumerate(headers) if h[1] == sb.SHT_SYMTAB)
+        headers.append([name, 4, 0, 0, at, 24, symtab, 1, 4, 12])
+        struct.pack_into('>I', data, 32, len(data))
+        struct.pack_into('>H', data, 48, len(headers))
+        for header in headers:
+            data += struct.pack('>IIIIIIIIII', *header)
+        return bytes(data)
+
+    def fragment(self, addend=0, externals=None, storage=None, commons=None):
+        native = self.native(addend)
+        sections, _ = sb.read_elf(native)
+        text = next(s for s in sections if s['name'] == '.text')
+        output = self.directory / 'fragment.o'
+        diagnostic_object.fragment(native, text, 0, 8, 0x801CDB70, {}, {}, {}, externals or {}, output, [],
+                                   storage, commons)
+        return {s['name']: s['value'] for s in sb.read_elf(output.read_bytes())[1]
+                if s['name'].startswith('__comparison_reference_')}
+
+    def test_a_linked_units_mapped_common_address_places_the_comparison_common(self):
+        self.assertEqual(self.fragment(commons={'gCommon': 0x803E763C}),
+                         {'__comparison_reference_803E763C': 0x803E763C})
+        self.assertEqual(self.fragment(addend=8, commons={'gCommon': 0x803E763C}),
+                         {'__comparison_reference_803E7644': 0x803E7644})
+        # The comparison's own storage map comes first.
+        self.assertEqual(self.fragment(storage={2: 0x803E9000}, commons={'gCommon': 0x803E763C}),
+                         {'__comparison_reference_803E9000': 0x803E9000})
+
+    def test_an_unmapped_common_fails_closed_even_with_a_configured_external(self):
+        refused = 'Comparison common symbol gCommon lacks an evidenced storage address'
+        cases = {'no map and no commons': {},
+                 'empty commons': dict(commons={}),
+                 'commons for another name': dict(commons={'gOther': 0x803E763C}),
+                 'a storage map without the symbol': dict(storage={}, commons={}),
+                 'only a configured external': dict(externals={'gCommon': 0x803E763C}),
+                 'a configured external beside commons for another name': dict(
+                     externals={'gCommon': 0x803E763C}, commons={'gOther': 0x803E9000})}
+        for reason, arguments in cases.items():
+            with self.subTest(reason), self.assertRaisesRegex(ValueError, refused):
+                self.fragment(**arguments)
+
+    def test_accepted_references_keeps_mapped_commons_apart_from_externals(self):
+        native = self.directory / 'build/source/obj/unit000_src_unit_c.o'
+        native.parent.mkdir(parents=True)
+        sb.write_object(native, [{'name': '.sbss', 'type': sb.SHT_NOBITS, 'flags': sb.SHF_ALLOC | sb.SHF_WRITE,
+                                  'size': 4, 'align': 4}],
+                        [{'name': 'gCommon', 'value': 4, 'size': 8, 'shndx': sb.SHN_COMMON, 'type': sb.STT_OBJECT},
+                         {'name': 's_Static', 'value': 0, 'size': 4, 'shndx': 1, 'bind': sb.STB_LOCAL}])
+        unit = {'source': 'src/unit.c', 'native_object_sha256': sb.sha256(native), 'functions': [], 'sections': [],
+                'storage': {'gCommon': '0x803E763C', 's_Static': '0x803ED624'}}
+        manifest = {'externals': {'gExternal': {'address': '0x803E92CC'}}}
+        references, ambiguous, commons = function_compare.accepted_references(self.directory, manifest, [unit])
+        # Only the mapped COMMON symbol places a comparison's COMMON; the external and the static do not.
+        self.assertEqual(commons, {'gCommon': 0x803E763C})
+        self.assertEqual((references['gCommon'], references['gExternal'], ambiguous), (0x803E763C, 0x803E92CC, set()))
+        self.assertEqual(function_compare.reference_addresses(self.directory, manifest, [unit]), (references, ambiguous))
+        # Two linked units mapping one COMMON symbol to different addresses fail closed.
+        other = self.directory / 'build/source/obj/unit001_src_other_c.o'
+        shutil.copy(native, other)
+        with self.assertRaisesRegex(ValueError, 'map one COMMON symbol to different addresses'):
+            function_compare.accepted_references(self.directory, manifest, [
+                unit, dict(unit, source='src/other.c', storage={'gCommon': '0x803E9000'})])
+
+
 class SectionBaseReferences(unittest.TestCase):
     """A large object addressed from a base formed past its end (lis/addi of .bss+0x10020, then
     negative displacements; snddrv.c's driver state) resolves to the section's own placement when

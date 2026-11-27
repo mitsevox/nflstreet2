@@ -3,6 +3,7 @@
 
 #include "engine/TDbCreate.h"
 #include "engine/t3db_index.h"
+#include "engine/t3db_mem.h"
 
 #define TDB_COLUMN_ROW 0xFE
 
@@ -84,22 +85,6 @@ typedef struct TDbMemEvent_t {
     int mUnknown4;
     int mUnknown8;
 } TDbMemEvent_t;
-
-typedef struct TDbMemBlock_t {
-    struct TDbMemBlock_t *mNext;
-    unsigned char unk_0x4[4];
-} TDbMemBlock_t;
-
-typedef struct TDbMemPool_t {
-    void *mFree;
-    TDbMemBlock_t *mBlocks;
-    unsigned char *mNext;
-    void *mHeap;
-    unsigned int mItemSize;
-    unsigned short mRemaining;
-    unsigned short mCount;
-    unsigned short mGrowCount;
-} TDbMemPool_t;
 
 typedef struct TDbIdxNode_t {
     struct TDbIdxNode_t *mChild[2];
@@ -274,8 +259,6 @@ typedef struct TDbIOIndexPart_t {
 
 extern void (*_tDbMemAllocInfoCallback)(TDbMemEvent_t *pEvent);
 extern unsigned int crc32_table[256];
-extern TDbMemPool_t lbl_803E9654;
-extern TDbMemPool_t _tDbIndexPool;
 extern int (*TDbStrncmp)(const char *a, const char *b, int size);
 extern void *_tDbGlobalMemoryHeapID;
 extern TDbQuery_t *_tDbQueries;
@@ -299,9 +282,6 @@ TDbIdxNode_t *_TDbIdxTreeDelete(TDbIdxTree_t *pTree, TDbIdxNode_t *pNode);
 int _TDbIndexRowAdd(TDbIndex_t *pIndex, unsigned int row);
 int _TDbIndexRowDelete(TDbIndex_t *pIndex, int row);
 int _TDbIndexDestroy(TDbIndex_t *pIndex);
-int _TDbMemPoolInit(TDbMemPool_t *pPool, void *pHeap, unsigned int itemSize, unsigned short count,
-                unsigned short growCount);
-int _TDbMemPoolDeinit(TDbMemPool_t *pPool);
 int _TDbMemPoolReset(TDbMemPool_t *pPool);
 int __TDbMemPoolAlloc(TDbMemPool_t *pPool, void *ppItem);
 void __TDbMemPoolFree(TDbMemPool_t *pPool, void *pItem);

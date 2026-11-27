@@ -25485,7 +25485,7 @@
     {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv PJoyDrvr.c six function/name rows, full poll partial and literal pool. Comparison only: five exact functions, one partial; original code and both external arrays remain linked. Data placement is unresolved; no COMMON storage map is used.",
+      "evidence": "evidence.tsv PJoyDrvr.c six function/name rows, full poll partial, literal pool and the data rows of _PerJoy_aiMotorCommand (.bss) and _PerJoy_aPadStatus (COMMON, placed by the linked unit storage map). Comparison only: five exact functions, one partial.",
       "sections": [
         {
           "section": ".text",
@@ -25498,6 +25498,12 @@
           "placement": ".data3",
           "start": "0x802B11C0",
           "end": "0x802B1200"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADE4",
+          "end": "0x8039ADF4"
         }
       ],
       "functions": [

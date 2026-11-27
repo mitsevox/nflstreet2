@@ -8,13 +8,6 @@ typedef struct TDbHuffNode_t {
     unsigned char mChild[2][2];
 } TDbHuffNode_t;
 
-typedef void (*TDbHandlerFn_8020A660)(TDbLitRef_t *pLits, int user, unsigned char *pbEmit);
-
-typedef struct TDbHandler_8020A660 {
-    TDbHandlerFn_8020A660 mpFn;
-    int mKey;
-} TDbHandler_8020A660;
-
 /* Defined in the T3DB query and index sources. */
 void _TDbDataSetBitData(unsigned int *pData, unsigned int bitOffset, unsigned int bitCount, unsigned int *pValue);
 int _TDbIndexZap(TDbIndex_t *pIndex);

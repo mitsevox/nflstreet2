@@ -5,7 +5,7 @@
 #include "engine/periph.h"
 #include "game/fn_801D2B7C.h"
 
-extern void *lbl_803ED664;
+void *Per_LLDriverData;
 
 void GlibSetVsyncCallbackAfter(void (*pCallback)(void));
 int PADInit(void);
@@ -19,7 +19,7 @@ int PerSystemInit(void *pData)
 {
     PADInit();
     Init_GFLink();
-    lbl_803ED664 = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
+    Per_LLDriverData = fn_801D2BB0(1, PerSystemGetDriverDataSize() * 4, 0, 0);
     Per_NumDevices = 4;
     PerRegisterDevices();
     PerJoyDriverPollPADs();
@@ -30,8 +30,8 @@ int PerSystemInit(void *pData)
 int PerSystemShutdown(void)
 {
     PerUnRegisterDevices();
-    fn_801D2BD0(lbl_803ED664);
-    lbl_803ED664 = 0;
+    fn_801D2BD0(Per_LLDriverData);
+    Per_LLDriverData = 0;
     return 0;
 }
 
@@ -111,7 +111,7 @@ int PerIsDeviceConnected(unsigned int port)
 
 void *PerSystemGetLLDriverData(unsigned int port)
 {
-    return (char *)lbl_803ED664 + PerSystemGetDriverDataSize() * port;
+    return (char *)Per_LLDriverData + PerSystemGetDriverDataSize() * port;
 }
 
 unsigned int PerSystemGetDriverDataSize(void)

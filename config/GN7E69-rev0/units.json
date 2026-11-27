@@ -1007,10 +1007,6 @@
       "address": "0x80201C70",
       "evidence": "evidence.tsv function/name rows at0x80201C70; complete measured comparison in its original file; original target code remains linked."
     },
-    "_tDbIndexPool": {
-      "address": "0x803E96A8",
-      "evidence": "evidence.tsv data/name rows: shared database state remains externally owned; IO consumer does not claim its native storage."
-    },
     "_TDbTblFillColHeader": {
       "address": "0x8020B564",
       "evidence": "evidence.tsv function/name/source-form rows for 0x8020B564; the documented holdout at the start of src/engine/t3db_table.c keeps its original bytes until its draft in comparisons.json is linked; _TDbTblCreate calls it (bl at 0x8020BCD4)."
@@ -1158,14 +1154,6 @@
     "iSPCH_GetSampleSizeData": {
       "address": "0x801B22E0",
       "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368; original sample-size code retained as the only spchrule.c holdout. Called by the speech pick comparison."
-    },
-    "_PerJoy_aiMotorCommand": {
-      "address": "0x8039ADE4",
-      "evidence": "evidence.tsv data/name rows for _PerJoy_aiMotorCommand; external array retains original storage."
-    },
-    "_PerJoy_aPadStatus": {
-      "address": "0x803E92CC",
-      "evidence": "evidence.tsv data/name rows for _PerJoy_aPadStatus; external array retains original storage."
     },
     "_f_bss": {
       "address": "0x803064C0",
@@ -15593,6 +15581,13 @@
           "start": "0x8037F860",
           "end": "0x8037F880"
         }
+      ],
+      "storage": [
+        {
+          "symbol": "_Con_CurrentContext",
+          "start": "0x803ED624",
+          "end": "0x803ED628"
+        }
       ]
     },
     {
@@ -17388,6 +17383,13 @@
           "placement": ".text",
           "start": "0x801E1A20",
           "end": "0x801E1D44"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "Per_LLDriverData",
+          "start": "0x803ED664",
+          "end": "0x803ED668"
         }
       ]
     },
@@ -27036,7 +27038,39 @@
           }
         ],
         "evidence": "x1b merge notes (swarm x1 tracking table): src/engine/t3db.c holds out fn_801F9430, fn_801F9E84."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_tDbDefaultDbStack",
+          "start": "0x803E944C",
+          "end": "0x803E95DC"
+        },
+        {
+          "symbol": "_tDbQryCallbackNames",
+          "start": "0x803E95DC",
+          "end": "0x803E9654"
+        },
+        {
+          "symbol": "_tDbGlobalExprPool",
+          "start": "0x803E9654",
+          "end": "0x803E9670"
+        },
+        {
+          "symbol": "_tDbQryMem",
+          "start": "0x803E9670",
+          "end": "0x803E968C"
+        },
+        {
+          "symbol": "_tDbQrySearchMem",
+          "start": "0x803E968C",
+          "end": "0x803E96A8"
+        },
+        {
+          "symbol": "_tDbIndexPool",
+          "start": "0x803E96A8",
+          "end": "0x803E96C4"
+        }
+      ]
     },
     {
       "source": "src/engine/memorycard.c",
@@ -28128,7 +28162,14 @@
           }
         ],
         "evidence": "LLFont.c holdout covering FontLLUploadPalettes. The complete body remains under the unchanged engine_c comparison profile."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_FontLLRenderMapScratch",
+          "start": "0x803E763C",
+          "end": "0x803E91F8"
+        }
+      ]
     },
     {
       "source": "src/engine/colorRamp.c",
@@ -29271,7 +29312,7 @@
     {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/PJoyDrvr.c (0x801E1D44-0x801E274C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 6 functions exact, the 1 holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/PJoyDrvr.c (0x801E1D44-0x801E274C) and the data rows of its whole data sections (its .bss _PerJoy_aiMotorCommand and its COMMON _PerJoy_aPadStatus through the storage map); linked with holdouts (owner ruling of 2026-11-20): 5 of 6 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29290,6 +29331,12 @@
           "placement": ".data3",
           "start": "0x802B11C0",
           "end": "0x802B1200"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039ADE4",
+          "end": "0x8039ADF4"
         }
       ],
       "holdouts": {
@@ -29300,7 +29347,14 @@
           }
         ],
         "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/PJoyDrvr.c holds out _PerJoyDriverPoll."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_PerJoy_aPadStatus",
+          "start": "0x803E92CC",
+          "end": "0x803E92FC"
+        }
+      ]
     },
     {
       "source": "src/engine/cu_801C3EFC.c",

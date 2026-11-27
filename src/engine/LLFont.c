@@ -29,7 +29,7 @@ static unsigned short _LLFontInsideOutlinePal[16] __attribute__((aligned(32)));
 static GXTlutObj _LLFontOutsideOutlineObj __attribute__((aligned(32)));
 static GXTlutObj _LLFontInsideOutlineObj __attribute__((aligned(32)));
 extern FontRenderState_t Font_RenderState;
-extern FontQuad_t lbl_803E763C[];
+FontQuad_t _FontLLRenderMapScratch[355];
 
 /* The four corners of one glyph quad: positions, then texture coordinates. */
 typedef struct FontQuadVerts_t {
@@ -111,7 +111,7 @@ static int _FontLLRender(int state, Font_t *pFont, FontQuad_t *pQuads, unsigned 
 
 int FontLLRenderText(Font_t *pFont, const char *pText, unsigned int flags, float maxWidth, float *pPos)
 {
-    FontQuad_t *pQuads = lbl_803E763C;
+    FontQuad_t *pQuads = _FontLLRenderMapScratch;
     float mtx[4][4];
     unsigned int count;
     int state = 0;

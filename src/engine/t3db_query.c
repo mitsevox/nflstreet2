@@ -187,7 +187,6 @@ void _TDbQryQIdxRowDelete(TDbTable_t *pTable, int row)
 int _TDbQryCompareIndexCol(TDbExpr_t *pExpr, unsigned int column, TDbExpr_t **ppOut);
 int _TDbQryCompareIndexExpr(TDbExpr_t *pA, TDbExpr_t *pB);
 extern unsigned int _tDbstrEmptyString;
-extern TDbMemPool_t lbl_803E968C;
 static int _TDbQry_aSwappedOps[6] = { 0x10004, 0x10005, 0x10003, 0x10001, 0x10002, 0x10006 };
 
 int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t **ppDst, int top)
@@ -218,7 +217,7 @@ int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t
         sub = pSrc->mOp == 0x20009;
     }
     rightTrue = 0;
-    err = __TDbMemPoolAlloc(&lbl_803E9654, ppDst);
+    err = __TDbMemPoolAlloc(&_tDbGlobalExprPool, ppDst);
     leftTrue = 0;
     if (err) {
         return 2;
@@ -334,14 +333,14 @@ int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t
         if ((*ppDst)->mOp == 0x20009) {
             if (!rightTrue) {
                 pNew = (*ppDst)->mRight.mValue.p;
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = pNew;
             } else if (!leftTrue) {
                 pNew = (*ppDst)->mLeft.mValue.p;
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = pNew;
             } else {
-                __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                 *ppDst = 0;
                 return err;
             }
@@ -351,7 +350,7 @@ int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t
             } else if (!rightTrue) {
                 _TDbExprFree((*ppDst)->mRight.mValue.p);
             }
-            __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+            __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
             *ppDst = 0;
             return err;
         } else {
@@ -375,7 +374,7 @@ int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t
                     (*ppDst)->mRight.mType = TDB_TYPE_UINT;
                 }
                 if ((*ppDst)->mRight.mValue.u == 0 && (*ppDst)->mOp == 0x10005) {
-                    __TDbMemPoolFree(&lbl_803E9654, *ppDst);
+                    __TDbMemPoolFree(&_tDbGlobalExprPool, *ppDst);
                     *ppDst = 0;
                     return err;
                 }
@@ -385,7 +384,7 @@ int _TDbQryPrepComplexFilter(TDbStmt_80205754 *pStmt, TDbExpr_t *pSrc, TDbExpr_t
             (pSrc->mOp & 0x10000)) {
             i = (int)((*ppDst)->mLeft.mValue.l >> 32);
             if (pStmt->mTableExprs[i] != 0) {
-                err = __TDbMemPoolAlloc(&lbl_803E9654, &pNew);
+                err = __TDbMemPoolAlloc(&_tDbGlobalExprPool, &pNew);
                 pNew->mLeft.mType = pNew->mRight.mType = TDB_TYPE_EXPR_UINT;
                 pNew->mOp = 0x20009;
                 pNew->mLeft.mValue.p = pStmt->mTableExprs[i];
@@ -647,7 +646,7 @@ void _TDbQryFreeQIdx(TDbQIdx_80205880 *pQIdx)
     void *pHeap;
 
     _TDbQryPrepFree(pQIdx->mStmt);
-    __TDbMemPoolFree(&lbl_803E968C, pQIdx->mStmt);
+    __TDbMemPoolFree(&_tDbQrySearchMem, pQIdx->mStmt);
     pHeap = pQIdx->mKeyPool.mHeap;
     _TDbMemPoolDeinit(&pQIdx->mKeyPool);
     _TDbMemPoolDeinit(&pQIdx->mPool);
@@ -1018,7 +1017,7 @@ int _TDbQryPrepSearch(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhe
                     pStmt->mTableExprs[0] = pStmt->mWhere;
                     pStmt->mWhere = 0;
                 } else if (pStmt->mWhere != 0) {
-                    err = __TDbMemPoolAlloc(&lbl_803E9654, &pAnd);
+                    err = __TDbMemPoolAlloc(&_tDbGlobalExprPool, &pAnd);
                     if (err == 0) {
                         pAnd->mOp = 0x20009;
                         pAnd->mLeft.mType = 3;
@@ -1263,8 +1262,6 @@ int _TDbQryDeleteRow(int dbId, TDbStmt_80205754 *pStmt, TDbResult_8020AD1C *pRes
 }
 
 
-extern TDbMemPool_t lbl_803E9670;
-extern TDbHandler_8020A660 lbl_803E95DC[15];
 
 int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, TDbIdxColumnDef_t *pCols,
                 int arg, TDbResult_8020AD1C *pResult)
@@ -1276,11 +1273,11 @@ int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, 
     int err;
 
     pResult->mCount = 0;
-    err = __TDbMemPoolAlloc(&lbl_803E9670, &pQuery);
+    err = __TDbMemPoolAlloc(&_tDbQryMem, &pQuery);
     if (err == 0) {
-        err = __TDbMemPoolAlloc(&lbl_803E968C, &pStmt);
+        err = __TDbMemPoolAlloc(&_tDbQrySearchMem, &pStmt);
         if (err != 0) {
-            __TDbMemPoolFree(&lbl_803E9670, pQuery);
+            __TDbMemPoolFree(&_tDbQryMem, pQuery);
         } else {
             err = _TDbQryPrepSearch(pDb, pRefs, pWhere, pStmt);
             if (err == 0) {
@@ -1313,7 +1310,7 @@ int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, 
                         }
                     }
                     _TDbQryPrepFree(pStmt);
-                    __TDbMemPoolFree(&lbl_803E968C, pStmt);
+                    __TDbMemPoolFree(&_tDbQrySearchMem, pStmt);
                 } else {
                     err = _TDbQryPrepComplex(pStmt);
                     if (err == 0) {
@@ -1353,7 +1350,7 @@ int _TDbQryCreate(void *pDb, TDbSQLTableRef_801FDC18 *pRefs, TDbExpr_t *pWhere, 
                 }
             }
             if (err != 0) {
-                __TDbMemPoolFree(&lbl_803E9670, pQuery);
+                __TDbMemPoolFree(&_tDbQryMem, pQuery);
             }
             if (err == 0) {
                 pQuery->mCallbackArg = arg;
@@ -1390,7 +1387,7 @@ int _TDbQryDestroy(TDbQuery_t *pQuery)
     } else if (pQuery->mState == 3) {
         _TDbQryFreeQIdx(pQuery->mSource.mQIdx);
     }
-    __TDbMemPoolFree(&lbl_803E9670, pQuery);
+    __TDbMemPoolFree(&_tDbQryMem, pQuery);
     return 0;
 }
 
@@ -2147,8 +2144,8 @@ int _TDbQryUpdateWithHandler(int unused, TDbStmt_80205754 *pStmt, int key, TDbLi
 
     memset(mask, 0, sizeof(mask));
     for (i = 0; i < 15; i++) {
-        if (key == lbl_803E95DC[i].mKey) {
-            pFn = lbl_803E95DC[i].mpFn;
+        if (key == _tDbQryCallbackNames[i].mKey) {
+            pFn = _tDbQryCallbackNames[i].mpFn;
             break;
         }
     }
