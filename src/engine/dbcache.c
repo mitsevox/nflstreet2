@@ -269,7 +269,7 @@ extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern DbUserEntry_t _DbUser_aEntries[];
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 
 static Entry_802FB310 _DbCache_aTables[3] = {
     { 0x54484344, 0x54484344, 0x44494754, 0x31494454 },
@@ -278,7 +278,7 @@ static Entry_802FB310 _DbCache_aTables[3] = {
 };
 static CacheCol_802FB340 _DbCache_aCachedCols[2] = {
     { 0x44494754, 0x4D414554, 0x3FF, 0x3F1, 0 },
-    { 0x44494750, 0x59414C50, 0x7FFF, 0x7F15, fn_80229AA4 },
+    { 0x44494750, 0x59414C50, 0x7FFF, 0x7F15, DbFindUnusedPlayerIds },
 };
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
@@ -395,30 +395,30 @@ extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
-extern int fn_802299FC(void);
-extern int fn_80229A70(void);
-extern int fn_80229E88(void);
-extern void fn_8022A304(void);
+extern int DbYalpModuleInit(void);
+extern int DbYalpModuleShutdown(void);
+extern int DbSplpModuleInit(void);
+extern void DbSplpModuleShutdown(void);
 extern int fn_8022B02C(int a);
 extern void fn_8022B200(void);
-extern int fn_8022C214(int a);
-extern void fn_8022C3C8(void);
-extern int fn_8022C410(int a);
-extern int fn_8022C518(int a);
-extern int fn_8022D154(void);
-extern int fn_8022D1B8(void);
-extern int fn_8022D6E8(void);
-extern void fn_8022D6F0(void);
-extern int fn_8022DA90(int *p);
-extern void fn_8022DB08(void);
+extern int DbSrptModuleInit(int a);
+extern void DbSrptModuleShutdown(void);
+extern int DbSrptDeleteUnflaggedTeams(int a);
+extern int DbSrptDeleteUnflaggedTypedTeams(int a);
+extern int DbUslpModuleInit(void);
+extern int DbUslpModuleShutdown(void);
+extern int DbThcdModuleInit(void);
+extern void DbThcdModuleShutdown(void);
+extern int DbFnigModuleInit(int *p);
+extern void DbFnigModuleShutdown(void);
 extern int DbResetGameInfo(void);
-extern int fn_8022DBF4(int a);
-extern int fn_8022DC38(int a);
+extern int DbFnigSetHomeTeam(int a);
+extern int DbFnigSetAwayTeam(int a);
 extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
 extern int DbRunLoadChain(void);
-extern int fn_8022E9A4(void);
-extern void fn_8022E9C4(void);
-extern int fn_8022E9E4(void);
+extern int DbLeagueModuleInit(void);
+extern void DbLeagueModuleShutdown(void);
+extern int DbLeagueLoad(void);
 extern int DbEvasModuleInit(void);
 extern void DbEvasModuleShutdown(void);
 extern int DbTatsCopyAllTables(int a, int b, int c);

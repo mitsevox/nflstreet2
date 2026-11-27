@@ -19021,65 +19021,96 @@
       ]
     },
     {
-      "source": "src/engine/cu_802297D8.c",
+      "source": "src/engine/dbyalp.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x8022C894 (src/engine/cu_802297D8.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The drafts compile only their float pools into .rodata (the query strings are referenced through neutral external labels), placed over the file's native .rodata (data row 0x802B2430). Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802297D8",
-          "end": "0x8022C894"
+          "end": "0x80229E88"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2430",
+          "end": "0x802B2CA0"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_802299FC",
+          "symbol": "DbYalpLoadWeightTable",
+          "start": "0x802297D8",
+          "end": "0x802299FC"
+        },
+        {
+          "symbol": "DbYalpModuleInit",
           "start": "0x802299FC",
           "end": "0x80229A70"
         },
         {
-          "symbol": "fn_80229A70",
+          "symbol": "DbYalpModuleShutdown",
           "start": "0x80229A70",
           "end": "0x80229AA4"
         },
         {
-          "symbol": "fn_80229C98",
+          "symbol": "DbFindUnusedPlayerIds",
+          "start": "0x80229AA4",
+          "end": "0x80229C98"
+        },
+        {
+          "symbol": "DbYalpGetLowRating",
           "start": "0x80229C98",
           "end": "0x80229CB0"
         },
         {
-          "symbol": "fn_80229CB0",
+          "symbol": "DbYalpGetHighRating",
           "start": "0x80229CB0",
           "end": "0x80229CC4"
         },
         {
-          "symbol": "fn_80229CC4",
+          "symbol": "DbYalpGetRatingWeight",
           "start": "0x80229CC4",
           "end": "0x80229CE4"
         },
         {
-          "symbol": "fn_80229CE4",
+          "symbol": "DbYalpGetWeightSum",
           "start": "0x80229CE4",
           "end": "0x80229CFC"
         },
         {
-          "symbol": "fn_80229E78",
+          "symbol": "DbYalpGetOverallRating",
+          "start": "0x80229CFC",
+          "end": "0x80229E78"
+        },
+        {
+          "symbol": "DbYalpBeginGame",
           "start": "0x80229E78",
           "end": "0x80229E80"
         },
         {
-          "symbol": "fn_80229E80",
+          "symbol": "DbYalpResumeGame",
           "start": "0x80229E80",
           "end": "0x80229E88"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbmtts.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022A428-0x8022C0E0 (src/engine/dbmtts.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "sections": [
         {
-          "symbol": "fn_8022A304",
-          "start": "0x8022A304",
-          "end": "0x8022A428"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022A428",
+          "end": "0x8022C0E0"
+        }
+      ],
+      "functions": [
         {
-          "symbol": "fn_8022A428",
+          "symbol": "DbMttsInsertSlot",
           "start": "0x8022A428",
           "end": "0x8022A490"
         },
@@ -19149,66 +19180,6 @@
           "end": "0x8022B2CC"
         },
         {
-          "symbol": "fn_8022BF60",
-          "start": "0x8022BF60",
-          "end": "0x8022BF68"
-        },
-        {
-          "symbol": "fn_8022BF68",
-          "start": "0x8022BF68",
-          "end": "0x8022C02C"
-        },
-        {
-          "symbol": "fn_8022C02C",
-          "start": "0x8022C02C",
-          "end": "0x8022C098"
-        },
-        {
-          "symbol": "fn_8022C098",
-          "start": "0x8022C098",
-          "end": "0x8022C0E0"
-        },
-        {
-          "symbol": "fn_8022C0E0",
-          "start": "0x8022C0E0",
-          "end": "0x8022C214"
-        },
-        {
-          "symbol": "fn_8022C214",
-          "start": "0x8022C214",
-          "end": "0x8022C3C8"
-        },
-        {
-          "symbol": "fn_8022C3C8",
-          "start": "0x8022C3C8",
-          "end": "0x8022C410"
-        },
-        {
-          "symbol": "fn_8022C410",
-          "start": "0x8022C410",
-          "end": "0x8022C518"
-        },
-        {
-          "symbol": "fn_8022C518",
-          "start": "0x8022C518",
-          "end": "0x8022C628"
-        },
-        {
-          "symbol": "fn_8022C628",
-          "start": "0x8022C628",
-          "end": "0x8022C81C"
-        },
-        {
-          "symbol": "fn_8022C81C",
-          "start": "0x8022C81C",
-          "end": "0x8022C858"
-        },
-        {
-          "symbol": "fn_8022C858",
-          "start": "0x8022C858",
-          "end": "0x8022C894"
-        },
-        {
           "symbol": "fn_8022B2CC",
           "start": "0x8022B2CC",
           "end": "0x8022B414"
@@ -19222,6 +19193,93 @@
           "symbol": "fn_8022B7A4",
           "start": "0x8022B7A4",
           "end": "0x8022B8C8"
+        },
+        {
+          "symbol": "fn_8022BF60",
+          "start": "0x8022BF60",
+          "end": "0x8022BF68"
+        },
+        {
+          "symbol": "fn_8022BF68",
+          "start": "0x8022BF68",
+          "end": "0x8022C02C"
+        },
+        {
+          "symbol": "DbMttsBeginGame",
+          "start": "0x8022C02C",
+          "end": "0x8022C098"
+        },
+        {
+          "symbol": "DbMttsResumeGame",
+          "start": "0x8022C098",
+          "end": "0x8022C0E0"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbsrpt.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c). The whole native unit includes its .sdata and .bss and compares the holdout, whose original bytes remain linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C0E0",
+          "end": "0x8022C894"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC030",
+          "end": "0x803EC03C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2390",
+          "end": "0x803A23E8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "DbSrptDeleteCursorTeams",
+          "start": "0x8022C0E0",
+          "end": "0x8022C214"
+        },
+        {
+          "symbol": "DbSrptModuleInit",
+          "start": "0x8022C214",
+          "end": "0x8022C3C8"
+        },
+        {
+          "symbol": "DbSrptModuleShutdown",
+          "start": "0x8022C3C8",
+          "end": "0x8022C410"
+        },
+        {
+          "symbol": "DbSrptDeleteUnflaggedTeams",
+          "start": "0x8022C410",
+          "end": "0x8022C518"
+        },
+        {
+          "symbol": "DbSrptDeleteUnflaggedTypedTeams",
+          "start": "0x8022C518",
+          "end": "0x8022C628"
+        },
+        {
+          "symbol": "DbFindUnusedTeamIds",
+          "start": "0x8022C628",
+          "end": "0x8022C81C"
+        },
+        {
+          "symbol": "DbSrptBeginGame",
+          "start": "0x8022C81C",
+          "end": "0x8022C858"
+        },
+        {
+          "symbol": "DbSrptResumeGame",
+          "start": "0x8022C858",
+          "end": "0x8022C894"
         }
       ]
     },

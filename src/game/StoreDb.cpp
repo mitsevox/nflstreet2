@@ -49,8 +49,8 @@ void TDbInsertRow(int handle, int table, DbColumnValue *pList, int *pResult, int
 int TDbTblFindUnusedId(int handle, int *pTable);
 int _TDbQrySelect(int handle, DbQueryTable *pTables, DbFilter *pFilter,
                 void *pSort, int *pCursor, QueryResult *pResult);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 int DbUserGetDb(int handle);
@@ -91,7 +91,7 @@ void StoreTeamAddPlayer(int team)
     int player;
     int sourcePlayer;
     int table;
-    fn_80229AA4(0x54415453, 0x59414C50, &player, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, &player, &count);
     TDbCompilePerformOp(0, "use 'TATS' select 'DIGP' into \x85 from 'PRTS'\n", &sourcePlayer);
     TDbTblFindUnusedId(0x54415453, &table);
     TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'PRTS' where ('DIGP' = \x85)\n", table, sourcePlayer);
@@ -337,7 +337,7 @@ int StoreTeamCreate(void)
     DbColumnValue columns[17];
     unsigned short count = 1;
     int team;
-    fn_8022C628(0x54415453, 0x4D414554, &team, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (int i = 0; i < 13; i++) {
         columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i], _StoreDb_aTeamDefaults[i]);
     }

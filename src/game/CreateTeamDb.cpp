@@ -26,8 +26,8 @@ int TDbTblFindUnusedId(int, int *);
 int TDbTblDestroy(int, int);
 void TDbInsertRow(int, int, DbColumnValue *, int *, int);
 int TDbTblGetCount(int, int, DbFilter *, unsigned short *);
-int fn_8022C628(int, int, int *, unsigned short *);
-int fn_80229AA4(int, int, int *, unsigned short *);
+int DbFindUnusedTeamIds(int, int, int *, unsigned short *);
+int DbFindUnusedPlayerIds(int, int, int *, unsigned short *);
 int MemCardFilesNeedsSave(int, int);
 void MemCardFilesStoreChecksum(int, int);
 int PortraitAllocSlot(int, int);
@@ -203,7 +203,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
     int table = -1;
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_8022C628(destination, 0x4D414554, &team, &teamCount);
+    DbFindUnusedTeamIds(destination, 0x4D414554, &team, &teamCount);
     TDbTblFindUnusedId(destination, &table);
     TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
     TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
@@ -219,7 +219,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
     }
     if (status != 23) {
         count = result.mUnknown0;
-        fn_80229AA4(destination, 0x59414C50, ids, &count);
+        DbFindUnusedPlayerIds(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
             TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
@@ -281,7 +281,7 @@ int CreateTeamInsertNew()
     DbColumnValue list[17];
     unsigned short count = 1;
     int team;
-    fn_8022C628(0x54415453, 0x4D414554, &team, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
         list[i].Set(0x4D414554, _CreateTeamDb_aTeamTags[i]);
         list[i].mValue = _CreateTeamDb_aDefaultValues[i];
@@ -309,7 +309,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     TDbTblGetCount(0x54415453, 0x52445243, &arg, &total);
     count = total;
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
@@ -475,7 +475,7 @@ void CreateTeamAddPlayer(int team, int player, int useDefault)
     unsigned short count = 1;
     int id;
     TDbTblFindUnusedId(0x54415453, &table);
-    fn_80229AA4(0x54415453, 0x59414C50, &id, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, &id, &count);
     TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", table, player);
     if (useDefault) player = 0x7FF4;
     TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ITGT' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 and 'DIGT' = \x82\n", table, id, player, team, 0, 0, 0, team);
