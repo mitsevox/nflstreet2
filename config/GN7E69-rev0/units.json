@@ -711,10 +711,6 @@
       "address": "0x80273DF8",
       "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
     },
-    "MemCAsyncOpen": {
-      "address": "0x801D4A3C",
-      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
-    },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
       "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
