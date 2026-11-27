@@ -43,7 +43,7 @@ int PlayerMoveTryStartRun(Object_80039F5C *p);
 int fn_8009AD30(Object_80039F5C *p, int value);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void fn_8011168C(Object_80039F5C *p);
 int fn_80110824(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -1302,7 +1302,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
         fn_800F053C(0, p->mpState, &message, p);
         return 0;
     }
-    if (fn_8010A2DC(p, 0, -1)) {
+    if (PlyrTryQueueMsg62(p, 0, -1)) {
         p->mUnknown512.mUnknown15 = pControl->mUnknown52;
         return 0;
     }

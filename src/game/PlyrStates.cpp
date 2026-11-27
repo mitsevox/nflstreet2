@@ -87,7 +87,7 @@ extern "C" {
 Object_80039F5C *BallGetCurrentHolder(void);
 int ScrmGetDefenseTeam(void);
 
-int fn_8010A2DC(Object_80039F5C *, int, short);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 
 int ScrmGetOffenseTeam(void);
 void fn_8011E3EC(Object_80039F5C *, int);
@@ -341,7 +341,7 @@ int PlyrEngageInput(Object_80039F5C *p)
 
 int PlyrStateUpdateDefault(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     return 0;
 }
 
@@ -550,7 +550,7 @@ void fn_8011380C(void);
 void fn_80113AAC(void);
 void fn_80113B28(void);
 void fn_80113C20(void);
-void fn_80113E74(void);
+void PlyrHitImpactUpdate(void);
 void fn_801147D4(void);
 void fn_80114838(void);
 void fn_80116B98(void);
@@ -599,7 +599,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)HuddleMoveEnter, (void *)fn_800F0900, (void *)HuddleMoveUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)HuddleMoveAltEnter, (void *)fn_800F0900, (void *)HuddleMoveAltUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)fn_80101CB4, (void *)fn_80102470, (void *)fn_801021C0, (void *)fn_80102664, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80113C20, (void *)fn_801147D4, (void *)fn_80113E74, (void *)fn_80114838, (void *)fn_800F0908, 0}},
+    {{(void *)fn_80113C20, (void *)fn_801147D4, (void *)PlyrHitImpactUpdate, (void *)fn_80114838, (void *)fn_800F0908, 0}},
     {{(void *)fn_80113680, (void *)fn_80113AAC, (void *)fn_8011380C, (void *)fn_80113B28, (void *)fn_800F0908, 0}},
     {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},

@@ -25,7 +25,7 @@ struct DirectedRunState_t {
 extern "C" {
 int fn_800ABDA4(int team);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
@@ -94,7 +94,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
     if (fn_8009FB60(p)) {
         return 1;
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (fn_800A5C04(p, state->mUnknown12, state->mUnknown12) || (p->mFlags & 0x4000)) {
         return 0;
     }

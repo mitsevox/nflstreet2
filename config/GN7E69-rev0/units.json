@@ -14680,13 +14680,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800F6C90",
-          "end": "0x800F6E30"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F70D0",
-          "end": "0x800F722C"
+          "end": "0x800F7314"
         },
         {
           "section": ".text",
@@ -14698,12 +14692,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800F88E4",
-          "end": "0x800F8D2C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F9024",
           "end": "0x800FA098"
         },
         {
@@ -14800,12 +14788,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80109F34",
-          "end": "0x8010A2DC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8010A4E8",
           "end": "0x8010BED4"
         },
         {
@@ -14835,7 +14817,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801147D4",
+          "start": "0x80113E74",
           "end": "0x80114EE4"
         },
         {
@@ -14866,12 +14848,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8011E7CC",
-          "end": "0x80120384"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8012055C",
           "end": "0x80121918"
         },
         {
@@ -14966,14 +14942,6 @@
             "evidence": "evidence.tsv source-form 0x800F6B2C-0x800F6C90"
           },
           {
-            "function": "fn_800F6E30",
-            "evidence": "evidence.tsv source-form 0x800F6E30-0x800F70D0"
-          },
-          {
-            "function": "fn_800F722C",
-            "evidence": "evidence.tsv source-form 0x800F722C-0x800F7314"
-          },
-          {
             "function": "fn_800F7314",
             "evidence": "evidence.tsv source-form 0x800F7314-0x800F7798"
           },
@@ -14984,10 +14952,6 @@
           {
             "function": "fn_800F8828",
             "evidence": "evidence.tsv source-form 0x800F8828-0x800F88E4"
-          },
-          {
-            "function": "fn_800F8D2C",
-            "evidence": "evidence.tsv source-form 0x800F8D2C-0x800F9024"
           },
           {
             "function": "fn_800FA098",
@@ -15062,10 +15026,6 @@
             "evidence": "evidence.tsv source-form 0x80109E48-0x80109F34"
           },
           {
-            "function": "fn_8010A2DC",
-            "evidence": "evidence.tsv source-form 0x8010A2DC-0x8010A4E8"
-          },
-          {
             "function": "fn_8010BED4",
             "evidence": "evidence.tsv source-form 0x8010BED4-0x8010BF5C"
           },
@@ -15084,10 +15044,6 @@
           {
             "function": "fn_80113C20",
             "evidence": "evidence.tsv source-form 0x80113C20-0x80113E74"
-          },
-          {
-            "function": "fn_80113E74",
-            "evidence": "evidence.tsv source-form 0x80113E74-0x801147D4"
           },
           {
             "function": "fn_80114EE4",
@@ -15118,10 +15074,6 @@
             "evidence": "evidence.tsv source-form 0x8011E484-0x8011E7CC"
           },
           {
-            "function": "fn_80120384",
-            "evidence": "evidence.tsv source-form 0x80120384-0x8012055C"
-          },
-          {
             "function": "fn_80121918",
             "evidence": "evidence.tsv source-form 0x80121918-0x80121BE8"
           },
@@ -15138,7 +15090,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 50 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 44 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

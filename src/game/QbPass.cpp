@@ -66,7 +66,7 @@ void CamGameSetModeAll(int);
 void PassIconObjSetEnabled(int);
 void fn_800B8344(Object_80039F5C *);
 
-int fn_8010A2DC(Object_80039F5C *, int, short);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
 int MathAngleDiff(int, int);
 unsigned char QbPassRateReceiver(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
@@ -364,7 +364,7 @@ int QbPassUpdate(Object_80039F5C *player) {
     }
     if (_QbPass_bDroppedBack)
         QbPassCheckSpeech(player);
-    fn_8010A2DC(player, 0, -1);
+    PlyrTryQueueMsg62(player, 0, -1);
     FieldPoint_t point;
     point = ScrmGetBallSpot();
     QbPassUpdateReceiverOptions(player, state);

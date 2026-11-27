@@ -34,7 +34,7 @@
 extern "C" {
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int ScrmGetDefenseTeam(void);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -390,7 +390,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
     GetOpenState_t *state = (GetOpenState_t *)&p->mUnknown336;
     p->mFlags |= 0x80000000;
     BallGetCurrent();
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
         if (--state->mUnknown28 < 0) {
             state->mUnknown28 = (int)((float)(int)((1.0f - (float)p->mRatings[3] * (1.0f / 255.0f)) * 5.0f) + 2.0f);

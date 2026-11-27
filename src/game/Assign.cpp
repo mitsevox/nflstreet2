@@ -1286,7 +1286,7 @@ extern "C" {
 extern float lbl_803EAE48;
 }
 
-/* View of the block at player +336 used by fn_800F8D2C and fn_800F9024. */
+/* View of the block at player +336 used by AssignBlockApproachUpdate and fn_800F9024. */
 struct Block_800F8D2C {
     int mRef;
     int mUnknown4;
@@ -2557,7 +2557,7 @@ struct State_80113C20 {
     unsigned char mUnknown68;
 };
 
-/* The bytes at player +336 as fn_80113E74 updates them; +32 is the block
+/* The bytes at player +336 as PlyrHitImpactUpdate updates them; +32 is the block
    passed to PlayerActionAnimPitchUpdate and PlayerActionAnimAiConsiderPitch. */
 struct State_80113E74 {
     int mRef;
@@ -2583,7 +2583,7 @@ struct State_80113E74 {
     unsigned char mUnknown68;
 };
 
-/* The bytes at +336 of the player that fn_80113E74's reference names. */
+/* The bytes at +336 of the player that PlyrHitImpactUpdate's reference names. */
 struct Other_80113E74 {
     char mUnknown0[4];
     unsigned int mUnknown4;
@@ -3488,9 +3488,9 @@ extern "C" void fn_800F6AD8(float *p);
 extern "C" void fn_800F6B2C(Object_80039F5C *p, Vector_80039F5C *pDelta);
 extern "C" void fn_800F6C90(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
 extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
+extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
 extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut);
-extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
+extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut);
 extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
 extern "C" void fn_800F7B64(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C *pOut);
@@ -3498,7 +3498,7 @@ extern "C" void fn_800F7F68(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
 extern "C" void fn_800F8588(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" void fn_800F8A88(Object_80039F5C *p, Object_80039F5C *pOther);
 extern "C" int fn_800F8D24(Object_80039F5C *p);
-extern "C" int fn_800F8D2C(Object_80039F5C *p);
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p);
 extern "C" int fn_800F9024(Object_80039F5C *p);
 extern "C" int fn_800F930C(Object_80039F5C *p);
 extern "C" Object_80039F5C *fn_800F9480(Object_80039F5C *p);
@@ -3602,7 +3602,7 @@ extern "C" int fn_80109E48(Object_80039F5C *p, int kind, int *pOut);
 extern "C" int fn_80109F34(Object_80039F5C *p);
 extern "C" int fn_8010A07C(Object_80039F5C *p);
 extern "C" int fn_8010A0A0(Object_80039F5C *p, int index);
-extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+extern "C" int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 extern "C" void fn_8010AECC(Object_80039F5C *p, unsigned char a, unsigned char b, unsigned char c);
 extern "C" void fn_8010B1FC(Object_80039F5C *p, int a, short b);
 extern "C" int fn_8010B224(Object_80039F5C *p);
@@ -3722,7 +3722,7 @@ extern "C" int fn_8011FB80(void *pA, void *pB);
 extern "C" void fn_8011FCA4(void);
 extern "C" int fn_8011FD64(unsigned short index);
 extern "C" void fn_8011FE0C(void);
-extern "C" void fn_80120384(void);
+extern "C" void AssignFlagsByBallHeading(void);
 extern "C" int fn_80120794(Vector_80039F5C *pA, Vector_80039F5C *pB, Vector_80039F5C *pDir, float speed, float dist, int, float range);
 extern "C" int PursuitGetInterceptAngle(Vector_80039F5C *pA, Vector_80039F5C *pB, float speed, Vector_80039F5C *pDir);
 extern "C" int fn_80120A50(FieldPoint_t *p, FieldPoint_t *pA, FieldPoint_t *pB, FieldPoint_t *pC);
@@ -3791,7 +3791,7 @@ Input_800B6D34 lbl_802DAAD0 = {0};
 }
 
 static int (*lbl_802DAB38[4])(Object_80039F5C *p) = {
-    fn_800F8D24, fn_800F8D2C, fn_800F9024, fn_800F930C,
+    fn_800F8D24, AssignBlockApproachUpdate, fn_800F9024, fn_800F930C,
 };
 
 extern "C" {
@@ -6580,7 +6580,7 @@ extern "C" int fn_800F6370(Object_80039F5C *p) {
         fn_800F053C(0, p->mpState, &message, p);
         result = 1;
     } else {
-        fn_8010A2DC(p, 0, -1);
+        PlyrTryQueueMsg62(p, 0, -1);
         fn_800F60BC(p);
         if (!(p->mFlags & 0x4000)) {
             if (fn_800F5208(p, pRecord)) {
@@ -6845,18 +6845,20 @@ extern "C" void fn_800F6D40(Object_80039F5C *p, Object_80039F5C *pOther, FieldPo
     }
 }
 
-extern "C" void fn_800F6E30(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
+extern "C" void AssignSteerLateralToTarget(Object_80039F5C *p, Object_80039F5C *pOther, FieldPoint_t *pTarget, Vector_80039F5C *pOut) {
     if (p && pOther && pOut) {
         FieldPoint_t origin = ScrmGetBallSpot();
         Vector_80039F5C ball;
         FieldPoint_t delta;
         int side;
         int flag;
+        // FAKEMATCH: a zero held in a local makes the then-arm an EQ compare against a non-constant operand, so expand emits beq <true>; b <false> as the target does (see evidence.tsv).
+        int zero = 0;
 
         BallGetPosition(BallGetCurrent(), &ball);
         Vec2Sub(&delta, pTarget, &p->mMotion.mPos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
-        if (pTarget->mX > ball.mX ? side == 0 : side != 0) {
+        if (pTarget->mX > ball.mX ? side == zero : side != 0) {
             flag = 1;
         } else {
             flag = 0;
@@ -6925,16 +6927,19 @@ extern "C" void fn_800F70D0(Object_80039F5C *p, Object_80039F5C *pOther, FieldPo
     }
 }
 
-extern "C" void fn_800F722C(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut) {
+extern "C" void AssignSteerLateralByGap(Object_80039F5C *p, Object_80039F5C *pOther, float *pX, float *pOut) {
     if (p && pOther && pOut) {
         Vector_80039F5C pos;
         int side;
         int flag;
         float distance;
 
+        // FAKEMATCH: a zero held in a local makes the then-arm an EQ compare against a non-constant operand, so expand emits beq <true>; b <false> as the target does (see evidence.tsv).
+        int zero = 0;
+
         BallGetPosition(BallGetCurrent(), &pos);
         side = (p->mpState->mUnknown2 ^ 1) & 1;
-        if (*pX > pos.mX ? side == 0 : side != 0) {
+        if (*pX > pos.mX ? side == zero : side != 0) {
             flag = 1;
         } else {
             flag = 0;
@@ -6973,7 +6978,7 @@ extern "C" void fn_800F7314(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F6D40(p, pOther, &spot, pOut);
-        fn_800F6E30(p, pOther, &spot, pOut);
+        AssignSteerLateralToTarget(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
@@ -7065,7 +7070,7 @@ extern "C" void fn_800F7798(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, &p->mMotion.mPos);
         fn_800F70D0(p, pOther, &spot, pOut);
-        fn_800F722C(p, pOther, &spot.mX, &pOut->mX);
+        AssignSteerLateralByGap(p, pOther, &spot.mX, &pOut->mX);
         fn_800F6B2C(p, pOut);
         heading = MathArcTan2(pOut->mY, pOut->mX);
         direction = heading & 0xFFFFFF;
@@ -7274,7 +7279,7 @@ extern "C" void fn_800F81C0(Object_80039F5C *p, Object_80039F5C *pOther, Vector_
         fn_8009F928(pOther, &spot, 5, pBlock->mUnknown21);
         Vec2Sub(&toSpot, &spot, pPos);
         fn_800F6C90(p, pOther, &spot, pOut);
-        fn_800F6E30(p, pOther, &spot, pOut);
+        AssignSteerLateralToTarget(p, pOther, &spot, pOut);
         fn_800F6B2C(p, pOut);
         direction = MathArcTan2(pOut->mY, pOut->mX) & 0xFFFFFF;
         if (pOther->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.14f) {
@@ -7507,7 +7512,7 @@ extern "C" int fn_800F8D24(Object_80039F5C *p) {
     return 0;
 }
 
-extern "C" int fn_800F8D2C(Object_80039F5C *p) {
+extern "C" int AssignBlockApproachUpdate(Object_80039F5C *p) {
     Block_800F8D2C *pBlock = (Block_800F8D2C *)&p->mUnknown336;
     Object_80039F5C *pOther = fn_8009BCE8(&pBlock->mRef);
 
@@ -7561,24 +7566,47 @@ extern "C" int fn_800F8D2C(Object_80039F5C *p) {
                 if (pBlock->mUnknown16 > 60) {
                     return 0;
                 }
-            } else if (side == 1 ? angle < 0x400000 : angle > 0x400000) {
-                if (pBlock->mUnknown16 > 30) {
-                    return 0;
-                }
-            } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
-                if (fabsf(delta.mX) < 2.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (pBlock->mUnknown16 > 45) {
-                    return 0;
+            } else if (side == 1) {
+                if (angle < 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             } else {
-                if (fabsf(delta.mX) < 1.0f) {
-                    pBlock->mUnknown12 = 0.0f;
-                }
-                if (delta.mY > -5.0f) {
-                    pBlock->mUnknown22 = 2;
-                    return 1;
+                if (angle > 0x400000) {
+                    if (pBlock->mUnknown16 > 30) {
+                        return 0;
+                    }
+                } else if (MathAngleDiff(angle, 0x400000) > 0x11C71B) {
+                    if (fabsf(delta.mX) < 2.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (pBlock->mUnknown16 > 45) {
+                        return 0;
+                    }
+                } else {
+                    if (fabsf(delta.mX) < 1.0f) {
+                        pBlock->mUnknown12 = 0.0f;
+                    }
+                    if (delta.mY > -5.0f) {
+                        pBlock->mUnknown22 = 2;
+                        return 1;
+                    }
                 }
             }
         } else {
@@ -8185,7 +8213,7 @@ extern "C" int fn_800FA300(Object_80039F5C *p)
     Message_800F01CC message;
     int active = 0;
 
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pBlock = (Block_800FA300 *)&p->mUnknown336;
     if (--pBlock->mUnknown20 & 0x80) {
         int range = 255 - p->mRatings[8];
@@ -9516,7 +9544,7 @@ extern "C" int fn_800FD41C(Object_80039F5C *p) {
     Vector_80039F5C *pPos;
     int result;
 
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pBlock = (Block_800FD650 *)&p->mUnknown336;
     pPos = &p->mMotion.mPos;
     result = 0;
@@ -10491,7 +10519,7 @@ extern "C" int fn_800FF7A8(Object_80039F5C *p)
 extern "C" {
 int fn_800FF7F4(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (p->mUnknown560.mUnknown53 != 0) {
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
@@ -10678,7 +10706,7 @@ extern "C" int fn_800FFE30(Object_80039F5C *p)
     Message_800F01CC message;
     FieldPoint_t point;
 
-    if (fn_8010A2DC(p, 0, -1) != 0) {
+    if (PlyrTryQueueMsg62(p, 0, -1) != 0) {
         pState->mUnknown0 = 1;
     }
     if (*PlyrGetPendingMsg(p) == 57 && p->mUnknown3040 > 30) {
@@ -14673,7 +14701,7 @@ extern "C" int fn_8010A254(Object_80039F5C *p, int kind) {
     return result;
 }
 
-extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
+extern "C" int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b) {
     int result = 0;
     int mode = fn_800AD9B4();
 
@@ -14693,11 +14721,19 @@ extern "C" int fn_8010A2DC(Object_80039F5C *p, int a, short b) {
                 message.mId = 62;
                 BallGetPosition(BallGetCurrent(), &toBall);
                 Vec3Sub(&toBall, &toBall, &p->mMotion.mPos);
+                // FAKEMATCH: the three nested tests each repeat else b = 0; jump2 merges them into the target's single li r30,0, and the extra references only raise the delay pseudo's global-alloc priority (see evidence.tsv).
                 if (b == -1) {
-                    if (fabsf(p->mMotion.mPos.mY) < ScrmGetGoalLineY() - 3.0f &&
-                        fabsf(p->mMotion.mPos.mX) < ScrmGetSidelineX() - 5.0f && !(p->mFlags & 0x400)) {
-                        b = (short)Vec2Magnitude(&toBall);
-                        b += SyncRandGetRange(0, 100);
+                    if (fabsf(p->mMotion.mPos.mY) < ScrmGetGoalLineY() - 3.0f) {
+                        if (fabsf(p->mMotion.mPos.mX) < ScrmGetSidelineX() - 5.0f) {
+                            if (!(p->mFlags & 0x400)) {
+                                b = (short)Vec2Magnitude(&toBall);
+                                b += SyncRandGetRange(0, 100);
+                            } else {
+                                b = 0;
+                            }
+                        } else {
+                            b = 0;
+                        }
                     } else {
                         b = 0;
                     }
@@ -14993,7 +15029,7 @@ extern "C" int fn_8010AFB8(Object_80039F5C *p) {
     Block_8010AFB8 *pBlock = (Block_8010AFB8 *)&p->mUnknown336;
     int team;
 
-    fn_8010A2DC(p, 0, 5);
+    PlyrTryQueueMsg62(p, 0, 5);
     if (!(p->mFlags & 0x40000) && fn_801BE648(p->mpUnknown792) != 0x5B) {
         if (p->mFlags & 4) {
             p->mFlags |= 0x40000;
@@ -15496,7 +15532,7 @@ extern "C" int fn_8010BF5C(Object_80039F5C *p)
 
     ball = ScrmGetBallSpot();
     PlayTrackGetResult5Rate();
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pState->mUnknown52++;
     pCarrier = BallGetCurrentHolder();
     BallGetPosition(BallGetCurrent(), &ballPos);
@@ -15960,7 +15996,7 @@ extern "C" int fn_8010D090(Object_80039F5C *p) {
 
     fn_800B8344(p);
     pCarrier = BallGetCurrentHolder();
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     if (*PlyrGetPendingMsg(p) == 0x39) {
         p->mUnknown3040 = 0;
     }
@@ -16763,7 +16799,7 @@ extern "C" int fn_8010F43C(Object_80039F5C *p)
         pState->mUnknown20 = 1;
     }
     pState->mUnknown21 = 0;
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     if (!(p->mFlags & 0x4000)) {
         if (!ScrmUsesBothTeams() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
             pState->mUnknown12 = SyncRandGetRange(0, 45) + 45;
@@ -16850,7 +16886,7 @@ extern "C" int PlyrTrackTargetUpdate(Object_80039F5C *p)
             message.mId = 31;
             fn_800F053C(0, p->mpState, &message, p);
         } else {
-            fn_8010A2DC(p, 0, -1);
+            PlyrTryQueueMsg62(p, 0, -1);
             if (ScrmIsNotReplay()) {
                 if ((pBlock->mUnknown0 != 4 && pBlock->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
                     fn_8011E3EC(p, 0);
@@ -18683,7 +18719,7 @@ extern "C" int fn_80113604(Object_80039F5C *p)
         return 1;
     }
     if (pState->mUnknown3[0] != 0) {
-        fn_8010A2DC(p, 0, -1);
+        PlyrTryQueueMsg62(p, 0, -1);
     }
     return 0;
 }
@@ -18915,7 +18951,7 @@ extern "C" int fn_80113C20(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" int fn_80113E74(Object_80039F5C *p)
+extern "C" int PlyrHitImpactUpdate(Object_80039F5C *p)
 {
     int result = 0;
     State_80113E74 *state = (State_80113E74 *)&p->mUnknown336;
@@ -18927,7 +18963,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     Vector_80039F5C hand;
     FieldPoint_t aim;
     Ball_t *pBall;
-    int allowed;
+    unsigned char allowed;
     float speed;
 
     if (pOther != 0) {
@@ -19003,6 +19039,7 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                     if (pRecord->mUnknownB == 1) {
                         int angle;
                         float scale;
+                        float ratio;
                         Object_80039F5C *pTarget;
 
                         aim.mX = 0.2f;
@@ -19011,11 +19048,11 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                         angle = aim.Heading();
                         pRecord->mUnknown10 = angle + SyncRandGetRange(0, 0xE38E3);
                         pRecord->mUnknown8 = (pRecord->mUnknown8 - 5) / 3 + 5;
-                        pRecord->mUnknownC = state->mUnknown4 / (gPlyrMoveFwdSpeed * 100621.12f);
-                        if (pRecord->mUnknownC == 0.0f) {
-                            float spread = pRecord->mUnknown10 / 4194304.0f;
-
-                            pRecord->mUnknownC = spread * 0.5f + 0.5f;
+                        ratio = state->mUnknown4 / (gPlyrMoveFwdSpeed * 100621.12f);
+                        pRecord->mUnknownC = ratio;
+                        if (ratio == 0.0f) {
+                            ratio = pRecord->mUnknown10 / 4194304.0f;
+                            pRecord->mUnknownC = ratio * 0.5f + 0.5f;
                         }
                         scale = pRecord->mUnknownC / 3.0f;
                         pRecord->mUnknown0 -= pRecord->mUnknown0 * scale;
@@ -19086,15 +19123,18 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
                 fn_801BE648(p->mpUnknown792) != 238) {
                 PossTryFumble(p, pOther);
             }
+            state->mUnknown26--;
+        } else {
+            state->mUnknown26--;
         }
-        state->mUnknown26--;
         if (state->mUnknown26 < 0) {
             fn_800CE674(pAnim);
         }
     }
     if (state->mUnknown59 == 0 && pOtherState != 0 && state->mUnknown20 != 0xFF && pOtherState->mUnknown4 != 0xFF) {
-        speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
-        AudmonEventPostId(37, &p->mMotion.mPos, p->mId, (unsigned int)speed, state->mUnknown20, pOtherState->mUnknown4);
+        AudmonEventPostId(37, &p->mMotion.mPos, p->mId,
+                          (unsigned int)(pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8),
+                          state->mUnknown20, pOtherState->mUnknown4);
         state->mUnknown59 = 1;
         fn_800A3B58(p, 1, 1);
         speed = pOtherState->mUnknown8 < state->mUnknown4 ? state->mUnknown4 : pOtherState->mUnknown8;
@@ -19104,9 +19144,10 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
     }
     if (ScrmIsNotReplay() != 0 && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
         p->mFlags &= ~0x1000;
-        pBall = BallFindHeldBy(p);
-        if (pBall != 0) {
-            BallReleaseStill(pBall, 5, 0);
+        Ball_t *pHeld = BallFindHeldBy(p);
+
+        if (pHeld != 0) {
+            BallReleaseStill(pHeld, 5, 0);
         }
     }
     if (p->mUnknown9[0] != 1) {
@@ -19126,13 +19167,13 @@ extern "C" int fn_80113E74(Object_80039F5C *p)
         }
     }
     if ((p->mFlags & 4) && state->mUnknown56 != 1 && state->mUnknown56 != 4) {
-        result = 1;
         p->mFlags &= ~0x0409280C;
         PlyrCollideRemoveExempt(p, fn_8009BCE8(&state->mRef));
         p->mUnknown512.mUnknown14 = 1;
         p->mUnknown512.mUnknown4 = p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
         StyleTrackerFinishHurdle(p);
+        result = 1;
     }
     return result;
 }
@@ -20188,7 +20229,7 @@ int fn_80116B98(Object_80039F5C *p)
 extern "C" {
 int fn_80116C34(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
     int update = 0;
     state->mUnknown0++;
@@ -20727,7 +20768,7 @@ extern "C" int fn_801182C8(Object_80039F5C *p)
     int update = 0;
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
     State_80116C34 *state = (State_80116C34 *)&p->mUnknown336;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     state->mUnknown0++;
     state->mUnknown2 = (signed char)(state->mUnknown2 - 1);
     if (state->mUnknown2 < 0) {
@@ -24261,7 +24302,7 @@ void fn_8011FE0C(void)
 }
 
 extern "C" {
-void fn_80120384(void)
+void AssignFlagsByBallHeading(void)
 {
     short i;
     int count;
@@ -24296,7 +24337,11 @@ void fn_80120384(void)
         lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
     }
     for (i = 0; i < count; i++) {
-        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f || lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
+        // FAKEMATCH: the two range tests are separate arms that each clear the entry (jump2 merges the
+        // identical stores); the || form gives count r30 and &delta r29. See the evidence.tsv FAKEMATCH row.
+        if (lbl_803EB09C->mpUnknown8[i].mUnknown0 < 2.5f) {
+            lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
+        } else if (lbl_803EB09C->mpUnknown8[i].mUnknown0 > 100.0f) {
             lbl_803EB09C->mpUnknown12[lbl_803EB09C->mpUnknown8[i].mUnknown4] = 0;
         }
     }
@@ -24365,7 +24410,7 @@ void fn_80120720(int value)
             fn_8011FE0C();
             break;
         case 3:
-            fn_80120384();
+            AssignFlagsByBallHeading();
             break;
         }
     }

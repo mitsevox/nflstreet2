@@ -45,7 +45,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerActionAiConsiderDive(Object_80039F5C *p);
 int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80110C10(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
 void fn_80111354(Object_80039F5C *p);
@@ -1270,7 +1270,7 @@ extern "C" int PursueEnter(Object_80039F5C *p)
     pState->mUnknown40 = 0;
     pState->mUnknown42 = p->mpState->mUnknown1;
     fn_8009A8D4(pState->mUnknown20);
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     return 0;
 }
 
@@ -1301,7 +1301,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     if (fn_8009FB60(p) != 0) {
         return 1;
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pOther = PursueGetTarget();
     pBall = BallGetCurrent();
     if (pOther != 0) {

@@ -159,7 +159,7 @@ int fn_8011E9D8(State_80039F5C *pState);
 }
 
 extern "C" {
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 }
 
 extern "C" {
@@ -909,7 +909,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
             p->mUnknown512.mUnknown0 = 0.0f;
         }
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
         if (pState->mUnknown36) {
             if (pRecord && pRecord->mUnknown16[p->mIdBytes[1]] == 255) {
@@ -3062,7 +3062,7 @@ extern "C" int CarrierMomentumExit(Object_80039F5C *p) {
 
 extern "C" int CarrierMomentumUpdate(Object_80039F5C *p) {
     int result;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     State_800E9E18 *state = (State_800E9E18 *)&p->mUnknown336;
     PlayerActionAnimTossUpdate(state->mUnknown20, p);
     PlayerActionAnimPitchUpdate(state->mUnknown20, p);
