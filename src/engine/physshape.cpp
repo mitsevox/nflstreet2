@@ -1263,9 +1263,9 @@ void SphereShape::Draw(const float pMatrix[4][4], int red, int green, int blue)
     Vec3_801DE1E0 a;
     Vec3_801DE1E0 b;
     float step = 0.31415927f;
-    float angle = step;
     float prevSin = MathSinf(0.0f) * mRadius;
     float prevCos = MathCosf(0.0f) * mRadius;
+    float angle = step;
     float end = angle + 6.2831855f;
 
     do {

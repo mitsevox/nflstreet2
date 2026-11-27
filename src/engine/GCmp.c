@@ -31,7 +31,6 @@ static unsigned char _GCmpModuleActive = 0;
 static int _GCmpNumTypes = 0;
 static GCmpCodec_t **_GCmpTypes;
 static char _GCmp_szLabel[32] = "GCMP.LIB";
-extern GCmpCodec_t lbl_80301940;
 extern GCmpCodec_t lbl_80301968;
 
 int GCmpInit(int count)
@@ -45,7 +44,7 @@ int GCmpInit(int count)
         GCmpRegisterType(0, &GCmpTypeNONE);
         GCmpRegisterType(1, &GCmpTypeRLE);
         GCmpRegisterType(2, &GCmpTypeHuffman);
-        GCmpRegisterType(3, &lbl_80301940);
+        GCmpRegisterType(3, &GCmpTypeLZM);
         GCmpRegisterType(5, &lbl_80301968);
         _GCmpTypes[4] = 0;
         for (i = 0; i <= 5 && err == 0; i++) {

@@ -24473,6 +24473,12 @@
           "end": "0x802821E8"
         },
         {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80301940",
+          "end": "0x80301968"
+        },
+        {
           "section": ".sdata",
           "placement": ".data5",
           "start": "0x803EC578",

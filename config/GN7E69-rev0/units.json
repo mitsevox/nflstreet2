@@ -22754,14 +22754,44 @@
     },
     {
       "source": "src/engine/lzm.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional whole-file lzm.c envelope, exact first-eleven-function prefix and six native bit-stream state objects. Later full bodies stay behind DECOMP_COMPARE and keep their original executable providers; no file closure.",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/lzm.c and its function, name and source-form rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the four holdouts, whose ranges keep the original bytes and stay registered partials in comparisons.json; every data section the file compiles is linked whole (.sdata 0x803EC578, .sbss 0x803ED414, .data 0x80301940 GCmpTypeLZM).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802805C4",
           "end": "0x8028113C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8028156C",
+          "end": "0x80281590"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80281938",
+          "end": "0x80281940"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80281C68",
+          "end": "0x80281C74"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802821E4",
+          "end": "0x802821E8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x80301940",
+          "end": "0x80301968"
         },
         {
           "section": ".sdata",
@@ -22775,7 +22805,28 @@
           "start": "0x803ED414",
           "end": "0x803ED420"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "sFlushBuffer",
+            "evidence": "evidence.tsv source-form 0x8028113C-0x8028156C"
+          },
+          {
+            "function": "sFlushMatch",
+            "evidence": "evidence.tsv source-form 0x80281590-0x80281938"
+          },
+          {
+            "function": "_LZMCoProcess",
+            "evidence": "evidence.tsv source-form 0x80281940-0x80281C68"
+          },
+          {
+            "function": "_LZMDecProcess",
+            "evidence": "evidence.tsv source-form 0x80281C74-0x802821E4"
+          }
+        ],
+        "evidence": "merge notes of the wave p1 lane p1g pull request: src/engine/lzm.c holds out sFlushBuffer, sFlushMatch, _LZMCoProcess, _LZMDecProcess."
+      }
     },
     {
       "source": "src/engine/MemExtern.c",
@@ -23153,12 +23204,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801E4D40",
-          "end": "0x801E6724"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E69D0",
           "end": "0x801E7034"
         },
         {
@@ -23183,13 +23228,9 @@
           {
             "function": "0x801E47B8",
             "evidence": "evidence.tsv source-form 0x801E47B8-0x801E4D40"
-          },
-          {
-            "function": "0x801E6724",
-            "evidence": "evidence.tsv source-form 0x801E6724-0x801E69D0"
           }
         ],
-        "evidence": "w1a merge notes (swarm w1 tracking table): src/engine/physshape.cpp holds out SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw."
+        "evidence": "w1a merge notes (swarm w1 tracking table), updated by the merge notes of the wave p1 lane p1g pull request (SphereShape::Draw now exact): src/engine/physshape.cpp holds out SphereShape::TestPoint and BoxShape::SegmentHits."
       }
     },
     {
