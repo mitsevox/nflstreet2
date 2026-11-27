@@ -991,10 +991,6 @@
       "address": "0x803EADE8",
       "evidence": "evidence.tsv data and name rows for 0x803EADE8 (original .sdata used by the TurnToPlayPickDirection holdout; storage is unclaimed)."
     },
-    "gPlayerPositionAbbrevs": {
-      "address": "0x802EA294",
-      "evidence": "evidence.tsv data and name rows for 0x802EA294 (26 position-name pointers in the .data of a file that is not yet a unit, used here only by the discarded GameTextShowRosterFill of src/game/GameText.cpp; storage not claimed by any unit)."
-    },
     "_TDbIOReadTableNew": {
       "address": "0x801FB0F8",
       "evidence": "evidence.tsv function/name rows at0x801FB0F8; complete measured comparison in its original file; original target code remains linked."
@@ -14226,14 +14222,77 @@
       ]
     },
     {
-      "source": "src/game/UISGroup2Msg.cpp",
+      "source": "src/game/PlayerDbText.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8017F670-0x8017F718 (src/game/UISGroup2Msg.cpp) and its source-form rows.",
+      "evidence": "evidence.tsv unit row 0x8017F670-0x8017F6A8 (src/game/PlayerDbText.cpp), its data rows and the linker row 0x802A58A4-0x802A5DEC.",
+      "link_roots": {
+        "symbols": [
+          "PositionAbbrevFormat"
+        ],
+        "discarded": [
+          "PlayerDbTextIsJerseyFree",
+          "PlayerDbTextFitText",
+          "PlayerDbTextGetDefaultPlayStyle",
+          "PlayerDbTextFormatPlayStyle",
+          "PlayerDbTextGetPosition",
+          "PlayerDbTextReadField",
+          "PlayerDbTextFormatField",
+          "PlayerDbTextGetJersey",
+          "PlayerDbTextGetPlayStyle",
+          "PlayerDbTextFindFreeJersey",
+          "PlayerDbTextSetTexts"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A58A4-0x802A5DEC: the target keeps PositionAbbrevFormat only; the listed functions have no code in the target while their strings remain in this file's .rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8017F670",
+          "end": "0x8017F6A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A58A4",
+          "end": "0x802A5DEC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802E9C28",
+          "end": "0x802EA490"
+        }
+      ]
+    },
+    {
+      "source": "src/game/PlayerStatText.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x802EA490-0x802EA934 (src/game/PlayerStatText.cpp) and its data and name rows: the code-less file of the player-statistic tables gPlayerStatColumns, gPlayerStatNames and gPlayerStatHeaders and their strings.",
+      "sections": [
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A5DEC",
+          "end": "0x802A6400"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EA490",
+          "end": "0x802EA934"
+        }
+      ]
+    },
+    {
+      "source": "src/game/UISGroup2Msg.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x8017F6A8-0x8017F718 (src/game/UISGroup2Msg.cpp) and its source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8017F6A8",
           "end": "0x8017F718"
         }
       ]
