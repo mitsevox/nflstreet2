@@ -1,4 +1,8 @@
-/* Partial source for several game-database modules (player, roster and team tables) not yet cut into their files. */
+/* The 'MTTS' table of the game database (one row per team slot: slot 'UNLS', team 'DIGT' and
+   the slot's team details) and the module that keeps the per-player and per-team column sets:
+   it fills and updates the 'MTTS' rows, walks them against the 'MAET' teams, reads and writes
+   one column of a 'DIGP' or 'DIGT' row by its column code, and runs the game start and resume
+   hooks of the module. Partial source; not yet linked. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
@@ -23,7 +27,14 @@ struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
-extern float lbl_803A20A4[][13];
+typedef struct Record_802297D8 {
+    float mUnknown0;
+    float mUnknown4;
+    float aUnknown8[10];
+    float mUnknown30;
+} Record_802297D8;
+
+extern Record_802297D8 lbl_803A20A4[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
@@ -41,7 +52,7 @@ extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
-extern int fn_802297D8(void *p, int tag);
+extern int DbYalpLoadWeightTable(void *p, int tag);
 extern int DbThcdSetLineup(int a, int *p, int c);
 int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
@@ -56,7 +67,7 @@ extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
-int fn_8022C0E0(struct QueryCursor cursor, int a);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
@@ -162,26 +173,12 @@ extern char lbl_802B5120[];
 extern char lbl_802B519C[];
 extern char lbl_802B51BC[];
 extern int lbl_802FA600[];
-typedef struct Entry_803A2390 {
+typedef struct DbSrptRow_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     unsigned short mUnknown4;
     unsigned short mUnknown6;
-} Entry_803A2390;
-
-typedef struct Record_8022A304 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC;
-    unsigned char mUnknownD;
-    unsigned char mUnknownE;
-    char mUnknownF[1];
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    unsigned short mUnknown14;
-    char mUnknown16[2];
-} Record_8022A304;
+} DbSrptRow_t;
 
 /* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
@@ -191,21 +188,17 @@ static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
     pCol->mUnk0 = 0;
 }
 
-extern Record_8022A304 lbl_802FA180[21];
-extern Record_8022A304 lbl_802FA378[17];
-extern Record_8022A304 lbl_802FA510[10];
-
 typedef struct Callbacks_8022B02C {
     int (*mpUnknown0)(int a, int b, int c, int d);
     int (*mpUnknown4)(int a, int b, int c, int d);
 } Callbacks_8022B02C;
 
-typedef struct Callbacks_8022C214 {
+typedef struct DbSrptCallbacks_t {
     int (*mpUnknown0)(int a, int b, int c, int d);
     int (*mpUnknown4)(int a, int b, int c, int d);
-} Callbacks_8022C214;
+} DbSrptCallbacks_t;
 
-extern Entry_803A2390 lbl_803A2390[];
+extern DbSrptRow_t _DbSrpt_aRows[];
 extern int (*_DbNiom_pEndFunc)(void);
 extern void *_DbNiom_pLoadFunc;
 extern void *_DbNiom_pResetFunc;
@@ -235,9 +228,9 @@ extern unsigned char lbl_803ED01C[1];
 extern int fn_802311C8(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
 extern int (*lbl_803EC02C)(int a, int b, int c, int d);
-extern unsigned char lbl_803EC030;
-extern int (*lbl_803EC034)(int a, int b, int c, int d);
-extern int (*lbl_803EC038)(int a, int b, int c, int d);
+extern unsigned char _DbSrpt_bHasTable;
+extern int (*_DbSrpt_pBeginGameFunc)(int a, int b, int c, int d);
+extern int (*_DbSrpt_pResumeGameFunc)(int a, int b, int c, int d);
 
 int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
@@ -442,16 +435,16 @@ void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
 int DbNiomModeResume(void);
-int fn_802299FC(void);
-int fn_80229A70(void);
-float fn_80229C98(int index);
-float fn_80229CB0(int index);
-float fn_80229CC4(int index, int item);
-float fn_80229CE4(int index);
-int fn_80229E78(void);
-int fn_80229E80(void);
-void fn_8022A304(void);
-int fn_8022A428(int a);
+int DbYalpModuleInit(void);
+int DbYalpModuleShutdown(void);
+float DbYalpGetLowRating(int index);
+float DbYalpGetHighRating(int index);
+float DbYalpGetRatingWeight(int index, int item);
+float DbYalpGetWeightSum(int index);
+int DbYalpBeginGame(void);
+int DbYalpResumeGame(void);
+void DbSplpModuleShutdown(void);
+int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
@@ -469,12 +462,12 @@ int fn_8022BF60(void);
 int fn_8022BF68(void);
 int DbMttsBeginGame(int a, int b, int c, int d);
 int DbMttsResumeGame(int a, int b, int c, int d);
-int fn_8022C0E0(struct QueryCursor cursor, int a);
-int fn_8022C214(Callbacks_8022C214 *pCallbacks);
-void fn_8022C3C8(void);
-int fn_8022C410(int a);
-int fn_8022C518(int a);
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
+int DbSrptModuleInit(DbSrptCallbacks_t *pCallbacks);
+void DbSrptModuleShutdown(void);
+int DbSrptDeleteUnflaggedTeams(int a);
+int DbSrptDeleteUnflaggedTypedTeams(int a);
+int DbFindUnusedTeamIds(int db, int tbl, int *pIds, unsigned short *pCount);
 int DbSrptBeginGame(int a, int b, int c, int d);
 int DbSrptResumeGame(int a, int b, int c, int d);
 void DbUtilRandomInit(void);
@@ -575,94 +568,12 @@ int DbUserGetId(int index);
 signed char DbUserFindIndex(int key);
 int DbUserGetDb(int key);
 
-int fn_802299FC(void)
+int DbMttsInsertSlot(int a)
 {
-    int result = fn_802297D8(lbl_803A1C60, 0x43524F50);
-    if (result == 0) {
-        result = fn_802297D8(lbl_803A20A4, 0x524F4250);
-    } else {
-        fn_802297D8(lbl_803A20A4, 0x524F4250);
-    }
-    return result;
-}
+    // FAKEMATCH: the last variadic 0 comes from a local so its constant is loaded first.
+    int zero = 0;
 
-int fn_80229A70(void)
-{
-    return MemFill(lbl_803A1C60, 1092, 0, 4);
-}
-
-float fn_80229C98(int index)
-{
-    return lbl_803A20A4[index][1];
-}
-
-float fn_80229CB0(int index)
-{
-    return lbl_803A20A4[index][0];
-}
-
-float fn_80229CC4(int index, int item)
-{
-    return lbl_803A20A4[index][item + 2];
-}
-
-float fn_80229CE4(int index)
-{
-    return lbl_803A20A4[index][12];
-}
-
-int fn_80229E78(void)
-{
-    return 0;
-}
-
-int fn_80229E80(void)
-{
-    return 0;
-}
-
-void fn_8022A304(void)
-{
-    unsigned short i;
-
-    for (i = 0; i < 21; i++) {
-        lbl_802FA180[i].mUnknown0 = 31;
-        lbl_802FA180[i].mUnknown4 = 31;
-        lbl_802FA180[i].mUnknown8 = 7;
-        lbl_802FA180[i].mUnknownC = 0;
-        lbl_802FA180[i].mUnknownD = 0;
-        lbl_802FA180[i].mUnknownE = 0;
-        lbl_802FA180[i].mUnknown10 = 0;
-        lbl_802FA180[i].mUnknown12 = 0;
-        lbl_802FA180[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 17; i++) {
-        lbl_802FA378[i].mUnknown0 = 31;
-        lbl_802FA378[i].mUnknown4 = 31;
-        lbl_802FA378[i].mUnknown8 = 7;
-        lbl_802FA378[i].mUnknownC = 0;
-        lbl_802FA378[i].mUnknownD = 0;
-        lbl_802FA378[i].mUnknownE = 0;
-        lbl_802FA378[i].mUnknown10 = 0;
-        lbl_802FA378[i].mUnknown12 = 0;
-        lbl_802FA378[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 10; i++) {
-        lbl_802FA510[i].mUnknown0 = 31;
-        lbl_802FA510[i].mUnknown4 = 31;
-        lbl_802FA510[i].mUnknown8 = 7;
-        lbl_802FA510[i].mUnknownC = 0;
-        lbl_802FA510[i].mUnknownD = 0;
-        lbl_802FA510[i].mUnknownE = 0;
-        lbl_802FA510[i].mUnknown10 = 0;
-        lbl_802FA510[i].mUnknown12 = 0;
-        lbl_802FA510[i].mUnknown14 = 0;
-    }
-}
-
-int fn_8022A428(int a)
-{
-    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
+    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, zero);
 }
 
 int fn_8022A490(unsigned int count)
@@ -674,7 +585,7 @@ int fn_8022A490(unsigned int count)
         unsigned short i;
 
         for (i = 0; i < count; i++) {
-            if ((err = fn_8022A428(id)) == 0) {
+            if ((err = DbMttsInsertSlot(id)) == 0) {
                 id++;
             } else {
                 break;
@@ -1135,232 +1046,6 @@ int DbMttsResumeGame(int a, int b, int c, int d)
     }
     if (err == 0) {
         err = fn_8022BF60();
-    }
-    return err;
-}
-
-int fn_8022C0E0(struct QueryCursor cursor, int a)
-{
-    unsigned short total;
-    int *pIds;
-    int id;
-    int status;
-    unsigned short count;
-    unsigned short i;
-
-    pIds = 0;
-    status = TDbQryGetCount(cursor.mUnknown0, &total);
-    if (status == 0) {
-        pIds = DbUtilAlloc(total * 4, 0);
-    }
-    count = 0;
-    if (status == 0) {
-        while (status == 0) {
-            status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
-            if (status == 0) {
-                pIds[count] = id;
-                count++;
-            }
-        }
-        if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = 0;
-        }
-        if (status == 0) {
-            for (i = 0; i < count; i++) {
-                status = fn_80230D8C(pIds[i], 0, a);
-                if (status != 0) {
-                    break;
-                }
-            }
-        }
-    }
-    if (pIds != 0) {
-        DbUtilFree(pIds);
-    }
-    return status;
-}
-
-int fn_8022C214(Callbacks_8022C214 *pCallbacks)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int index;
-    unsigned short a;
-    unsigned short b;
-    unsigned short c;
-    unsigned short d;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3698, &cursor);
-    while (status == 0) {
-        status = TDbCompilePerformOp(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
-        if (status == 0) {
-            lbl_803A2390[index].mUnknown0 = a;
-            lbl_803A2390[index].mUnknown2 = b;
-            lbl_803A2390[index].mUnknown4 = c;
-            lbl_803A2390[index].mUnknown6 = d;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    if (status == 0) {
-        status = DbTatsCopyTblDestroy(0, 0x53525054);
-    } else {
-        DbTatsCopyTblDestroy(0, 0x53525054);
-    }
-    lbl_803EC030 = 0;
-    if (status == 0) {
-        lbl_803EC030 = TDbTblExists(0, 0x53525054) == 0;
-        if (pCallbacks != 0) {
-            lbl_803EC034 = pCallbacks->mpUnknown0;
-            lbl_803EC038 = pCallbacks->mpUnknown4;
-        }
-    }
-    return status;
-}
-
-void fn_8022C3C8(void)
-{
-    MemFill((char *)lbl_803A2390, 88, 0, 4);
-    lbl_803EC030 = 0;
-    lbl_803EC034 = 0;
-    lbl_803EC038 = 0;
-}
-
-int fn_8022C410(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B37E4, &cursor, 0);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C518(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3824, &cursor, 0, 5, 1);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int id;
-    int prev;
-    int next;
-    int last;
-    unsigned short count;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3888, db, &cursor, tbl);
-    prev = -1;
-    next = -1;
-    last = 1023;
-    count = 0;
-    while (status == 0 && count < *pCount) {
-        status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
-        if (status == 0) {
-            if (id > prev + 1) {
-                next = prev + 1;
-                while (status == 0 && next < id && count < *pCount && next <= 1008) {
-                    pIds[count] = next;
-                    count++;
-                    next++;
-                }
-            }
-            last = (next > id) ? next : id;
-            prev = id;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    if (status == 0 && count < *pCount) {
-        next = last + 1;
-        if (last == 1023) {
-            next = 0;
-        }
-        while (count < *pCount && next <= 1008) {
-            pIds[count] = next;
-            count++;
-            next++;
-        }
-    }
-    *pCount = count;
-    return status;
-}
-
-int DbSrptBeginGame(int a, int b, int c, int d)
-{
-    int err = 0;
-
-    if (lbl_803EC034 != 0) {
-        err = lbl_803EC034(a, b, c, d);
-    }
-    return err;
-}
-
-int DbSrptResumeGame(int a, int b, int c, int d)
-{
-    int err = 0;
-
-    if (lbl_803EC038 != 0) {
-        err = lbl_803EC038(a, b, c, d);
     }
     return err;
 }

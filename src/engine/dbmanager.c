@@ -320,16 +320,16 @@ extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
-extern int fn_802299FC(void);
-extern int fn_80229A70(void);
-extern int fn_80229E88(void);
-extern void fn_8022A304(void);
+extern int DbYalpModuleInit(void);
+extern int DbYalpModuleShutdown(void);
+extern int DbSplpModuleInit(void);
+extern void DbSplpModuleShutdown(void);
 extern int fn_8022B02C(int a);
 extern void fn_8022B200(void);
-extern int fn_8022C214(int a);
-extern void fn_8022C3C8(void);
-extern int fn_8022C410(int a);
-extern int fn_8022C518(int a);
+extern int DbSrptModuleInit(int a);
+extern void DbSrptModuleShutdown(void);
+extern int DbSrptDeleteUnflaggedTeams(int a);
+extern int DbSrptDeleteUnflaggedTypedTeams(int a);
 extern int DbUslpModuleInit(void);
 extern int DbUslpModuleShutdown(void);
 extern int DbThcdModuleInit(void);
@@ -661,16 +661,16 @@ int DbManagerInitModules(void)
     if ((err = DbLeagueModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_80229E88()) != 0) {
+    if ((err = DbSplpModuleInit()) != 0) {
         return err;
     }
     if ((err = fn_8022B02C(0)) != 0) {
         return err;
     }
-    if ((err = fn_8022C214(0)) != 0) {
+    if ((err = DbSrptModuleInit(0)) != 0) {
         return err;
     }
-    if ((err = fn_802299FC()) != 0) {
+    if ((err = DbYalpModuleInit()) != 0) {
         return err;
     }
     if ((err = DbThcdModuleInit()) != 0) {
@@ -687,10 +687,10 @@ void DbManagerShutdownModules(void)
     DbFnigModuleShutdown();
     DbUslpModuleShutdown();
     DbThcdModuleShutdown();
-    fn_80229A70();
-    fn_8022C3C8();
+    DbYalpModuleShutdown();
+    DbSrptModuleShutdown();
     fn_8022B200();
-    fn_8022A304();
+    DbSplpModuleShutdown();
     DbLeagueModuleShutdown();
     DbOcmtModuleShutdown();
     DbOptionsModuleShutdown();
@@ -941,9 +941,9 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
     err = TDbCompilePerformOp(0, "select 'PNIG' into \203 from 'FNIG'\n", &flag);
     if (err == 0) {
         if (flag == 0) {
-            err = fn_8022C518(0x07000000);
+            err = DbSrptDeleteUnflaggedTypedTeams(0x07000000);
             if (err == 0) {
-                err = fn_8022C410(0x04000000);
+                err = DbSrptDeleteUnflaggedTeams(0x04000000);
                 if (err == 0) {
                     err = DbNiomReadOnce(0x07000000, 0x03000000);
                     if (err == 0) {

@@ -1238,21 +1238,41 @@
       "address": "0x803ED681",
       "evidence": "Linker-defined end of .sbss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
     },
+    "DbYalpModuleInit": {
+      "address": "0x802299FC",
+      "evidence": "evidence.tsv function and name rows at 0x802299FC. src/engine/dbmanager.c calls the original-byte DbYalpModuleInit provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpModuleShutdown": {
+      "address": "0x80229A70",
+      "evidence": "evidence.tsv function and name rows at 0x80229A70. src/engine/dbmanager.c calls the original-byte DbYalpModuleShutdown provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbFindUnusedPlayerIds": {
+      "address": "0x80229AA4",
+      "evidence": "evidence.tsv function and name rows at 0x80229AA4. src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp and src/game/TeamDb.cpp calls the original-byte DbFindUnusedPlayerIds provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpGetOverallRating": {
+      "address": "0x80229CFC",
+      "evidence": "evidence.tsv function and name rows at 0x80229CFC. src/game/cu_80081CDC.cpp calls the original-byte DbYalpGetOverallRating provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpBeginGame": {
+      "address": "0x80229E78",
+      "evidence": "evidence.tsv function and name rows at 0x80229E78. src/engine/dbfnig.c calls the original-byte DbYalpBeginGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpResumeGame": {
+      "address": "0x80229E80",
+      "evidence": "evidence.tsv function and name rows at 0x80229E80. src/engine/dbfnig.c calls the original-byte DbYalpResumeGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
     "DbMttsBeginGame": {
       "address": "0x8022C02C",
-      "evidence": "evidence.tsv function and name rows at 0x8022C02C. src/engine/dbfnig.c calls the original-byte DbMttsBeginGame provider (src/engine/cu_802297D8.c is a registered comparison)."
+      "evidence": "evidence.tsv function and name rows at 0x8022C02C. src/engine/dbfnig.c calls the original-byte DbMttsBeginGame provider (src/engine/dbmtts.c is a registered comparison)."
     },
     "DbMttsResumeGame": {
       "address": "0x8022C098",
-      "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/cu_802297D8.c is a registered comparison)."
+      "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/dbmtts.c is a registered comparison)."
     },
-    "DbSrptBeginGame": {
-      "address": "0x8022C81C",
-      "evidence": "evidence.tsv function and name rows at 0x8022C81C. src/engine/dbfnig.c calls the original-byte DbSrptBeginGame provider (src/engine/cu_802297D8.c is a registered comparison)."
-    },
-    "DbSrptResumeGame": {
-      "address": "0x8022C858",
-      "evidence": "evidence.tsv function and name rows at 0x8022C858. src/engine/dbfnig.c calls the original-byte DbSrptResumeGame provider (src/engine/cu_802297D8.c is a registered comparison)."
+    "DbFindUnusedTeamIds": {
+      "address": "0x8022C628",
+      "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
     }
   },
   "units": [
@@ -4587,6 +4607,71 @@
           "end": "0x803EC00C"
         }
       ]
+    },
+    {
+      "source": "src/engine/dbsplp.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229E88-0x8022A428 (src/engine/dbsplp.c), its function, name, type and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); every function exact, its complete .text and its own .rodata and .data linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229E88",
+          "end": "0x8022A428"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2CA0",
+          "end": "0x802B2F64"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA180",
+          "end": "0x802FA600"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbsrpt.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The file's .sdata 0x803EC030-0x803EC03C and .bss 0x803A2390-0x803A23E8 link from this file; its query strings keep their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C0E0",
+          "end": "0x8022C628"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C81C",
+          "end": "0x8022C894"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC030",
+          "end": "0x803EC03C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2390",
+          "end": "0x803A23E8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "DbFindUnusedTeamIds",
+            "evidence": "evidence.tsv source-form 0x8022C628-0x8022C81C"
+          }
+        ],
+        "evidence": "w2d merge notes (PR #1490 holdouts table): src/engine/dbsrpt.c holds out DbFindUnusedTeamIds (0x8022C628)."
+      }
     },
     {
       "source": "src/engine/dbevas.c",

@@ -38,8 +38,8 @@ typedef struct DbFnigRecord_t {
     int unk_0x6C;
 } DbFnigRecord_t;
 
-int fn_80229E78(int home, int away, int mode, int arg);
-int fn_80229E80(int home, int away, int homeCshg, int awayCsag);
+int DbYalpBeginGame(int home, int away, int mode, int arg);
+int DbYalpResumeGame(int home, int away, int homeCshg, int awayCsag);
 int DbMttsBeginGame(int home, int away, int mode, int arg);
 int DbMttsResumeGame(int home, int away, int homeCshg, int awayCsag);
 int DbSrptBeginGame(int home, int away, int mode, int arg);
@@ -408,7 +408,7 @@ int DbRunUpdateChain(int inProgress, int arg, unsigned char *pDone, int *pHomePl
         if (err == 0) {
             err = DbMttsBeginGame(home, away, inProgress, arg);
             if (err == 0) {
-                err = fn_80229E78(home, away, inProgress, arg);
+                err = DbYalpBeginGame(home, away, inProgress, arg);
                 if (err == 0) {
                     err = DbSrptBeginGame(home, away, inProgress, arg);
                     if (err == 0) {
@@ -445,7 +445,7 @@ int DbRunLoadChain(void)
         if (err == 0) {
             err = DbSrptResumeGame(home, away, homeCshg, awayCsag);
             if (err == 0) {
-                err = fn_80229E80(home, away, homeCshg, awayCsag);
+                err = DbYalpResumeGame(home, away, homeCshg, awayCsag);
                 if (err == 0) {
                     err = DbMttsResumeGame(home, away, homeCshg, awayCsag);
                 }

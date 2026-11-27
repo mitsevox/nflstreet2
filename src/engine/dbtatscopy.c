@@ -43,7 +43,7 @@ extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
-extern int fn_802297D8(void *p, int tag);
+extern int DbYalpLoadWeightTable(void *p, int tag);
 extern int DbThcdSetLineup(int a, int *p, int c);
 int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
@@ -58,7 +58,7 @@ extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
-int fn_8022C0E0(struct QueryCursor cursor, int a);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int fn_80230D8C(int id, int a, int b);
 extern char lbl_802B3610[];
@@ -162,26 +162,6 @@ extern char lbl_802B5120[];
 extern char lbl_802B519C[];
 extern char lbl_802B51BC[];
 extern int lbl_802FA600[];
-typedef struct Entry_803A2390 {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
-} Entry_803A2390;
-
-typedef struct Record_8022A304 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC;
-    unsigned char mUnknownD;
-    unsigned char mUnknownE;
-    char mUnknownF[1];
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    unsigned short mUnknown14;
-    char mUnknown16[2];
-} Record_8022A304;
 
 /* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
@@ -191,21 +171,12 @@ static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
     pCol->mUnk0 = 0;
 }
 
-extern Record_8022A304 lbl_802FA180[21];
-extern Record_8022A304 lbl_802FA378[17];
-extern Record_8022A304 lbl_802FA510[10];
 
 typedef struct Callbacks_8022B02C {
     int (*mpUnknown0)(int a, int b, int c, int d);
     int (*mpUnknown4)(int a);
 } Callbacks_8022B02C;
 
-typedef struct Callbacks_8022C214 {
-    int (*mpUnknown0)(int a);
-    int (*mpUnknown4)(int a);
-} Callbacks_8022C214;
-
-extern Entry_803A2390 lbl_803A2390[];
 extern int (*_DbNiom_pEndFunc)(void);
 extern void *_DbNiom_pLoadFunc;
 extern void *_DbNiom_pResetFunc;
@@ -229,9 +200,6 @@ extern unsigned char lbl_803ED01C[1];
 extern int fn_802311C8(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
 extern int (*lbl_803EC02C)(int a);
-extern unsigned char lbl_803EC030;
-extern int (*lbl_803EC034)(int a);
-extern int (*lbl_803EC038)(int a);
 
 int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
@@ -436,16 +404,16 @@ void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
 int DbNiomModeResume(void);
-int fn_802299FC(void);
-int fn_80229A70(void);
-float fn_80229C98(int index);
-float fn_80229CB0(int index);
-float fn_80229CC4(int index, int item);
-float fn_80229CE4(int index);
-int fn_80229E78(void);
-int fn_80229E80(void);
-void fn_8022A304(void);
-int fn_8022A428(int a);
+int DbYalpModuleInit(void);
+int DbYalpModuleShutdown(void);
+float DbYalpGetLowRating(int index);
+float DbYalpGetHighRating(int index);
+float DbYalpGetRatingWeight(int index, int item);
+float DbYalpGetWeightSum(int index);
+int DbYalpBeginGame(void);
+int DbYalpResumeGame(void);
+void DbSplpModuleShutdown(void);
+int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
@@ -463,14 +431,13 @@ int fn_8022BF60(void);
 int fn_8022BF68(void);
 int DbMttsBeginGame(int a, int b, int c, int d);
 int DbMttsResumeGame(int a);
-int fn_8022C0E0(struct QueryCursor cursor, int a);
-int fn_8022C214(Callbacks_8022C214 *pCallbacks);
-void fn_8022C3C8(void);
-int fn_8022C410(int a);
-int fn_8022C518(int a);
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
-int DbSrptBeginGame(int a);
-int DbSrptResumeGame(int a);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
+void DbSrptModuleShutdown(void);
+int DbSrptDeleteUnflaggedTeams(int a);
+int DbSrptDeleteUnflaggedTypedTeams(int a);
+int DbFindUnusedTeamIds(int db, int tbl, int *pIds, unsigned short *pCount);
+int DbSrptBeginGame(int a, int b, int c, int d);
+int DbSrptResumeGame(int a, int b, int c, int d);
 void DbUtilRandomInit(void);
 void DbUtilRandomShutdown(void);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
