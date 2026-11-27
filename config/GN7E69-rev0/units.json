@@ -4606,13 +4606,19 @@
     {
       "source": "src/engine/cu_802336C4.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the two holdouts, whose ranges keep the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
           "end": "0x80233760"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80233760",
+          "end": "0x802337D4"
         },
         {
           "section": ".text",
@@ -4636,15 +4642,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80233760",
-            "evidence": "evidence.tsv source-form 0x80233760-0x802337D4"
-          },
-          {
             "function": "fn_802338D4",
             "evidence": "evidence.tsv source-form 0x802338D4-0x80233BB8"
           }
         ],
-        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_80233760 and fn_802338D4."
+        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_802338D4 (r5 lane 4, 2026-11-27: fn_80233760 exact and linked)."
       }
     },
     {
