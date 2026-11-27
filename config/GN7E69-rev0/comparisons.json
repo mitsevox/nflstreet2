@@ -29553,43 +29553,6 @@
       ]
     },
     {
-      "source": "src/engine/smidi.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026B898",
-          "end": "0x8026C39C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FFCD0",
-          "end": "0x802FFCD4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6E60",
-          "end": "0x803A7624"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
-          "start": "0x8026BA60",
-          "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiprocesstick__Fi",
-          "start": "0x8026BF04",
-          "end": "0x8026C0C0"
-        }
-      ]
-    },
-    {
       "source": "src/engine/physshape.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x801E2CB4-0x801E7034 (src/engine/physshape.cpp) and its function rows; all 39 bodies compared with the full .rodata 0x802B1290-0x802B1480 and .data 0x802F94E4-0x802F9508 (data rows); 36 exact and linked, the holdouts SphereShape::TestPoint, BoxShape::SegmentHits and SphereShape::Draw keep the original bytes.",
