@@ -19,6 +19,7 @@ extern void *DSNewNode(void *pPool);
 extern void DSDelNode(void *pPool, void *pElement);
 extern void *memset(void *pDst, int value, unsigned int size);
 
+char Obj_ModuleID[] = "OBJECT.LIB";
 static unsigned char _Obj_ModuleActive = 0;
 int _Obj_NumTypes;
 ObjType_t *_Obj_pTypeList;

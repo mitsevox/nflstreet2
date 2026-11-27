@@ -13,10 +13,14 @@ typedef struct VramBlock_t {
     unsigned char mUnknown9[19];
 } VramBlock_t;
 
+char Vram_ModuleID[] = "VRAM.LIB";
 static unsigned short _Vram_MaxBlocks = 0;
 static VramBlock_t *_Vram_Blocks = 0;
 static int _Vram_NextHandle = -1;
 static unsigned char _Vram_ModuleActive = 0;
+
+/* 16 heap pointers; no retained code reads or writes them. */
+void *_Vram_pHeaps[16];
 
 int VramInit(VramInitBlock_t *pDesc)
 {

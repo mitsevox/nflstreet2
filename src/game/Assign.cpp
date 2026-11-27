@@ -750,11 +750,11 @@ extern Input_800B6D34 lbl_802DAAD0;
 }
 
 extern "C" {
-extern unsigned int *lbl_802EE928[];
+extern unsigned int *gPadStateConfigs[];
 }
 
 extern "C" {
-extern int *lbl_802EE938[];
+extern int *gPadStateConfigParams[];
 }
 
 extern "C" {
@@ -4500,8 +4500,8 @@ extern "C" int fn_800F0EFC(void *p, int value) {
     pRecord->mpEntries = (Entry_800F0EFC *)fn_801D2B7C(pRecord->mCount * 116, 0, 0);
     memset(pRecord->mpEntries, 0, pRecord->mCount * 116);
     for (int i = 0; i < pRecord->mCount; i++) {
-        pRecord->mpEntries[i].mpUnknown0 = lbl_802EE928[0];
-        pRecord->mpEntries[i].mpUnknown4 = lbl_802EE938[0];
+        pRecord->mpEntries[i].mpUnknown0 = gPadStateConfigs[0];
+        pRecord->mpEntries[i].mpUnknown4 = gPadStateConfigParams[0];
     }
     return 0;
 }
@@ -4716,8 +4716,8 @@ extern "C" void fn_800F1800(int index) {
 }
 
 extern "C" void fn_800F181C(int index, int which) {
-    lbl_803EAE18->mpEntries[index].mpUnknown0 = lbl_802EE928[which];
-    lbl_803EAE18->mpEntries[index].mpUnknown4 = lbl_802EE938[which];
+    lbl_803EAE18->mpEntries[index].mpUnknown0 = gPadStateConfigs[which];
+    lbl_803EAE18->mpEntries[index].mpUnknown4 = gPadStateConfigParams[which];
 }
 
 extern "C" void fn_800F1858(Object_80039F5C *p) {

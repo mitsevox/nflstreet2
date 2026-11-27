@@ -201,3 +201,11 @@ void (*_Skel_aConvertFuncs[48])(Skel_t *, SkelNode_t *, SkelPose_t *) = {
     _SkelNullFunc, _SkelNullFunc, _SkelNullFunc, _SkelNullFunc,
     _SkelNullFunc, _SkelNullFunc, _SkelNullFunc, _SkelNullFunc,
 };
+
+/* Default sizes of the 32 collision parts; no retained code reads them. */
+static float _defaultCollisionPartSize[32] = {
+    0.1f, 0.1f, 0.1f, 5.0f, 3.25f, 3.5f, 0.1f, 0.1f,
+    5.0f, 3.25f, 3.5f, 0.1f, 0.1f, 9.0f, 9.0f, 0.1f,
+    0.1f, 5.5f, 0.1f, 7.0f, 4.0f, 3.0f, 2.0f, 1.0f,
+    0.1f, 7.0f, 4.0f, 3.0f, 2.0f, 0.1f, 0.1f, 0.1f,
+};
