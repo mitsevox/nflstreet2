@@ -23370,53 +23370,6 @@
       ]
     },
     {
-      "source": "src/game/PlayArt.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp). Draft comparisons of the unlinked functions 0x80166110-0x80167094 behind DECOMP_COMPARE; the linked tail 0x80167094-0x80167910 keeps its units.json placement and the original bytes stay linked for the drafts.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80166110",
-          "end": "0x80167910"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4850",
-          "end": "0x802A4908"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031D38C",
-          "end": "0x8036167C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PlayArtBuildArrowQuad",
-          "start": "0x80166110",
-          "end": "0x801662A8"
-        },
-        {
-          "symbol": "PlayArtAddQuad",
-          "start": "0x801662A8",
-          "end": "0x8016631C"
-        },
-        {
-          "symbol": "PlayArtBuildRoute",
-          "start": "0x8016631C",
-          "end": "0x80166BE8"
-        },
-        {
-          "symbol": "PlayArtSetPlayerColors",
-          "start": "0x80166BE8",
-          "end": "0x80167094"
-        }
-      ]
-    },
-    {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), the sound_cxx compiler row and the compiler, external and source-form rows 0x802714A8-0x80276DE4 and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked.",

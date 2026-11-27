@@ -547,10 +547,6 @@
     }
   },
   "externals": {
-    "PlayArtBuildRoute": {
-      "address": "0x8016631C",
-      "evidence": "evidence.tsv function and name rows at 0x8016631C. PlayArtBuild in the linked PlayArt.cpp range calls the original-byte PlayArtBuildRoute (a PlayArt.cpp holdout registered in comparisons.json)."
-    },
     "YUV_convert": {
       "address": "0x801DB900",
       "evidence": "evidence.tsv function and related name rows at 0x801DB900 (YUV_convert, a registered holdout of src/engine/yuvconv.c, original bytes linked). render.c calls it by name."
@@ -14382,13 +14378,43 @@
     {
       "source": "src/game/PlayArt.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional source unit and membership row, exact individual function extents, direct reset storage extents and inferred types.",
+      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp), its function rows and the data rows 0x802A4850-0x802A4908 and 0x8031D38C-0x8036167C.",
+      "link_roots": {
+        "symbols": [
+          "PlayArtBuildArrowQuad",
+          "PlayArtAddQuad",
+          "PlayArtBuildRoute",
+          "PlayArtSetPlayerColors",
+          "PlayArtReadPositions",
+          "PlayArtReadRoutes",
+          "PlayArtBuild",
+          "PlayArtDraw",
+          "PlayArtStart",
+          "PlayArtSetFlip",
+          "PlayArtStop",
+          "PlayArtMemInit",
+          "PlayArtMemShutdown",
+          "PlayArtResetAll",
+          "PlayArtResetTeam"
+        ],
+        "discarded": [
+          "PlayArtLoadRouteId",
+          "PlayArtLoadPlayRoutes"
+        ],
+        "evidence": "evidence.tsv linker row 0x802A4884-0x802A4908: the target keeps every listed function, all reached from outside the unit or from each other; PlayArtLoadRouteId and PlayArtLoadPlayRoutes have no code in the target, while their two query strings remain in rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80166BE8",
+          "start": "0x80166110",
           "end": "0x80167910"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802A4850",
+          "end": "0x802A4908"
         },
         {
           "section": ".bss",
