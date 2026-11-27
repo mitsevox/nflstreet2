@@ -406,7 +406,7 @@ class FoldedDuplicates(Fixture):
             self.load(self.folded_manifest(evidence=" "))
         with self.assertRaisesRegex(ValueError, "symbols map and evidence"):
             self.load(self.folded_manifest(symbols={}))
-        with self.assertRaisesRegex(ValueError, "descriptive local name"):
+        with self.assertRaisesRegex(ValueError, "descriptive name"):
             self.load(self.folded_manifest(symbols={"fn_80003124": "0x80003124"}))
         with self.assertRaisesRegex(ValueError, "the unit's own range"):
             self.load(self.folded_manifest(symbols={"Destroy": "0x80003114"}))
@@ -1030,9 +1030,47 @@ class KeptLocals(Fixture):
         units[1]["global_folds"] = {"Unit_Function": 0x80003134}
         with self.assertRaisesRegex(ValueError, "does not resolve to 0x80003134"):
             sb.plan(self.sections, units, lone, externals)
-        # A definition and an external together are ambiguous.
-        with self.assertRaisesRegex(ValueError, "already defined|does not resolve"):
+        # So does a holdout's original bytes, at exactly the address.
+        units, externals, _ = self.load()
+        units[0]["held"] = {"globals": {"Unit_Function": 0x80003130}}
+        units[1]["global_folds"] = {"Unit_Function": 0x80003130}
+        _, _, resolved = sb.plan(self.sections, units, lone, externals)
+        self.assertEqual(resolved["Unit_Function"], 0x80003130)
+        units[1]["global_folds"] = {"Unit_Function": 0x80003134}
+        with self.assertRaisesRegex(ValueError, "does not resolve to 0x80003134"):
+            sb.plan(self.sections, units, lone, externals)
+        # A definition and an external together are refused before any fold is resolved.
+        with self.assertRaisesRegex(ValueError, "already defined"):
             plan(0x80003110, manifest)
+
+    def test_every_global_fold_is_checked_even_without_a_surviving_reference(self):
+        # src/other.c keeps only its renamed copy: no reference to Unit_Function survives.
+        unit = compiled([text(8), rodata(4)], [{"name": "Unit_Function", "value": 0, "size": 4,
+                                                "shndx": 1, "type": sb.STT_FUNC}])
+        other = compiled([text(4)], [{"name": "__folded_copy_Unit_Function", "value": 0, "size": 4,
+                                      "shndx": 1, "type": sb.STT_FUNC}])
+        for objects in ({"src/unit.c": unit, "src/other.c": other},
+                        {"src/unit.c": compiled([text(8), rodata(4)], []), "src/other.c": other}):
+            units, externals, _ = self.load()
+            units[1]["global_folds"] = {"Unit_Function": 0xDEADBEEC}
+            with self.assertRaisesRegex(ValueError, "folded global Unit_Function does not resolve to 0xDEADBEEC"):
+                sb.plan(self.sections, units, objects, externals)
+        units, externals, _ = self.load()
+        units[1]["global_folds"] = {"Unit_Function": 0x80003110}
+        sb.plan(self.sections, units, {"src/unit.c": unit, "src/other.c": other}, externals)
+
+    def test_a_global_fold_never_resolves_to_a_kept_local(self):
+        # keep_object publishes the local Inline as a global; a global duplicate cannot fold into it.
+        native, output = self.native()
+        sb.keep_object(native, {"Inline": 0x80003114}, output)
+        other = compiled([text(4)], [{"name": "__folded_copy_Inline", "value": 0, "size": 4,
+                                      "shndx": 1, "type": sb.STT_FUNC},
+                                     {"name": "Inline", "value": 0, "shndx": 0}])
+        units, externals, _ = self.load(self.kept_manifest())
+        units[1]["global_folds"] = {"Inline": 0x80003114}
+        with self.assertRaisesRegex(ValueError, "folded global Inline does not resolve to 0x80003114"):
+            sb.plan(self.sections, units, {"src/unit.c": sb.read_elf(output.read_bytes()), "src/other.c": other},
+                    externals)
 
     def test_other_units_resolve_to_the_kept_copy_only_with_kept_locals(self):
         native, output = self.native()

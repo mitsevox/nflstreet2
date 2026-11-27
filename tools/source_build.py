@@ -387,7 +387,7 @@ def folded_symbols(folded, placed, source):
     result = {}
     for name, value in folded["symbols"].items():
         if not name or NEUTRAL.fullmatch(name) or name in LINKER_SYMBOLS:
-            raise ValueError(f"{source}: folded symbol {name!r} must be a descriptive local name")
+            raise ValueError(f"{source}: folded symbol {name!r} must be a descriptive name")
         result[name] = address(value)
         if any(entry["start"] <= result[name] < entry["end"] for entry in placed):
             raise ValueError(f"{source}: folded symbol {name} targets the unit's own range")
@@ -661,7 +661,7 @@ def folded_copy(name):
 def fold_object(native, folded, output):
     """Model the original linker folding a unit's duplicates into another file's copies.
 
-    For each folded name, which must be exactly one defined local function or object, the
+    For each folded local name, which must be exactly one defined local function or object, the
     relocations that target it are redirected to a new undefined symbol `__folded_<name>`, which
     the link resolves to the configured address; nothing else changes (ngcld rejects relocations
     against absolute symbols). A reference into a folded extent through any other symbol
@@ -686,8 +686,9 @@ def fold_object(native, folded, output):
     symtab, strtab = tables[0], sections[tables[0]["link"]]
     folds, added, names = {}, [], b""
     for name in folded:
-        if any(symbol["name"] in (folded_reference(name), folded_copy(name)) for symbol in symbols):
-            raise ValueError(f"Folded reference {folded_reference(name)} is already a symbol of the unit")
+        for derived in (folded_reference(name), folded_copy(name)):
+            if any(symbol["name"] == derived for symbol in symbols):
+                raise ValueError(f"Folded reference {derived} is already a symbol of the unit")
         found = [index for index, symbol in enumerate(symbols, 1) if symbol["name"] == name]
         symbol = symbols[found[0] - 1] if len(found) == 1 else None
         section = sections[symbol["shndx"]] if symbol and 0 < symbol["shndx"] < len(sections) else None
@@ -1402,24 +1403,20 @@ def plan(sections, units, objects, externals):
         folds = {folded_reference(name): value for name, value in (unit.get("folded") or {}).items()}
         folds.update({holdout_reference(row["start"]): row["start"] for row in unit.get("holdouts") or []})
         global_folds = unit.get("global_folds") or {}
+        # A folded global duplicate resolves to the definition the original linker kept: another
+        # linked unit's global definition, else a holdout's original bytes or an external, at the
+        # configured address and nowhere else. Every configured fold is checked, whether or not a
+        # retained reference to it survives.
+        linked_folds = {name: global_fold_target(units, unit, name, value, defined, held, externals)
+                        for name, value in global_folds.items()}
         for symbol in objects[unit["source"]][1]:
             name = symbol["name"]
             if symbol["shndx"] != SHN_UNDEF or symbol["bind"] == STB_LOCAL or not name:
                 continue
             if name in global_folds:
-                # A folded global duplicate resolves to the definition the original linker kept:
-                # another linked unit's, a holdout's original bytes, or an external, at the
-                # configured address and nowhere else.
-                value = global_folds[name]
-                owner = defined.get(name)
-                if owner is not None:
-                    if owner[1] == unit["source"] or owner[0] != value or name in held or name in externals:
-                        raise ValueError(f"{unit['source']}: folded global {name} does not resolve to "
-                                         f"0x{value:08X}")
+                if linked_folds[name]:
                     continue
-                if (name in held) == (name in externals) or held.get(name, externals.get(name)) != value:
-                    raise ValueError(f"{unit['source']}: folded global {name} does not resolve to "
-                                     f"0x{value:08X}")
+                value = global_folds[name]
             elif name in folds:
                 value = folds[name]
                 if kept_fold(units, unit, name, value, defined, externals):
@@ -1467,6 +1464,25 @@ def plan(sections, units, objects, externals):
                              "reference that unit's symbol instead")
         owner["symbols"].append({"name": name, "value": value - owner["start"]})
     return pieces, defined, resolved
+
+
+def global_fold_target(units, unit, name, value, defined, held, externals):
+    """Check folded global `name` of `unit` against the definition it folds into; return True when
+    that is another linked unit's global definition (the link resolves the name to it), False when
+    it is a holdout's or an external's address (plan() resolves the name to `value`)."""
+    owner = defined.get(name)
+    if owner is not None:
+        other = next((other for other in units if other["source"] == owner[1]), None)
+        # A kept local's global copy (keep_object) is a file-local the original linker could not
+        # have resolved another file's global duplicate to.
+        if other is None or other is unit or owner[0] != value or name in held or name in externals \
+                or name in (other.get("kept_locals") or {}):
+            raise ValueError(f"{unit['source']}: folded global {name} does not resolve to 0x{value:08X}")
+        return True
+    # plan() has already refused a holdout whose external names another address.
+    if held.get(name, externals.get(name)) != value:
+        raise ValueError(f"{unit['source']}: folded global {name} does not resolve to 0x{value:08X}")
+    return False
 
 
 def kept_fold(units, unit, name, value, defined, externals):
