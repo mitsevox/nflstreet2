@@ -277,7 +277,7 @@
         "include/libc"
       ],
       "language": "c++",
-      "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp (now pathsnd.c and pathreal5.c) under engine_c. -fno-weak (c18 wave) keeps the inline Path::IPathToReal destructor, its setters and both virtual tables of src/engine/pathreal5.c as that file own local code and .rodata, as the target places them; pathsnd.c measures the same 32 of 41 exact with and without it."
+      "evidence": "evidence.tsv compiler rows 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c) and 0x8027ED6C-0x8027EFAC (src/engine/pathreal5.c): the PATH sound files keep GoldenEye: Rogue Agent's and Medal of Honor: European Assault's .c names, whose symbols for these files are C++-mangled (PATH_vectortosnd__Fv, __Q24Path9PathToSnd, TaskService__Q24Path11PathToReal5ii), and the code uses virtual tables and constructors; -O2 with the default -G 8 follows the r13 small-data accesses of both ranges. The flags are the ones the same sources compiled with as src/engine/cu_8027D3AC.cpp (now pathsnd.c and pathreal5.c) under engine_c. -fno-weak (c18 wave) keeps the inline Path::IPathToReal destructor, its setters and both virtual tables of src/engine/pathreal5.c as that file own local code and .rodata, as the target places them; pathsnd.c measured the same 32 of 41 exact with and without it before it was written out; all 62 of its functions are now exact and linked under this profile."
     },
     "path_cxx_holdouts": {
       "flags": [
@@ -25139,6 +25139,25 @@
           "placement": ".data4",
           "start": "0x80301428",
           "end": "0x803018A8"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/pathsnd.c",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x8027D3AC-0x8027ED6C (src/engine/pathsnd.c), its 62 function and name rows (GoldenEye: Rogue Agent mangled names for the 61 sibling members, PATHI_streamlowpass inferred), the class and record type rows, the source-form rows 0x8027D3AC-0x8027ED6C, the exact .rodata data row 0x802C2380-0x802C2790 with its five virtual-table rows and the path_cxx compiler row 0x8027D3AC-0x8027EFAC; every function exact and linked (w2 wave).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8027D3AC",
+          "end": "0x8027ED6C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2380",
+          "end": "0x802C2790"
         }
       ]
     },

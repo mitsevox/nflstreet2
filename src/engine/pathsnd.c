@@ -1,595 +1,1037 @@
-/* PATH sound tracks (pathsnd.c): the PATH audio-track system's sound back end. It creates the
-   PathToSnd singleton and its bank and stream track objects, and drives the sound library's voices for
-   their volume, pitch, send levels, pause, play and stop. */
+/* PATH sound tracks (pathsnd.c): the PATH audio-track system's sound back end. It installs the
+   Path::PathToSnd singleton, which creates the bank and stream track objects the music player plays
+   through, and drives the sound library's voices and streams for their volume, pitch, send levels,
+   pause, play, stop and status. */
 
 #include <string.h>
-#include "engine/sndvoice.h"
-#include "engine/system.h"
+#include "engine/pathreal.h"
+#include "engine/sndstrm.h"
+#include "engine/voicequery.h"
 
-typedef struct Record_8027D9FC {
-    int m0;
-    int m4;
-    int m8;
-    int mC;
-} Record_8027D9FC;
+/* The parts of the PATH project state this file reads: the loaded map and its node offset table. */
+struct PathSndMap_t {
+    unsigned char unk_0x0[0x12];
+    unsigned short mNodeCount;
+};
 
-typedef struct Record_8027EC7C {
-    unsigned int mWords[32];
-} Record_8027EC7C;
+struct PathSndNode_t {
+    unsigned int unk_0x0;
+    unsigned int unk_0x4 : 20, mBeats : 4, mDivisions : 8;
+    unsigned int unk_0x8;
+    unsigned int mFlags;
+};
 
-typedef struct Record_8027E2D0 {
-    int m0;
-    unsigned char mUnknown4[8];
-    int mC;
-    int m10;
-    int m14;
-    int m18;
-    void *m1C;
-    unsigned char mUnknown20[4];
-} Record_8027E2D0;
+struct PathSndProject_t {
+    unsigned char unk_0x0[0x18];
+    PathSndMap_t *mpMap;
+    short *mpNodeOffsets;
+};
 
-struct IPathTrack {
-    int m0;
-    unsigned char mUnknown4[4];
-    int m8;
-    int mC;
-    int m10;
-    unsigned char mUnknown14[8];
-    int m1C;
-    unsigned char mUnknown20[0x18];
-    int m38;
-    unsigned char mUnknown3C[0x18];
-    int m54;
-    int m58;
-    unsigned char mUnknown5C[8];
-    Record_8027E2D0 *m64;
+/* The status block a track keeps at +0x24 and copies out through GetPathStatus. */
+struct PathStatus_t {
+    int mNode;
+    int unk_0x4;
+    int unk_0x8;
+    int unk_0xC;
+    int mVoice;
+    int mReady;
+    unsigned int mLength;
+    unsigned int unk_0x1C;
+    unsigned int unk_0x20;
+    unsigned int mPosition;
+    unsigned int unk_0x28;
+    unsigned int unk_0x2C;
+    int mBuffered;
+    int mRemaining;
+};
+
+/* One sub-bank slot of a bank track (36 bytes). */
+struct PathSubBankState_t {
+    int mPriority;
+    unsigned char unk_0x4[8];
+    int mIndex;
+    int mReady;
+    int mAttached;
+    int mBank;
+    void *mpHeader;
+    unsigned int mLastPlayed;
+};
+
+struct PathTrackInfo_t;
+struct PathTrackFile_t;
+
+/* The base track interface as this file's tracks use it (constructor, destructor and the
+   non-pure methods are pathtrack.c's). */
+class IPathTrack {
+public:
+    int mHandle;
+    int mResult;
+    int mFXSendLevel;
+    int mDryLevel;
+    int mVolume;
+    int unk_0x14;
+    int unk_0x18;
+    int mDirty;
+    SndPlayOpts_t *mpPlayOpts;
+    PathStatus_t mStatus;
+    PathTrackInfo_t *mpTrackInfo;
+    int mMaxSubBanks;
+    PathSubBankState_t *mpSubBanks;
+
+    IPathTrack();
     virtual ~IPathTrack();
-    virtual void vfn_02();
-    virtual void vfn_03();
-    virtual int vfn_04();
-    virtual int vfn_05(int flag);
-    virtual void vfn_06();
-    virtual void vfn_07();
-    virtual void vfn_08();
-    virtual int vfn_09(int index);
-    virtual void vfn_10();
-    virtual void vfn_11();
-    virtual int vfn_12();
-    virtual int vfn_13(int value);
-    virtual void vfn_14();
-    virtual int vfn_15(int value);
-    virtual void vfn_16();
-    virtual int vfn_17(int a, int b);
-    virtual void vfn_18();
-    virtual int vfn_19(int value);
-    virtual void vfn_20();
-    virtual void vfn_21();
-    virtual void vfn_22();
-    virtual void vfn_23(Record_8027EC7C *record);
-    virtual void vfn_24();
-    virtual int vfn_25(int value);
-    virtual void vfn_26();
-    virtual int vfn_27();
-    virtual Record_8027E2D0 *vfn_28(int key);
-    virtual Record_8027E2D0 *vfn_29();
-    virtual int vfn_30(int key, void *data);
-    virtual int vfn_31(int key);
-    virtual int vfn_32(int key, int mode);
-    virtual int vfn_33(int key);
-    virtual int vfn_34(int value, int a);
-    virtual int vfn_35();
+    virtual void SetTrackInfo(PathTrackInfo_t *info);
+    virtual void UpdateStatus() = 0;
+    virtual int Stop() = 0;
+    virtual int Pause(int pause) = 0;
+    virtual void CheckStatus() = 0;
+    virtual int GetPathStatus(PathStatus_t *status) = 0;
+    virtual int ReadyForNewRequest() = 0;
+    virtual int TimeRemaining(int index) = 0;
+    virtual int TimeBuffered() = 0;
+    virtual int Play(int node, unsigned int offset, int count, int key, unsigned int length) = 0;
+    virtual int GetVolume();
+    virtual int SetVolume(int volume) = 0;
+    virtual int GetDryLevel();
+    virtual int SetDryLevel(int level) = 0;
+    virtual int GetFXSendLevel(int send);
+    virtual int SetFXSendLevel(int send, int level) = 0;
+    virtual int GetPitchMult() = 0;
+    virtual int SetPitchMult(int pitch) = 0;
+    virtual int GetHandle();
+    virtual SndPlayOpts_t *GetPlayOpts();
+    virtual void SetName(const char *name) = 0;
+    virtual void SetFilePath(PathTrackFile_t *path);
+    virtual void StreamCache(char *data, int size) = 0;
+    virtual int ModifyHold(int hold) = 0;
+    virtual int GetNumSubBanks();
+    virtual int GetMaxSubBanks();
+    virtual PathSubBankState_t *GetSubBankPtr(int index);
+    virtual PathSubBankState_t *GetAvailSubBankPtr();
+    virtual int AddSubBank(int index, char *data);
+    virtual int AddSubBankDone(int index);
+    virtual int DetachSubBankHeader(int index, int header);
+    virtual int RemoveSubBank(int index);
 };
 
-struct PathTrackSnd : IPathTrack {
-    virtual ~PathTrackSnd();
-    Record_8027D9FC m6C;
-    Record_8027EC7C m7C;
-    unsigned char mFC;
-    unsigned char mUnknownFD[3];
-    unsigned char m100;
-    unsigned char m101;
-    unsigned char mUnknown102[6];
-    unsigned short m108;
-    unsigned char mUnknown10A[0xA];
-    int m114;
-    virtual int vfn_13(int value);
-    virtual int vfn_05(int flag);
+struct PathTrackName_t {
+    char mText[16];
 };
 
-struct PathTrackSndBank : PathTrackSnd {
-    virtual ~PathTrackSndBank();
-    unsigned char mUnknown118[0xC];
-    int m124;
-    virtual int vfn_13(int value);
-    virtual int vfn_15(int value);
-    virtual int vfn_17(int a, int b);
-    virtual int vfn_19(int value);
-    virtual int vfn_04(void);
-    virtual int vfn_30(int key, void *data);
-    virtual int vfn_31(int key);
-    virtual Record_8027E2D0 *vfn_28(int key);
-    virtual Record_8027E2D0 *vfn_29(void);
-    virtual int vfn_33(int key);
-    virtual int vfn_32(int key, int mode);
-    virtual int vfn_34(int key, int data);
+struct PathTrackPath_t {
+    char mText[128];
 };
 
-typedef struct Record_8027EAC0 {
-    unsigned char mUnknown0[4];
-    int m4;
-    int m8;
-    unsigned char mUnknownC[8];
-} Record_8027EAC0;
-
-struct PathTrackSndStream : PathTrackSnd {
-    virtual ~PathTrackSndStream();
-    int m118;
-    int m11C;
-    Record_8027EAC0 *m120;
-    int m124;
-    int m128;
-    virtual int vfn_34(int value, int a);
-    virtual int vfn_35(void);
-    virtual int vfn_15(int value);
-    virtual int vfn_17(int a, int b);
-    virtual int vfn_25(int value);
-    virtual int vfn_19(int value);
-    virtual int vfn_09(int index);
-    virtual int vfn_04(void);
-    virtual void vfn_23(Record_8027EC7C *record);
-    void SetLowPass(int value);
-};
-
-/* The PATH-to-sound interface object; its table 0x802C2730 holds the track creators. */
-struct PathToSnd {
-    virtual ~PathToSnd();
-    virtual int CreateStreamTrack(IPathTrack **track, int a, float b, int c);
-    virtual int CreateBankTrack(IPathTrack **track, int count);
+/* One queued request of a stream track (20 bytes). */
+struct PathStreamRequest_t {
+    unsigned int mLength;
+    int mRequest;
+    unsigned int mPlayed;
+    int mNode;
+    int unk_0x10;
 };
 
 extern "C" {
 
+void PATHI_servicetimer(void);
 void *PATHI_memalloc(int size);
-void PATHI_servicetask(void);
-void SNDSYS_entercritical(void);
-void SNDSYS_leavecritical(void);
-int SNDSTRM_pitchmult(int handle, int value);
-int SNDSTRM_drylevel(int handle, int value);
-int SNDSTRM_fxlevel(int handle, int a, int b);
-int SNDSTRM_modifyhold(int handle, int value);
-int STREAM_overhead(int count, int filters, int taps);
-int SNDvol(int handle, int value);
-int SNDCTRL_drylevel(int handle, int value);
-int SNDpitchmult(int handle, int value);
+void PATHI_memfree(void *p);
+extern unsigned int gPathMilliseconds;
+extern PathSndProject_t *pfstate;
+int SNDSTRM_overhead(int count, int requests);
+int fn_8026E280(SndPlayOpts_t *opts, int count, int requests, void *buffer, int size);
+void fn_8026E2A8(int handle);
+int fn_8026E364(int handle, int key, void *path, int offset);
+int fn_8026E388(int handle);
+int SNDSTRM_drylevel(int handle, int level);
+int SNDSTRM_fxlevel(int handle, int send, int level);
+int SNDSTRM_modifyhold(int request, int hold);
+int SNDSTRM_pitchmult(int handle, int pitch);
+int SNDSTRM_lowpass(int handle, int value);
+int SNDSTRM_getprogvol(int handle);
+int SNDSTRM_requeststatus(int request, SndStreamRequestStatus_t *status);
+void SNDSTRM_status(int handle, SndStreamStatus_t *status);
+void SNDSYS_add100hzclient(void (*client)(void));
+void SNDSYS_remove100hzclient(void (*client)(void));
+int SNDplaysetdef(SndPlayOpts_t *opts);
+int SNDvol(int handle, int volume);
 int SNDBANK_asyncloadmem(int *handle, void *data);
 int SNDBANK_asyncloadmemdone(void);
+int SNDBANK_patchinfo(int bank, int patch, SndSampleFormat_t *format, SndSampleAttr_t *attr, void *desc);
+int SNDBANK_play(int bank, int patch, SndPlayOpts_t *opts);
 int SNDbankremove(int handle);
 int SNDbankheadersize(int handle);
 int SNDbankheadercopy(void *dest, int handle);
 int SNDstop(int handle);
-int fn_8026E388(int handle);
-void PATHI_memfree(void *p);
-int SNDSTRM_lowpass(int handle, int value);
-void *fn_8027DAA4(int size);
-IPathTrack *fn_8027DAE4(void *mem, int count);
 
+}
+
+/* Two equivalent node lookups: GetPathStatus matches only with the conditional form and
+   PathTrackSndBank::CheckStatus only with the if/else form (see the source-form row). */
+static inline PathSndNode_t *_PathSndNodePtr(int index)
+{
+    return (index >= 0 && index <= pfstate->mpMap->mNodeCount)
+        ? (PathSndNode_t *)((unsigned char *)pfstate->mpMap + pfstate->mpNodeOffsets[index] * 4) : 0;
+}
+
+static inline PathSndNode_t *_PathSndGetNode(int index)
+{
+    PathSndNode_t *node;
+    if (index < 0 || index > pfstate->mpMap->mNodeCount)
+        node = 0;
+    else
+        node = (PathSndNode_t *)((unsigned char *)pfstate->mpMap + pfstate->mpNodeOffsets[index] * 4);
+    return node;
+}
+
+namespace Path {
+
+class PathToSnd : public IPathToSnd {
+public:
+    static void *operator new(unsigned int size);
+    static void operator delete(void *p);
+    PathToSnd();
+    virtual ~PathToSnd();
+    virtual int CreateStreamTrack(IPathTrack **track, int count, float seconds, int rate);
+    virtual int CreateBankTrack(IPathTrack **track, int count);
+    virtual void GetDefaultPlayOpts(void *opts);
+};
+
+class PathTrackSnd : public IPathTrack {
+public:
+    PathTrackName_t mName;
+    PathTrackPath_t mPath;
+    SndPlayOpts_t mPlayOpts;
+    int mPitchMult;
+
+    PathTrackSnd();
+    virtual ~PathTrackSnd();
+    virtual void UpdateStatus() { mDirty = 1; }
+    virtual int Pause(int pause);
+    virtual int GetPathStatus(PathStatus_t *status);
+    virtual int ReadyForNewRequest();
+    virtual int TimeBuffered();
+    virtual int GetVolume();
+    virtual int SetVolume(int volume);
+    virtual int SetDryLevel(int level);
+    virtual int SetFXSendLevel(int send, int level);
+    virtual void SetName(const char *name);
+    virtual void StreamCache(char *data, int size) {}
+    virtual int ModifyHold(int hold) { return -1; }
+    virtual int GetPitchMult() { return mPitchMult; }
+};
+
+class PathTrackSndStream : public PathTrackSnd {
+public:
+    void *mpBuffer;
+    int mMaxRequests;
+    PathStreamRequest_t *mpRequests;
+    char *mpCache;
+    int mCacheSize;
+
+    static void *operator new(unsigned int size);
+    static void operator delete(void *p);
+    PathTrackSndStream(int count);
+    virtual ~PathTrackSndStream();
+    virtual int AttachStreamInstance(int handle, char *buffer);
+    virtual int DetachStreamInstance();
+    virtual void CheckStatus();
+    virtual int SetVolume(int volume);
+    virtual int SetDryLevel(int level);
+    virtual int SetFXSendLevel(int send, int level);
+    virtual int ModifyHold(int hold);
+    virtual int SetPitchMult(int pitch);
+    virtual void StreamCache(char *data, int size);
+    virtual int TimeRemaining(int index);
+    virtual int Play(int node, unsigned int offset, int count, int key, unsigned int length);
+    virtual int Stop();
+    virtual void SetFilePath(PathTrackFile_t *path);
+};
+
+class PathTrackSndBank : public PathTrackSnd {
+public:
+    int unk_0x118;
+    int mPatch;
+    unsigned int mLength;
+    int mVoice;
+    int mRemaining;
+    int mNode;
+    int mBeat;
+
+    static void *operator new(unsigned int size);
+    static void operator delete(void *p);
+    PathTrackSndBank(int count);
+    virtual ~PathTrackSndBank();
+    virtual int AttachSubBank(int index, int bank);
+    virtual int DetachSubBank(int index);
+    virtual void CheckStatus();
+    virtual int SetVolume(int volume);
+    virtual int SetDryLevel(int level);
+    virtual int SetFXSendLevel(int send, int level);
+    virtual int SetPitchMult(int pitch);
+    virtual int TimeRemaining(int index);
+    virtual int Play(int node, unsigned int offset, int count, int key, unsigned int length);
+    virtual int Stop();
+    virtual int AddSubBank(int index, char *data);
+    virtual int AddSubBankDone(int index);
+    virtual PathSubBankState_t *GetSubBankPtr(int index);
+    virtual PathSubBankState_t *GetAvailSubBankPtr();
+    virtual int RemoveSubBank(int index);
+    virtual int DetachSubBankHeader(int index, int header);
+};
+
+}
+
+void PATH_vectortosnd()
+{
+    // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
+    const char *format = "%s  %s";
+
+    if (Path::IPathToSnd::sndimp != 0) {
+        delete Path::IPathToSnd::sndimp;
+    }
+    Path::IPathToSnd::sndimp = new Path::PathToSnd;
+}
+
+namespace Path {
+
+int PathToSnd::CreateStreamTrack(IPathTrack **track, int count, float seconds, int rate)
+{
+    PathTrackSndStream *stream = new PathTrackSndStream(count);
+
+    if (seconds != 0.0f) {
+        int requests = (int)(seconds * 15.0f) + 1;
+        int size = (int)(seconds * ((float)rate * 1000.0f));
+        void *buffer;
+        int handle;
+
+        size += SNDSTRM_overhead(count, requests);
+        if (size < IPathToReal::realimp->GetMinStreamBufferSize(count)) {
+            size = IPathToReal::realimp->GetMinStreamBufferSize(count);
+        }
+        buffer = PATHI_memalloc(size);
+        handle = -108;
+        if (buffer != 0) {
+            handle = fn_8026E280(stream->GetPlayOpts(), count, requests, buffer, size);
+        }
+        stream->AttachStreamInstance(handle, (char *)buffer);
+    }
+    *track = stream;
+    return 0;
 }
 
 int PathToSnd::CreateBankTrack(IPathTrack **track, int count)
 {
-    *track = fn_8027DAE4(fn_8027DAA4(308), count);
+    *track = new PathTrackSndBank(count);
     return 0;
 }
 
-extern "C" {
-
-void *fn_8027D5CC(int size)
+void *PathToSnd::operator new(unsigned int size)
 {
     return PATHI_memalloc(size);
 }
 
-void fn_8027D5EC(void *p)
+void PathToSnd::operator delete(void *p)
 {
     PATHI_memfree(p);
 }
 
-int fn_8027D960(PathTrackSnd *p)
+PathToSnd::PathToSnd()
 {
-    return p->m38;
+    SNDSYS_add100hzclient(PATHI_servicetimer);
 }
 
-int fn_8027D968(PathTrackSnd *p)
+PathToSnd::~PathToSnd()
 {
-    return p->m54;
+    SNDSYS_remove100hzclient(PATHI_servicetimer);
 }
 
-int fn_8027D970(PathTrackSnd *p)
+void PathToSnd::GetDefaultPlayOpts(void *opts)
 {
-    return p->m10;
+    SNDplaysetdef((SndPlayOpts_t *)opts);
+    ((SndPlayOpts_t *)opts)->m5 = 0;
 }
 
+PathTrackSnd::PathTrackSnd()
+{
+    mName.mText[0] = 0;
+    mPath.mText[0] = 0;
+    mpPlayOpts = &mPlayOpts;
+    IPathToSnd::sndimp->GetDefaultPlayOpts(&mPlayOpts);
+    mHandle = -1;
+    mPitchMult = mPlayOpts.mC;
 }
 
-int PathTrackSnd::vfn_13(int value)
+PathTrackSnd::~PathTrackSnd()
+{
+}
+
+int PathTrackSnd::GetPathStatus(PathStatus_t *status)
+{
+    PathSndNode_t *node;
+    int beatLength;
+    int barLength;
+
+    if (mDirty) {
+        CheckStatus();
+    }
+    beatLength = barLength = mStatus.mLength;
+    node = _PathSndNodePtr(mStatus.mNode);
+    if (node != 0 && node->mDivisions != 0) {
+        mStatus.unk_0x1C = mStatus.mLength / node->mDivisions;
+        beatLength = barLength / node->mDivisions;
+        if (node->mBeats != 0) {
+            mStatus.unk_0x20 = mStatus.mLength / (node->mBeats * node->mDivisions);
+            barLength = barLength / (node->mBeats * node->mDivisions);
+        }
+    }
+    {
+        unsigned int remain = mStatus.mLength - mStatus.mPosition;
+        mStatus.unk_0x8 = mStatus.unk_0x20 != 0 ? remain / mStatus.unk_0x20 + 1 : 0;
+    }
+    if (beatLength > 0) {
+        mStatus.unk_0x28 = mStatus.mPosition % beatLength;
+    } else {
+        mStatus.unk_0x28 = 0;
+    }
+    if (barLength > 0) {
+        mStatus.unk_0x2C = mStatus.mPosition % barLength;
+    } else {
+        mStatus.unk_0x2C = 0;
+    }
+    *status = mStatus;
+    return 1;
+}
+
+int PathTrackSnd::ReadyForNewRequest()
+{
+    return mStatus.mReady;
+}
+
+int PathTrackSnd::TimeBuffered()
+{
+    return mStatus.mBuffered;
+}
+
+int PathTrackSnd::GetVolume()
+{
+    return mVolume;
+}
+
+int PathTrackSnd::SetVolume(int volume)
 {
     int current;
-    if ((unsigned int)value > 127) {
+    if ((unsigned int)volume > 127) {
         return -8;
     }
-    current = vfn_12();
-    if (current == value || value < 0 || current < 0) {
-        return -1;
-    }
-    return 0;
-}
-
-extern "C" {
-
-int fn_8027D9EC(PathTrackSnd *p)
-{
-    return 0;
-}
-
-int fn_8027D9F4(PathTrackSnd *p)
-{
-    return 0;
-}
-
-void fn_8027D9FC(PathTrackSnd *p, Record_8027D9FC *record)
-{
-    p->m6C = *record;
-}
-
-}
-
-int PathTrackSnd::vfn_05(int flag)
-{
-    int arg = 0;
-    int value = 0;
-    if (m114 > 0) {
-        value = m114;
-    } else if (m108 != 0) {
-        value = m108;
-    }
-    if (flag == 0) {
-        arg = value = m114;
-    }
-    vfn_19(arg);
-    m114 = value;
-    return 0;
-}
-
-extern "C" {
-
-void *fn_8027DAA4(int size)
-{
-    return PATHI_memalloc(size);
-}
-
-void fn_8027DAC4(void *p)
-{
-    PATHI_memfree(p);
-}
-
-}
-
-int PathTrackSndBank::vfn_34(int key, int data)
-{
-    Record_8027E2D0 *record;
-
-    if (vfn_28(key) != 0) {
-        return -18;
-    }
-    record = vfn_29();
-    if (record == 0) {
-        return -13;
-    }
-    record->m0 = 100;
-    record->mC = key;
-    record->m18 = data;
-    record->m14 = record->m10 = 1;
-    return 0;
-}
-
-int PathTrackSndBank::vfn_13(int value)
-{
-    int status = PathTrackSnd::vfn_13(value);
-    int result = 0;
-    if (status == 0) {
-        SNDSYS_entercritical();
-        result = SNDvol(m124, value);
-        SNDSYS_leavecritical();
-        m10 = value;
-        mFC = value;
-    }
-    return result;
-}
-
-int PathTrackSndBank::vfn_15(int value)
-{
-    int status = fn_8027D9EC(this);
-    int result = 0;
-    if (status == 0) {
-        SNDSYS_entercritical();
-        result = SNDCTRL_drylevel(m124, value);
-        SNDSYS_leavecritical();
-        mC = value;
-        m100 = value;
-    }
-    return result;
-}
-
-int PathTrackSndBank::vfn_17(int a, int b)
-{
-    int status = fn_8027D9F4(this);
-    int result = 0;
-    if (status == 0) {
-        SNDSYS_entercritical();
-        result = SNDfxlevel(m124, a, b);
-        SNDSYS_leavecritical();
-        m8 = b;
-        m101 = b;
-    }
-    return result;
-}
-
-int PathTrackSndBank::vfn_19(int value)
-{
-    int result;
-    SNDSYS_entercritical();
-    result = SNDpitchmult(m124, value);
-    SNDSYS_leavecritical();
-    m114 = value;
-    m108 = value;
-    return result;
-}
-
-extern "C" {
-
-int fn_8027E0AC(PathTrackSndBank *p, int index)
-{
-    if (index == 0) {
-        return p->m58;
+    current = GetVolume();
+    if (current != volume && volume >= 0 && current >= 0) {
+        return 0;
     }
     return -1;
 }
 
+int PathTrackSnd::SetDryLevel(int level)
+{
+    return 0;
 }
 
-int PathTrackSndBank::vfn_04(void)
+int PathTrackSnd::SetFXSendLevel(int send, int level)
 {
+    return 0;
+}
+
+void PathTrackSnd::SetName(const char *name)
+{
+    mName = *(const PathTrackName_t *)name;
+}
+
+int PathTrackSnd::Pause(int pause)
+{
+    int arg = 0;
+    int value = 0;
+    if (mPitchMult > 0) {
+        value = mPitchMult;
+    } else if (mPlayOpts.mC != 0) {
+        value = mPlayOpts.mC;
+    }
+    if (pause == 0) {
+        arg = value = mPitchMult;
+    }
+    SetPitchMult(arg);
+    mPitchMult = value;
+    return 0;
+}
+
+void *PathTrackSndBank::operator new(unsigned int size)
+{
+    return PATHI_memalloc(size);
+}
+
+void PathTrackSndBank::operator delete(void *p)
+{
+    PATHI_memfree(p);
+}
+
+PathTrackSndBank::PathTrackSndBank(int count)
+{
+    int size = count * sizeof(PathSubBankState_t);
+    int i;
+
+    mPatch = -1;
+    mRemaining = 0;
+    mLength = 0;
+    mVoice = -1;
+    mpSubBanks = (PathSubBankState_t *)PATHI_memalloc(size);
+    memset(mpSubBanks, 0, size);
+    for (i = 0; i < count; i++) {
+        mpSubBanks[i].mIndex = -1;
+    }
+    mMaxSubBanks = count;
+}
+
+PathTrackSndBank::~PathTrackSndBank()
+{
+    int i;
+    for (i = 0; i < GetNumSubBanks(); i++) {
+        RemoveSubBank(i);
+    }
+    if (mpSubBanks != 0) {
+        PATHI_memfree(mpSubBanks);
+    }
+}
+
+int PathTrackSndBank::AttachSubBank(int index, int bank)
+{
+    PathSubBankState_t *state;
+
+    if (GetSubBankPtr(index) != 0) {
+        return -18;
+    }
+    state = GetAvailSubBankPtr();
+    if (state == 0) {
+        return -13;
+    }
+    state->mIndex = index;
+    state->mBank = bank;
+    state->mAttached = state->mReady = 1;
+    state->mPriority = 100;
+    return 0;
+}
+
+int PathTrackSndBank::DetachSubBank(int index)
+{
+    PathSubBankState_t *state = GetSubBankPtr(index);
+    int bank;
+    if (state == 0) {
+        return -8;
+    }
+    bank = state->mBank;
+    RemoveSubBank(index);
+    return bank;
+}
+
+void PathTrackSndBank::CheckStatus()
+{
+    SndSampleAttr_t attr;
+    SndSampleDesc_t desc;
+    SndSampleFormat_t format;
+    PathSndNode_t *node;
     int result;
-    SNDSYS_entercritical();
-    result = SNDstop(m0);
-    SNDSYS_leavecritical();
-    m38 = 1;
-    m124 = -1;
-    m0 = -1;
-    vfn_03();
-    return result;
+    int elapsed; /* ms played so far (voice metric * 10) */
+    int beatsLeft;
+    int length;
+    int rate;
+
+    memset(&mStatus, 0, sizeof(mStatus));
+    mStatus.mVoice = -1;
+    elapsed = 0;
+    mStatus.unk_0xC = -1;
+    mStatus.mNode = -1;
+    result = -8;
+    mStatus.mRemaining = -1;
+    beatsLeft = 0;
+    mStatus.mReady = 1;
+    if (mHandle >= 0) {
+        mDirty = 1;
+        SNDSYS_entercritical();
+        if (mPatch >= 0 && mVoice >= 0) {
+            length = 0;
+            result = SNDBANK_patchinfo(mHandle, mPatch, &format, &attr, &desc);
+            if (result >= 0) {
+                elapsed = AudioVoiceGetMaxMetric(mVoice);
+                if (elapsed < 0) {
+                    mVoice = mHandle = -1;
+                    goto done;
+                }
+                elapsed *= 10;
+                rate = format.mRate;
+                length = (int)((float)desc.mFrames / (float)rate * 1000.0f);
+                node = _PathSndGetNode(mNode);
+                if (node->mFlags & 0x40000000) {
+                    int lastBeat = node->mBeats - 1;
+                    mStatus.mLength = length * (lastBeat + 1);
+                    beatsLeft = lastBeat - mBeat;
+                } else {
+                    mStatus.mLength = length;
+                }
+            } else {
+                mVoice = mHandle = mNode = -1;
+            }
+            mStatus.mBuffered = length;
+            mLength = length;
+            mRemaining = elapsed;
+            mStatus.mRemaining = elapsed;
+            mStatus.mPosition = length * beatsLeft + elapsed;
+            mStatus.unk_0x8 = mBeat;
+            mStatus.unk_0xC = mStatus.mNode = mNode;
+            mStatus.mVoice = mVoice;
+            mVolume = SNDCTRL_getprogvol(mVoice);
+        }
+    done:
+        mResult = result;
+        mDirty = 0;
+        SNDSYS_leavecritical();
+    }
 }
 
-int PathTrackSndBank::vfn_30(int key, void *data)
+int PathTrackSndBank::SetVolume(int volume)
 {
-    int result = -8;
-    Record_8027E2D0 *record = vfn_28(key);
-    if (record != 0) {
-        result = SNDBANK_asyncloadmem(&record->m18, data);
+    int status = PathTrackSnd::SetVolume(volume);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = SNDvol(mVoice, volume);
+        SNDSYS_leavecritical();
+        mVolume = volume;
+        mPlayOpts.m0 = volume;
     }
     return result;
 }
 
-int PathTrackSndBank::vfn_31(int key)
+int PathTrackSndBank::SetDryLevel(int level)
+{
+    int status = PathTrackSnd::SetDryLevel(level);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = SNDCTRL_drylevel(mVoice, level);
+        SNDSYS_leavecritical();
+        mDryLevel = level;
+        mPlayOpts.m4 = level;
+    }
+    return result;
+}
+
+int PathTrackSndBank::SetFXSendLevel(int send, int level)
+{
+    int status = PathTrackSnd::SetFXSendLevel(send, level);
+    int result = 0;
+    if (status == 0) {
+        SNDSYS_entercritical();
+        result = SNDfxlevel(mVoice, send, level);
+        SNDSYS_leavecritical();
+        mFXSendLevel = level;
+        mPlayOpts.m5 = level;
+    }
+    return result;
+}
+
+int PathTrackSndBank::SetPitchMult(int pitch)
+{
+    int result;
+    SNDSYS_entercritical();
+    result = SNDpitchmult(mVoice, pitch);
+    SNDSYS_leavecritical();
+    mPitchMult = pitch;
+    mPlayOpts.mC = pitch;
+    return result;
+}
+
+int PathTrackSndBank::TimeRemaining(int index)
+{
+    if (index == 0) {
+        return mStatus.mRemaining;
+    }
+    return -1;
+}
+
+int PathTrackSndBank::Play(int node, unsigned int offset, int count, int key, unsigned int length)
+{
+    PathSubBankState_t *state = GetSubBankPtr(offset >> 16);
+    int bank;
+    int result;
+
+    if (state == 0 || state->mBank < 0) {
+        return -1;
+    }
+    mPatch = (offset & 0xFFFF) + count - 1;
+    SNDSYS_entercritical();
+    bank = state->mBank;
+    if (mHandle != bank && mHandle >= 0) {
+        SNDstop(mHandle);
+    }
+    result = SNDBANK_play(state->mBank, mPatch, &mPlayOpts);
+    mHandle = bank;
+    SNDSYS_leavecritical();
+    if (result >= 0) {
+        mNode = node;
+        mBeat = count - 1;
+        mLength = length;
+        mVoice = result;
+        state->mLastPlayed = gPathMilliseconds;
+        mDirty = 1;
+    }
+    return result;
+}
+
+int PathTrackSndBank::Stop()
+{
+    int result;
+    SNDSYS_entercritical();
+    result = SNDstop(mHandle);
+    SNDSYS_leavecritical();
+    mStatus.mReady = 1;
+    mVoice = -1;
+    mHandle = -1;
+    UpdateStatus();
+    return result;
+}
+
+int PathTrackSndBank::AddSubBank(int index, char *data)
+{
+    int result = -8;
+    PathSubBankState_t *state = GetSubBankPtr(index);
+    if (state != 0) {
+        result = SNDBANK_asyncloadmem(&state->mBank, data);
+    }
+    return result;
+}
+
+int PathTrackSndBank::AddSubBankDone(int index)
 {
     int result = 0;
-    Record_8027E2D0 *record = vfn_28(key);
-    if (record != 0) {
+    PathSubBankState_t *state = GetSubBankPtr(index);
+    if (state != 0) {
         result = SNDBANK_asyncloadmemdone();
     }
     return result;
 }
 
-Record_8027E2D0 *PathTrackSndBank::vfn_28(int key)
+PathSubBankState_t *PathTrackSndBank::GetSubBankPtr(int index)
 {
     int i;
-    Record_8027E2D0 *record;
-    for (i = 0; i < vfn_27(); i++) {
-        record = &m64[i];
-        if (record->mC == key) {
-            return record;
+    PathSubBankState_t *state;
+    for (i = 0; i < GetMaxSubBanks(); i++) {
+        // FAKEMATCH: integer address arithmetic; it keeps the target operand order of the slot address add (offset first)
+        state = (PathSubBankState_t *)(i * sizeof(PathSubBankState_t) + (int)mpSubBanks);
+        if (state->mIndex == index) {
+            return state;
         }
     }
     return 0;
 }
 
-Record_8027E2D0 *PathTrackSndBank::vfn_29(void)
+PathSubBankState_t *PathTrackSndBank::GetAvailSubBankPtr()
 {
     int i;
-    Record_8027E2D0 *record;
-    for (i = 0; i < vfn_27(); i++) {
-        record = &m64[i];
-        if (record->mC < 0) {
-            return record;
+    PathSubBankState_t *state;
+    for (i = 0; i < GetMaxSubBanks(); i++) {
+        // FAKEMATCH: integer address arithmetic; it keeps the target operand order of the slot address add (offset first)
+        state = (PathSubBankState_t *)(i * sizeof(PathSubBankState_t) + (int)mpSubBanks);
+        if (state->mIndex < 0) {
+            return state;
         }
     }
     return 0;
 }
 
-int PathTrackSndBank::vfn_33(int key)
+int PathTrackSndBank::RemoveSubBank(int index)
 {
     int result = 0;
-    Record_8027E2D0 *record = vfn_28(key);
-    if (record != 0 && record->m18 != -1) {
-        if (record->m14 == 0) {
-            result = SNDbankremove(record->m18);
-            PATHI_memfree(record->m1C);
+    PathSubBankState_t *state = GetSubBankPtr(index);
+    if (state != 0 && state->mBank != -1) {
+        if (state->mAttached == 0) {
+            result = SNDbankremove(state->mBank);
+            PATHI_memfree(state->mpHeader);
         }
-        memset(record, 0, sizeof(*record));
-        record->m18 = -1;
+        memset(state, 0, sizeof(*state));
+        state->mBank = -1;
     }
     return result;
 }
 
-int PathTrackSndBank::vfn_32(int key, int mode)
+int PathTrackSndBank::DetachSubBankHeader(int index, int header)
 {
     int result = -8;
-    void *data;
-    Record_8027E2D0 *record = vfn_28(key);
-    if (record != 0 && record->m18 != -1 && mode == 7) {
-        data = PATHI_memalloc(SNDbankheadersize(record->m18));
-        if (data != 0) {
-            SNDbankheadercopy(data, record->m18);
+    void *copy;
+    PathSubBankState_t *state = GetSubBankPtr(index);
+    if (state != 0 && state->mBank != -1 && header == 7) {
+        copy = PATHI_memalloc(SNDbankheadersize(state->mBank));
+        if (copy != 0) {
+            SNDbankheadercopy(copy, state->mBank);
             result = 0;
-            PATHI_memfree(record->m1C);
-            record->m1C = data;
+            PATHI_memfree(state->mpHeader);
+            state->mpHeader = copy;
         }
     }
     return result;
 }
 
-extern "C" {
-
-void *fn_8027E4D8(int size)
+void *PathTrackSndStream::operator new(unsigned int size)
 {
     return PATHI_memalloc(size);
 }
 
-void fn_8027E4F8(void *p)
+void PathTrackSndStream::operator delete(void *p)
 {
     PATHI_memfree(p);
 }
 
+PathTrackSndStream::PathTrackSndStream(int count)
+{
+    int i;
+
+    mMaxRequests = count;
+    if (count <= 0) {
+        mMaxRequests = 1;
+    }
+    mpRequests = (PathStreamRequest_t *)PATHI_memalloc(mMaxRequests * sizeof(PathStreamRequest_t));
+    if (mpRequests == 0) {
+        mMaxRequests = 0;
+    }
+    for (i = 0; i < mMaxRequests; i++) {
+        mpRequests[i].mLength = mpRequests[i].mPlayed = 0;
+        mpRequests[i].mRequest = -1;
+    }
+    mpCache = 0;
+    mCacheSize = 0;
+    mpBuffer = 0;
 }
 
-int PathTrackSndStream::vfn_34(int value, int a)
+PathTrackSndStream::~PathTrackSndStream()
 {
-    if (m0 >= 0) {
+    if (mHandle >= 0) {
+        fn_8026E2A8(mHandle);
+        if (mpBuffer != 0) {
+            PATHI_memfree(mpBuffer);
+        }
+    }
+    PATHI_memfree(mpRequests);
+}
+
+int PathTrackSndStream::AttachStreamInstance(int handle, char *buffer)
+{
+    if (mHandle >= 0) {
         return -18;
     }
-    m0 = value;
-    m1C = 1;
-    m118 = a;
+    mHandle = handle;
+    mDirty = 1;
+    mpBuffer = buffer;
     return 0;
 }
 
-int PathTrackSndStream::vfn_35(void)
+int PathTrackSndStream::DetachStreamInstance()
 {
-    int value = m0;
-    if (value < 0) {
+    int handle = mHandle;
+    if (handle < 0) {
         return -18;
     }
-    m0 = -1;
-    m118 = 0;
-    return value;
+    mHandle = -1;
+    mpBuffer = 0;
+    return handle;
 }
 
-int PathTrackSndStream::vfn_15(int value)
+void PathTrackSndStream::CheckStatus()
+{
+    SndStreamStatus_t status;
+    SndStreamRequestStatus_t request;
+    unsigned int played;
+    int i;
+
+    memset(&mStatus, 0, sizeof(mStatus));
+    mStatus.mVoice = -1;
+    mStatus.unk_0xC = -1;
+    mStatus.mNode = -1;
+    if (mHandle >= 0) {
+        mDirty = 1;
+        mStatus.mReady = 1;
+        SNDSYS_entercritical();
+        SNDSTRM_status(mHandle, &status);
+        mStatus.mRemaining = 0;
+        mStatus.mBuffered = 0;
+        if (status.mRequests >= mMaxRequests) {
+            mStatus.mReady = 0;
+        }
+        for (i = 0; i < mMaxRequests; i++) {
+            mpRequests[i].mPlayed = 0;
+            if (mpRequests[i].mRequest >= 0) {
+                SNDSTRM_requeststatus(mpRequests[i].mRequest, &request);
+                switch (request.mState) {
+                case 1:
+                    mpRequests[i].mPlayed = mpRequests[i].mLength;
+                    mStatus.mRemaining += mpRequests[i].mLength;
+                    mStatus.mBuffered += request.unk_0xC;
+                    mStatus.mReady = 0;
+                    break;
+                case 0:
+                case 2:
+                    mpRequests[i].mPlayed = request.unk_0x8;
+                    if (request.unk_0x4 == 0 && request.unk_0x8 == 0) {
+                        mpRequests[i].mPlayed = mpRequests[i].mLength;
+                    }
+                    played = mpRequests[i].mPlayed;
+                    mStatus.mRemaining += played;
+                    mStatus.mBuffered += request.unk_0xC;
+                    mStatus.mPosition = played;
+                    if (request.unk_0xC < request.unk_0x8) {
+                        mStatus.mReady = 0;
+                    }
+                    break;
+                default:
+                    mpRequests[i].mRequest = -1;
+                    mpRequests[i].mNode = -1;
+                    break;
+                }
+                if (mpRequests[i].mNode >= 0) {
+                    mStatus.mNode = mpRequests[i].mNode;
+                    mStatus.unk_0x8 = mpRequests[i].unk_0x10;
+                }
+            }
+        }
+        mStatus.unk_0xC = mpRequests[0].mNode;
+        mStatus.mVoice = mpRequests[0].mRequest;
+        mStatus.mLength = mpRequests[0].mLength;
+        mVolume = SNDSTRM_getprogvol(mHandle);
+        mDirty = 0;
+        SNDSYS_leavecritical();
+    }
+}
+
+int PathTrackSndStream::SetVolume(int volume)
 {
     int result = 0;
-    if (fn_8027D9EC(this) == 0) {
+    if (PathTrackSnd::SetVolume(volume) == 0) {
         SNDSYS_entercritical();
-        result = SNDSTRM_drylevel(m0, value);
+        result = SNDSTRM_setvol(mHandle, -1, (float)volume * (1.0f / 127.0f));
         SNDSYS_leavecritical();
-        mC = value;
+        mVolume = volume;
+        mPlayOpts.m0 = volume;
     }
     return result;
 }
 
-int PathTrackSndStream::vfn_17(int a, int b)
+int PathTrackSndStream::SetDryLevel(int level)
 {
     int result = 0;
-    if (fn_8027D9F4(this) == 0) {
+    if (PathTrackSnd::SetDryLevel(level) == 0) {
         SNDSYS_entercritical();
-        result = SNDSTRM_fxlevel(m0, a, b);
+        result = SNDSTRM_drylevel(mHandle, level);
         SNDSYS_leavecritical();
-        m8 = b;
+        mDryLevel = level;
     }
     return result;
 }
 
-int PathTrackSndStream::vfn_25(int value)
+int PathTrackSndStream::SetFXSendLevel(int send, int level)
 {
-    return SNDSTRM_modifyhold(m120->m4, value);
+    int result = 0;
+    if (PathTrackSnd::SetFXSendLevel(send, level) == 0) {
+        SNDSYS_entercritical();
+        result = SNDSTRM_fxlevel(mHandle, send, level);
+        SNDSYS_leavecritical();
+        mFXSendLevel = level;
+    }
+    return result;
 }
 
-int PathTrackSndStream::vfn_19(int value)
+int PathTrackSndStream::ModifyHold(int hold)
+{
+    return SNDSTRM_modifyhold(mpRequests->mRequest, hold);
+}
+
+int PathTrackSndStream::SetPitchMult(int pitch)
 {
     int result;
     SNDSYS_entercritical();
-    result = SNDSTRM_pitchmult(m0, value);
+    result = SNDSTRM_pitchmult(mHandle, pitch);
     SNDSYS_leavecritical();
-    m108 = value;
-    m114 = value;
+    mPlayOpts.mC = pitch;
+    mPitchMult = pitch;
     return result;
 }
 
-extern "C" {
-
-void fn_8027EAB4(PathTrackSndStream *p, int a, int b)
+void PathTrackSndStream::StreamCache(char *data, int size)
 {
-    p->m124 = a;
-    p->m128 = b;
+    mpCache = data;
+    mCacheSize = size;
 }
 
-}
-
-int PathTrackSndStream::vfn_09(int index)
+int PathTrackSndStream::TimeRemaining(int index)
 {
-    Record_8027EAC0 *record;
+    PathStreamRequest_t *request;
     if (index < 0) {
-        return m58;
+        return mStatus.mRemaining;
     }
-    if (index < m11C) {
-        record = &m120[index];
-        if (record->m4 >= 0) {
-            return record->m8;
+    if (index < mMaxRequests) {
+        // FAKEMATCH: integer address arithmetic; it keeps the target operand order of the request address add (offset first)
+        request = (PathStreamRequest_t *)(index * sizeof(PathStreamRequest_t) + (int)mpRequests);
+        if (request->mRequest >= 0) {
+            return request->mPlayed;
         }
     }
     return -8;
 }
 
-int PathTrackSndStream::vfn_04(void)
+int PathTrackSndStream::Play(int node, unsigned int offset, int count, int key, unsigned int length)
 {
     int result;
-    SNDSYS_entercritical();
-    result = fn_8026E388(m0);
-    SNDSYS_leavecritical();
-    m38 = 1;
-    vfn_03();
+    int i;
+
+    if (mpCache != 0 && (int)(offset << 7) < mCacheSize) {
+        result = AudioVoiceForwardData(mHandle, key, mpCache, offset << 7);
+    } else {
+        result = fn_8026E364(mHandle, key, &mPath, offset << 7);
+    }
+    if (result >= 0) {
+        unk_0x18 = mMaxRequests;
+        for (i = mMaxRequests - 1; i > 0; i--) {
+            mpRequests[i] = mpRequests[i - 1];
+            if (mpRequests[i].mRequest < 0) {
+                unk_0x18 = i - 1;
+            }
+        }
+        mpRequests[0].mRequest = result;
+        mpRequests[0].mLength = length;
+        mpRequests[0].mNode = node;
+        mpRequests[0].unk_0x10 = -1;
+        mStatus.mReady = 0;
+    }
+    mDirty = 1;
     return result;
 }
 
-void PathTrackSndStream::vfn_23(Record_8027EC7C *record)
+int PathTrackSndStream::Stop()
 {
-    m7C = *record;
+    int result;
+    SNDSYS_entercritical();
+    result = fn_8026E388(mHandle);
+    SNDSYS_leavecritical();
+    mStatus.mReady = 1;
+    UpdateStatus();
+    return result;
 }
 
-void PathTrackSndStream::SetLowPass(int value)
+void PathTrackSndStream::SetFilePath(PathTrackFile_t *path)
+{
+    mPath = *(PathTrackPath_t *)path;
+}
+
+}
+
+extern "C" void PATHI_streamlowpass(void *track, int value)
 {
     SNDSYS_entercritical();
-    SNDSTRM_lowpass(m0, value);
+    SNDSTRM_lowpass(((Path::PathTrackSndStream *)track)->mHandle, value);
     SNDSYS_leavecritical();
-}
-
-extern "C" {
-
-void fn_8027ED4C(PathTrackSnd *p)
-{
-    p->m1C = 1;
-}
-
-void fn_8027ED58(PathTrackSnd *p)
-{
-}
-
-int fn_8027ED5C(PathTrackSnd *p)
-{
-    return -1;
-}
-
-int fn_8027ED64(PathTrackSnd *p)
-{
-    return p->m114;
-}
-
 }
