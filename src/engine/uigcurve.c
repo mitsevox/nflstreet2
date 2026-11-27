@@ -323,11 +323,11 @@ void _UIGCurveDraw(UIGNode_t *pNode)
         Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
     UIGCurveRender(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x10) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 
