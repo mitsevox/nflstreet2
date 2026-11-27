@@ -22773,19 +22773,13 @@
     },
     {
       "source": "src/engine/animmotroot.c",
-      "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8, the source-form row of AnimMotBlendRootAngle and the HOLDOUT source-form row of AnimMotBlendRootOffset. AnimMotBlendRootAngle (exact since round 5 lane 2, 2026-11-27) and AnimMotRotateHalfTurn link exact; AnimMotBlendRootOffset keeps the original code; the .rodata pool links whole.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8 and the source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset; every function exact and linked since round 5 lane 2 (2026-11-27; the two blends were holdouts of the e1d pull request), so the file links whole with engine_c_fastmath and no holdouts; the .rodata pool links whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801BCA74",
-          "end": "0x801BCCAC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BCEEC",
           "end": "0x801BCF40"
         },
         {
@@ -22794,16 +22788,7 @@
           "start": "0x802AEDC0",
           "end": "0x802AEDC8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "AnimMotBlendRootOffset",
-            "evidence": "evidence.tsv source-form 0x801BCCAC-0x801BCEEC"
-          }
-        ],
-        "evidence": "Two blend functions stayed measured partials after copy-form, indexing-form and inline-helper tries; merge notes of the e1d pull request list them (round 5 lane 2 merge notes, 2026-11-27: AnimMotBlendRootAngle made exact)."
-      }
+      ]
     },
     {
       "source": "src/engine/llvector.c",

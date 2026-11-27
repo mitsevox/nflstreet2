@@ -23951,37 +23951,6 @@
       ]
     },
     {
-      "source": "src/engine/animmotroot.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8, the source-form row of AnimMotBlendRootAngle (exact and linked since round 5 lane 2, 2026-11-27) and the HOLDOUT source-form row of AnimMotBlendRootOffset, which keeps the original code while AnimMotBlendRootAngle, AnimMotRotateHalfTurn and the pool link.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801BCA74",
-          "end": "0x801BCF40"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEDC0",
-          "end": "0x802AEDC8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "AnimMotBlendRootAngle",
-          "start": "0x801BCA74",
-          "end": "0x801BCCAC"
-        },
-        {
-          "symbol": "AnimMotBlendRootOffset",
-          "start": "0x801BCCAC",
-          "end": "0x801BCEEC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
