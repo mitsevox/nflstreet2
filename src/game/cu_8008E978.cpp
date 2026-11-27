@@ -7476,7 +7476,7 @@ extern "C" void fn_800BC3F0(void);
 
 extern "C" void fn_800BC51C(PreGamePhase *pObject);
 
-extern "C" void fn_800BCF7C(void);
+extern "C" void PreGamePlaybacksStart(void);
 
 extern "C" void fn_800BD184(PreGamePhase *p, int value);
 
@@ -29393,7 +29393,7 @@ void PreGamePhase::OnExit()
     }
 }
 
-extern "C" void fn_800BCF7C(void)
+extern "C" void PreGamePlaybacksStart(void)
 {
     Params_80096A58 crowd;
     Params_80096A58 ambience;
@@ -29462,12 +29462,13 @@ extern "C" void fn_800BCF7C(void)
     crowd.mUnknown24 = 0;
     crowd.mUnknown28 = SyncRandGetRange(1, 2);
     crowd.mUnknown32 = 300.0f;
+    int crowdFlags = crowd.mUnknown12 | 0x50;
     ambience.mUnknown20 = 2;
     ambience.mUnknown24 = 0;
-    crowd.mUnknown12 |= 0x50;
+    ambience.mUnknown28 = 0;
     ambience.mUnknown12 |= 0x10;
     ambience.mUnknown32 = 300.0f;
-    ambience.mUnknown28 = 0;
+    crowd.mUnknown12 = crowdFlags;
     lbl_803EC98C->mUnknown8 = fn_80096A58(&crowd);
     ResSync(0);
     if (lbl_803EC98C->mUnknown8 != -1) {

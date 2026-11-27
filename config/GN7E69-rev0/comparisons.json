@@ -17262,7 +17262,7 @@
           "end": "0x800BCF7C"
         },
         {
-          "symbol": "fn_800BCF7C",
+          "symbol": "PreGamePlaybacksStart",
           "start": "0x800BCF7C",
           "end": "0x800BD184"
         },
