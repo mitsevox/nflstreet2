@@ -6356,7 +6356,7 @@ extern "C" void fn_800A4980(Object_80039F5C *p, Object_80039F5C *pOther, int ind
 
 extern "C" void fn_800A4E64(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
-extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
+extern "C" int DefReactTryStart(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
 
 extern "C" int fn_800A506C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
@@ -18005,7 +18005,7 @@ extern "C" void fn_800A4E64(Object_80039F5C *p, Object_80039F5C *pOther, int ind
     pParams->mUnknownC = 5;
 }
 
-extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level)
+extern "C" int DefReactTryStart(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level)
 {
     Params_800A4E8C params;
     int result = 0;
@@ -18050,11 +18050,11 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
                                       : (p->mTarget.mUnknownC > params.mUnknown0 ? params.mUnknown0 : p->mTarget.mUnknownC);
                 }
                 p->mFlags |= 0x20000;
-                p->mTarget.mValue = p->mTarget.mUnknownC;
                 result = 1;
                 p->mTarget.mUnknown10 = 0;
                 p->mTarget.mUnknown4 = -1;
                 p->mTarget.mUnknown8 = 1.0f;
+                p->mTarget.mValue = p->mTarget.mUnknownC;
             }
         }
     }
@@ -18397,7 +18397,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
         Object_80039F5C *p = PlyrGet(team, i);
 
         if ((p->mFlags & 0x4000) == 0 && fn_800A554C(p, pTarget, pOther, kind)
-            && fn_800A4E8C(p, pOther, kind, level)) {
+            && DefReactTryStart(p, pOther, kind, level)) {
             AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
                 StyleTrackerOnMoveResult(4);
