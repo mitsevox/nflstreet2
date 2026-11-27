@@ -252,9 +252,15 @@ int StoreIsItemLocked(int index, int id)
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue, 0x4C544154, category);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (status != 0) id++;
     } else {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (status != 0) id++;
     }
     if (status == 0) {
         if (count == 0) result = 0;
@@ -273,9 +279,15 @@ int StoreIsItemNew(int index, int id)
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1, 0x4C544154, category);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (status != 0) id++;
     } else {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (status != 0) id++;
     }
     if (status == 0) {
         if (count == 0) result = 0;
@@ -289,8 +301,10 @@ void StoreClearItemNew(int index, int id)
     int db = DbUserGetDb(DbUserGetCurrent());
     int category = StoreGetTattooLocation(index);
     if (category != 3) {
-        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
+                pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category) != 0) id++;
     } else {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id);
@@ -303,8 +317,10 @@ void StoreUnlockItem(int index, int id)
     int db = DbUserGetDb(DbUserGetCurrent());
     int category = StoreGetTattooLocation(index);
     if (category != 3) {
-        TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
-                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category);
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
+        if (TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
+                pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category) != 0) id++;
     } else {
         TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id);
@@ -339,10 +355,12 @@ int StoreTeamCreate(void)
     int team;
     DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (int i = 0; i < 13; i++) {
-        columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i], _StoreDb_aTeamDefaults[i]);
+        columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i]);
+        columns[i].mValue = _StoreDb_aTeamDefaults[i];
     }
     for (int i = 0; i < 3; i++) {
-        columns[i + 13].Set(0x4D414554, _StoreDb_aTeamColumns[i + 13], (int)_StoreDb_apszTeamNames[i]);
+        const char *pName = _StoreDb_apszTeamNames[i];
+        columns[i + 13].Set(0x4D414554, _StoreDb_aTeamColumns[i + 13], (int)pName);
     }
     columns[0].mValue = team;
     columns[16].SetEnd();

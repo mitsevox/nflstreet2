@@ -62,7 +62,7 @@ int GameTextGetPadPlayer(int a);
 int GameTextFindPlayerPad(int a);
 void FEPlyrSetPlayer(int index, int a, int b);
 int GameTextGetMemCardNames(char *pText0, int length0, char *pText1, int length1, char *pText2, int length2, char *pText3, int length3);
-int fn_801D6850(void);
+int MemCardMgrGetFileType(void);
 void GameTextGetEnteredName(char *pText, int length);
 void CamPlayStartJitter(int a);
 void UserProfileDelete(signed char a);
@@ -350,7 +350,7 @@ int MsgGameHandleMessage(unsigned int id, MsgGameArg_t *pArgs, int unused, MsgGa
                                  pArgs[3].pParams->mpText, pArgs[3].pParams->mLength);
         break;
     case 0xDB:
-        pResult->i = fn_801D6850();
+        pResult->i = MemCardMgrGetFileType();
         break;
     case 6:
         GameTextGetEnteredName(pArgs[0].pParams->mpText, pArgs[0].pParams->mLength);

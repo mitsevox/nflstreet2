@@ -556,7 +556,10 @@ void TeamDbGetRandomLogoColors(int *pLogo, int *pFirst, int *pSecond, int *pThir
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
+    int status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a cursor for select * from 'LTPS'\n", &cursor);
+    // FAKEMATCH: dead increment of the unused status; its branch makes a block boundary after the
+    // declare call that lasts until after register allocation (flow deletes the increment)
+    if (status != 0) status++;
     cursor.mUnknown4 = SyncRandGetIntRange(1, 0, result.mUnknown0 - 1);
     TDbCompilePerformOp(0, "use 'TATS' fetch from \x8a 'LGLT' into \x85 and '1CMT' into \x85 and '2CMT' into \x85 and '3CMT' into \x85\n",
                 &cursor, pLogo, pFirst, pSecond, pThird);
@@ -579,7 +582,9 @@ void TeamDbGetRandomName(int logo, char *pName, int size)
     cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1;
     cursor.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
+    int status = TDbCompilePerformOp(&result, "declare \x8a cursor for select * from 'CTNR' where ('LGLT' = \x82)\n", &cursor, logo);
+    // FAKEMATCH: dead increment of the unused status, as in TeamDbGetRandomLogoColors
+    if (status != 0) status++;
     int count = result.mUnknown0;
     if (count > 0) {
         cursor.mUnknown4 = SyncRandGetIntRange(1, 0, count - 1);

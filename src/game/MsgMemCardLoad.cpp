@@ -121,7 +121,7 @@ extern "C" int MsgMemCardLoadGetEntryName(int key, int value, TextRecord_t *p)
 
 extern "C" int MsgMemCardLoadGetCardText(TextRecord_t *p)
 {
-    return MemCFormatPort(fn_801D671C(), p->mUnknown8, p->mUnknown4);
+    return MemCFormatPort(MemCardMgrGetPort(), p->mUnknown8, p->mUnknown4);
 }
 
 extern "C" void MsgMemCardLoadRegisterCallbacks()

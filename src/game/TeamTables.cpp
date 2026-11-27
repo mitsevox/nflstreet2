@@ -18,7 +18,9 @@ void TeamTablesCopy(int database, int firstTable, int secondTable,
 {
     int source = DbUserGetDb(database);
     TDbTblFindUnusedId(0x54415453, pFirstCopy);
-    TDbCompilePerformOp(0, "use \x8c select into \x8c.\x8c * from \x8c\n", source, 0x54415453, *pFirstCopy, firstTable);
+    // FAKEMATCH: dead increment of the unused firstTable on a failed copy; its branch splits the two
+    // copies into separate blocks until after register allocation (flow deletes the increment)
+    if (TDbCompilePerformOp(0, "use \x8c select into \x8c.\x8c * from \x8c\n", source, 0x54415453, *pFirstCopy, firstTable) != 0) firstTable++;
     TDbTblFindUnusedId(0x54415453, pSecondCopy);
     TDbCompilePerformOp(0, "use \x8c select into \x8c.\x8c * from \x8c\n", source, 0x54415453, *pSecondCopy, secondTable);
 }

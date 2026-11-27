@@ -8,16 +8,16 @@
 #include "game/MemCardMsg.h"
 
 extern "C" {
-int fn_801D671C(void);
-void fn_801D6B24(char *pText, int size);
+int MemCardMgrGetPort(void);
+void MemCardMgrGetFileTitle(char *pText, int size);
 void MemCFormatPort(int port, char *pText, int size);
-int fn_801D6850(void);
-int fn_801D673C(int index);
+int MemCardMgrGetFileType(void);
+int MemCardMgrGetCardType(int index);
 void MemCFormatCardType(int value, char *pText, int size);
 void MemCardFilesGetTypeName(int value, char *pOut, int size);
 unsigned int MemCardFilesGetFileSize(int value);
 int MemCardFilesGetTotalSize(void);
-char *fn_801D6918(void);
+char *MemCardMgrGetLastAction(void);
 void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const char *pText);
 int snprintf(char *pOut, int size, const char *pFormat, ...);
 void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *pC, char *pD, char *pE);
@@ -52,36 +52,36 @@ void MemCardMsgGetText(int value, MemCardMsgText_t *pA, MemCardMsgText_t *pB, Me
     char textB[32];
     char textC[32];
     char textD[32];
-    int index = fn_801D671C();
+    int index = MemCardMgrGetPort();
     int flag = 0;
     strcpy(text, "");
     strcpy(textB, "");
 
     switch (value) {
     case 1: case 5: case 8: case 15: case 50: case 59: case 94: case 119: case 122:
-        fn_801D6B24(text, 32);
+        MemCardMgrGetFileTitle(text, 32);
         if (strcmp(text, "???") == 0) {
-            MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+            MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
         }
         break;
     case 63: {
-        int key = fn_801D6850();
+        int key = MemCardMgrGetFileType();
         if (key < 1 || key > 3) {
             flag = lbl_803EB720;
         }
     }
     case 2:
     {
-        int type = fn_801D6850();
+        int type = MemCardMgrGetFileType();
         if (type == 1) {
-            MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+            MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
         } else if (type > 1) {
             if (type <= 3) {
-                fn_801D6B24(textC, 32);
+                MemCardMgrGetFileTitle(textC, 32);
                 if (strcmp(textC, "???") == 0) {
-                    MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+                    MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
                 } else {
-                    MemCardFilesGetTypeName(fn_801D6850(), textD, 32);
+                    MemCardFilesGetTypeName(MemCardMgrGetFileType(), textD, 32);
                     snprintf(text, 32, "%s %s", textD, textC);
                 }
             }
@@ -89,20 +89,20 @@ void MemCardMsgGetText(int value, MemCardMsgText_t *pA, MemCardMsgText_t *pB, Me
         break;
     }
     case 4: case 9: case 19: case 23: case 51: case 93: case 98: case 99: case 114: case 117: case 123:
-        MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+        MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
         break;
     case 10:
-        MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+        MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
         break;
     case 17:
-        MemCardFilesGetTypeName(fn_801D6850(), text, 32);
+        MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
         break;
     case 6: case 91: case 107: case 111: case 113: case 120:
-        strcpy(text, fn_801D6918());
+        strcpy(text, MemCardMgrGetLastAction());
         break;
     case 22: case 64: case 65: case 96: case 97: case 115: case 116:
-        MemCardFilesGetTypeName(fn_801D6850(), text, 32);
-        MemCardUtilFormatBlocks(MemCardFilesGetFileSize(fn_801D6850()), textB, 32, 0, 0);
+        MemCardFilesGetTypeName(MemCardMgrGetFileType(), text, 32);
+        MemCardUtilFormatBlocks(MemCardFilesGetFileSize(MemCardMgrGetFileType()), textB, 32, 0, 0);
         break;
     case 55:
         MemCardUtilFormatBlocks(MemCardFilesGetTotalSize(), text, 32, 0, 0);
@@ -126,7 +126,7 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
     if (GameOptionsGet(12) != 1) {
         strcpy(textF, "");
     }
-    int key = fn_801D673C(index);
+    int key = MemCardMgrGetCardType(index);
     MemCFormatCardType(-1, textB, 12);
     if (strcmp(pA, "UserID") == 0) {
         strcpy(pA, "User ID");
@@ -386,7 +386,7 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
         break;
     case 63:
         strcpy(pC, "!");
-        if (fn_801D6850() == 0) {
+        if (MemCardMgrGetFileType() == 0) {
             if (flag == 1) {
                 sprintf(pD, "Do you want to save all your files to %s?\nWARNING! Not saving may lose your current files.", textB);
             } else {
@@ -582,7 +582,7 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
         strcpy(pE, "|^Continue");
         break;
     case 43:
-        strcpy(textE, fn_801D6918());
+        strcpy(textE, MemCardMgrGetLastAction());
         strcpy(pC, "!");
         sprintf(pD, "%s failed.  Please check the %s in %s and try again.", textE, text, textC);
         strcpy(pE, "|^Continue");
@@ -590,7 +590,7 @@ void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *
     case 54:
     case 110:
     default:
-        strcpy(textE, fn_801D6918());
+        strcpy(textE, MemCardMgrGetLastAction());
         strcpy(pC, "!");
         sprintf(pD, "%s failed.  Please check the %s in %s and try again.", textE, text, textC);
         strcpy(pE, "|^Continue");

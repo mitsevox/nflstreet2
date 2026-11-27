@@ -269,10 +269,11 @@ int iSPCH_GetPhraseBank(SpchEventKey_t *key, SpchEventParm_t *event, SpchPhraseB
     int id = key->mId;
     int mode = key->mUnknown3;
     int index = key->mUnknown2;
-    out->mBankIndex = -1;
     int value = -1;
-    out->mSubBank = -1;
-    out->mHandle = -1;
+    int slot = -1;
+    out->mSubBank = slot;
+    out->mHandle = slot;
+    out->mBankIndex = slot;
     switch (mode) {
     case 0:
         out->mBankIndex = iSPCH_FindBank(id, &value);
@@ -283,13 +284,11 @@ int iSPCH_GetPhraseBank(SpchEventKey_t *key, SpchEventParm_t *event, SpchPhraseB
         out->mHandle = value;
         break;
     case 2:
-        {
-            int slot = iSPCH_FindBank(id, &value);
-            if (iSPCH_TestSubBankBounds(slot, event[index].mWord)) out->mSubBank = event[index].mHalfwords[1];
-            else value = -1;
-            out->mBankIndex = slot;
-            out->mHandle = value;
-        }
+        slot = iSPCH_FindBank(id, &value);
+        if (iSPCH_TestSubBankBounds(slot, event[index].mWord)) out->mSubBank = event[index].mHalfwords[1];
+        else value = -1;
+        out->mBankIndex = slot;
+        out->mHandle = value;
         break;
     }
     return out->mHandle >= 0;
