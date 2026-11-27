@@ -6,23 +6,23 @@
 struct PlayerHeadIds_t;
 struct Object_8003DEC4;
 
-/* Called with the player by fn_8015F958, fn_8015FB38, fn_8015FC54 and
-   fn_8015FD70 once the loads they start complete (directly when nothing
+/* Called with the player by PlaModelLoadHairAsync, PlaModelLoadHatAsync, PlaModelLoadGlassesAsync and
+   PlaModelLoadJewelAsync once the loads they start complete (directly when nothing
    needs loading). */
-typedef void (*Callback_8015F958)(Object_8003DEC4 *pPlayer);
+typedef void (*PlaModelLoadCallback_t)(Object_8003DEC4 *pPlayer);
 
 extern "C" {
 Object_8023417C *fn_8015E2FC(int type, int index, int a);
-void fn_8015E620(unsigned int players, int mode);
+void PlaModelInit(unsigned int players, int mode);
 void fn_8015E73C(int id);
 void fn_8015E908(int a);
 void fn_8015F3FC(int a);
 int fn_8015F5BC(const char *pName);
-void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback);
-void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback);
-void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback);
-void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback);
-void fn_8015FE4C(void);
+void PlaModelLoadHairAsync(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback);
+void PlaModelLoadHatAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback);
+void PlaModelLoadGlassesAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback);
+void PlaModelLoadJewelAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback);
+void PlaModelFinishAsyncLoads(void);
 }
 
 #endif

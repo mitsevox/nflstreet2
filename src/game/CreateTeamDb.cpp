@@ -39,7 +39,7 @@ int PlayerDbGetEyebrows(Object_8008044C *);
 int PlayerDbGetPlex(Object_8008044C *);
 int PlayerDbGetHairColor(Object_8008044C *);
 int PlayerDbGetFacialHairColor(Object_8008044C *);
-void fn_8015F638(int, int, int, int *);
+void PlaModelGetHairStyleModels(int, int, int, int *);
 void PlaTexCacheGetHairTexture(int, int *, int *);
 int PlaTexCacheGetCapFaceId(int);
 void TeamTablesPurgeCreated(int);
@@ -338,7 +338,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
         unsigned int color19 = PlayerDbGetFacialHairColor(&object);
         PlayerDbGetFaceFeatures(&object, &block);
         FaceMorphBuildWeights(&block, &values);
-        fn_8015F638(value6E, value6C, 0, resultIds);
+        PlaModelGetHairStyleModels(value6E, value6C, 0, resultIds);
         PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
         int unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
         int unknown12 = value73 * 3 + value74 + 0x33BA;

@@ -13,8 +13,8 @@
 
 #include <string.h>
 
-/* Pending model load sorted by id by fn_8015E0B8. */
-struct QueueEntry_8031C098 {
+/* Pending model load sorted by id by PlaModelQueuePart. */
+struct PlaModelQueueEntry_t {
     unsigned int mId;
     void *mpData;
 };
@@ -51,20 +51,20 @@ extern char lbl_802EC064[];
 extern char lbl_802EC070[];
 extern char lbl_802EC08C[];
 
-void fn_8015DA7C(void);
-void fn_8015DA80(int index, int load);
-void fn_8015DD3C(int index, int load);
-void fn_8015DE3C(int index, int load);
-void fn_8015DF3C(int index, int load);
-void fn_8015E1F0(void);
-void fn_8015E200(void);
-void fn_8015E210(void);
-void fn_8015E220(void);
-void fn_8015E230(void);
-void fn_8015EB00(int index);
-void fn_8015EC28(int index);
-void fn_8015ED50(int index);
-void fn_8015FE4C(void);
+void PlaModelPostInit(void);
+void PlaModelLoadHair(int index, int load);
+void PlaModelLoadHat(int index, int load);
+void PlaModelLoadGlasses(int index, int load);
+void PlaModelLoadJewel(int index, int load);
+void PlaModelFaceReadDone(void);
+void PlaModelHairReadDone(void);
+void PlaModelHatReadDone(void);
+void PlaModelGlassesReadDone(void);
+void PlaModelJewelReadDone(void);
+void PlaModelClearHair(int index);
+void PlaModelClearHat(int index);
+void PlaModelClearGlasses(int index);
+void PlaModelFinishAsyncLoads(void);
 }
 
 #define LOD(scale, a, b, id) { scale, a, b, id, 0, { 0 } }
@@ -78,128 +78,128 @@ void fn_8015FE4C(void);
     }
 #define PLAYER_TABLE(set)                                                                   \
     {                                                                                       \
-        lbl_802DFD20[set][0], lbl_802DFD20[set][1], lbl_802DFD20[set][2],                   \
-        lbl_802DFD20[set][3], lbl_802DFD20[set][4], lbl_802DFD20[set][5],                   \
-        lbl_802DFD20[set][6], lbl_802DFD20[set][7], lbl_802DFD20[set][8],                   \
-        lbl_802DFD20[set][9], lbl_802DFD20[set][10], lbl_802DFD20[set][11],                 \
-        lbl_802DFD20[set][12], lbl_802DFD20[set][13]                                        \
+        _PlaModel_aPlayerPartLods[set][0], _PlaModel_aPlayerPartLods[set][1], _PlaModel_aPlayerPartLods[set][2],                   \
+        _PlaModel_aPlayerPartLods[set][3], _PlaModel_aPlayerPartLods[set][4], _PlaModel_aPlayerPartLods[set][5],                   \
+        _PlaModel_aPlayerPartLods[set][6], _PlaModel_aPlayerPartLods[set][7], _PlaModel_aPlayerPartLods[set][8],                   \
+        _PlaModel_aPlayerPartLods[set][9], _PlaModel_aPlayerPartLods[set][10], _PlaModel_aPlayerPartLods[set][11],                 \
+        _PlaModel_aPlayerPartLods[set][12], _PlaModel_aPlayerPartLods[set][13]                                        \
     }
 
-static const char *lbl_802DF180[4] = { "Heavy", "Muscular", "Thin", "Athletic" };
+static const char *_PlaModel_apszBodyTypes[4] = { "Heavy", "Muscular", "Thin", "Athletic" };
 
-static ModelLod_802DF190 lbl_802DF190[4][3] = {
+static ModelLod_802DF190 _PlaModel_aBodyLods[4][3] = {
     { LOD(0.3f, 2700, 63000, 1), LOD(0.0725f, 1500, 32000, 2), LOD_END },
     { LOD(0.3f, 2700, 63000, 3), LOD(0.0725f, 1500, 32000, 4), LOD_END },
     { LOD(0.3f, 2700, 63000, 5), LOD(0.0725f, 1500, 32000, 6), LOD_END },
     { LOD(0.3f, 2700, 63000, 7), LOD(0.0725f, 1500, 32000, 8), LOD_END },
 };
 
-static ModelLod_802DF190 lbl_802DF550[4][2][2] = {
+static ModelLod_802DF190 _PlaModel_aHandLods[4][2][2] = {
     { { LOD(2.0f, 228, 8000, 13), LOD_END }, { LOD(2.0f, 228, 8000, 14), LOD_END } },
     { { LOD(2.0f, 228, 8000, 15), LOD_END }, { LOD(2.0f, 228, 8000, 16), LOD_END } },
     { { LOD(2.0f, 228, 8000, 17), LOD_END }, { LOD(2.0f, 228, 8000, 18), LOD_END } },
     { { LOD(2.0f, 228, 8000, 19), LOD_END }, { LOD(2.0f, 228, 8000, 20), LOD_END } },
 };
 
-static ModelLod_802DF190 lbl_802DFA50[3] = {
+static ModelLod_802DF190 _PlaModel_aFaceLods[3] = {
     LOD(0.3f, 770, 63000, NO_MODEL), LOD(0.0725f, 400, 32000, NO_MODEL), LOD_END,
 };
 
-static ModelLod_802DF190 lbl_802DFB40[3] = {
+static ModelLod_802DF190 _PlaModel_aBaseHeadLods[3] = {
     LOD(0.3f, 770, 63000, 9), LOD(0.0725f, 400, 32000, 10), LOD_END,
 };
 
-static ModelLod_802DF190 lbl_802DFC30[3] = {
+static ModelLod_802DF190 _PlaModel_aMorphHeadLods[3] = {
     LOD(0.3f, 770, 63000, 11), LOD(0.0725f, 400, 32000, 12), LOD_END,
 };
 
-static ModelLod_802DF190 lbl_802DFD20[4][14][3] = {
+static ModelLod_802DF190 _PlaModel_aPlayerPartLods[4][14][3] = {
     PLAYER_LODS_14(1), PLAYER_LODS_14(1), PLAYER_LODS_14(1), PLAYER_LODS_14(0x151),
 };
 
-static ModelLod_802DF190 *lbl_802E31A0[4] = {
-    lbl_802DF190[0], lbl_802DF190[1], lbl_802DF190[2], lbl_802DF190[3],
+static ModelLod_802DF190 *_PlaModel_apBodyLods[4] = {
+    _PlaModel_aBodyLods[0], _PlaModel_aBodyLods[1], _PlaModel_aBodyLods[2], _PlaModel_aBodyLods[3],
 };
 
-static ModelLod_802DF190 *lbl_802E31B0[4][2] = {
-    { lbl_802DF550[0][0], lbl_802DF550[0][1] },
-    { lbl_802DF550[1][0], lbl_802DF550[1][1] },
-    { lbl_802DF550[2][0], lbl_802DF550[2][1] },
-    { lbl_802DF550[3][0], lbl_802DF550[3][1] },
+static ModelLod_802DF190 *_PlaModel_apHandLods[4][2] = {
+    { _PlaModel_aHandLods[0][0], _PlaModel_aHandLods[0][1] },
+    { _PlaModel_aHandLods[1][0], _PlaModel_aHandLods[1][1] },
+    { _PlaModel_aHandLods[2][0], _PlaModel_aHandLods[2][1] },
+    { _PlaModel_aHandLods[3][0], _PlaModel_aHandLods[3][1] },
 };
 
-static ModelLod_802DF190 *lbl_802E31D0[14] = PLAYER_TABLE(0);
-static ModelLod_802DF190 *lbl_802E3208[14] = PLAYER_TABLE(1);
-static ModelLod_802DF190 *lbl_802E3240[14] = PLAYER_TABLE(2);
-static ModelLod_802DF190 *lbl_802E3278[14] = PLAYER_TABLE(3);
+static ModelLod_802DF190 *_PlaModel_apHairLods[14] = PLAYER_TABLE(0);
+static ModelLod_802DF190 *_PlaModel_apHatLods[14] = PLAYER_TABLE(1);
+static ModelLod_802DF190 *_PlaModel_apGlassesLods[14] = PLAYER_TABLE(2);
+static ModelLod_802DF190 *_PlaModel_apJewelLods[14] = PLAYER_TABLE(3);
 
-static unsigned char lbl_803EB330 = 0;
-static unsigned char lbl_803EB331 = 0;
-static unsigned char lbl_803EB332 = 0;
-static unsigned char lbl_803EB333 = 0;
-static unsigned char lbl_803EB334 = 0;
-static ModelLod_802DF190 *lbl_803EB338 = lbl_802DFA50;
-static ModelLod_802DF190 *lbl_803EB33C = lbl_802DFB40;
-static ModelLod_802DF190 *lbl_803EB340 = lbl_802DFC30;
-static unsigned char lbl_803EB344 = 0;
-static AnimSkeleton_t *lbl_803EB348 = 0;
-static AnimSkeleton_t *lbl_803EB34C[2] = { 0 };
-static AnimSkeleton_t *lbl_803EB354 = 0;
-static AnimSkeleton_t *lbl_803EB358 = 0;
-static unsigned char lbl_803EB35C = 0;
-static unsigned char lbl_803EB35D = 1;
-static int lbl_803EB360 = 0;
+static unsigned char _PlaModel_uFaceLoadsPending = 0;
+static unsigned char _PlaModel_uHairLoadsPending = 0;
+static unsigned char _PlaModel_uHatLoadsPending = 0;
+static unsigned char _PlaModel_uGlassesLoadsPending = 0;
+static unsigned char _PlaModel_uJewelLoadsPending = 0;
+static ModelLod_802DF190 *_PlaModel_pFaceLods = _PlaModel_aFaceLods;
+static ModelLod_802DF190 *_PlaModel_pBaseHeadLods = _PlaModel_aBaseHeadLods;
+static ModelLod_802DF190 *_PlaModel_pMorphHeadLods = _PlaModel_aMorphHeadLods;
+static unsigned char _PlaModel_bCacheFace = 0;
+static AnimSkeleton_t *_PlaModel_pBodySkeleton = 0;
+static AnimSkeleton_t *_PlaModel_apHandSkeletons[2] = { 0 };
+static AnimSkeleton_t *_PlaModel_pHairSkeleton = 0;
+static AnimSkeleton_t *_PlaModel_pJewelSkeleton = 0;
+static unsigned char _PlaModel_bPlayerBuffersAllocated = 0;
+static unsigned char _PlaModel_bSyncLoads = 1;
+static int _PlaModel_iLodMode = 0;
 
-static QueueEntry_8031C098 *lbl_8031C098[4];
-static int lbl_8031C0A8[4];
-static void *lbl_8031C0B8[4];
-static unsigned int lbl_8031C0C8[4];
-static Object_80233EAC lbl_8031C0D8[4];
-static Object_80233EAC lbl_8031C128[4][2];
-static Object_80233EAC lbl_8031C1C8;
-static Object_80233EAC lbl_8031C1DC;
-static Object_80233EAC lbl_8031C1F0;
-static Object_80233EAC lbl_8031C204[14];
-static Object_80233EAC lbl_8031C31C[14];
-static Object_80233EAC lbl_8031C434[14];
-static Object_80233EAC lbl_8031C54C[14];
-static void *lbl_8031C664[4][2];
-static void *lbl_8031C684[4][2][1];
-static void *lbl_8031C6A4[14][2];
-static void *lbl_8031C714[14][2];
-static void *lbl_8031C784[14][2];
-static void *lbl_8031C7F4[14][2];
+static PlaModelQueueEntry_t *_PlaModel_apLoadQueues[4];
+static int _PlaModel_aiLoadQueueCounts[4];
+static void *_PlaModel_apLoadQueueArchives[4];
+static unsigned int _PlaModel_auLoadQueuedPlayers[4];
+static Object_80233EAC _PlaModel_aBodies[4];
+static Object_80233EAC _PlaModel_aHands[4][2];
+static Object_80233EAC _PlaModel_Face;
+static Object_80233EAC _PlaModel_BaseHead;
+static Object_80233EAC _PlaModel_MorphHead;
+static Object_80233EAC _PlaModel_aHair[14];
+static Object_80233EAC _PlaModel_aHats[14];
+static Object_80233EAC _PlaModel_aGlasses[14];
+static Object_80233EAC _PlaModel_aJewels[14];
+static void *_PlaModel_apBodyData[4][2];
+static void *_PlaModel_apHandData[4][2][1];
+static void *_PlaModel_apHairData[14][2];
+static void *_PlaModel_apHatData[14][2];
+static void *_PlaModel_apGlassesData[14][2];
+static void *_PlaModel_apJewelData[14][2];
 
-static Callback_8015F958 lbl_803ECA6C[1];
-static Object_8003DEC4 *lbl_803ECA70[1];
-static int lbl_803ECA74[1];
-static Callback_8015F958 lbl_803ECA78[1];
-static Object_8003DEC4 *lbl_803ECA7C[1];
-static int lbl_803ECA80[1];
-static Callback_8015F958 lbl_803ECA84[1];
-static Object_8003DEC4 *lbl_803ECA88[1];
-static int lbl_803ECA8C[1];
-static Callback_8015F958 lbl_803ECA90[1];
-static Object_8003DEC4 *lbl_803ECA94[1];
-static int lbl_803ECA98[1];
-static Callback_8015F958 lbl_803ECA9C[1];
-static Object_8003DEC4 *lbl_803ECAA0[1];
-static void *lbl_803ECAA4[2];
-static char *lbl_803ECAAC[2];
-static void *lbl_803ECAB4[2];
-static char *lbl_803ECABC[2];
-static int lbl_803ECAC4[2];
-static void *lbl_803ECACC;
-static void *lbl_803ECAD0;
-static void *lbl_803ECAD4;
-static void *lbl_803ECAD8;
-static void *lbl_803ECADC;
-static void *lbl_803ECAE0;
-static void *lbl_803ECAE4;
+static PlaModelLoadCallback_t _PlaModel_apFaceCallback[1];
+static Object_8003DEC4 *_PlaModel_apFacePlayer[1];
+static int _PlaModel_aiHairPlayerIndex[1];
+static PlaModelLoadCallback_t _PlaModel_apHairCallback[1];
+static Object_8003DEC4 *_PlaModel_apHairPlayer[1];
+static int _PlaModel_aiHatPlayerIndex[1];
+static PlaModelLoadCallback_t _PlaModel_apHatCallback[1];
+static Object_8003DEC4 *_PlaModel_apHatPlayer[1];
+static int _PlaModel_aiGlassesPlayerIndex[1];
+static PlaModelLoadCallback_t _PlaModel_apGlassesCallback[1];
+static Object_8003DEC4 *_PlaModel_apGlassesPlayer[1];
+static int _PlaModel_aiJewelPlayerIndex[1];
+static PlaModelLoadCallback_t _PlaModel_apJewelCallback[1];
+static Object_8003DEC4 *_PlaModel_apJewelPlayer[1];
+static void *_PlaModel_apBaseHeadData[2];
+static char *_PlaModel_apFaceData[2];
+static void *_PlaModel_apMorphHeadData[2];
+static char *_PlaModel_apFaceCache[2];
+static int _PlaModel_aiFaceCacheIds[2];
+static void *_PlaModel_pModelArchive;
+static void *_PlaModel_pHairArchive;
+static void *_PlaModel_pRosterHairArchive;
+static void *_PlaModel_pFaceArchive;
+static void *_PlaModel_pHatArchive;
+static void *_PlaModel_pGlassesArchive;
+static void *_PlaModel_pJewelArchive;
 
 static inline void *HairArchive(unsigned int id)
 {
-    return id > ROSTER_ID_BASE ? lbl_803ECAD4 : lbl_803ECAD0;
+    return id > ROSTER_ID_BASE ? _PlaModel_pRosterHairArchive : _PlaModel_pHairArchive;
 }
 
 static inline unsigned int HairId(unsigned int id)
@@ -209,62 +209,72 @@ static inline unsigned int HairId(unsigned int id)
 
 extern "C" {
 
-void fn_8015D3EC(int load)
+void PlaModelLoadBodies(int load)
 {
     unsigned int i;
     unsigned int j;
-    int count;
+    unsigned int count;
+    ModelLod_802DF190 **tbl;
 
-    switch (lbl_803EB360) {
+    // FAKEMATCH: both switch arms set the same table pointer and count; the
+    // per-arm assignments keep the target's dead LOD-mode compares and blt 2.
+    switch (_PlaModel_iLodMode) {
     case 0:
     case 1:
-        count = 1;
+        tbl = _PlaModel_apBodyLods;
+        count = 2;
         break;
     default:
+        tbl = _PlaModel_apBodyLods;
         count = 2;
         break;
     }
 
     for (i = 0; i <= 3; i++) {
         if (load) {
-            for (j = 0; j < 2; j++) {
-                lbl_8031C664[i][j] =
-                    fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_802E31A0[i][j].mId), 4, 0);
+            for (j = 0; j < count; j++) {
+                _PlaModel_apBodyData[i][j] =
+                    fn_801D2B7C(ResGetSize(_PlaModel_pModelArchive, tbl[i][j].mId), 4, 0);
             }
         }
-        fn_80233EAC(&lbl_8031C0D8[i], lbl_802E31A0[i], "PLYRBODY", 0, lbl_803ECACC, 0,
-                    lbl_8031C664[i], 1);
+        fn_80233EAC(&_PlaModel_aBodies[i], tbl[i], "PLYRBODY", 0, _PlaModel_pModelArchive, 0,
+                    _PlaModel_apBodyData[i], 1);
     }
 }
 
-void fn_8015D4E0(void)
+void PlaModelFreeBodies(void)
 {
     unsigned int i;
     unsigned int j;
 
     for (i = 0; i <= 3; i++) {
         for (j = 0; j <= 1; j++) {
-            if (lbl_8031C664[i][j]) {
-                fn_801D2BD0(lbl_8031C664[i][j]);
-                lbl_8031C664[i][j] = 0;
+            if (_PlaModel_apBodyData[i][j]) {
+                fn_801D2BD0(_PlaModel_apBodyData[i][j]);
+                _PlaModel_apBodyData[i][j] = 0;
             }
         }
     }
 }
 
-void fn_8015D550(int load)
+void PlaModelLoadHands(int load)
 {
     unsigned int i;
     unsigned int j;
     unsigned int k;
     unsigned int count;
+    ModelLod_802DF190 *(*tbl)[2];
 
-    switch (lbl_803EB360) {
+    // FAKEMATCH: both switch arms set the same table pointer; the per-arm
+    // assignment puts the table's lis in each arm as the target does.
+    switch (_PlaModel_iLodMode) {
     case 0:
     case 1:
+        tbl = _PlaModel_apHandLods;
         count = 1;
         break;
     default:
+        tbl = _PlaModel_apHandLods;
         count = 2;
         break;
     }
@@ -273,17 +283,17 @@ void fn_8015D550(int load)
         for (j = 0; j <= 1; j++) {
             if (load) {
                 for (k = 0; k < count; k++) {
-                    lbl_8031C684[i][j][k] =
-                        fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_802E31B0[i][j][k].mId), 4, 0);
+                    _PlaModel_apHandData[i][j][k] =
+                        fn_801D2B7C(ResGetSize(_PlaModel_pModelArchive, tbl[i][j][k].mId), 4, 0);
                 }
             }
-            fn_80233EAC(&lbl_8031C128[i][j], lbl_802E31B0[i][j], "PLYRHAND", 0, lbl_803ECACC, 0,
-                        lbl_8031C684[i][j], 1);
+            fn_80233EAC(&_PlaModel_aHands[i][j], tbl[i][j], "PLYRHAND", 0, _PlaModel_pModelArchive, 0,
+                        _PlaModel_apHandData[i][j], 1);
         }
     }
 }
 
-void fn_8015D68C(void)
+void PlaModelFreeHands(void)
 {
     unsigned int i;
     unsigned int j;
@@ -292,49 +302,49 @@ void fn_8015D68C(void)
     for (i = 0; i <= 3; i++) {
         for (j = 0; j <= 1; j++) {
             for (k = 0; k < 1; k++) {
-                if (lbl_8031C684[i][j][k]) {
-                    fn_801D2BD0(lbl_8031C684[i][j][k]);
-                    lbl_8031C684[i][j][k] = 0;
+                if (_PlaModel_apHandData[i][j][k]) {
+                    fn_801D2BD0(_PlaModel_apHandData[i][j][k]);
+                    _PlaModel_apHandData[i][j][k] = 0;
                 }
             }
         }
     }
 }
 
-void fn_8015D718(int load)
+void PlaModelLoadBaseHead(int load)
 {
     unsigned int i;
 
     if (load) {
         for (i = 0; i < 2; i++) {
-            if (lbl_803EB33C[i].mId != NO_MODEL) {
-                lbl_803ECAA4[i] =
-                    fn_801D2B7C(ResGetSize(lbl_803ECACC, lbl_803EB33C[i].mId), 4, 0);
+            if (_PlaModel_pBaseHeadLods[i].mId != NO_MODEL) {
+                _PlaModel_apBaseHeadData[i] =
+                    fn_801D2B7C(ResGetSize(_PlaModel_pModelArchive, _PlaModel_pBaseHeadLods[i].mId), 4, 0);
             }
         }
     }
-    fn_80233EAC(&lbl_8031C1DC, lbl_803EB33C, "BASEHEAD", 0, lbl_803ECACC, 0, lbl_803ECAA4, 1);
+    fn_80233EAC(&_PlaModel_BaseHead, _PlaModel_pBaseHeadLods, "BASEHEAD", 0, _PlaModel_pModelArchive, 0, _PlaModel_apBaseHeadData, 1);
 }
 
-void fn_8015D7C0(void)
+void PlaModelFreeBaseHead(void)
 {
     unsigned int i;
 
     for (i = 0; i < 1; i++) {
-        if (lbl_8031C684[i]) {
-            fn_801D2BD0(lbl_803ECAA4[i]);
-            lbl_803ECAA4[i] = 0;
+        if (_PlaModel_apHandData[i]) {
+            fn_801D2BD0(_PlaModel_apBaseHeadData[i]);
+            _PlaModel_apBaseHeadData[i] = 0;
         }
     }
 }
 
-void fn_8015D81C(unsigned int players)
+void PlaModelAllocPlayerBuffers(unsigned int players)
 {
     unsigned int i;
     unsigned int k;
     unsigned int count;
 
-    switch (lbl_803EB360) {
+    switch (_PlaModel_iLodMode) {
     case 0:
         count = 1;
         break;
@@ -353,38 +363,38 @@ void fn_8015D81C(unsigned int players)
 
     for (i = 0; i < players; i++) {
         for (k = 0; k < count; k++) {
-            lbl_8031C6A4[i][k] = fn_801D2B7C(sizesA[k], 4, 0);
-            lbl_8031C714[i][k] = fn_801D2B7C(sizesB[k], 4, 0);
-            lbl_8031C784[i][k] = fn_801D2B7C(sizesC[k], 4, 0);
-            lbl_8031C7F4[i][k] = fn_801D2B7C(sizesD[k], 4, 0);
+            _PlaModel_apHairData[i][k] = fn_801D2B7C(sizesA[k], 4, 0);
+            _PlaModel_apHatData[i][k] = fn_801D2B7C(sizesB[k], 4, 0);
+            _PlaModel_apGlassesData[i][k] = fn_801D2B7C(sizesC[k], 4, 0);
+            _PlaModel_apJewelData[i][k] = fn_801D2B7C(sizesD[k], 4, 0);
         }
     }
     for (k = 0; k < count; k++) {
     }
 }
 
-void fn_8015D998(void)
+void PlaModelFreePlayerBuffers(void)
 {
     unsigned int i;
     unsigned int k;
 
     for (i = 0; i <= 13; i++) {
         for (k = 0; k <= 1; k++) {
-            if (lbl_8031C6A4[i][k]) {
-                fn_801D2BD0(lbl_8031C6A4[i][k]);
-                lbl_8031C6A4[i][k] = 0;
+            if (_PlaModel_apHairData[i][k]) {
+                fn_801D2BD0(_PlaModel_apHairData[i][k]);
+                _PlaModel_apHairData[i][k] = 0;
             }
-            if (lbl_8031C714[i][k]) {
-                fn_801D2BD0(lbl_8031C714[i][k]);
-                lbl_8031C714[i][k] = 0;
+            if (_PlaModel_apHatData[i][k]) {
+                fn_801D2BD0(_PlaModel_apHatData[i][k]);
+                _PlaModel_apHatData[i][k] = 0;
             }
-            if (lbl_8031C784[i][k]) {
-                fn_801D2BD0(lbl_8031C784[i][k]);
-                lbl_8031C784[i][k] = 0;
+            if (_PlaModel_apGlassesData[i][k]) {
+                fn_801D2BD0(_PlaModel_apGlassesData[i][k]);
+                _PlaModel_apGlassesData[i][k] = 0;
             }
-            if (lbl_8031C7F4[i][k]) {
-                fn_801D2BD0(lbl_8031C7F4[i][k]);
-                lbl_8031C7F4[i][k] = 0;
+            if (_PlaModel_apJewelData[i][k]) {
+                fn_801D2BD0(_PlaModel_apJewelData[i][k]);
+                _PlaModel_apJewelData[i][k] = 0;
             }
         }
     }
@@ -392,11 +402,11 @@ void fn_8015D998(void)
     }
 }
 
-void fn_8015DA7C(void)
+void PlaModelPostInit(void)
 {
 }
 
-void fn_8015DA80(int index, int load)
+void PlaModelLoadHair(int index, int load)
 {
     ModelLod_802DF190 *pLods;
     unsigned int count;
@@ -404,14 +414,14 @@ void fn_8015DA80(int index, int load)
     unsigned int id0;
     unsigned int id1;
 
-    pLods = lbl_802E31D0[index];
+    pLods = _PlaModel_apHairLods[index];
     id0 = pLods[0].mId;
     id1 = pLods[1].mId;
-    switch (lbl_803EB360) {
+    switch (_PlaModel_iLodMode) {
     case 0:
         pLods[1].mId = NO_MODEL;
-        id1 = NO_MODEL;
         count = 1;
+        id1 = NO_MODEL;
         break;
     case 1:
         count = 2;
@@ -422,89 +432,83 @@ void fn_8015DA80(int index, int load)
     }
 
     if (load) {
-        if (lbl_803EB35D) {
+        if (_PlaModel_bSyncLoads) {
             GlibSyncFrame();
         }
-        ResCopyToBuffer(HairArchive(id0), HairId(lbl_802E31D0[index][0].mId), lbl_8031C6A4[index][0]);
-        ResCopyToBuffer(HairArchive(id1), HairId(lbl_802E31D0[index][1].mId), lbl_8031C6A4[index][1]);
-        fn_80233EAC(&lbl_8031C204[index], lbl_802E31D0[index], "PLYRMODEL", 0, HairArchive(id0),
-                    lbl_803EB354, lbl_8031C6A4[index], 0);
-        if (lbl_803EB35D) {
+        ResCopyToBuffer(HairArchive(id0), HairId(_PlaModel_apHairLods[index][0].mId), _PlaModel_apHairData[index][0]);
+        ResCopyToBuffer(HairArchive(id1), HairId(_PlaModel_apHairLods[index][1].mId), _PlaModel_apHairData[index][1]);
+        fn_80233EAC(&_PlaModel_aHair[index], _PlaModel_apHairLods[index], "PLYRMODEL", 0, HairArchive(id0),
+                    _PlaModel_pHairSkeleton, _PlaModel_apHairData[index], 0);
+        if (_PlaModel_bSyncLoads) {
             ResSync(0);
         }
     } else {
-        fn_80233EAC(&lbl_8031C204[index], lbl_802E31D0[index], "PLYRMODEL", 0, HairArchive(id0),
-                    lbl_803EB354, lbl_8031C6A4[index], 0);
+        fn_80233EAC(&_PlaModel_aHair[index], _PlaModel_apHairLods[index], "PLYRMODEL", 0, HairArchive(id0),
+                    _PlaModel_pHairSkeleton, _PlaModel_apHairData[index], 0);
     }
 
-    lbl_802E31D0[index][0].mId = id0;
-    if (id0 > ROSTER_ID_BASE) {
-        lbl_802E31D0[index][0].mId = id0 - ROSTER_ID_BASE;
-    }
-    lbl_802E31D0[index][1].mId = id1;
-    if (id1 > ROSTER_ID_BASE) {
-        lbl_802E31D0[index][1].mId = id1 - ROSTER_ID_BASE;
-    }
+    _PlaModel_apHairLods[index][0].mId = id0 > ROSTER_ID_BASE ? id0 - ROSTER_ID_BASE : id0;
+    _PlaModel_apHairLods[index][1].mId = id1 > ROSTER_ID_BASE ? id1 - ROSTER_ID_BASE : id1;
     for (k = 0; k < count; k++) {
-        PlyrModelLodBindSkeleton(&lbl_802E31D0[index][k], lbl_803EB354);
+        PlyrModelLodBindSkeleton(&_PlaModel_apHairLods[index][k], _PlaModel_pHairSkeleton);
     }
-    lbl_802E31D0[index][0].mId = id0;
-    lbl_802E31D0[index][1].mId = id1;
+    _PlaModel_apHairLods[index][0].mId = id0;
+    _PlaModel_apHairLods[index][1].mId = id1;
 }
 
-void fn_8015DD3C(int index, int load)
+void PlaModelLoadHat(int index, int load)
 {
-    ModelLod_802DF190 *pLods = lbl_802E3208[index];
+    ModelLod_802DF190 *pLods = _PlaModel_apHatLods[index];
 
-    if (lbl_803EB360 == 0) {
+    if (_PlaModel_iLodMode == 0) {
         pLods[1].mId = NO_MODEL;
     }
 
     if (load) {
-        if (lbl_803EB35D) {
+        if (_PlaModel_bSyncLoads) {
             GlibSyncFrame();
         }
-        fn_80233EAC(&lbl_8031C31C[index], lbl_802E3208[index], "PLYRMODEL", 0, lbl_803ECADC,
-                    lbl_803EB348, lbl_8031C714[index], 1);
-        if (lbl_803EB35D) {
+        fn_80233EAC(&_PlaModel_aHats[index], _PlaModel_apHatLods[index], "PLYRMODEL", 0, _PlaModel_pHatArchive,
+                    _PlaModel_pBodySkeleton, _PlaModel_apHatData[index], 1);
+        if (_PlaModel_bSyncLoads) {
             ResSync(0);
         }
     } else {
-        fn_80233EAC(&lbl_8031C31C[index], lbl_802E3208[index], "PLYRMODEL", 0, lbl_803ECADC,
-                    lbl_803EB348, lbl_8031C714[index], 0);
+        fn_80233EAC(&_PlaModel_aHats[index], _PlaModel_apHatLods[index], "PLYRMODEL", 0, _PlaModel_pHatArchive,
+                    _PlaModel_pBodySkeleton, _PlaModel_apHatData[index], 0);
     }
 }
 
-void fn_8015DE3C(int index, int load)
+void PlaModelLoadGlasses(int index, int load)
 {
-    ModelLod_802DF190 *pLods = lbl_802E3240[index];
+    ModelLod_802DF190 *pLods = _PlaModel_apGlassesLods[index];
 
-    if (lbl_803EB360 == 0) {
+    if (_PlaModel_iLodMode == 0) {
         pLods[1].mId = NO_MODEL;
     }
 
     if (load) {
-        if (lbl_803EB35D) {
+        if (_PlaModel_bSyncLoads) {
             GlibSyncFrame();
         }
-        fn_80233EAC(&lbl_8031C434[index], lbl_802E3240[index], "PLYRMODEL", 0, lbl_803ECAE0,
-                    lbl_803EB348, lbl_8031C784[index], 1);
-        if (lbl_803EB35D) {
+        fn_80233EAC(&_PlaModel_aGlasses[index], _PlaModel_apGlassesLods[index], "PLYRMODEL", 0, _PlaModel_pGlassesArchive,
+                    _PlaModel_pBodySkeleton, _PlaModel_apGlassesData[index], 1);
+        if (_PlaModel_bSyncLoads) {
             ResSync(0);
         }
     } else {
-        fn_80233EAC(&lbl_8031C434[index], lbl_802E3240[index], "PLYRMODEL", 0, lbl_803ECAE0,
-                    lbl_803EB348, lbl_8031C784[index], 0);
+        fn_80233EAC(&_PlaModel_aGlasses[index], _PlaModel_apGlassesLods[index], "PLYRMODEL", 0, _PlaModel_pGlassesArchive,
+                    _PlaModel_pBodySkeleton, _PlaModel_apGlassesData[index], 0);
     }
 }
 
-void fn_8015DF3C(int index, int load)
+void PlaModelLoadJewel(int index, int load)
 {
-    ModelLod_802DF190 *pLods = lbl_802E3278[index];
+    ModelLod_802DF190 *pLods = _PlaModel_apJewelLods[index];
     unsigned int count;
     unsigned int k;
 
-    switch (lbl_803EB360) {
+    switch (_PlaModel_iLodMode) {
     case 0:
         pLods[1].mId = NO_MODEL;
         count = 1;
@@ -519,36 +523,36 @@ void fn_8015DF3C(int index, int load)
     }
 
     if (load) {
-        if (lbl_803EB35D) {
+        if (_PlaModel_bSyncLoads) {
             GlibSyncFrame();
         }
-        fn_80233EAC(&lbl_8031C54C[index], lbl_802E3278[index], "PLYRMODEL", 0, lbl_803ECAE4,
-                    lbl_803EB358, lbl_8031C7F4[index], 1);
-        if (lbl_803EB35D) {
+        fn_80233EAC(&_PlaModel_aJewels[index], _PlaModel_apJewelLods[index], "PLYRMODEL", 0, _PlaModel_pJewelArchive,
+                    _PlaModel_pJewelSkeleton, _PlaModel_apJewelData[index], 1);
+        if (_PlaModel_bSyncLoads) {
             ResSync(0);
         }
     } else {
-        fn_80233EAC(&lbl_8031C54C[index], lbl_802E3278[index], "PLYRMODEL", 0, lbl_803ECAE4,
-                    lbl_803EB358, lbl_8031C7F4[index], 0);
+        fn_80233EAC(&_PlaModel_aJewels[index], _PlaModel_apJewelLods[index], "PLYRMODEL", 0, _PlaModel_pJewelArchive,
+                    _PlaModel_pJewelSkeleton, _PlaModel_apJewelData[index], 0);
     }
 
     for (k = 0; k < count; k++) {
-        PlyrModelLodBindSkeleton(&lbl_802E3278[index][k], lbl_803EB358);
+        PlyrModelLodBindSkeleton(&_PlaModel_apJewelLods[index][k], _PlaModel_pJewelSkeleton);
     }
 }
 
 /* Queues the models of one player part for fn_8015EF10, keeping each
    queue sorted by id so that equal models are read only once. */
-void fn_8015E0B8(int type, int index, ModelLod_802DF190 *pLods, void **ppData)
+void PlaModelQueuePart(int type, int index, ModelLod_802DF190 *pLods, void **ppData)
 {
     int count;
     int i;
     int j;
-    QueueEntry_8031C098 *pQueue;
+    PlaModelQueueEntry_t *pQueue;
     int queued;
-    QueueEntry_8031C098 entry;
+    PlaModelQueueEntry_t entry;
 
-    switch (lbl_803EB360) {
+    switch (_PlaModel_iLodMode) {
     case 0:
         count = 1;
         break;
@@ -563,8 +567,8 @@ void fn_8015E0B8(int type, int index, ModelLod_802DF190 *pLods, void **ppData)
         count = 1;
     }
 
-    pQueue = lbl_8031C098[type];
-    queued = lbl_8031C0A8[type];
+    pQueue = _PlaModel_apLoadQueues[type];
+    queued = _PlaModel_aiLoadQueueCounts[type];
     for (i = 0; i < count; i++) {
         entry.mId = pLods[i].mId;
         if (entry.mId == NO_MODEL) {
@@ -579,36 +583,36 @@ void fn_8015E0B8(int type, int index, ModelLod_802DF190 *pLods, void **ppData)
             queued++;
         }
     }
-    lbl_8031C0A8[type] = queued;
-    lbl_8031C0C8[type] |= 1 << index;
+    _PlaModel_aiLoadQueueCounts[type] = queued;
+    _PlaModel_auLoadQueuedPlayers[type] |= 1 << index;
 }
 
-void fn_8015E1F0(void)
+void PlaModelFaceReadDone(void)
 {
-    lbl_803EB330--;
+    _PlaModel_uFaceLoadsPending--;
 }
 
-void fn_8015E200(void)
+void PlaModelHairReadDone(void)
 {
-    lbl_803EB331--;
+    _PlaModel_uHairLoadsPending--;
 }
 
-void fn_8015E210(void)
+void PlaModelHatReadDone(void)
 {
-    lbl_803EB332--;
+    _PlaModel_uHatLoadsPending--;
 }
 
-void fn_8015E220(void)
+void PlaModelGlassesReadDone(void)
 {
-    lbl_803EB333--;
+    _PlaModel_uGlassesLoadsPending--;
 }
 
-void fn_8015E230(void)
+void PlaModelJewelReadDone(void)
 {
-    lbl_803EB334--;
+    _PlaModel_uJewelLoadsPending--;
 }
 
-void fn_8015E240(int load, int flag)
+void PlaModelLoadMorphHead(int load, int flag)
 {
     int size0;
     int size1;
@@ -616,40 +620,40 @@ void fn_8015E240(int load, int flag)
 
     if (load) {
         value = 0;
-        size0 = ResGetSize(lbl_803ECACC, lbl_803EB340[0].mId);
-        size1 = ResGetSize(lbl_803ECACC, lbl_803EB340[1].mId);
+        size0 = ResGetSize(_PlaModel_pModelArchive, _PlaModel_pMorphHeadLods[0].mId);
+        size1 = ResGetSize(_PlaModel_pModelArchive, _PlaModel_pMorphHeadLods[1].mId);
         if (flag) {
             value = 4;
         }
-        lbl_803ECAB4[0] = fn_801D2B7C(size0, value, 0);
-        lbl_803ECAB4[1] = fn_801D2B7C(size1, value, 0);
+        _PlaModel_apMorphHeadData[0] = fn_801D2B7C(size0, value, 0);
+        _PlaModel_apMorphHeadData[1] = fn_801D2B7C(size1, value, 0);
     }
-    fn_80233EAC(&lbl_8031C1F0, lbl_803EB340, "PLYRMODEL", 0, lbl_803ECACC, 0, lbl_803ECAB4, 1);
+    fn_80233EAC(&_PlaModel_MorphHead, _PlaModel_pMorphHeadLods, "PLYRMODEL", 0, _PlaModel_pModelArchive, 0, _PlaModel_apMorphHeadData, 1);
 }
 
 Object_8023417C *fn_8015E2FC(int type, int index, int a)
 {
     switch (type) {
     case 0:
-        return fn_8023417C(&lbl_8031C0D8[index], a);
+        return fn_8023417C(&_PlaModel_aBodies[index], a);
     case 1:
-        return fn_8023417C(&lbl_8031C128[index][0], a);
+        return fn_8023417C(&_PlaModel_aHands[index][0], a);
     case 2:
-        return fn_8023417C(&lbl_8031C128[index][1], a);
+        return fn_8023417C(&_PlaModel_aHands[index][1], a);
     case 3:
-        return fn_8023417C(&lbl_8031C204[index], a);
+        return fn_8023417C(&_PlaModel_aHair[index], a);
     case 4:
-        return fn_8023417C(&lbl_8031C1C8, a);
+        return fn_8023417C(&_PlaModel_Face, a);
     case 5:
-        return fn_8023417C(&lbl_8031C1DC, a);
+        return fn_8023417C(&_PlaModel_BaseHead, a);
     case 6:
-        return fn_8023417C(&lbl_8031C1F0, a);
+        return fn_8023417C(&_PlaModel_MorphHead, a);
     case 7:
-        return fn_8023417C(&lbl_8031C31C[index], a);
+        return fn_8023417C(&_PlaModel_aHats[index], a);
     case 8:
-        return fn_8023417C(&lbl_8031C434[index], a);
+        return fn_8023417C(&_PlaModel_aGlasses[index], a);
     case 9:
-        return fn_8023417C(&lbl_8031C54C[index], a);
+        return fn_8023417C(&_PlaModel_aJewels[index], a);
     }
     return 0;
 }
@@ -660,31 +664,31 @@ Object_80233EAC *fn_8015E440(int type, int index)
 
     switch (type) {
     case 0:
-        pObject = &lbl_8031C0D8[index];
+        pObject = &_PlaModel_aBodies[index];
         break;
     case 1:
-        pObject = &lbl_8031C128[type][0];
+        pObject = &_PlaModel_aHands[type][0];
         break;
     case 2:
-        pObject = &lbl_8031C128[type][1];
+        pObject = &_PlaModel_aHands[type][1];
         break;
     case 3:
-        pObject = &lbl_8031C204[index];
+        pObject = &_PlaModel_aHair[index];
         break;
     case 4:
-        pObject = &lbl_8031C1C8;
+        pObject = &_PlaModel_Face;
         break;
     case 5:
-        pObject = &lbl_8031C1DC;
+        pObject = &_PlaModel_BaseHead;
         break;
     case 7:
-        pObject = &lbl_8031C31C[index];
+        pObject = &_PlaModel_aHats[index];
         break;
     case 8:
-        pObject = &lbl_8031C434[index];
+        pObject = &_PlaModel_aGlasses[index];
         break;
     case 9:
-        pObject = &lbl_8031C54C[index];
+        pObject = &_PlaModel_aJewels[index];
         break;
     default:
         pObject = 0;
@@ -693,71 +697,71 @@ Object_80233EAC *fn_8015E440(int type, int index)
     return pObject;
 }
 
-void fn_8015E548(void)
+void PlaModelOpenArchives(void)
 {
     int a = ResSetMemFlags(4);
     int b = FileSetMemAllocFlags(4);
 
-    lbl_803ECACC = ResOpenDevice(lbl_802EC028, 0x2C);
-    lbl_803ECAD0 = ResOpenDevice(lbl_802EC044, 0x2C);
-    lbl_803ECAD4 = ResOpenDevice(lbl_802EC050, 0x2C);
-    lbl_803ECAD8 = ResOpenDevice(lbl_802EC038, 0x2C);
-    lbl_803ECADC = ResOpenDevice(lbl_802EC064, 0x2C);
-    lbl_803ECAE0 = ResOpenDevice(lbl_802EC070, 0x2C);
-    lbl_803ECAE4 = ResOpenDevice(lbl_802EC08C, 0x2C);
+    _PlaModel_pModelArchive = ResOpenDevice(lbl_802EC028, 0x2C);
+    _PlaModel_pHairArchive = ResOpenDevice(lbl_802EC044, 0x2C);
+    _PlaModel_pRosterHairArchive = ResOpenDevice(lbl_802EC050, 0x2C);
+    _PlaModel_pFaceArchive = ResOpenDevice(lbl_802EC038, 0x2C);
+    _PlaModel_pHatArchive = ResOpenDevice(lbl_802EC064, 0x2C);
+    _PlaModel_pGlassesArchive = ResOpenDevice(lbl_802EC070, 0x2C);
+    _PlaModel_pJewelArchive = ResOpenDevice(lbl_802EC08C, 0x2C);
     ResSetMemFlags(a);
     FileSetMemAllocFlags(b);
 }
 
-void fn_8015E620(unsigned int players, int mode)
+void PlaModelInit(unsigned int players, int mode)
 {
-    lbl_803EB360 = mode;
-    fn_8015D81C(players);
-    lbl_803EB35C = 1;
-    lbl_803EB35D = 1;
-    fn_8015DA7C();
+    _PlaModel_iLodMode = mode;
+    PlaModelAllocPlayerBuffers(players);
+    _PlaModel_bPlayerBuffersAllocated = 1;
+    _PlaModel_bSyncLoads = 1;
+    PlaModelPostInit();
 }
 
-void fn_8015E654(int mode)
+void PlaModelSetLodMode(int mode)
 {
-    lbl_803EB360 = mode;
+    _PlaModel_iLodMode = mode;
 }
 
-void fn_8015E65C(void)
+void PlaModelShutdown(void)
 {
-    fn_8015D998();
-    lbl_803EB35C = 0;
+    PlaModelFreePlayerBuffers();
+    _PlaModel_bPlayerBuffersAllocated = 0;
 }
 
-void fn_8015E684(void)
+void PlaModelLoadSharedModels(void)
 {
     PlyrRenderBindPartTable(0);
-    fn_8015D3EC(1);
-    fn_8015D550(1);
-    fn_8015D718(1);
+    PlaModelLoadBodies(1);
+    PlaModelLoadHands(1);
+    PlaModelLoadBaseHead(1);
     PlyrRenderUnbindPartTable();
 }
 
-void fn_8015E6C4(void)
+void PlaModelInitPlayerModels(void)
 {
 }
 
-void fn_8015E6C8(void)
+void PlaModelResetPlayerModels(void)
 {
     unsigned int i;
 
     for (i = 0; i <= 13; i++) {
-        fn_8015EB00(i);
-        fn_8015EC28(i);
-        fn_8015ED50(i);
+        PlaModelClearHair(i);
+        PlaModelClearHat(i);
+        PlaModelClearGlasses(i);
     }
 }
 
-void fn_8015E714(void)
+void PlaModelFreeSharedModels(void)
 {
-    fn_8015D4E0();
-    fn_8015D68C();
-    fn_8015D7C0();
+    PlaModelFreeBodies();
+    PlaModelFreeHands();
+    PlaModelFreeBaseHead();
 }
 
 void fn_8015E73C(int id)
@@ -765,62 +769,62 @@ void fn_8015E73C(int id)
     int size0;
     int size1;
 
-    if (lbl_803EB330) {
+    if (_PlaModel_uFaceLoadsPending) {
         ResSync(0);
-        fn_8015FE4C();
+        PlaModelFinishAsyncLoads();
     }
-    lbl_803EB338[0].mId = id;
-    lbl_803EB338[1].mId = id + 1;
-    size0 = ResGetSize(lbl_803ECAD8, id);
-    size1 = ResGetSize(lbl_803ECAD8, lbl_803EB338[1].mId);
-    if (lbl_803EB344 && lbl_803ECAC4[0] == 0 && lbl_803ECAC4[1] == 0) {
-        lbl_803ECABC[0] = (char *)fn_801D2B7C(size0, 4, 0);
-        lbl_803ECABC[1] = (char *)fn_801D2B7C(size1, 4, 0);
-        lbl_803ECAC4[0] = lbl_803EB338[0].mId;
-        lbl_803ECAC4[1] = lbl_803EB338[1].mId;
-        ResCopyToBuffer(lbl_803ECAD8, lbl_803ECAC4[0], lbl_803ECABC[0]);
-        ResCopyToBuffer(lbl_803ECAD8, lbl_803ECAC4[1], lbl_803ECABC[1]);
+    _PlaModel_pFaceLods[0].mId = id;
+    _PlaModel_pFaceLods[1].mId = id + 1;
+    size0 = ResGetSize(_PlaModel_pFaceArchive, id);
+    size1 = ResGetSize(_PlaModel_pFaceArchive, _PlaModel_pFaceLods[1].mId);
+    if (_PlaModel_bCacheFace && _PlaModel_aiFaceCacheIds[0] == 0 && _PlaModel_aiFaceCacheIds[1] == 0) {
+        _PlaModel_apFaceCache[0] = (char *)fn_801D2B7C(size0, 4, 0);
+        _PlaModel_apFaceCache[1] = (char *)fn_801D2B7C(size1, 4, 0);
+        _PlaModel_aiFaceCacheIds[0] = _PlaModel_pFaceLods[0].mId;
+        _PlaModel_aiFaceCacheIds[1] = _PlaModel_pFaceLods[1].mId;
+        ResCopyToBuffer(_PlaModel_pFaceArchive, _PlaModel_aiFaceCacheIds[0], _PlaModel_apFaceCache[0]);
+        ResCopyToBuffer(_PlaModel_pFaceArchive, _PlaModel_aiFaceCacheIds[1], _PlaModel_apFaceCache[1]);
     }
-    lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 4, 0);
-    lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 4, 0);
-    if (lbl_803EB344) {
-        memcpy(lbl_803ECAAC[0], lbl_803ECABC[0], size0);
-        memcpy(lbl_803ECAAC[1], lbl_803ECABC[1], size1);
-        fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    (void **)lbl_803ECAAC, 0);
+    _PlaModel_apFaceData[0] = (char *)fn_801D2B7C(size0, 4, 0);
+    _PlaModel_apFaceData[1] = (char *)fn_801D2B7C(size1, 4, 0);
+    if (_PlaModel_bCacheFace) {
+        memcpy(_PlaModel_apFaceData[0], _PlaModel_apFaceCache[0], size0);
+        memcpy(_PlaModel_apFaceData[1], _PlaModel_apFaceCache[1], size1);
+        fn_80233EAC(&_PlaModel_Face, _PlaModel_pFaceLods, "PLYRMODEL", 0, _PlaModel_pFaceArchive, _PlaModel_pBodySkeleton,
+                    (void **)_PlaModel_apFaceData, 0);
     } else {
-        fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    (void **)lbl_803ECAAC, 1);
+        fn_80233EAC(&_PlaModel_Face, _PlaModel_pFaceLods, "PLYRMODEL", 0, _PlaModel_pFaceArchive, _PlaModel_pBodySkeleton,
+                    (void **)_PlaModel_apFaceData, 1);
     }
-    if (lbl_803EB35D) {
+    if (_PlaModel_bSyncLoads) {
         ResSync(0);
     }
 }
 
 void fn_8015E908(int a)
 {
-    fn_801D2BD0(lbl_803ECAAC[0]);
-    fn_801D2BD0(lbl_803ECAAC[1]);
-    lbl_803ECAAC[0] = 0;
-    lbl_803ECAAC[1] = 0;
+    fn_801D2BD0(_PlaModel_apFaceData[0]);
+    fn_801D2BD0(_PlaModel_apFaceData[1]);
+    _PlaModel_apFaceData[0] = 0;
+    _PlaModel_apFaceData[1] = 0;
 }
 
-void fn_8015E950(int load, int flag)
+void PlaModelInitMorphHead(int load, int flag)
 {
     PlyrRenderBindPartTable(0);
-    fn_8015E240(load, flag);
+    PlaModelLoadMorphHead(load, flag);
     PlyrRenderUnbindPartTable();
 }
 
-void fn_8015E994(void)
+void PlaModelFreeMorphHead(void)
 {
-    if (lbl_803ECAB4[0]) {
-        fn_801D2BD0(lbl_803ECAB4[0]);
-        fn_801D2BD0(lbl_803ECAB4[1]);
-        lbl_803ECAB4[0] = 0;
-        lbl_803ECAB4[1] = 0;
-        lbl_802DFC30[0].mpUnknown10 = 0;
-        lbl_802DFC30[1].mpUnknown10 = 0;
+    if (_PlaModel_apMorphHeadData[0]) {
+        fn_801D2BD0(_PlaModel_apMorphHeadData[0]);
+        fn_801D2BD0(_PlaModel_apMorphHeadData[1]);
+        _PlaModel_apMorphHeadData[0] = 0;
+        _PlaModel_apMorphHeadData[1] = 0;
+        _PlaModel_aMorphHeadLods[0].mpUnknown10 = 0;
+        _PlaModel_aMorphHeadLods[1].mpUnknown10 = 0;
     }
 }
 
@@ -828,31 +832,31 @@ void fn_8015E9F4(int index, PlayerHeadIds_t *pIds)
 {
     ModelLod_802DF190 *pLods;
 
-    if (lbl_803EB331) {
+    if (_PlaModel_uHairLoadsPending) {
         ResSync(0);
-        fn_8015FE4C();
+        PlaModelFinishAsyncLoads();
     }
-    if (lbl_8031C0C8[0] & (1 << index)) {
-        fn_8015DA80(index, 0);
+    if (_PlaModel_auLoadQueuedPlayers[0] & (1 << index)) {
+        PlaModelLoadHair(index, 0);
     } else if (pIds->mUnknown0 != NO_MODEL) {
-        pLods = lbl_802E31D0[index];
+        pLods = _PlaModel_apHairLods[index];
         if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
             pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
-            lbl_802E31D0[index][0].mId = pIds->mUnknown0;
-            lbl_802E31D0[index][1].mId = pIds->mUnknown4;
-            fn_8015DA80(index, 1);
+            _PlaModel_apHairLods[index][0].mId = pIds->mUnknown0;
+            _PlaModel_apHairLods[index][1].mId = pIds->mUnknown4;
+            PlaModelLoadHair(index, 1);
         }
     }
-    lbl_8031C0C8[0] &= ~(1 << index);
+    _PlaModel_auLoadQueuedPlayers[0] &= ~(1 << index);
 }
 
-void fn_8015EB00(int index)
+void PlaModelClearHair(int index)
 {
     unsigned int k;
 
     for (k = 0; k <= 1; k++) {
-        lbl_802E31D0[index][k].mId = NO_MODEL;
-        lbl_802E31D0[index][k].mpUnknown10 = 0;
+        _PlaModel_apHairLods[index][k].mId = NO_MODEL;
+        _PlaModel_apHairLods[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -860,30 +864,30 @@ void fn_8015EB4C(int index, int id)
 {
     ModelLod_802DF190 *pLods;
 
-    if (lbl_803EB332) {
+    if (_PlaModel_uHatLoadsPending) {
         ResSync(0);
-        fn_8015FE4C();
+        PlaModelFinishAsyncLoads();
     }
-    if (lbl_8031C0C8[1] & (1 << index)) {
-        fn_8015DD3C(index, 0);
+    if (_PlaModel_auLoadQueuedPlayers[1] & (1 << index)) {
+        PlaModelLoadHat(index, 0);
     } else if (id != NO_MODEL) {
-        pLods = lbl_802E3208[index];
+        pLods = _PlaModel_apHatLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3208[index][1].mId = id + 1;
-            fn_8015DD3C(index, 1);
+            _PlaModel_apHatLods[index][1].mId = id + 1;
+            PlaModelLoadHat(index, 1);
         }
     }
-    lbl_8031C0C8[1] &= ~(1 << index);
+    _PlaModel_auLoadQueuedPlayers[1] &= ~(1 << index);
 }
 
-void fn_8015EC28(int index)
+void PlaModelClearHat(int index)
 {
     unsigned int k;
 
     for (k = 0; k <= 1; k++) {
-        lbl_802E3208[index][k].mId = NO_MODEL;
-        lbl_802E3208[index][k].mpUnknown10 = 0;
+        _PlaModel_apHatLods[index][k].mId = NO_MODEL;
+        _PlaModel_apHatLods[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -891,30 +895,30 @@ void fn_8015EC74(int index, int id)
 {
     ModelLod_802DF190 *pLods;
 
-    if (lbl_803EB333) {
+    if (_PlaModel_uGlassesLoadsPending) {
         ResSync(0);
-        fn_8015FE4C();
+        PlaModelFinishAsyncLoads();
     }
-    if (lbl_8031C0C8[2] & (1 << index)) {
-        fn_8015DE3C(index, 0);
+    if (_PlaModel_auLoadQueuedPlayers[2] & (1 << index)) {
+        PlaModelLoadGlasses(index, 0);
     } else if (id != NO_MODEL) {
-        pLods = lbl_802E3240[index];
+        pLods = _PlaModel_apGlassesLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3240[index][1].mId = id + 1;
-            fn_8015DE3C(index, 1);
+            _PlaModel_apGlassesLods[index][1].mId = id + 1;
+            PlaModelLoadGlasses(index, 1);
         }
     }
-    lbl_8031C0C8[2] &= ~(1 << index);
+    _PlaModel_auLoadQueuedPlayers[2] &= ~(1 << index);
 }
 
-void fn_8015ED50(int index)
+void PlaModelClearGlasses(int index)
 {
     unsigned int k;
 
     for (k = 0; k <= 1; k++) {
-        lbl_802E3240[index][k].mId = NO_MODEL;
-        lbl_802E3240[index][k].mpUnknown10 = 0;
+        _PlaModel_apGlassesLods[index][k].mId = NO_MODEL;
+        _PlaModel_apGlassesLods[index][k].mpUnknown10 = 0;
     }
 }
 
@@ -922,21 +926,21 @@ void fn_8015ED9C(int index, int id)
 {
     ModelLod_802DF190 *pLods;
 
-    if (lbl_803EB334) {
+    if (_PlaModel_uJewelLoadsPending) {
         ResSync(0);
-        fn_8015FE4C();
+        PlaModelFinishAsyncLoads();
     }
-    if (lbl_8031C0C8[3] & (1 << index)) {
-        fn_8015DF3C(index, 0);
+    if (_PlaModel_auLoadQueuedPlayers[3] & (1 << index)) {
+        PlaModelLoadJewel(index, 0);
     } else if (id != NO_MODEL) {
-        pLods = lbl_802E3278[index];
+        pLods = _PlaModel_apJewelLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3278[index][1].mId = NO_MODEL;
-            fn_8015DF3C(index, 1);
+            _PlaModel_apJewelLods[index][1].mId = NO_MODEL;
+            PlaModelLoadJewel(index, 1);
         }
     }
-    lbl_8031C0C8[3] &= ~(1 << index);
+    _PlaModel_auLoadQueuedPlayers[3] &= ~(1 << index);
 }
 
 void fn_8015EE74(void)
@@ -944,14 +948,14 @@ void fn_8015EE74(void)
     unsigned int i;
 
     for (i = 0; i <= 3; i++) {
-        lbl_8031C098[i] = (QueueEntry_8031C098 *)fn_801D2B7C(0xE0, 2, 0);
-        lbl_8031C0A8[i] = 0;
-        lbl_8031C0C8[i] = 0;
+        _PlaModel_apLoadQueues[i] = (PlaModelQueueEntry_t *)fn_801D2B7C(0xE0, 2, 0);
+        _PlaModel_aiLoadQueueCounts[i] = 0;
+        _PlaModel_auLoadQueuedPlayers[i] = 0;
     }
-    lbl_8031C0B8[0] = lbl_803ECAD0;
-    lbl_8031C0B8[1] = lbl_803ECADC;
-    lbl_8031C0B8[2] = lbl_803ECAE0;
-    lbl_8031C0B8[3] = lbl_803ECAE4;
+    _PlaModel_apLoadQueueArchives[0] = _PlaModel_pHairArchive;
+    _PlaModel_apLoadQueueArchives[1] = _PlaModel_pHatArchive;
+    _PlaModel_apLoadQueueArchives[2] = _PlaModel_pGlassesArchive;
+    _PlaModel_apLoadQueueArchives[3] = _PlaModel_pJewelArchive;
 }
 
 /* Reads every queued model; a model already read for another player is
@@ -961,13 +965,13 @@ void fn_8015EF10(void)
     unsigned int i;
     int j;
     int count;
-    QueueEntry_8031C098 *pQueue;
+    PlaModelQueueEntry_t *pQueue;
     unsigned int lastId;
     void *pLast;
 
     for (i = 0; i <= 3; i++) {
-        pQueue = lbl_8031C098[i];
-        count = lbl_8031C0A8[i];
+        pQueue = _PlaModel_apLoadQueues[i];
+        count = _PlaModel_aiLoadQueueCounts[i];
         pLast = 0;
         lastId = pQueue[0].mId + 1;
         for (j = 0; j < count; j++) {
@@ -979,14 +983,14 @@ void fn_8015EF10(void)
                 if (i == 0) {
                     ResCopyToBuffer(HairArchive(lastId), HairId(lastId), pLast);
                 } else {
-                    ResCopyToBuffer(lbl_8031C0B8[i], lastId, pLast);
+                    ResCopyToBuffer(_PlaModel_apLoadQueueArchives[i], lastId, pLast);
                 }
             }
         }
     }
     for (i = 0; i <= 3; i++) {
-        fn_801D2BD0(lbl_8031C098[i]);
-        lbl_8031C098[i] = 0;
+        fn_801D2BD0(_PlaModel_apLoadQueues[i]);
+        _PlaModel_apLoadQueues[i] = 0;
     }
 }
 
@@ -995,12 +999,12 @@ void fn_8015F068(int index, PlayerHeadIds_t *pIds)
     ModelLod_802DF190 *pLods;
 
     if (pIds->mUnknown0 != NO_MODEL) {
-        pLods = lbl_802E31D0[index];
+        pLods = _PlaModel_apHairLods[index];
         if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
             pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
-            lbl_802E31D0[index][0].mId = pIds->mUnknown0;
-            lbl_802E31D0[index][1].mId = pIds->mUnknown4;
-            fn_8015E0B8(0, index, lbl_802E31D0[index], lbl_8031C6A4[index]);
+            _PlaModel_apHairLods[index][0].mId = pIds->mUnknown0;
+            _PlaModel_apHairLods[index][1].mId = pIds->mUnknown4;
+            PlaModelQueuePart(0, index, _PlaModel_apHairLods[index], _PlaModel_apHairData[index]);
         }
     }
 }
@@ -1010,60 +1014,60 @@ void fn_8015F124(int index, int id)
     ModelLod_802DF190 *pLods;
 
     if (id != NO_MODEL) {
-        pLods = lbl_802E3208[index];
+        pLods = _PlaModel_apHatLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10 || pLods[1].mId != id ||
             !pLods[1].mpUnknown10) {
-            lbl_802E3208[index][0].mId = id;
-            lbl_802E3208[index][1].mId = id + 1;
-            fn_8015E0B8(1, index, lbl_802E3208[index], lbl_8031C714[index]);
+            _PlaModel_apHatLods[index][0].mId = id;
+            _PlaModel_apHatLods[index][1].mId = id + 1;
+            PlaModelQueuePart(1, index, _PlaModel_apHatLods[index], _PlaModel_apHatData[index]);
         }
     }
 }
 
 void fn_8015F1D4(int index, int id)
 {
-    if ((id == NO_MODEL || (lbl_802E3240[index][0].mId == id && lbl_802E3240[index][0].mpUnknown10)) &&
-        lbl_802E3240[index][1].mId == id && lbl_802E3240[index][1].mpUnknown10) {
+    if ((id == NO_MODEL || (_PlaModel_apGlassesLods[index][0].mId == id && _PlaModel_apGlassesLods[index][0].mpUnknown10)) &&
+        _PlaModel_apGlassesLods[index][1].mId == id && _PlaModel_apGlassesLods[index][1].mpUnknown10) {
         return;
     }
-    lbl_802E3240[index][0].mId = id;
-    lbl_802E3240[index][1].mId = id + 1;
-    fn_8015E0B8(2, index, lbl_802E3240[index], lbl_8031C784[index]);
+    _PlaModel_apGlassesLods[index][0].mId = id;
+    _PlaModel_apGlassesLods[index][1].mId = id + 1;
+    PlaModelQueuePart(2, index, _PlaModel_apGlassesLods[index], _PlaModel_apGlassesData[index]);
 }
 
 void fn_8015F298(int index, int id)
 {
-    if ((id == NO_MODEL || (lbl_802E3278[index][0].mId == id && lbl_802E3278[index][0].mpUnknown10)) &&
-        lbl_802E3278[index][1].mId == id && lbl_802E3278[index][1].mpUnknown10) {
+    if ((id == NO_MODEL || (_PlaModel_apJewelLods[index][0].mId == id && _PlaModel_apJewelLods[index][0].mpUnknown10)) &&
+        _PlaModel_apJewelLods[index][1].mId == id && _PlaModel_apJewelLods[index][1].mpUnknown10) {
         return;
     }
-    lbl_802E3278[index][0].mId = id;
-    lbl_802E3278[index][1].mId = NO_MODEL;
-    fn_8015E0B8(3, index, lbl_802E3278[index], lbl_8031C7F4[index]);
+    _PlaModel_apJewelLods[index][0].mId = id;
+    _PlaModel_apJewelLods[index][1].mId = NO_MODEL;
+    PlaModelQueuePart(3, index, _PlaModel_apJewelLods[index], _PlaModel_apJewelData[index]);
 }
 
-void fn_8015F35C(void)
+void PlaModelBeginFaceCache(void)
 {
-    lbl_803EB344 = 1;
-    lbl_803ECAC4[0] = 0;
-    lbl_803ECAC4[1] = 0;
-    lbl_803ECABC[0] = 0;
-    lbl_803ECABC[1] = 0;
+    _PlaModel_bCacheFace = 1;
+    _PlaModel_aiFaceCacheIds[0] = 0;
+    _PlaModel_aiFaceCacheIds[1] = 0;
+    _PlaModel_apFaceCache[0] = 0;
+    _PlaModel_apFaceCache[1] = 0;
 }
 
-void fn_8015F388(void)
+void PlaModelEndFaceCache(void)
 {
-    if (lbl_803ECABC[0]) {
-        fn_801D2BD0(lbl_803ECABC[0]);
-        lbl_803ECABC[0] = 0;
+    if (_PlaModel_apFaceCache[0]) {
+        fn_801D2BD0(_PlaModel_apFaceCache[0]);
+        _PlaModel_apFaceCache[0] = 0;
     }
-    if (lbl_803ECABC[1]) {
-        fn_801D2BD0(lbl_803ECABC[1]);
-        lbl_803ECABC[1] = 0;
+    if (_PlaModel_apFaceCache[1]) {
+        fn_801D2BD0(_PlaModel_apFaceCache[1]);
+        _PlaModel_apFaceCache[1] = 0;
     }
-    lbl_803EB344 = 0;
-    lbl_803ECAC4[0] = 0;
-    lbl_803ECAC4[1] = 0;
+    _PlaModel_bCacheFace = 0;
+    _PlaModel_aiFaceCacheIds[0] = 0;
+    _PlaModel_aiFaceCacheIds[1] = 0;
 }
 
 void fn_8015F3FC(int a)
@@ -1071,10 +1075,10 @@ void fn_8015F3FC(int a)
     unsigned int i;
 
     for (i = 0; i <= 1; i++) {
-        lbl_8031C1C8.mpUnknown10[i].mpUnknown10 = 0;
-        PlyrModelLodClear(&lbl_803EB338[i]);
-        lbl_803EB338[i].mId = i + 9;
-        PlyrModelLodInit(&lbl_803EB338[i], &lbl_802DFB40[i], lbl_803EB348);
+        _PlaModel_Face.mpUnknown10[i].mpUnknown10 = 0;
+        PlyrModelLodClear(&_PlaModel_pFaceLods[i]);
+        _PlaModel_pFaceLods[i].mId = i + 9;
+        PlyrModelLodInit(&_PlaModel_pFaceLods[i], &_PlaModel_aBaseHeadLods[i], _PlaModel_pBodySkeleton);
     }
 }
 
@@ -1084,37 +1088,45 @@ void fn_8015F484(AnimSkeleton_t *pSkeleton, AnimSkeleton_t **ppHandSkeletons,
     unsigned int i;
     unsigned int j;
     unsigned int k;
-    int count;
+    unsigned int nBody = 2;
+    unsigned int nHand = 1;
+    ModelLod_802DF190 **bodyTbl;
+    ModelLod_802DF190 *(*handTbl)[2];
 
-    switch (lbl_803EB360) {
+    // FAKEMATCH: both switch arms set the same table pointers; the per-arm
+    // assignment keeps the switch compares and hoists both tables' addresses
+    // as the target does. nBody and nHand are the loop bounds as locals.
+    switch (_PlaModel_iLodMode) {
     case 0:
     case 1:
-        count = 1;
+        bodyTbl = _PlaModel_apBodyLods;
+        handTbl = _PlaModel_apHandLods;
         break;
     default:
-        count = 2;
+        bodyTbl = _PlaModel_apBodyLods;
+        handTbl = _PlaModel_apHandLods;
         break;
     }
 
-    lbl_803EB348 = pSkeleton;
-    lbl_803EB34C[0] = ppHandSkeletons[0];
-    lbl_803EB34C[1] = ppHandSkeletons[1];
-    lbl_803EB354 = pHairSkeleton;
-    lbl_803EB358 = pSkeleton3;
+    _PlaModel_pBodySkeleton = pSkeleton;
+    _PlaModel_apHandSkeletons[0] = ppHandSkeletons[0];
+    _PlaModel_apHandSkeletons[1] = ppHandSkeletons[1];
+    _PlaModel_pHairSkeleton = pHairSkeleton;
+    _PlaModel_pJewelSkeleton = pSkeleton3;
 
     for (i = 0; i <= 3; i++) {
-        for (k = 0; k < 2; k++) {
-            PlyrModelLodBindSkeleton(&lbl_802E31A0[i][k], lbl_803EB348);
+        for (k = 0; k < nBody; k++) {
+            PlyrModelLodBindSkeleton(&bodyTbl[i][k], _PlaModel_pBodySkeleton);
         }
     }
     for (k = 0; k <= 1; k++) {
-        PlyrModelLodBindSkeleton(&lbl_803EB33C[k], lbl_803EB348);
-        PlyrModelLodBindSkeleton(&lbl_803EB340[k], lbl_803EB348);
+        PlyrModelLodBindSkeleton(&_PlaModel_pBaseHeadLods[k], _PlaModel_pBodySkeleton);
+        PlyrModelLodBindSkeleton(&_PlaModel_pMorphHeadLods[k], _PlaModel_pBodySkeleton);
     }
     for (i = 0; i <= 3; i++) {
         for (j = 0; j <= 1; j++) {
-            for (k = 0; k < 1; k++) {
-                PlyrModelLodBindSkeleton(&lbl_802E31B0[i][j][k], lbl_803EB34C[j]);
+            for (k = 0; k < nHand; k++) {
+                PlyrModelLodBindSkeleton(&handTbl[i][j][k], _PlaModel_apHandSkeletons[j]);
             }
         }
     }
@@ -1132,7 +1144,7 @@ int fn_8015F5BC(const char *pName)
     }
     name[0] = 0;
     snprintf(name, sizeof(name), "HEAD_MODEL_%s_2700", pName);
-    id = ResFindIndexByName(lbl_803ECAD8, name);
+    id = ResFindIndexByName(_PlaModel_pFaceArchive, name);
     if (id == -1) {
         id = 0x1D8;
     }
@@ -1147,14 +1159,14 @@ static int _PlayerHeadFindCapModel(int cap, const char *pName)
 
     name[0] = 0;
     snprintf(name, sizeof(name), "HEAD_MODEL_CAP%02d_%s_2700", cap, pName);
-    id = ResFindIndexByName(lbl_803ECAD8, name);
+    id = ResFindIndexByName(_PlaModel_pFaceArchive, name);
     if (id == -1) {
         id = 0x1D8;
     }
     return id;
 }
 
-void fn_8015F638(int style, int shape, int hat, int *pIds)
+void PlaModelGetHairStyleModels(int style, int shape, int hat, int *pIds)
 {
     DbCursor cursor;
 
@@ -1176,7 +1188,7 @@ void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, P
     char *p;
     int id;
 
-    fn_8015F638(style, shape, hat, &pIds->mUnknown0);
+    PlaModelGetHairStyleModels(style, shape, hat, &pIds->mUnknown0);
     if (pName) {
         p = strchr(pName, ' ');
         if (p) {
@@ -1188,7 +1200,7 @@ void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, P
         } else {
             snprintf(name, sizeof(name), "HAIR_MODEL_%s_2700", pName);
         }
-        id = ResFindIndexByName(lbl_803ECAD4, name);
+        id = ResFindIndexByName(_PlaModel_pRosterHairArchive, name);
         if (id != -1) {
             pIds->mUnknown0 = id + ROSTER_ID_BASE;
         }
@@ -1198,184 +1210,184 @@ void PlayerHeadGetHairModels(const char *pName, int style, int shape, int hat, P
         } else {
             snprintf(name, sizeof(name), "HAIR_MODEL_%s_1500", pName);
         }
-        id = ResFindIndexByName(lbl_803ECAD4, name);
+        id = ResFindIndexByName(_PlaModel_pRosterHairArchive, name);
         if (id != -1) {
             pIds->mUnknown4 = id + ROSTER_ID_BASE;
         }
     }
 }
 
-void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void fn_8015F82C(int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback)
 {
     int size0;
     int size1;
 
-    lbl_803ECA6C[0] = pCallback;
-    lbl_803ECA70[0] = pPlayer;
+    _PlaModel_apFaceCallback[0] = pCallback;
+    _PlaModel_apFacePlayer[0] = pPlayer;
     if (id != NO_MODEL) {
-        lbl_803EB330 = 1;
-        lbl_803EB338[0].mId = id;
-        lbl_803EB338[1].mId = id + 1;
-        size0 = ResGetSize(lbl_803ECAD8, id);
-        size1 = ResGetSize(lbl_803ECAD8, lbl_803EB338[1].mId);
-        lbl_803ECAAC[0] = (char *)fn_801D2B7C(size0, 2, 0);
-        lbl_803ECAAC[1] = (char *)fn_801D2B7C(size1, 2, 0);
-        lbl_803EB330++;
-        ResCopyAsyncToBuffer(lbl_803ECAD8, lbl_803EB338[0].mId, 1, lbl_803ECAAC[0], 100, fn_8015E1F0, 0);
-        lbl_803EB330++;
-        ResCopyAsyncToBuffer(lbl_803ECAD8, lbl_803EB338[1].mId, 1, lbl_803ECAAC[1], 100, fn_8015E1F0, 0);
+        _PlaModel_uFaceLoadsPending = 1;
+        _PlaModel_pFaceLods[0].mId = id;
+        _PlaModel_pFaceLods[1].mId = id + 1;
+        size0 = ResGetSize(_PlaModel_pFaceArchive, id);
+        size1 = ResGetSize(_PlaModel_pFaceArchive, _PlaModel_pFaceLods[1].mId);
+        _PlaModel_apFaceData[0] = (char *)fn_801D2B7C(size0, 2, 0);
+        _PlaModel_apFaceData[1] = (char *)fn_801D2B7C(size1, 2, 0);
+        _PlaModel_uFaceLoadsPending++;
+        ResCopyAsyncToBuffer(_PlaModel_pFaceArchive, _PlaModel_pFaceLods[0].mId, 1, _PlaModel_apFaceData[0], 100, PlaModelFaceReadDone, 0);
+        _PlaModel_uFaceLoadsPending++;
+        ResCopyAsyncToBuffer(_PlaModel_pFaceArchive, _PlaModel_pFaceLods[1].mId, 1, _PlaModel_apFaceData[1], 100, PlaModelFaceReadDone, 0);
     } else {
-        lbl_803EB338[0].mId = id;
-        lbl_803EB338[1].mId = id;
+        _PlaModel_pFaceLods[0].mId = id;
+        _PlaModel_pFaceLods[1].mId = id;
         pCallback(pPlayer);
     }
 }
 
-void fn_8015F958(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void PlaModelLoadHairAsync(int index, PlayerHeadIds_t *pIds, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback)
 {
     ModelLod_802DF190 *pLods;
 
-    lbl_803EB331 = 1;
-    lbl_803ECA78[0] = pCallback;
-    lbl_803ECA7C[0] = pPlayer;
-    lbl_803ECA74[0] = index;
+    _PlaModel_uHairLoadsPending = 1;
+    _PlaModel_apHairCallback[0] = pCallback;
+    _PlaModel_apHairPlayer[0] = pPlayer;
+    _PlaModel_aiHairPlayerIndex[0] = index;
     if (pIds->mUnknown0 != NO_MODEL) {
-        pLods = lbl_802E31D0[index];
+        pLods = _PlaModel_apHairLods[index];
         if (pIds->mUnknown0 != pLods[0].mId || !pLods[0].mpUnknown10 ||
             pIds->mUnknown4 != pLods[1].mId || !pLods[1].mpUnknown10) {
-            lbl_802E31D0[index][0].mId = pIds->mUnknown0;
-            lbl_802E31D0[index][1].mId = pIds->mUnknown4;
-            lbl_803EB331++;
-            ResCopyAsyncToBuffer(HairArchive(lbl_802E31D0[index][0].mId), HairId(lbl_802E31D0[index][0].mId), 1,
-                        lbl_8031C6A4[index][0], 100, fn_8015E200, 0);
-            if (lbl_803EB360) {
-                lbl_803EB331++;
-                ResCopyAsyncToBuffer(HairArchive(lbl_802E31D0[index][1].mId), HairId(lbl_802E31D0[index][1].mId),
-                            1, lbl_8031C6A4[index][1], 100, fn_8015E200, 0);
+            _PlaModel_apHairLods[index][0].mId = pIds->mUnknown0;
+            _PlaModel_apHairLods[index][1].mId = pIds->mUnknown4;
+            _PlaModel_uHairLoadsPending++;
+            ResCopyAsyncToBuffer(HairArchive(_PlaModel_apHairLods[index][0].mId), HairId(_PlaModel_apHairLods[index][0].mId), 1,
+                        _PlaModel_apHairData[index][0], 100, PlaModelHairReadDone, 0);
+            if (_PlaModel_iLodMode) {
+                _PlaModel_uHairLoadsPending++;
+                ResCopyAsyncToBuffer(HairArchive(_PlaModel_apHairLods[index][1].mId), HairId(_PlaModel_apHairLods[index][1].mId),
+                            1, _PlaModel_apHairData[index][1], 100, PlaModelHairReadDone, 0);
             }
             return;
         }
     }
-    lbl_803EB331 = 0;
-    lbl_803ECA78[0](lbl_803ECA7C[0]);
+    _PlaModel_uHairLoadsPending = 0;
+    _PlaModel_apHairCallback[0](_PlaModel_apHairPlayer[0]);
 }
 
-void fn_8015FB38(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void PlaModelLoadHatAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback)
 {
     ModelLod_802DF190 *pLods;
 
-    lbl_803EB332 = 1;
-    lbl_803ECA84[0] = pCallback;
-    lbl_803ECA88[0] = pPlayer;
-    lbl_803ECA80[0] = index;
+    _PlaModel_uHatLoadsPending = 1;
+    _PlaModel_apHatCallback[0] = pCallback;
+    _PlaModel_apHatPlayer[0] = pPlayer;
+    _PlaModel_aiHatPlayerIndex[0] = index;
     if (id != NO_MODEL) {
-        pLods = lbl_802E3208[index];
+        pLods = _PlaModel_apHatLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3208[index][1].mId = id + 1;
-            lbl_803EB332++;
-            ResCopyAsyncToBuffer(lbl_803ECADC, lbl_802E3208[index][0].mId, 1, lbl_8031C714[index][0], 100,
-                        fn_8015E210, 0);
-            if (lbl_803EB360) {
-                lbl_803EB332++;
-                ResCopyAsyncToBuffer(lbl_803ECADC, lbl_802E3208[index][1].mId, 1, lbl_8031C714[index][1], 100,
-                            fn_8015E210, 0);
+            _PlaModel_apHatLods[index][1].mId = id + 1;
+            _PlaModel_uHatLoadsPending++;
+            ResCopyAsyncToBuffer(_PlaModel_pHatArchive, _PlaModel_apHatLods[index][0].mId, 1, _PlaModel_apHatData[index][0], 100,
+                        PlaModelHatReadDone, 0);
+            if (_PlaModel_iLodMode) {
+                _PlaModel_uHatLoadsPending++;
+                ResCopyAsyncToBuffer(_PlaModel_pHatArchive, _PlaModel_apHatLods[index][1].mId, 1, _PlaModel_apHatData[index][1], 100,
+                            PlaModelHatReadDone, 0);
             }
             return;
         }
     }
-    lbl_803EB332 = 0;
-    lbl_803ECA84[0](lbl_803ECA88[0]);
+    _PlaModel_uHatLoadsPending = 0;
+    _PlaModel_apHatCallback[0](_PlaModel_apHatPlayer[0]);
 }
 
-void fn_8015FC54(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void PlaModelLoadGlassesAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback)
 {
     ModelLod_802DF190 *pLods;
 
-    lbl_803EB333 = 1;
-    lbl_803ECA90[0] = pCallback;
-    lbl_803ECA94[0] = pPlayer;
-    lbl_803ECA8C[0] = index;
+    _PlaModel_uGlassesLoadsPending = 1;
+    _PlaModel_apGlassesCallback[0] = pCallback;
+    _PlaModel_apGlassesPlayer[0] = pPlayer;
+    _PlaModel_aiGlassesPlayerIndex[0] = index;
     if (id != NO_MODEL) {
-        pLods = lbl_802E3240[index];
+        pLods = _PlaModel_apGlassesLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3240[index][1].mId = id + 1;
-            lbl_803EB333++;
-            ResCopyAsyncToBuffer(lbl_803ECAE0, lbl_802E3240[index][0].mId, 1, lbl_8031C784[index][0], 100,
-                        fn_8015E220, 0);
-            if (lbl_803EB360) {
-                lbl_803EB333++;
-                ResCopyAsyncToBuffer(lbl_803ECAE0, lbl_802E3240[index][1].mId, 1, lbl_8031C784[index][1], 100,
-                            fn_8015E220, 0);
+            _PlaModel_apGlassesLods[index][1].mId = id + 1;
+            _PlaModel_uGlassesLoadsPending++;
+            ResCopyAsyncToBuffer(_PlaModel_pGlassesArchive, _PlaModel_apGlassesLods[index][0].mId, 1, _PlaModel_apGlassesData[index][0], 100,
+                        PlaModelGlassesReadDone, 0);
+            if (_PlaModel_iLodMode) {
+                _PlaModel_uGlassesLoadsPending++;
+                ResCopyAsyncToBuffer(_PlaModel_pGlassesArchive, _PlaModel_apGlassesLods[index][1].mId, 1, _PlaModel_apGlassesData[index][1], 100,
+                            PlaModelGlassesReadDone, 0);
             }
             return;
         }
     }
-    lbl_803EB333 = 0;
-    lbl_803ECA90[0](lbl_803ECA94[0]);
+    _PlaModel_uGlassesLoadsPending = 0;
+    _PlaModel_apGlassesCallback[0](_PlaModel_apGlassesPlayer[0]);
 }
 
-void fn_8015FD70(int index, int id, Object_8003DEC4 *pPlayer, Callback_8015F958 pCallback)
+void PlaModelLoadJewelAsync(int index, int id, Object_8003DEC4 *pPlayer, PlaModelLoadCallback_t pCallback)
 {
     ModelLod_802DF190 *pLods;
 
-    lbl_803EB334 = 1;
-    lbl_803ECA9C[0] = pCallback;
-    lbl_803ECAA0[0] = pPlayer;
-    lbl_803ECA98[0] = index;
+    _PlaModel_uJewelLoadsPending = 1;
+    _PlaModel_apJewelCallback[0] = pCallback;
+    _PlaModel_apJewelPlayer[0] = pPlayer;
+    _PlaModel_aiJewelPlayerIndex[0] = index;
     if (id != NO_MODEL) {
-        pLods = lbl_802E3278[index];
+        pLods = _PlaModel_apJewelLods[index];
         if (pLods[0].mId != id || !pLods[0].mpUnknown10) {
             pLods[0].mId = id;
-            lbl_802E3278[index][1].mId = id + 1;
-            lbl_803EB334++;
-            ResCopyAsyncToBuffer(lbl_803ECAE4, lbl_802E3278[index][0].mId, 1, lbl_8031C7F4[index][0], 100,
-                        fn_8015E230, 0);
+            _PlaModel_apJewelLods[index][1].mId = id + 1;
+            _PlaModel_uJewelLoadsPending++;
+            ResCopyAsyncToBuffer(_PlaModel_pJewelArchive, _PlaModel_apJewelLods[index][0].mId, 1, _PlaModel_apJewelData[index][0], 100,
+                        PlaModelJewelReadDone, 0);
             return;
         }
     }
-    lbl_803EB334 = 0;
-    lbl_803ECA9C[0](lbl_803ECAA0[0]);
+    _PlaModel_uJewelLoadsPending = 0;
+    _PlaModel_apJewelCallback[0](_PlaModel_apJewelPlayer[0]);
 }
 
 /* Finishes the asynchronous loads started above once only the initial
    count of each is left, then calls the stored completion callback. */
-void fn_8015FE4C(void)
+void PlaModelFinishAsyncLoads(void)
 {
-    if (lbl_803EB330 == 1) {
-        lbl_803EB330 = 0;
-        fn_80233EAC(&lbl_8031C1C8, lbl_803EB338, "PLYRMODEL", 0, lbl_803ECAD8, lbl_803EB348,
-                    (void **)lbl_803ECAAC, 0);
-        lbl_803ECA6C[0](lbl_803ECA70[0]);
+    if (_PlaModel_uFaceLoadsPending == 1) {
+        _PlaModel_uFaceLoadsPending = 0;
+        fn_80233EAC(&_PlaModel_Face, _PlaModel_pFaceLods, "PLYRMODEL", 0, _PlaModel_pFaceArchive, _PlaModel_pBodySkeleton,
+                    (void **)_PlaModel_apFaceData, 0);
+        _PlaModel_apFaceCallback[0](_PlaModel_apFacePlayer[0]);
     }
-    if (lbl_803EB331 == 1) {
-        lbl_803EB331 = 0;
+    if (_PlaModel_uHairLoadsPending == 1) {
+        _PlaModel_uHairLoadsPending = 0;
         PlyrRenderBindPartTable(0);
-        fn_8015DA80(lbl_803ECA74[0], 0);
+        PlaModelLoadHair(_PlaModel_aiHairPlayerIndex[0], 0);
         PlyrRenderUnbindPartTable();
-        lbl_803ECA78[0](lbl_803ECA7C[0]);
+        _PlaModel_apHairCallback[0](_PlaModel_apHairPlayer[0]);
     }
-    if (lbl_803EB332 == 1) {
-        lbl_803EB332 = 0;
+    if (_PlaModel_uHatLoadsPending == 1) {
+        _PlaModel_uHatLoadsPending = 0;
         PlyrRenderBindPartTable(0);
-        fn_8015DD3C(lbl_803ECA80[0], 0);
+        PlaModelLoadHat(_PlaModel_aiHatPlayerIndex[0], 0);
         PlyrRenderUnbindPartTable();
-        lbl_803ECA84[0](lbl_803ECA88[0]);
+        _PlaModel_apHatCallback[0](_PlaModel_apHatPlayer[0]);
     }
-    if (lbl_803EB333 == 1) {
-        lbl_803EB333 = 0;
+    if (_PlaModel_uGlassesLoadsPending == 1) {
+        _PlaModel_uGlassesLoadsPending = 0;
         PlyrRenderBindPartTable(0);
-        fn_8015DE3C(lbl_803ECA8C[0], 0);
+        PlaModelLoadGlasses(_PlaModel_aiGlassesPlayerIndex[0], 0);
         PlyrRenderUnbindPartTable();
-        lbl_803ECA90[0](lbl_803ECA94[0]);
+        _PlaModel_apGlassesCallback[0](_PlaModel_apGlassesPlayer[0]);
     }
-    if (lbl_803EB334 == 1) {
-        lbl_803EB334 = 0;
+    if (_PlaModel_uJewelLoadsPending == 1) {
+        _PlaModel_uJewelLoadsPending = 0;
         PlyrRenderBindPartTable(0);
-        fn_8015DF3C(lbl_803ECA98[0], 0);
+        PlaModelLoadJewel(_PlaModel_aiJewelPlayerIndex[0], 0);
         PlyrRenderUnbindPartTable();
-        lbl_803ECA9C[0](lbl_803ECAA0[0]);
+        _PlaModel_apJewelCallback[0](_PlaModel_apJewelPlayer[0]);
     }
 }
 

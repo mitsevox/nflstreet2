@@ -1162,18 +1162,12 @@
     {
       "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the five holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8015D4E0",
-          "end": "0x8015D550"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015D68C",
+          "start": "0x8015D3EC",
           "end": "0x8015DA80"
         },
         {
@@ -1186,12 +1180,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015E1F0",
-          "end": "0x8015F484"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015F5BC",
           "end": "0x8015FFA8"
         },
         {
@@ -1228,24 +1216,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8015D3EC",
-            "evidence": "evidence.tsv source-form 0x8015D3EC-0x8015D4E0"
-          },
-          {
-            "function": "fn_8015D550",
-            "evidence": "evidence.tsv source-form 0x8015D550-0x8015D68C"
-          },
-          {
-            "function": "fn_8015DA80",
+            "function": "PlaModelLoadHair",
             "evidence": "evidence.tsv source-form 0x8015DA80-0x8015DD3C"
           },
           {
-            "function": "fn_8015E0B8",
+            "function": "PlaModelQueuePart",
             "evidence": "evidence.tsv source-form 0x8015E0B8-0x8015E1F0"
-          },
-          {
-            "function": "fn_8015F484",
-            "evidence": "evidence.tsv source-form 0x8015F484-0x8015F5BC"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"

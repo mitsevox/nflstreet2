@@ -20530,7 +20530,7 @@
     {
       "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -20571,102 +20571,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8015D3EC",
+          "symbol": "PlaModelLoadBodies",
           "start": "0x8015D3EC",
           "end": "0x8015D4E0"
         },
         {
-          "symbol": "fn_8015D4E0",
+          "symbol": "PlaModelFreeBodies",
           "start": "0x8015D4E0",
           "end": "0x8015D550"
         },
         {
-          "symbol": "fn_8015D550",
+          "symbol": "PlaModelLoadHands",
           "start": "0x8015D550",
           "end": "0x8015D68C"
         },
         {
-          "symbol": "fn_8015D68C",
+          "symbol": "PlaModelFreeHands",
           "start": "0x8015D68C",
           "end": "0x8015D718"
         },
         {
-          "symbol": "fn_8015D718",
+          "symbol": "PlaModelLoadBaseHead",
           "start": "0x8015D718",
           "end": "0x8015D7C0"
         },
         {
-          "symbol": "fn_8015D7C0",
+          "symbol": "PlaModelFreeBaseHead",
           "start": "0x8015D7C0",
           "end": "0x8015D81C"
         },
         {
-          "symbol": "fn_8015D81C",
+          "symbol": "PlaModelAllocPlayerBuffers",
           "start": "0x8015D81C",
           "end": "0x8015D998"
         },
         {
-          "symbol": "fn_8015D998",
+          "symbol": "PlaModelFreePlayerBuffers",
           "start": "0x8015D998",
           "end": "0x8015DA7C"
         },
         {
-          "symbol": "fn_8015DA7C",
+          "symbol": "PlaModelPostInit",
           "start": "0x8015DA7C",
           "end": "0x8015DA80"
         },
         {
-          "symbol": "fn_8015DA80",
+          "symbol": "PlaModelLoadHair",
           "start": "0x8015DA80",
           "end": "0x8015DD3C"
         },
         {
-          "symbol": "fn_8015DD3C",
+          "symbol": "PlaModelLoadHat",
           "start": "0x8015DD3C",
           "end": "0x8015DE3C"
         },
         {
-          "symbol": "fn_8015DE3C",
+          "symbol": "PlaModelLoadGlasses",
           "start": "0x8015DE3C",
           "end": "0x8015DF3C"
         },
         {
-          "symbol": "fn_8015DF3C",
+          "symbol": "PlaModelLoadJewel",
           "start": "0x8015DF3C",
           "end": "0x8015E0B8"
         },
         {
-          "symbol": "fn_8015E0B8",
+          "symbol": "PlaModelQueuePart",
           "start": "0x8015E0B8",
           "end": "0x8015E1F0"
         },
         {
-          "symbol": "fn_8015E1F0",
+          "symbol": "PlaModelFaceReadDone",
           "start": "0x8015E1F0",
           "end": "0x8015E200"
         },
         {
-          "symbol": "fn_8015E200",
+          "symbol": "PlaModelHairReadDone",
           "start": "0x8015E200",
           "end": "0x8015E210"
         },
         {
-          "symbol": "fn_8015E210",
+          "symbol": "PlaModelHatReadDone",
           "start": "0x8015E210",
           "end": "0x8015E220"
         },
         {
-          "symbol": "fn_8015E220",
+          "symbol": "PlaModelGlassesReadDone",
           "start": "0x8015E220",
           "end": "0x8015E230"
         },
         {
-          "symbol": "fn_8015E230",
+          "symbol": "PlaModelJewelReadDone",
           "start": "0x8015E230",
           "end": "0x8015E240"
         },
         {
-          "symbol": "fn_8015E240",
+          "symbol": "PlaModelLoadMorphHead",
           "start": "0x8015E240",
           "end": "0x8015E2FC"
         },
@@ -20681,42 +20681,42 @@
           "end": "0x8015E548"
         },
         {
-          "symbol": "fn_8015E548",
+          "symbol": "PlaModelOpenArchives",
           "start": "0x8015E548",
           "end": "0x8015E620"
         },
         {
-          "symbol": "fn_8015E620",
+          "symbol": "PlaModelInit",
           "start": "0x8015E620",
           "end": "0x8015E654"
         },
         {
-          "symbol": "fn_8015E654",
+          "symbol": "PlaModelSetLodMode",
           "start": "0x8015E654",
           "end": "0x8015E65C"
         },
         {
-          "symbol": "fn_8015E65C",
+          "symbol": "PlaModelShutdown",
           "start": "0x8015E65C",
           "end": "0x8015E684"
         },
         {
-          "symbol": "fn_8015E684",
+          "symbol": "PlaModelLoadSharedModels",
           "start": "0x8015E684",
           "end": "0x8015E6C4"
         },
         {
-          "symbol": "fn_8015E6C4",
+          "symbol": "PlaModelInitPlayerModels",
           "start": "0x8015E6C4",
           "end": "0x8015E6C8"
         },
         {
-          "symbol": "fn_8015E6C8",
+          "symbol": "PlaModelResetPlayerModels",
           "start": "0x8015E6C8",
           "end": "0x8015E714"
         },
         {
-          "symbol": "fn_8015E714",
+          "symbol": "PlaModelFreeSharedModels",
           "start": "0x8015E714",
           "end": "0x8015E73C"
         },
@@ -20731,12 +20731,12 @@
           "end": "0x8015E950"
         },
         {
-          "symbol": "fn_8015E950",
+          "symbol": "PlaModelInitMorphHead",
           "start": "0x8015E950",
           "end": "0x8015E994"
         },
         {
-          "symbol": "fn_8015E994",
+          "symbol": "PlaModelFreeMorphHead",
           "start": "0x8015E994",
           "end": "0x8015E9F4"
         },
@@ -20746,7 +20746,7 @@
           "end": "0x8015EB00"
         },
         {
-          "symbol": "fn_8015EB00",
+          "symbol": "PlaModelClearHair",
           "start": "0x8015EB00",
           "end": "0x8015EB4C"
         },
@@ -20756,7 +20756,7 @@
           "end": "0x8015EC28"
         },
         {
-          "symbol": "fn_8015EC28",
+          "symbol": "PlaModelClearHat",
           "start": "0x8015EC28",
           "end": "0x8015EC74"
         },
@@ -20766,7 +20766,7 @@
           "end": "0x8015ED50"
         },
         {
-          "symbol": "fn_8015ED50",
+          "symbol": "PlaModelClearGlasses",
           "start": "0x8015ED50",
           "end": "0x8015ED9C"
         },
@@ -20806,12 +20806,12 @@
           "end": "0x8015F35C"
         },
         {
-          "symbol": "fn_8015F35C",
+          "symbol": "PlaModelBeginFaceCache",
           "start": "0x8015F35C",
           "end": "0x8015F388"
         },
         {
-          "symbol": "fn_8015F388",
+          "symbol": "PlaModelEndFaceCache",
           "start": "0x8015F388",
           "end": "0x8015F3FC"
         },
@@ -20831,7 +20831,7 @@
           "end": "0x8015F638"
         },
         {
-          "symbol": "fn_8015F638",
+          "symbol": "PlaModelGetHairStyleModels",
           "start": "0x8015F638",
           "end": "0x8015F6E8"
         },
@@ -20846,27 +20846,27 @@
           "end": "0x8015F958"
         },
         {
-          "symbol": "fn_8015F958",
+          "symbol": "PlaModelLoadHairAsync",
           "start": "0x8015F958",
           "end": "0x8015FB38"
         },
         {
-          "symbol": "fn_8015FB38",
+          "symbol": "PlaModelLoadHatAsync",
           "start": "0x8015FB38",
           "end": "0x8015FC54"
         },
         {
-          "symbol": "fn_8015FC54",
+          "symbol": "PlaModelLoadGlassesAsync",
           "start": "0x8015FC54",
           "end": "0x8015FD70"
         },
         {
-          "symbol": "fn_8015FD70",
+          "symbol": "PlaModelLoadJewelAsync",
           "start": "0x8015FD70",
           "end": "0x8015FE4C"
         },
         {
-          "symbol": "fn_8015FE4C",
+          "symbol": "PlaModelFinishAsyncLoads",
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
