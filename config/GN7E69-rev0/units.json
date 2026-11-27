@@ -1363,7 +1363,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and MemInitHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and MemInitHeap keep the original bytes. It links its 52-byte .sdata run 0x803EBCC4-0x803EBCF8 (the fifteen _Mem_* state objects, NASCAR 2005 names, their data rows); the strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -1388,6 +1388,12 @@
           "placement": ".text",
           "start": "0x801D2478",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCC4",
+          "end": "0x803EBCF8"
         },
         {
           "section": ".bss",
