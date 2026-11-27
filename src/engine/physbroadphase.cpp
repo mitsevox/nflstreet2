@@ -352,8 +352,8 @@ void BroadPhase::InsertEndpoint(int axis, unsigned short endpoint)
 
     if (current == BROADPHASE_NONE) {
         mAxisHead[axis] = endpoint;
-        pEndpoint->mPrev = current;
         pEndpoint->mNext = current;
+        pEndpoint->mPrev = current;
     } else {
         for (;;) {
             pCurrent = &mpEndpoints[current];
@@ -365,8 +365,8 @@ void BroadPhase::InsertEndpoint(int axis, unsigned short endpoint)
                 } else {
                     mAxisHead[axis] = endpoint;
                 }
-                pEndpoint->mNext = current;
                 pEndpoint->mPrev = pCurrent->mPrev;
+                pEndpoint->mNext = current;
                 pCurrent->mPrev = endpoint;
                 return;
             }
