@@ -200,8 +200,7 @@ void SysInitRealTimeClock(void)
     long long secs;
     long long days;
     unsigned char enabled;
-    unsigned int daysInYear;
-    unsigned short month;
+    unsigned short count;
     int year;
     int m;
 
@@ -212,19 +211,23 @@ void SysInitRealTimeClock(void)
     _Sys_RealTimeClock.mHours = (long long)floorf(secs * (1.0f / 3600.0f)) % 24;
     days = floorf(secs * (1.0f / 86400.0f));
     _Sys_RealTimeClock.mYear = 0;
-    daysInYear = 366;
-    while (days >= daysInYear) {
-        days -= daysInYear;
+    count = 366;
+    while (days >= count) {
+        days -= count;
         _Sys_RealTimeClock.mYear++;
-        daysInYear = DateIsYearLeap(_Sys_RealTimeClock.mYear) ? 366 : 365;
+        if (DateIsYearLeap(_Sys_RealTimeClock.mYear)) {
+            count = 366;
+        } else {
+            count = 365;
+        }
     }
     _Sys_RealTimeClock.mYear += 2000;
     aDays[2] = DateIsYearLeap(_Sys_RealTimeClock.mYear) ? 29 : 28;
-    month = 1;
-    while (days >= aDays[month]) {
-        days -= aDays[month++];
+    count = 1;
+    while (days >= aDays[count]) {
+        days -= aDays[count++];
     }
-    _Sys_RealTimeClock.mMonth = month;
+    _Sys_RealTimeClock.mMonth = count;
     _Sys_RealTimeClock.mDays = days + 1;
     _Sys_RealTimeClock.mHundredths = 0;
     _Sys_ClockVsyncTicks = 0;

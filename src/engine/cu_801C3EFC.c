@@ -91,14 +91,28 @@ static inline void fn_801C3EFC_Rot(int x, int y, int z)
     MatRotZYX(z << 8, y << 8, x << 8);
 }
 
-void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
-                 Limit_801C3EFC *pLimits, float *pTarget, int iterations)
+static inline void _ChainGetMatrixPos(float *pPos, float *pMatrix)
 {
-    int rot[3];
+    pPos[0] = pMatrix[3];
+    pPos[1] = pMatrix[7];
+    pPos[2] = pMatrix[11];
+}
+
+static inline void _ChainSetAngles(int *pDst, int *pSrc)
+{
+    pDst[0] = pSrc[0];
+    pDst[1] = pSrc[1];
+    pDst[2] = pSrc[2];
+}
+
+void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
+                 Limit_801C3EFC *pLimits, float *pTarget, unsigned int iterations)
+{
     float toEnd[3];
     float toTarget[3];
     float jointPos[3];
     float mats[16][16];
+    int rot[3];
     float axis[3];
     float endPos[3];
     float q[4];
@@ -123,17 +137,14 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     MatMakeUnit();
     MatTranslate(pInst->mPos);
     fn_801C3F48(pChain, 0, pChain->mStart - 1, angles, mats);
-    while (iterations--) {
+    while (iterations-- > 0) {
+        i = pChain->mEnd - 1;
         MatLoad(mats[pChain->mStart - 1]);
         fn_801C3F48(pChain, pChain->mStart, pChain->mEnd, angles, mats);
-        endPos[0] = mats[pChain->mEnd][3];
-        endPos[1] = mats[pChain->mEnd][7];
-        endPos[2] = mats[pChain->mEnd][11];
-        for (i = pChain->mEnd - 1; i >= pChain->mStart; i--) {
+        _ChainGetMatrixPos(endPos, mats[pChain->mEnd]);
+        for (; i >= pChain->mStart; i--) {
             bone = pChain->mpLinks[i].mBone;
-            jointPos[0] = mats[i][3];
-            jointPos[1] = mats[i][7];
-            jointPos[2] = mats[i][11];
+            _ChainGetMatrixPos(jointPos, mats[i]);
             Vec3Sub(toEnd, endPos, jointPos);
             Vec3Sub(toTarget, pTarget, jointPos);
             MatLoad(mats[i]);
@@ -160,9 +171,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
                     fn_801C3EFC(pLimit->mRange[2], pRest->z, &rot[2]);
                 }
                 if (lbl_803EBBD8) {
-                    angles[bone][0] = rot[0];
-                    angles[bone][1] = rot[1];
-                    angles[bone][2] = rot[2];
+                    _ChainSetAngles(angles[bone], rot);
                 }
                 MatLoad(mats[i - 1]);
                 MatTranslate(pSkel->mPos[bone]);
@@ -176,11 +185,10 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     count = 0;
     for (i = pChain->mStart; i <= pChain->mEnd; i++) {
         bone = pChain->mpLinks[i].mBone;
-        pResult->mBone = bone;
-        pResult->x = angles[bone][0] >> 8;
-        pResult->y = angles[bone][1] >> 8;
-        pResult->z = angles[bone][2] >> 8;
-        pResult++;
+        pResult[count].mBone = bone;
+        pResult[count].x = angles[bone][0] >> 8;
+        pResult[count].y = angles[bone][1] >> 8;
+        pResult[count].z = angles[bone][2] >> 8;
         count++;
     }
     pChain->mSolved = count;

@@ -210,8 +210,8 @@ int TDbSQLDestroyCursor(struct QueryCursor *pCursor)
         ((TDbParseInfo_801FC9D4 *)pCursor->mUnknown12)->mState = 10;
         n = __T3DB_Compiler_SQLStack[0].mUsed;
         pInfo = (TDbParseInfo_801FC9D4 *)((unsigned char *)__T3DB_Compiler_SQLStack[0].mItems + n * __T3DB_Compiler_SQLStack[0].mItemSize);
-        i = n - 1;
-        if (n != 0) {
+        i = n;
+        if (i-- != 0) {
             do {
                 pInfo--;
                 if (pInfo->mState != 10) {
@@ -1270,7 +1270,9 @@ int _T3DBParse_OrderBy(TDbParseInfo_801FC9D4 *pInfo, TDbLexer_t *pLexer, int res
                 pOrder->mDescending = 0;
                 break;
             }
-            if (pLexer->mTokens[1].mType == 0x38) {
+            // FAKEMATCH: re-takes the lookahead token address pNext already holds; gives the target's r26/r27 split of the inlined TDbLexNext copies
+            pNext = &pLexer->mTokens[1];
+            if (pNext->mType == 0x38) {
                 TDbLexNext_801FD3C0(pLexer);
                 more = 1;
             }

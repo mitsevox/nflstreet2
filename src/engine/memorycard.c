@@ -564,8 +564,11 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
             goto done;
         }
         if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
-            if (memcmp(_MemCOp.mStat.company, "69", 2) == 0
-                && strncmp(_MemCOp.mStat.fileName, pName, 32) == 0) {
+            if (memcmp(_MemCOp.mStat.company, "69", 2) != 0) {
+                _MemCOp.mResult = CARD_RESULT_NOFILE;
+            } else if (strncmp(_MemCOp.mStat.fileName, pName, 32) != 0) {
+                _MemCOp.mResult = CARD_RESULT_NOFILE;
+            } else {
                 _MemCOp.mResult = CARDFastOpen(port, fileNo, &_MemCOp.mFileInfo);
                 if (_MemCOp.mResult == CARD_RESULT_READY) {
                     _MemCOp.mResult = fileNo;
@@ -573,7 +576,6 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
                 }
                 break;
             }
-            _MemCOp.mResult = CARD_RESULT_NOFILE;
         }
     }
 done:
@@ -695,8 +697,9 @@ int MemCAsyncDelete(int port, const char *pName)
         _MemCOp.mResult = CARDGetStatus(port, fileNo, &_MemCOp.mStat);
         if (_MemCOp.mResult == CARD_RESULT_READY || _MemCOp.mResult == CARD_RESULT_NOFILE) {
             if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
-                if (memcmp(_MemCOp.mStat.company, "69", 2) != 0
-                    || strncmp(_MemCOp.mStat.fileName, pName, 32) != 0) {
+                if (memcmp(_MemCOp.mStat.company, "69", 2) != 0) {
+                    _MemCOp.mResult = CARD_RESULT_NOFILE;
+                } else if (strncmp(_MemCOp.mStat.fileName, pName, 32) != 0) {
                     _MemCOp.mResult = CARD_RESULT_NOFILE;
                 } else {
                     _MemCOp.mResult = CARDFastDeleteAsync(port, fileNo, 0);

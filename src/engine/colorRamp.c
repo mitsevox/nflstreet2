@@ -106,55 +106,38 @@ unsigned int ColorRampEval(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor, u
     ColorRampNode_t *pNode = 0;
     ColorRampNode_t *pPrev;
     unsigned int i;
-    ColorRampNode_t **nodes;
-    float blue;
     unsigned int interp;
 
     i = start;
     if (i < pRamp->mCount) {
-        nodes = &pRamp->mpNodes[0];
-        pNode = nodes[start];
-        goto check_key;
-
-prev_color:
-        pColor->x = pNode[-1].mColor.x;
-        pColor->y = pNode[-1].mColor.y;
-        blue = pNode[-1].mColor.z;
-        goto store_blue;
-
-interpolate:
-        interp = pRamp->mInterp;
-        if (interp == 0) {
-            goto prev_color;
+        pNode = pRamp->mpNodes[i];
+        for (;;) {
+            if (!(t >= pNode->mT)) {
+                found = 1;
+                if (i == 0) {
+                    pColor->x = pNode->mColor.x;
+                    pColor->y = pNode->mColor.y;
+                    pColor->z = pNode->mColor.z;
+                    break;
+                }
+                interp = pRamp->mInterp;
+                if (interp == 0) {
+                    pColor->x = pNode[-1].mColor.x;
+                    pColor->y = pNode[-1].mColor.y;
+                    pColor->z = pNode[-1].mColor.z;
+                } else {
+                    pPrev = pRamp->mpNodes[i - 1];
+                    _colorRampInterp(pColor, &pPrev->mColor, &pNode->mColor, interp,
+                                (t - pPrev->mT) / (pNode->mT - pPrev->mT));
+                }
+                break;
+            }
+            if (++i >= pRamp->mCount) {
+                break;
+            }
+            pNode = pRamp->mpNodes[i];
         }
-        pPrev = pRamp->mpNodes[i - 1];
-        _colorRampInterp(pColor, &pPrev->mColor, &pNode->mColor, interp,
-                    (t - pPrev->mT) / (pNode->mT - pPrev->mT));
-        goto complete;
-
-step:
-        ++i;
-        if (i >= pRamp->mCount) {
-            goto complete;
-        }
-        pNode = nodes[i];
-check_key:
-        if (t >= pNode->mT) {
-            goto step;
-        }
-
-        found = 1;
-        if (i != 0) {
-            goto interpolate;
-        }
-        pColor->x = pNode->mColor.x;
-        pColor->y = pNode->mColor.y;
-        blue = pNode->mColor.z;
-store_blue:
-        pColor->z = blue;
     }
-
-complete:
     if (!found) {
         if (pNode == 0) {
             pColor->z = pColor->y = pColor->x = 0.0f;
