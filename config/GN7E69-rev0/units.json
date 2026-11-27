@@ -14134,7 +14134,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the holdout keeping its original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -14146,12 +14146,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80164E30",
-          "end": "0x80165464"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80165770",
           "end": "0x80166110"
         },
         {
@@ -14178,10 +14172,6 @@
           {
             "function": "PlayAlignIssuePlayerRoute",
             "evidence": "evidence.tsv source-form 0x80164CE4-0x80164E30"
-          },
-          {
-            "function": "PlayAlignLoadPlayRoutes",
-            "evidence": "evidence.tsv source-form 0x80165464-0x80165770"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"

@@ -558,7 +558,9 @@ void RouteArrowBuild(RouteArrow_t *p)
             more = (pCommand[0] >> 7) ^ 1;
             more &= RouteArrowAddCommand(p, &command.mType, &point, hasOther);
             pCommand += 4;
-            more = pCommand[0] ? more : 0;
+            unsigned char c = pCommand[0];
+            if (c) c = more;
+            more = c;
         } else more = 0;
     } while (more);
     RouteArrowSetStyle(p, &command.mType, hasOther);
