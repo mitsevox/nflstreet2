@@ -33,10 +33,23 @@ typedef struct UISControlInfo_t {
     Float32 f58; /* 0x58 */
 } UISControlInfoT;
 
-/* Per-control state block; only the enable word is established. */
+/* Draw colour factors (r, g, b, a). */
+typedef struct UISColorVector_t {
+    Float32 r; /* 0x00 */
+    Float32 g; /* 0x04 */
+    Float32 b; /* 0x08 */
+    Float32 a; /* 0x0C */
+} UISColorVectorT;
+
+/* Per-control state block. */
 typedef struct UISControlState_t {
-    Uint8 unk_00[0x04];
+    void *pOwner;   /* 0x00: the control or node that owns it; 0 while hidden */
     Int32 bEnabled; /* 0x04 */
+    Uint8 unk_08[0x34];              /* 0x08: transform block passed to UISInfoT.pControlFnc */
+    UISColorVectorT MultiplerFactor; /* 0x3C */
+    UISColorVectorT AdditiveFactor;  /* 0x4C */
+    Uint8 unk_5C[0x04];
+    Int32 bCanHandleMessages;        /* 0x60 */
 } UISControlStateT;
 
 /* 8-byte entry of a control node: ID 0xFFFF marks a link to the control
@@ -85,12 +98,15 @@ typedef struct UISString_t {
     char *pText;   /* 0x08 */
 } UISStringT;
 
+/* A loaded screen file; its pointer fields hold file offsets until
+   0x8021861C turns them into pointers. */
 typedef struct UISScreenData_t {
     Uint32 NumControls;      /* 0x00 */
     UISControlT *pControls;  /* 0x04 */
     Uint32 NumStrings;       /* 0x08 */
     UISStringT *pStrings;    /* 0x0C */
-    Uint8 unk_10[0x08];
+    Uint32 NumPatchStrings;  /* 0x10 */
+    Uint32 *pStringPatchTable; /* 0x14: file offsets of words that name a pStrings entry */
     Uint32 NumObjects;       /* 0x18 */
     UISObjectRefT *pObjects; /* 0x1C */
 } UISScreenDataT;
@@ -125,13 +141,38 @@ typedef union UISThreadAction_t {
     Int32 Words[4];
 } UISThreadActionT;
 
+/* The global script's screen record (laid out as UISScreenT; 0x802188D4 fills it). */
 typedef struct UISCursor_t {
-    Uint8 unk_00[0x10];
-    void *pTarget; /* 0x10 */
+    Int32 unk_00;               /* 0x00 */
+    Uint16 GroupID;             /* 0x04 */
+    Uint16 ScreenID;            /* 0x06 */
+    Uint16 ParentGroupID;       /* 0x08 */
+    Uint16 ParentScreenID;      /* 0x0A */
+    Int32 bWaitingToBeUnloaded; /* 0x0C */
+    void *pTarget;              /* 0x10: the global script's screen data */
 } UISCursorT;
 
+/* Screen resource callbacks the game registers (group ID, screen ID). */
+typedef void *UISResLoadFncT(Uint16 GroupID, Uint16 ScreenID);
+typedef void UISResUnloadFncT(Uint16 GroupID, Uint16 ScreenID, void *pData);
+typedef void UISScreenActivatedFncT(Uint16 GroupID, Uint16 ScreenID);
+
+/* A word of a script call's arguments. */
+typedef union UISParam_t {
+    Float32 fValue;
+    Int32 iValue;
+    void *pValue;
+} UISParamT;
+
 typedef Int32 UISActionFncT(void *pObject, Int32, Int32, void *, Int32);
-typedef void UISControlFncT(void *, void *);
+
+/* One entry of the action function table (UISInfoT.ActionFncs). */
+typedef struct UISPlugin_t {
+    UISActionFncT *pFnc; /* 0x00 */
+} UISPluginT;
+/* Transform callback: Action 0 init, 1 push, 2 pop, 3 shutdown, with the
+   control state's transform block (+0x08). */
+typedef void UISControlFncT(Int32 Action, void *pTransform);
 
 typedef struct UISAnimateData_t {
     Uint32 iType;                     /* 0x00: selector passed to UISGetActionPtrValue */
@@ -182,40 +223,44 @@ typedef struct UISActionStack_t {
     Int32 *pTop;   /* 0x04 */
 } UISActionStackT;
 
+#define UIS_MAGIC 0x5549535F /* "UIS_", stored by 0x802188D4 */
+
 typedef struct UISInfo_t {
-    Int32 unk_00;                   /* 0x00 */
+    Int32 unk_00;                   /* 0x00: UIS_MAGIC once set up */
     Uint32 Flags;                   /* 0x04 */
     Uint32 MSPerTick;               /* 0x08 */
-    void *pCallback0C;              /* 0x0C */
-    void *pCallback10;              /* 0x10 */
-    void *pCallback14;              /* 0x14 */
-    void *pCallback18;              /* 0x18 */
+    void *pMessageFnc;              /* 0x0C */
+    UISResUnloadFncT *pShutdownScreenFnc; /* 0x10 */
+    UISResLoadFncT *pLoadFnc;       /* 0x14: returns a screen's data */
+    UISResUnloadFncT *pUnloadFnc;   /* 0x18 */
     UISControlFncT *pControlFnc;    /* 0x1C */
-    Uint8 unk_20[0x04];
-    void *pCallback24;              /* 0x24 */
+    void *pCallback20;              /* 0x20 */
+    UISScreenActivatedFncT *pScreenActivatedFnc; /* 0x24 */
     void (*pCallback28)(Uint16, Uint16, char *); /* 0x28: (group, screen, text) */
-    void (*pCallback2C)(void);             /* 0x2C: called before the screens are drawn */
+    void (*pCallback2C)(void);              /* 0x2C: called before the screens are drawn */
     void (*pCallback30)(void);              /* 0x30: called after the screens are drawn */
     void (*pCallback34)(Uint16, Uint16);    /* 0x34: called before each screen (group, screen) */
     void (*pCallback38)(Uint16, Uint16);    /* 0x38: called after each screen (group, screen) */
     Uint32 ActiveScreen;            /* 0x3C: index into Screens, -1 when none */
-    Uint8 unk_40[0x04];
+    Uint32 MaxScreens;              /* 0x40 */
     Int32 NumScreens;               /* 0x44 */
     UISScreenT *Screens;            /* 0x48 */
     UISCursorT *pCursor;            /* 0x4C */
-    Uint8 unk_50[0x04];
+    Uint32 MaxActionFncs;           /* 0x50 */
     Uint32 NumActionFncs;           /* 0x54 */
-    UISActionFncT **ActionFncs;     /* 0x58 */
-    Uint8 unk_5C[0x04];
+    UISPluginT *ActionFncs;         /* 0x58 */
+    Uint32 MaxRateFncs;             /* 0x5C */
     Int32 NumRateFncs;              /* 0x60 */
     UISRateFncT *RateFncs;          /* 0x64 */
     Uint32 MaxScreenRefs;           /* 0x68 */
-    Uint32 NumScreenRefs;          /* 0x6C */
+    Uint32 NumScreenRefs;           /* 0x6C */
     UISScreenRefT *ScreenRefs;      /* 0x70 */
     UISRunStateT RunState;          /* 0x74: passed by address to 0x802180A0 */
-    Uint8 unk_88[0x34];
+    UISRunStateT RateStack;         /* 0x88 */
+    UISColorVectorT MultiplerFactor; /* 0x9C */
+    UISColorVectorT AdditiveFactor; /* 0xAC */
     UISActionStackT ActionStack;    /* 0xBC */
-    Uint8 unk_C4[0x04];
+    Int32 **ppStackCurrent;         /* 0xC4: &RunState.pStackCurrent */
     Int32 bShuttingDown;            /* 0xC8 */
 } UISInfoT;
 
@@ -242,16 +287,16 @@ void UISUnloadRateFnc(UISInfoT *pInfo, UISControlInfoT *pControlInfo, Uint32 Rat
 void UISRemoveUnNessaryRateFncs(UISInfoT *pInfo);
 
 /* UIStudio.c functions called from other files; names not yet established. */
-void fn_80218AF0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 Arg3, Uint16 Arg4,
-                 Uint8 Count, Int32 *pArgs);
-Int32 fn_802191F0(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
+Int32 UISInternalLoadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
+                  Uint16 ParentScreenID, Uint8 Count, Int32 *pArgs);
+Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
 void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
                  Int32 *pArgs, Int32 bAll);
-void fn_80219BA0(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
+void UISInternalActivateControl(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
                  Uint16 Arg6);
-void fn_80219E18(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
+void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bArg1, Uint16 GroupID, Uint16 ScreenID);
 void fn_80219650(UISInfoT *pInfo, Uint16 *pGroupID, Uint16 *pScreenID);
-void fn_80219F84(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
+void UISUpdateVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Type, void *pNode, Int32 bValue);
 
 /* UI Studio functions of UISStack.c, UISUtils.c and UISActionProcess.c called from other files. */
 Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,

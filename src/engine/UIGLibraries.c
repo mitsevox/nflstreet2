@@ -23,7 +23,7 @@ int ResLoadAll(ResFile_t *pRes, int heap, int a);
 int ResUnLoadAll(ResFile_t *pRes);
 int ResGetNumResources(ResFile_t *pRes);
 int ResGetAlignment(ResFile_t *pRes);
-void fn_80220BE0(void);
+void UIGCSResetColorStyleCache(void);
 
 static UIGLibrary_t *_pLibraryInfo[2] = { 0 };
 static UIGLibraryMemInfoFunc_t *_UIGLibraryMemInfoFunc = 0;
@@ -51,7 +51,7 @@ UIGLibrary_t *UIGLibraryInit(UISResListDesc *pDesc)
     Int32 Size;
     UIGLibrary_t *pObject;
 
-    fn_80220BE0();
+    UIGCSResetColorStyleCache();
     Size = pDesc->NumA * sizeof(UIGLibraryType_t) + sizeof(UIGLibrary_t) +
            pDesc->NumB * sizeof(UIGLibraryType_t);
     pObject = fn_801D2B7C(Size, pDesc->unk_08, 0);
@@ -70,7 +70,7 @@ void UIGLibraryShutdown(UIGLibrary_t *pObject)
     Int32 i;
     Int32 Count;
 
-    fn_80220BE0();
+    UIGCSResetColorStyleCache();
     if (pObject != NULL) {
         Count = pObject->NumA;
         for (i = 0; i < Count; i++) {
@@ -144,7 +144,7 @@ void _UIGLibraryOpen(UIGLibrary_t *pObject, Int32 Index, UIGLibraryType_t *pEntr
         pEntry->bItems = 1;
     }
     UIGLibraryInitType(pObject, pEntry->Flags, Index);
-    fn_80220BE0();
+    UIGCSResetColorStyleCache();
     UIGLibraryClearMemInfo();
 }
 
@@ -524,7 +524,7 @@ void UIGLibraryInitType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a)
             UIGFmvInit(pObject, a);
         }
     }
-    fn_80220BE0();
+    UIGCSResetColorStyleCache();
 }
 
 void UIGLibraryShutdownType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a)
@@ -536,7 +536,7 @@ void UIGLibraryShutdownType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a)
             UIGFmvShutdown(pObject, a);
         }
     }
-    fn_80220BE0();
+    UIGCSResetColorStyleCache();
 }
 
 void UIGLibraryProcessType(UIGLibrary_t *pObject, Uint32 Flags, Int32 a, Int32 b)

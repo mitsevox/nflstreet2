@@ -215,7 +215,7 @@ int fn_801D2BD0(void *p);
 void RemapCopyTable(int a, int b);
 int SysGetSystemTime(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
+void UISProcessEvent(void *p, int a, int b, int c, float *pD, unsigned char e);
 void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
 float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
@@ -2509,31 +2509,31 @@ extern "C" void ReplayCamHandleMenuInput(GameCamera_t *pCamera, int player, unsi
     switch (action) {
     case 0:
         ReplayCamZoom(pCamera, -1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 1:
         ReplayCamZoom(pCamera, 1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 2:
         ReplayCamAdjustHeight(pCamera, 1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 3:
         ReplayCamAdjustHeight(pCamera, -1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 4:
         ReplayCamAdjustHeight(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 5:
         ReplayCamRotate(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 6:
         ReplayCamPitch(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     }
 }

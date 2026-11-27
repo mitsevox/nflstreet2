@@ -116,7 +116,7 @@ Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
     p--;
     switch (Type) {
     case 0:
-        fn_80218AF0(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->s.unk_04,
+        UISInternalLoadScreen(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->s.unk_04,
                     pAction->s.unk_06, Count, pArgs);
         break;
     case 1:
@@ -128,7 +128,7 @@ Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
             pScreen->bWaitingToBeUnloaded = 1;
         }
         if (_UISCanDoUnloadAction(Group, Screen, pInfo, p) == 0 ||
-            fn_802191F0(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
+            UISInternalUnloadScreen(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
             *ppTop = UISAddThreadActionAt(pInfo, *ppTop, pAction, GroupID, ScreenID, 1, Count, pArgs);
         }
         break;
@@ -141,21 +141,21 @@ Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
         pInfo->Flags &= ~2;
         break;
     case 3:
-        fn_80219E18(pInfo, 1, pAction->s.GroupID, pAction->s.ScreenID);
+        UISInternalActivateScreen(pInfo, 1, pAction->s.GroupID, pAction->s.ScreenID);
         break;
     case 4:
-        fn_80219E18(pInfo, 0, pAction->s.GroupID, pAction->s.ScreenID);
+        UISInternalActivateScreen(pInfo, 0, pAction->s.GroupID, pAction->s.ScreenID);
         break;
     case 5:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
         break;
     case 6:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
@@ -186,14 +186,14 @@ Int32 *_UISDoThreadControlAction(UISInfoT *pInfo, Int32 *p)
     switch (Type) {
     case 5:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
         break;
     case 6:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }

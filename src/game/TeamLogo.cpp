@@ -44,7 +44,7 @@ void PlaDynClutApplyColors(PaletteDesc_t *pDesc, int id, FMCAPPORTText *pText);
 void GlibSyncFrame(void);
 void *UIGLibraryGetGlobal(int index);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
-char *fn_80220BFC(int a, int b);
+char *UIGCSLoadPalette(int a, int b);
 TexPaletteInfo_t *LLUIGTexNodeGet(void *pObject, int a, int b);
 void DCStoreRange(char *p, int size);
 }
@@ -95,7 +95,7 @@ void TeamLogoTintPalette(int id, int a, int b, int c, const unsigned char *pColo
     text.mChars[21] = pColor[1];
     text.mChars[22] = pColor[2];
     PlaDynClutApplyColors(&desc, c, &text);
-    pDst = fn_80220BFC(5, id);
+    pDst = UIGCSLoadPalette(5, id);
     GlibSyncFrame();
     memcpy(pDst, buffer, desc.mUnknown4);
     TeamLogoFlushPalette(id, pDst);

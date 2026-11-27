@@ -393,7 +393,7 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
                 *pOut++ = *pArgs++;
                 break;
             case 's':
-                pString = ((Buffer_80222E54 *)*pArgs++)->pText;
+                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
                 if (pString != NULL) {
                     pOut = _WriteString(pString, pOut, pEnd, Width, Precision, bLeft);
                 } else {
@@ -428,7 +428,7 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
     return pOut - pStart;
 }
 
-void UISStringFormat(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs)
+void UISStringFormat(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs)
 {
     if (pFormat != NULL && pDst != NULL) {
         UISSprintf(pDst->pText, pDst->Size, pFormat->pText, a, pArgs);
