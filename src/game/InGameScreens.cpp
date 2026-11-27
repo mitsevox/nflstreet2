@@ -2577,10 +2577,10 @@ void InGameRewardGetTexts(int *pResult,MenuText_t **pNames)
 }
 
 /* Shared with the 28-byte records initialized by fn_80156400. */
-class Record_8005CE10 {
+class QuickStrikeScoreRecord {
 public:
-    Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
-    virtual ~Record_8005CE10() {}
+    QuickStrikeScoreRecord() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
+    virtual ~QuickStrikeScoreRecord() {}
     unsigned int mOrdinal;
     int mEvent;
     int mPlayer;
@@ -2633,7 +2633,7 @@ void MiniGameCrushCarrierGetScoreInfo(MiniGameC *,int,Stats_8005C4A4 *);
 void MiniGame2MinuteGetTeamStats(MiniGameC *,int,Stats_8005C844 *);
 void MiniGame4On4GetTeamStats(MiniGameC *,int,Stats_8005CAE4 *);
 void MiniGameQuickStrikeGetTeamScore(MiniGameC *,int,int *,int *);
-void MiniGameQuickStrikeGetScoreRecord(MiniGameC *,int,int,Record_8005CE10 *);
+void MiniGameQuickStrikeGetScoreRecord(MiniGameC *,int,int,QuickStrikeScoreRecord *);
 int MiniGameQuickStrikeGetScoreCount(MiniGameC *,int);
 
 void InGameRewardSetNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
@@ -2815,7 +2815,7 @@ void InGameFormatPossessionCount(int team,int *other,char *text,int size) {
     DbCursor query; int value;MiniGameQuickStrikeGetTeamScore(MiniGameGetCurrent(),team,other,&value);snprintf(text,size,"%d",value);
 }
 void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
-    Record_8005CE10 record;MiniGameQuickStrikeGetScoreRecord(MiniGameGetCurrent(),team,index,&record);
+    QuickStrikeScoreRecord record;MiniGameQuickStrikeGetScoreRecord(MiniGameGetCurrent(),team,index,&record);
     unsigned int value=record.mOrdinal;
     Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;}

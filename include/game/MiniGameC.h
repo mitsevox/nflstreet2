@@ -7,17 +7,17 @@ struct AutoDepthPlayer_t;
 
 extern "C" void GameStatsUpdateRecords(void);
 
-struct Record_80148C4C {
+struct MiniGameDepthRecord_t {
     int mUnknown0;
     int mUnknown4[10];
     unsigned char mUnknown2C;
     char mUnknown2D[3];
 };
 
-struct State_80148A58 {
+struct MiniGameDepthState_t {
     unsigned int mCount;
     int mCachedValue;
-    Record_80148C4C *mpRecords;
+    MiniGameDepthRecord_t *mpRecords;
     unsigned char mUnknownC;
     char mUnknownD[3];
 };
@@ -73,7 +73,7 @@ public:
     int mUnknown4;
     union {
         char mUnknown8[16];
-        State_80148A58 mState;
+        MiniGameDepthState_t mState;
     };
 };
 

@@ -9270,8 +9270,8 @@
       },
       "folded": {
         "symbols": {
-          "_._15Record_8005CE10": "0x8005D580",
-          "_vt.15Record_8005CE10": "0x8028EAD0"
+          "_._22QuickStrikeScoreRecord": "0x8005D580",
+          "_vt.22QuickStrikeScoreRecord": "0x8028EAD0"
         },
         "evidence": "evidence.tsv linker row MiniGames Record_8005CE10 fold: under -fno-weak the inline Record_8005CE10 destructor and vtable are local to this file and to src/game/InGameScreens.cpp; the target keeps InGameScreens.cpp's destructor 0x8005D580 and vtable 0x8028EAD0 for both files' references, has no destructor in this file, and keeps this file's vtable copy 0x802A3060 unreferenced."
       },
@@ -26238,8 +26238,8 @@
       },
       "kept_locals": {
         "symbols": {
-          "_._15Record_8005CE10": "0x8005D580",
-          "_vt.15Record_8005CE10": "0x8028EAD0"
+          "_._22QuickStrikeScoreRecord": "0x8005D580",
+          "_vt.22QuickStrikeScoreRecord": "0x8028EAD0"
         },
         "evidence": "evidence.tsv linker row MiniGames Record_8005CE10 fold: the target keeps this file's Record_8005CE10 destructor 0x8005D580 and vtable 0x8028EAD0 for its own references and for src/game/MiniGames.cpp's (its vtable copy 0x802A3060 holds 0x8005D580 at 0x802A306C; 0x80156400 stores 0x8028EAD0 at 0x80156454); MiniGames.cpp's folded map resolves to them through __folded_<name>."
       }

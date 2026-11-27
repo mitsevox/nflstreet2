@@ -44,7 +44,7 @@
 struct Vector_80039F5C;
 struct FieldPoint_t;
 struct Block_80170E64;
-class Record_8005CE10;
+class QuickStrikeScoreRecord;
 
 struct PlaybookTeamView {
     char mUnknown0[0x40];
@@ -61,13 +61,13 @@ struct Stats_8005CAE4 {
     int mValues[4];
 };
 
-struct TextChoices_802DDC20 {
+struct MiniGameAwardTitles_t {
     unsigned char mCount;
     char mUnknown1[3];
     const char *mpText[5];
 };
 
-struct Info_8014F3E4 {
+struct CrushCarrierScoreInfo_t {
     Object_80039F5C *mpUnknown0;
     unsigned int mUnknown4;
     unsigned int mUnknown8;
@@ -86,7 +86,7 @@ struct MiniGameSlotInfo_t {
     unsigned char mUnknown21;
 };
 
-struct Entry_8015005C {
+struct JumpBallScoreEntry_t {
     int mUnknown0;
     unsigned int mUnknown4;
     unsigned short mUnknown8;
@@ -98,8 +98,8 @@ struct Entry_8015005C {
     char mUnknown18[2];
 };
 
-struct Table_8015005C {
-    Entry_8015005C mEntries[4];
+struct JumpBallScoreTable_t {
+    JumpBallScoreEntry_t mEntries[4];
     Vector_80039F5C mUnknown80;
     FieldPoint_t mUnknown92[3];
     unsigned char mUnknown116;
@@ -123,10 +123,10 @@ struct Score_801531C4 {
     unsigned char mUnknown32;
 };
 
-class Record_8005CE10 {
+class QuickStrikeScoreRecord {
 public:
-    Record_8005CE10() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
-    virtual ~Record_8005CE10() {}
+    QuickStrikeScoreRecord() : mOrdinal(0), mEvent(11), mPlayer(32767), mConversion(11), mOther(32767), mFlag(0) {}
+    virtual ~QuickStrikeScoreRecord() {}
     unsigned int mOrdinal;
     unsigned int mEvent;
     int mPlayer;
@@ -630,7 +630,7 @@ struct MiniGameJumpBallData {
     MiniGameJumpBallPostPlayC mUnknown24;
     MiniGameJumpBallGameEndC mUnknown28;
     MiniGameJumpBallRulesC mUnknown32;
-    Table_8015005C *mpUnknown36;
+    JumpBallScoreTable_t *mpUnknown36;
 };
 
 class MiniGameOpenFieldPreGameC : public PreGamePhase {
@@ -752,20 +752,20 @@ public:
     MiniGameQuickStrikeRulesC mObject4;
     MiniGameQuickStrikeGameEndC mObject12;
     int mUnknown16;
-    Record_8005CE10 mRecords[2][3];
+    QuickStrikeScoreRecord mRecords[2][3];
     unsigned char mUnknown188;
     unsigned char mUnknown189[2];
 };
 
 extern "C" const char *_MiniGame_pJumpBallIntro;
-extern Record_80148C4C _MiniGame_a2MinuteDepth[];
+extern MiniGameDepthRecord_t _MiniGame_a2MinuteDepth[];
 void *operator new(unsigned int size, int unknown);
-extern Record_80148C4C _MiniGame_a4On4Depth[];
-extern Record_80148C4C _MiniGame_aCrushCarrierDepth[];
+extern MiniGameDepthRecord_t _MiniGame_a4On4Depth[];
+extern MiniGameDepthRecord_t _MiniGame_aCrushCarrierDepth[];
 void *operator new[](unsigned int size, int unknown);
-extern "C" Table_8015005C *MiniGameJumpBallGetTable(void);
-extern Record_80148C4C _MiniGame_aJumpBallDepth[];
-extern Record_80148C4C _MiniGame_aOpenFieldDepth[];
+extern "C" JumpBallScoreTable_t *MiniGameJumpBallGetTable(void);
+extern MiniGameDepthRecord_t _MiniGame_aJumpBallDepth[];
+extern MiniGameDepthRecord_t _MiniGame_aOpenFieldDepth[];
 
 extern "C" {
 void MemCopy(void *pDst, const void *pSrc, int size);
@@ -792,7 +792,7 @@ extern int _MiniGame_aPlayerAwards[14][3];
 extern unsigned char _MiniGame_aAwardCounts[54];
 extern int _MiniGame_aTeamIds[2];
 extern unsigned char _MiniGame_b2MinuteSecondDrive;
-extern TextChoices_802DDC20 _MiniGame_aAwardTitles[];
+extern MiniGameAwardTitles_t _MiniGame_aAwardTitles[];
 void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pOut);
 void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut);
 void fn_800B4798(short *pRatings, int team, unsigned char index, void *pContext);
@@ -1409,7 +1409,7 @@ void MiniGameReloadPlayer(Object_80039F5C *p)
     fn_800B5150(p);
 }
 
-TextChoices_802DDC20 _MiniGame_aAwardTitles[54] = {
+MiniGameAwardTitles_t _MiniGame_aAwardTitles[54] = {
     {1, {0}, {""}},
     {3, {0}, {"Tackling Machine", "Bruiser", "Trampler"}},
     {2, {0}, {"Scoring Machine", "Scoreboard"}},
@@ -1936,7 +1936,7 @@ void MiniGame2MinutePreGameC::ShowIntroScreen()
     }
 }
 
-Record_80148C4C _MiniGame_a2MinuteDepth[14] = {
+MiniGameDepthRecord_t _MiniGame_a2MinuteDepth[14] = {
     {0, {0, 0, 0, 0, 0, 0, 10, 0, 0, 0}, 0},
     {1, {8, 8, 5, 10, 10, 5, 0, 0, 10, 0}, 0},
     {2, {8, 8, 5, 10, 10, 5, 0, 0, 10, 0}, 0},
@@ -2658,7 +2658,7 @@ void MiniGame4On4PreGameC::OnUpdate(float dt)
     }
 }
 
-Record_80148C4C _MiniGame_a4On4Depth[14] = {
+MiniGameDepthRecord_t _MiniGame_a4On4Depth[14] = {
     {0, {0, 0, 6, 0, 2, 0, 10, 0, 0, 0}, 0},
     {4, {6, 0, 9, 3, 7, 4, 0, 3, 4, 3}, 0},
     {5, {8, 6, 6, 8, 10, 6, 0, 0, 6, 0}, 0},
@@ -2675,7 +2675,7 @@ Record_80148C4C _MiniGame_a4On4Depth[14] = {
     {13, {0, 6, 0, 0, 10, 6, 0, 0, 8, 0}, 0},
 };
 
-Record_80148C4C _MiniGame_a4On4AutoDepth[14] = {
+MiniGameDepthRecord_t _MiniGame_a4On4AutoDepth[14] = {
     {0, {0, 0, 0, 0, 0, 0, 10, 0, 0, 0}, 0},
     {4, {6, 0, 9, 3, 7, 4, 0, 3, 4, 3}, 0},
     {5, {8, 6, 6, 8, 10, 6, 0, 0, 6, 0}, 0},
@@ -3243,7 +3243,7 @@ void MiniGameCrushCarrierC::RestorePlayerOrder()
     }
 }
 
-Record_80148C4C _MiniGame_aCrushCarrierDepth[1] = {
+MiniGameDepthRecord_t _MiniGame_aCrushCarrierDepth[1] = {
     {1, {8, 8, 10, 0, 10, 10, 0, 0, 0, 0}, 0},
 };
 
@@ -3855,7 +3855,7 @@ void MiniGameCrushCarrierSetTime(int value)
     _MiniGame_iCrushCarrierTime = value;
 }
 
-void MiniGameCrushCarrierGetScoreInfo(MiniGameC *p, int index, Info_8014F3E4 *pInfo)
+void MiniGameCrushCarrierGetScoreInfo(MiniGameC *p, int index, CrushCarrierScoreInfo_t *pInfo)
 {
     MiniGameCrushCarrierScore *pRecord = &static_cast<MiniGameCrushCarrierC *>(p)->mpUnknown1C->mpUnknown34[index];
     pInfo->mUnknown4 = pRecord->mUnknown4;
@@ -4115,11 +4115,11 @@ void MiniGameJumpBallPickLandingSpot(FieldPoint_t *p)
 void MiniGameJumpBallSortScoreUp(MiniGameJumpBallData *p, int index)
 {
     for (; index != 0; index--) {
-        Entry_8015005C *pEntries = p->mpUnknown36->mEntries;
+        JumpBallScoreEntry_t *pEntries = p->mpUnknown36->mEntries;
         unsigned int score = pEntries[index].mUnknown10 + pEntries[index].mUnknown8 * 2;
         unsigned int prevScore = pEntries[index - 1].mUnknown10 + pEntries[index - 1].mUnknown8 * 2;
         if (score > prevScore) {
-            Entry_8015005C temp = pEntries[index];
+            JumpBallScoreEntry_t temp = pEntries[index];
             pEntries[index] = pEntries[index - 1];
             p->mpUnknown36->mEntries[index - 1] = temp;
         } else {
@@ -4174,7 +4174,7 @@ void MiniGameJumpBallRulesC::AwardWin(int value)
 extern "C" void MiniGameJumpBallEndRound(void *p)
 {
     for (unsigned int i = 0; i <= 3; i++) {
-        Entry_8015005C *pEntry = &MiniGameJumpBallGetTable()->mEntries[i];
+        JumpBallScoreEntry_t *pEntry = &MiniGameJumpBallGetTable()->mEntries[i];
         unsigned int score = pEntry->mUnknown10 + pEntry->mUnknown8 * 2;
         if (score > pEntry->mUnknown4) {
             pEntry->mUnknown4 = score;
@@ -4210,7 +4210,7 @@ void MiniGameJumpBallPreGameC::OnEnter(float dt)
     HudPost3AOff();
     StyleTrackerSetEnabled(0);
     if (mUnknown4) {
-        Table_8015005C *pTable = MiniGameJumpBallGetTable();
+        JumpBallScoreTable_t *pTable = MiniGameJumpBallGetTable();
         int ids[2][7];
         int others[2][7];
         for (unsigned char team = 0; team <= 1; team++) {
@@ -4471,7 +4471,7 @@ extern "C" {
 void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p)
 {
     unsigned int count = BallsGetCount();
-    Table_8015005C *pTable = MiniGameJumpBallGetTable();
+    JumpBallScoreTable_t *pTable = MiniGameJumpBallGetTable();
     Vector_80039F5C position;
     int angles[3];
     FieldPoint_t origin;
@@ -4619,7 +4619,7 @@ void RefreshFourPlayerScoreRows(MiniGameJumpBallDuringPlayC *p)
             char score[16];
             char name[20];
             strncpy(name, PlyrFindById(MiniGameJumpBallGetTable()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
-            Entry_8015005C *pEntries = MiniGameJumpBallGetTable()->mEntries;
+            JumpBallScoreEntry_t *pEntries = MiniGameJumpBallGetTable()->mEntries;
             snprintf(score, sizeof(score), "%d",
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);
             HudSetScoreTableRow(i + 1, name, score, "", MiniGameJumpBallGetTable()->mEntries[i].mUnknown12);
@@ -4673,7 +4673,7 @@ int MiniGameJumpBallPostPlayC::GetBusy(float dt)
     return 0;
 }
 
-Record_80148C4C _MiniGame_aJumpBallDepth[2] = {
+MiniGameDepthRecord_t _MiniGame_aJumpBallDepth[2] = {
     {2, {8, 5, 0, 10, 8, 0, 0, 0, 5, 0}, 0},
     {0, {0, 0, 0, 0, 0, 0, 10, 0, 0, 0}, 0},
 };
@@ -4722,17 +4722,17 @@ void MiniGameJumpBallC::Start()
 {
     void *pHandle = 0;
     int allocate = IsTutorial() == 0;
-    Table_8015005C *pTable;
+    JumpBallScoreTable_t *pTable;
 
     mpUnknown1C = new (0) MiniGameJumpBallData;
     if (allocate) {
-        pHandle = SyncStateRegister(0, (void **)&mpUnknown1C->mpUnknown36, sizeof(Table_8015005C), 0, 0x4D474A42);
-        pTable = (Table_8015005C *)SyncStateGetData(pHandle);
+        pHandle = SyncStateRegister(0, (void **)&mpUnknown1C->mpUnknown36, sizeof(JumpBallScoreTable_t), 0, 0x4D474A42);
+        pTable = (JumpBallScoreTable_t *)SyncStateGetData(pHandle);
     } else {
-        mpUnknown1C->mpUnknown36 = (Table_8015005C *)fn_801D2B7C(sizeof(Table_8015005C), 0, 0);
+        mpUnknown1C->mpUnknown36 = (JumpBallScoreTable_t *)fn_801D2B7C(sizeof(JumpBallScoreTable_t), 0, 0);
         pTable = mpUnknown1C->mpUnknown36;
     }
-    memset(pTable, 0, sizeof(Table_8015005C));
+    memset(pTable, 0, sizeof(JumpBallScoreTable_t));
     pTable->mCount = 4;
     pTable->mUnknown119 = 3;
     pTable->mUnknown125 = 2;
@@ -4785,13 +4785,13 @@ extern "C" {
 int MiniGameJumpBallIsTied(MiniGameJumpBallC *p)
 {
     if (p->mUnknown40 == 0) {
-        Entry_8015005C *pFirst = &p->mpUnknown1C->mpUnknown36->mEntries[0];
-        Entry_8015005C *pSecond = pFirst + 1;
+        JumpBallScoreEntry_t *pFirst = &p->mpUnknown1C->mpUnknown36->mEntries[0];
+        JumpBallScoreEntry_t *pSecond = pFirst + 1;
 
         return pFirst->mUnknown10 + pFirst->mUnknown8 * 2 ==
                pSecond->mUnknown10 + pSecond->mUnknown8 * 2;
     } else {
-        Table_8015005C *pTable = p->mpUnknown1C->mpUnknown36;
+        JumpBallScoreTable_t *pTable = p->mpUnknown1C->mpUnknown36;
         int lower = 0;
         unsigned int score = pTable->mEntries[0].mUnknown10 + pTable->mEntries[0].mUnknown8 * 2;
         unsigned int i;
@@ -4855,13 +4855,13 @@ void MiniGameJumpBallCheckRoundEnd(MiniGameJumpBallC *p)
     char line[83];
     int over = 0;
     unsigned char sudden = 0;
-    Table_8015005C *pTable;
+    JumpBallScoreTable_t *pTable;
     Object_80039F5C *pPlayer;
     unsigned int i;
     bool last;
     MiniGameJumpBallDuringPlayC *pState;
-    Entry_8015005C *pEntries;
-    Entry_8015005C *pRows;
+    JumpBallScoreEntry_t *pEntries;
+    JumpBallScoreEntry_t *pRows;
 
     if ((p->mUnknown36 != 0 && fn_8009D990(1) == 0) ||
         (p->mUnknown32 != 0 &&
@@ -5107,7 +5107,7 @@ void MiniGameJumpBallResetScores(MiniGameJumpBallC *p)
     p->mpUnknown1C->mpUnknown36->mUnknown124 = 0;
     p->mpUnknown1C->mpUnknown36->mUnknown125 = 2;
     for (i = 0; i <= 3; i++) {
-        Entry_8015005C *pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
+        JumpBallScoreEntry_t *pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
 
         pEntries[i].mUnknown4 = pEntries[i].mUnknown8 = pEntries[i].mUnknown10 =
             pEntries[i].mUnknown14 = pEntries[i].mUnknown16 = 0;
@@ -5171,7 +5171,7 @@ int _MiniGame_iOpenFieldLastSecond = 0;
 
 void MiniGameJumpBallGetEntryInfo(MiniGameJumpBallC *p, int index, MiniGameSlotInfo_t *pInfo)
 {
-    Entry_8015005C *pEntry = &p->mpUnknown1C->mpUnknown36->mEntries[index];
+    JumpBallScoreEntry_t *pEntry = &p->mpUnknown1C->mpUnknown36->mEntries[index];
 
     pInfo->mUnknown4 = pEntry->mUnknown16 + pEntry->mUnknown14 * 2;
     pInfo->mUnknown8 = pEntry->mUnknown4;
@@ -5337,8 +5337,8 @@ int MiniGameJumpBallC::AllowsPause(int value)
     int result = 0;
 
     if (value != 255) {
-        Entry_8015005C *pEntry = MiniGameJumpBallGetTable()->mEntries;
-        Entry_8015005C *pEnd = pEntry + 3;
+        JumpBallScoreEntry_t *pEntry = MiniGameJumpBallGetTable()->mEntries;
+        JumpBallScoreEntry_t *pEnd = pEntry + 3;
         int count = 0;
 
         for (; pEntry <= pEnd; pEntry++) {
@@ -5361,7 +5361,7 @@ int MiniGameJumpBallC::AllowsPause(int value)
 
 extern "C" {
 
-Table_8015005C *MiniGameJumpBallGetTable(void)
+JumpBallScoreTable_t *MiniGameJumpBallGetTable(void)
 {
     return gMiniGameJumpBall.mpUnknown1C->mpUnknown36;
 }
@@ -5777,7 +5777,7 @@ int MiniGameOpenFieldPostPlayC::GetResultText(char *pText)
     return result;
 }
 
-Record_80148C4C _MiniGame_aOpenFieldDepth[2] = {
+MiniGameDepthRecord_t _MiniGame_aOpenFieldDepth[2] = {
     {0, {6, 0, 6, 0, 10, 8, 0, 2, 1, 1}, 0},
     {1, {6, 0, 6, 0, 10, 8, 0, 2, 1, 1}, 0},
 };
@@ -6497,7 +6497,7 @@ void MiniGameQuickStrikeAddConversion(MiniGameC *p, unsigned char team, int kind
     static_cast<MiniGameQuickStrikeC *>(p)->mpUnknown1C->mRecords[team][0].mFlag = flag;
 }
 
-void MiniGameQuickStrikeGetScoreRecord(MiniGameC *p, int team, int index, Record_8005CE10 *pOut)
+void MiniGameQuickStrikeGetScoreRecord(MiniGameC *p, int team, int index, QuickStrikeScoreRecord *pOut)
 {
     unsigned char count = MiniGameQuickStrikeGetScoreCount(p, team);
     int depth = index + 1;
