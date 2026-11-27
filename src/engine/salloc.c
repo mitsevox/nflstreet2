@@ -173,7 +173,7 @@ void SNDVOICEI_free(int voice)
         } else {
             _SndVoiceClearFlags(v);
             // FAKEMATCH: Qualify the pool view to retain the separate base-address calculation.
-            v->m2C = static_cast<const volatile Object_803A6C24 &>(lbl_803A6C24).m170;
+            v->m2C = static_cast<const volatile SndGlobalVoiceView_t &>(lbl_803A6C24).m170;
         }
     } else {
         _SndVoiceClear(v);

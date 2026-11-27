@@ -9,7 +9,7 @@
 
 extern "C" {
 
-typedef struct Object_80267404 {
+typedef struct CounterState_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -17,16 +17,16 @@ typedef struct Object_80267404 {
     unsigned char mUnknownD[3];
     int mUnknown10;
     int mUnknown14;
-} Object_80267404;
+} CounterState_t;
 
-typedef struct Object_80267480 {
+typedef struct RandomState_t {
     int mUnknown0;
     unsigned int mUnknown4;
     int mUnknown8;
     int mUnknownC;
-} Object_80267480;
+} RandomState_t;
 
-typedef struct Object_802674DC {
+typedef struct RandomShuffleState_t {
     unsigned short mUnknown0;
     unsigned char mUnknown2;
     signed char mUnknown3;
@@ -38,9 +38,9 @@ typedef struct Object_802674DC {
         unsigned char mBytes[1];
         unsigned short mShorts[1];
     } mUnknown10;
-} Object_802674DC;
+} RandomShuffleState_t;
 
-typedef struct Object_8026769C {
+typedef struct RangeTrigState_t {
     int mUnknown0;
     int mUnknown4;
     int mUnknown8;
@@ -49,21 +49,21 @@ typedef struct Object_8026769C {
     unsigned char mUnknown11;
     unsigned char mUnknown12[2];
     int mUnknown14;
-} Object_8026769C;
+} RangeTrigState_t;
 
-typedef struct Object_802677B4 {
+typedef struct StateGenState_t {
     unsigned short mUnknown0;
     unsigned char mUnknown2;
     unsigned char mUnknown3;
     int mUnknown4;
     int mUnknown8[1];
-} Object_802677B4;
+} StateGenState_t;
 
-typedef struct Object_80267814 {
+typedef struct MergeTrigState_t {
     unsigned char mUnknown0;
     unsigned char mUnknown1[3];
     int mUnknown4[1];
-} Object_80267814;
+} MergeTrigState_t;
 
 typedef struct Args_80267D84 {
     unsigned char mCount;
@@ -71,14 +71,14 @@ typedef struct Args_80267D84 {
     int mValues[1];
 } Args_80267D84;
 
-typedef struct Object_80267DB4 {
+typedef struct DemuxState_t {
     unsigned char mCount;
     unsigned char mUnknown1;
     short mUnknown2;
     int mUnknown4;
     int mUnknown8;
     int mUnknownC[1];
-} Object_80267DB4;
+} DemuxState_t;
 
 typedef struct Entry_802686CC {
     unsigned char mType;
@@ -87,63 +87,38 @@ typedef struct Entry_802686CC {
     int mUnknown8;
 } Entry_802686CC;
 
-typedef struct Object_802686CC {
+typedef struct BankPlayerState_t {
     unsigned char mUnknown0[8];
     int mUnknown8;
     unsigned char mUnknownC[2];
     unsigned char mUnknownE;
     unsigned char mUnknownF[13];
     Entry_802686CC mEntries[1];
-} Object_802686CC;
+} BankPlayerState_t;
 
 typedef struct Owner_802685B8 {
     unsigned char mUnknown0[64];
     int mUnknown40;
 } Owner_802685B8;
 
-typedef struct Object_802685B8 {
+typedef struct BankPlayerStartState_t {
     Owner_802685B8 *mUnknown0;
     unsigned char mUnknown4[10];
     unsigned char mUnknownE;
     unsigned char mUnknownF[13];
     Entry_802686CC mEntries[1];
-} Object_802685B8;
+} BankPlayerStartState_t;
 
 typedef struct Result_802685B8 {
     int mUnknown0;
 } Result_802685B8;
 
-typedef struct Object_80268F54 {
+typedef struct AddMaxState_t {
     unsigned char mCount;
     unsigned char mUnknown1[3];
     int mUnknown4;
     int mValues[1];
-} Object_80268F54;
-
-typedef struct Object_80268FFC {
-    unsigned char mUnknown0[24];
-    int mUnknown18;
-} Object_80268FFC;
-
-typedef struct Object_80269008 {
-    unsigned char mUnknown0[16];
-    int mUnknown10;
-} Object_80269008;
-
-typedef struct Object_80269014 {
-    unsigned char mUnknown0[16];
-    unsigned char mUnknown10;
-    unsigned char mUnknown11[3];
-    int mUnknown14[1];
-} Object_80269014;
-
-typedef struct Object_80269048 {
-    unsigned char mUnknown0[24];
-    unsigned char mUnknown18;
-    unsigned char mUnknown19;
-    unsigned char mUnknown1A[2];
-    int mUnknown1C[1];
-} Object_80269048;
+} AddMaxState_t;
 
 typedef void (*SndAemsBankSetter_t)(int voice, int value);
 typedef void (*SndAemsOptSetter_t)(SndPlayOpts_t *opts, int value);
@@ -347,14 +322,15 @@ typedef struct DestroyState_t {
 typedef struct AemsVariableClient_t {
     Csis::GlobalVariableHandle mHandle;
     Csis::FunctionClient mClient;
-    int unk_0x18;
+    int mValue;
 } AemsVariableClient_t;
 
 typedef struct AemsFunctionClient_t {
     Csis::FunctionHandle mHandle;
     Csis::FunctionClient mClient;
     unsigned char mNumParams;
-    unsigned char unk_0x19[3];
+    unsigned char mCalled;
+    unsigned char unk_0x1A[2];
     int mParams[1];
 } AemsFunctionClient_t;
 
@@ -367,7 +343,7 @@ typedef struct AemsMemberDataClient_t {
 
 typedef struct AemsDestructorClient_t {
     Csis::ClassDestructorClient mClient;
-    int unk_0x10;
+    int mDestroyed;
 } AemsDestructorClient_t;
 
 /* A resolved module bank: its class count, code size, class table offset, fixup header offset,
@@ -609,7 +585,7 @@ int UpdateSetGlobalVariable(SetGlobalVariableState_t *p)
     return 0;
 }
 
-int SNDAEMSI_updatecounter(Object_80267404 *p)
+int SNDAEMSI_updatecounter(CounterState_t *p)
 {
     int v = p->mUnknown14;
 
@@ -626,7 +602,7 @@ int SNDAEMSI_updatecounter(Object_80267404 *p)
     return p->mUnknown8;
 }
 
-int SNDAEMSI_updaterandom(Object_80267480 *p)
+int SNDAEMSI_updaterandom(RandomState_t *p)
 {
     int result;
 
@@ -639,7 +615,7 @@ int SNDAEMSI_updaterandom(Object_80267480 *p)
     return result;
 }
 
-int SNDAEMSI_updaterandomshuffle(Object_802674DC *p)
+int SNDAEMSI_updaterandomshuffle(RandomShuffleState_t *p)
 {
     unsigned int index;
 
@@ -699,7 +675,7 @@ int SNDAEMSI_updaterandomweighted(RandomWeightedState_t *p)
     return p->mValue;
 }
 
-int SNDAEMSI_updaterangetrig(Object_8026769C *p)
+int SNDAEMSI_updaterangetrig(RangeTrigState_t *p)
 {
     if (p->mUnknown14 >= p->mUnknown0 && p->mUnknown14 <= p->mUnknown4) {
         if (p->mUnknown10 == 0) {
@@ -739,7 +715,7 @@ int SNDAEMSI_updatedelaytrig(DelayTrigState_t *p)
     return 0;
 }
 
-int SNDAEMSI_updatestategen(Object_802677B4 *p)
+int SNDAEMSI_updatestategen(StateGenState_t *p)
 {
     int *flags = (int *)((char *)p + p->mUnknown0);
     int i;
@@ -755,7 +731,7 @@ int SNDAEMSI_updatestategen(Object_802677B4 *p)
     return p->mUnknown4;
 }
 
-int SNDAEMSI_updatemerge(Object_80267814 *p)
+int SNDAEMSI_updatemerge(MergeTrigState_t *p)
 {
     int i;
 
@@ -930,7 +906,7 @@ int SNDAEMSI_updatemux(Args_80267D84 *p)
     return p->mValues[index];
 }
 
-int SNDAEMSI_updatedemux(Object_80267DB4 *p)
+int SNDAEMSI_updatedemux(DemuxState_t *p)
 {
     int index;
 
@@ -1251,7 +1227,7 @@ void SNDAEMSI_optstub(void)
 {
 }
 
-Result_802685B8 SNDAEMSI_playerplaybank(Object_802685B8 *p, int *q)
+Result_802685B8 SNDAEMSI_playerplaybank(BankPlayerStartState_t *p, int *q)
 {
     SndPlayOpts_t params;
     Result_802685B8 result;
@@ -1269,7 +1245,7 @@ Result_802685B8 SNDAEMSI_playerplaybank(Object_802685B8 *p, int *q)
     return result;
 }
 
-int SNDAEMSI_playerstopbank(Object_802686CC *p)
+int SNDAEMSI_playerstopbank(BankPlayerState_t *p)
 {
     return SNDstop(p->mUnknown8);
 }
@@ -1282,7 +1258,7 @@ int SNDAEMSI_playerpausebank(int *p)
     return SNDpitchmult(handle, 0);
 }
 
-void SNDAEMSI_playerunpausebank(Object_802686CC *p)
+void SNDAEMSI_playerunpausebank(BankPlayerState_t *p)
 {
     int a = 4096;
     int b = 32767;
@@ -1485,7 +1461,7 @@ int SNDAEMSI_updateramp(RampState_t *p)
     return _SNDAEMSI_round(p->mValue);
 }
 
-int SNDAEMSI_updateaddmax(Object_80268F54 *p)
+int SNDAEMSI_updateaddmax(AddMaxState_t *p)
 {
     int i;
     int sum = p->mValues[0];
@@ -1515,39 +1491,39 @@ int SNDAEMSI_updatemultiplymax(int *p)
     return value;
 }
 
-int UpdateFunction(Object_80269048 *p)
+int UpdateFunction(AemsFunctionClient_t *p)
 {
-    int value = p->mUnknown19;
+    int value = p->mCalled;
 
-    p->mUnknown19 = 0;
+    p->mCalled = 0;
     return value;
 }
 
-void SNDAEMSI_SetGlobalVariable(int *values, Object_80268FFC *p)
+void SNDAEMSI_SetGlobalVariable(int *values, AemsVariableClient_t *p)
 {
-    p->mUnknown18 = values[0];
+    p->mValue = values[0];
 }
 
-void SNDAEMSI_SetClassDestructor(int *values, Object_80269008 *p)
+void SNDAEMSI_SetClassDestructor(int *values, AemsDestructorClient_t *p)
 {
-    p->mUnknown10 = 1;
+    p->mDestroyed = 1;
 }
 
-void SNDAEMSI_SetClassData(int *values, Object_80269014 *p)
+void SNDAEMSI_SetClassData(int *values, AemsMemberDataClient_t *p)
 {
     int i;
 
-    for (i = 0; i < p->mUnknown10; i++)
-        p->mUnknown14[i] = values[i];
+    for (i = 0; i < p->mNumParams; i++)
+        p->mParams[i] = values[i];
 }
 
-void CsisFunctionCallback(int *values, Object_80269048 *p)
+void CsisFunctionCallback(int *values, AemsFunctionClient_t *p)
 {
     int i;
 
-    for (i = 0; i < p->mUnknown18; i++)
-        p->mUnknown1C[i] = values[i];
-    p->mUnknown19 = 1;
+    for (i = 0; i < p->mNumParams; i++)
+        p->mParams[i] = values[i];
+    p->mCalled = 1;
 }
 
 void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params, void *context)

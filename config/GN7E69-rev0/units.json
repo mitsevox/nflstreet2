@@ -1142,6 +1142,10 @@
     "DbMttsResumeGame": {
       "address": "0x8022C098",
       "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/dbmtts.c is a registered comparison)."
+    },
+    "SNDI_parsetimbre": {
+      "address": "0x80270E04",
+      "evidence": "evidence.tsv function and related name rows at 0x80270E04 (SNDI_parsetimbre, the registered holdout of src/engine/stpparse.c, original bytes linked). sbremove.c, sresopat.c and stagpat.c call it by name through the sndbank.h prototype."
     }
   },
   "units": [
