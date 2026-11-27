@@ -2,11 +2,12 @@
 
 #include "engine/voicequery.h"
 #include "engine/sndvoice.h"
+#include "engine/sndstrm.h"
 #include "engine/cu_802714A8.h"
 
 int AudioVoiceForwardData(int key, int value, void *data, int offset)
 {
-    return fn_8026E160(key, value, (unsigned char *)data + offset, 0, 1);
+    return SNDSTRMI_queue(key, value, (char *)data + offset, 0, 1);
 }
 
 int AudioVoiceGetMaxMetric(int id)

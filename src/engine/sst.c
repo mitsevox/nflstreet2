@@ -37,7 +37,6 @@ typedef struct SndStreamBufferTag_t {
     unsigned char mStream;
 } SndStreamBufferTag_t;
 
-SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
 void SNDSTRMI_removerequest(int id);
 int SNDSTRMI_numcreated(void);
 
@@ -457,7 +456,7 @@ int SNDSTRMI_numcreated(void)
 extern "C" int SNDPKTPLAY_create(SndPacketReleaseFn_t release, SndPacketFramesDoneFn_t callback,
                                  void *context, void *memory, unsigned int size);
 
-int fn_8026DE00(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
+int SNDSTRMI_create(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared)
 {
     SndStreamChannel_t *channel;
     SndStreamRequest_t *requests;
@@ -590,7 +589,7 @@ extern "C" {
 
 int SNDSTRM_create(SndPlayOpts_t *opts, int a, int b, void *memory, int size)
 {
-    return fn_8026DE00(opts, a, b, memory, size, 0, 0);
+    return SNDSTRMI_create(opts, a, b, memory, size, 0, 0);
 }
 
 int SNDSTRM_destroy(int stream)

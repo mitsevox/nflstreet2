@@ -29518,7 +29518,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); all 20 functions written, 16 exact; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 17 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29541,49 +29541,9 @@
       ],
       "functions": [
         {
-          "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
-          "start": "0x8026D200",
-          "end": "0x8026D278"
-        },
-        {
-          "symbol": "SNDSTRMI_startstream__FP18SndStreamChannel_t",
-          "start": "0x8026D278",
-          "end": "0x8026D53C"
-        },
-        {
           "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
           "start": "0x8026D53C",
           "end": "0x8026D5B4"
-        },
-        {
-          "symbol": "SNDSTRMI_destroyall__Fv",
-          "start": "0x8026D5B4",
-          "end": "0x8026D610"
-        },
-        {
-          "symbol": "SNDSTRMI_getstreamptr__Fi",
-          "start": "0x8026D610",
-          "end": "0x8026D644"
-        },
-        {
-          "symbol": "SNDSTRMI_removerequest__Fi",
-          "start": "0x8026D644",
-          "end": "0x8026D6AC"
-        },
-        {
-          "symbol": "SNDSTRMI_releasecallback__FPvT0",
-          "start": "0x8026D6AC",
-          "end": "0x8026D6E8"
-        },
-        {
-          "symbol": "SNDSTRMI_framescallback__FiUiPv",
-          "start": "0x8026D6E8",
-          "end": "0x8026D790"
-        },
-        {
-          "symbol": "SNDSTRMI_parseheader__FiP16SndStreamChunk_t",
-          "start": "0x8026D790",
-          "end": "0x8026D9CC"
         },
         {
           "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
@@ -29591,54 +29551,9 @@
           "end": "0x8026DAE4"
         },
         {
-          "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
-          "start": "0x8026DAE4",
-          "end": "0x8026DB5C"
-        },
-        {
-          "symbol": "SNDSTRMI_isheld__FP18SndStreamChannel_t",
-          "start": "0x8026DB5C",
-          "end": "0x8026DC38"
-        },
-        {
-          "symbol": "SNDSTRMI_service__Fv",
-          "start": "0x8026DC38",
-          "end": "0x8026DDB8"
-        },
-        {
-          "symbol": "SNDSTRMI_numcreated__Fv",
-          "start": "0x8026DDB8",
-          "end": "0x8026DE00"
-        },
-        {
-          "symbol": "fn_8026DE00",
+          "symbol": "SNDSTRMI_create",
           "start": "0x8026DE00",
           "end": "0x8026E160"
-        },
-        {
-          "symbol": "SNDSTRMI_queue__FiiPcii",
-          "start": "0x8026E160",
-          "end": "0x8026E280"
-        },
-        {
-          "symbol": "SNDSTRM_create",
-          "start": "0x8026E280",
-          "end": "0x8026E2A8"
-        },
-        {
-          "symbol": "SNDSTRM_destroy",
-          "start": "0x8026E2A8",
-          "end": "0x8026E364"
-        },
-        {
-          "symbol": "SNDSTRM_queuefile",
-          "start": "0x8026E364",
-          "end": "0x8026E388"
-        },
-        {
-          "symbol": "SNDSTRM_purge",
-          "start": "0x8026E388",
-          "end": "0x8026E4C0"
         }
       ]
     },

@@ -135,10 +135,10 @@ int SNDpitchmult(int handle, int value);
 void SNDplaysetdef(SndPatchOpts_t *pOpts);
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
-int fn_8026E280(SndPatchOpts_t *pOpts, int a, int b, void *pBuffer, int size);
-void fn_8026E2A8(int handle);
-int fn_8026E364(int handle, int a, void *b);
-int fn_8026E388(int handle);
+int SNDSTRM_create(SndPatchOpts_t *pOpts, int a, int b, void *pBuffer, int size);
+void SNDSTRM_destroy(int handle);
+int SNDSTRM_queuefile(int handle, int a, void *b);
+int SNDSTRM_purge(int handle);
 int SNDSTRM_fxlevel(int handle, int a, int b);
 int SNDSTRM_getprogvol(int handle);
 int SNDSTRM_setazimuth(int stream, int speaker, float azimuth);
@@ -662,7 +662,7 @@ SndStream_t *SndCreateStream(int extra, int a, int b, int bank)
     SNDplaysetdef(&opts);
     size = SNDSTRM_overhead(a, b) + extra;
     pStream->pBuffer = fn_801D2BB0(1, size, 0, 0);
-    pStream->mHandle = fn_8026E280(&opts, a, b, pStream->pBuffer, size);
+    pStream->mHandle = SNDSTRM_create(&opts, a, b, pStream->pBuffer, size);
     return pStream;
 }
 
@@ -672,7 +672,7 @@ int SndStreamQueueFile(SndStream_t *pStream, void *pFile, int a, int b)
 
     result = -1;
     if (SND_READY()) {
-        result = fn_8026E364(pStream->mHandle, a, pFile);
+        result = SNDSTRM_queuefile(pStream->mHandle, a, pFile);
     }
     return result;
 }
@@ -680,7 +680,7 @@ int SndStreamQueueFile(SndStream_t *pStream, void *pFile, int a, int b)
 void SndDestroyStream(SndStream_t *pStream)
 {
     if (SND_READY()) {
-        fn_8026E2A8(pStream->mHandle);
+        SNDSTRM_destroy(pStream->mHandle);
         fn_801D2BD0(pStream->pBuffer);
         DSDelListNode(_Snd_ModuleInfo.pStreamList, pStream);
     }
@@ -689,7 +689,7 @@ void SndDestroyStream(SndStream_t *pStream)
 void SndPurgeStream(SndStream_t *pStream)
 {
     if (SND_READY()) {
-        fn_8026E388(pStream->mHandle);
+        SNDSTRM_purge(pStream->mHandle);
     }
 }
 

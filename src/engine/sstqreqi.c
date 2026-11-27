@@ -7,7 +7,7 @@ extern "C" {
 
 int SNDSTRM_queuerequestid(int stream, int id, int offset)
 {
-    return fn_8026E160(stream, id, 0, offset, 2);
+    return SNDSTRMI_queue(stream, id, 0, offset, 2);
 }
 
 }

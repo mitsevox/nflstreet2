@@ -14,7 +14,7 @@ int SNDSTRM_timemult(int stream, int mult)
     } else if (mult < 2048) {
         mult = 2048;
     }
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

@@ -826,6 +826,10 @@
     "SNDI_parsetimbre": {
       "address": "0x80270E04",
       "evidence": "evidence.tsv function and related name rows at 0x80270E04 (SNDI_parsetimbre, the registered holdout of src/engine/stpparse.c, original bytes linked). sbremove.c, sresopat.c and stagpat.c call it by name through the sndbank.h prototype."
+    },
+    "SNDSTRMI_create": {
+      "address": "0x8026DE00",
+      "evidence": "evidence.tsv function and name rows for 0x8026DE00 (SNDSTRMI_create, a registered holdout of src/engine/sst.c, original bytes linked); called by name from src/engine/sstcrtap.c."
     }
   },
   "units": [
@@ -18252,7 +18256,7 @@
     },
     {
       "source": "src/engine/voicequery.c",
-      "profile": "engine_c",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row src/engine/voicequery.c 0x802898FC-0x80289A04, separate exact function extents and inferred names/source-form rows. Complete two-function audio helper file, no owned data; trailing 28 zero bytes remain unassigned.",
       "sections": [
         {
@@ -24029,6 +24033,66 @@
           "end": "0x802FFFFC"
         }
       ]
+    },
+    {
+      "source": "src/engine/sst.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 17 of 20 functions exact, the holdouts SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026D200",
+          "end": "0x8026D53C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026D5B4",
+          "end": "0x8026D9CC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026DAE4",
+          "end": "0x8026DE00"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026E160",
+          "end": "0x8026E4C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7910",
+          "end": "0x802B7938"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFFFC",
+          "end": "0x80300020"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
+            "evidence": "evidence.tsv source-form 0x8026D53C-0x8026D5B4"
+          },
+          {
+            "function": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
+            "evidence": "evidence.tsv source-form 0x8026D9CC-0x8026DAE4"
+          },
+          {
+            "function": "SNDSTRMI_create",
+            "evidence": "evidence.tsv source-form 0x8026DE00-0x8026E160"
+          }
+        ],
+        "evidence": "src/engine/sst.c holds out SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create (round 6 lane 5 link); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
+      }
     },
     {
       "source": "src/engine/sstautov.c",
