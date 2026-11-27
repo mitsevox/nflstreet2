@@ -25815,12 +25815,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8026739C",
-          "end": "0x80267894"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80267C70",
           "end": "0x802687AC"
         },
         {
@@ -25867,14 +25861,6 @@
           {
             "function": "UpdateControlClass",
             "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"
-          },
-          {
-            "function": "SNDAEMSI_updateenvelope",
-            "evidence": "evidence.tsv source-form 0x80267894-0x80267A1C"
-          },
-          {
-            "function": "SNDAEMSI_updatetable",
-            "evidence": "evidence.tsv source-form 0x80267A1C-0x80267C70"
           },
           {
             "function": "SNDAEMSI_playerupdatebank",
@@ -29749,6 +29735,18 @@
         {
           "section": ".text",
           "placement": ".text",
+          "start": "0x80284030",
+          "end": "0x8028410C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80282F24",
+          "end": "0x802830F0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
           "start": "0x802821E8",
           "end": "0x802822E0"
         },
@@ -29767,7 +29765,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80282800",
+          "start": "0x80282740",
           "end": "0x8028291C"
         },
         {
@@ -29804,20 +29802,12 @@
             "evidence": "evidence.tsv source-form 0x80282654-0x80282740"
           },
           {
-            "function": "_LZHMemProcess",
-            "evidence": "evidence.tsv source-form 0x80282740-0x80282800"
-          },
-          {
             "function": "_LZHEncodeInput",
             "evidence": "evidence.tsv source-form 0x8028291C-0x80282D70"
           },
           {
             "function": "_LZHEncodeCodeBufferStart",
             "evidence": "evidence.tsv source-form 0x80282D70-0x80282F24"
-          },
-          {
-            "function": "_LZHEncodeCodeBuffer",
-            "evidence": "evidence.tsv source-form 0x80282F24-0x802830F0"
           },
           {
             "function": "_LZHDecodeNewBlock",
@@ -29834,10 +29824,6 @@
           {
             "function": "_LZHReadBits",
             "evidence": "evidence.tsv source-form 0x80283E48-0x80284030"
-          },
-          {
-            "function": "_LZHMemDecodeNewBlock",
-            "evidence": "evidence.tsv source-form 0x80284030-0x8028410C"
           },
           {
             "function": "_LZHMemDecodeInput",

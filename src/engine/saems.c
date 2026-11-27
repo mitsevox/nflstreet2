@@ -395,6 +395,11 @@ typedef struct AemsModuleBank_t {
 // FAKEMATCH: the module bank list head read through a constant address (sndaems + 4) instead of sndaems.mpModuleBanks, for the target's folded sndaems+4 accesses
 #define AEMS_MODULE_BANKS (*(SndAemsModuleBankLink_t **)((char *)&sndaems + 4))
 
+static __inline int _SNDAEMSI_round(float x)
+{
+    return (int)(!(x < 0.0f) ? x + 0.5f : x - 0.5f);
+}
+
 int SNDAEMS_removemodulebank(int handle);
 int SNDAEMSI_updatedestroy(DestroyState_t *p);
 void SNDAEMSI_timerupdate(void *unused);
@@ -806,7 +811,7 @@ int SNDAEMSI_updateenvelope(EnvelopeState_80267858 *p)
         p->mLevel = 0.0f;
     }
     p->mLastInput = *input;
-    return (int)(!(p->mLevel < 0.0f) ? p->mLevel + 0.5f : p->mLevel - 0.5f);
+    return _SNDAEMSI_round(p->mLevel);
 }
 
 /* A lookup table module: the table (entry type, entry count, input range, index scale and the
@@ -862,7 +867,7 @@ int SNDAEMSI_updatetable(TableState_t *p)
         } else {
             float pos = (float)index * t->mScale;
             float start = pos - 0.5f;
-            int first = (int)(!(start < 0.0f) ? start + 0.5f : start - 0.5f);
+            int first = _SNDAEMSI_round(start);
             int next = first + 1;
             float a;
             float b;
@@ -882,7 +887,7 @@ int SNDAEMSI_updatetable(TableState_t *p)
                 b = t->mEntries.mInts[next];
             }
             value = pos * (b - a) + a;
-            index = (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+            index = _SNDAEMSI_round(value);
             p->mOutput = index;
         }
     }
@@ -1001,14 +1006,14 @@ int SNDAEMSI_updatescale(ScaleState_80267EC4 *p)
     for (i = 1; i < p->mCount; i++)
         value *= p->mValues[i];
     value *= p->mScale;
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 int SNDAEMSI_updatescale2(Scale2State_80267F80 *p)
 {
     float value = (float)p->mA * (float)p->mB * p->mScale;
 
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 int SNDAEMSI_updateadd(Args_80267D84 *p)
@@ -1348,11 +1353,11 @@ int SNDAEMSI_playerupdatebank(PlayerState_t *p)
         float ms = (float)frame * msPerFrame;
         int value;
 
-        value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+        value = _SNDAEMSI_round(ms);
         ((PlayerTimes_t *)input)->mPosition = value;
         if (v->m18 <= 0) {
             ms = (float)((unsigned int)v->m14 - frame) * msPerFrame;
-            value = (int)(!(ms < 0.0f) ? ms + 0.5f : ms - 0.5f);
+            value = _SNDAEMSI_round(ms);
         } else {
             value = 0;
         }
@@ -1437,7 +1442,7 @@ int SNDAEMSI_updateoscillator(OscillatorState_t *p)
     if (p->mWaveform == 0) {
         float angle = p->mPhase * 1024.0f;
 
-        value = (float)iSNDsin((int)(!(angle < 0.0f) ? angle + 0.5f : angle - 0.5f)) * (1.0f / 65536.0f) * amplitude;
+        value = (float)iSNDsin(_SNDAEMSI_round(angle)) * (1.0f / 65536.0f) * amplitude;
     } else if (p->mWaveform == 1) {
         if (!(p->mPhase < 0.5f))
             value = amplitude;
@@ -1455,7 +1460,7 @@ int SNDAEMSI_updateoscillator(OscillatorState_t *p)
         value = shape * amplitude;
     }
     p->mPhase += step;
-    return (int)(!(value < 0.0f) ? value + 0.5f : value - 0.5f);
+    return _SNDAEMSI_round(value);
 }
 
 /* A ramp: the current value, the per-tick rate, the target and time it was set up for, the ramp
@@ -1493,7 +1498,7 @@ int SNDAEMSI_updateramp(RampState_t *p)
         if (!(p->mValue >= (float)p->mTarget))
             p->mValue = (float)p->mTarget;
     }
-    return (int)(!(p->mValue < 0.0f) ? p->mValue + 0.5f : p->mValue - 0.5f);
+    return _SNDAEMSI_round(p->mValue);
 }
 
 int SNDAEMSI_updateaddmax(Object_80268F54 *p)

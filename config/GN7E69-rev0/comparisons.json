@@ -28947,16 +28947,6 @@
           "end": "0x8026739C"
         },
         {
-          "symbol": "SNDAEMSI_updateenvelope",
-          "start": "0x80267894",
-          "end": "0x80267A1C"
-        },
-        {
-          "symbol": "SNDAEMSI_updatetable",
-          "start": "0x80267A1C",
-          "end": "0x80267C70"
-        },
-        {
           "symbol": "SNDAEMSI_playerupdatebank",
           "start": "0x802687AC",
           "end": "0x8026898C"
