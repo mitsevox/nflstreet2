@@ -57,7 +57,7 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             int wait = (int)operand >> 16;
             if (!wait) {
                 PathBeatInfo_t info;
-                p->mUnknown100->vfn_03();
+                p->mUnknown100->UpdateStatus();
                 if (PATHI_beatinfo(p, &info) >= 0)
                     action->mHalves.high = PATHI_calcwaitbeat(
                         (operand >> 12) & 15, (operand >> 8) & 15, (operand >> 4) & 15, &info);
@@ -112,7 +112,7 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             if (p->mUnknownF0 >= 0)
                 ready = 0;
             else
-                ready = p->mUnknown100->vfn_08();
+                ready = p->mUnknown100->ReadyForNewRequest();
             if (ready) {
                 p->mUnknown8.bits.mUnknown7 = -1;
                 p->mUnknown4 = PATHI_enternode(previous, node, p->mUnknown1, 1);
@@ -198,7 +198,7 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             action->mBits4.complete = 1;
             if (lhs <= 0) {
                 p->mUnknown8.bits.flag40 = (operand >> 15) & 1;
-                p->mUnknown100->vfn_05((operand >> 15) & 1);
+                p->mUnknown100->Pause((operand >> 15) & 1);
             } else if (operand & 0x8000)
                 p->mPauseTime = gPathMilliseconds + lhs;
             else
@@ -326,7 +326,7 @@ extern "C" int PATHI_trackstatus(PathTrack_t *p)
         if (p->mUnknownF0 >= 0)
             value = 0;
         else
-            value = p->mUnknown100->vfn_08();
+            value = p->mUnknown100->ReadyForNewRequest();
         if (value && PATHI_timeremaining(p) <= (p->mUnknown8.halves.high))
             p->mUnknown110 = 4;
         if (p->mUnknown1A == -1)
@@ -395,7 +395,7 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *eve
             break;
         case 15:
             if (p->mUnknown100)
-                id = p->mUnknown100->vfn_18();
+                id = p->mUnknown100->GetPitchMult();
             else
                 id = 1;
             break;
@@ -478,7 +478,7 @@ extern "C" void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Path
                 value = 0;
             p->mUnknownE = value;
             if (p->mUnknown100)
-                p->mUnknown100->vfn_15(value);
+                p->mUnknown100->SetDryLevel(value);
             break;
         case 9:
             if (value > 127)
@@ -486,18 +486,18 @@ extern "C" void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Path
             if (value < 0)
                 value = 0;
             if (p->mUnknown100)
-                p->mUnknown100->vfn_17(p->mUnknown8.bits.mUnknown1, value);
+                p->mUnknown100->SetFXSendLevel(p->mUnknown8.bits.mUnknown1, value);
             p->mUnknownC = value;
             break;
         case 14:
             value = value != 0;
             p->mUnknown8.bits.flag40 = value;
             if (p->mUnknown100)
-                p->mUnknown100->vfn_05(value);
+                p->mUnknown100->Pause(value);
             break;
         case 15:
             if (p->mUnknown100)
-                p->mUnknown100->vfn_19(value);
+                p->mUnknown100->SetPitchMult(value);
             break;
         case 23:
             if (value > 127)
