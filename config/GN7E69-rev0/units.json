@@ -1039,14 +1039,6 @@
       "address": "0x802796DC",
       "evidence": "evidence.tsv function and name rows for 0x802796DC (SNDI_validrendermode, srender.c, registered in comparisons.json, original bytes linked); called by SNDPKTPLAY_start (spktplay.c comparison, c19 wave)."
     },
-    "PATHI_enternode": {
-      "address": "0x801B6ED0",
-      "evidence": "evidence.tsv function and name rows for 0x801B6ED0 (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
-    },
-    "PATHI_nextnode": {
-      "address": "0x801B6D9C",
-      "evidence": "evidence.tsv function and name rows for 0x801B6D9C (PATH library function defined by the comparison source src/engine/pathnode.c, not yet linked; called from src/engine/pathaction.c)."
-    },
     "SNDPLATFORM_outputcaps": {
       "address": "0x802733A0",
       "evidence": "evidence.tsv function and name rows for 0x802733A0 (SNDPLATFORM_outputcaps, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/ssysinit.c (n1e naming wave)."
@@ -1134,10 +1126,6 @@
     "PlyrAlignMoveToTarget": {
       "address": "0x800E2FE4",
       "evidence": "evidence.tsv function and name rows for the PlyrAlignApproach.cpp holdout, called by PlyrAlignUpdate in src/game/PlyrTackle.cpp."
-    },
-    "PATHI_seeknextnode": {
-      "address": "0x801B721C",
-      "evidence": "evidence.tsv function/name rows for PATHI_seeknextnode at 0x801B721C. Original-owned code used by PATHI_serviceproject, call at 0x801B397C."
     },
     "iSPCH_GetSampleSizeData": {
       "address": "0x801B22E0",
@@ -30179,6 +30167,114 @@
           }
         ],
         "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/physbroadphase.cpp holds out BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint."
+      }
+    },
+    {
+      "source": "src/engine/pathnode.c",
+      "profile": "path_cxx_holdouts",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B67F8",
+          "end": "0x801B6A18"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B6D20",
+          "end": "0x801B6ED0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B7178",
+          "end": "0x801B7460"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED00",
+          "end": "0x802AED50"
+        }
+      ],
+      "evidence": "evidence.tsv provisional unit row 0x801B6780-0x801B7778; full file reconstructed and named, exact functions and whole native data linked around documented holdouts.",
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PATHI_sampleoffset",
+            "evidence": "evidence.tsv source-form 0x801B6780-0x801B67F8"
+          },
+          {
+            "function": "PATHI_choosesynchtime",
+            "evidence": "evidence.tsv source-form 0x801B6A18-0x801B6CB4"
+          },
+          {
+            "function": "PATHI_timeremaining",
+            "evidence": "evidence.tsv source-form 0x801B6CB4-0x801B6D20"
+          },
+          {
+            "function": "PATHI_enternode",
+            "evidence": "evidence.tsv source-form 0x801B6ED0-0x801B7178"
+          },
+          {
+            "function": "PATHI_queuenode",
+            "evidence": "evidence.tsv source-form 0x801B7460-0x801B7778"
+          }
+        ],
+        "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."
+      }
+    },
+    {
+      "source": "src/engine/pathaction.c",
+      "profile": "path_cxx_holdouts",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B84E4",
+          "end": "0x801B8580"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801B89B0",
+          "end": "0x801B8C18"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AED58",
+          "end": "0x802AED94"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBB70",
+          "end": "0x803EBB78"
+        }
+      ],
+      "evidence": "evidence.tsv provisional unit row 0x801B7880-0x801B8C18; full file reconstructed and named, exact functions and whole native data linked around documented holdouts.",
+      "holdouts": {
+        "functions": [
+          {
+            "function": "PATHI_serviceaction",
+            "evidence": "evidence.tsv source-form 0x801B7880-0x801B845C"
+          },
+          {
+            "function": "PATHI_conditiondone",
+            "evidence": "evidence.tsv source-form 0x801B845C-0x801B84E4"
+          },
+          {
+            "function": "PATHI_trackstatus",
+            "evidence": "evidence.tsv source-form 0x801B8580-0x801B864C"
+          },
+          {
+            "function": "PATHI_getvalue",
+            "evidence": "evidence.tsv source-form 0x801B864C-0x801B89B0"
+          }
+        ],
+        "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."
       }
     },
     {

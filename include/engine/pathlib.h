@@ -176,13 +176,13 @@ struct PathTrack_t {
     int mUnknown110;
 };
 
-struct Record_801B6D20 {
-    signed char mUnknown0;
-    signed char mUnknown1;
-    unsigned short mUnknown2;
+struct PathFindBranch_t {
+    signed char mLow;
+    signed char mHigh;
+    unsigned short mNode;
 };
 
-struct Sequence_801B84E4;
+struct PathEvent_t;
 
 struct PathProject_t {
     int mUnknown0;
@@ -205,30 +205,36 @@ struct PathProject_t {
     unsigned char mUnknownA0[32];
     enum { kEventPoolBytes = 4096 };
     // The last scanned slot shares the first bytes of the event pool.
-    Sequence_801B84E4 *mUnknownC0[17];
-    unsigned char mEventPoolTail[kEventPoolBytes - sizeof(Sequence_801B84E4 *)];
+    PathEvent_t *mUnknownC0[17];
+    unsigned char mEventPoolTail[kEventPoolBytes - sizeof(PathEvent_t *)];
     int mUnknown1100;
 };
 
-struct Event_801B845C {
-    unsigned char mUnknown0[4];
+struct PathAction_t {
+    unsigned int mTrackMask;
     union {
-        unsigned int mUnknown4;
-        struct { unsigned int mUnknown6:26, depth:3, mUnknown0:3; } mBits4;
+        unsigned int mControl;
+        struct {
+            unsigned int unknownHigh:8, operation:7, complete:1;
+            unsigned int lhsKind:2, rhsKind:2, condition:3, comparison:3, depth:3, unknownLow:3;
+        } mBits4;
     };
-    unsigned char mUnknown8[4];
+    union {
+        unsigned int mOperand;
+        struct { short high, low; } mHalves;
+    };
 };
-struct SequenceHeader_801B6210 {
+struct PathEventHeader_t {
     unsigned int mUnknown0[5];
 };
-struct Sequence_801B84E4 {
-    unsigned int mUnknown0;
-    unsigned int mUnknown4;
-    unsigned int mUnknown8;
+struct PathEvent_t {
+    unsigned int mCreatedAt;
+    unsigned int mLifetime;
+    unsigned int mActionStartedAt;
     unsigned char mUnknownC[3];
-    unsigned char mUnknownF;
+    unsigned char mActionCount;
     union {
-        unsigned char mUnknown10;
+        unsigned char mActionIndex;
         unsigned int mWord10;
         struct {
             unsigned int mUnknown18:8, mUnknown14:4;
@@ -239,72 +245,73 @@ struct Sequence_801B84E4 {
             unsigned int mUnknown13:18, flag2000:1, mUnknown0:13;
         } mFlags10;
     };
-    Event_801B845C mUnknown14[1];
+    PathAction_t mActions[1];
 };
 struct PathfinderStatus_t;
-struct Entry_801B63F0 {
+struct PathMapEntry_t {
     union {
         struct {
-            short mUnknown0;
-            short mUnknown2;
+            short mSample;
+            short mPackedControl;
         };
         struct {
-            unsigned int mUnknown16:16, mUnknown14:2, mTrack:5, mUnknown5:4;
+            unsigned int mUnknown16:16, mTrack:5, mSection:6;
             int mLoop:5;
         } mBits0;
     };
     union {
-        unsigned int mUnknown4;
+        unsigned int mTimingAndBranches;
         struct {
             unsigned int mUnknown20:12, mBranches:5, mKind:3, mBeats:4, mUnknown0:8;
         } mBits4;
     };
-    unsigned int mUnknown8;
-    unsigned int mUnknownC;
+    unsigned int mLinkAndSync;
+    unsigned int mFlagsAndEvent;
     union {
         unsigned int word;
         struct { unsigned int mUnknownF:17, flag4000:1, mUnknown0:14; } bits;
-    } mUnknown10;
+    } mEventFlags;
 };
-struct PathStatus_801B67F8 {
+struct PathBeatStatus_t {
     unsigned char mUnknown0[8];
-    int mUnknown8;
+    int mBeat;
     unsigned char mUnknownC[12];
-    int mUnknown18;
-    int mUnknown1C;
-    int mUnknown20;
-    int mUnknown24;
-    int mUnknown28;
-    int mUnknown2C;
+    int mNodeDuration;
+    int mBarDuration;
+    int mBeatDuration;
+    int mRemaining;
+    int mBarRemaining;
+    int mBeatRemaining;
+    unsigned char mUnknown30[8];
 };
-struct BeatInfo_801B67F8 {
-    unsigned int mUnknown0:4, mUnknown4b:4, mUnknown1:8, mUnknown2:16;
-    unsigned int mUnknown4;
-    int mUnknown8;
-    int mUnknownC;
-    int mUnknown10;
-    int mUnknown14;
-    unsigned int mUnknown18;
+struct PathBeatInfo_t {
+    unsigned int mBeatsPerBar:4, mBeatUnit:4, mBeat:8, mUnknown2:16;
+    unsigned int mBeatDuration;
+    int mBarDuration;
+    int mNodeDuration;
+    int mBeatRemaining;
+    int mBarRemaining;
+    unsigned int mRemaining;
 };
-struct FindNode_801B6A18 {
+struct PathFindNode_t {
     unsigned char mUnknown0[8];
     union {
-        short mUnknown8;
+        short mNode;
         struct { unsigned int mUnknown4:28, mSync:2, mUnknown0:2; } mBits8;
     };
 };
-struct TrackStatus_801B864C {
-    int mUnknown0;
+struct PathActionStatus_t {
+    int mNode;
     unsigned char mUnknown4[20];
-    int mUnknown18;
+    int mNodeDuration;
     unsigned char mUnknown1C[8];
-    int mUnknown24;
-    int mUnknown28;
-    int mUnknown2C;
-    unsigned char mUnknown30[12];
+    int mRemaining;
+    int mBarRemaining;
+    int mBeatRemaining;
+    unsigned char mUnknown30[8];
 };
-struct Record_801B6780 {
-    short mUnknown0;
+struct PathSamplePrefix_t {
+    short mSample;
 };
 struct PathfinderTrackData_t;
 
@@ -327,7 +334,7 @@ extern int tasktimespent;
 extern PathProject_t *pfstates[4];
 void PATHI_serviceproject(void);
 int PATHI_inittrack(int flags, PathfinderTrackData_t *data);
-int fn_801B7880(Sequence_801B84E4 *p, Event_801B845C *entry);
+int PATHI_serviceaction(PathEvent_t *p, PathAction_t *entry);
 extern unsigned int seedPATH[6];
 int PATH_destroy(int flags);
 void SNDSYS_entercritical(void);
@@ -365,21 +372,21 @@ int PATHI_status(PathTrack_t *p, void *info);
 void PATH_stop(int flags);
 int PATHI_stop(PathTrack_t *p);
 void PATHI_printf(const char *format, ...);
-int PATHI_addevent(int flags, Sequence_801B84E4 *sequence);
-void PATHI_removeevent(Sequence_801B84E4 *p);
-void PATHI_seteventfilter(Entry_801B63F0 *p, int value);
+int PATHI_addevent(int flags, PathEvent_t *sequence);
+void PATHI_removeevent(PathEvent_t *p);
+void PATHI_seteventfilter(PathMapEntry_t *p, int value);
 void PATHI_clearalleventfilters(void);
 int PATHI_serviceevent(int index);
-int fn_801B6780(int index);
-int fn_801B6CB4(PathTrack_t *p);
-int fn_801B6D20(int count, int value, Record_801B6D20 *entries);
-int fn_801B7178(int index, int value);
+int PATHI_sampleoffset(int index);
+int PATHI_timeremaining(PathTrack_t *p);
+int PATHI_pickclosestbranch(int count, int value, PathFindBranch_t *entries);
+int PATHI_routenode(int index, int value);
 unsigned int PATHI_random(void);
-Event_801B845C *fn_801B845C(Event_801B845C *p, int state, Event_801B845C *end);
-int fn_801B84E4(Event_801B845C *p, Sequence_801B84E4 *sequence);
-int fn_801B8580(PathTrack_t *p);
-int PATHI_getvalue(int id, int kind, PathTrack_t *p, Sequence_801B84E4 *event);
-void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, Sequence_801B84E4 *event);
+PathAction_t *PATHI_conditiondone(PathAction_t *p, int state, PathAction_t *end);
+int PATHI_restoretolastwhile(PathAction_t *p, PathEvent_t *sequence);
+int PATHI_trackstatus(PathTrack_t *p);
+int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *event);
+void PATHI_setvalue(int id, int kind, int value, PathTrack_t *p, PathEvent_t *event);
 extern unsigned char volscale;
 extern int defaultfxbus;
 void PATH_setallocator(Allocator *allocator, const AllocParams &params);
@@ -399,17 +406,17 @@ int PATHI_loadbank(PathTrack_t *p, int index);
 int PATHI_subbankready(PathTrack_t *p, int index);
 int PATHI_loadbankdata(PathTrack_t *p, int index, int size);
 int PATH_event(int flags, unsigned int id);
-Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event);
+PathEvent_t *PATHI_copyevent(PathEvent_t *event);
 void PATHI_releaseevent(int index, int reason);
 int PATHI_serviceeventqueue(void);
 int PATHI_eventtakespriority(int index);
-int PATHI_beatinfo(PathTrack_t *p, BeatInfo_801B67F8 *info);
-int PATHI_calcwaitbeat(int a, int b, int c, BeatInfo_801B67F8 *info);
+int PATHI_beatinfo(PathTrack_t *p, PathBeatInfo_t *info);
+int PATHI_calcwaitbeat(int a, int b, int c, PathBeatInfo_t *info);
 int PATHI_nextnode(int index, int value, int advance);
 int PATHI_enternode(int track, int index, int value, int advance);
 void PATHI_seeknextnode(int index);
 int PATHI_queuenode(PathTrack_t *p);
-int PATHI_choosesynchtime(int index, const FindNode_801B6A18 &find, const BeatInfo_801B67F8 &info, unsigned int &time);
+int PATHI_choosesynchtime(int index, const PathFindNode_t &find, const PathBeatInfo_t &info, unsigned int &time);
 }
 
 static inline PathTrackInfo_t *PATHI_trackinfo(int index)
@@ -420,24 +427,24 @@ static inline PathTrackInfo_t *PATHI_trackinfo(int index)
     return info;
 }
 
-static inline Entry_801B63F0 *PATHI_findevent(int key)
+static inline PathMapEntry_t *PATHI_findevent(int key)
 {
     int i = pfstate->mUnknown18->mUnknownF;
     while (--i >= 0) {
-        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown24[i] * 4);
-        if ((int)(entry->mUnknownC >> 8) == key)
+        PathMapEntry_t *entry = (PathMapEntry_t *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown24[i] * 4);
+        if ((int)(entry->mFlagsAndEvent >> 8) == key)
             return entry;
     }
     return 0;
 }
 
-static inline Entry_801B63F0 *PATHI_getnode(int index)
+static inline PathMapEntry_t *PATHI_getnode(int index)
 {
-    Entry_801B63F0 *node;
+    PathMapEntry_t *node;
     if (index < 0 || index > pfstate->mUnknown18->mUnknown12)
         node = 0;
     else
-        node = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
+        node = (PathMapEntry_t *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[index] * 4);
     return node;
 }
 

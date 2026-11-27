@@ -7,21 +7,21 @@
 static inline unsigned char *_PATHI_eventpoolbytes(PathProject_t *bank)
 {
     return reinterpret_cast<unsigned char *>(bank) +
-        (offsetof(PathProject_t, mUnknownC0) + 16 * sizeof(Sequence_801B84E4 *));
+        (offsetof(PathProject_t, mUnknownC0) + 16 * sizeof(PathEvent_t *));
 }
 
-extern "C" int PATHI_addevent(int flags, Sequence_801B84E4 *sequence)
+extern "C" int PATHI_addevent(int flags, PathEvent_t *sequence)
 {
     // FAKEMATCH: unused string local; emits the unreferenced "%s  %s" that starts the target .rodata
     const char *header = "%s  %s";
 
     int result = -8;
-    Event_801B845C *entry = sequence->mUnknown14;
+    PathAction_t *entry = sequence->mActions;
     int depth = 0;
     unsigned int high = flags & 0xFF000000;
-    for (unsigned int i = 0; i < sequence->mUnknownF; ++i, ++entry) {
-        if ((entry->mUnknown4 & 0x00FE0000) == 0x00020000) {
-            switch ((entry->mUnknown4 >> 9) & 7) {
+    for (unsigned int i = 0; i < sequence->mActionCount; ++i, ++entry) {
+        if ((entry->mControl & 0x00FE0000) == 0x00020000) {
+            switch ((entry->mControl >> 9) & 7) {
             case 0:
             case 1:
                 entry->mBits4.depth = depth++;
@@ -47,8 +47,8 @@ extern "C" int PATHI_addevent(int flags, Sequence_801B84E4 *sequence)
                 return -13;
             result = 0;
             unsigned int now = Path::IPathToReal::realimp->GetMilliseconds();
-            sequence->mUnknown8 = now;
-            sequence->mUnknown0 = now;
+            sequence->mActionStartedAt = now;
+            sequence->mCreatedAt = now;
             pfstates[i]->mUnknownC0[count++] = sequence;
             pfstates[i]->mUnknown1100 = count;
         }
@@ -69,16 +69,16 @@ extern "C" int PATH_event(int flags, unsigned int id)
         return -18;
     unsigned int voices = id & 0x0F000000;
     int result = -8;
-    Sequence_801B84E4 *copy = 0;
+    PathEvent_t *copy = 0;
     id &= 0x00FFFFFF;
     for (unsigned int i = 0; i < 4; ++i) {
         if (PATHI_switchproject((unsigned char)i, flags) &&
             (voices & (0x01000000 << pfstate->mUnknown18->mUnknownC))) {
-            Entry_801B63F0 *event = PATHI_findevent(id);
+            PathMapEntry_t *event = PATHI_findevent(id);
             if (event) {
-                if (!event->mUnknown10.bits.flag4000) {
+                if (!event->mEventFlags.bits.flag4000) {
                     if (!copy) {
-                        copy = PATHI_copyevent((Sequence_801B84E4 *)event);
+                        copy = PATHI_copyevent((PathEvent_t *)event);
                         if (!copy)
                             continue;
                     }
@@ -93,20 +93,20 @@ extern "C" int PATH_event(int flags, unsigned int id)
     return result;
 }
 
-extern "C" Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event)
+extern "C" PathEvent_t *PATHI_copyevent(PathEvent_t *event)
 {
-    int size = event->mUnknownF * 12 + 20;
+    int size = event->mActionCount * 12 + 20;
     unsigned char *end = _PATHI_eventpoolbytes(pfstate) + PathProject_t::kEventPoolBytes;
     unsigned char *free = _PATHI_eventpoolbytes(pfstate);
     for (int i = 0; i < 16; ++i) {
-        Sequence_801B84E4 *queued = pfstate->mUnknownC0[i];
+        PathEvent_t *queued = pfstate->mUnknownC0[i];
         if ((unsigned char *)queued >= free && (unsigned char *)queued < end)
-            free += queued->mUnknownF * 12 + 20;
+            free += queued->mActionCount * 12 + 20;
     }
     if (free + size < end) {
         memcpy(free, event, size);
-        ((Sequence_801B84E4 *)free)->mBits10.mVoice = pfstate->mUnknown14;
-        return (Sequence_801B84E4 *)free;
+        ((PathEvent_t *)free)->mBits10.mVoice = pfstate->mUnknown14;
+        return (PathEvent_t *)free;
     }
     if (debugchannels & 0x120)
         PATHI_printf("Can't add new event, size %d bytes (%d bytes free).\n", size, end - free);
@@ -116,21 +116,21 @@ extern "C" Sequence_801B84E4 *PATHI_copyevent(Sequence_801B84E4 *event)
 extern "C" void PATHI_releaseevent(int index, int reason)
 {
     PathProject_t *bank = pfstate;
-    Sequence_801B84E4 *event = bank->mUnknownC0[index];
-    int size = event->mUnknownF * 12 + 20;
-    SequenceHeader_801B6210 saved = *(SequenceHeader_801B6210 *)event;
+    PathEvent_t *event = bank->mUnknownC0[index];
+    int size = event->mActionCount * 12 + 20;
+    PathEventHeader_t saved = *(PathEventHeader_t *)event;
     unsigned char *free = _PATHI_eventpoolbytes(bank);
     unsigned char *end = free + PathProject_t::kEventPoolBytes;
     int pooled = (unsigned char *)event >= free && (unsigned char *)event < end;
     if (pooled) {
         memcpy(event, (unsigned char *)event + size, end - (unsigned char *)event);
         for (int i = 0; i <= 16; ++i) {
-            Sequence_801B84E4 *queued = pfstate->mUnknownC0[i];
+            PathEvent_t *queued = pfstate->mUnknownC0[i];
             if ((unsigned char *)queued > (unsigned char *)event && (unsigned char *)queued < end) {
-                queued = (Sequence_801B84E4 *)((unsigned char *)queued - size);
+                queued = (PathEvent_t *)((unsigned char *)queued - size);
                 pfstate->mUnknownC0[i] = queued;
                 if (free <= (unsigned char *)queued)
-                    free = (unsigned char *)queued + (queued->mUnknownF * 12 + 20);
+                    free = (unsigned char *)queued + (queued->mActionCount * 12 + 20);
             }
         }
     } else if (eventrelease && event->mFlags10.flag2000)
@@ -138,7 +138,7 @@ extern "C" void PATHI_releaseevent(int index, int reason)
     PATHI_removeevent(event);
 }
 
-extern "C" void PATHI_removeevent(Sequence_801B84E4 *p)
+extern "C" void PATHI_removeevent(PathEvent_t *p)
 {
     for (int i = 0; i < 4; ++i) {
         PathProject_t *bank = pfstates[i];
@@ -155,38 +155,38 @@ extern "C" void PATHI_removeevent(Sequence_801B84E4 *p)
     }
 }
 
-extern "C" void PATHI_seteventfilter(Entry_801B63F0 *p, int value)
+extern "C" void PATHI_seteventfilter(PathMapEntry_t *p, int value)
 {
-    Entry_801B63F0 *found = PATHI_findevent(p->mUnknownC >> 8);
+    PathMapEntry_t *found = PATHI_findevent(p->mFlagsAndEvent >> 8);
     if (found)
-        found->mUnknown10.bits.flag4000 = value;
+        found->mEventFlags.bits.flag4000 = value;
 }
 
 extern "C" void PATHI_clearalleventfilters(void)
 {
     for (int i = 0; i < pfstate->mUnknown18->mUnknownF; ++i) {
-        Entry_801B63F0 *entry = (Entry_801B63F0 *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown24[i] * 4);
+        PathMapEntry_t *entry = (PathMapEntry_t *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown24[i] * 4);
         if (entry)
-            entry->mUnknown10.bits.flag4000 = 0;
+            entry->mEventFlags.bits.flag4000 = 0;
     }
 }
 
 extern "C" int PATHI_serviceevent(int index)
 {
-    Sequence_801B84E4 *p = pfstate->mUnknownC0[index];
+    PathEvent_t *p = pfstate->mUnknownC0[index];
     int count = 0;
-    if (p->mUnknown8 > gPathMilliseconds)
+    if (p->mActionStartedAt > gPathMilliseconds)
         return 0;
-    unsigned int i = p->mUnknown10;
+    unsigned int i = p->mActionIndex;
     // The packed actions immediately follow the sequence header.
     // FAKEMATCH: Integer address addition reproduces ProDG's indexed add operand order.
-    Event_801B845C *entry = reinterpret_cast<Event_801B845C *>(
-        i * sizeof(Event_801B845C) + reinterpret_cast<unsigned long long>(p->mUnknown14));
-    for (; i < p->mUnknownF; ++entry, ++i) {
-        if ((entry->mUnknown4 & 0x10000) || fn_801B7880(p, entry)) {
+    PathAction_t *entry = reinterpret_cast<PathAction_t *>(
+        i * sizeof(PathAction_t) + reinterpret_cast<unsigned long long>(p->mActions));
+    for (; i < p->mActionCount; ++entry, ++i) {
+        if ((entry->mControl & 0x10000) || PATHI_serviceaction(p, entry)) {
             ++count;
-            ++p->mUnknown10;
-            p->mUnknown8 = gPathMilliseconds;
+            ++p->mActionIndex;
+            p->mActionStartedAt = gPathMilliseconds;
         } else
             break;
     }
@@ -199,12 +199,12 @@ extern "C" int PATHI_serviceeventqueue(void)
     for (int i = 0; i < 16; ++i) {
         if (i >= pfstate->mUnknown1100)
             pfstate->mUnknownC0[i] = 0;
-        Sequence_801B84E4 *event = pfstate->mUnknownC0[i];
+        PathEvent_t *event = pfstate->mUnknownC0[i];
         if (event) {
             int reason = 0;
-            if (event->mUnknown10 >= event->mUnknownF)
+            if (event->mActionIndex >= event->mActionCount)
                 reason = 3;
-            if (event->mUnknown4 && event->mUnknown0 + event->mUnknown4 < gPathMilliseconds)
+            if (event->mLifetime && event->mCreatedAt + event->mLifetime < gPathMilliseconds)
                 reason = 1;
             if (event->mBits10.mPriority && !PATHI_eventtakespriority(i))
                 reason = 2;
@@ -220,13 +220,13 @@ extern "C" int PATHI_serviceeventqueue(void)
 
 extern "C" int PATHI_eventtakespriority(int index)
 {
-    Sequence_801B84E4 *event = pfstate->mUnknownC0[index];
+    PathEvent_t *event = pfstate->mUnknownC0[index];
     int priority = event->mBits10.mPriority;
     int odd = priority % 2;
     if (priority <= 0)
         priority = -priority;
     while (++index <= 15) {
-        Sequence_801B84E4 *other = pfstate->mUnknownC0[index];
+        PathEvent_t *other = pfstate->mUnknownC0[index];
         if (other && other->mBits10.mPriority) {
             int level = other->mBits10.mPriority;
             if (level < 0)
