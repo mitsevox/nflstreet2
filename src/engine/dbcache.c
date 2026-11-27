@@ -1,7 +1,8 @@
-/* Partial source: the game database's column caches. Each cache is keyed by an open database
-   handle and keeps, per cached column ('DIGT' of the team table, 'DIGP' of the player table),
-   arrays of row values that the team and player queries look up instead of searching the
-   tables again; the caches are kept in one linked list. */
+/* Partial source: the game database's id-remap caches, used when team and player rows are
+   copied between databases or deleted. Each cache is keyed by an open database handle and
+   keeps, per id column ('DIGT' of the team table, 'DIGP' of the player table), arrays that map
+   old ids to new ones (new ids come from the unused-id fill); DbCacheUpdateHandler applies the
+   remap while DbCacheCopyRows copies rows. The caches are kept in one linked list. */
 
 #include "engine/TDbCreate.h"
 #include "engine/tdbext.h"

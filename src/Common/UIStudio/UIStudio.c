@@ -46,6 +46,12 @@ int sprintf(char *s, const char *format, ...);
 Uint8 UISIsShuttingDown(UISInfoT *pInfo);
 UISControlStateT *UISFindSiblingEnableControl(UISScreenT *pScreen, UISControlStateT *pControlInfo);
 
+/* Address of a static object in the screen's data, or 0 when the entry has no offset. */
+static __inline void *_UISGetObjectAddress(UISScreenT *pScreen, UISObjectRefT *pRef)
+{
+    return pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+}
+
 /* Runs the screen's static objects that have not run yet, then every action
    function under control Control and the controls it links to. */
 static void _ParseInitialize(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, Int32 FncID)
@@ -66,7 +72,7 @@ static void _ParseInitialize(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Contro
             pRef = &pScreen->pData->pObjects[Object];
             if (pRef->State == 0) {
                 if (pRef->ID < pInfo->NumActionFncs && pInfo->ActionFncs[pRef->ID].pFnc != 0) {
-                    pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                    pObject = _UISGetObjectAddress(pScreen, pRef);
                     pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
                 }
                 pRef->State = 1;
@@ -109,9 +115,9 @@ static Int32 _DetermineVisibility(UISScreenT *pScreen, void **ppTarget, Int32 Ty
             pControl = pContext;
             if (pControl->pState == *ppTarget) {
                 *ppTarget = pControl;
-                return pControl->pState->pOwner != 0;
+                return pControl->pState->unk_00 != 0;
             }
-            if (pControl->pState != 0 && pControl->pState->pOwner != 0) {
+            if (pControl->pState != 0 && pControl->pState->unk_00 != 0) {
                 NumItems = pControl->NumNodes;
                 for (Item = 0; Item < NumItems; Item++) {
                     Result = _DetermineVisibility(pScreen, ppTarget, 7,
@@ -164,7 +170,7 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
         switch (Type) {
         case 8:
             pControl = pChange;
-            if (pControl->pState != 0 && (bFirstPass || pControl->pState->pOwner != 0)) {
+            if (pControl->pState != 0 && (bFirstPass || pControl->pState->unk_00 != 0)) {
                 NumItems = pControl->NumNodes;
                 for (Item = 0; Item < NumItems; Item++) {
                     _ParseVisibility(pInfo, pScreen, Value, 7, ((UISControlT *)pChange)->ppNodes[Item],
@@ -244,11 +250,11 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
         for (Obj = 0; Obj < pScreen->pData->NumObjects; Obj++) {
             pRef = &pScreen->pData->pObjects[Obj];
             if (pRef->ID < pInfo->NumActionFncs && pInfo->ActionFncs[pRef->ID].pFnc != 0) {
-                pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                pObject = _UISGetObjectAddress(pScreen, pRef);
                 pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
             }
         }
-        if (pControl->pState->pOwner != 0) {
+        if (pControl->pState->unk_00 != 0) {
             OldMultipler = *UISGetColorMultipler();
             OldAdditive = *UISGetColorAdditive();
             pCurMultipler = &pControl->pState->MultiplerFactor;
@@ -654,7 +660,8 @@ void UISRegisterPluginFnc(UISInfoT *pInfo, Uint32 Fnc, UISActionFncT *pFnc)
 }
 
 /* Loads a screen as the newest in the table, with ParentGroupID/ParentScreenID
-   as the screen to go back to: patches its data (event -9 the first time), runs
+   as the screen to go back to: patches its data and sends it event -9 (the patch
+   result is never 0, so the test always passes), runs
    its initializers and transforms and sends it event -2 with the arguments. A
    loaded screen is set up again instead. Returns 0 when it was already loaded or
    the load callback gave nothing. */
@@ -1165,7 +1172,7 @@ void *UISFindStaticObject(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint
         for (Object = 0; Object < pScreen->pData->NumObjects; Object++) {
             pRef = &pScreen->pData->pObjects[Object];
             if (pRef->ID == ObjectID) {
-                pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                pObject = _UISGetObjectAddress(pScreen, pRef);
                 break;
             }
         }
