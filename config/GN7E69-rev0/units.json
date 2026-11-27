@@ -28709,7 +28709,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row0x801DD498-0x801DFE0C (provisional sibling-supported particleLib.c); all45 functions reconstructed, whole native data placed, five documented HOLDOUT source-form rows keep original function bytes.",
+      "evidence": "evidence.tsv unit row0x801DD498-0x801DFE0C (provisional sibling-supported particleLib.c); all45 functions reconstructed, whole native data placed, five documented HOLDOUT source-form rows kept original function bytes; round 5 lane 3 (2026-11-27) made _sumGasMotionForces, ParticleLibInit and ParticleObjInitState exact and linked them, two holdouts remain.",
       "sections": [
         {
           "section": ".text",
@@ -28721,24 +28721,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801DE010",
-          "end": "0x801DE04C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DE114",
-          "end": "0x801DE1E0"
+          "end": "0x801DE410"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DE4F8",
-          "end": "0x801DE794"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DE7F4",
           "end": "0x801DFE0C"
         },
         {
@@ -28779,23 +28767,11 @@
             "evidence": "evidence.tsv source-form 0x801DDFB0-0x801DE010"
           },
           {
-            "function": "_sumGasMotionForces",
-            "evidence": "evidence.tsv source-form 0x801DE04C-0x801DE114"
-          },
-          {
-            "function": "ParticleLibInit",
-            "evidence": "evidence.tsv source-form 0x801DE1E0-0x801DE410"
-          },
-          {
             "function": "ParticleLibShutdown",
             "evidence": "evidence.tsv source-form 0x801DE410-0x801DE4F8"
-          },
-          {
-            "function": "ParticleObjInitState",
-            "evidence": "evidence.tsv source-form 0x801DE794-0x801DE7F4"
           }
         ],
-        "evidence": "PR1445 merge notes: five measured partials in particleLib.c, each retained in comparisons.json and tracked by a HOLDOUT row; owner holdouts ruling2026-11-20."
+        "evidence": "PR1445 merge notes: five measured partials in particleLib.c, each retained in comparisons.json and tracked by a HOLDOUT row; owner holdouts ruling2026-11-20 (round 5 lane 3 merge notes, 2026-11-27: _sumGasMotionForces, ParticleLibInit and ParticleObjInitState made exact)."
       },
       "link_roots": {
         "discarded": [
