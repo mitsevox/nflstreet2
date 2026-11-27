@@ -359,5 +359,5 @@ char *T3DB_Lexer_StringLiteral(TDbLexer_t *pLexer, char *p)
     pLexer->mTokens[pLexer->mCount].mValue.s = &pLexer->mBuffer[pLexer->mBufUsed];
     pLexer->mTokens[pLexer->mCount++].mSrc = p + (-used - pLexer->mBufUsed);
     pLexer->mBufUsed = used;
-    return p + 1;
+    return ++p;
 }

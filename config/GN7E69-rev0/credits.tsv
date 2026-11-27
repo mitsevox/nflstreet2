@@ -315,3 +315,24 @@
 0x80260FE8	mitsevox	First exact (floorf) in original PR #1379, integrated with adampreddy's stack.
 0x802610B0	mitsevox	First exact (sinf) in original PR #1381, integrated with adampreddy's stack.
 0x8026118C	mitsevox	First exact (tanf) in original PR #1379, integrated with adampreddy's stack.
+0x801B02DC	lifewillbeokay	iSPCH_OrderSentences src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B07A0	lifewillbeokay	iSPCH_SentenceGetChoices src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B0C7C	lifewillbeokay	iSPCH_SentenceMakeChoice src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B10AC	lifewillbeokay	iSPCH_InitSentencePickInfo src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B10D8	lifewillbeokay	iSPCH_ClearSentenceChoiceChannel src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B118C	lifewillbeokay	iSPCH_InitSentenceChoice src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B1214	lifewillbeokay	iSPCH_SaveChosenSentence src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B1380	lifewillbeokay	iSPCH_PlayChosen src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B14B4	lifewillbeokay	iSPCH_MakeValidParmsMask src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B1528	lifewillbeokay	iSPCH_SentenceIsContextMatch src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B1628	lifewillbeokay	iSPCH_ChooseSentence src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B1864	lifewillbeokay	iSPCH_ChooseSingleSentence src/engine/spchpick.c made exact in #1447; landed through the merge lane integration PR.
+0x801B67F8	lifewillbeokay	PATHI_beatinfo src/engine/pathnode.c made exact in #1461; landed through the merge lane integration PR.
+0x801B68EC	lifewillbeokay	PATHI_calcwaitbeat src/engine/pathnode.c made exact in #1461; landed through the merge lane integration PR.
+0x801B6D9C	lifewillbeokay	PATHI_nextnode src/engine/pathnode.c made exact in #1461; landed through the merge lane integration PR.
+0x801B7178	lifewillbeokay	PATHI_routenode src/engine/pathnode.c made exact in #1461; landed through the merge lane integration PR.
+0x801B721C	lifewillbeokay	PATHI_seeknextnode src/engine/pathnode.c made exact in #1461; landed through the merge lane integration PR.
+0x801B89B0	lifewillbeokay	PATHI_setvalue src/engine/pathaction.c made exact in #1461; landed through the merge lane integration PR.
+0x801DD730	lifewillbeokay	_genNewParticles src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.
+0x801DF3E4	lifewillbeokay	_partReadWrite src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.
+0x801DF620	lifewillbeokay	ParticleParmLoad src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.

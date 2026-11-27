@@ -43,7 +43,7 @@ typedef struct UISColorVector_t {
 
 /* Per-control state block. */
 typedef struct UISControlState_t {
-    void *pOwner;   /* 0x00: the control or node that owns it; 0 while hidden */
+    void *unk_00;   /* 0x00: nonzero while the control is shown */
     Int32 bEnabled; /* 0x04 */
     Uint8 unk_08[0x34];              /* 0x08: transform block passed to UISInfoT.pControlFnc */
     UISColorVectorT MultiplerFactor; /* 0x3C */
@@ -93,7 +93,7 @@ typedef struct UISObjectRef_t {
 
 /* 12-byte string record of a screen file's string table. */
 typedef struct UISString_t {
-    Uint32 ID;     /* 0x00 */
+    Uint32 unk_00; /* 0x00 */
     Uint32 Length; /* 0x04 */
     char *pText;   /* 0x08 */
 } UISStringT;
@@ -257,8 +257,7 @@ typedef struct UISInfo_t {
     UISScreenRefT *ScreenRefs;      /* 0x70 */
     UISRunStateT RunState;          /* 0x74: passed by address to 0x802180A0 */
     UISRunStateT RateStack;         /* 0x88 */
-    UISColorVectorT MultiplerFactor; /* 0x9C */
-    UISColorVectorT AdditiveFactor; /* 0xAC */
+    Uint8 unk_9C[0x20];             /* 0x9C */
     UISActionStackT ActionStack;    /* 0xBC */
     Int32 **ppStackCurrent;         /* 0xC4: &RunState.pStackCurrent */
     Int32 bShuttingDown;            /* 0xC8 */

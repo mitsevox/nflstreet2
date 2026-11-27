@@ -797,9 +797,10 @@ static inline void _YuvConvertLine(u32 *line, u8 *y, u8 *u, u8 *v, int n)
     u32 *d;
     u8 *up;
     u8 *vp;
+    u32 w0, w1, w2, w3;
 
     while (x < n && ((u32)line & 15)) {
-        line[x] = YUV_PACK(y[x * 2], u[x], y[x * 2 + 1], v[x]);
+        line[x] = YUV_PACK(y[x << 1], u[x], y[(x << 1) + 1], v[x]);
         x++;
     }
     if (x <= n) {
@@ -809,20 +810,28 @@ static inline void _YuvConvertLine(u32 *line, u8 *y, u8 *u, u8 *v, int n)
         vp = v + x;
         goto test;
         do {
-            *d++ = YUV_PACK(y[x * 2], *up, y[x * 2 + 1], *vp);
+            *d++ = YUV_PACK(y[x << 1], *up, y[(x << 1) + 1], *vp);
             x++;
             up++;
             vp++;
         test:
             while (x + 8 < n) {
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 0], up[0], y[x * 2 + 1], vp[0]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 2], up[1], y[x * 2 + 3], vp[1]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 4], up[2], y[x * 2 + 5], vp[2]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 6], up[3], y[x * 2 + 7], vp[3]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 8], up[4], y[x * 2 + 9], vp[4]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 10], up[5], y[x * 2 + 11], vp[5]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 12], up[6], y[x * 2 + 13], vp[6]);
-                GXWGFifo.u32 = YUV_PACK(y[x * 2 + 14], up[7], y[x * 2 + 15], vp[7]);
+                w0 = YUV_PACK(y[(x << 1) + 0], up[0], y[(x << 1) + 1], vp[0]);
+                w1 = YUV_PACK(y[(x << 1) + 2], up[1], y[(x << 1) + 3], vp[1]);
+                w2 = YUV_PACK(y[(x << 1) + 4], up[2], y[(x << 1) + 5], vp[2]);
+                w3 = YUV_PACK(y[(x << 1) + 6], up[3], y[(x << 1) + 7], vp[3]);
+                GXWGFifo.u32 = w0;
+                GXWGFifo.u32 = w1;
+                GXWGFifo.u32 = w2;
+                GXWGFifo.u32 = w3;
+                w0 = YUV_PACK(y[(x << 1) + 8], up[4], y[(x << 1) + 9], vp[4]);
+                w1 = YUV_PACK(y[(x << 1) + 10], up[5], y[(x << 1) + 11], vp[5]);
+                w2 = YUV_PACK(y[(x << 1) + 12], up[6], y[(x << 1) + 13], vp[6]);
+                w3 = YUV_PACK(y[(x << 1) + 14], up[7], y[(x << 1) + 15], vp[7]);
+                GXWGFifo.u32 = w0;
+                GXWGFifo.u32 = w1;
+                GXWGFifo.u32 = w2;
+                GXWGFifo.u32 = w3;
                 d += 8;
                 up += 8;
                 vp += 8;
@@ -841,7 +850,7 @@ int YUV_convert(u8 **planes, int x, int y, int pitch, int width, int height, int
     u8 *base = (u8 *)(frameBuffer + 0x40000000);
 
     for (j = 0; j < height / 2; j++) {
-        u8 *line = base + y * stride + (x << 1) + j * stride * 2;
+        u8 *line = base + y * stride + ((x << 1) + j * stride * 2);
         u8 *yp = planes[0] + width * j;
         u8 *up = planes[1] + (j >> 1) * n;
         u8 *vp = planes[2] + (j >> 1) * n;
@@ -860,7 +869,7 @@ int YUV_convert_noscale(u8 **planes, int x, int y, int pitch, int width, int hei
     u8 *base = (u8 *)(frameBuffer + 0x40000000);
 
     for (j = 0; j < height; j++) {
-        u8 *line = base + y * stride + (x << 1) + j * stride;
+        u8 *line = base + (y * stride + (x << 1) + j * stride);
         u8 *yp = planes[0] + width * j;
         u8 *up = planes[1] + (j >> 1) * n;
         u8 *vp = planes[2] + (j >> 1) * n;
