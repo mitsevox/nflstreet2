@@ -23953,7 +23953,7 @@
     {
       "source": "src/engine/animmotroot.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8 and the HOLDOUT source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset, which keep the original code while AnimMotRotateHalfTurn and the pool link.",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), function rows, data row 0x802AEDC0-0x802AEDC8, the source-form row of AnimMotBlendRootAngle (exact and linked since round 5 lane 2, 2026-11-27) and the HOLDOUT source-form row of AnimMotBlendRootOffset, which keeps the original code while AnimMotBlendRootAngle, AnimMotRotateHalfTurn and the pool link.",
       "sections": [
         {
           "section": ".text",
@@ -26752,7 +26752,7 @@
     {
       "source": "src/engine/splytree.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are drafted at 90.62% (the target loads the child into r0 and copies it to r3 after loading the tree sentinel; see the compiler row).",
+      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are exact and linked since round 5 lane 2 (2026-11-27; FAKEMATCH dead-branch form, see their source-form rows).",
       "sections": [
         {
           "section": ".text",

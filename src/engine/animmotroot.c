@@ -49,16 +49,18 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
             _AnimMotBlendOrient(&pRecords[index].mUnknown10, &pEntry->mUnknownC, &target, pRecords[index].mUnknown4C.mUnknown14);
             i++;
         } else {
-            Triple_801BCA74 *pDst = &pRecords[index].mUnknown10;
+            Triple_801BCA74 *pDst;
 
-            pDst->mUnknown0 = pEntry->mUnknownC.mUnknown0;
+            // FAKEMATCH: the first word is stored through pRecords[index] and the other two through
+            // pDst; one uniform copy form gives the base+offset add order instead of offset+base.
+            pRecords[index].mUnknown10.mUnknown0 = pEntry->mUnknownC.mUnknown0;
+            pDst = &pRecords[index].mUnknown10;
             pDst->mUnknown4 = pEntry->mUnknownC.mUnknown4;
             pDst->mUnknown8 = pEntry->mUnknownC.mUnknown8;
         }
         if (pEntry->mUnknown8 & 2) {
             int angle;
             int delta;
-            int blend;
             float weight;
 
             if (pRecords[index].mUnknown4C.mUnknown1E & 8) {
@@ -73,7 +75,7 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
             pRecords[index].mUnknown10.mUnknown4 = 0;
             delta = angle - pRecords[index].mUnknown1C;
             pRecords[index].mUnknown1C = angle;
-            blend = (int)(((long long)pRecords[index].mUnknown20 * delta) >> 24);
+            delta = (int)(((long long)pRecords[index].mUnknown20 * delta) >> 24);
             total += pEntry->mUnknown0;
             weight = total != 0.0f ? pEntry->mUnknown0 / total : 0.0f;
             {
@@ -84,7 +86,7 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
                     apply = 1;
                 }
                 if (apply) {
-                    OrientLerpAngle(&value, blend, value, weight);
+                    OrientLerpAngle(&value, delta, value, weight);
                 }
             }
         }

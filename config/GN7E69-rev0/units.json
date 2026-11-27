@@ -22774,8 +22774,14 @@
     {
       "source": "src/engine/animmotroot.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8 and the two HOLDOUT source-form rows. AnimMotRotateHalfTurn links exact; AnimMotBlendRootAngle and AnimMotBlendRootOffset keep the original code; the .rodata pool links whole.",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8, the source-form row of AnimMotBlendRootAngle and the HOLDOUT source-form row of AnimMotBlendRootOffset. AnimMotBlendRootAngle (exact since round 5 lane 2, 2026-11-27) and AnimMotRotateHalfTurn link exact; AnimMotBlendRootOffset keeps the original code; the .rodata pool links whole.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801BCA74",
+          "end": "0x801BCCAC"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -22792,15 +22798,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "AnimMotBlendRootAngle",
-            "evidence": "evidence.tsv source-form 0x801BCA74-0x801BCCAC"
-          },
-          {
             "function": "AnimMotBlendRootOffset",
             "evidence": "evidence.tsv source-form 0x801BCCAC-0x801BCEEC"
           }
         ],
-        "evidence": "Two blend functions stay measured partials after copy-form, indexing-form and inline-helper tries; merge notes of the e1d pull request list them."
+        "evidence": "Two blend functions stayed measured partials after copy-form, indexing-form and inline-helper tries; merge notes of the e1d pull request list them (round 5 lane 2 merge notes, 2026-11-27: AnimMotBlendRootAngle made exact)."
       }
     },
     {
@@ -29349,13 +29351,13 @@
     {
       "source": "src/engine/splytree.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 11 of 15 functions exact, the 4 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 13 of 15 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C7684",
-          "end": "0x801C77DC"
+          "end": "0x801C7844"
         },
         {
           "section": ".text",
@@ -29373,14 +29375,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "_DSListGetSplayPrev",
-            "evidence": "evidence.tsv source-form 0x801C77DC-0x801C7810"
-          },
-          {
-            "function": "_DSListGetSplayNext",
-            "evidence": "evidence.tsv source-form 0x801C7810-0x801C7844"
-          },
-          {
             "function": "_DSListSplay",
             "evidence": "evidence.tsv source-form 0x801C7844-0x801C7A34"
           },
@@ -29389,7 +29383,7 @@
             "evidence": "evidence.tsv source-form 0x801C7A98-0x801C7C1C"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98 (round 5 lane 2 merge notes, 2026-11-27: _DSListGetSplayPrev and _DSListGetSplayNext made exact; _DSListSplay and _DSListAddSplayNode remain)."
       }
     },
     {
