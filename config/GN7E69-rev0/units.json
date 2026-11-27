@@ -29526,7 +29526,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802851E8",
-          "end": "0x802855EC"
+          "end": "0x802856D8"
         }
       ],
       "holdouts": {
@@ -29562,13 +29562,9 @@
           {
             "function": "_LZHHuffDecodeBuildTableR",
             "evidence": "evidence.tsv source-form 0x80284FB8-0x802851E8"
-          },
-          {
-            "function": "_LZHHeapPop",
-            "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact; lane 8 follow-up: _LZHProcess)."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact; lane 8 follow-up: _LZHProcess; round 6: _LZHHeapPop)."
       }
     },
     {

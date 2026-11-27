@@ -1353,8 +1353,8 @@ void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf)
     short top;
 
     lbl_803ED470++;
-    lbl_803B795C[lbl_803ED470].mUnknown00 = node;
     lbl_803B795C[lbl_803ED470].mUnknown02 = 0;
+    lbl_803B795C[lbl_803ED470].mUnknown00 = node;
     value = lbl_803B7204[node][0];
     depth = 1;
     while (value > 0)
@@ -1367,13 +1367,12 @@ void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf)
     }
     pLeaf->mUnknown02 = depth;
     size = 1 << depth;
-    pLeaf->mUnknown00 = lbl_803ED468;
     index = lbl_803ED468;
+    pLeaf->mUnknown00 = index;
     lbl_803ED468 += size;
     lbl_803ED46C[index].mUnknown02 = 0;
-    lbl_803ED46C[index].mUnknown00 = -value;
+    lbl_803ED46C[index++].mUnknown00 = -value;
     depth = 0;
-    index++;
     for (count = size - 1; count > 0; count--)
     {
         do
@@ -1518,14 +1517,14 @@ LZHHeapNode_t _LZHHeapPop(void)
 {
     LZHHeapNode_t top = lbl_803B795C[1];
     unsigned short weight = lbl_803B795C[lbl_803ED470].mUnknown02;
-    short count = --lbl_803ED470;
+    short half = --lbl_803ED470 / 2;
     short i = 1;
     short child;
 
-    while (i <= count / 2)
+    while (i <= half)
     {
         child = i << 1;
-        if (child < count && lbl_803B795C[child].mUnknown02 > lbl_803B795C[child + 1].mUnknown02)
+        if (child < lbl_803ED470 && lbl_803B795C[child].mUnknown02 > lbl_803B795C[child + 1].mUnknown02)
             child++;
         if (lbl_803B795C[child].mUnknown02 >= weight)
             break;
