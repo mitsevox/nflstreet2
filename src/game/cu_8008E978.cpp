@@ -276,7 +276,7 @@ struct Cell_80094B34 {
     signed short mValue : 13;
 };
 
-/* Block allocated by fn_80096954 with fn_801D2B7C (112 bytes). */
+/* Block allocated by AnimPlaybackSysInit with fn_801D2B7C (112 bytes). */
 struct Block_80096954 {
     Table_80093BAC *mpUnknown0[2];
     void *mpUnknown8;
@@ -3858,6 +3858,11 @@ struct Animation_8009C630 {
     char mUnknown84[16];
 };
 
+/* The four animation records the player's +792 collection holds. */
+struct AnimSlots_8009C630 {
+    Animation_8009C630 mEntries[4];
+};
+
 extern "C" {
 int fn_8011F2C4(void);
 }
@@ -5481,7 +5486,7 @@ extern "C" void fn_80090284(int *pData);
 
 extern "C" void fn_8009036C(int *p);
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot);
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot);
 
 extern "C" int fn_800904D4(Params_80092E54 *pRequest, void *pData, int size);
 
@@ -5725,7 +5730,7 @@ extern "C" int fn_8009679C(unsigned int index);
 
 extern "C" void fn_80096850(int index, FieldPoint_t *pOut, int *pFlag);
 
-extern "C" void fn_80096954(void *pData);
+extern "C" void AnimPlaybackSysInit(void *pData);
 
 extern "C" void fn_80096A24(void);
 
@@ -5955,7 +5960,7 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
 
 extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, Object_80039F5C *, unsigned int), unsigned int count);
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id);
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
 extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
@@ -7187,7 +7192,7 @@ extern "C" int fn_800B5448(void *p, void *pBuffer);
 
 extern "C" int fn_800B54C0(void *p);
 
-extern "C" int fn_800B54D4(Object_80039F5C *p, int mode);
+extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode);
 
 extern "C" int fn_800B56C4(Object_80039F5C *p, Input_800B6D34 *pInput, int a);
 
@@ -7647,7 +7652,7 @@ extern "C" void fn_800C3678(void);
 
 extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int index, Command_800CEE74 *pRecord, Vector_80039F5C *pPoint, int angle);
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key);
 
 extern "C" void fn_800C39E0(Object_80039F5C *p, int a, int index, int value, int flag);
 
@@ -7731,7 +7736,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance);
 
 extern "C" void fn_800C5B20(Object_80039F5C *p, int value);
 
-extern "C" int fn_800C5BF0(Object_80039F5C *p, int value);
+extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value);
 
 extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther);
 
@@ -7995,7 +8000,7 @@ extern "C" void fn_800CDE50(Group_800CC98C *p, Play_800CCEBC *pPlay, unsigned in
 
 extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800CE608 *pA, Record_800CE608 *pB, int index);
 
-extern "C" void fn_800CE218(Group_800CC98C *p);
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p);
 
 extern "C" int fn_800CE2B8(Query_800CE770 *p);
 
@@ -8114,14 +8119,14 @@ extern "C" void fn_8008E978(Object_80039F5C *p)
 extern "C" void fn_8008E9B0(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
-    PlyrMoveCmd_t *current=&p->mUnknown512;
     PlyrMoveCmd_t *next=&p->mUnknown528;
+    PlyrMoveCmd_t *current=&p->mUnknown512;
     int difference=MathAngleDiff(current->mUnknown4,current->mUnknown8);
     if(difference<=0x2E38E2 || current->mUnknown0==0.0f) {
         key=74; next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     } else if(difference<=0x56C16B && !(p->mUnknown492>gPlyrMoveSideSpeed)) {
         key=160;
         float speed=gPlyrMoveSideSpeed*0.18f/gPlyrMoveSideSpeed;
@@ -8136,7 +8141,7 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown14=1;
         next->mUnknown4=current->mUnknown4;
         next->mUnknown8=current->mUnknown8;
-        next->mUnknown0=current->mUnknown0;
+        p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     }
     if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)
         fn_801BE068(p->mpUnknown792,p->mpUnknown796,p->mpUnknown800,key,1.0f,p);
@@ -8285,11 +8290,11 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
     case 0xC011:fn_800ADD04(0);result=1;break;
     case 0xC012:AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();AnimSeqGetOpcodeParameter();result=1;break;
     case 0xC003:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B8))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B8))
             p->mFlags|=0x1000;
         result=1;break;
     case 0xC018:
-        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(fn_8009C630(p,key)<=lbl_803EA8B4))
+        if(p->mIdBytes[3]==1 && (key==69 || key==178) && !(PlayerAnimSlotFindValue(p,key)<=lbl_803EA8B4))
             p->mFlags|=0x2000;
         result=1;break;
     case 0xC01F:case 0xC023:case 0xD004:AnimSeqGetOpcodeParameter();result=1;break;
@@ -8565,7 +8570,7 @@ extern "C" void fn_8009036C(int *p)
     fn_80094454(*p);
 }
 
-extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
+extern "C" int AnimSeqDynSlotAcquire(Params_80092E54 *pRequest, int *pSlot)
 {
     Actor_801C009C *pActor = fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
     int load = 1;
@@ -8577,12 +8582,13 @@ extern "C" int fn_80090390(Params_80092E54 *pRequest, int *pSlot)
             if (lbl_8030C164[i].mUnknown8 == pRequest->mUnknown0) {
                 load = 0;
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             } else {
                 load = 0;
                 AnimFileCopyBigFileInfo(pActor, fn_80093BAC(lbl_8030C164[i].mUnknown8, lbl_8030C164[i].mUnknownC));
                 lbl_8030C164[i].mUnknown4++;
+                pRequest->mUnknownD8.mWord = i;
             }
-            pRequest->mUnknownD8.mWord = i;
             break;
         }
     }
@@ -9793,7 +9799,7 @@ extern "C" int fn_80092E54(Params_80092E54 *pParams, void *pBuffer, int size)
         if (pBuffer != 0) {
             started = fn_800904D4(pParams, pBuffer, size);
         } else {
-            started = fn_80090390(pParams, &slot);
+            started = AnimSeqDynSlotAcquire(pParams, &slot);
         }
         if (started) {
             *(Params_80092E54 *)&lbl_803EC924->mUnknown80.mCharacters[slot] = *pParams;
@@ -9837,7 +9843,7 @@ extern "C" int fn_8009313C(Params_80092E54 *pRequest)
 
     if (slot != invalid) {
         fn_80093BAC(pRequest->mUnknown0, pRequest->mUnknown4);
-        if (fn_80096074(pRequest, 0) && fn_80090390(pRequest, &slot)) {
+        if (fn_80096074(pRequest, 0) && AnimSeqDynSlotAcquire(pRequest, &slot)) {
             unsigned char found;
 
             fn_80093C70(pRequest, 0x42414C4C /* 'BALL' */, 0, &found);
@@ -11654,7 +11660,7 @@ extern "C" void fn_80096850(int index, FieldPoint_t *pOut, int *pFlag)
     *pFlag = 0;
 }
 
-extern "C" void fn_80096954(void *pData)
+extern "C" void AnimPlaybackSysInit(void *pData)
 {
     unsigned int i;
 
@@ -11663,9 +11669,13 @@ extern "C" void fn_80096954(void *pData)
     AnimSeqncrRelocateSeqFile((struct AnimSeqncrFile_t *)lbl_803EA920->mpUnknown0[0]);
     lbl_803EA920->mpUnknown8 = pData;
     for (i = 0; i < 2; i++) {
+        Playback_80096DA8 *pEntry;
+
         memset(&lbl_803EA920->mUnknown10[i], 0, sizeof(Playback_80096DA8));
-        lbl_803EA920->mUnknown10[i].mUnknown2A = 0xFFFF;
-        lbl_803EA920->mUnknown10[i].mUnknown28 = 0xFFFF;
+        // FAKEMATCH: &mUnknown10[i] spelled as integer arithmetic (offset + block, then +0x10) for the target's address order
+        pEntry = (Playback_80096DA8 *)(i * sizeof(Playback_80096DA8) + (unsigned int)lbl_803EA920 + 0x10);
+        pEntry->mUnknown28 = 0xFFFF;
+        pEntry->mUnknown2A = 0xFFFF;
         lbl_803EA920->mUnknown10[i].mUnknown0 = -1;
         lbl_8030C2A8[i].mUnknown0 = 0;
         lbl_8030C2A8[i].mUnknown4 = 0;
@@ -14189,12 +14199,15 @@ extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short,
     }
 }
 
-extern "C" float fn_8009C630(Object_80039F5C *p, int id)
+extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id)
 {
     float result = 0.0f;
     for (unsigned int i = 0; i <= 3; i++) {
-        if (((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown4 == id) {
-            result = ((Animation_8009C630 *)p->mpUnknown792)[i].mUnknown80;
+        Animation_8009C630 *pRec = &((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i];
+
+        if (pRec->mUnknown4 == id) {
+            // FAKEMATCH: the float is re-indexed instead of read through pRec, for the target's addi/lfsx order
+            result = ((AnimSlots_8009C630 *)p->mpUnknown792)->mEntries[i].mUnknown80;
             break;
         }
     }
@@ -25904,7 +25917,7 @@ extern "C" int fn_800B54C0(void *p)
     return lbl_803EAB60->mCount * sizeof(Entry_800B5224) + sizeof(Block_800B62D8);
 }
 
-extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
+extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
     Object_80039F5C *pNearest;
@@ -25927,7 +25940,8 @@ extern "C" int fn_800B54D4(Object_80039F5C *p, int mode)
         Vec2Sub(&delta, &pNearest->mMotion, pMotion);
         angle = MathArcTan2(delta.mY, delta.mX);
         turn = MathAngleDiff(angle, pMotion->mFacing);
-        MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing);
+        // FAKEMATCH: unused comparison on the kept second MathAngleDiff call; it makes cse build 0x1FFFFF early as the target does
+        int facingCarrier = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pNearest->mMotion.mFacing) <= 0x1FFFFF;
         if (!(distance > 3.0f) && turn <= 0x1FFFFF && !(pNearest->mFlags & 0x800) && CarrierMoveStart(p, mode) != 0) {
             return 1;
         }
@@ -26815,7 +26829,7 @@ extern "C" int fn_800B76E8(Object_80039F5C *p)
         if (fn_800B56C4(p, &input, mode) == 0) {
             return 0;
         }
-        if ((input.mUnknown92 & 1) && fn_800B54D4(p, mode) != 0) {
+        if ((input.mUnknown92 & 1) && CarrierTryMoveOrDive(p, mode) != 0) {
             p->mFlags |= 0x4000;
             return 0;
         }
@@ -32388,7 +32402,7 @@ extern "C" int fn_800C36A8(Object_80039F5C *p, int skip, unsigned short key, int
     return result;
 }
 
-extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
+extern "C" void PlayerActionAnimStartStateAlign(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
 {
     Entry_800DE51C *pRecord = 0;
     Table_80089904 *pTable = fn_801BE72C(p->mpUnknown796->mUnknown2, fn_801BE648(p->mpUnknown792));
@@ -32398,7 +32412,8 @@ extern "C" void fn_800C38C4(Object_80039F5C *p, Block_800DE3B0 *pBlock, int key)
     for (i = 0; i < pTable->mCount; i++) {
         Table_800DE51C *pRecords = (Table_800DE51C *)AnimFileGetStateData(fn_801BE648(p->mpUnknown792), p->mpUnknown796->mUnknown2);
 
-        if (pRecords->mEntries[i].mUnknown2 == 1 && pRecords->mEntries[i].mUnknown0 == (key & ~0x8000)) {
+        // FAKEMATCH: one row spelled as mEntries[i] and (mEntries + i) in one condition for the target's shared row pointer
+        if (pRecords->mEntries[i].mUnknown2 == 1 && (pRecords->mEntries + i)->mUnknown0 == (key & ~0x8000)) {
             pRecord = &pRecords->mEntries[i];
             break;
         }
@@ -32442,7 +32457,7 @@ extern "C" int fn_800C3A4C(Table_80089904 *pTable, unsigned short key, void *pA,
                                          index & 0x7FFF, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         p->mFlags |= 0x200;
-        fn_800C38C4(p, pBlock, index);
+        PlayerActionAnimStartStateAlign(p, pBlock, index);
         if (pBlock->mUnknown1F) {
             AnimChannel_t *pEntry = &pEntries[pBlock->mUnknown1D];
 
@@ -33246,7 +33261,7 @@ extern "C" void fn_800C561C(Object_80039F5C *p, int value)
         p->mFlags &= ~0x80000;
         fn_800C8688(p, pOther, 0, 0);
     }
-    if (pOther != 0 && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && PlyrContactIsKnockable(pOther, value)) {
         PlyrContactSendCarrierHit(pOther);
     }
 }
@@ -33268,7 +33283,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
     Record_800B15FC *pRecord;
     int ok;
 
-    if (pOther != 0 && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && PlyrContactIsKnockable(pOther, value)) {
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         canStrip = 0;
         canKnock = 0;
@@ -33327,7 +33342,7 @@ extern "C" void fn_800C56C0(Object_80039F5C *p, int value, int chance)
                 StyleTrackerOnBrokenTackle(p);
                 fn_800A8954(13, p->mIdBytes[2], p);
             }
-            if (knockChance > 0 && knockChance > roll && canKnock && !stripped && fn_800C5BF0(pOther, value)) {
+            if (knockChance > 0 && knockChance > roll && canKnock && !stripped && PlyrContactIsKnockable(pOther, value)) {
                 if (!contactApplied) {
                     fn_800C51DC(p, pOther);
                     contactApplied = 1;
@@ -33366,12 +33381,27 @@ extern "C" void fn_800C5B20(Object_80039F5C *p, int value)
         pRecord->mUnknown16 = 0;
         fn_800B1508();
     }
-    if (pOther != 0 && SyncRandGetRange(0, 255) > pOther->mRatings[0] && fn_800C5BF0(pOther, value)) {
+    if (pOther != 0 && SyncRandGetRange(0, 255) > pOther->mRatings[0] && PlyrContactIsKnockable(pOther, value)) {
         fn_80111354(pOther);
     }
 }
 
-extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
+static inline int _ContactNotFlag800(Object_80039F5C *p)
+{
+    return !(p->mFlags & 0x800);
+}
+
+static inline int _ContactStateNot14(Object_80039F5C *p)
+{
+    return p->mUnknown344Word != 14;
+}
+
+static inline int _ContactPlayKindNot8(void)
+{
+    return fn_8011F518()->mUnknown4 != 8;
+}
+
+extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
 {
     State_80039F5C *pState = p->mpState;
     int result = 1;
@@ -33437,18 +33467,18 @@ extern "C" int fn_800C5BF0(Object_80039F5C *p, int value)
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = p->mUnknown344Word != 14;
+                result = _ContactStateNot14(p);
             }
             break;
         case 25:
             if (value == 7 || value == 24) {
                 result = 0;
             } else {
-                result = fn_8011F518()->mUnknown4 != 8;
+                result = _ContactPlayKindNot8();
             }
             break;
         default:
-            result = !(p->mFlags & 0x800);
+            result = _ContactNotFlag800(p);
             break;
         }
     }
@@ -33555,7 +33585,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
             pTarget = pOther;
         }
         if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
-            && pTarget != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pTarget, p)) {
+            && pTarget != 0 && PlyrContactIsKnockable(p, value) && fn_800C5DE4(pTarget, p)) {
             if (fn_800C769C(pTarget, p)) {
                 return pTarget->mUnknown1221;
             }
@@ -33642,7 +33672,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
     if (pSource != 0 && pOther == 0) {
         pOther = fn_8009BCE8(&pSource->mUnknown40);
     }
-    if (pOther != 0 && fn_800C5BF0(p, value) && fn_800C5DE4(pOther, p)) {
+    if (pOther != 0 && PlyrContactIsKnockable(p, value) && fn_800C5DE4(pOther, p)) {
         if (PlayerMoveGetKind(p) || (pOther != 0 && PlayerActionDiveIsActive(pOther))) {
             return 0;
         }
@@ -33693,7 +33723,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
         }
         break;
     }
-    if (!fn_800C5DE4(p, pOther) || !fn_800C5BF0(pOther, pOther->mUnknown2914)) {
+    if (!fn_800C5DE4(p, pOther) || !PlyrContactIsKnockable(pOther, pOther->mUnknown2914)) {
         return 0;
     }
     fn_8011E188();
@@ -33744,19 +33774,27 @@ extern "C" int fn_800C68BC(Object_800C6640 *pSource, int value)
             return 0;
         case 6:
         case 8:
-            if (pOwner == 0) {
-                return 1;
+            {
+                int result = 1;
+
+                if (pOwner != 0 && (pOwner->mFlags & 0x800)) {
+                    result = 0;
+                }
+                return result;
             }
-            return !(pOwner->mFlags & 0x800);
         }
         break;
-    case 0:
+    case 0: {
+        int result = 1;
+
         switch (pSource->mUnknown54) {
         case 9:
         case 10:
-            return 0;
+            result = 0;
+            break;
         }
-        break;
+        return result;
+    }
     }
     return 1;
 }
@@ -37116,20 +37154,20 @@ extern "C" void fn_800CE158(Group_800CC98C *p, Play_800CCEBC *pPlay, Record_800C
     pA->mUnknown14 = 0;
 }
 
-extern "C" void fn_800CE218(Group_800CC98C *p)
+extern "C" void PlyrContactSetGroupMirror(Group_800CC98C *p)
 {
     Block_800C8330 *pBlock = &p->mpUnknown0->mUnknown1160Wide;
+    Block_800C8330 *pOther;
+    Object_80039F5C *pB;
     unsigned char i;
 
     if (p->mUnknown60 != 0) {
         pBlock->mUnknown56[0] = 1;
         pBlock->mBlock.mUnknown55[0] = p->mUnknown57;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 1;
                 pOther->mBlock.mUnknown55[0] = p->mUnknown57;
             }
@@ -37137,11 +37175,9 @@ extern "C" void fn_800CE218(Group_800CC98C *p)
     } else {
         pBlock->mUnknown56[0] = 0;
         for (i = 0; i <= 6; i++) {
-            Object_80039F5C *pB = p->mpUnknown4Entries[i];
-
+            pB = p->mpUnknown4Entries[i];
             if (pB != 0) {
-                Block_800C8330 *pOther = &pB->mUnknown1160Wide;
-
+                pOther = &pB->mUnknown1160Wide;
                 pOther->mUnknown56[0] = 0;
             }
         }
@@ -37169,7 +37205,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
         Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
         if (pFound != 0) {
             result = 1;
-            fn_800CE218(p);
+            PlyrContactSetGroupMirror(p);
             fn_800CDD98(p, pFound, index);
         }
     }
@@ -37179,7 +37215,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
             Play_800CCEBC *pFound = fn_800CD8BC(p, &play, &index);
             if (pFound != 0) {
                 result = 1;
-                fn_800CE218(p);
+                PlyrContactSetGroupMirror(p);
                 fn_800CDD98(p, pFound, index);
             }
         }

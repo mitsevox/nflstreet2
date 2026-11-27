@@ -11979,7 +11979,7 @@
           "end": "0x80090390"
         },
         {
-          "symbol": "fn_80090390",
+          "symbol": "AnimSeqDynSlotAcquire",
           "start": "0x80090390",
           "end": "0x800904D4"
         },
@@ -12589,7 +12589,7 @@
           "end": "0x80096954"
         },
         {
-          "symbol": "fn_80096954",
+          "symbol": "AnimPlaybackSysInit",
           "start": "0x80096954",
           "end": "0x80096A24"
         },
@@ -13164,7 +13164,7 @@
           "end": "0x8009C630"
         },
         {
-          "symbol": "fn_8009C630",
+          "symbol": "PlayerAnimSlotFindValue",
           "start": "0x8009C630",
           "end": "0x8009C684"
         },
@@ -16404,7 +16404,7 @@
           "end": "0x800B54D4"
         },
         {
-          "symbol": "fn_800B54D4",
+          "symbol": "CarrierTryMoveOrDive",
           "start": "0x800B54D4",
           "end": "0x800B56C4"
         },
@@ -17779,7 +17779,7 @@
           "end": "0x800C38C4"
         },
         {
-          "symbol": "fn_800C38C4",
+          "symbol": "PlayerActionAnimStartStateAlign",
           "start": "0x800C38C4",
           "end": "0x800C39E0"
         },
@@ -17989,7 +17989,7 @@
           "end": "0x800C5BF0"
         },
         {
-          "symbol": "fn_800C5BF0",
+          "symbol": "PlyrContactIsKnockable",
           "start": "0x800C5BF0",
           "end": "0x800C5DE4"
         },
@@ -18649,7 +18649,7 @@
           "end": "0x800CE218"
         },
         {
-          "symbol": "fn_800CE218",
+          "symbol": "PlyrContactSetGroupMirror",
           "start": "0x800CE218",
           "end": "0x800CE2B8"
         },

@@ -86,7 +86,7 @@ struct Slot_8009418C {
     int mUnknownC;
 };
 
-/* One of the two 48-byte records at +16 of the block fn_80096954
+/* One of the two 48-byte records at +16 of the block AnimPlaybackSysInit
    allocates. */
 struct Playback_80096DA8 {
     int mUnknown0,mUnknown4; union { int mWord; unsigned short mParts[2]; } mUnknown8; unsigned int mUnknownC;

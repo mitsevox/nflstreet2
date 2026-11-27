@@ -13502,12 +13502,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80090244",
-          "end": "0x80090390"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800904D4",
           "end": "0x80090558"
         },
         {
@@ -13532,12 +13526,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80095FD8",
-          "end": "0x80096954"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80096A24",
           "end": "0x800975EC"
         },
         {
@@ -13568,12 +13556,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8009C328",
-          "end": "0x8009C630"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8009C684",
           "end": "0x8009C7B4"
         },
         {
@@ -13664,12 +13646,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800B4D7C",
-          "end": "0x800B54D4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800B56C4",
           "end": "0x800B6868"
         },
         {
@@ -13754,19 +13730,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800C3610",
-          "end": "0x800C38C4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800C39E0",
           "end": "0x800C3BEC"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800C4184",
-          "end": "0x800C5BF0"
+          "end": "0x800C5DE4"
         },
         {
           "section": ".text",
@@ -13796,12 +13766,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800CE158",
-          "end": "0x800CE218"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800CE2B8",
           "end": "0x800CF84C"
         },
         {
@@ -13858,10 +13822,6 @@
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
           },
           {
-            "function": "fn_80090390",
-            "evidence": "evidence.tsv source-form 0x80090390-0x800904D4"
-          },
-          {
             "function": "fn_80090558",
             "evidence": "evidence.tsv source-form 0x80090558-0x80090BDC"
           },
@@ -13876,10 +13836,6 @@
           {
             "function": "fn_800955D8",
             "evidence": "evidence.tsv source-form 0x800955D8-0x80095FD8"
-          },
-          {
-            "function": "fn_80096954",
-            "evidence": "evidence.tsv source-form 0x80096954-0x80096A24"
           },
           {
             "function": "fn_800975EC",
@@ -13912,10 +13868,6 @@
           {
             "function": "fn_8009C220",
             "evidence": "evidence.tsv source-form 0x8009C220-0x8009C328"
-          },
-          {
-            "function": "fn_8009C630",
-            "evidence": "evidence.tsv source-form 0x8009C630-0x8009C684"
           },
           {
             "function": "fn_8009C7B4",
@@ -13976,10 +13928,6 @@
           {
             "function": "fn_800B4A88",
             "evidence": "evidence.tsv source-form 0x800B4A88-0x800B4D7C"
-          },
-          {
-            "function": "fn_800B54D4",
-            "evidence": "evidence.tsv source-form 0x800B54D4-0x800B56C4"
           },
           {
             "function": "fn_800B6868",
@@ -14046,16 +13994,8 @@
             "evidence": "evidence.tsv source-form 0x800C34B0-0x800C3610"
           },
           {
-            "function": "fn_800C38C4",
-            "evidence": "evidence.tsv source-form 0x800C38C4-0x800C39E0"
-          },
-          {
             "function": "fn_800C3BEC",
             "evidence": "evidence.tsv source-form 0x800C3BEC-0x800C4184"
-          },
-          {
-            "function": "fn_800C5BF0",
-            "evidence": "evidence.tsv source-form 0x800C5BF0-0x800C5DE4"
           },
           {
             "function": "fn_800C5DE4",
@@ -14076,13 +14016,9 @@
           {
             "function": "fn_800CDE50",
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
-          },
-          {
-            "function": "fn_800CE218",
-            "evidence": "evidence.tsv source-form 0x800CE218-0x800CE2B8"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 58 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 51 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [

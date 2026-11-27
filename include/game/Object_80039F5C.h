@@ -358,7 +358,7 @@ struct Object_80039F5C {
         /* State 17 keeps a packed player reference at +336 and a flag at +351
            (fn_800CDE50). */
         Link_800CDE50 mUnknown336Link;
-        /* Per-state scratch: state 26 reads +344 as a word (fn_800C5BF0);
+        /* Per-state scratch: state 26 reads +344 as a word (PlyrContactIsKnockable);
            state 58 keeps a player reference at +352 (fn_800C7D44). */
         struct {
             char mUnknown336Words[8];

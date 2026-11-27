@@ -63,7 +63,7 @@ void fn_8008FD88(int a);
 void fn_8008FDC0(void);
 void fn_80094E80(void);
 void fn_80094FE8(void);
-void fn_80096954(void *p);
+void AnimPlaybackSysInit(void *p);
 void fn_80096A24(void);
 void fn_80099630(void);
 void fn_800996D4(void);
@@ -412,7 +412,7 @@ const char *CamScript::GetName() { return "CamScript"; }
 
 int CamScript::Init()
 {
-    fn_80096954(gAnimData.GetArchive());
+    AnimPlaybackSysInit(gAnimData.GetArchive());
     return 1;
 }
 
