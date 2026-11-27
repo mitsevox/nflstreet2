@@ -130,7 +130,7 @@ void UIGRenderSetLast(int a);
 void UIGRenderReset(void);
 void UIGRenderTransformNodeAction(void);
 void UIGLibTextObjAction(void);
-void fn_80225654(void);
+void UIGArcObjAction(void);
 void LLLightAttachViewport(Viewport_t *pObject);
 void LLLightDetachViewport(Viewport_t *pObject);
 int LLFogEnable(int a);
@@ -196,7 +196,7 @@ void UISGameSetCallbacks(void *p)
     UISRegisterPluginFnc(p, 1, UISSoundObjAction);
     UISRegisterPluginFnc(p, 2, (void (*)(void))UIGCurveObjAction);
     UISRegisterPluginFnc(p, 3, UISViewObjAction);
-    UISRegisterPluginFnc(p, 4, fn_80225654);
+    UISRegisterPluginFnc(p, 4, UIGArcObjAction);
     UISRegisterPluginFnc(p, 5, UISTextTableAction);
     UISRegisterPluginFnc(p, 6, UISModelObjAction);
     UISRegisterPluginFnc(p, 7, UISGameObjSlot7);

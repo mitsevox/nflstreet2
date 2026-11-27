@@ -51,7 +51,7 @@ typedef struct UIGNode_t {
         } v;
         struct {
             Uint16 unk_10;         /* 0x10 */
-            Uint8 unk_12[0x02];
+            Uint16 unk_12;         /* 0x12 */
             Uint8 unk_14[4];       /* 0x14 */
             Uint8 unk_18[4];       /* 0x18 */
             Float32 unk_1C[2];     /* 0x1C */

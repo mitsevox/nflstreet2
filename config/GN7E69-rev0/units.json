@@ -28877,6 +28877,56 @@
       ]
     },
     {
+      "source": "src/engine/uigarc.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022479C",
+          "end": "0x8022482C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802254F8",
+          "end": "0x80225CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2008",
+          "end": "0x802B2050"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FE0",
+          "end": "0x802FA020"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF70",
+          "end": "0x803EBF78"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_UIGArcBuildFan",
+            "evidence": "evidence.tsv source-form 0x80223FF4-0x8022479C"
+          },
+          {
+            "function": "_UIGArcBuildStrip",
+            "evidence": "evidence.tsv source-form 0x8022482C-0x802254F8"
+          }
+        ],
+        "evidence": "e2e merge notes (swarm e2 tracking, PR #1471): src/engine/uigarc.c holds out fn_80223FF4 and fn_8022482C."
+      }
+    },
+    {
       "source": "src/engine/dbuslp.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022C9A8-0x8022D6E8 (src/engine/dbuslp.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",

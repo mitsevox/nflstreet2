@@ -255,6 +255,60 @@ char *fn_8021CA8C(Uint32 Value, char *pDst, char *pEnd, char Pad, Int32 Width, I
     return pDst;
 }
 
+char *fn_8021CB68(char *pDst, char *pEnd, Int32 Width, Int32 Precision, Float32 Value)
+{
+    char Buffer[64];
+    Int32 Length;
+    Int32 bNegative;
+    Int32 Count;
+    Int32 Digit;
+    Float32 Round;
+    Float32 Fraction;
+    Float32 Tenth;
+
+    Length = 0;
+    if (Precision < 0) {
+        Precision = 6;
+    }
+    bNegative = Value < 0.0f;
+    if (bNegative) {
+        Value = -Value;
+    }
+    Round = 0.5f;
+    for (Count = 0; Count < Precision; Count++) {
+        Round *= 0.1f;
+    }
+    Value += Round;
+    Fraction = Value - (Int32)Value;
+    do {
+        Tenth = Value * 0.1f;
+        Buffer[Length++] = (Int32)(Value - (Int32)Tenth * 10) + '0';
+        Value = Tenth;
+    } while (Value >= 1.0f);
+    if (bNegative) {
+        Buffer[Length++] = '-';
+    }
+    if (Width != 0) {
+        Count = (Precision != 0 ? Width - 1 : Width) - (Precision + Length);
+        for (; Count > 0; Count--) {
+            Buffer[Length++] = ' ';
+        }
+    }
+    for (Length--; Length >= 0 && pDst < pEnd; Length--) {
+        *pDst++ = Buffer[Length];
+    }
+    if (Precision != 0 && pDst < pEnd) {
+        *pDst++ = '.';
+        do {
+            Fraction *= 10.0f;
+            Digit = (Int32)Fraction;
+            *pDst++ = Digit + '0';
+            Fraction -= Digit;
+        } while (--Precision != 0 && pDst < pEnd);
+    }
+    return pDst;
+}
+
 /* Writes Value in hexadecimal; Case selects the letter case of the digits. */
 char *fn_8021CDAC(Uint32 Value, char *pDst, char *pEnd, Int32 Width, char Pad, Int32 Case)
 {
@@ -313,6 +367,101 @@ char *fn_8021CE48(const char *pString, char *pDst, char *pEnd, Int32 Width, Int3
         }
     }
     return pDst;
+}
+
+Int32 fn_8021CF38(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs)
+{
+    char *pOut;
+    char *pStart;
+    char *pEnd;
+    char *pString;
+    Int32 bLeft;
+    Int32 bUnsigned;
+    Int32 Width;
+    Int32 Precision;
+    Int32 Case;
+    char Pad;
+    char c;
+
+    pOut = pDst;
+    pStart = pOut;
+    bLeft = 0;
+    pEnd = pStart + Size;
+    if (pStart == NULL || Size == 0 || pFormat == NULL) {
+        return -1;
+    }
+    while ((c = *pFormat++) != 0 && pOut < pEnd) {
+        if (c == '%') {
+            bUnsigned = 0;
+            Width = 0;
+            Precision = -1;
+            Pad = ' ';
+            c = *pFormat++;
+            if (c == '-') {
+                bLeft = 1;
+                c = *pFormat++;
+            }
+            if (c == '0') {
+                Pad = '0';
+                c = *pFormat++;
+            }
+            while (c >= '0' && c <= '9') {
+                Width = Width * 10 + c - '0';
+                c = *pFormat++;
+            }
+            if (c == '.') {
+                c = *pFormat++;
+            }
+            if (c >= '0' && c <= '9') {
+                Precision = c - '0';
+                c = *pFormat++;
+                while (c >= '0' && c <= '9') {
+                    Precision = Precision * 10 + c - '0';
+                    c = *pFormat++;
+                }
+            }
+            Case = 0;
+            if (c >= 'A' && c <= 'Z') {
+                Case = -32;
+            }
+            switch (c) {
+            case 'c':
+                *pOut++ = *pArgs++;
+                break;
+            case 's':
+                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
+                if (pString != NULL) {
+                    pOut = fn_8021CE48(pString, pOut, pEnd, Width, Precision, bLeft);
+                } else {
+                    pOut = fn_8021CE48("(null)", pOut, pEnd, Width, Precision, bLeft);
+                }
+                break;
+            case 'u':
+                bUnsigned = 1;
+            case 'd':
+            case 'i':
+                pOut = fn_8021CA8C(*pArgs++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
+                break;
+            case 'f':
+                pOut = fn_8021CB68(pOut, pEnd, Width, Precision, *(Float32 *)pArgs++);
+                break;
+            case 'X':
+            case 'p':
+            case 'x':
+                pOut = fn_8021CDAC(*pArgs++, pOut, pEnd, Width, Pad, Case);
+                break;
+            default:
+                if (c != 0) {
+                    *pOut++ = c;
+                }
+                break;
+            }
+        } else {
+            *pOut++ = c;
+        }
+    }
+    *pOut = 0;
+    return pOut - pStart;
 }
 
 void fn_8021D1FC(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs)

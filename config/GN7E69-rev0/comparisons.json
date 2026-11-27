@@ -24592,6 +24592,12 @@
           "placement": ".text",
           "start": "0x8021A438",
           "end": "0x8021DE9C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E88",
+          "end": "0x802B1EB0"
         }
       ],
       "functions": [
@@ -24656,6 +24662,11 @@
           "end": "0x8021CB68"
         },
         {
+          "symbol": "fn_8021CB68",
+          "start": "0x8021CB68",
+          "end": "0x8021CDAC"
+        },
+        {
           "symbol": "fn_8021CDAC",
           "start": "0x8021CDAC",
           "end": "0x8021CE48"
@@ -24664,6 +24675,11 @@
           "symbol": "fn_8021CE48",
           "start": "0x8021CE48",
           "end": "0x8021CF38"
+        },
+        {
+          "symbol": "fn_8021CF38",
+          "start": "0x8021CF38",
+          "end": "0x8021D1FC"
         },
         {
           "symbol": "fn_8021D1FC",
@@ -29868,65 +29884,93 @@
       ]
     },
     {
-      "source": "src/engine/cu_80223FF4.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/cu_80223FF4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80223FF4 and 0x8022482C, the users of the .rodata 0x802B2008-0x802B204C, have no body here.",
+      "source": "src/engine/uigarc.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler row (engine_c_fastmath, the base profile of the linked engine_c_fastmath_holdouts unit), function, name and data rows. Partials: the two vertex builders 0x80223FF4 (95.01%) and 0x8022482C (88.18%), the documented holdouts (HOLDOUT source-form rows); their ranges keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80223FF4",
           "end": "0x80225CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2008",
+          "end": "0x802B2050"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FE0",
+          "end": "0x802FA020"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF70",
+          "end": "0x803EBF78"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8022479C",
+          "symbol": "_UIGArcBuildFan",
+          "start": "0x80223FF4",
+          "end": "0x8022479C"
+        },
+        {
+          "symbol": "_UIGArcLoad",
           "start": "0x8022479C",
           "end": "0x8022480C"
         },
         {
-          "symbol": "fn_8022480C",
+          "symbol": "_UIGArcUnload",
           "start": "0x8022480C",
           "end": "0x8022482C"
         },
         {
-          "symbol": "fn_802254F8",
+          "symbol": "_UIGArcBuildStrip",
+          "start": "0x8022482C",
+          "end": "0x802254F8"
+        },
+        {
+          "symbol": "_UIGArcDraw",
           "start": "0x802254F8",
           "end": "0x80225654"
         },
         {
-          "symbol": "fn_80225654",
+          "symbol": "UIGArcObjAction",
           "start": "0x80225654",
           "end": "0x802258F8"
         },
         {
-          "symbol": "fn_802258F8",
+          "symbol": "_UIGArcUnrelocate",
           "start": "0x802258F8",
           "end": "0x80225928"
         },
         {
-          "symbol": "fn_80225928",
+          "symbol": "_UIGArcRelocate",
           "start": "0x80225928",
           "end": "0x80225958"
         },
         {
-          "symbol": "fn_80225958",
+          "symbol": "_UIGArcRender",
           "start": "0x80225958",
           "end": "0x80225AAC"
         },
         {
-          "symbol": "fn_80225AAC",
+          "symbol": "_UIGArcSetClamp",
           "start": "0x80225AAC",
           "end": "0x80225AE4"
         },
         {
-          "symbol": "fn_80225AE4",
+          "symbol": "_UIGArcSetMaterialColors",
           "start": "0x80225AE4",
           "end": "0x80225B50"
         },
         {
-          "symbol": "fn_80225B50",
+          "symbol": "_UIGArcSetupRender",
           "start": "0x80225B50",
           "end": "0x80225CBC"
         }
