@@ -923,14 +923,6 @@
       "address": "0x80307470",
       "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
     },
-    "__11PhysicsTime": {
-      "address": "0x801E8C78",
-      "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
-    },
-    "fn_801E8D14__11PhysicsTimef": {
-      "address": "0x801E8D14",
-      "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
-    },
     "_ctors": {
       "address": "0x802CC668",
       "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
@@ -1098,10 +1090,6 @@
     "ScaleBlockReset": {
       "address": "0x802349CC",
       "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "fn_801E8CA0__11PhysicsTimef": {
-      "address": "0x801E8CA0",
-      "evidence": "Target member stores the f1 time as whole ticks u32+0 (fctiwz) and the remaining fraction f32+4; called by 0x800504EC on the time object 0x803084B8; inferred member contract."
     },
     "FEPlyrPoseTransitionCallback": {
       "address": "0x80089E70",
@@ -17973,6 +17961,45 @@
           "end": "0x802B15F8"
         }
       ]
+    },
+    {
+      "source": "src/engine/phystime.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E8C78-0x801E8E04 (src/engine/phystime.cpp) and data row 0x802B15F8-0x802B1660.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8C78",
+          "end": "0x801E8E04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B15F8",
+          "end": "0x802B1660"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "__11PhysicsTime",
+          "SetSeconds__11PhysicsTimef",
+          "AddSeconds__11PhysicsTimef",
+          "PhysTimeElapsed__FPC11PhysicsTimeT0"
+        ],
+        "discarded": [
+          "__11PhysicsTimef",
+          "GetWholeSeconds__C11PhysicsTime"
+        ],
+        "evidence": "evidence.tsv linker row phystime.cpp discarded functions and global folds."
+      },
+      "folded": {
+        "symbols": {
+          "_._11PhysicsTime": "0x80051D60",
+          "_vt.11PhysicsTime": "0x8028DD58"
+        },
+        "evidence": "evidence.tsv linker row phystime.cpp discarded functions and global folds."
+      }
     },
     {
       "source": "src/engine/polynomial.c",
