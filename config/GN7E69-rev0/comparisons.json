@@ -951,7 +951,7 @@
           "end": "0x8003549C"
         },
         {
-          "symbol": "fn_8003549C__8PlayBooki",
+          "symbol": "OpenTeamPlayBooks__8PlayBooki",
           "start": "0x8003549C",
           "end": "0x8003556C"
         },
@@ -981,7 +981,7 @@
           "end": "0x800355FC"
         },
         {
-          "symbol": "fn_800355FC__8PlayBook",
+          "symbol": "ReopenTeamPlayBooks__8PlayBook",
           "start": "0x800355FC",
           "end": "0x80035620"
         },
@@ -1436,7 +1436,7 @@
           "end": "0x80035DA0"
         },
         {
-          "symbol": "fn_80035DA0__FPUcT0",
+          "symbol": "_TurboGetTeamSizes__FPUcT0",
           "start": "0x80035DA0",
           "end": "0x80035E68"
         },
@@ -1466,7 +1466,7 @@
           "end": "0x80035EE0"
         },
         {
-          "symbol": "fn_80035EE0__5Turbo",
+          "symbol": "ResetMeters__5Turbo",
           "start": "0x80035EE0",
           "end": "0x80035F14"
         },

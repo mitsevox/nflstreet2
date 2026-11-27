@@ -909,7 +909,7 @@ int PlayTrack::Shutdown()
     return 1;
 }
 
-void PlayBook::fn_8003549C(int flag)
+void PlayBook::OpenTeamPlayBooks(int flag)
 {
     int a;
     int b;
@@ -946,7 +946,7 @@ int PlayBook::Init()
 {
     PlayBookAlloc();
     PlayBookClear();
-    fn_8003549C(1);
+    OpenTeamPlayBooks(1);
     PlayBookPostInit();
     PlayBookLoadAudibleTable();
     return 1;
@@ -958,9 +958,9 @@ int PlayBook::Shutdown()
     return 1;
 }
 
-void PlayBook::fn_800355FC()
+void PlayBook::ReopenTeamPlayBooks()
 {
-    fn_8003549C(0);
+    OpenTeamPlayBooks(0);
 }
 
 static ModuleDependency sPlyrDependencies[] = { &gGRender, &gAnimData, &gGameObjList, &gGameVpt, &gGameState, &gCld, &gEffects, &gLight, &gShadows, &gSimpShadow, &gParticles, &gAss, &gBlock, &gCatch, &gAudmon, &gBigObj, &gUIS, 0 };
@@ -1332,7 +1332,7 @@ int Trk::Shutdown()
     return 1;
 }
 
-static void fn_80035DA0(unsigned char *pA, unsigned char *pB)
+static void _TurboGetTeamSizes(unsigned char *pA, unsigned char *pB)
 {
     unsigned char a;
     unsigned char b;
@@ -1371,7 +1371,7 @@ int Turbo::Init()
     unsigned char a;
     unsigned char b;
 
-    fn_80035DA0(&a, &b);
+    _TurboGetTeamSizes(&a, &b);
     fn_800C9D6C(a, b);
     return 1;
 }
@@ -1382,12 +1382,12 @@ int Turbo::Shutdown()
     return 1;
 }
 
-void Turbo::fn_80035EE0()
+void Turbo::ResetMeters()
 {
     unsigned char a;
     unsigned char b;
 
-    fn_80035DA0(&a, &b);
+    _TurboGetTeamSizes(&a, &b);
     fn_800C9E4C(a, b);
 }
 
