@@ -22,7 +22,7 @@ int PlayerDbGetId(Object_8008044C *pObject);
 void SndgMusicPumpFrame(int a);
 int UserProfileGetSelected(unsigned char index);
 int toupper(int c);
-unsigned int fn_80229CFC(int category, int *pValues, int a);
+unsigned int DbYalpGetOverallRating(int category, int *pValues, int a);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
@@ -106,7 +106,7 @@ unsigned int fn_80081ECC(int category, int *pValues)
     values[7] = pValues[7];
     values[8] = pValues[8];
     values[9] = pValues[9];
-    return fn_80229CFC(category, values, 0);
+    return DbYalpGetOverallRating(category, values, 0);
 }
 
 void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a)

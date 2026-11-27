@@ -222,7 +222,7 @@ extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern DbUserEntry_t _DbUser_aEntries[];
-extern Entry_802FB310 lbl_802FB310[];
+extern Entry_802FB310 _DbCache_aTables[];
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
 extern Table_803E96E8 lbl_803E96E8;
@@ -231,7 +231,7 @@ extern char *_DbUser_pFileName;
 extern int _DbUser_iMode;
 extern int _DbUser_iCurrent;
 extern unsigned char _DbUser_iCount;
-extern Cache_8022F8A8 *lbl_803EC0E0;
+extern Cache_8022F8A8 *_DbCache_pList;
 extern int _DbOccp_iHandlerTag;
 extern int _DbOccp_iDb;
 extern int lbl_803EC0F0;
@@ -320,37 +320,37 @@ extern void DbNiomSetModeFuncs(DbNiomModeFuncs_t *pFuncs);
 extern void DbNiomClearModeFuncs(void);
 extern int DbNiomModeLoad(void **ppData, void *p);
 extern int DbNiomModeReset(int a, int b);
-extern int fn_802299FC(void);
-extern int fn_80229A70(void);
-extern int fn_80229E88(void);
-extern void fn_8022A304(void);
+extern int DbYalpModuleInit(void);
+extern int DbYalpModuleShutdown(void);
+extern int DbSplpModuleInit(void);
+extern void DbSplpModuleShutdown(void);
 extern int fn_8022B02C(int a);
 extern void fn_8022B200(void);
-extern int fn_8022C214(int a);
-extern void fn_8022C3C8(void);
-extern int fn_8022C410(int a);
-extern int fn_8022C518(int a);
-extern int fn_8022D154(void);
-extern int fn_8022D1B8(void);
-extern int fn_8022D6E8(void);
-extern void fn_8022D6F0(void);
-extern int fn_8022DA90(int *p);
-extern void fn_8022DB08(void);
+extern int DbSrptModuleInit(int a);
+extern void DbSrptModuleShutdown(void);
+extern int DbSrptDeleteUnflaggedTeams(int a);
+extern int DbSrptDeleteUnflaggedTypedTeams(int a);
+extern int DbUslpModuleInit(void);
+extern int DbUslpModuleShutdown(void);
+extern int DbThcdModuleInit(void);
+extern void DbThcdModuleShutdown(void);
+extern int DbFnigModuleInit(int *p);
+extern void DbFnigModuleShutdown(void);
 extern int DbResetGameInfo(void);
-extern int fn_8022DBF4(int a);
-extern int fn_8022DC38(int a);
+extern int DbFnigSetHomeTeam(int a);
+extern int DbFnigSetAwayTeam(int a);
 extern int DbRunUpdateChain(int a, int b, unsigned char *p, int *pA, int *pB);
 extern int DbRunLoadChain(void);
-extern int fn_8022E9A4(void);
-extern void fn_8022E9C4(void);
-extern int fn_8022E9E4(void);
+extern int DbLeagueModuleInit(void);
+extern void DbLeagueModuleShutdown(void);
+extern int DbLeagueLoad(void);
 extern int DbEvasModuleInit(void);
 extern void DbEvasModuleShutdown(void);
 extern int DbTatsCopyAllTables(int a, int b, int c);
 extern signed char DbUserFindIndex(int key);
 extern int DbUserGetDb(int key);
-extern int fn_8022F8A8(int key, Cache_8022F8A8 **ppCache);
-extern int fn_80230400(unsigned short id, int a, int b, int c, int d, int e, int f);
+extern int DbCacheCreate(int key, Cache_8022F8A8 **ppCache);
+extern int DbCacheCopyRows(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void ScaleBlockReset(void *p);
 extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
 extern void fn_80236F00(void);
@@ -516,14 +516,14 @@ int DbUserOpenDatabases(void);
 int DbUserPostLoad(int a);
 int DbUserCloseDatabases(void);
 int DbUserSetName(int value, char *pName);
-unsigned short fn_8022F80C(void);
-Cache_8022F8A8 *fn_8022F858(unsigned short id);
-Cache_8022F8A8 *fn_8022F880(int key);
-int fn_8022FBAC(Cache_8022F8A8 *pCache);
-int fn_802303A0(int index);
-int fn_802303B4(int key, unsigned short *pId);
-int fn_80230CC8(unsigned short id);
-int fn_80230CEC(int a, int b, int c, int key, int e, int f);
+unsigned short DbCacheNewId(void);
+Cache_8022F8A8 *DbCacheFindById(unsigned short id);
+Cache_8022F8A8 *DbCacheFindByDb(int key);
+int DbCacheDestroy(Cache_8022F8A8 *pCache);
+int DbCacheGetTableId(int index);
+int DbCacheOpen(int key, unsigned short *pId);
+int DbCacheClose(unsigned short id);
+int DbCacheCopy(int a, int b, int c, int key, int e, int f);
 int DbOccpModuleInit(int handle);
 void DbOccpModuleShutdown(void);
 int DbOccpQueryNone(void);
@@ -658,40 +658,40 @@ int DbManagerInitModules(void)
     if ((err = DbOcmtModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_8022E9A4()) != 0) {
+    if ((err = DbLeagueModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_80229E88()) != 0) {
+    if ((err = DbSplpModuleInit()) != 0) {
         return err;
     }
     if ((err = fn_8022B02C(0)) != 0) {
         return err;
     }
-    if ((err = fn_8022C214(0)) != 0) {
+    if ((err = DbSrptModuleInit(0)) != 0) {
         return err;
     }
-    if ((err = fn_802299FC()) != 0) {
+    if ((err = DbYalpModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_8022D6E8()) != 0) {
+    if ((err = DbThcdModuleInit()) != 0) {
         return err;
     }
-    if ((err = fn_8022D154()) != 0) {
+    if ((err = DbUslpModuleInit()) != 0) {
         return err;
     }
-    return fn_8022DA90(_DbManager_aResultFuncs);
+    return DbFnigModuleInit(_DbManager_aResultFuncs);
 }
 
 void DbManagerShutdownModules(void)
 {
-    fn_8022DB08();
-    fn_8022D1B8();
-    fn_8022D6F0();
-    fn_80229A70();
-    fn_8022C3C8();
+    DbFnigModuleShutdown();
+    DbUslpModuleShutdown();
+    DbThcdModuleShutdown();
+    DbYalpModuleShutdown();
+    DbSrptModuleShutdown();
     fn_8022B200();
-    fn_8022A304();
-    fn_8022E9C4();
+    DbSplpModuleShutdown();
+    DbLeagueModuleShutdown();
     DbOcmtModuleShutdown();
     DbOptionsModuleShutdown();
     DbEvasModuleShutdown();
@@ -717,7 +717,7 @@ int DbManagerInit(struct Request_802329F0 *p)
         if (result == 0) {
             result = DbManagerInitHook();
             if (result == 0) {
-                result = fn_80230CEC(1023, 0x54415453, 1, 0x454D4147, 0x04000000, 0);
+                result = DbCacheCopy(1023, 0x54415453, 1, 0x454D4147, 0x04000000, 0);
                 if (result == 0) {
                     result = DbNiomBeginMode(&p->mMode);
                     if (result == 0) {
@@ -941,13 +941,13 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
     err = TDbCompilePerformOp(0, "select 'PNIG' into \203 from 'FNIG'\n", &flag);
     if (err == 0) {
         if (flag == 0) {
-            err = fn_8022C518(0x07000000);
+            err = DbSrptDeleteUnflaggedTypedTeams(0x07000000);
             if (err == 0) {
-                err = fn_8022C410(0x04000000);
+                err = DbSrptDeleteUnflaggedTeams(0x04000000);
                 if (err == 0) {
                     err = DbNiomReadOnce(0x07000000, 0x03000000);
                     if (err == 0) {
-                        err = fn_8022E9E4();
+                        err = DbLeagueLoad();
                     }
                 }
             }
@@ -955,7 +955,7 @@ int DbManagerEnterMode2(int *pRecord0, int *pRecord1)
             id1 = 0;
             if (err == 0 && (err = TDbCompilePerformOp(0, "select 'DIGT' into \202 from 'MTTS' where ('UNLS' = \202)\n", &id0, 0)) == 0
                 && (err = TDbCompilePerformOp(0, "select 'DIGT' into \202 from 'MTTS' where ('UNLS' = \202)\n", &id1, 1)) == 0
-                && (err = fn_8022DBF4(id0)) == 0 && (err = fn_8022DC38(id1)) == 0) {
+                && (err = DbFnigSetHomeTeam(id0)) == 0 && (err = DbFnigSetAwayTeam(id1)) == 0) {
                 for (i = 0; i <= 13; i++) {
                     TDbCompilePerformOp(0, "select 'DIGP' into \205 from 'YALP' where 'DIOP' = \205 and 'DIGT' = \205\n", &pRecord0[i], pRecord0[i], id0);
                 }

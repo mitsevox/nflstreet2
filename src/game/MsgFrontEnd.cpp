@@ -242,10 +242,10 @@ int DbNiomEndMode(void);
 void fn_8022A490(int a);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
-void fn_8022DC7C(int a);
-void fn_8022DCB0(int a);
-void fn_8022DCE4(int a);
-void fn_8022DD18(int a);
+void DbFnigSetHomeOffPlaybook(int a);
+void DbFnigSetHomeDefPlaybook(int a);
+void DbFnigSetAwayOffPlaybook(int a);
+void DbFnigSetAwayDefPlaybook(int a);
 int DbUserGetId(int index);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
@@ -2851,10 +2851,10 @@ void MsgTeamSelectExit(void)
         GameInfoSet(1, id1);
         fn_8022A508(0, id0, id0, 0, value0);
         fn_8022A508(1, id1, id1, 0, value1);
-        fn_8022DC7C(0);
-        fn_8022DCB0(0);
-        fn_8022DCE4(0);
-        fn_8022DD18(0);
+        DbFnigSetHomeOffPlaybook(0);
+        DbFnigSetHomeDefPlaybook(0);
+        DbFnigSetAwayOffPlaybook(0);
+        DbFnigSetAwayDefPlaybook(0);
     }
 
     for (unsigned int i = 0; i < 2; i++) {

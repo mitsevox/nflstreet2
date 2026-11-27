@@ -34,14 +34,14 @@ int fn_80082AB0(int a, int b, int c);
 void *UIGLibraryGetGlobal(int index);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int fn_8022A508(int a, int b, int c, int d, int e);
-int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
-void fn_8022DC7C(int a);
-void fn_8022DCB0(int a);
-void fn_8022DCE4(int a);
-void fn_8022DD18(int a);
+void DbFnigSetHomeOffPlaybook(int a);
+void DbFnigSetHomeDefPlaybook(int a);
+void DbFnigSetAwayOffPlaybook(int a);
+void DbFnigSetAwayDefPlaybook(int a);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 int SyncRandGetIntRange(int stream, int low, int high);
@@ -510,7 +510,7 @@ int TeamDbInsert(const char *pName, int type, int logo)
     unsigned short count = 1;
     int id;
 
-    fn_8022C628(0x54415453, 0x4D414554, &id, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &id, &count);
     TDbCompilePerformOp(0,
                 "use 'TATS' insert into 'MAET' set 'DIGT' = \x82 and 'PYTT' = \x82 and 'DIOT' = \x82 and "
                 "'DROT' = \x82 and 'LGLT' = \x82 and 'SIVT' = \x83 and 'RUMT' = \x85 and 'ANDT' = \x88 and "
@@ -675,13 +675,13 @@ void TeamDbLoadSideWithCopies(int team, int *pList, int side, int count)
     if (side == 0) {
         GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
-        fn_8022DC7C(0);
-        fn_8022DCB0(0);
+        DbFnigSetHomeOffPlaybook(0);
+        DbFnigSetHomeDefPlaybook(0);
     } else {
         GameInfoSet(1, team);
         fn_8022A508(1, team, team, type, -1);
-        fn_8022DCE4(0);
-        fn_8022DD18(0);
+        DbFnigSetAwayOffPlaybook(0);
+        DbFnigSetAwayDefPlaybook(0);
     }
     PlayerCursorOpen(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
@@ -707,13 +707,13 @@ void TeamDbLoadSide(int team, int *pList, int side, int count)
     if (side == 0) {
         GameInfoSet(0, team);
         fn_8022A508(0, team, team, type, -1);
-        fn_8022DC7C(0);
-        fn_8022DCB0(0);
+        DbFnigSetHomeOffPlaybook(0);
+        DbFnigSetHomeDefPlaybook(0);
     } else {
         GameInfoSet(1, team);
         fn_8022A508(1, team, team, type, -1);
-        fn_8022DCE4(0);
-        fn_8022DD18(0);
+        DbFnigSetAwayOffPlaybook(0);
+        DbFnigSetAwayDefPlaybook(0);
     }
     PlayerCursorOpen(&cursor, 0, 0x54415453);
     for (i = 0; i < count; i++) {
@@ -735,7 +735,7 @@ void TeamDbCopyPlayers(int team, int *pIds, unsigned int count)
     unsigned int i;
     unsigned int j;
 
-    fn_80229AA4(0x54415453, 0x59414C50, pNewIds, &found);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, pNewIds, &found);
     for (i = 0; i < count; i++) {
         TDbTblFindUnusedId(0x54415453, &table);
         pOldIds[i] = pIds[i];

@@ -1,4 +1,8 @@
-/* Partial source for several game-database modules (player, roster and team tables) not yet cut into their files. */
+/* The 'MTTS' table of the game database (one row per team slot: slot 'UNLS', team 'DIGT' and
+   the slot's team details) and the module that keeps the per-player and per-team column sets:
+   it fills and updates the 'MTTS' rows, walks them against the 'MAET' teams, reads and writes
+   one column of a 'DIGP' or 'DIGT' row by its column code, and runs the game start and resume
+   hooks of the module. Partial source; not yet linked. */
 
 #include "engine/dbteams.h"
 #include "engine/tdbext.h"
@@ -23,7 +27,14 @@ struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
 extern char lbl_803A1C60[];
-extern float lbl_803A20A4[][13];
+typedef struct Record_802297D8 {
+    float mUnknown0;
+    float mUnknown4;
+    float aUnknown8[10];
+    float mUnknown30;
+} Record_802297D8;
+
+extern Record_802297D8 lbl_803A20A4[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;
@@ -41,8 +52,8 @@ extern int TDbTblDestroy(int db, int tbl);
 signed char DbUserFindIndex(int key);
 
 extern const unsigned char lbl_802AEF10[];
-extern int fn_802297D8(void *p, int tag);
-extern int fn_8022D8F8(int a, int *p, int c);
+extern int DbYalpLoadWeightTable(void *p, int tag);
+extern int DbThcdSetLineup(int a, int *p, int c);
 int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
@@ -56,9 +67,9 @@ extern char lbl_802B4EA0[];
 extern char lbl_802B4EC4[];
 extern char lbl_802B37E4[];
 extern char lbl_802B3824[];
-int fn_8022C0E0(struct QueryCursor cursor, int a);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
-extern int fn_80230D8C(int id, int a, int b);
+extern int DbCacheDeleteRows(int id, int a, int b);
 extern char lbl_802B3610[];
 extern char lbl_802B3698[];
 extern char lbl_802B479C[];
@@ -78,20 +89,11 @@ extern char lbl_802B5ACC[];
 extern char lbl_802B5B34[];
 extern char lbl_802B5B64[];
 extern char lbl_802B5BDC[];
-extern struct QueryCursor lbl_802FA8B0;
-extern unsigned short lbl_803EC060;
-extern int *lbl_803EC084;
-extern unsigned short lbl_803EC088;
-extern int (*lbl_803EC08C)[2];
-extern unsigned short lbl_803EC090;
-extern int (*lbl_803EC094)[3];
-extern unsigned short lbl_803EC098;
-extern int lbl_802FAA50[][10][2];
 int DbLoadConferenceIds(void);
 int DbLoadDivisionIds(void);
 int DbLoadTeamList(void);
-int fn_8022E9E4(void);
-void fn_8022EA4C(void);
+int DbLeagueLoad(void);
+void DbLeagueFree(void);
 
 typedef struct Record_8022D5A4 {
     unsigned short mUnknown0;
@@ -106,7 +108,6 @@ typedef struct Record_8022D874 {
     char mUnknown9[3];
 } Record_8022D874;
 
-extern Record_8022D874 lbl_802FA8C0[];
 extern char lbl_802B48C4[];
 extern char lbl_802B4A54[];
 extern char lbl_802B4A9C[];
@@ -114,8 +115,8 @@ extern char lbl_802B4AE0[];
 void DbBuildPendingNodeList(void *pPairs);
 void DbAssignPendingNodeIds(void);
 int DbLoadTeamDepthChart(int key, int mode);
-int fn_8022D710(int a, int b, int c, int row, int value);
-unsigned short fn_8022D6FC(int index);
+int DbThcdSetEntry(int a, int b, int c, int row, int value);
+unsigned short DbThcdGetMaxDepth(int index);
 
 #include "engine/DbNiomHandlers.h"
 
@@ -138,11 +139,11 @@ typedef struct Node_8022CC6C {
     struct Node_8022CC6C *mpUnknown16;
 } Node_8022CC6C;
 
-void fn_8022CAEC(Node_8022CC6C **ppHead);
+void DbUslpSortOpen(Node_8022CC6C **ppHead);
 
 extern int fn_8022A624(Object_8022A59C *p, struct QueryCursor cursor, int a, int b);
-extern int fn_802303B4(int key, unsigned short *pId);
-extern int fn_80230CC8(unsigned short id);
+extern int DbCacheOpen(int key, unsigned short *pId);
+extern int DbCacheClose(unsigned short id);
 extern int DbLockAcquire(void);
 extern int DbLockRelease(void);
 
@@ -172,27 +173,12 @@ extern char lbl_802B5120[];
 extern char lbl_802B519C[];
 extern char lbl_802B51BC[];
 extern int lbl_802FA600[];
-extern unsigned short lbl_802FAA1C[];
-typedef struct Entry_803A2390 {
+typedef struct DbSrptRow_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
     unsigned short mUnknown4;
     unsigned short mUnknown6;
-} Entry_803A2390;
-
-typedef struct Record_8022A304 {
-    int mUnknown0;
-    int mUnknown4;
-    int mUnknown8;
-    unsigned char mUnknownC;
-    unsigned char mUnknownD;
-    unsigned char mUnknownE;
-    char mUnknownF[1];
-    unsigned short mUnknown10;
-    unsigned short mUnknown12;
-    unsigned short mUnknown14;
-    char mUnknown16[2];
-} Record_8022A304;
+} DbSrptRow_t;
 
 /* Ends a column list for TDbInsertRow. */
 static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
@@ -202,24 +188,17 @@ static inline void fn_801F9718_SetEnd(TDbCol_801F9718 *pCol)
     pCol->mUnk0 = 0;
 }
 
-extern Record_8022A304 lbl_802FA180[21];
-extern Record_8022A304 lbl_802FA378[17];
-extern Record_8022A304 lbl_802FA510[10];
-
 typedef struct Callbacks_8022B02C {
     int (*mpUnknown0)(int a, int b, int c, int d);
-    int (*mpUnknown4)(int a);
+    int (*mpUnknown4)(int a, int b, int c, int d);
 } Callbacks_8022B02C;
 
-typedef struct Callbacks_8022C214 {
-    int (*mpUnknown0)(int a);
-    int (*mpUnknown4)(int a);
-} Callbacks_8022C214;
+typedef struct DbSrptCallbacks_t {
+    int (*mpUnknown0)(int a, int b, int c, int d);
+    int (*mpUnknown4)(int a, int b, int c, int d);
+} DbSrptCallbacks_t;
 
-extern Entry_803A2390 lbl_803A2390[];
-extern char lbl_803A23E8[];
-extern char lbl_803A2474[];
-extern struct QueryCursor lbl_803A25E0;
+extern DbSrptRow_t _DbSrpt_aRows[];
 extern int (*_DbNiom_pEndFunc)(void);
 extern void *_DbNiom_pLoadFunc;
 extern void *_DbNiom_pResetFunc;
@@ -248,24 +227,10 @@ extern TDbCol_801F9718 *lbl_803EC024[1];
 extern unsigned char lbl_803ED01C[1];
 extern int DbOccpModuleInit(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
-extern int (*lbl_803EC02C)(int a);
-extern unsigned char lbl_803EC030;
-extern int (*lbl_803EC034)(int a);
-extern int (*lbl_803EC038)(int a);
-extern int (*lbl_803EC048)(int a);
-extern int (*lbl_803EC04C)(int a);
-extern Node_8022CC6C *lbl_803EC050;
-extern Node_8022CC6C *lbl_803EC054;
-extern Node_8022CC6C *lbl_803EC058;
-extern Record_8022D5A4 *lbl_803EC05C;
-extern unsigned short lbl_803EC060;
-extern int lbl_803EC064;
-extern int lbl_803EC068;
-extern int lbl_803EC06C;
-extern int lbl_803EC070;
-extern int lbl_803EC074;
-extern int lbl_803EC07C;
-extern int lbl_803EC080;
+extern int (*lbl_803EC02C)(int a, int b, int c, int d);
+extern unsigned char _DbSrpt_bHasTable;
+extern int (*_DbSrpt_pBeginGameFunc)(int a, int b, int c, int d);
+extern int (*_DbSrpt_pResumeGameFunc)(int a, int b, int c, int d);
 
 int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, Object_8022A59C **ppOut);
@@ -276,16 +241,16 @@ int fn_8022BF68(void);
 void DbUtilRandomInit(void);
 void DbUtilRandomShutdown(void);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
-void *fn_8022C9A8(void);
-void fn_8022C9B4(void *p);
-void fn_8022CADC(void);
-Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key);
-void *fn_8022CD30(void);
-void fn_8022CD3C(void *p);
-void fn_8022CDA0(void);
-int fn_8022D14C(int a);
-int fn_8022D250(int (*pCallback)(int a));
-int fn_8022D25C(int (*pCallback)(int a));
+void *DbUslpAllocNodes(void);
+void DbUslpFreeNodes(void *p);
+void DbUslpClearLists(void);
+Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
+void *DbUslpAllocEntries(void);
+void DbUslpFreeEntries(void *p);
+void DbUslpCloseSlotCursor(void);
+int DbUslpFilterNone(int a);
+int DbUslpSetFilter1(int (*pCallback)(int a));
+int DbUslpSetFilter2(int (*pCallback)(int a));
 
 
 
@@ -470,16 +435,16 @@ void DbNiomClearModeFuncs(void);
 int DbNiomModeLoad(void **ppData, void *p);
 int DbNiomModeReset(int a, int b);
 int DbNiomModeResume(void);
-int fn_802299FC(void);
-int fn_80229A70(void);
-float fn_80229C98(int index);
-float fn_80229CB0(int index);
-float fn_80229CC4(int index, int item);
-float fn_80229CE4(int index);
-int fn_80229E78(void);
-int fn_80229E80(void);
-void fn_8022A304(void);
-int fn_8022A428(int a);
+int DbYalpModuleInit(void);
+int DbYalpModuleShutdown(void);
+float DbYalpGetLowRating(int index);
+float DbYalpGetHighRating(int index);
+float DbYalpGetRatingWeight(int index, int item);
+float DbYalpGetWeightSum(int index);
+int DbYalpBeginGame(void);
+int DbYalpResumeGame(void);
+void DbSplpModuleShutdown(void);
+int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
@@ -495,84 +460,84 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks);
 void fn_8022B200(void);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
-int fn_8022C02C(int a, int b, int c, int d);
-int fn_8022C098(int a);
-int fn_8022C0E0(struct QueryCursor cursor, int a);
-int fn_8022C214(Callbacks_8022C214 *pCallbacks);
-void fn_8022C3C8(void);
-int fn_8022C410(int a);
-int fn_8022C518(int a);
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount);
-int fn_8022C81C(int a);
-int fn_8022C858(int a);
+int DbMttsBeginGame(int a, int b, int c, int d);
+int DbMttsResumeGame(int a, int b, int c, int d);
+int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a);
+int DbSrptModuleInit(DbSrptCallbacks_t *pCallbacks);
+void DbSrptModuleShutdown(void);
+int DbSrptDeleteUnflaggedTeams(int a);
+int DbSrptDeleteUnflaggedTypedTeams(int a);
+int DbFindUnusedTeamIds(int db, int tbl, int *pIds, unsigned short *pCount);
+int DbSrptBeginGame(int a, int b, int c, int d);
+int DbSrptResumeGame(int a, int b, int c, int d);
 void DbUtilRandomInit(void);
 void DbUtilRandomShutdown(void);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
 void DbUtilSetHeap(int a);
 void *DbUtilAlloc(int size, int a);
 void DbUtilFree(void *p);
-void *fn_8022C9A8(void);
-void fn_8022C9B4(void *p);
+void *DbUslpAllocNodes(void);
+void DbUslpFreeNodes(void *p);
 void DbBuildPendingNodeList(void *pPairs);
-void fn_8022CADC(void);
-void fn_8022CAEC(Node_8022CC6C **ppHead);
-Node_8022CC6C *fn_8022CC6C(Node_8022CC6C **ppHead, unsigned char key);
-Node_8022CC6C *fn_8022CC98(Node_8022CC6C **ppHead, unsigned short key);
-void fn_8022CCC4(Node_8022CC6C **ppHead, Node_8022CC6C *p);
-void fn_8022CD0C(Node_8022CC6C **ppHead, Node_8022CC6C *p);
-void *fn_8022CD30(void);
-void fn_8022CD3C(void *p);
-int fn_8022CD40(int a, int b, int c);
-void fn_8022CDA0(void);
-void fn_8022CDF8(void);
-int fn_8022D14C(int a);
-int fn_8022D154(void);
-int fn_8022D1B8(void);
-int fn_8022D23C(void);
-int fn_8022D250(int (*pCallback)(int a));
-int fn_8022D25C(int (*pCallback)(int a));
-int fn_8022D268(int a, int b, int c, void *pPairs, int action, int mode);
-int fn_8022D2F4(int a, int b, int c, void *pPairs, int mode);
-int fn_8022D3AC(void);
-unsigned short fn_8022D3D4(unsigned char key);
+void DbUslpClearLists(void);
+void DbUslpSortOpen(Node_8022CC6C **ppHead);
+Node_8022CC6C *DbUslpFindSlot(Node_8022CC6C **ppHead, unsigned char key);
+Node_8022CC6C *DbUslpFindPlayer(Node_8022CC6C **ppHead, unsigned short key);
+void DbUslpListRemove(Node_8022CC6C **ppHead, Node_8022CC6C *p);
+void DbUslpListPush(Node_8022CC6C **ppHead, Node_8022CC6C *p);
+void *DbUslpAllocEntries(void);
+void DbUslpFreeEntries(void *p);
+int DbUslpOpenSlotCursor(int a, int b, int c);
+void DbUslpCloseSlotCursor(void);
+void DbUslpApplyStoredSlots(void);
+int DbUslpFilterNone(int a);
+int DbUslpModuleInit(void);
+int DbUslpModuleShutdown(void);
+int DbUslpResetFilter1(void);
+int DbUslpSetFilter1(int (*pCallback)(int a));
+int DbUslpSetFilter2(int (*pCallback)(int a));
+int DbUslpRunStep(int a, int b, int c, void *pPairs, int action, int mode);
+int DbUslpFillSlots(int a, int b, int c, void *pPairs, int mode);
+int DbUslpFinish(void);
+unsigned short DbUslpGetSlotPlayer(unsigned char key);
 int DbOpenDepthChartCursor(int a, int b, int mode);
-int fn_8022D540(void);
+int DbCloseDepthChartCursor(void);
 int DbLoadTeamDepthChart(int key, int mode);
-int fn_8022D6E8(void);
-void fn_8022D6F0(void);
-unsigned short fn_8022D6FC(int index);
-int fn_8022D710(int a, int b, int c, int row, int value);
-int DbTableLookupByte(int row, int column);
-int fn_8022D864(void);
-int fn_8022D86C(void);
-int fn_8022D874(int a, int b, int c, int key);
-int fn_8022D8F8(int a, int *p, int tag);
-int fn_8022DA44(int a, int *b, int c, int *d, int e);
-int fn_8022DA90(int *p);
-void fn_8022DB08(void);
+int DbThcdModuleInit(void);
+void DbThcdModuleShutdown(void);
+unsigned short DbThcdGetMaxDepth(int index);
+int DbThcdSetEntry(int a, int b, int c, int row, int value);
+int DbThcdGetFallbackPosition(int row, int column);
+int DbThcdBeginGame(int home, int away, int mode, int arg);
+int DbThcdResumeGame(int home, int away, int homeCshg, int awayCsag);
+int DbThcdSetSlotPlayer(int a, int b, int c, int key);
+int DbThcdSetLineup(int a, int *p, int tag);
+int DbThcdSetLineups(int a, int *b, int c, int *d, int e);
+int DbFnigModuleInit(int *p);
+void DbFnigModuleShutdown(void);
 int DbResetGameInfo(void);
-int fn_8022DBF4(int value);
-int fn_8022DC38(int value);
-int fn_8022DC7C(int value);
-int fn_8022DCB0(int value);
-int fn_8022DCE4(int value);
-int fn_8022DD18(int value);
+int DbFnigSetHomeTeam(int value);
+int DbFnigSetAwayTeam(int value);
+int DbFnigSetHomeOffPlaybook(int value);
+int DbFnigSetHomeDefPlaybook(int value);
+int DbFnigSetAwayOffPlaybook(int value);
+int DbFnigSetAwayDefPlaybook(int value);
 int fn_8022DD4C(int value);
 int fn_8022DD80(int value);
-int fn_8022DDB4(int a, void *p);
-int fn_8022E21C(int a, int b);
+int DbFnigWriteBlock(int a, void *p);
+int DbFnigCopyGamePlayers(int a, int b);
 int fn_8022E558(void);
 int fn_8022E560(void);
 int DbLoadConferenceIds(void);
-void fn_8022E694(void);
+void DbLeagueFreeConferences(void);
 int DbLoadDivisionIds(void);
-void fn_8022E7FC(void);
+void DbLeagueFreeDivisions(void);
 int DbLoadTeamList(void);
-void fn_8022E96C(void);
-int fn_8022E9A4(void);
-void fn_8022E9C4(void);
-int fn_8022E9E4(void);
-void fn_8022EA4C(void);
+void DbLeagueFreeTeams(void);
+int DbLeagueModuleInit(void);
+void DbLeagueModuleShutdown(void);
+int DbLeagueLoad(void);
+void DbLeagueFree(void);
 int DbEvasModuleInit(void);
 void DbEvasModuleShutdown(void);
 int DbEvasInit(int a, const char *pName, int b);
@@ -603,94 +568,12 @@ int DbUserGetId(int index);
 signed char DbUserFindIndex(int key);
 int DbUserGetDb(int key);
 
-int fn_802299FC(void)
+int DbMttsInsertSlot(int a)
 {
-    int result = fn_802297D8(lbl_803A1C60, 0x43524F50);
-    if (result == 0) {
-        result = fn_802297D8(lbl_803A20A4, 0x524F4250);
-    } else {
-        fn_802297D8(lbl_803A20A4, 0x524F4250);
-    }
-    return result;
-}
+    // FAKEMATCH: the last variadic 0 comes from a local so its constant is loaded first.
+    int zero = 0;
 
-int fn_80229A70(void)
-{
-    return MemFill(lbl_803A1C60, 1092, 0, 4);
-}
-
-float fn_80229C98(int index)
-{
-    return lbl_803A20A4[index][1];
-}
-
-float fn_80229CB0(int index)
-{
-    return lbl_803A20A4[index][0];
-}
-
-float fn_80229CC4(int index, int item)
-{
-    return lbl_803A20A4[index][item + 2];
-}
-
-float fn_80229CE4(int index)
-{
-    return lbl_803A20A4[index][12];
-}
-
-int fn_80229E78(void)
-{
-    return 0;
-}
-
-int fn_80229E80(void)
-{
-    return 0;
-}
-
-void fn_8022A304(void)
-{
-    unsigned short i;
-
-    for (i = 0; i < 21; i++) {
-        lbl_802FA180[i].mUnknown0 = 31;
-        lbl_802FA180[i].mUnknown4 = 31;
-        lbl_802FA180[i].mUnknown8 = 7;
-        lbl_802FA180[i].mUnknownC = 0;
-        lbl_802FA180[i].mUnknownD = 0;
-        lbl_802FA180[i].mUnknownE = 0;
-        lbl_802FA180[i].mUnknown10 = 0;
-        lbl_802FA180[i].mUnknown12 = 0;
-        lbl_802FA180[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 17; i++) {
-        lbl_802FA378[i].mUnknown0 = 31;
-        lbl_802FA378[i].mUnknown4 = 31;
-        lbl_802FA378[i].mUnknown8 = 7;
-        lbl_802FA378[i].mUnknownC = 0;
-        lbl_802FA378[i].mUnknownD = 0;
-        lbl_802FA378[i].mUnknownE = 0;
-        lbl_802FA378[i].mUnknown10 = 0;
-        lbl_802FA378[i].mUnknown12 = 0;
-        lbl_802FA378[i].mUnknown14 = 0;
-    }
-    for (i = 0; i < 10; i++) {
-        lbl_802FA510[i].mUnknown0 = 31;
-        lbl_802FA510[i].mUnknown4 = 31;
-        lbl_802FA510[i].mUnknown8 = 7;
-        lbl_802FA510[i].mUnknownC = 0;
-        lbl_802FA510[i].mUnknownD = 0;
-        lbl_802FA510[i].mUnknownE = 0;
-        lbl_802FA510[i].mUnknown10 = 0;
-        lbl_802FA510[i].mUnknown12 = 0;
-        lbl_802FA510[i].mUnknown14 = 0;
-    }
-}
-
-int fn_8022A428(int a)
-{
-    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, 0);
+    return TDbCompilePerformOp(0, lbl_802B2F64, a, 1023, 1023, 31, -1, 3, 15, 7, -1, zero);
 }
 
 int fn_8022A490(unsigned int count)
@@ -702,7 +585,7 @@ int fn_8022A490(unsigned int count)
         unsigned short i;
 
         for (i = 0; i < count; i++) {
-            if ((err = fn_8022A428(id)) == 0) {
+            if ((err = DbMttsInsertSlot(id)) == 0) {
                 id++;
             } else {
                 break;
@@ -730,7 +613,7 @@ int fn_8022A59C(int a, Object_8022A59C **ppOut)
     p->mUnknown4 = a;
     p->mUnknown0 = -1;
     if (err == 0) {
-        err = fn_802303B4(0, &p->mUnknown0);
+        err = DbCacheOpen(0, &p->mUnknown0);
     }
     if (err == 0) {
         *ppOut = p;
@@ -771,7 +654,7 @@ int fn_8022AC80(Object_8022A59C *p)
     int err = 0;
 
     if (p->mUnknown0 != 0xFFFF) {
-        err = fn_80230CC8(p->mUnknown0);
+        err = DbCacheClose(p->mUnknown0);
     }
     if (err == 0) {
         err = DbLockRelease();
@@ -1141,7 +1024,7 @@ int fn_8022BF68(void)
     return err;
 }
 
-int fn_8022C02C(int a, int b, int c, int d)
+int DbMttsBeginGame(int a, int b, int c, int d)
 {
     int err = 0;
 
@@ -1154,237 +1037,15 @@ int fn_8022C02C(int a, int b, int c, int d)
     return err;
 }
 
-int fn_8022C098(int a)
+int DbMttsResumeGame(int a, int b, int c, int d)
 {
     int err = 0;
 
     if (lbl_803EC02C != 0) {
-        err = lbl_803EC02C(a);
+        err = lbl_803EC02C(a, b, c, d);
     }
     if (err == 0) {
         err = fn_8022BF60();
     }
     return err;
-}
-
-int fn_8022C0E0(struct QueryCursor cursor, int a)
-{
-    unsigned short total;
-    int *pIds;
-    int id;
-    int status;
-    unsigned short count;
-    unsigned short i;
-
-    pIds = 0;
-    status = TDbQryGetCount(cursor.mUnknown0, &total);
-    if (status == 0) {
-        pIds = DbUtilAlloc(total * 4, 0);
-    }
-    count = 0;
-    if (status == 0) {
-        while (status == 0) {
-            status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
-            if (status == 0) {
-                pIds[count] = id;
-                count++;
-            }
-        }
-        if (QUERY_STATUS_ACCEPTED(status) == 1) {
-            status = 0;
-        }
-        if (status == 0) {
-            for (i = 0; i < count; i++) {
-                status = fn_80230D8C(pIds[i], 0, a);
-                if (status != 0) {
-                    break;
-                }
-            }
-        }
-    }
-    if (pIds != 0) {
-        DbUtilFree(pIds);
-    }
-    return status;
-}
-
-int fn_8022C214(Callbacks_8022C214 *pCallbacks)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int index;
-    unsigned short a;
-    unsigned short b;
-    unsigned short c;
-    unsigned short d;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3698, &cursor);
-    while (status == 0) {
-        status = TDbCompilePerformOp(0, lbl_802B36C4, &cursor, &index, &a, &b, &c, &d);
-        if (status == 0) {
-            lbl_803A2390[index].mUnknown0 = a;
-            lbl_803A2390[index].mUnknown2 = b;
-            lbl_803A2390[index].mUnknown4 = c;
-            lbl_803A2390[index].mUnknown6 = d;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    if (status == 0) {
-        status = DbTatsCopyTblDestroy(0, 0x53525054);
-    } else {
-        DbTatsCopyTblDestroy(0, 0x53525054);
-    }
-    lbl_803EC030 = 0;
-    if (status == 0) {
-        lbl_803EC030 = TDbTblExists(0, 0x53525054) == 0;
-        if (pCallbacks != 0) {
-            lbl_803EC034 = pCallbacks->mpUnknown0;
-            lbl_803EC038 = pCallbacks->mpUnknown4;
-        }
-    }
-    return status;
-}
-
-void fn_8022C3C8(void)
-{
-    MemFill((char *)lbl_803A2390, 88, 0, 4);
-    lbl_803EC030 = 0;
-    lbl_803EC034 = 0;
-    lbl_803EC038 = 0;
-}
-
-int fn_8022C410(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B37E4, &cursor, 0);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C518(int a)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3824, &cursor, 0, 5, 1);
-    if (status == 0) {
-        status = fn_8022C0E0(cursor, a);
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    return status;
-}
-
-int fn_8022C628(int db, int tbl, int *pIds, unsigned short *pCount)
-{
-    struct QueryCursor cursor;
-    int status = 0;
-    int id;
-    int prev;
-    int next;
-    int last;
-    unsigned short count;
-
-    cursor.mUnknown0 = 0;
-    cursor.mUnknown4 = 0;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
-    status = TDbCompilePerformOp(0, lbl_802B3888, db, &cursor, tbl);
-    prev = -1;
-    next = -1;
-    last = 1023;
-    count = 0;
-    while (status == 0 && count < *pCount) {
-        status = TDbCompilePerformOp(0, lbl_802B3610, &cursor, &id);
-        if (status == 0) {
-            if (id > prev + 1) {
-                next = prev + 1;
-                while (status == 0 && next < id && count < *pCount && next <= 1008) {
-                    pIds[count] = next;
-                    count++;
-                    next++;
-                }
-            }
-            last = (next > id) ? next : id;
-            prev = id;
-        }
-    }
-    if (QUERY_STATUS_ACCEPTED(status) == 1) {
-        if (cursor.mUnknown0 != 0) {
-            status = TDbSQLDestroyCursor(&cursor);
-        } else {
-            status = 0;
-        }
-    } else if (cursor.mUnknown0 != 0) {
-        TDbSQLDestroyCursor(&cursor);
-    }
-    if (status == 0 && count < *pCount) {
-        next = last + 1;
-        if (last == 1023) {
-            next = 0;
-        }
-        while (count < *pCount && next <= 1008) {
-            pIds[count] = next;
-            count++;
-            next++;
-        }
-    }
-    *pCount = count;
-    return status;
-}
-
-int fn_8022C81C(int a)
-{
-    if (lbl_803EC034 != 0) {
-        return lbl_803EC034(a);
-    }
-    return 0;
-}
-
-int fn_8022C858(int a)
-{
-    if (lbl_803EC038 != 0) {
-        return lbl_803EC038(a);
-    }
-    return 0;
 }
