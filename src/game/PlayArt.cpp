@@ -396,9 +396,9 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
         zero.mX = zero.mY = 0.0f;
         (void)&zero;
         int moved;
-        switch (step->mUnknown10) {
-        case -1:
-            stop = 1;
+        switch ((unsigned int)step->mUnknown10) {
+        default:
+            if (step->mUnknown10 == -1) stop = 1;
             break;
         case 0:
             controls[0] = starts[i];
