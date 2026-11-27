@@ -23234,7 +23234,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); the six non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); its one non-exact function, PlayAlignIssuePlayerRoute, stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
