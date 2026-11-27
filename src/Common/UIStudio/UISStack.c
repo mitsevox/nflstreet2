@@ -1156,9 +1156,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         }
         case 89: {
-            Int32 Value;
-            Int32 Offset;
-            Uint8 Type;
+            Uint32 Word;
             Uint32 a;
             Uint32 b;
             Uint32 c;
@@ -1170,16 +1168,19 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             pState->pCode++;
             c = *pState->pCode;
             pState->pCode++;
-            d = *pState->pCode;
+            Word = (a << 24) | (b << 16) | (c << 8);
+            c = *pState->pCode;
             pState->pCode++;
-            Value = (a << 24) | (b << 16) | (c << 8) | d;
-            Offset = *pState->pCode << 8;
+            Word |= c;
+            c = *pState->pCode;
             pState->pCode++;
-            Offset |= *pState->pCode;
+            d = c << 8;
+            c = *pState->pCode;
             pState->pCode++;
-            Type = *pState->pCode;
+            d |= c;
+            c = *pState->pCode;
             pState->pCode++;
-            UISUpdateVisibility(pInfo, pScreen, Type, (void *)(Value + pTop[(Int16)Offset]), pTop[-1]);
+            UISUpdateVisibility(pInfo, pScreen, c, (void *)(Word + pTop[(Int16)d]), pTop[-1]);
             pState->pTop--;
             break;
         }
