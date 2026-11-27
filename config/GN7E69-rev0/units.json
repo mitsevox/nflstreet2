@@ -4536,18 +4536,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8022FEF8",
-          "end": "0x8022FFD0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022FFD0",
-          "end": "0x802303A0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802303A0",
           "end": "0x80230400"
         },
         {
@@ -4636,18 +4624,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
-          "end": "0x80233760"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80233760",
-          "end": "0x802337D4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802337D4",
           "end": "0x802338D4"
         },
         {
