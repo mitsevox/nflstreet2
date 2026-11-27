@@ -6,21 +6,21 @@
 #include <string.h>
 #include <stdio.h>
 
-typedef void (*DeviceFunc_803EBCFC)(int added, int removed);
+typedef void (*MemCDeviceChangeFunc_t)(int added, int removed);
 
-typedef struct Struct_80384CC0 {
+typedef struct MemCDevices_t {
     int mMounted;
     int mPresent;
     int mAdded;
     int mRemoved;
-} Struct_80384CC0;
+} MemCDevices_t;
 
-typedef struct Struct_80384CD0 {
+typedef struct MemCOp_t {
     int mPort;
     int mHandle;
     int mState;
     int mResult;
-    unsigned char mUnknown10;
+    unsigned char mDone;
     unsigned char mBusy;
     int mSize;
     char mName[32];
@@ -34,29 +34,29 @@ typedef struct Struct_80384CD0 {
     unsigned char mCacheDirty;
     unsigned char mCacheValid;
     int mLength;
-    int mUnknownD4;
+    int mTransferred;
     int mPendingState;
     char *mPendingRead;
     char *mPendingWrite;
     int mPendingLength;
-} Struct_80384CD0;
+} MemCOp_t;
 
-typedef struct Struct_80384DB8 {
+typedef struct MemCCard_t {
     int mType;
     s32 mMemSize;
     s32 mSectorSize;
     s32 mFreeBytes;
     s32 mFreeFiles;
-    int mUnknown14;
+    int mStatus;
     unsigned int mNumEntries;
-} Struct_80384DB8;
+} MemCCard_t;
 
 
 static int _iFileCacheSize = 0;
-static DeviceFunc_803EBCFC _MemCDeviceChangeCallback = 0;
-static Struct_80384CC0 _MemCDevices;
-static Struct_80384CD0 _MemCOp;
-static Struct_80384DB8 _MemCCard;
+static MemCDeviceChangeFunc_t _MemCDeviceChangeCallback = 0;
+static MemCDevices_t _MemCDevices;
+static MemCOp_t _MemCOp;
+static MemCCard_t _MemCCard;
 static char _MemCWorkArea[2][0xA000] __attribute__((aligned(32)));
 
 extern int DateIsYearLeap(int year);
@@ -521,7 +521,7 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
         }
     }
     if (flags & 1) {
-        _MemCOp.mUnknown10 = 0;
+        _MemCOp.mDone = 0;
         for (fileNo = 0; fileNo < 127; fileNo++) {
             _MemCOp.mResult = CARDGetStatus(port, fileNo, &_MemCOp.mStat);
             if (_MemCOp.mResult != CARD_RESULT_READY && _MemCOp.mResult != CARD_RESULT_NOFILE) {
@@ -546,17 +546,18 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
         }
         if (_MemCOp.mResult != CARD_RESULT_NOFILE) {
         fail:
-            _MemCOp.mUnknown10 = 1;
+            _MemCOp.mDone = 1;
             _MemCOp.mBusy = 0;
         } else {
         create:
             _MemCOpenDeleteCB(port, 0);
         }
+    out:
         return 0;
     nocard:
         _MemCOp.mBusy = 0;
-        _MemCOp.mUnknown10 = 1;
-        return 0;
+        _MemCOp.mDone = 1;
+        goto out;
     }
     for (fileNo = 0; fileNo < 127; fileNo++) {
         _MemCOp.mResult = CARDGetStatus(port, fileNo, &_MemCOp.mStat);
@@ -579,7 +580,7 @@ int MemCAsyncOpen(int port, const char *pName, int unused, int flags, int size)
         }
     }
 done:
-    _MemCOp.mUnknown10 = 1;
+    _MemCOp.mDone = 1;
     _MemCOp.mBusy = 0;
     return 0;
 }
@@ -590,12 +591,12 @@ static void _MemCOpenDeleteCB(s32 chan, s32 result)
         _MemCOp.mResult = CARDCreateAsync(chan, _MemCOp.mName, _MemCOp.mSize,
                                                &_MemCOp.mFileInfo, _MemCOpenCreateCB);
         if (_MemCOp.mResult != CARD_RESULT_READY) {
-            _MemCOp.mUnknown10 = 1;
+            _MemCOp.mDone = 1;
         }
     } else {
         _MemCOp.mResult = result;
         _MemCOp.mBusy = 0;
-        _MemCOp.mUnknown10 = 1;
+        _MemCOp.mDone = 1;
     }
 }
 
@@ -620,11 +621,11 @@ static void _MemCOpenCreateCB(s32 chan, s32 result)
             _MemCOp.mResult = fileNo;
         }
         _MemCOp.mBusy = 0;
-        _MemCOp.mUnknown10 = 1;
+        _MemCOp.mDone = 1;
     } else {
         _MemCOp.mResult = result;
         _MemCOp.mBusy = 0;
-        _MemCOp.mUnknown10 = 1;
+        _MemCOp.mDone = 1;
     }
 }
 
@@ -707,18 +708,18 @@ int MemCAsyncDelete(int port, const char *pName)
                         _MemCOp.mBusy = 1;
                         return 0;
                     }
-                    _MemCOp.mUnknown10 = 1;
+                    _MemCOp.mDone = 1;
                     _MemCOp.mBusy = 0;
                     return 0;
                 }
             }
         } else {
-            _MemCOp.mUnknown10 = 1;
+            _MemCOp.mDone = 1;
             _MemCOp.mBusy = 0;
             return 0;
         }
     }
-    _MemCOp.mUnknown10 = 1;
+    _MemCOp.mDone = 1;
     _MemCOp.mBusy = 0;
     return 0;
 }
@@ -793,7 +794,7 @@ static int _MemCAsyncRead(int handle, char *pBuffer, int length)
             pBuffer += count;
             length -= count;
             _MemCOp.mOffset += count;
-            _MemCOp.mUnknownD4 += count;
+            _MemCOp.mTransferred += count;
         }
         if (length == 0) {
             _MemCOp.mHandle = handle;
@@ -836,7 +837,7 @@ static int _MemCAsyncRead(int handle, char *pBuffer, int length)
 
 int MemCAsyncRead(int handle, char *pBuffer, int length)
 {
-    _MemCOp.mUnknownD4 = 0;
+    _MemCOp.mTransferred = 0;
     return _MemCAsyncRead(handle, pBuffer, length);
 }
 
@@ -876,7 +877,7 @@ static int _MemCAsyncWrite(int handle, char *pBuffer, int length)
         memcpy(_MemCOp.mCache + _MemCOp.mCachePos, pBuffer, count);
         _MemCOp.mCachePos += count;
         _MemCOp.mOffset += count;
-        _MemCOp.mUnknownD4 += count;
+        _MemCOp.mTransferred += count;
         _MemCOp.mCacheDirty = 1;
         if (_MemCOp.mCachePos < _MemCOp.mChunkSize) {
             _MemCOp.mBusy = 0;
@@ -927,7 +928,7 @@ static int _MemCAsyncWrite(int handle, char *pBuffer, int length)
 
 int MemCAsyncWrite(int handle, char *pBuffer, int length)
 {
-    _MemCOp.mUnknownD4 = 0;
+    _MemCOp.mTransferred = 0;
     return _MemCAsyncWrite(handle, pBuffer, length);
 }
 
@@ -1016,7 +1017,7 @@ int MemCAsyncPoll(int *pResult)
         switch (_MemCOp.mState) {
         case 13:
             result = _MemCOp.mResult;
-            done = (signed char)_MemCOp.mUnknown10;
+            done = (signed char)_MemCOp.mDone;
             break;
         case 1:
             if (_MemCOp.mResult == -1) {
@@ -1038,15 +1039,15 @@ int MemCAsyncPoll(int *pResult)
             switch (result) {
             case CARD_RESULT_IOERROR:
             case CARD_RESULT_FATAL_ERROR:
-                _MemCCard.mUnknown14 = 4;
+                _MemCCard.mStatus = 4;
                 result = 0;
                 break;
             case CARD_RESULT_BROKEN:
-                _MemCCard.mUnknown14 = 1;
+                _MemCCard.mStatus = 1;
                 result = 0;
                 break;
             case CARD_RESULT_ENCODING:
-                _MemCCard.mUnknown14 = 3;
+                _MemCCard.mStatus = 3;
                 result = 0;
                 break;
             case CARD_RESULT_NOCARD:
@@ -1054,7 +1055,7 @@ int MemCAsyncPoll(int *pResult)
             case CARD_RESULT_BUSY:
                 break;
             case CARD_RESULT_READY:
-                _MemCCard.mUnknown14 = 0;
+                _MemCCard.mStatus = 0;
                 break;
             }
             break;
@@ -1062,22 +1063,22 @@ int MemCAsyncPoll(int *pResult)
             switch (result) {
             case CARD_RESULT_IOERROR:
             case CARD_RESULT_FATAL_ERROR:
-                _MemCCard.mUnknown14 = 4;
+                _MemCCard.mStatus = 4;
                 result = 0;
                 break;
             case CARD_RESULT_BROKEN:
-                _MemCCard.mUnknown14 = 2;
+                _MemCCard.mStatus = 2;
                 result = 0;
                 break;
             case CARD_RESULT_ENCODING:
-                _MemCCard.mUnknown14 = 3;
+                _MemCCard.mStatus = 3;
                 result = 0;
                 break;
             case CARD_RESULT_NOCARD:
             case CARD_RESULT_BUSY:
                 break;
             case CARD_RESULT_READY:
-                _MemCCard.mUnknown14 = 0;
+                _MemCCard.mStatus = 0;
                 break;
             }
             break;
@@ -1159,7 +1160,7 @@ int MemCAsyncPoll(int *pResult)
                 break;
             case 2:
             case 6:
-                result = _MemCCard.mUnknown14;
+                result = _MemCCard.mStatus;
                 break;
             case 20:
             case 21:
@@ -1208,7 +1209,7 @@ pending:
         switch (state) {
         case 20:
         case 21:
-            result = _MemCOp.mUnknownD4;
+            result = _MemCOp.mTransferred;
             break;
         }
     }

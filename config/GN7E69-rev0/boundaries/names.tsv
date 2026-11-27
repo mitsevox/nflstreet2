@@ -809,7 +809,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x801D2050	4	_PrintDefault	name	Memory.c	Memory.c
 0x801D2054	116	MemInit	name	Memory.c	Memory.c
 0x801D20C8	104	MemShutdown	name	Memory.c	Memory.c
-0x801D2130	840	MemInitHeap	size	Memory.c	Memory.c
+0x801D2130	840	MemInitHeap	name	Memory.c	Memory.c
 0x801D2478	248	MemCustomHeap	name	Memory.c	Memory.c
 0x801D2570	292	MemShutdownHeap	size	Memory.c	Memory.c
 0x801D2694	48	MemCheckSentinelAll	name	Memory.c	Memory.c

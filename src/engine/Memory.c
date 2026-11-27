@@ -65,7 +65,7 @@ extern int sprintf(char *pDst, const char *pFormat, ...);
 static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offset);
 void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset);
 extern int SysGetSystemTime(void);
-int fn_801D2130(MemHeapDesc_t *pParams);
+int MemInitHeap(MemHeapDesc_t *pParams);
 extern int fn_801D2570(int ident);
 
 static MemHeap_t *_FindHeapByIdent(int id)
@@ -488,7 +488,7 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
         return 0;
     }
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = ((unsigned int)pStart + (n + 12)) % 16u;
+    rem = (unsigned int)(pStart + n + 12) & 15;
     if (rem) {
         extra = 16 - rem;
         if (n == 0 && extra < 2) {
@@ -600,7 +600,7 @@ int MemInit(MemInitParams_t *pParams)
     lbl_803EBCCC = 0;
     lbl_803EBCD4 = _PrintDefault;
     if (pParams != 0) {
-        result = fn_801D2130(pParams->mpHeap);
+        result = MemInitHeap(pParams->mpHeap);
         if (result == 0) {
             lbl_803EBCC4 = pParams->mpHeap->mId;
         }
@@ -623,7 +623,7 @@ int MemShutdown(void)
     return 0;
 }
 
-int fn_801D2130(MemHeapDesc_t *pParams)
+int MemInitHeap(MemHeapDesc_t *pParams)
 {
     int ownsMemory = 0;
     int ident = pParams->mId;

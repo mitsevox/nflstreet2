@@ -41,16 +41,16 @@ extern "C" void MemCardScreenListBegin(int value, int *pCount)
     MemCardFilesGetSaveTarget(&a, &b);
     index = MemCardFilesGetSlotPort(a, b);
     if (index == -1) {
-        if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            MemCardMgrUnmount(fn_801D671C());
+        if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+            MemCardMgrUnmount(MemCardMgrGetPort());
         }
         index = 0;
         if (_MemCardScreen_iForcedSlot != -1) {
             index = _MemCardScreen_iForcedSlot;
         }
     } else if (_MemCardScreen_iForcedSlot != -1 && _MemCardScreen_iForcedSlot != index) {
-        if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            MemCardMgrUnmount(fn_801D671C());
+        if (MemCardMgrGetPort() >= 0 && MemCardMgrGetPort() <= 1) {
+            MemCardMgrUnmount(MemCardMgrGetPort());
         }
         index = _MemCardScreen_iForcedSlot;
     }
@@ -81,7 +81,7 @@ extern "C" int MemCardScreenListGetItem(int *p0, int *p4, int *p8, int *p12)
     *p8 = MemCardFilesGetSlotFileNumber(a, b);
     if (a == 1 || ((a == 2 || a == 3) && MemCardFilesIsSlotSaved(a, b))) {
         char text[32];
-        fn_801D6B24(text, 32);
+        MemCardMgrGetFileTitle(text, 32);
         *p8 = MemCardMgrFindSlot(text, a, &flag);
         int found = *p8 != -1;
         if (found) {

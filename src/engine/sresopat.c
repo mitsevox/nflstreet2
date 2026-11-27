@@ -5,12 +5,12 @@
 
 int SNDBANKI_asyncresolvepatch(int mask, void *patch, int base, int *count)
 {
-    Struct_80270E04 info;
+    SNDIPATCHHEADER info;
     char *cursor = (char *)patch + 4;
     int more;
 
     do {
-        more = fn_80270E04(&cursor, &info);
+        more = SNDI_parsetimbre(&cursor, &info);
         if (info.m18 & mask) {
             SNDPLATFORM_asyncresolvetimbre(&info, base, count);
             SNDBANKI_userdatacallback(&info, 0);

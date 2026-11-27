@@ -2,11 +2,12 @@
    platform start, stop and service routines. */
 
 #include "engine/sndlib.h"
+#include "engine/ssysinit.h"
 
 /* The audio-callback count: the driver thread runs the 100 Hz server on every other callback. */
 static int everyother = 0;
 
-State_803A8D60 snddrv __attribute__((aligned(32)));
+SndDrvState_t snddrv __attribute__((aligned(32)));
 
 void SNDDRV_freenextframe(void)
 {
@@ -633,7 +634,7 @@ void SNDPLATFORM_getvoicerange(u32 flags, int *a, int *b)
     }
 }
 
-int SNDPLATFORM_asyncresolvetimbre(Struct_80270E04 *p, int value, int *base)
+int SNDPLATFORM_asyncresolvetimbre(SNDIPATCHHEADER *p, int value, int *base)
 {
     if (*base == 0) {
         *base = p->m68;
@@ -821,7 +822,7 @@ int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream)
     return 0;
 }
 
-int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_80274464 *info, Struct_80274464 *p)
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;
@@ -1172,17 +1173,17 @@ void SNDI_mutexunlock(void)
     OSUnlockMutex(&snddrv.mBE30);
 }
 
-int SNDPLATFORM_ModeSetUp(Struct_802753AC *p, int mode)
+int SNDPLATFORM_ModeSetUp(SNDSYSOPTS *opts, int mode)
 {
     switch (mode) {
     case 0:
-        p->m3F = 1;
+        opts->mParams.m23 = 1;
         break;
     case 1:
-        p->m3F = 2;
+        opts->mParams.m23 = 2;
         break;
     case 8:
-        p->m3F = 4;
+        opts->mParams.m23 = 4;
         break;
     }
     return 0;

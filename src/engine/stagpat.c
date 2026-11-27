@@ -31,7 +31,7 @@ retry:
     return freekey;
 }
 
-int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPlayOpts_t *opts, Struct_80270E04 *tag,
+int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPlayOpts_t *opts, SNDIPATCHHEADER *tag,
                         int key, int velocity, int detune)
 {
     Record_803A6DF0 *rec;
@@ -183,7 +183,7 @@ int SNDBANKI_playtimbre(int bank_index, int patch_index, BankVer_t *bank, SndPla
 
 int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_index, SndPlayOpts_t *opts)
 {
-    Struct_80270E04 tag;
+    SNDIPATCHHEADER tag;
     int handles[12];
     Record_803A6DF0 *v = 0;
     int count = 0;
@@ -209,7 +209,7 @@ int SNDBANKI_playpatch(BankVer_t *bank, void *patch, int bank_index, int patch_i
     patch = (char *)patch + 4;
     group = SNDBANKI_findfreekey();
     do {
-        more = fn_80270E04((char **)&patch, &tag);
+        more = SNDI_parsetimbre((char **)&patch, &tag);
         if (started == 0) {
             if (tag.m0 != 0) {
                 random = randrange(tag.m0);

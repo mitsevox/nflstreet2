@@ -100,7 +100,7 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
     }
     memset((unsigned char *)pDevice->mpData + 8, 0, PerGetDataSize());
     for (j = 4; j < 8; j++) {
-        ((signed char *)pDevice->mpData)[j + 8] = -0x80;
+        ((PerData_t *)pDevice->mpData)->mUnknown08[j] = -0x80;
     }
 
     switch (state) {
@@ -153,7 +153,6 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             float sum;
             int xPositive;
             int yNegative;
-            int axis;
             int value;
             signed char out;
 
@@ -211,40 +210,40 @@ int _PerJoyDriverPoll(PerDevice_t *pDevice, int (*pCounter)(unsigned int))
             out = (signed char)(stickY * (yNegative == 1 ? 127.0f : -127.0f));
             ((signed char *)pDevice->mpData)[9] = out;
 
-            axis = 2;
+            j = 2;
             value = (float)_PerJoy_aPadStatus[port].substickX * (127.0 / 29.0);
             out = (signed char)(value < -127 ? -127 : (value > 127 ? 127 : value));
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
-            axis++;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
+            j++;
             value = (float)-_PerJoy_aPadStatus[port].substickY * (127.0 / 29.0);
             out = (signed char)(value < -127 ? -127 : (value > 127 ? 127 : value));
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
-            axis++;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
+            j++;
             value = ((float)_PerJoy_aPadStatus[port].triggerLeft - 76.0f) * (127.0 / 70.0);
             out = (signed char)(value < -128 ? -128 : (value > 127 ? 127 : value));
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
             if (out > -120) {
                 ((PerData_t *)pDevice->mpData)->mUnknown08[Per_MaxAxis] |= Per_BtnMask[6];
             }
-            axis++;
+            j++;
             value = ((float)_PerJoy_aPadStatus[port].triggerRight - 76.0f) * (127.0 / 70.0);
             out = (signed char)(value < -128 ? -128 : (value > 127 ? 127 : value));
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
             if (out > -120) {
                 ((PerData_t *)pDevice->mpData)->mUnknown08[Per_MaxAxis] |= Per_BtnMask[5];
             }
-            axis++;
+            j++;
             out = 127;
             if (_PerJoy_aPadStatus[port].analogA == 0) {
                 out = -128;
             }
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
-            axis++;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
+            j++;
             out = 127;
             if (_PerJoy_aPadStatus[port].analogB == 0) {
                 out = -128;
             }
-            ((signed char *)pDevice->mpData)[axis + 8] = out;
+            ((PerData_t *)pDevice->mpData)->mUnknown08[j] = out;
             pData = pDevice->mpData;
             if (pCounter) {
                 pData->mUnknown04 = pCounter(pDevice->mIndex);

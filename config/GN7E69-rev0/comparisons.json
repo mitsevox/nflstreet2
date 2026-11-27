@@ -24754,7 +24754,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and five HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These five full partial bodies retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
+      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and the HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These partial bodies (two after round 5 lane 3, 2026-11-27) retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
       "sections": [
         {
           "section": ".text",
@@ -24800,24 +24800,9 @@
           "end": "0x801DE010"
         },
         {
-          "symbol": "_sumGasMotionForces",
-          "start": "0x801DE04C",
-          "end": "0x801DE114"
-        },
-        {
-          "symbol": "ParticleLibInit",
-          "start": "0x801DE1E0",
-          "end": "0x801DE410"
-        },
-        {
           "symbol": "ParticleLibShutdown",
           "start": "0x801DE410",
           "end": "0x801DE4F8"
-        },
-        {
-          "symbol": "ParticleObjInitState",
-          "start": "0x801DE794",
-          "end": "0x801DE7F4"
         }
       ],
       "discarded": [
@@ -25107,7 +25092,7 @@
           "end": "0x801D2130"
         },
         {
-          "symbol": "fn_801D2130",
+          "symbol": "MemInitHeap",
           "start": "0x801D2130",
           "end": "0x801D2478"
         },
@@ -25600,7 +25585,7 @@
           "end": "0x801D671C"
         },
         {
-          "symbol": "fn_801D671C",
+          "symbol": "MemCardMgrGetPort",
           "start": "0x801D671C",
           "end": "0x801D6724"
         },
@@ -25615,7 +25600,7 @@
           "end": "0x801D673C"
         },
         {
-          "symbol": "fn_801D673C",
+          "symbol": "MemCardMgrGetCardType",
           "start": "0x801D673C",
           "end": "0x801D6754"
         },
@@ -25650,7 +25635,7 @@
           "end": "0x801D6850"
         },
         {
-          "symbol": "fn_801D6850",
+          "symbol": "MemCardMgrGetFileType",
           "start": "0x801D6850",
           "end": "0x801D685C"
         },
@@ -25670,7 +25655,7 @@
           "end": "0x801D6918"
         },
         {
-          "symbol": "fn_801D6918",
+          "symbol": "MemCardMgrGetLastAction",
           "start": "0x801D6918",
           "end": "0x801D6924"
         },
@@ -25695,7 +25680,7 @@
           "end": "0x801D6B24"
         },
         {
-          "symbol": "fn_801D6B24",
+          "symbol": "MemCardMgrGetFileTitle",
           "start": "0x801D6B24",
           "end": "0x801D6B4C"
         },
@@ -28553,7 +28538,7 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 6 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 68 functions are exact and linked (6 made exact by lane 8, 2026-11-27).",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c) and its compiler, function, name, data and source-form rows. The 3 registered functions are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 71 functions are exact and linked (6 made exact by lane 8 and 3 by round 5 lane 5, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
@@ -28576,11 +28561,6 @@
       ],
       "functions": [
         {
-          "symbol": "SNDAEMSI_updatedestroy",
-          "start": "0x80266EC0",
-          "end": "0x80267114"
-        },
-        {
           "symbol": "UpdateControlClass",
           "start": "0x802671D0",
           "end": "0x8026739C"
@@ -28589,16 +28569,6 @@
           "symbol": "SNDAEMSI_updateoscillator",
           "start": "0x80268B88",
           "end": "0x80268DA8"
-        },
-        {
-          "symbol": "SNDAEMSI_CreateModuleInstance",
-          "start": "0x80269084",
-          "end": "0x80269260"
-        },
-        {
-          "symbol": "SNDAEMS_removemodulebank",
-          "start": "0x802692B8",
-          "end": "0x80269484"
         },
         {
           "symbol": "SNDAEMSI_resolvemodulebank",

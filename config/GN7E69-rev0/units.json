@@ -711,10 +711,6 @@
       "address": "0x80273DF8",
       "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
     },
-    "MemCAsyncOpen": {
-      "address": "0x801D4A3C",
-      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
-    },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
       "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
@@ -826,6 +822,10 @@
     "__CTOR_LIST__": {
       "address": "0x80289A20",
       "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
+    },
+    "SNDI_parsetimbre": {
+      "address": "0x80270E04",
+      "evidence": "evidence.tsv function and related name rows at 0x80270E04 (SNDI_parsetimbre, the registered holdout of src/engine/stpparse.c, original bytes linked). sbremove.c, sresopat.c and stagpat.c call it by name through the sndbank.h prototype."
     }
   },
   "units": [
@@ -1363,7 +1363,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and fn_801D2130 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and MemInitHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -1411,11 +1411,11 @@
             "evidence": "evidence.tsv source-form 0x801D1C14-0x801D1E30"
           },
           {
-            "function": "fn_801D2130",
+            "function": "MemInitHeap",
             "evidence": "evidence.tsv source-form 0x801D2130-0x801D2478"
           }
         ],
-        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 (fn_801D2478, MemCustomHeap, exact since #1492)."
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 (fn_801D2478, MemCustomHeap, exact since #1492; fn_801D2130 named MemInitHeap in round 5 lane 3)."
       },
       "storage": [
         {
@@ -25614,19 +25614,13 @@
     {
       "source": "src/engine/saems.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 68 of 74 functions exact, the 6 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "evidence": "evidence.tsv unit row 0x80266E88-0x802697D8 (src/engine/saems.c, NASCAR 2005 saems.c), its function, name and data rows (.rodata 0x802B77C8-0x802B78A0, .data 0x802FFB3C-0x802FFC90) and the sound_cxx compiler row; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 71 of 74 functions exact, the 3 holdouts keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80267114",
-          "end": "0x802671D0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
           "start": "0x80266E88",
-          "end": "0x80266EC0"
+          "end": "0x802671D0"
         },
         {
           "section": ".text",
@@ -25638,18 +25632,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80268DA8",
-          "end": "0x80269084"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80269260",
-          "end": "0x802692B8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80269484",
           "end": "0x802694AC"
         },
         {
@@ -25668,10 +25650,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "SNDAEMSI_updatedestroy",
-            "evidence": "evidence.tsv source-form 0x80266EC0-0x80267114"
-          },
-          {
             "function": "UpdateControlClass",
             "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"
           },
@@ -25680,19 +25658,11 @@
             "evidence": "evidence.tsv source-form 0x80268B88-0x80268DA8"
           },
           {
-            "function": "SNDAEMSI_CreateModuleInstance",
-            "evidence": "evidence.tsv source-form 0x80269084-0x80269260"
-          },
-          {
-            "function": "SNDAEMS_removemodulebank",
-            "evidence": "evidence.tsv source-form 0x802692B8-0x80269484"
-          },
-          {
             "function": "SNDAEMSI_resolvemodulebank",
             "evidence": "evidence.tsv source-form 0x802694AC-0x802697D8"
           }
         ],
-        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out SNDAEMSI_updatedestroy, UpdateControlClass, SNDAEMSI_updateoscillator, SNDAEMSI_CreateModuleInstance, SNDAEMS_removemodulebank, SNDAEMSI_resolvemodulebank (lane 8 merge notes, 2026-11-27: UpdateCallFunction, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer and SNDAEMSI_updateramp made exact); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
+        "evidence": "merge notes of the e2a pull request: src/engine/saems.c holds out UpdateControlClass, SNDAEMSI_updateoscillator and SNDAEMSI_resolvemodulebank (lane 8 merge notes, 2026-11-27: UpdateCallFunction, SNDAEMSI_updateenvelope, SNDAEMSI_updatetable, SNDAEMSI_playerupdatebank, SNDAEMSI_updateplayer and SNDAEMSI_updateramp made exact; round 5 lane 5 merge notes, 2026-11-27: SNDAEMSI_updatedestroy, SNDAEMSI_CreateModuleInstance and SNDAEMS_removemodulebank made exact); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the cause."
       }
     },
     {
@@ -26857,7 +26827,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801D4D08",
+          "start": "0x801D4A3C",
           "end": "0x801D546C"
         },
         {
@@ -26892,10 +26862,6 @@
             "evidence": "evidence.tsv source-form 0x801D4848-0x801D4A3C"
           },
           {
-            "function": "MemCAsyncOpen",
-            "evidence": "evidence.tsv source-form 0x801D4A3C-0x801D4D08"
-          },
-          {
             "function": "_MemCAsyncWrite",
             "evidence": "evidence.tsv source-form 0x801D546C-0x801D56A0"
           },
@@ -26904,7 +26870,7 @@
             "evidence": "evidence.tsv source-form 0x801D5840-0x801D5D30"
           }
         ],
-        "evidence": "x1b merge notes (swarm x1 tracking table) and the lane-2 holdout PR: src/engine/memorycard.c holds out MemCAsyncGetDir, MemCAsyncOpen, _MemCAsyncWrite and MemCAsyncPoll (MemCAsyncDelete is exact and linked)."
+        "evidence": "x1b merge notes (swarm x1 tracking table) and the lane-2 holdout PR: src/engine/memorycard.c holds out MemCAsyncGetDir, _MemCAsyncWrite and MemCAsyncPoll (MemCAsyncDelete is exact and linked; MemCAsyncOpen exact and linked in round 5 lane 3)."
       }
     },
     {
@@ -28641,7 +28607,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row0x801DD498-0x801DFE0C (provisional sibling-supported particleLib.c); all45 functions reconstructed, whole native data placed, five documented HOLDOUT source-form rows keep original function bytes.",
+      "evidence": "evidence.tsv unit row0x801DD498-0x801DFE0C (provisional sibling-supported particleLib.c); all45 functions reconstructed, whole native data placed, five documented HOLDOUT source-form rows kept original function bytes; round 5 lane 3 (2026-11-27) made _sumGasMotionForces, ParticleLibInit and ParticleObjInitState exact and linked them, two holdouts remain.",
       "sections": [
         {
           "section": ".text",
@@ -28653,24 +28619,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801DE010",
-          "end": "0x801DE04C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DE114",
-          "end": "0x801DE1E0"
+          "end": "0x801DE410"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801DE4F8",
-          "end": "0x801DE794"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801DE7F4",
           "end": "0x801DFE0C"
         },
         {
@@ -28711,23 +28665,11 @@
             "evidence": "evidence.tsv source-form 0x801DDFB0-0x801DE010"
           },
           {
-            "function": "_sumGasMotionForces",
-            "evidence": "evidence.tsv source-form 0x801DE04C-0x801DE114"
-          },
-          {
-            "function": "ParticleLibInit",
-            "evidence": "evidence.tsv source-form 0x801DE1E0-0x801DE410"
-          },
-          {
             "function": "ParticleLibShutdown",
             "evidence": "evidence.tsv source-form 0x801DE410-0x801DE4F8"
-          },
-          {
-            "function": "ParticleObjInitState",
-            "evidence": "evidence.tsv source-form 0x801DE794-0x801DE7F4"
           }
         ],
-        "evidence": "PR1445 merge notes: five measured partials in particleLib.c, each retained in comparisons.json and tracked by a HOLDOUT row; owner holdouts ruling2026-11-20."
+        "evidence": "PR1445 merge notes: five measured partials in particleLib.c, each retained in comparisons.json and tracked by a HOLDOUT row; owner holdouts ruling2026-11-20 (round 5 lane 3 merge notes, 2026-11-27: _sumGasMotionForces, ParticleLibInit and ParticleObjInitState made exact)."
       },
       "link_roots": {
         "discarded": [

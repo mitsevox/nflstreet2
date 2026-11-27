@@ -5,7 +5,7 @@
 
 int SNDbankremove(int bank)
 {
-    Struct_80270E04 info;
+    SNDIPATCHHEADER info;
     char *cursor;
     BankVer_t *hdr;
     int i;
@@ -35,7 +35,7 @@ int SNDbankremove(int bank)
         if (cursor != 0) {
             cursor += 4;
             do {
-                more = fn_80270E04(&cursor, &info);
+                more = SNDI_parsetimbre(&cursor, &info);
                 SNDBANKI_userdatacallback(&info, 2);
             } while (more != 0);
         }
