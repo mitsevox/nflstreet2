@@ -19,7 +19,6 @@ int DbUserGetCurrent(void);
 static unsigned char _Stev_bOpen = 0;
 
 extern "C" {
-#if defined(DECOMP_COMPARE)
 int StevQueryRowCount(void)
 {
     int count;
@@ -79,11 +78,6 @@ int SstlFetchEntry(unsigned int index, int *pLglt, char *pEtnr, int size)
     }
     return found;
 }
-#else
-int StevQueryRowCount(void);
-int StevQueryDiveCount(int dive);
-int SstlFetchEntry(unsigned int index, int *pLglt, char *pEtnr, int size);
-#endif
 
 int StevReadRow(int nets, StevRow_t *pRow)
 {
