@@ -9952,7 +9952,7 @@
     {
       "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (12 bodies exact, 1 partial: PlaDynClutScaleRange) and the exact .rodata data row 0x8028D568-0x8028D588. The exact functions are linked through the units.json holdouts entry; PlaDynClutScaleRange keeps its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -25120,77 +25120,6 @@
       ]
     },
     {
-      "source": "src/engine/colorRamp.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv whole-file unit, function, compiler and literal rows. ColorRampEval is a measured holdout at 0x801E0844-0x801E0984. The remaining nine functions and all 12 readonly bytes link in the original build.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801E052C",
-          "end": "0x801E0A1C"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1140",
-          "end": "0x802B114C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_colorRampInsertIndex",
-          "start": "0x801E052C",
-          "end": "0x801E05B0"
-        },
-        {
-          "symbol": "_colorRampAppend",
-          "start": "0x801E05B0",
-          "end": "0x801E05F8"
-        },
-        {
-          "symbol": "_colorRampInterp",
-          "start": "0x801E05F8",
-          "end": "0x801E06B0"
-        },
-        {
-          "symbol": "_colorRampCopyNode",
-          "start": "0x801E06B0",
-          "end": "0x801E06DC"
-        },
-        {
-          "symbol": "ColorRampInit",
-          "start": "0x801E06DC",
-          "end": "0x801E071C"
-        },
-        {
-          "symbol": "ColorRampInitParms",
-          "start": "0x801E071C",
-          "end": "0x801E079C"
-        },
-        {
-          "symbol": "ColorRampInsertColor",
-          "start": "0x801E079C",
-          "end": "0x801E0844"
-        },
-        {
-          "symbol": "ColorRampEval",
-          "start": "0x801E0844",
-          "end": "0x801E0984"
-        },
-        {
-          "symbol": "ColorRampSetInterp",
-          "start": "0x801E0984",
-          "end": "0x801E098C"
-        },
-        {
-          "symbol": "ColorRampCopy",
-          "start": "0x801E098C",
-          "end": "0x801E0A1C"
-        }
-      ]
-    },
-    {
       "source": "src/engine/PJoyDrvr.c",
       "profile": "engine_c_fastmath",
       "evidence": "evidence.tsv PJoyDrvr.c six function/name rows, full poll partial, literal pool and the data rows of _PerJoy_aiMotorCommand (.bss) and _PerJoy_aPadStatus (COMMON, placed by the linked unit storage map). Comparison only: five exact functions, one partial.",
@@ -25250,7 +25179,7 @@
     {
       "source": "src/engine/physbroadphase.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its function rows and the game_cpp compiler row, plus the exact data row 0x802B1708-0x802B1720. Registered for its two holdouts; the exact functions link through units.json.",
+      "evidence": "evidence.tsv unit row 0x801E9F70-0x801EADD8 (src/engine/physbroadphase.cpp), its function rows and the game_cpp compiler row, plus the exact data row 0x802B1708-0x802B1720. Registered for its holdout BroadPhase::InsertEndpoint; the exact functions link through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -26562,7 +26491,7 @@
     {
       "source": "src/engine/llsystem.c",
       "profile": "llsystem_c_data",
-      "evidence": "evidence.tsv llsystem.c complete unit and two HOLDOUT source-form rows. Only the two complete unfinished functions are registered; all22 other functions and all88 native data bytes link. The base comparison profile differs from the linked holdouts profile solely by -ffunction-sections. No function or data slice is omitted.",
+      "evidence": "evidence.tsv llsystem.c complete unit and the HOLDOUT source-form row of SysStartTimer. Registered: SysStartTimer (holdout) and SysInitRealTimeClock (exact since the lane-2 holdout PR, linked); the other 23 functions (SysInitRealTimeClock included) and all88 native data bytes link. The base comparison profile differs from the linked holdouts profile solely by -ffunction-sections. No function or data slice is omitted.",
       "sections": [
         {
           "section": ".text",
@@ -27273,37 +27202,6 @@
           "symbol": "PATHI_sortprojects",
           "start": "0x801B3568",
           "end": "0x801B3724"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/pathtrack.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and two HOLDOUT source-form rows. Twenty-six exact bodies, including the base constructor, and the complete native read-only section link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B3AD0",
-          "end": "0x801B45D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA60",
-          "end": "0x802AEB90"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_inittrack",
-          "start": "0x801B3FE0",
-          "end": "0x801B4174"
-        },
-        {
-          "symbol": "PATHI_dispatchtrackstate",
-          "start": "0x801B43CC",
-          "end": "0x801B44BC"
         }
       ]
     },
@@ -29643,7 +29541,7 @@
     {
       "source": "src/engine/uigarc.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler row (engine_c_fastmath, the base profile of the linked engine_c_fastmath_holdouts unit), function, name and data rows. Partials: the two vertex builders 0x80223FF4 (95.01%) and 0x8022482C (88.18%), the documented holdouts (HOLDOUT source-form rows); their ranges keep the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler row (engine_c_fastmath, the base profile of the linked engine_c_fastmath_holdouts unit), function, name and data rows. Partials: the two vertex builders 0x80223FF4 (95.11%) and 0x8022482C (88.18%), the documented holdouts (HOLDOUT source-form rows); their ranges keep the original bytes.",
       "sections": [
         {
           "section": ".text",

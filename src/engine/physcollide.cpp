@@ -282,10 +282,9 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
     depthA = 0.0f;
     speed = Vec3Magnitude(&relative);
     if (speed > 1e-16f) {
-        float length = speed * dt;
+        float length = (speed * dt) + (speed * dt);
         float limit;
 
-        length = length + length;
         if (length < mMinTestLength) {
             length = mMinTestLength;
         }
@@ -343,43 +342,44 @@ int ContactSystem::ResolveContact(float dt, RigidBody *pA, RigidBody *pB, BodyCo
             approach = -Vec3DotProduct(&normalA, &relative);
         }
     }
-    if (approach > 0.0f) {
-        float response;
-        float scale;
-        float length;
-
-        if ((approach * dt) + (approach * dt) > depthA) {
-            pCorrection->x = pCorrection->y = pCorrection->z = 0.0f;
-        }
-        response = ComputeBodyRotationalResponse(pA, pPointA, &normalA);
-        scale = ComputeBodyRotationalResponse(pB, pPointB, &normalA);
-        pShapeA->GetMaterial(&frictionA, &bounceA, pA->mTransform, pPointA);
-        scale = approach / (pA->mInvMass + pB->mInvMass + response + scale);
-        pShapeB->GetMaterial(&frictionB, &bounceB, pB->mTransform, pPointB);
-        scale *= (bounceA + bounceB) * 0.5f + 1.0f;
-        Vec3Scale(&impulse, &normalA, -scale);
-        friction.x = friction.y = friction.z = 0.0f;
-        Vec3Scale(&along, &normalA, -approach);
-        Vec3Sub(&tangent, &relative, &along);
-        length = Vec3Magnitude(&tangent);
-        if (length > 1e-6f) {
-            float mu;
-
-            Vec3Scale(&tangent, &tangent, 1.0f / length);
-            if (frictionA < 0.2f || frictionB < 0.2f) {
-                mu = frictionB <= frictionA ? frictionB : frictionA;
-            } else {
-                mu = (frictionA + frictionB) * 0.5f;
-            }
-            Vec3Sub(&probeB, &pA->mForce, &pB->mForce);
-            mu = mu * Vec3DotProduct(&probeB, &normalA) * dt;
-            if (mu > 0.0) {
-                Vec3Scale(&friction, &tangent, mu);
-            }
-        }
-        *pImpulse = impulse;
-        *pFriction = friction;
-        return 1;
+    if (!(approach > 0.0f)) {
+        return 0;
     }
-    return 0;
+    float response;
+    float scale;
+    float length;
+
+    if ((approach * dt) + (approach * dt) > depthA) {
+        pCorrection->x = pCorrection->y = pCorrection->z = 0.0f;
+    }
+    response = ComputeBodyRotationalResponse(pA, pPointA, &normalA);
+    scale = ComputeBodyRotationalResponse(pB, pPointB, &normalA);
+    scale = approach / (pA->mInvMass + pB->mInvMass + response + scale);
+    pShapeA->GetMaterial(&frictionA, &bounceA, pA->mTransform, pPointA);
+    pShapeB->GetMaterial(&frictionB, &bounceB, pB->mTransform, pPointB);
+    scale *= (bounceA + bounceB) * 0.5f + 1.0f;
+    Vec3Scale(&impulse, &normalA, -scale);
+    friction.x = friction.y = friction.z = 0.0f;
+    Vec3Scale(&along, &normalA, -approach);
+    Vec3Sub(&tangent, &relative, &along);
+    length = Vec3Magnitude(&tangent);
+    if (length > 1e-6f) {
+        float mu;
+        float force;
+
+        Vec3Scale(&tangent, &tangent, 1.0f / length);
+        if (frictionA < 0.2f || frictionB < 0.2f) {
+            mu = frictionB <= frictionA ? frictionB : frictionA;
+        } else {
+            mu = (frictionA + frictionB) * 0.5f;
+        }
+        Vec3Sub(&probeB, &pA->mForce, &pB->mForce);
+        force = mu * Vec3DotProduct(&probeB, &normalA) * dt;
+        if (force > 0.0) {
+            Vec3Scale(&friction, &tangent, force);
+        }
+    }
+    *pImpulse = impulse;
+    *pFriction = friction;
+    return 1;
 }

@@ -73,37 +73,12 @@ static inline int BlendChannel(int a, int b, int weightA, int weightB, int total
 
 static inline int ScaleChannel(int value, int scale)
 {
-    value = value * (scale * 2) / 255;
-    if (value > 255) {
-        value = 255;
+    int result = scale * 2 * value / 255;
+
+    if (result > 255) {
+        result = 255;
     }
-    return value;
-}
-
-static inline void ScaleColor(PaletteColor *pColor, const PaletteColor *pScale)
-{
-    pColor->r = ScaleChannel(pColor->r, pScale->r);
-    pColor->g = ScaleChannel(pColor->g, pScale->g);
-    pColor->b = ScaleChannel(pColor->b, pScale->b);
-}
-
-static inline void BlendRange(unsigned short *pData, int format, const ColorEntry *pEntry,
-                              const PaletteColor *pFrom, const PaletteColor *pTo)
-{
-    int total = pEntry->mTo - pEntry->mFrom;
-    int weightFrom = total;
-    int weightTo = 0;
-
-    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
-        PaletteColor color;
-
-        color.r = BlendChannel(pFrom->r, pTo->r, weightFrom, weightTo, total);
-        color.g = BlendChannel(pFrom->g, pTo->g, weightFrom, weightTo, total);
-        color.b = BlendChannel(pFrom->b, pTo->b, weightFrom, weightTo, total);
-        PackColor(pData, i, color.r, color.g, color.b, format);
-        weightFrom--;
-        weightTo++;
-    }
+    return result;
 }
 
 extern "C" {
@@ -144,6 +119,11 @@ ColorPalette *PlaDynClutFindPalette(PlaDynClutPalettes_t *pPalettes, int colorNu
         }
     }
     return pPalette;
+}
+
+static inline void GetPaletteColor(PlaDynClutPalettes_t *pPalettes, const ColorEntry *pEntry, PaletteColor *pColor)
+{
+    *pColor = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
 }
 
 void PlaDynClutBeginTable(void *p, PlaDynClutTable_t *pState)
@@ -194,7 +174,20 @@ void PlaDynClutBlendRange(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 
     UnpackColor(pData, pEntry->mFrom, &from, format);
     UnpackColor(pData, pEntry->mTo, &to, format);
-    BlendRange(pData, format, pEntry, &from, &to);
+    int total = pEntry->mTo - pEntry->mFrom;
+    int weightFrom = total;
+    int weightTo = 0;
+
+    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
+        PaletteColor color;
+
+        color.r = BlendChannel(from.r, to.r, weightFrom, weightTo, total);
+        color.g = BlendChannel(from.g, to.g, weightFrom, weightTo, total);
+        color.b = BlendChannel(from.b, to.b, weightFrom, weightTo, total);
+        PackColor(pData, i, color.r, color.g, color.b, format);
+        weightFrom--;
+        weightTo++;
+    }
 }
 
 void PlaDynClutBlendPaletteToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
@@ -202,10 +195,24 @@ void PlaDynClutBlendPaletteToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState, 
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor to;
-    PaletteColor from = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor from;
 
+    GetPaletteColor(pPalettes, pEntry, &from);
     UnpackColor(pData, pEntry->mTo, &to, format);
-    BlendRange(pData, format, pEntry, &from, &to);
+    int total = pEntry->mTo - pEntry->mFrom;
+    int weightFrom = total;
+    int weightTo = 0;
+
+    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
+        PaletteColor color;
+
+        color.r = BlendChannel(from.r, to.r, weightFrom, weightTo, total);
+        color.g = BlendChannel(from.g, to.g, weightFrom, weightTo, total);
+        color.b = BlendChannel(from.b, to.b, weightFrom, weightTo, total);
+        PackColor(pData, i, color.r, color.g, color.b, format);
+        weightFrom--;
+        weightTo++;
+    }
 }
 
 void PlaDynClutBlendStartToPalette(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
@@ -213,10 +220,24 @@ void PlaDynClutBlendStartToPalette(ColorEntry *pEntry, PlaDynClutTable_t *pState
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor from;
-    PaletteColor to = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor to;
 
+    GetPaletteColor(pPalettes, pEntry, &to);
     UnpackColor(pData, pEntry->mFrom, &from, format);
-    BlendRange(pData, format, pEntry, &from, &to);
+    int total = pEntry->mTo - pEntry->mFrom;
+    int weightFrom = total;
+    int weightTo = 0;
+
+    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
+        PaletteColor color;
+
+        color.r = BlendChannel(from.r, to.r, weightFrom, weightTo, total);
+        color.g = BlendChannel(from.g, to.g, weightFrom, weightTo, total);
+        color.b = BlendChannel(from.b, to.b, weightFrom, weightTo, total);
+        PackColor(pData, i, color.r, color.g, color.b, format);
+        weightFrom--;
+        weightTo++;
+    }
 }
 
 void PlaDynClutBlendSourceToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState)
@@ -228,7 +249,20 @@ void PlaDynClutBlendSourceToEnd(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 
     UnpackColor(pData, pEntry->mColor, &from, format);
     UnpackColor(pData, pEntry->mTo, &to, format);
-    BlendRange(pData, format, pEntry, &from, &to);
+    int total = pEntry->mTo - pEntry->mFrom;
+    int weightFrom = total;
+    int weightTo = 0;
+
+    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
+        PaletteColor color;
+
+        color.r = BlendChannel(from.r, to.r, weightFrom, weightTo, total);
+        color.g = BlendChannel(from.g, to.g, weightFrom, weightTo, total);
+        color.b = BlendChannel(from.b, to.b, weightFrom, weightTo, total);
+        PackColor(pData, i, color.r, color.g, color.b, format);
+        weightFrom--;
+        weightTo++;
+    }
 }
 
 void PlaDynClutBlendStartToSource(ColorEntry *pEntry, PlaDynClutTable_t *pState)
@@ -240,7 +274,20 @@ void PlaDynClutBlendStartToSource(ColorEntry *pEntry, PlaDynClutTable_t *pState)
 
     UnpackColor(pData, pEntry->mColor, &to, format);
     UnpackColor(pData, pEntry->mFrom, &from, format);
-    BlendRange(pData, format, pEntry, &from, &to);
+    int total = pEntry->mTo - pEntry->mFrom;
+    int weightFrom = total;
+    int weightTo = 0;
+
+    for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
+        PaletteColor color;
+
+        color.r = BlendChannel(from.r, to.r, weightFrom, weightTo, total);
+        color.g = BlendChannel(from.g, to.g, weightFrom, weightTo, total);
+        color.b = BlendChannel(from.b, to.b, weightFrom, weightTo, total);
+        PackColor(pData, i, color.r, color.g, color.b, format);
+        weightFrom--;
+        weightTo++;
+    }
 }
 
 void PlaDynClutScaleRange(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynClutPalettes_t *pPalettes)
@@ -248,11 +295,14 @@ void PlaDynClutScaleRange(ColorEntry *pEntry, PlaDynClutTable_t *pState, PlaDynC
     unsigned short *pData = pState->mpData;
     int format = pState->mFormat;
     PaletteColor color;
-    PaletteColor scale = PlaDynClutFindPalette(pPalettes, pEntry->mColor)->mColors[pEntry->mLevel];
+    PaletteColor scale;
 
+    GetPaletteColor(pPalettes, pEntry, &scale);
     UnpackColor(pData, pEntry->mColor, &color, format);
     for (int i = pEntry->mFrom; i <= pEntry->mTo; i++) {
-        ScaleColor(&color, &scale);
+        color.r = ScaleChannel(color.r, scale.r);
+        color.g = ScaleChannel(color.g, scale.g);
+        color.b = ScaleChannel(color.b, scale.b);
         PackColor(pData, i, &color, format);
     }
 }
