@@ -1065,10 +1065,10 @@ int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable
     }
     if (found == 1) {
         err = TDbQryCreateTbl(db, table, cursor, aKeys, 0);
-        /* Redundant (found is already 1): kept for the target's dead 0/23 test at 0x8023031C/20
-           (holdout, see its HOLDOUT row). */
+        /* FAKEMATCH: dead store (ok is reset before its next read); keeps the target's unused
+           0/23 test at 0x8023031C/20 and the found test after the call. */
         if (err == 0 || err == 23) {
-            found = 1;
+            ok = 1;
         }
     }
     if (found == 1) {

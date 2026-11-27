@@ -4524,7 +4524,7 @@
     {
       "source": "src/engine/dbcache.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the four holdouts, whose ranges keep the original bytes. The file's .data 0x802FB310-0x802FB368 (the three table tag records and the two cached-column records) and .sdata 0x803EC0E0-0x803EC0E4 (the cache list head) link from this file.",
+      "evidence": "evidence.tsv provisional unit row 0x8022F80C-0x802311C8 (src/engine/dbcache.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the three holdouts, whose ranges keep the original bytes. The file's .data 0x802FB310-0x802FB368 (the three table tag records and the two cached-column records) and .sdata 0x803EC0E0-0x803EC0E4 (the cache list head) link from this file.",
       "sections": [
         {
           "section": ".text",
@@ -4537,6 +4537,12 @@
           "placement": ".text",
           "start": "0x8022FEF8",
           "end": "0x8022FFD0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022FFD0",
+          "end": "0x802303A0"
         },
         {
           "section": ".text",
@@ -4570,10 +4576,6 @@
             "evidence": "evidence.tsv source-form 0x8022FC8C-0x8022FEF8"
           },
           {
-            "function": "DbCacheCreateScratchTable",
-            "evidence": "evidence.tsv source-form 0x8022FFD0-0x802303A0"
-          },
-          {
             "function": "DbCacheCopyRows",
             "evidence": "evidence.tsv source-form 0x80230400-0x80230CC8"
           },
@@ -4582,7 +4584,7 @@
             "evidence": "evidence.tsv source-form 0x80230D8C-0x802311C8"
           }
         ],
-        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out DbCacheUpdateHandler (0x8022FC8C), DbCacheCreateScratchTable (0x8022FFD0), DbCacheCopyRows (0x80230400) and DbCacheDeleteRows (0x80230D8C)."
+        "evidence": "e2c merge notes (PR #1468 holdouts table): src/engine/dbcache.c holds out DbCacheUpdateHandler (0x8022FC8C), DbCacheCopyRows (0x80230400) and DbCacheDeleteRows (0x80230D8C) (r5 lane 4, 2026-11-27: DbCacheCreateScratchTable exact and linked)."
       }
     },
     {
@@ -4628,13 +4630,19 @@
     {
       "source": "src/engine/cu_802336C4.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the two holdouts, whose ranges keep the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
           "end": "0x80233760"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80233760",
+          "end": "0x802337D4"
         },
         {
           "section": ".text",
@@ -4658,15 +4666,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80233760",
-            "evidence": "evidence.tsv source-form 0x80233760-0x802337D4"
-          },
-          {
             "function": "fn_802338D4",
             "evidence": "evidence.tsv source-form 0x802338D4-0x80233BB8"
           }
         ],
-        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_80233760 and fn_802338D4."
+        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_802338D4 (r5 lane 4, 2026-11-27: fn_80233760 exact and linked)."
       }
     },
     {

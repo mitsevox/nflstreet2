@@ -358,7 +358,8 @@ extern void TMClipResetExtent(void *p);
 extern void TMBufferNew(void *p, int a, int b);
 extern void TMBufferDelete(void *p);
 extern void TMBufferReset(void *p);
-extern void TMBlendSetWeights(short *pValues, int count);
+/* FAKEMATCH: declared returning int (the src/engine/tmblend.c definition is void; the result is never used), which gives fn_80233760's argument move order. */
+extern int TMBlendSetWeights(short *pValues, int count);
 extern void TMBlendBegin(void *p);
 extern void TMBlendEnd(void);
 extern void TMBlendBindModel(void *p);

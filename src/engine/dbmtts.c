@@ -174,7 +174,7 @@ extern int (*_DbNiom_pModeLoad)(void **ppData, void *p);
 extern int (*_DbNiom_pModeReset)(int a, int b);
 extern int (*_DbNiom_pModeResume)(void);
 extern int (*_DbNiom_pModeFn16)(void);
-extern int lbl_803EC020[2];
+extern int lbl_803EC020[1];
 extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbCol_801F9718 *pCols);
 extern int TDbQrySetFirstRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
@@ -582,7 +582,7 @@ int fn_8022A59C(int a, DbMttsCursor_t **ppOut)
 int fn_8022AB6C(DbMttsCursor_t *p, int a, int b)
 {
     struct QueryCursor cursor;
-    int err;
+    int err = 0;
 
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
@@ -702,7 +702,7 @@ int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
-    int err;
+    int err = 0;
 
     table = lbl_803EC010[set][index];
     aCols[0].mUnk0 = key;
@@ -743,11 +743,16 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
         count = lbl_803EC014[i];
         for (j = 0; j < count; j++) {
             table = lbl_803EC010[i][j];
-            if (TDbTblExists(0, table) == 0) {
-                status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
-            } else {
-                lbl_803EC018[i][j] = 0;
-                lbl_803EC01C[i][j] = 0;
+            {
+                TDbCol_801F9718 **ppCols = &lbl_803EC018[i][j];
+                unsigned char *pCount = &lbl_803EC01C[i][j];
+
+                if (TDbTblExists(0, table) == 0) {
+                    status = fn_8022AD64(table, ppCols, pCount);
+                } else {
+                    *ppCols = 0;
+                    *pCount = 0;
+                }
             }
             if (status != 0) {
                 break;
@@ -757,12 +762,19 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
             break;
         }
     }
-    for (i = 0; i < 1 && status == 0; i++) {
-        table = lbl_803EC020[i];
-        if (TDbTblExists(0, table) == 0) {
-            status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
-        } else {
-            lbl_803ED01C[i] = 0;
+    if (status == 0) {
+        for (i = 0; i < 1; i++) {
+            unsigned char *pCount = &lbl_803ED01C[i];
+
+            table = lbl_803EC020[i];
+            if (TDbTblExists(0, table) == 0) {
+                status = fn_8022AD64(table, &lbl_803EC024[i], pCount);
+            } else {
+                *pCount = 0;
+            }
+            if (status != 0) {
+                break;
+            }
         }
     }
     if (status == 0) {
@@ -841,7 +853,11 @@ static inline void _DbMttsSetColInt(TDbExpr_t *pExpr, int op, unsigned long long
     pExpr->mLeft.mType = TDB_TYPE_COLUMN;
     pExpr->mLeft.mValue.l = col;
     pExpr->mRight.mType = TDB_TYPE_INT;
-    pExpr->mRight.mValue.i = value;
+    /* FAKEMATCH: the integer stored through a pointer to the value field, for the target's frame-based store address in 0x8022BD30; the same field is set. */
+    {
+        int *pValue = &pExpr->mRight.mValue.i;
+        *pValue = value;
+    }
 }
 
 /* sub-expression op sub-expression */
@@ -873,18 +889,19 @@ int fn_8022B2CC(int key, unsigned int col, int value)
     } else {
         index = lbl_802FA614[c - 65];
     }
-    if (index < 0) {
-        return 131;
-    }
-    table = lbl_803EC010[0][index];
-    _DbMttsSetCol(&aCols[0], value, table, col);
-    fn_801F9718_SetEnd(&aCols[1]);
-    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
-    _DbMttsSetTable(&aTables[0], table, 2, &expr);
-    _DbMttsSetTable(&aTables[1], -1, 2, 0);
-    err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
-    if (err == 23) {
-        err = fn_8022AF5C(key, -1, col, value, 0, index);
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        _DbMttsSetCol(&aCols[0], value, table, col);
+        fn_801F9718_SetEnd(&aCols[1]);
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
+        err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+        if (err == 23) {
+            err = fn_8022AF5C(key, -1, col, value, 0, index);
+        }
+    } else {
+        err = 131;
     }
     return err;
 }
@@ -1112,11 +1129,21 @@ int fn_8022BAB4(int key, int a, int margin, int b)
     _DbMttsSetColInt(&aTerms[2], 0x4000D, _DbColKey(0x52505354, 0x706F7374), b);
     err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
     if (err == 23) {
-        _DbMttsSetCol(&aCols[0], key, 0x52505354, 0x44494754);
-        _DbMttsSetCol(&aCols[1], cls, 0x52505354, 0x63647374);
-        _DbMttsSetCol(&aCols[2], 1, 0x52505354, 0x61707374);
-        _DbMttsSetCol(&aCols[3], a, 0x52505354, 0x63707374);
-        _DbMttsSetCol(&aCols[4], b, 0x52505354, 0x706F7374);
+        aCols[0].mCol = 0x44494754;
+        aCols[0].mUnk0 = key;
+        aCols[0].mUnk4 = 0x52505354;
+        aCols[1].mCol = 0x63647374;
+        aCols[1].mUnk0 = cls;
+        aCols[1].mUnk4 = 0x52505354;
+        aCols[2].mCol = 0x61707374;
+        aCols[2].mUnk0 = 1;
+        aCols[2].mUnk4 = 0x52505354;
+        aCols[3].mCol = 0x63707374;
+        aCols[3].mUnk0 = a;
+        aCols[3].mUnk4 = 0x52505354;
+        aCols[4].mUnk4 = 0x52505354;
+        aCols[4].mCol = 0x706F7374;
+        aCols[4].mUnk0 = b;
         fn_801F9718_SetEnd(&aCols[5]);
         err = TDbInsertRow(0, 0x52505354, aCols, 0, 0);
     }
