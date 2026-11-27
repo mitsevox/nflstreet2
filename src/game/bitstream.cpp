@@ -24,20 +24,23 @@ long long ReadBitStream(BitStream_t *pStream, unsigned int bits)
 {
     int word = pStream->mWord;
     int bit = pStream->mBit;
-    unsigned long long *pWord = &pStream->mpBuffer[word];
-    unsigned long long value = *pWord;
+    unsigned long long *pBuffer = pStream->mpBuffer;
+    unsigned long long value = pBuffer[word];
     unsigned long long result;
     unsigned int count = bit + 1;
 
     if (count < bits) {
-        bits -= count;
+        unsigned int rest = bits - count;
+
         result = value & ((((unsigned long long)((count >> 6) ^ 1)) << count) - 1);
-        result <<= bits;
-        result |= pWord[1] >> (64 - bits);
-        pStream->mBit = 63 - bits;
+        result <<= rest;
+        result |= pBuffer[word + 1] >> (64 - rest);
+        pStream->mBit = 63 - rest;
         pStream->mWord = word + 1;
     } else {
-        result = value >> (bit - (bits - 1));
+        unsigned int shift = bits - 1;
+
+        result = value >> (bit - shift);
         result &= (1ULL << bits) - 1;
         pStream->mBit = bit - bits;
     }
