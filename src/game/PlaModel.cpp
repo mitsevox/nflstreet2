@@ -541,6 +541,15 @@ void PlaModelLoadJewel(int index, int load)
     }
 }
 
+static inline void CopyEntry(PlaModelQueueEntry_t *pDest, PlaModelQueueEntry_t *pSource)
+{
+    unsigned int id = pSource->mId;
+    void *pData = pSource->mpData;
+
+    pDest->mId = id;
+    pDest->mpData = pData;
+}
+
 /* Queues the models of one player part for fn_8015EF10, keeping each
    queue sorted by id so that equal models are read only once. */
 void PlaModelQueuePart(int type, int index, ModelLod_802DF190 *pLods, void **ppData)
@@ -550,7 +559,6 @@ void PlaModelQueuePart(int type, int index, ModelLod_802DF190 *pLods, void **ppD
     int j;
     PlaModelQueueEntry_t *pQueue;
     int queued;
-    PlaModelQueueEntry_t entry;
 
     switch (_PlaModel_iLodMode) {
     case 0:
@@ -570,19 +578,35 @@ void PlaModelQueuePart(int type, int index, ModelLod_802DF190 *pLods, void **ppD
     pQueue = _PlaModel_apLoadQueues[type];
     queued = _PlaModel_aiLoadQueueCounts[type];
     for (i = 0; i < count; i++) {
+        PlaModelQueueEntry_t entry;
+
         entry.mId = pLods[i].mId;
         if (entry.mId == NO_MODEL) {
-            break;
+            goto done;
         }
         if (entry.mId != 0) {
             entry.mpData = ppData[i];
-            for (j = queued - 1; j >= 0 && pQueue[j].mId > entry.mId; j--) {
-                pQueue[j + 1] = pQueue[j];
+            if (entry.mpData != 0) {
+                j++;
             }
-            pQueue[j + 1] = entry;
+            j = queued - 1;
             queued++;
+            goto test;
+        next:
+            j--;
+        test:
+            if (j >= 0 && pQueue[j].mId > entry.mId) {
+                CopyEntry(&pQueue[j + 1], &pQueue[j]);
+                goto next;
+            }
+            PlaModelQueueEntry_t *pEntry = &entry;
+            unsigned int id = pEntry->mId;
+            void *pData = pEntry->mpData;
+            pQueue[j + 1].mId = id;
+            pQueue[j + 1].mpData = pData;
         }
     }
+done:
     _PlaModel_aiLoadQueueCounts[type] = queued;
     _PlaModel_auLoadQueuedPlayers[type] |= 1 << index;
 }
