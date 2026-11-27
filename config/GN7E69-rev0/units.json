@@ -17,6 +17,31 @@
         "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
       }
     },
+    "uistudio_fastmath": {
+      "flags": [
+        "-O2",
+        "-ffast-math"
+      ],
+      "evidence": "evidence.tsv compiler row 0x802176E8-0x8021A068 (uistudio_fastmath): the uistudio profile (ProDG 3.9.3 cc1 -O2, the UI Studio source root) plus -ffast-math for src/Common/UIStudio/UIStudio.c. Every floating-point compare of the file (0x802184B4-0x802184F4 in the rate-function update, 0x80219754 and 0x802197C8 in the event dispatch) branches in the ordered form -ffast-math emits (cror+bso); without the flag ProDG emits the unordered form (bge/ble after fcmpu) for the same source (tested).",
+      "source_root": {
+        "directory": "src",
+        "file_prefix": "../../../Source",
+        "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
+      }
+    },
+    "uistudio_fastmath_holdouts": {
+      "flags": [
+        "-O2",
+        "-ffast-math",
+        "-ffunction-sections"
+      ],
+      "evidence": "uistudio_fastmath (its evidence.tsv compiler row) plus -ffunction-sections, the named profile of the UI Studio unit linked with holdouts (owner rulings of 2026-11-20: holdouts for any file after real attempts, and the flag from a named profile, not added by the tool; config README, Holdouts). The partials of the file keep comparing with uistudio_fastmath.",
+      "source_root": {
+        "directory": "src",
+        "file_prefix": "../../../Source",
+        "evidence": "Target source-path strings 0x802B1DC4 and 0x802B1DF0 (evidence.tsv unit-anchor rows) both begin ../../../Source/Common/UIStudio/."
+      }
+    },
     "dolphin_release": {
       "compiler": "mwcc",
       "flags": [
@@ -557,14 +582,6 @@
     "gPlayerLookBonuses": {
       "address": "0x80308368",
       "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
-    "RuntimeErrorFnc": {
-      "address": "0x803EBF30",
-      "evidence": "evidence.tsv name/data rows for 0x803EBF30 (related name, target .sdata word)."
-    },
-    "UISGetActionPtrValue": {
-      "address": "0x8021C8B4",
-      "evidence": "evidence.tsv function/name rows for 0x8021C8B4 (target extent, related name)."
     },
     "__pure_virtual": {
       "address": "0x8025F088",
@@ -2030,6 +2047,76 @@
           "end": "0x803ECFAC"
         }
       ]
+    },
+    {
+      "source": "src/Common/UIStudio/UIStudio.c",
+      "profile": "uistudio_fastmath_holdouts",
+      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _DetermineVisibility, _ParseVisibility, PatchScrData, UISFindStaticObject keep the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802176E8",
+          "end": "0x802178E4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80217C38",
+          "end": "0x8021861C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802188A0",
+          "end": "0x80219AF8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80219BA0",
+          "end": "0x8021A068"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1D40",
+          "end": "0x802B1DF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF28",
+          "end": "0x803EBF2C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFE8",
+          "end": "0x803ECFF0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_DetermineVisibility",
+            "evidence": "evidence.tsv source-form 0x802178E4-0x80217A7C"
+          },
+          {
+            "function": "_ParseVisibility",
+            "evidence": "evidence.tsv source-form 0x80217A7C-0x80217C38"
+          },
+          {
+            "function": "PatchScrData",
+            "evidence": "evidence.tsv source-form 0x8021861C-0x802188A0"
+          },
+          {
+            "function": "UISFindStaticObject",
+            "evidence": "evidence.tsv source-form 0x80219AF8-0x80219BA0"
+          }
+        ],
+        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility, _ParseVisibility, PatchScrData, UISFindStaticObject."
+      }
     },
     {
       "source": "src/Common/UIStudio/UISEvent.c",
@@ -28313,6 +28400,56 @@
       ]
     },
     {
+      "source": "src/engine/uigarc.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022479C",
+          "end": "0x8022482C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802254F8",
+          "end": "0x80225CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2008",
+          "end": "0x802B2050"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FE0",
+          "end": "0x802FA020"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF70",
+          "end": "0x803EBF78"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_UIGArcBuildFan",
+            "evidence": "evidence.tsv source-form 0x80223FF4-0x8022479C"
+          },
+          {
+            "function": "_UIGArcBuildStrip",
+            "evidence": "evidence.tsv source-form 0x8022482C-0x802254F8"
+          }
+        ],
+        "evidence": "e2e merge notes (swarm e2 tracking, PR #1471): src/engine/uigarc.c holds out fn_80223FF4 and fn_8022482C."
+      }
+    },
+    {
       "source": "src/engine/dbuslp.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022C9A8-0x8022D6E8 (src/engine/dbuslp.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",
@@ -28803,20 +28940,139 @@
       }
     },
     {
-      "source": "src/engine/cu_80221BF0.c",
+      "source": "src/engine/uigimagenode.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021EFD8",
+          "end": "0x8021F984"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220988",
+          "end": "0x80220B4C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1EF8",
+          "end": "0x802B1F58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FA0",
+          "end": "0x802F9FE0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFF0",
+          "end": "0x803ECFFC"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "UIGImageNodeRender",
+            "evidence": "evidence.tsv source-form 0x8021F984-0x8021FB30"
+          },
+          {
+            "function": "UIGImageNodeSendTextured",
+            "evidence": "evidence.tsv source-form 0x8021FB30-0x80220310"
+          },
+          {
+            "function": "UIGImageNodeSendColored",
+            "evidence": "evidence.tsv source-form 0x80220310-0x80220988"
+          }
+        ],
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
+      }
+    },
+    {
+      "source": "src/engine/UIGColorStyle.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row of src/engine/UIGColorStyle.c (0x80220B4C-0x80220CDC) and the data rows of its .sdata and .sbss; linked with holdouts (owner ruling of 2026-11-20): 4 of 5 functions exact, the holdout keeps the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220BE0",
+          "end": "0x80220CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF48",
+          "end": "0x803EBF4C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFFC",
+          "end": "0x803ED00C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "UIGCSGetColorStyle",
+            "evidence": "evidence.tsv source-form 0x80220B4C-0x80220BE0"
+          }
+        ],
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/UIGColorStyle.c holds out UIGCSGetColorStyle."
+      }
+    },
+    {
+      "source": "src/engine/uigrender.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row of src/engine/uigrender.c (0x80220CDC-0x80221314) and the data rows of its whole data sections; all 12 functions exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220CDC",
+          "end": "0x80221314"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1F58",
+          "end": "0x802B1F74"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F878",
+          "end": "0x8039F9B8"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF50",
+          "end": "0x803EBF60"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED00C",
+          "end": "0x803ED010"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/uigtext.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_80221BF0.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 7 of 9 functions exact, the 2 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/uigtext.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 8 of 9 functions exact, the holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80221BF0",
-          "end": "0x80221D30"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221D5C",
           "end": "0x80221DB0"
         },
         {
@@ -28830,20 +29086,22 @@
           "placement": ".data3",
           "start": "0x802B1FA0",
           "end": "0x802B1FC0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F9B8",
+          "end": "0x8039FDB8"
         }
       ],
       "holdouts": {
         "functions": [
           {
-            "function": "fn_80221D30",
-            "evidence": "evidence.tsv source-form 0x80221D30-0x80221D5C"
-          },
-          {
-            "function": "fn_80221DB0",
+            "function": "UIGTextLayout",
             "evidence": "evidence.tsv source-form 0x80221DB0-0x80222220"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_80221BF0.c holds out fn_80221D30, fn_80221DB0."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table) and lane e1b merge notes (PR #1455 holdouts table): src/engine/uigtext.c holds out UIGTextLayout."
       }
     },
     {
@@ -29006,6 +29264,135 @@
           }
         ],
         "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/physbroadphase.cpp holds out BroadPhase::GetOverlapIndex and BroadPhase::InsertEndpoint."
+      }
+    },
+    {
+      "source": "src/Common/UIStudio/UISStack.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 1 of 2 functions exact, the holdouts UISStackProcess keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021A438",
+          "end": "0x8021A45C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E78",
+          "end": "0x802B1E88"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "UISStackProcess",
+            "evidence": "evidence.tsv source-form 0x8021A45C-0x8021C5EC"
+          }
+        ],
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISStack.c holds out UISStackProcess."
+      }
+    },
+    {
+      "source": "src/Common/UIStudio/UISUtils.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021C5EC",
+          "end": "0x8021CB68"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021CDAC",
+          "end": "0x8021CE48"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021D1FC",
+          "end": "0x8021D880"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E88",
+          "end": "0x802B1EB0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_WriteFloat",
+            "evidence": "evidence.tsv source-form 0x8021CB68-0x8021CDAC"
+          },
+          {
+            "function": "_WriteString",
+            "evidence": "evidence.tsv source-form 0x8021CE48-0x8021CF38"
+          },
+          {
+            "function": "UISSprintf",
+            "evidence": "evidence.tsv source-form 0x8021CF38-0x8021D1FC"
+          }
+        ],
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISUtils.c holds out _WriteFloat, _WriteString, UISSprintf."
+      }
+    },
+    {
+      "source": "src/Common/UIStudio/UISError.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x8021D880-0x8021D888 (src/Common/UIStudio/UISError.c), its compiler, function and data rows.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021D880",
+          "end": "0x8021D888"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1EB0",
+          "end": "0x802B1EF4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9F98",
+          "end": "0x802F9FA0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF30",
+          "end": "0x803EBF34"
+        }
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISActionProcess.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the holdouts UISAddThreadActionAt keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021D904",
+          "end": "0x8021DE9C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "UISAddThreadActionAt",
+            "evidence": "evidence.tsv source-form 0x8021D888-0x8021D904"
+          }
+        ],
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISActionProcess.c holds out UISAddThreadActionAt."
       }
     }
   ]

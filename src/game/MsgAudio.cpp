@@ -10,7 +10,7 @@
 #include "game/GameOptions.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 
 struct OptAudioArgs_t {
     int mUnknown0;
@@ -173,7 +173,7 @@ void OptAudioClose(void)
         } else {
             value = 1;
         }
-        fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
+        UISProcessHint(gUISMainInfo, 0x8000000F, 1, &value);
         if (GameOptionsGet(6) == 1) {
             UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {

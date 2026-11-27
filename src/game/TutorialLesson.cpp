@@ -6,7 +6,7 @@
 
 #include "engine/cu_80229270.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/TDbCompilePerformOp.h"
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
@@ -547,7 +547,7 @@ extern "C" {
 
 void TutorialPostPrompt(int index, int value)
 {
-    fn_8021D7B8(gUISMainInfo, _Tutorial_aPromptMsgIds[index], 1, &value);
+    UISProcessHint(gUISMainInfo, _Tutorial_aPromptMsgIds[index], 1, &value);
 }
 
 void TutorialSetupRosters(void)
@@ -1083,7 +1083,7 @@ short TutorialScaleCpuRating(int team, int unused, short value)
 
 void TutorialSetHudVisible(int value)
 {
-    fn_8021D7B8(gUISMainInfo, 0x80000072, 1, &value);
+    UISProcessHint(gUISMainInfo, 0x80000072, 1, &value);
 }
 
 void TutorialReleasePause(void)
@@ -1696,11 +1696,11 @@ void TutorialShowTitles(int show)
         _Tutorial_StepText.mpText = _Tutorial_szStepTitle;
         _Tutorial_StepText.mSize = strlen(_Tutorial_szStepTitle) + 1;
         _Tutorial_pStepText = &_Tutorial_StepText;
-        fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
-        fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);
+        UISProcessHint(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
+        UISProcessHint(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);
     }
     _Tutorial_iTitlesShown = show;
-    fn_8021D7B8(gUISMainInfo, 0x8000007F, 1, &_Tutorial_iTitlesShown);
+    UISProcessHint(gUISMainInfo, 0x8000007F, 1, &_Tutorial_iTitlesShown);
 }
 
 void TutorialReloadRatings(void)
@@ -1904,9 +1904,9 @@ void TutorialPreSnap::OnEnter(float dt)
     HudSetGameBreakerMeter(0, 0.0f, 0, 0);
     args[0] = 1;
     args[1] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+    UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     args[0] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+    UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     TutorialShowPrompts(TutorialGetLessonObject()->GetStep()->mPrompts, 1, 0);
     PauseRequestCancel();
     if (!PauseIsUnblocked()) {

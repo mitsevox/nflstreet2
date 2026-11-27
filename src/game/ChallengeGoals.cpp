@@ -6,7 +6,7 @@
 #include "game/AudmonEvent.h"
 #include "game/GameOptions.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 
@@ -637,7 +637,7 @@ void ChallengeSendGoalList(int flag)
         _Challenge_GoalResults.mUnknown4 = 4;
         args[6].p = &_Challenge_GoalResults;
         if (count > 0 || !flag) {
-            fn_8021D7B8(gUISMainInfo, 0x80000083, 7, args);
+            UISProcessHint(gUISMainInfo, 0x80000083, 7, args);
         }
     }
 }

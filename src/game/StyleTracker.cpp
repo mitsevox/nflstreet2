@@ -16,7 +16,7 @@
 #include "game/PlayBookGetPlay.h"
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/SyncStateRegister.h"
 
 enum StyleMessage {};
@@ -585,7 +585,7 @@ extern "C" void StyleTrackerShowAward(int i, const char *pName, int a, int mode)
         ((Entry_80219044 *)args[1].p)->mLength = strlen(_StyleTracker_pState->mAwardText);
         args[2].i = a;
         args[3].i = mode;
-        fn_8021D7B8(gUISMainInfo, 0x80000013, 4, args);
+        UISProcessHint(gUISMainInfo, 0x80000013, 4, args);
     }
 }
 
@@ -595,7 +595,7 @@ extern "C" void StyleTrackerShowTotal(int i, int a) {
     if (_StyleTracker_bEnabled) {
         args[0].i = i;
         args[1].i = a;
-        fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+        UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     }
 }
 
@@ -616,7 +616,7 @@ extern "C" void StyleTrackerShowCombo(int i) {
         args[0] = &_StyleTracker_pState->mTextArg;
         args[0]->mpText = i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText;
         args[0]->mLength = strlen(i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText);
-        fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
+        UISProcessHint(gUISMainInfo, 0x80000018, 1, args);
     }
 }
 

@@ -3,7 +3,7 @@
    lesson has been completed. */
 
 #include "game/DbCursor.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 
 struct TutorialText_t {
     char mUnknown0[4];
@@ -114,7 +114,7 @@ void MsgTutorialPostLessonEvent(int value)
     if (value != -1) {
         MsgGameIgnoreValue(value);
     }
-    fn_8021D7B8(gUISMainInfo, 0x80000036, 0, 0);
+    UISProcessHint(gUISMainInfo, 0x80000036, 0, 0);
 }
 
 int MsgTutorialHandleMessage(unsigned int id, TutorialArgs_t *pParams, int unused, int *pResult)

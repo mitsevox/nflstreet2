@@ -18893,7 +18893,7 @@
     },
     {
       "source": "src/Common/UIStudio/UIStudio.c",
-      "profile": "uistudio",
+      "profile": "uistudio_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x802176E8-0x8021A068 for ../../../Source/Common/UIStudio/UIStudio.c, exact whole-function rows and neutral name rows for the 23 draft bodies, and the file compiler row. The drafts use no static data; the .rodata block data_802B1D40 and all other functions remain original and unmeasured.",
       "sections": [
         {
@@ -18901,66 +18901,84 @@
           "placement": ".text",
           "start": "0x802176E8",
           "end": "0x8021A068"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1D40",
+          "end": "0x802B1DF0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFE8",
+          "end": "0x803ECFF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF28",
+          "end": "0x803EBF2C"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80217C38",
+          "symbol": "_ParseTransforms",
           "start": "0x80217C38",
           "end": "0x80217D30"
         },
         {
-          "symbol": "fn_802182E4",
+          "symbol": "_UISKillRateFncsInScreen",
           "start": "0x802182E4",
           "end": "0x80218364"
         },
         {
-          "symbol": "fn_802188A0",
+          "symbol": "UISGetMemSize",
           "start": "0x802188A0",
           "end": "0x802188D4"
         },
         {
-          "symbol": "fn_80218A34",
+          "symbol": "UISShutdown",
           "start": "0x80218A34",
           "end": "0x80218AA8"
         },
         {
-          "symbol": "fn_80218AA8",
+          "symbol": "UISRegisterMessageFnc",
           "start": "0x80218AA8",
           "end": "0x80218AB0"
         },
         {
-          "symbol": "fn_80218AB0",
+          "symbol": "UISRegisterResourceFncs",
           "start": "0x80218AB0",
           "end": "0x80218ABC"
         },
         {
-          "symbol": "fn_80218ABC",
+          "symbol": "UISRegisterShutdownFnc",
           "start": "0x80218ABC",
           "end": "0x80218AC4"
         },
         {
-          "symbol": "fn_80218AC4",
+          "symbol": "UISRegisterTransformFncs",
           "start": "0x80218AC4",
           "end": "0x80218ACC"
         },
         {
-          "symbol": "fn_80218ACC",
+          "symbol": "UISRegisterScreenActivatedFnc",
           "start": "0x80218ACC",
           "end": "0x80218AD4"
         },
         {
-          "symbol": "fn_80218AD4",
+          "symbol": "UISRegisterPluginFnc",
           "start": "0x80218AD4",
           "end": "0x80218AF0"
         },
         {
-          "symbol": "fn_80218CB8",
+          "symbol": "UISSetGlobalScript",
           "start": "0x80218CB8",
           "end": "0x80218D20"
         },
         {
-          "symbol": "fn_80218D20",
+          "symbol": "_UISInternalReInitScreen",
           "start": "0x80218D20",
           "end": "0x80218DDC"
         },
@@ -18995,34 +19013,109 @@
           "end": "0x8021992C"
         },
         {
-          "symbol": "fn_80219A54",
+          "symbol": "UISIdleProcess",
           "start": "0x80219A54",
           "end": "0x80219AF8"
         },
         {
-          "symbol": "fn_80219AF8",
+          "symbol": "UISFindStaticObject",
           "start": "0x80219AF8",
           "end": "0x80219BA0"
         },
         {
-          "symbol": "fn_80219F84",
+          "symbol": "UISUpdateVisibility",
           "start": "0x80219F84",
           "end": "0x8021A020"
         },
         {
-          "symbol": "fn_8021A020",
+          "symbol": "UISIsActiveScreenEnabled",
           "start": "0x8021A020",
           "end": "0x8021A060"
         },
         {
-          "symbol": "fn_8021A060",
+          "symbol": "UISIsShuttingDown",
           "start": "0x8021A060",
           "end": "0x8021A068"
         },
         {
-          "symbol": "fn_8021992C",
+          "symbol": "UISDrawObjects",
           "start": "0x8021992C",
           "end": "0x80219A54"
+        },
+        {
+          "symbol": "_ParseInitialize",
+          "start": "0x802176E8",
+          "end": "0x802178E4"
+        },
+        {
+          "symbol": "_DetermineVisibility",
+          "start": "0x802178E4",
+          "end": "0x80217A7C"
+        },
+        {
+          "symbol": "_ParseVisibility",
+          "start": "0x80217A7C",
+          "end": "0x80217C38"
+        },
+        {
+          "symbol": "_ParseObjects",
+          "start": "0x80217D30",
+          "end": "0x802180A0"
+        },
+        {
+          "symbol": "_ParseMaps",
+          "start": "0x802180A0",
+          "end": "0x802182E4"
+        },
+        {
+          "symbol": "_ParseRateFncs",
+          "start": "0x80218364",
+          "end": "0x8021861C"
+        },
+        {
+          "symbol": "PatchScrData",
+          "start": "0x8021861C",
+          "end": "0x802188A0"
+        },
+        {
+          "symbol": "UISInit",
+          "start": "0x802188D4",
+          "end": "0x80218A34"
+        },
+        {
+          "symbol": "UISProcessEvent",
+          "start": "0x802196B4",
+          "end": "0x80219854"
+        },
+        {
+          "symbol": "UISInternalLoadScreen",
+          "start": "0x80218AF0",
+          "end": "0x80218CB8"
+        },
+        {
+          "symbol": "_UISInternalLoad",
+          "start": "0x80218DDC",
+          "end": "0x80218FC4"
+        },
+        {
+          "symbol": "UISInternalUnloadModal",
+          "start": "0x80219070",
+          "end": "0x802191F0"
+        },
+        {
+          "symbol": "UISInternalUnloadScreen",
+          "start": "0x802191F0",
+          "end": "0x8021956C"
+        },
+        {
+          "symbol": "UISInternalActivateScreen",
+          "start": "0x80219E18",
+          "end": "0x80219F84"
+        },
+        {
+          "symbol": "UISInternalActivateControl",
+          "start": "0x80219BA0",
+          "end": "0x80219E18"
         }
       ]
     },
@@ -24464,45 +24557,77 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021A438.c",
+      "source": "src/Common/UIStudio/UISStack.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021A438-0x8021DE9C (src/engine/cu_8021A438.c), its exact whole-function rows and neutral name rows (UISGetActionPtrValue keeps its existing name row), and the file compiler row. The draft bodies use no compiled static data; the other functions of the range, its .rodata 0x802B1E78-0x802B1EF8 and its small data remain original and unmeasured.",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021A438-0x8021C5EC (src/Common/UIStudio/UISStack.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts UISStackProcess as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E78-0x802B1E88).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8021A438",
-          "end": "0x8021DE9C"
+          "end": "0x8021C5EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E78",
+          "end": "0x802B1E88"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8021A438",
+          "symbol": "_UISPatchFncPC",
           "start": "0x8021A438",
           "end": "0x8021A45C"
         },
         {
-          "symbol": "fn_8021C5EC",
+          "symbol": "UISStackProcess",
+          "start": "0x8021A45C",
+          "end": "0x8021C5EC"
+        }
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISUtils.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021C5EC",
+          "end": "0x8021D880"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1E88",
+          "end": "0x802B1EB0"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "UISFindScreen",
           "start": "0x8021C5EC",
           "end": "0x8021C654"
         },
         {
-          "symbol": "fn_8021C654",
+          "symbol": "UISFindEventPC",
           "start": "0x8021C654",
           "end": "0x8021C6A8"
         },
         {
-          "symbol": "fn_8021C6A8",
+          "symbol": "UISFindSubControlEventPC",
           "start": "0x8021C6A8",
           "end": "0x8021C70C"
         },
         {
-          "symbol": "fn_8021C70C",
+          "symbol": "_UISFindHintPC",
           "start": "0x8021C70C",
           "end": "0x8021C760"
         },
         {
-          "symbol": "fn_8021C760",
+          "symbol": "UISExecuteFnc",
           "start": "0x8021C760",
           "end": "0x8021C8B4"
         },
@@ -24512,212 +24637,144 @@
           "end": "0x8021CA3C"
         },
         {
-          "symbol": "fn_8021CA3C",
+          "symbol": "UISGetColorMultipler",
           "start": "0x8021CA3C",
           "end": "0x8021CA48"
         },
         {
-          "symbol": "fn_8021CA48",
+          "symbol": "UISGetColorAdditive",
           "start": "0x8021CA48",
           "end": "0x8021CA54"
         },
         {
-          "symbol": "fn_8021CA54",
+          "symbol": "UISSetColorMultipler",
           "start": "0x8021CA54",
           "end": "0x8021CA70"
         },
         {
-          "symbol": "fn_8021CA70",
+          "symbol": "UISSetColorAdditive",
           "start": "0x8021CA70",
           "end": "0x8021CA8C"
         },
         {
-          "symbol": "fn_8021CA8C",
+          "symbol": "_WriteInt",
           "start": "0x8021CA8C",
           "end": "0x8021CB68"
         },
         {
-          "symbol": "fn_8021CDAC",
+          "symbol": "_WriteFloat",
+          "start": "0x8021CB68",
+          "end": "0x8021CDAC"
+        },
+        {
+          "symbol": "_WriteHex",
           "start": "0x8021CDAC",
           "end": "0x8021CE48"
         },
         {
-          "symbol": "fn_8021CE48",
+          "symbol": "_WriteString",
           "start": "0x8021CE48",
           "end": "0x8021CF38"
         },
         {
-          "symbol": "fn_8021D1FC",
+          "symbol": "UISSprintf",
+          "start": "0x8021CF38",
+          "end": "0x8021D1FC"
+        },
+        {
+          "symbol": "UISStringFormat",
           "start": "0x8021D1FC",
           "end": "0x8021D23C"
         },
         {
-          "symbol": "fn_8021D23C",
+          "symbol": "_IsChildOfControl",
           "start": "0x8021D23C",
           "end": "0x8021D2DC"
         },
         {
-          "symbol": "fn_8021D2DC",
+          "symbol": "_GetFirstEnableControl",
           "start": "0x8021D2DC",
           "end": "0x8021D37C"
         },
         {
-          "symbol": "fn_8021D37C",
+          "symbol": "UISFindSiblingEnableControl",
           "start": "0x8021D37C",
           "end": "0x8021D404"
         },
         {
-          "symbol": "fn_8021D404",
+          "symbol": "UISMoveScreenDrawPosition",
           "start": "0x8021D404",
           "end": "0x8021D620"
         },
         {
-          "symbol": "fn_8021D620",
+          "symbol": "_ParseHints",
           "start": "0x8021D620",
           "end": "0x8021D718"
         },
         {
-          "symbol": "fn_8021D718",
+          "symbol": "UISDoHint",
           "start": "0x8021D718",
           "end": "0x8021D7B8"
         },
         {
-          "symbol": "fn_8021D7B8",
+          "symbol": "UISProcessHint",
           "start": "0x8021D7B8",
           "end": "0x8021D828"
         },
         {
-          "symbol": "fn_8021D828",
+          "symbol": "UISAreEventsEnabled",
           "start": "0x8021D828",
           "end": "0x8021D880"
-        },
+        }
+      ]
+    },
+    {
+      "source": "src/Common/UIStudio/UISActionProcess.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021D888-0x8021DE9C (src/Common/UIStudio/UISActionProcess.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts UISAddThreadActionAt as partials (HOLDOUT source-form rows) and keep the exact functions measured.",
+      "sections": [
         {
-          "symbol": "fn_8021D880",
-          "start": "0x8021D880",
-          "end": "0x8021D888"
-        },
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8021D888",
+          "end": "0x8021DE9C"
+        }
+      ],
+      "functions": [
         {
-          "symbol": "fn_8021D888",
+          "symbol": "UISAddThreadActionAt",
           "start": "0x8021D888",
           "end": "0x8021D904"
         },
         {
-          "symbol": "fn_8021D904",
+          "symbol": "UISAddThreadAction",
           "start": "0x8021D904",
           "end": "0x8021D968"
         },
         {
-          "symbol": "fn_8021D968",
+          "symbol": "_UISCanDoUnloadAction",
           "start": "0x8021D968",
           "end": "0x8021D9D4"
         },
         {
-          "symbol": "fn_8021D9D4",
+          "symbol": "UISThreadProcessHints",
           "start": "0x8021D9D4",
           "end": "0x8021DAA4"
         },
         {
-          "symbol": "fn_8021DAA4",
+          "symbol": "_UISDoThreadAction",
           "start": "0x8021DAA4",
           "end": "0x8021DD50"
         },
         {
-          "symbol": "fn_8021DD50",
+          "symbol": "_UISDoThreadControlAction",
           "start": "0x8021DD50",
           "end": "0x8021DDF4"
         },
         {
-          "symbol": "fn_8021DDF4",
+          "symbol": "UISProcessThreadAction",
           "start": "0x8021DDF4",
           "end": "0x8021DE9C"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_8021F77C.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x8021F77C-0x8021F8DC and their literal-pool slice 0x802B1F10-0x802B1F28 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8021F77C",
-          "end": "0x8021F8DC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F10",
-          "end": "0x802B1F28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8021F77C",
-          "start": "0x8021F77C",
-          "end": "0x8021F82C"
-        },
-        {
-          "symbol": "fn_8021F82C",
-          "start": "0x8021F82C",
-          "end": "0x8021F8DC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80220D3C.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80220D3C-0x80221118 and their literal-pool slice 0x802B1F58-0x802B1F6C (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80220D3C",
-          "end": "0x80221118"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F58",
-          "end": "0x802B1F6C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80220D3C",
-          "start": "0x80220D3C",
-          "end": "0x80220DA4"
-        },
-        {
-          "symbol": "fn_80220DA4",
-          "start": "0x80220DA4",
-          "end": "0x80221118"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_80221154.c",
-      "profile": "engine_c",
-      "evidence": "Comparison source fragment of src/engine/cu_8021A438.c (evidence.tsv unit row 0x8021A438-0x80221198): the target function extents 0x80221154-0x80221198 and their literal-pool slice 0x802B1F6C-0x802B1F70 (exact data row). The partition's constants lie in pools of functions without drafts, so these functions are compiled with their own pools; the split does not claim an original file boundary. Original assembly stays linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221154",
-          "end": "0x80221198"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1F6C",
-          "end": "0x802B1F70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_80221154",
-          "start": "0x80221154",
-          "end": "0x80221198"
         }
       ]
     },
@@ -29527,145 +29584,164 @@
       ]
     },
     {
-      "source": "src/engine/cu_8021EFD8.c",
+      "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80221314 (src/engine/cu_8021EFD8.c), its function and name rows, the file compiler row and the exact data row 0x802B1F70-0x802B1F74 (the literal of fn_80221198, the only draft body that loads a constant). Draft comparisons only; original assembly remains linked. The comparison fragments src/engine/cu_8021F77C.c, src/engine/cu_80220D3C.c and src/engine/cu_80221154.c hold the drafts that share the other pools of the range.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8021EFD8",
-          "end": "0x80221314"
+          "end": "0x80220B4C"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B1F70",
-          "end": "0x802B1F74"
+          "start": "0x802B1EF8",
+          "end": "0x802B1F58"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FA0",
+          "end": "0x802F9FE0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFF0",
+          "end": "0x803ECFFC"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8021F550",
+          "symbol": "UIGImageNodeObjAction",
+          "start": "0x8021EFD8",
+          "end": "0x8021F550"
+        },
+        {
+          "symbol": "UIGImageNodeLoad",
           "start": "0x8021F550",
           "end": "0x8021F5C0"
         },
         {
-          "symbol": "fn_8021F5C0",
+          "symbol": "UIGImageNodeDraw",
           "start": "0x8021F5C0",
           "end": "0x8021F71C"
         },
         {
-          "symbol": "fn_8021F71C",
+          "symbol": "UIGImageNodeUnLoad",
           "start": "0x8021F71C",
           "end": "0x8021F77C"
         },
         {
-          "symbol": "fn_8021F8DC",
+          "symbol": "UIGImageNodeLerpByte",
+          "start": "0x8021F77C",
+          "end": "0x8021F82C"
+        },
+        {
+          "symbol": "UIGImageNodeLerpShort",
+          "start": "0x8021F82C",
+          "end": "0x8021F8DC"
+        },
+        {
+          "symbol": "UIGImageNodePrepare",
           "start": "0x8021F8DC",
           "end": "0x8021F954"
         },
         {
-          "symbol": "fn_8021F954",
+          "symbol": "UIGImageNodeRelease",
           "start": "0x8021F954",
           "end": "0x8021F984"
         },
         {
-          "symbol": "fn_8021F984",
+          "symbol": "UIGImageNodeRender",
           "start": "0x8021F984",
           "end": "0x8021FB30"
         },
         {
-          "symbol": "fn_80220988",
+          "symbol": "UIGImageNodeSendTextured",
+          "start": "0x8021FB30",
+          "end": "0x80220310"
+        },
+        {
+          "symbol": "UIGImageNodeSendColored",
+          "start": "0x80220310",
+          "end": "0x80220988"
+        },
+        {
+          "symbol": "UIGImageNodeSetColors",
           "start": "0x80220988",
           "end": "0x80220A08"
         },
         {
-          "symbol": "fn_80220A08",
+          "symbol": "UIGImageNodeSetupGX",
           "start": "0x80220A08",
           "end": "0x80220AD0"
         },
         {
-          "symbol": "fn_80220AD0",
+          "symbol": "UIGImageNodeSetClamp",
           "start": "0x80220AD0",
           "end": "0x80220B4C"
-        },
-        {
-          "symbol": "fn_80220B4C",
-          "start": "0x80220B4C",
-          "end": "0x80220BE0"
-        },
-        {
-          "symbol": "fn_80220BE0",
-          "start": "0x80220BE0",
-          "end": "0x80220BFC"
-        },
-        {
-          "symbol": "fn_80220BFC",
-          "start": "0x80220BFC",
-          "end": "0x80220C4C"
-        },
-        {
-          "symbol": "fn_80220C4C",
-          "start": "0x80220C4C",
-          "end": "0x80220CA4"
-        },
-        {
-          "symbol": "fn_80220CA4",
-          "start": "0x80220CA4",
-          "end": "0x80220CDC"
-        },
-        {
-          "symbol": "fn_80220CDC",
-          "start": "0x80220CDC",
-          "end": "0x80220CE4"
-        },
-        {
-          "symbol": "fn_80220CE4",
-          "start": "0x80220CE4",
-          "end": "0x80220CFC"
-        },
-        {
-          "symbol": "fn_80220CFC",
-          "start": "0x80220CFC",
-          "end": "0x80220D04"
-        },
-        {
-          "symbol": "fn_80220D04",
-          "start": "0x80220D04",
-          "end": "0x80220D34"
-        },
-        {
-          "symbol": "fn_80220D34",
-          "start": "0x80220D34",
-          "end": "0x80220D3C"
-        },
-        {
-          "symbol": "fn_80221118",
-          "start": "0x80221118",
-          "end": "0x80221154"
-        },
-        {
-          "symbol": "fn_80221198",
-          "start": "0x80221198",
-          "end": "0x80221294"
-        },
-        {
-          "symbol": "fn_80221294",
-          "start": "0x80221294",
-          "end": "0x802212C8"
-        },
-        {
-          "symbol": "fn_802212C8",
-          "start": "0x802212C8",
-          "end": "0x80221314"
         }
       ]
     },
     {
-      "source": "src/engine/cu_80221BF0.c",
+      "source": "src/engine/UIGColorStyle.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80220B4C-0x80220CDC (src/engine/UIGColorStyle.c), its function and name rows, the file compiler row and the exact data rows of its .sdata and .sbss; the file is linked with holdouts and its holdout UIGCSGetColorStyle 0x80220B4C (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80220B4C",
+          "end": "0x80220CDC"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF48",
+          "end": "0x803EBF4C"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFFC",
+          "end": "0x803ED00C"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "UIGCSGetColorStyle",
+          "start": "0x80220B4C",
+          "end": "0x80220BE0"
+        },
+        {
+          "symbol": "UIGCSResetColorStyleCache",
+          "start": "0x80220BE0",
+          "end": "0x80220BFC"
+        },
+        {
+          "symbol": "UIGCSLoadPalette",
+          "start": "0x80220BFC",
+          "end": "0x80220C4C"
+        },
+        {
+          "symbol": "UIGCSSwapPalette",
+          "start": "0x80220C4C",
+          "end": "0x80220CA4"
+        },
+        {
+          "symbol": "UIGCSRestorePalette",
+          "start": "0x80220CA4",
+          "end": "0x80220CDC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/uigtext.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/cu_80221BF0.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80222220 and 0x802227B0, the users of the .rodata 0x802B1FA0-0x802B1FBC, have no body here.",
+      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/uigtext.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout UIGTextLayout 0x80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
@@ -29678,6 +29754,12 @@
           "placement": ".data3",
           "start": "0x802B1FA0",
           "end": "0x802B1FC0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F9B8",
+          "end": "0x8039FDB8"
         }
       ],
       "functions": [
@@ -29687,32 +29769,32 @@
           "end": "0x80221D30"
         },
         {
-          "symbol": "fn_80221D30",
+          "symbol": "UIGTextGetLine",
           "start": "0x80221D30",
           "end": "0x80221D5C"
         },
         {
-          "symbol": "fn_80221D5C",
+          "symbol": "UIGTextFreeLines",
           "start": "0x80221D5C",
           "end": "0x80221DB0"
         },
         {
-          "symbol": "fn_80221DB0",
+          "symbol": "UIGTextLayout",
           "start": "0x80221DB0",
           "end": "0x80222220"
         },
         {
-          "symbol": "fn_80222764",
+          "symbol": "UIGLibTextLoad",
           "start": "0x80222764",
           "end": "0x802227B0"
         },
         {
-          "symbol": "fn_80222E0C",
+          "symbol": "UIGLibTextUnLoad",
           "start": "0x80222E0C",
           "end": "0x80222E54"
         },
         {
-          "symbol": "fn_80222E54",
+          "symbol": "UIGTextCopyBuffer",
           "start": "0x80222E54",
           "end": "0x80222EC4"
         },
@@ -30195,65 +30277,93 @@
       ]
     },
     {
-      "source": "src/engine/cu_80223FF4.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/cu_80223FF4.c), its function and name rows and the file compiler row. Draft comparisons only; original assembly remains linked. The draft bodies use no compiled static data; 0x80223FF4 and 0x8022482C, the users of the .rodata 0x802B2008-0x802B204C, have no body here.",
+      "source": "src/engine/uigarc.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler row (engine_c_fastmath, the base profile of the linked engine_c_fastmath_holdouts unit), function, name and data rows. Partials: the two vertex builders 0x80223FF4 (95.01%) and 0x8022482C (88.18%), the documented holdouts (HOLDOUT source-form rows); their ranges keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80223FF4",
           "end": "0x80225CBC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2008",
+          "end": "0x802B2050"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F9FE0",
+          "end": "0x802FA020"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF70",
+          "end": "0x803EBF78"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_8022479C",
+          "symbol": "_UIGArcBuildFan",
+          "start": "0x80223FF4",
+          "end": "0x8022479C"
+        },
+        {
+          "symbol": "_UIGArcLoad",
           "start": "0x8022479C",
           "end": "0x8022480C"
         },
         {
-          "symbol": "fn_8022480C",
+          "symbol": "_UIGArcUnload",
           "start": "0x8022480C",
           "end": "0x8022482C"
         },
         {
-          "symbol": "fn_802254F8",
+          "symbol": "_UIGArcBuildStrip",
+          "start": "0x8022482C",
+          "end": "0x802254F8"
+        },
+        {
+          "symbol": "_UIGArcDraw",
           "start": "0x802254F8",
           "end": "0x80225654"
         },
         {
-          "symbol": "fn_80225654",
+          "symbol": "UIGArcObjAction",
           "start": "0x80225654",
           "end": "0x802258F8"
         },
         {
-          "symbol": "fn_802258F8",
+          "symbol": "_UIGArcUnrelocate",
           "start": "0x802258F8",
           "end": "0x80225928"
         },
         {
-          "symbol": "fn_80225928",
+          "symbol": "_UIGArcRelocate",
           "start": "0x80225928",
           "end": "0x80225958"
         },
         {
-          "symbol": "fn_80225958",
+          "symbol": "_UIGArcRender",
           "start": "0x80225958",
           "end": "0x80225AAC"
         },
         {
-          "symbol": "fn_80225AAC",
+          "symbol": "_UIGArcSetClamp",
           "start": "0x80225AAC",
           "end": "0x80225AE4"
         },
         {
-          "symbol": "fn_80225AE4",
+          "symbol": "_UIGArcSetMaterialColors",
           "start": "0x80225AE4",
           "end": "0x80225B50"
         },
         {
-          "symbol": "fn_80225B50",
+          "symbol": "_UIGArcSetupRender",
           "start": "0x80225B50",
           "end": "0x80225CBC"
         }

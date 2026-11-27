@@ -23,7 +23,7 @@ struct UISColor_t {
 
 extern "C" {
 UISModel_t *ObjNew(int type, int flags, UISModelDesc_t *pDesc);
-UISColor_t *fn_8021CA3C(void);
+UISColor_t *UISGetColorMultipler(void);
 void UISGameSetDrawMode(int a);
 void GlibSetZBufferEnable(int a);
 void GlibClearZBuffer(void);
@@ -51,7 +51,7 @@ void UISModelObjCreate(UISModelObj_t *p)
 
 void UISModelObjDraw(UISModelObj_t *p, int *pFlag)
 {
-    UISColor_t *pObject = fn_8021CA3C();
+    UISColor_t *pObject = UISGetColorMultipler();
 
     UISGameSetDrawMode(4);
     GlibSetZBufferEnable(1);
