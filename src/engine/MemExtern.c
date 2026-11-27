@@ -50,7 +50,7 @@ static int _MemExternVerifyHeap(void *pHeapData)
     if (pHeap->mSize == total) {
         return 0;
     }
-    fn_801D26C4(pHeap->mIdent, 0, _MemExtern_aCorruptMapMessage);
+    MemHeapBreakdown(pHeap->mIdent, 0, _MemExtern_aCorruptMapMessage);
     return -1;
 }
 
@@ -234,7 +234,7 @@ int MemInitExternHeap(int ident, int parentIdent, char *pStart, unsigned int siz
     if (maxBlocks < 8) {
         maxBlocks = 8;
     }
-    pHeap = fn_801D2478(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(MemExternHeap_t), &_MemExtern_sHeapFuncs);
+    pHeap = MemCustomHeap(ident, parentIdent, pStart, size, maxBlocks * 8 + sizeof(MemExternHeap_t), &_MemExtern_sHeapFuncs);
     if (pHeap == 0) {
         return 0;
     }

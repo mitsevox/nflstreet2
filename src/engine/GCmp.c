@@ -22,7 +22,7 @@ void GCmpStop(GCmpStream_t *pStream);
 
 extern void *fn_801D2BB0(int a, int size, int c, int d);
 extern int fn_801D2BD0(void *p);
-extern void *fn_801D310C(void *allocation, int size, int c, int d);
+extern void *MemReallocMem(void *allocation, int size, int c, int d);
 extern void SysSetLastErrorFunc(int err);
 extern char *strnzcpy(char *pDest, const char *pSource, int size);
 extern int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -108,7 +108,7 @@ void GCmpCompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
             case 2:
                 break;
             case 3:
-                pDst->mpData = fn_801D310C(pDst->mpData, pDst->mSize * 2, 0, 0);
+                pDst->mpData = MemReallocMem(pDst->mpData, pDst->mSize * 2, 0, 0);
                 pDst->mSize *= 2;
                 pStream->mOwnsDst = 1;
                 pStream->mStatus = 0;
@@ -132,7 +132,7 @@ void GCmpDecompress(int codec, GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst)
             case 2:
                 break;
             case 3:
-                pDst->mpData = fn_801D310C(pDst->mpData, pDst->mSize * 2, 0, 0);
+                pDst->mpData = MemReallocMem(pDst->mpData, pDst->mSize * 2, 0, 0);
                 pDst->mSize *= 2;
                 pStream->mOwnsDst = 1;
                 pStream->mStatus = 0;
@@ -216,7 +216,7 @@ void GCmpStop(GCmpStream_t *pStream)
     }
     pStream->mpDst->mSize = pStream->mpDst->mPos;
     if (pStream->mOwnsDst) {
-        pStream->mpDst->mpData = fn_801D310C(pStream->mpDst->mpData, pStream->mpDst->mSize, 0, 0);
+        pStream->mpDst->mpData = MemReallocMem(pStream->mpDst->mpData, pStream->mpDst->mSize, 0, 0);
     }
     fn_801D2BD0(pStream);
 }
@@ -306,7 +306,7 @@ int GCmpWrite(GCmpBuffer_t *pBuffer, void *pIn, unsigned int size)
     unsigned char *pSrc = pIn;
 
     while (pBuffer->mPos + size > pBuffer->mSize) {
-        pBuffer->mpData = fn_801D310C(pBuffer->mpData, pBuffer->mSize * 2, 0, 0);
+        pBuffer->mpData = MemReallocMem(pBuffer->mpData, pBuffer->mSize * 2, 0, 0);
         pBuffer->mSize *= 2;
     }
     while (size--) {

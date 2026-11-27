@@ -14,10 +14,10 @@ typedef struct TDbExtResRef_t {
     int mMode;
 } TDbExtResRef_t;
 
-extern unsigned char fn_801D2700(int handle);
+extern unsigned char MemHeapActive(int handle);
 extern int fn_801D2130(MemPoolDesc_t *pParams);
 extern int fn_801D2570(int handle);
-extern void *fn_801D310C(void *p, int size, int flags, int d);
+extern void *MemReallocMem(void *p, int size, int flags, int d);
 extern int ResIsOpen(void *pPath);
 
 /* A heap that replaces the one each allocation names, when set. */
@@ -38,7 +38,7 @@ static MemPoolDesc_t _TDbExt_HeapDesc;
 void TDbExtInit(MemPoolDesc_t *pParams)
 {
     _TDbExt_HeapDesc = *pParams;
-    _TDbExt_bHeapActive = fn_801D2700(pParams->mUnknown8);
+    _TDbExt_bHeapActive = MemHeapActive(pParams->mUnknown8);
     if (_TDbExt_bHeapActive == 0) {
         fn_801D2130(&_TDbExt_HeapDesc);
     }
@@ -92,7 +92,7 @@ int TDbExtMemAllocTemp(void *pHeap, int size, void *ppMem)
 
 int TDbExtMemRealloc(void *pHeap, void *pOld, int oldSize, int newSize, void *ppMem)
 {
-    void *pMem = fn_801D310C(pOld, newSize, _TDbExt_uMemFlags, 0);
+    void *pMem = MemReallocMem(pOld, newSize, _TDbExt_uMemFlags, 0);
 
     *(void **)ppMem = pMem;
     return pMem ? 0 : 2;

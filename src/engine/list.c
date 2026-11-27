@@ -8,7 +8,7 @@
 DSListType_t DSList_Interface[9];
 
 void DSListInitLinkedModule(void);
-void fn_801C7EE4(void);
+void DSListInitSplayTreeModule(void);
 void DSListInitBinTreeModule(void);
 
 static int _DSGetListNodeSize(int type, int size)
@@ -40,7 +40,7 @@ void DSListInitModule(void)
     }
     DSListInitLinkedModule();
     DSListInitBinTreeModule();
-    fn_801C7EE4();
+    DSListInitSplayTreeModule();
 }
 
 void DSAddListType(int type, void (*init)(DSList_t *), int (*del)(DSList_t *),

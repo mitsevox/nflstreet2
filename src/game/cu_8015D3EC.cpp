@@ -30,7 +30,7 @@ void PlyrRenderUnbindPartTable(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
 int FileSetMemAllocFlags(int value);
 void GlibSyncFrame(void);
-int fn_801D3148(int a, void *p);
+int MemGetSizeByAddr(int a, void *p);
 void ResCopyAsyncToBuffer(void *pArchive, int id, int a, void *pDest, int b, void (*pCallback)(void), int c);
 int ResCopyToBuffer(void *pArchive, int id, void *pDest);
 int ResFindIndexByName(void *pArchive, char *pName);
@@ -967,7 +967,7 @@ void fn_8015EF10(void)
         lastId = pQueue[0].mId + 1;
         for (j = 0; j < count; j++) {
             if (pQueue[j].mId == lastId) {
-                memcpy(pQueue[j].mpData, pLast, fn_801D3148(1, pLast));
+                memcpy(pQueue[j].mpData, pLast, MemGetSizeByAddr(1, pLast));
             } else {
                 lastId = pQueue[j].mId;
                 pLast = pQueue[j].mpData;

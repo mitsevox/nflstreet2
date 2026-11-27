@@ -768,7 +768,7 @@ extern Record_80148C4C lbl_802DEA18[];
 extern Record_80148C4C lbl_802DEAA8[];
 
 extern "C" {
-void fn_801D31F0(void *pDst, const void *pSrc, int size);
+void MemCopy(void *pDst, const void *pSrc, int size);
 extern int lbl_803EB2A8;
 extern int lbl_803EB2AC;
 extern MiniGameC *lbl_8031BDBC[];
@@ -1038,24 +1038,24 @@ void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB)
     unsigned char *pBytesA = (unsigned char *)pA;
     unsigned char *pBytesB = (unsigned char *)pB;
 
-    fn_801D31F0(&message, pA->mUnknown3044, sizeof(message));
-    fn_801D31F0(pA->mUnknown3044, pB->mUnknown3044, sizeof(message));
-    fn_801D31F0(pB->mUnknown3044, &message, sizeof(message));
-    fn_801D31F0(queue, pA->mQueue, sizeof(queue));
-    fn_801D31F0(pA->mQueue, pB->mQueue, sizeof(queue));
-    fn_801D31F0(pB->mQueue, queue, sizeof(queue));
-    fn_801D31F0(state, pBytesA + 336, sizeof(state));
-    fn_801D31F0(pBytesA + 336, pBytesB + 336, sizeof(state));
-    fn_801D31F0(pBytesB + 336, state, sizeof(state));
-    fn_801D31F0(block1244, pBytesA + 1244, sizeof(block1244));
-    fn_801D31F0(pBytesA + 1244, pBytesB + 1244, sizeof(block1244));
-    fn_801D31F0(pBytesB + 1244, block1244, sizeof(block1244));
-    fn_801D31F0(block1256, pBytesA + 1256, sizeof(block1256));
-    fn_801D31F0(pBytesA + 1256, pBytesB + 1256, sizeof(block1256));
-    fn_801D31F0(pBytesB + 1256, block1256, sizeof(block1256));
-    fn_801D31F0(block2496, pBytesA + 2496, sizeof(block2496));
-    fn_801D31F0(pBytesA + 2496, pBytesB + 2496, sizeof(block2496));
-    fn_801D31F0(pBytesB + 2496, block2496, sizeof(block2496));
+    MemCopy(&message, pA->mUnknown3044, sizeof(message));
+    MemCopy(pA->mUnknown3044, pB->mUnknown3044, sizeof(message));
+    MemCopy(pB->mUnknown3044, &message, sizeof(message));
+    MemCopy(queue, pA->mQueue, sizeof(queue));
+    MemCopy(pA->mQueue, pB->mQueue, sizeof(queue));
+    MemCopy(pB->mQueue, queue, sizeof(queue));
+    MemCopy(state, pBytesA + 336, sizeof(state));
+    MemCopy(pBytesA + 336, pBytesB + 336, sizeof(state));
+    MemCopy(pBytesB + 336, state, sizeof(state));
+    MemCopy(block1244, pBytesA + 1244, sizeof(block1244));
+    MemCopy(pBytesA + 1244, pBytesB + 1244, sizeof(block1244));
+    MemCopy(pBytesB + 1244, block1244, sizeof(block1244));
+    MemCopy(block1256, pBytesA + 1256, sizeof(block1256));
+    MemCopy(pBytesA + 1256, pBytesB + 1256, sizeof(block1256));
+    MemCopy(pBytesB + 1256, block1256, sizeof(block1256));
+    MemCopy(block2496, pBytesA + 2496, sizeof(block2496));
+    MemCopy(pBytesA + 2496, pBytesB + 2496, sizeof(block2496));
+    MemCopy(pBytesB + 2496, block2496, sizeof(block2496));
 }
 
 void fn_801485B4(void)
@@ -1157,15 +1157,15 @@ void fn_801488D4(Object_80039F5C *pA, Object_80039F5C *pB)
     pA->mUnknown2908 = pB->mUnknown2908;
     pB->mUnknown2908 = id;
 
-    fn_801D31F0(motion, pBytesA + 424, sizeof(motion));
-    fn_801D31F0(pBytesA + 424, pBytesB + 424, sizeof(motion));
-    fn_801D31F0(pBytesB + 424, motion, sizeof(motion));
-    fn_801D31F0(control, &pA->mUnknown512, sizeof(control));
-    fn_801D31F0(&pA->mUnknown512, &pB->mUnknown512, sizeof(control));
-    fn_801D31F0(&pB->mUnknown512, control, sizeof(control));
-    fn_801D31F0(control, &pA->mUnknown528, sizeof(control));
-    fn_801D31F0(&pA->mUnknown528, &pB->mUnknown528, sizeof(control));
-    fn_801D31F0(&pB->mUnknown528, control, sizeof(control));
+    MemCopy(motion, pBytesA + 424, sizeof(motion));
+    MemCopy(pBytesA + 424, pBytesB + 424, sizeof(motion));
+    MemCopy(pBytesB + 424, motion, sizeof(motion));
+    MemCopy(control, &pA->mUnknown512, sizeof(control));
+    MemCopy(&pA->mUnknown512, &pB->mUnknown512, sizeof(control));
+    MemCopy(&pB->mUnknown512, control, sizeof(control));
+    MemCopy(control, &pA->mUnknown528, sizeof(control));
+    MemCopy(&pA->mUnknown528, &pB->mUnknown528, sizeof(control));
+    MemCopy(&pB->mUnknown528, control, sizeof(control));
 
     unsigned char byte = pA->mUnknown9[0];
     pA->mUnknown9[0] = pB->mUnknown9[0];

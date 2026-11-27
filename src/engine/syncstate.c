@@ -55,8 +55,8 @@ static SyncStateHeapDesc_t _SyncState_HeapDesc;
 void SyncStateRestoreGroup(SyncStateGroup_t *p);
 void SyncStateNotifyGroup(SyncStateGroup_t *p);
 static DSList_t *_SyncState_pGroups;
-extern void fn_801D277C(int ident);
-extern char *fn_801D27B8(int ident);
+extern void MemSetDefaultHeap(int ident);
+extern char *MemGetHeapStart(int ident);
 extern void fn_801D2130(void *pConfig);
 extern void fn_801D2570(int ident);
 void SyncStateDetachGroup(SyncStateGroup_t *p);
@@ -116,7 +116,7 @@ void SyncStateRestoreGroup(SyncStateGroup_t *p)
 {
     SyncStateHandle_t *pItem;
     if (p->mpCopy != 0) {
-        SyncStateCopy(fn_801D27B8(p->mHeap), p->mpCopy, p->mHeapSize);
+        SyncStateCopy(MemGetHeapStart(p->mHeap), p->mpCopy, p->mHeapSize);
     }
     pItem = DSGetListNode(p->mpHandles, 0);
     while (pItem != 0) {
@@ -225,7 +225,7 @@ void SyncStateOpenGroup(SyncStateGroup_t *p)
 
 void SyncStateSaveGroup(SyncStateGroup_t *p)
 {
-    char *pData = fn_801D27B8(p->mHeap);
+    char *pData = MemGetHeapStart(p->mHeap);
     if (p->mpCopy != 0) {
         SyncStateCopy(p->mpCopy, pData, p->mHeapSize);
     }
@@ -254,7 +254,7 @@ void SyncStateDelGroup(SyncStateGroup_t *p)
     SyncStateHandle_t *pItem;
     SyncStateHandle_t *pNext;
 
-    fn_801D277C(p->mHeap);
+    MemSetDefaultHeap(p->mHeap);
     pItem = DSGetListNode(p->mpHandles, 0);
     while (pItem != 0) {
         SyncStateDelHandle(pItem);
@@ -263,7 +263,7 @@ void SyncStateDelGroup(SyncStateGroup_t *p)
         pItem = pNext;
     }
     DSDelList(p->mpHandles);
-    fn_801D277C(1);
+    MemSetDefaultHeap(1);
     fn_801D2570(p->mHeap);
     SyncStateRemoveGroup(p);
 }
@@ -291,7 +291,7 @@ void *SyncStateRegister(int a, void **ppData, int size, int b, unsigned int id)
     void *pResult = 0;
     SyncStateGroup_t *p = SyncStateFindGroup(a);
     if (p != 0) {
-        fn_801D277C(p->mHeap);
+        MemSetDefaultHeap(p->mHeap);
         pResult = SyncStateNewHandle(p, ppData, size, b, id);
     }
     return pResult;
@@ -304,7 +304,7 @@ void SyncStateCommit(void *pHandle)
         p->mpInitFn(p->mpData, 0);
     }
     SyncStateAttachHandle(p);
-    fn_801D277C(1);
+    MemSetDefaultHeap(1);
 }
 
 void SyncStateSetCallbacks(void *pHandle, SyncStateFn_t pCallback10, SyncStateFn_t pCallback14, SyncStateFn_t pCallback18, SyncStateCompareFn_t pCallback1C)

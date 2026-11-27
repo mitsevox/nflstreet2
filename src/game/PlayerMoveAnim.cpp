@@ -71,7 +71,7 @@ extern "C" int PlayerMoveAnimSelectByHeading(Object_80039F5C *p, int diff, unsig
     } else {
         if (diff <= 0x56C16B && pCur->mUnknown4 > 0x800000) {
             *pKey = 84;
-            if (fn_801BE648(p->mpUnknown792) == 84 && fn_801BE7C8(p->mpUnknown792, 84) != 0.0f) {
+            if (fn_801BE648(p->mpUnknown792) == 84 && AnimStGetStateDelay(p->mpUnknown792, 84) != 0.0f) {
                 pCur->mUnknown8 = p->mMotion.mFacing;
                 pCur->mUnknown0 = 0.0f;
             }

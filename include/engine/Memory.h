@@ -4,23 +4,23 @@
 /* Heap records of Memory.c (0x801D134C-0x801D34C4) and the extern-heap hooks MemExtern.c installs. */
 
 /* Free-list tree node; lives 0xC bytes into a free block (right after its header). */
-typedef struct MemNode_801D134C {
+typedef struct MemNode_t {
     int mSize;
-    struct MemNode_801D134C *mpParent;
-    struct MemNode_801D134C *mpLeft;
-    struct MemNode_801D134C *mpRight;
-} MemNode_801D134C;
+    struct MemNode_t *mpParent;
+    struct MemNode_t *mpLeft;
+    struct MemNode_t *mpRight;
+} MemNode_t;
 
-struct MemHeap_801D134C;
+struct MemHeap_t;
 
 /* 12-byte block header; mOffset is the distance from the region start to the block data. */
-typedef struct MemBlock_801D134C {
+typedef struct MemBlock_t {
     short mOffset;
     unsigned char mState;
     unsigned char mUnk3;
-    struct MemHeap_801D134C *mpHeap;
+    struct MemHeap_t *mpHeap;
     void **mpTail;
-} MemBlock_801D134C;
+} MemBlock_t;
 
 typedef struct MemHeapFuncs_t {
     void (*mDestroy)(void *pHeapData);
@@ -36,12 +36,12 @@ typedef struct MemHeapFuncs_t {
 } MemHeapFuncs_t;
 
 /* 0x100-byte heap record; extern heaps keep their own data right after it. */
-typedef struct MemHeap_801D134C {
+typedef struct MemHeap_t {
     int mId;
-    struct MemHeap_801D134C *mpSelf;
-    struct MemHeap_801D134C *mpNext;
-    struct MemHeap_801D134C *mpParent;
-    struct MemHeap_801D134C *mpSub;
+    struct MemHeap_t *mpSelf;
+    struct MemHeap_t *mpNext;
+    struct MemHeap_t *mpParent;
+    struct MemHeap_t *mpSub;
     char *mpStart;
     char *mpEnd;
     unsigned int mSize;
@@ -49,7 +49,7 @@ typedef struct MemHeap_801D134C {
     unsigned int mNumFree;
     unsigned int mMaxFree;
     int mFreeBytes;
-    MemNode_801D134C mRoot;
+    MemNode_t mRoot;
     unsigned int mNumUsed;
     unsigned int mMaxUsed;
     unsigned int mUsedBytes;
@@ -74,11 +74,11 @@ typedef struct MemHeap_801D134C {
     char mUnkF5[0xF8 - 0xF5];
     MemHeapFuncs_t *mpFuncs;
     void (*mCopy)(void *pDst, int dstExtern, void *pSrc, int srcExtern, int size);
-} MemHeap_801D134C;
+} MemHeap_t;
 
-int fn_801D26C4(int ident, int flags, const char *pMessage);
-void *fn_801D2478(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
+int MemHeapBreakdown(int ident, int flags, const char *pMessage);
+void *MemCustomHeap(int ident, int parentIdent, char *pStart, unsigned int size, int dataSize,
                   MemHeapFuncs_t *pFuncs);
-void fn_801D3470(void *pAddr, char *pOut, int size);
+void MemGetGroupLabelByAddr(void *pAddr, char *pOut, int size);
 
 #endif

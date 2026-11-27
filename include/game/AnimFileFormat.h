@@ -31,7 +31,7 @@ typedef struct AnimFileStateAnims_t {
     AnimFileStateAnim_t mEntries[1];
 } AnimFileStateAnims_t;
 
-/* Transition rule; fn_801BEFA4 matches it against the current and next state. */
+/* Transition rule; _AnimTranGetBestTransition matches it against the current and next state. */
 typedef struct AnimFileStateTran_t {
     unsigned short mUnknown0;
     unsigned short mUnknown2;
@@ -39,7 +39,7 @@ typedef struct AnimFileStateTran_t {
     unsigned short mUnknown6;
     unsigned short mUnknown8;
     unsigned char mUnknownA[2];
-    struct Transition_801BEFA4 *mpUnknownC;
+    struct AnimTranInfo_t *mpUnknownC;
 } AnimFileStateTran_t;
 
 typedef struct AnimFileStateTrans_t {

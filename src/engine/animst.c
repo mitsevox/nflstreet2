@@ -1,13 +1,16 @@
+/* Animation state slots: each animated object keeps up to four animation states (the current
+   one and those fading out), started, weighted, delayed and ended here, with per-object-type
+   handlers choosing the animation for each state event. */
 #include <string.h>
-#include "engine/cu_801BDA30.h"
+#include "engine/animst.h"
 #include "engine/SysSetLastErrorFunc.h"
 #include "game/fn_801D2B7C.h"
 
-extern Handlers_801BDA30 **lbl_803EBB98;
+extern AnimStStateDefs_t **lbl_803EBB98;
 extern int lbl_803ECEBC;
 extern AnimStateAnimList_t lbl_8037EC7C;
 
-int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
+int _AnimStCallSelectAnimFunc(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
                 AnimChannel_t *pRecords)
 {
     if (key & 0x8000) {
@@ -17,7 +20,7 @@ int fn_801BDA30(unsigned short type, unsigned short key, void *pOwner, int event
     return lbl_803EBB98[type]->mpUnknown4[key](&lbl_8037EC7C, key, pObject, pRecords, pOwner, event);
 }
 
-void _AnimStOrganizeInfo(Collection_801BE594 *p)
+void _AnimStOrganizeInfo(AnimStInfo_t *p)
 {
     int count;
     int i;
@@ -48,15 +51,15 @@ void _AnimStOrganizeInfo(Collection_801BE594 *p)
     }
 }
 
-void fn_801BDBD4(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, int index,
+void _AnimStEndState(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, int index,
                  void *pOwner)
 {
-    fn_801BDA30(pObject->mUnknown2, p->mUnknown4[index].mUnknown0, pOwner, 3, pObject, pRecords);
+    _AnimStCallSelectAnimFunc(pObject->mUnknown2, p->mUnknown4[index].mUnknown0, pOwner, 3, pObject, pRecords);
     AnimChanStopByStateIndex(pObject, pRecords, p->mUnknown4[index].mUnknown0);
     p->mUnknown4[index].mUnknown2 = 0;
 }
 
-unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner,
+unsigned short _AnimStGetFreeSlotIndex(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner,
                            unsigned short key)
 {
     int slot = -1;
@@ -73,7 +76,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
     if (i == 4) {
         for (i = 0; i < 4; i++) {
             if (p->mUnknown4[i].mUnknown8 != 0.0f) {
-                fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                _AnimStEndState(p, pObject, pRecords, i, pOwner);
                 freed = 1;
                 _AnimStOrganizeInfo(p);
                 break;
@@ -83,7 +86,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown4C.mUnknown0 <= 1e-07f && (p->mUnknown4[i].mUnknown0 & 0x8000) &&
                     p->mUnknown4[i].mUnknown0 != 0xFFFF && AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
-                    fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                    _AnimStEndState(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     _AnimStOrganizeInfo(p);
                     break;
@@ -94,7 +97,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
             for (i = 0; i < 4; i++) {
                 if (p->mUnknown4[i].mUnknown2 == 1 && p->mUnknown4[i].mUnknown0 != 0xFFFF &&
                     AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
-                    fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                    _AnimStEndState(p, pObject, pRecords, i, pOwner);
                     freed = 1;
                     _AnimStOrganizeInfo(p);
                     break;
@@ -113,7 +116,7 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
                 }
             }
             if (index != -1) {
-                fn_801BDBD4(p, pObject, pRecords, index, pOwner);
+                _AnimStEndState(p, pObject, pRecords, index, pOwner);
                 freed = 1;
                 _AnimStOrganizeInfo(p);
             }
@@ -129,13 +132,13 @@ unsigned short fn_801BDC3C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimCh
     }
     if (slot == -1) {
         slot = 3;
-        fn_801BDBD4(p, pObject, pRecords, 0, pOwner);
+        _AnimStEndState(p, pObject, pRecords, 0, pOwner);
         _AnimStOrganizeInfo(p);
     }
     return slot;
 }
 
-unsigned short fn_801BDF38(Collection_801BE594 *p)
+unsigned short _AnimStMakeUniqueTransitionState(AnimStInfo_t *p)
 {
     unsigned short key = 0xFFFE;
     int unique;
@@ -176,12 +179,12 @@ int fn_801BDFF8(void)
     return 0;
 }
 
-void fn_801BE030(int type, Handlers_801BDA30 *pHandlers)
+void fn_801BE030(int type, AnimStStateDefs_t *pHandlers)
 {
     lbl_803EBB98[type] = pHandlers;
 }
 
-void fn_801BE040(Collection_801BE594 *p)
+void AnimStInitStructure(AnimStInfo_t *p)
 {
     int i;
 
@@ -192,7 +195,7 @@ void fn_801BE040(Collection_801BE594 *p)
     }
 }
 
-int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
+int fn_801BE068(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, unsigned short key,
                 float frames, void *pOwner)
 {
     unsigned short previous = fn_801BE648(p);
@@ -203,12 +206,12 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pR
     for (i = 0; i <= 3; i++) {
         if (p->mUnknown4[i].mUnknown2 == 3) {
             p->mUnknown4[i].mUnknown2 = 2;
-            fn_801BDA30(pObject->mUnknown2, previous, pOwner, 4, pObject, pRecords);
+            _AnimStCallSelectAnimFunc(pObject->mUnknown2, previous, pOwner, 4, pObject, pRecords);
             if (p->mUnknown4[i].mUnknown8 != 0.0f && i > 0) {
-                fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                _AnimStEndState(p, pObject, pRecords, i, pOwner);
                 i--;
                 if (p->mUnknown4[i].mUnknown0 == 0xFFFF) {
-                    p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
+                    p->mUnknown4[i].mUnknown0 = _AnimStMakeUniqueTransitionState(p);
                     AnimWgtSetLinear(&p->mUnknown4[i].mUnknown4C, 10, -1.0f, 0.0f);
                     while (AnimChanGetNumActiveByState(pObject, pRecords, 0xFFFF)) {
                         pRecords[AnimChanGetStateChannelByIndex(pObject, pRecords, 0xFFFF, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
@@ -223,7 +226,7 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pR
             unsigned short old = p->mUnknown4[i].mUnknown0;
 
             if (old == key || old == 0xFFFF) {
-                p->mUnknown4[i].mUnknown0 = fn_801BDF38(p);
+                p->mUnknown4[i].mUnknown0 = _AnimStMakeUniqueTransitionState(p);
                 p->mUnknown4[i].mUnknown4 &= ~1;
                 while (AnimChanGetNumActiveByState(pObject, pRecords, old)) {
                     pRecords[AnimChanGetStateChannelByIndex(pObject, pRecords, old, 0)].mUnknown8 = p->mUnknown4[i].mUnknown0;
@@ -232,29 +235,29 @@ int fn_801BE068(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pR
         }
     }
     add = 0;
-    if (fn_801BE82C(pObject->mUnknown2, previous)) {
+    if (_AnimTranGetStateTransitions(pObject->mUnknown2, previous)) {
         add = 1;
     }
     if (add == 1) {
-        slot = fn_801BDC3C(p, pObject, pRecords, pOwner, 0xFFFF);
-        memset(&p->mUnknown4[slot], 0, sizeof(Slot_801BE594));
+        slot = _AnimStGetFreeSlotIndex(p, pObject, pRecords, pOwner, 0xFFFF);
+        memset(&p->mUnknown4[slot], 0, sizeof(AnimStSlot_t));
         p->mUnknown4[slot].mUnknown0 = 0xFFFF;
         p->mUnknown4[slot].mUnknown2 = add;
         p->mUnknown4[slot].mUnknown8 = 0.0f;
         AnimWgtSet(&p->mUnknown4[slot].mUnknown4C, 0, 0.0f, 0, 0.0f);
     }
-    slot = fn_801BDC3C(p, pObject, pRecords, pOwner, key);
-    memset(&p->mUnknown4[slot], 0, sizeof(Slot_801BE594));
+    slot = _AnimStGetFreeSlotIndex(p, pObject, pRecords, pOwner, key);
+    memset(&p->mUnknown4[slot], 0, sizeof(AnimStSlot_t));
     p->mUnknown4[slot].mUnknown2 = 3;
     p->mUnknown4[slot].mUnknown0 = key;
     p->mUnknown4[slot].mUnknown8 = 0.0f;
     AnimWgtSetLinear(&p->mUnknown4[slot].mUnknown4C, 10, 0.0f, frames);
-    fn_801BDA30(pObject->mUnknown2, key, pOwner, 0, pObject, pRecords);
-    fn_801BE99C(p, pObject, pRecords, key, previous, 2, pOwner);
+    _AnimStCallSelectAnimFunc(pObject->mUnknown2, key, pOwner, 0, pObject, pRecords);
+    _AnimTranDoTransition(p, pObject, pRecords, key, previous, 2, pOwner);
     return 0;
 }
 
-void fn_801BE3C0(Collection_801BE594 *p, float from, float to, unsigned short key, int type, void *pSource)
+void fn_801BE3C0(AnimStInfo_t *p, float from, float to, unsigned short key, int type, void *pSource)
 {
     int i;
 
@@ -266,7 +269,7 @@ void fn_801BE3C0(Collection_801BE594 *p, float from, float to, unsigned short ke
     }
 }
 
-void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner, float step)
+void fn_801BE420(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner, float step)
 {
     int i;
 
@@ -280,24 +283,24 @@ void fn_801BE420(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *p
             AnimWgtProcess(&p->mUnknown4[i].mUnknown4C, step);
             if (p->mUnknown4[i].mUnknown4C.mUnknown0 > 1e-07f) {
                 if (p->mUnknown4[i].mUnknown4 & 1) {
-                    fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
+                    _AnimStCallSelectAnimFunc(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 2, pObject, pRecords);
                 }
                 if (AnimChanGetNumActiveByState(pObject, pRecords, p->mUnknown4[i].mUnknown0) == 0) {
                     if (p->mUnknown4[i].mUnknown2 == 3) {
-                        fn_801BDA30(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 1, pObject, pRecords);
+                        _AnimStCallSelectAnimFunc(pObject->mUnknown2, p->mUnknown4[i].mUnknown0, pOwner, 1, pObject, pRecords);
                     } else {
-                        fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                        _AnimStEndState(p, pObject, pRecords, i, pOwner);
                     }
                 }
             } else {
-                fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+                _AnimStEndState(p, pObject, pRecords, i, pOwner);
             }
         }
     }
     _AnimStOrganizeInfo(p);
 }
 
-Slot_801BE594 *fn_801BE594(Collection_801BE594 *p, unsigned short key)
+AnimStSlot_t *AnimStGetStateSlot(AnimStInfo_t *p, unsigned short key)
 {
     int i;
 
@@ -309,7 +312,7 @@ Slot_801BE594 *fn_801BE594(Collection_801BE594 *p, unsigned short key)
     return 0;
 }
 
-float fn_801BE5D0(Collection_801BE594 *p, unsigned short key)
+float AnimStGetStateWeight(AnimStInfo_t *p, unsigned short key)
 {
     int i;
 
@@ -321,7 +324,7 @@ float fn_801BE5D0(Collection_801BE594 *p, unsigned short key)
     return 0.0f;
 }
 
-struct Block_801BE60C *fn_801BE60C(Collection_801BE594 *p, unsigned short key)
+struct Block_801BE60C *fn_801BE60C(AnimStInfo_t *p, unsigned short key)
 {
     int i;
 
@@ -333,7 +336,7 @@ struct Block_801BE60C *fn_801BE60C(Collection_801BE594 *p, unsigned short key)
     return 0;
 }
 
-unsigned short fn_801BE648(Collection_801BE594 *p)
+unsigned short fn_801BE648(AnimStInfo_t *p)
 {
     unsigned short key = 0xFFFF;
     int i;
@@ -346,13 +349,13 @@ unsigned short fn_801BE648(Collection_801BE594 *p)
     return key;
 }
 
-void fn_801BE67C(Collection_801BE594 *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner)
+void fn_801BE67C(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords, void *pOwner)
 {
     int i;
 
     for (i = 3; i >= 0; i--) {
         if (p->mUnknown4[i].mUnknown2 != 3 && p->mUnknown4[i].mUnknown2 != 0) {
-            fn_801BDBD4(p, pObject, pRecords, i, pOwner);
+            _AnimStEndState(p, pObject, pRecords, i, pOwner);
         }
     }
     _AnimStOrganizeInfo(p);
@@ -368,7 +371,7 @@ void *fn_801BE72C(unsigned short type, unsigned short key)
     return &lbl_8037EC7C;
 }
 
-void fn_801BE760(Collection_801BE594 *p, unsigned short key, unsigned short flags)
+void fn_801BE760(AnimStInfo_t *p, unsigned short key, unsigned short flags)
 {
     int i;
 
@@ -379,7 +382,7 @@ void fn_801BE760(Collection_801BE594 *p, unsigned short key, unsigned short flag
     }
 }
 
-void fn_801BE798(Collection_801BE594 *p, unsigned short key, float value)
+void AnimStSetStateDelay(AnimStInfo_t *p, unsigned short key, float value)
 {
     int i;
 
@@ -390,7 +393,7 @@ void fn_801BE798(Collection_801BE594 *p, unsigned short key, float value)
     }
 }
 
-float fn_801BE7C8(Collection_801BE594 *p, unsigned short key)
+float AnimStGetStateDelay(AnimStInfo_t *p, unsigned short key)
 {
     float value = 0.0f;
     int i;

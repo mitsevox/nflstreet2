@@ -23989,9 +23989,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801BDA30.c",
+      "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/cu_801BDA30.c, animst.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -24008,7 +24008,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801BDA30",
+          "symbol": "_AnimStCallSelectAnimFunc",
           "start": "0x801BDA30",
           "end": "0x801BDAC0"
         },
@@ -24018,17 +24018,17 @@
           "end": "0x801BDBD4"
         },
         {
-          "symbol": "fn_801BDBD4",
+          "symbol": "_AnimStEndState",
           "start": "0x801BDBD4",
           "end": "0x801BDC3C"
         },
         {
-          "symbol": "fn_801BDC3C",
+          "symbol": "_AnimStGetFreeSlotIndex",
           "start": "0x801BDC3C",
           "end": "0x801BDF38"
         },
         {
-          "symbol": "fn_801BDF38",
+          "symbol": "_AnimStMakeUniqueTransitionState",
           "start": "0x801BDF38",
           "end": "0x801BDF90"
         },
@@ -24048,7 +24048,7 @@
           "end": "0x801BE040"
         },
         {
-          "symbol": "fn_801BE040",
+          "symbol": "AnimStInitStructure",
           "start": "0x801BE040",
           "end": "0x801BE068"
         },
@@ -24068,12 +24068,12 @@
           "end": "0x801BE594"
         },
         {
-          "symbol": "fn_801BE594",
+          "symbol": "AnimStGetStateSlot",
           "start": "0x801BE594",
           "end": "0x801BE5D0"
         },
         {
-          "symbol": "fn_801BE5D0",
+          "symbol": "AnimStGetStateWeight",
           "start": "0x801BE5D0",
           "end": "0x801BE60C"
         },
@@ -24103,12 +24103,12 @@
           "end": "0x801BE798"
         },
         {
-          "symbol": "fn_801BE798",
+          "symbol": "AnimStSetStateDelay",
           "start": "0x801BE798",
           "end": "0x801BE7C8"
         },
         {
-          "symbol": "fn_801BE7C8",
+          "symbol": "AnimStGetStateDelay",
           "start": "0x801BE7C8",
           "end": "0x801BE82C"
         }
@@ -24134,27 +24134,27 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801BE82C",
+          "symbol": "_AnimTranGetStateTransitions",
           "start": "0x801BE82C",
           "end": "0x801BE860"
         },
         {
-          "symbol": "fn_801BE860",
+          "symbol": "_AnimTranFindBestChannel",
           "start": "0x801BE860",
           "end": "0x801BE910"
         },
         {
-          "symbol": "fn_801BE910",
+          "symbol": "_AnimTranSetTransOutWgt",
           "start": "0x801BE910",
           "end": "0x801BE99C"
         },
         {
-          "symbol": "fn_801BE99C",
+          "symbol": "_AnimTranDoTransition",
           "start": "0x801BE99C",
           "end": "0x801BEFA4"
         },
         {
-          "symbol": "fn_801BEFA4",
+          "symbol": "_AnimTranGetBestTransition",
           "start": "0x801BEFA4",
           "end": "0x801BF090"
         }
@@ -25596,12 +25596,12 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D134C",
+          "symbol": "_FindHeapByIdent",
           "start": "0x801D134C",
           "end": "0x801D13A4"
         },
         {
-          "symbol": "fn_801D13A4",
+          "symbol": "_FindHeapByAddr",
           "start": "0x801D13A4",
           "end": "0x801D1474"
         },
@@ -25611,62 +25611,62 @@
           "end": "0x801D1588"
         },
         {
-          "symbol": "fn_801D1588",
+          "symbol": "_FreeListInsert",
           "start": "0x801D1588",
           "end": "0x801D1620"
         },
         {
-          "symbol": "fn_801D1620",
+          "symbol": "_FreeListDelete",
           "start": "0x801D1620",
           "end": "0x801D177C"
         },
         {
-          "symbol": "fn_801D177C",
+          "symbol": "_ShortenBlock",
           "start": "0x801D177C",
           "end": "0x801D18A0"
         },
         {
-          "symbol": "fn_801D18A0",
+          "symbol": "_SplitBlock",
           "start": "0x801D18A0",
           "end": "0x801D1ACC"
         },
         {
-          "symbol": "fn_801D1ACC",
+          "symbol": "_FindAndSplit",
           "start": "0x801D1ACC",
           "end": "0x801D1B64"
         },
         {
-          "symbol": "fn_801D1B64",
+          "symbol": "_FindAndSplitHead",
           "start": "0x801D1B64",
           "end": "0x801D1C14"
         },
         {
-          "symbol": "fn_801D1C14",
+          "symbol": "_SplitBlockTail",
           "start": "0x801D1C14",
           "end": "0x801D1E30"
         },
         {
-          "symbol": "fn_801D1E30",
+          "symbol": "_FindAndSplitTail",
           "start": "0x801D1E30",
           "end": "0x801D1ED8"
         },
         {
-          "symbol": "fn_801D1ED8",
+          "symbol": "_DebugSetup",
           "start": "0x801D1ED8",
           "end": "0x801D2050"
         },
         {
-          "symbol": "fn_801D2050",
+          "symbol": "_PrintDefault",
           "start": "0x801D2050",
           "end": "0x801D2054"
         },
         {
-          "symbol": "fn_801D2054",
+          "symbol": "MemInit",
           "start": "0x801D2054",
           "end": "0x801D20C8"
         },
         {
-          "symbol": "fn_801D20C8",
+          "symbol": "MemShutdown",
           "start": "0x801D20C8",
           "end": "0x801D2130"
         },
@@ -25676,7 +25676,7 @@
           "end": "0x801D2478"
         },
         {
-          "symbol": "fn_801D2478",
+          "symbol": "MemCustomHeap",
           "start": "0x801D2478",
           "end": "0x801D2570"
         },
@@ -25686,17 +25686,17 @@
           "end": "0x801D2694"
         },
         {
-          "symbol": "fn_801D2694",
+          "symbol": "MemCheckSentinelAll",
           "start": "0x801D2694",
           "end": "0x801D26C4"
         },
         {
-          "symbol": "fn_801D26C4",
+          "symbol": "MemHeapBreakdown",
           "start": "0x801D26C4",
           "end": "0x801D2700"
         },
         {
-          "symbol": "fn_801D2700",
+          "symbol": "MemHeapActive",
           "start": "0x801D2700",
           "end": "0x801D2730"
         },
@@ -25706,7 +25706,7 @@
           "end": "0x801D277C"
         },
         {
-          "symbol": "fn_801D277C",
+          "symbol": "MemSetDefaultHeap",
           "start": "0x801D277C",
           "end": "0x801D27A0"
         },
@@ -25716,7 +25716,7 @@
           "end": "0x801D27B8"
         },
         {
-          "symbol": "fn_801D27B8",
+          "symbol": "MemGetHeapStart",
           "start": "0x801D27B8",
           "end": "0x801D27F4"
         },
@@ -25726,7 +25726,7 @@
           "end": "0x801D2874"
         },
         {
-          "symbol": "fn_801D2874",
+          "symbol": "MemCheckSentinel",
           "start": "0x801D2874",
           "end": "0x801D28A8"
         },
@@ -25756,17 +25756,17 @@
           "end": "0x801D310C"
         },
         {
-          "symbol": "fn_801D310C",
+          "symbol": "MemReallocMem",
           "start": "0x801D310C",
           "end": "0x801D3148"
         },
         {
-          "symbol": "fn_801D3148",
+          "symbol": "MemGetSizeByAddr",
           "start": "0x801D3148",
           "end": "0x801D31F0"
         },
         {
-          "symbol": "fn_801D31F0",
+          "symbol": "MemCopy",
           "start": "0x801D31F0",
           "end": "0x801D3318"
         },
@@ -25786,7 +25786,7 @@
           "end": "0x801D3470"
         },
         {
-          "symbol": "fn_801D3470",
+          "symbol": "MemGetGroupLabelByAddr",
           "start": "0x801D3470",
           "end": "0x801D34C4"
         }
@@ -27196,77 +27196,77 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801C7684",
+          "symbol": "_DSListTraverseSplayTreeRight",
           "start": "0x801C7684",
           "end": "0x801C7730"
         },
         {
-          "symbol": "fn_801C7730",
+          "symbol": "_DSListTraverseSplayTreeLeft",
           "start": "0x801C7730",
           "end": "0x801C77DC"
         },
         {
-          "symbol": "fn_801C77DC",
+          "symbol": "_DSListGetSplayPrev",
           "start": "0x801C77DC",
           "end": "0x801C7810"
         },
         {
-          "symbol": "fn_801C7810",
+          "symbol": "_DSListGetSplayNext",
           "start": "0x801C7810",
           "end": "0x801C7844"
         },
         {
-          "symbol": "fn_801C7844",
+          "symbol": "_DSListSplay",
           "start": "0x801C7844",
           "end": "0x801C7A34"
         },
         {
-          "symbol": "fn_801C7A34",
+          "symbol": "_DSListInitSplayTree",
           "start": "0x801C7A34",
           "end": "0x801C7A60"
         },
         {
-          "symbol": "fn_801C7A60",
+          "symbol": "_DSListDelSplayTree",
           "start": "0x801C7A60",
           "end": "0x801C7A98"
         },
         {
-          "symbol": "fn_801C7A98",
+          "symbol": "_DSListAddSplayNode",
           "start": "0x801C7A98",
           "end": "0x801C7C1C"
         },
         {
-          "symbol": "fn_801C7C1C",
+          "symbol": "_DSListInitSplayNode",
           "start": "0x801C7C1C",
           "end": "0x801C7C44"
         },
         {
-          "symbol": "fn_801C7C44",
+          "symbol": "_DSListGetSplayNode",
           "start": "0x801C7C44",
           "end": "0x801C7D1C"
         },
         {
-          "symbol": "fn_801C7D1C",
+          "symbol": "_DSListRemoveSplayNode",
           "start": "0x801C7D1C",
           "end": "0x801C7E00"
         },
         {
-          "symbol": "fn_801C7E00",
+          "symbol": "_DSListTraverseSplayTree",
           "start": "0x801C7E00",
           "end": "0x801C7E30"
         },
         {
-          "symbol": "fn_801C7E30",
+          "symbol": "_DSListSearchSplayTree",
           "start": "0x801C7E30",
           "end": "0x801C7EDC"
         },
         {
-          "symbol": "fn_801C7EDC",
+          "symbol": "_DSListOptimizeSplayTree",
           "start": "0x801C7EDC",
           "end": "0x801C7EE4"
         },
         {
-          "symbol": "fn_801C7EE4",
+          "symbol": "DSListInitSplayTreeModule",
           "start": "0x801C7EE4",
           "end": "0x801C7F70"
         }
@@ -27551,12 +27551,12 @@
           "end": "0x801B4960"
         },
         {
-          "symbol": "fn_801B4960",
+          "symbol": "PATHI_customsfxfade",
           "start": "0x801B4960",
           "end": "0x801B49C4"
         },
         {
-          "symbol": "fn_801B49C4",
+          "symbol": "PATHI_customdrylevelfade",
           "start": "0x801B49C4",
           "end": "0x801B4A24"
         },
@@ -29854,187 +29854,187 @@
       ],
       "functions": [
         {
-          "symbol": "fn_802821E8",
+          "symbol": "_LZHInit",
           "start": "0x802821E8",
           "end": "0x80282260"
         },
         {
-          "symbol": "fn_80282260",
+          "symbol": "_LZHShutdown",
           "start": "0x80282260",
           "end": "0x802822E0"
         },
         {
-          "symbol": "fn_802822E0",
+          "symbol": "_LZHCoStart",
           "start": "0x802822E0",
           "end": "0x8028243C"
         },
         {
-          "symbol": "fn_8028243C",
+          "symbol": "_LZHCoStop",
           "start": "0x8028243C",
           "end": "0x802824A8"
         },
         {
-          "symbol": "fn_802824A8",
+          "symbol": "_LZHDecStart",
           "start": "0x802824A8",
           "end": "0x8028257C"
         },
         {
-          "symbol": "fn_8028257C",
+          "symbol": "_LZHMemDecStart",
           "start": "0x8028257C",
           "end": "0x802825C8"
         },
         {
-          "symbol": "fn_802825C8",
+          "symbol": "_LZHDecStop",
           "start": "0x802825C8",
           "end": "0x80282624"
         },
         {
-          "symbol": "fn_80282624",
+          "symbol": "_LZHMemDecStop",
           "start": "0x80282624",
           "end": "0x80282654"
         },
         {
-          "symbol": "fn_80282654",
+          "symbol": "_LZHProcess",
           "start": "0x80282654",
           "end": "0x80282740"
         },
         {
-          "symbol": "fn_80282740",
+          "symbol": "_LZHMemProcess",
           "start": "0x80282740",
           "end": "0x80282800"
         },
         {
-          "symbol": "fn_80282800",
+          "symbol": "_LZHEncodeNewBlock",
           "start": "0x80282800",
           "end": "0x802828BC"
         },
         {
-          "symbol": "fn_802828BC",
+          "symbol": "_LZHEncodeNewBlockEOF",
           "start": "0x802828BC",
           "end": "0x8028291C"
         },
         {
-          "symbol": "fn_8028291C",
+          "symbol": "_LZHEncodeInput",
           "start": "0x8028291C",
           "end": "0x80282D70"
         },
         {
-          "symbol": "fn_80282D70",
+          "symbol": "_LZHEncodeCodeBufferStart",
           "start": "0x80282D70",
           "end": "0x80282F24"
         },
         {
-          "symbol": "fn_80282F24",
+          "symbol": "_LZHEncodeCodeBuffer",
           "start": "0x80282F24",
           "end": "0x802830F0"
         },
         {
-          "symbol": "fn_802830F0",
+          "symbol": "_LZHDecodeNewBlock",
           "start": "0x802830F0",
           "end": "0x802832CC"
         },
         {
-          "symbol": "fn_802832CC",
+          "symbol": "_LZHDecodeInput",
           "start": "0x802832CC",
           "end": "0x80283660"
         },
         {
-          "symbol": "fn_80283660",
+          "symbol": "_LZHDecodeInputFull",
           "start": "0x80283660",
           "end": "0x80283E48"
         },
         {
-          "symbol": "fn_80283E48",
+          "symbol": "_LZHReadBits",
           "start": "0x80283E48",
           "end": "0x80284030"
         },
         {
-          "symbol": "fn_80284030",
+          "symbol": "_LZHMemDecodeNewBlock",
           "start": "0x80284030",
           "end": "0x8028410C"
         },
         {
-          "symbol": "fn_8028410C",
+          "symbol": "_LZHMemDecodeInput",
           "start": "0x8028410C",
           "end": "0x80284700"
         },
         {
-          "symbol": "fn_80284700",
+          "symbol": "_LZHMemReadBits",
           "start": "0x80284700",
           "end": "0x8028490C"
         },
         {
-          "symbol": "fn_8028490C",
+          "symbol": "_LZHHuffWriteHuffData",
           "start": "0x8028490C",
           "end": "0x80284968"
         },
         {
-          "symbol": "fn_80284968",
+          "symbol": "_LZHHuffEncodeBuildTree",
           "start": "0x80284968",
           "end": "0x80284AEC"
         },
         {
-          "symbol": "fn_80284AEC",
+          "symbol": "_LZHHuffEncodeGenCodeLen",
           "start": "0x80284AEC",
           "end": "0x80284D1C"
         },
         {
-          "symbol": "fn_80284D1C",
+          "symbol": "_LZHHuffReadHuffData",
           "start": "0x80284D1C",
           "end": "0x80284DD0"
         },
         {
-          "symbol": "fn_80284DD0",
+          "symbol": "_LZHHuffAssignCodes",
           "start": "0x80284DD0",
           "end": "0x80284E70"
         },
         {
-          "symbol": "fn_80284E70",
+          "symbol": "_LZHHuffDecodeBuildTree",
           "start": "0x80284E70",
           "end": "0x80284F78"
         },
         {
-          "symbol": "fn_80284F78",
+          "symbol": "_LZHHuffDecodeBuildTable",
           "start": "0x80284F78",
           "end": "0x80284FB8"
         },
         {
-          "symbol": "fn_80284FB8",
+          "symbol": "_LZHHuffDecodeBuildTableR",
           "start": "0x80284FB8",
           "end": "0x802851E8"
         },
         {
-          "symbol": "fn_802851E8",
+          "symbol": "_LZHHuffGenCodeConvertTables",
           "start": "0x802851E8",
           "end": "0x80285304"
         },
         {
-          "symbol": "fn_80285304",
+          "symbol": "_LZHUpdateChecksum",
           "start": "0x80285304",
           "end": "0x80285394"
         },
         {
-          "symbol": "fn_80285394",
+          "symbol": "_LZHWriteBits",
           "start": "0x80285394",
           "end": "0x80285458"
         },
         {
-          "symbol": "fn_80285458",
+          "symbol": "_LZHFlushByteBuffer",
           "start": "0x80285458",
           "end": "0x802854D8"
         },
         {
-          "symbol": "fn_802854D8",
+          "symbol": "_LZHFlushBitBuffer",
           "start": "0x802854D8",
           "end": "0x8028555C"
         },
         {
-          "symbol": "fn_8028555C",
+          "symbol": "_LZHHeapPush",
           "start": "0x8028555C",
           "end": "0x802855EC"
         },
         {
-          "symbol": "fn_802855EC",
+          "symbol": "_LZHHeapPop",
           "start": "0x802855EC",
           "end": "0x802856D8"
         }

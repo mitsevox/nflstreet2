@@ -69,7 +69,7 @@ void AnimFileRelocate(AnimFileFormat_t *pFile)
             for (j = 0; j < pState->mpTrans->mCount; j++) {
                 if (pState->mpTrans->mEntries[j].mpUnknownC)
                     pState->mpTrans->mEntries[j].mpUnknownC =
-                        (struct Transition_801BEFA4 *)((char *)pState->mpTrans->mEntries[j].mpUnknownC + (int)pFile);
+                        (struct AnimTranInfo_t *)((char *)pState->mpTrans->mEntries[j].mpUnknownC + (int)pFile);
             }
         }
         for (i = 0; i < pFile->anims->mCount; i++)

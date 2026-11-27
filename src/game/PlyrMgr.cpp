@@ -153,7 +153,7 @@ void AnimChanInitChannels(void *p, void *q);
 void AnimChanProcess(void *a, void *b, float f, Object_80039F5C *p);
 int AnimMotCreateWeightList(void *a, void *b, void *c);
 void AnimMotRotateHalfTurn(void *a, void *b);
-void fn_801BE040(void *p);
+void AnimStInitStructure(void *p);
 void fn_801BE420(void *a, void *b, void *c, Object_80039F5C *p, float f);
 
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
@@ -1295,14 +1295,14 @@ extern "C" void PlyrInitAnimChannels(Object_80039F5C *p)
 
     AnimInitHeader(p->mUnknown1244, 0, 1, 10);
     AnimChanInitChannels(p->mUnknown1244, p->mUnknown1244 + 12);
-    fn_801BE040(p->mUnknown1244 + 1252);
+    AnimStInitStructure(p->mUnknown1244 + 1252);
     AnimInitHeader(&pPlayer->mUnknown3096, 2, 3, 4);
     AnimChanInitChannels(&pPlayer->mUnknown3096, pPlayer->mUnknown3108);
-    fn_801BE040(pPlayer->mUnknown3604);
+    AnimStInitStructure(pPlayer->mUnknown3604);
     for (i = 0; i <= 1; i++) {
         AnimInitHeader(&pPlayer->mUnknown4008[i], 0, 4, 2);
         AnimChanInitChannels(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i]);
-        fn_801BE040(pPlayer->mUnknown4528[i]);
+        AnimStInitStructure(pPlayer->mUnknown4528[i]);
     }
 }
 
