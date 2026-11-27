@@ -50,15 +50,15 @@ int FEPlyrFindRunPose(FEPlyrModel_t *pRecord, Table_80089904 *pTable, unsigned i
     AnimFileGetStateAnimList(((FEPlyrPoseFileView_t *)pRecord->mUnknown796)->mAnimFileId, 74, pTable);
     memset(values, 255, sizeof(values));
     values[0] = 1;
-    id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
+    id = pTable->mEntries[PlayerAnimTablePickBest(pTable, values)].mUnknown2 & 0x7FFF;
     AnimFileGetStateAnimList(((FEPlyrPoseFileView_t *)pRecord->mUnknown796)->mAnimFileId, id, pTable);
     memset(values, 255, sizeof(values));
     values[0] = PlayerLocoGetRunCategory(value - 31);
-    id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
+    id = pTable->mEntries[PlayerAnimTablePickBest(pTable, values)].mUnknown2 & 0x7FFF;
     AnimFileGetStateAnimList(((FEPlyrPoseFileView_t *)pRecord->mUnknown796)->mAnimFileId, id, pTable);
     memset(values, 255, sizeof(values));
     values[0] = 1;
-    id = pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF;
+    id = pTable->mEntries[PlayerAnimTablePickBest(pTable, values)].mUnknown2 & 0x7FFF;
     AnimFileGetStateAnimList(((FEPlyrPoseFileView_t *)pRecord->mUnknown796)->mAnimFileId, id, pTable);
     pObject = AnimFileGetStateData(id, ((FEPlyrPoseFileView_t *)pRecord->mUnknown796)->mAnimFileId);
     if (pObject->mCount != 0) {

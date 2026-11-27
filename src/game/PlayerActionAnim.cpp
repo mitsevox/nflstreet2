@@ -260,7 +260,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
         allow = 0;
     }
     unsigned int roll = (unsigned int)SyncRandGetRange(0, 255);
-    if (roll > (unsigned int)fn_800ACFA8(p)) {
+    if (roll > (unsigned int)GameSkillGetPitchThreshold(p)) {
         failed = 1;
     }
     if (failed && (unsigned int)SyncRandGetRange(0, 100) < (unsigned int)lbl_803EAD19) {
@@ -331,9 +331,14 @@ extern "C" int PlayerActionAnimIsPitchArmed(Object_80039F5C *p)
         pRecord = (Record_800DB60C *)((char *)p + 336);
         break;
     }
-    int result = 0;
-    if (pRecord && pRecord->mUnknown1) {
-        result = pRecord->mUnknown20 >= 0.0f;
+    int result;
+    // FAKEMATCH: result = 0 is written in both arms (one store before the test would do); the arm-local
+    // stores put the li r3,0 after the pRecord compare in insn order, as the target schedules it
+    if (!pRecord) {
+        result = 0;
+    } else {
+        result = 0;
+        if (pRecord->mUnknown1) result = pRecord->mUnknown20 >= 0.0f;
     }
     return result;
 }
@@ -560,10 +565,10 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
     case 0:
         if (p->mUnknown2913 == 0) {
             side = 1;
-            fn_800ADB90(p, 5, 8, 1);
+            PlyrHandSetPoseFor(p, 5, 8, 1);
         } else {
             side = 0;
-            fn_800ADB90(p, 5, 8, 0);
+            PlyrHandSetPoseFor(p, 5, 8, 0);
         }
         for (i = 0; i < pList->mCount; i++) {
             Object_800DC36C *pObject = pList->mEntries[i].mpUnknown4;
@@ -587,9 +592,9 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
             pBlock->mUnknown4Word = p->mMotion.mFacing;
         }
         AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(PlyrSurfaceScaleSpeed(p, 1.0f)));
-        if (fn_800A7EF4(p->mIdBytes[2]) == 2) {
+        if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 2) {
             AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(2.0f));
-        } else if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
+        } else if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 0) {
             AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(0.5f));
         }
         break;
@@ -669,7 +674,7 @@ extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short 
         p->mUnknown1008.mUnknown0 = pRecord->mUnknown8;
         p->mUnknown1008.mUnknown1 = pRecord->mUnknown9;
         p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
-        int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
+        int index = PlayerAnimTablePickBest(pTable, (unsigned char *)&p->mUnknown1008);
         unsigned char entry = AnimChanStartAnim(pA, pEntries, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p, 1.0f);
         pRecord->mUnknown0 = entry;
         pRecord->mUnknown4 = -1;
@@ -679,12 +684,13 @@ extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short 
     case 1:
         break;
     case 2: {
+        int next;
         int direction = PlayerActionAnimSetTurnAngle(p, (Record_800DC584 *)pRecord);
         if (direction != pRecord->mUnknown8) {
             if (pRecord->mUnknown4 != -1 && p->mpUnknown800[pRecord->mUnknown4].mUnknown8 == key) {
                 AnimChanStopAnim((AnimHeader_t *)pA, pEntries, pRecord->mUnknown4);
             }
-            int next = AnimChanStartCopy(pA, pEntries, &pEntries[pRecord->mUnknown0]);
+            next = AnimChanStartCopy(pA, pEntries, &pEntries[pRecord->mUnknown0]);
             pRecord->mUnknown4 = pRecord->mUnknown0;
             AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 0.0f);
             pRecord->mUnknown0 = next;
@@ -693,7 +699,7 @@ extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short 
             p->mUnknown1008.mUnknown0 = direction;
             p->mUnknown1008.mUnknown1 = pRecord->mUnknown9;
             p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
-            int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
+            int index = PlayerAnimTablePickBest(pTable, (unsigned char *)&p->mUnknown1008);
             AnimChanSwitchAnim(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
             AnimWgtSet(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
             AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 12, -1.0f, 1.0f);
@@ -715,7 +721,7 @@ extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short 
                 if (pRecord->mUnknown4 != -1 && p->mpUnknown800[pRecord->mUnknown4].mUnknown8 == key) {
                     AnimChanStopAnim((AnimHeader_t *)pA, pEntries, pRecord->mUnknown4);
                 }
-                int next = AnimChanStartCopy(pA, pEntries, &pEntries[pRecord->mUnknown0]);
+                next = AnimChanStartCopy(pA, pEntries, &pEntries[pRecord->mUnknown0]);
                 pRecord->mUnknown4 = pRecord->mUnknown0;
                 AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 0.0f);
                 pRecord->mUnknown9 = category;
@@ -723,7 +729,7 @@ extern "C" int PlayerActionAnimTurnPhase(Table_80089904 *pTable, unsigned short 
                 p->mUnknown1008.mUnknown0 = pRecord->mUnknown8;
                 p->mUnknown1008.mUnknown1 = pRecord->mUnknown9;
                 p->mUnknown1008.mUnknown2 = pRecord->mUnknown10;
-                int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
+                int index = PlayerAnimTablePickBest(pTable, (unsigned char *)&p->mUnknown1008);
                 AnimChanSwitchAnim(pA, pEntries, pRecord->mUnknown0, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p);
                 AnimWgtSet(&pEntries[pRecord->mUnknown0].mUnknown30, 0, 0.0f, 0, 0.0f);
                 AnimWgtSetLinear(&pEntries[pRecord->mUnknown0].mUnknown30, 16, -1.0f, 1.0f);
@@ -935,6 +941,7 @@ extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned sh
     }
     if (update == 1) {
         unsigned char category = 1;
+        unsigned char *pInfo;
         if (p->mUnknown16 != 2 && p->mUnknown108 != 2 && p->mUnknown200 != 2 && ScrmIsNotReplay() == 1) {
             --pRecord->mUnknown0;
             if (pRecord->mUnknown0 & 0x8000) {
@@ -945,12 +952,14 @@ extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned sh
         while (!found) {
             int type = category == 0 ? 2 : 1;
             for (int i = 0; i < pTable->mCount; ++i) {
-                unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
+                pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
                 if (pInfo[5] == type) {
                     int value = PlayerActionAnimScoreReaction(p, pInfo + 4);
                     if (value >= score && value > 0) {
-                        if (score != value || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
-                            if (score != value) score = value;
+                        if (score == value) {
+                            if ((unsigned int)SyncRandGetRange(0, 100) <= 49) chosen = i;
+                        } else {
+                            score = value;
                             chosen = i;
                         }
                     }
@@ -968,7 +977,7 @@ extern "C" int PlayerActionAnimReactionPhase(Table_80089904 *pTable, unsigned sh
         if (old != 0xFFFF && pEntries[old].mUnknown1 == 2 && pEntries[old].mUnknown8 == key) {
             AnimWgtSetLinear(&pEntries[old].mUnknown30, blend, -1.0f, 0.0f);
         }
-        unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
+        pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
         if (pInfo[5] == 2) pRecord->mUnknown6 = 1; else pRecord->mUnknown6 = 0;
         pRecord->mUnknown4 = pInfo[4];
         p->mFlags &= ~4;
@@ -1010,7 +1019,7 @@ extern "C" int PlayerActionAnimDepthPhase(Table_80089904 *pTable, unsigned short
         } else {
             p->mUnknown1008.mUnknown0 = 1;
         }
-        int index = fn_8009C56C(pTable, (unsigned char *)&p->mUnknown1008);
+        int index = PlayerAnimTablePickBest(pTable, (unsigned char *)&p->mUnknown1008);
         AnimChanStartAnim(pA, pB, pTable->mEntries[index].mUnknown0, pTable->mEntries[index].mUnknown2, key, p, 1.0f);
     }
     return 0;
@@ -1088,7 +1097,7 @@ extern "C" void PlayerActionAnimLoadVariantList(Table_80089904 *pTable, unsigned
     values[1] = 255;
     values[2] = 255;
     values[3] = 255;
-    AnimFileGetStateAnimList(a, pTable->mEntries[fn_8009C56C(pTable, values)].mUnknown2 & 0x7FFF, pTable);
+    AnimFileGetStateAnimList(a, pTable->mEntries[PlayerAnimTablePickBest(pTable, values)].mUnknown2 & 0x7FFF, pTable);
 }
 
 extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, unsigned short key, void *pA, void *pB,
@@ -1096,10 +1105,14 @@ extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_8003
 {
     unsigned short weights[32];
     int total = 0;
+    unsigned char *pInfo;
     PlayerActionAnimLoadVariantList(pTable, p->mpUnknown796->mUnknown2, pRecord->mUnknown12);
-    for (int i = 0; i < pTable->mCount; ++i) {
-        unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
-        int weight;
+    int i;
+    for (i = 0; i < pTable->mCount; ++i) {
+        pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
+        // FAKEMATCH: redundant zero initializer (every switch arm sets weight); its dead store keeps the
+        // loop at 69 insns in the first loop pass so the constant 1 of bit is hoisted in the second pass
+        int weight = 0;
         switch (pInfo[4]) {
         case 1: weight = 100; break;
         case 2: weight = 50; break;
@@ -1127,10 +1140,10 @@ extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_8003
     }
     unsigned short chosen = SyncRandGetRange(0, pTable->mCount);
     if (chosen >= pTable->mCount) chosen = pTable->mCount - 1;
-    int i = 0;
+    i = 0;
     while (i < pTable->mCount) {
         if (PlayerActionAnimIsVariantFree(p, (unsigned char)chosen, key)) {
-            unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
+            pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             pRecord->mUnknown8 = pInfo[5];
             pRecord->mUnknown9 = pInfo[7] == 2;
             *((unsigned char *)pRecord + 16) = chosen;
@@ -1142,7 +1155,7 @@ extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_8003
     if (i == pTable->mCount) {
         chosen = SyncRandGetRange(0, i);
         if (chosen >= pTable->mCount) {
-            unsigned char *pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
+            pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
             chosen = pTable->mCount - 1;
             pRecord->mUnknown8 = pInfo[5];
             pRecord->mUnknown9 = pInfo[7] == 2;
@@ -1160,7 +1173,7 @@ extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_8003
     if (FELoopIsMainFEActive()) {
         fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
     }
-    unsigned char *pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
+    pInfo = (unsigned char *)pTable->mEntries[chosen].mpInfo;
     pRecord->mUnknown10 = pInfo[6];
     if (old != 0xFFFF && !FELoopIsMainFEActive()) {
         AnimWgtSetLinear(&pEntries[(unsigned short)pRecord->mUnknown14].mUnknown30, 16, 0.0f, 1.0f);
@@ -1636,8 +1649,10 @@ extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned sho
     switch (mode) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        int first = p->mUnknown1008.mUnknown0 | (p->mUnknown1008.mUnknown1 << 8);
-        int second = p->mUnknown1008.mUnknown2 | (p->mUnknown1011 << 8);
+        int first = p->mUnknown1008.mUnknown0;
+        first |= p->mUnknown1008.mUnknown1 << 8;
+        int second = p->mUnknown1008.mUnknown2;
+        second |= p->mUnknown1011 << 8;
         pBlock->mUnknown1D = AnimChanStartAnim(pData, pEntries, second, first, key, p, 1.0f);
         pBlock->mUnknown18 = key;
         if (PlayerActionAnimIsFlaggedKey(key)) p->mFlags |= 512;

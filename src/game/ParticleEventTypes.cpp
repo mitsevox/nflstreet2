@@ -9,7 +9,7 @@
 
 extern "C" {
 void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0);
-int fn_800A33DC(void);
+int StadiumGetTempLevel(void);
 int fn_800A8444(int team);
 int ParticleSysGetFootstepEffect(int a);
 int ParticleSysGetImpactEffect(int a);
@@ -132,7 +132,7 @@ extern "C" void ParticleEventBodyTrail(ParticleEvent_t *pEvent)
     float m[4][4];
     ParticleSpawnArgs_t args;
 
-    if (fn_800A33DC() != 0 && fn_800A33DC() != 1 && pTrail->mUnknown57C != 1) {
+    if (StadiumGetTempLevel() != 0 && StadiumGetTempLevel() != 1 && pTrail->mUnknown57C != 1) {
         return;
     }
     ParticleEventGetJoint(pBody, pEvent->mUnknown14, &pos, &angles);

@@ -23,8 +23,8 @@ struct EnvObjOverlay {
 };
 
 extern "C" {
-void *fn_800A336C(void);
-int fn_800A3374(void);
+void *StadiumGetResDevice(void);
+int StadiumGetEnvObjResIndex(void);
 int GlowGetFlickerState(unsigned int index);
 float GlowGetFlickerTime(unsigned int index);
 float GlowGetFlickerDuration(unsigned int index);
@@ -50,8 +50,8 @@ static EnvObjOverlay *_EnvObj_pOverlay = 0;
 extern "C" {
 void EnvObjAttachModel(void)
 {
-    void *pData = fn_800A336C();
-    int index = fn_800A3374();
+    void *pData = StadiumGetResDevice();
+    int index = StadiumGetEnvObjResIndex();
     int handle = ResLoad(pData, index, 1);
     EnvObj *pObject;
 

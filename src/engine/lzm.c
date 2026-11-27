@@ -835,9 +835,11 @@ int _LZMDecProcess(GCmpBuffer_t *pSrc, GCmpBuffer_t *pDst, void *pState)
         n = pSrc->mpData[1];
         blockSize = n << 24;
         n = pSrc->mpData[2];
-        blockSize |= n << 16;
+        n <<= 16;
+        blockSize |= n;
         n = pSrc->mpData[3];
-        blockSize |= n << 8;
+        n <<= 8;
+        blockSize |= n;
         n = pSrc->mpData[4];
         blockSize |= n;
         inputPos = blockPos = 5;

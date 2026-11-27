@@ -33,16 +33,16 @@ void MemCardFilesAddSlot(int a, int b, unsigned int c, char *d);
 int DbUserGetDb(int a);
 void DbCheckVersion(int handle);
 void MemCardFilesStoreChecksum(int a, int b);
-int fn_801D6844(void);
-void fn_801D6DE0(int a, int b);
+int MemCardMgrGetSlot(void);
+void MemCardMgrMarkSlotCorrupt(int a, int b);
 void SndgApplyVolumeOptions(void);
 void GameOptionsInit(int a);
 void GameOptionsShutdown(void);
 int MemCardFilesComputeChecksum(int a, int b);
 
-int fn_801D6620(void *p);
-int fn_801D6EA0(int a);
-void fn_801D6EFC(void);
+int MemCardMgrGetResult(void *p);
+int MemCardMgrIsStreamReady(int a);
+void MemCardMgrEndStream(void);
 void MemCardFilesUpdateSlot(int type, int index, int value);
 void MemCardFilesClearSlotInfo(int a, int b);
 void VptRemoveCallback(int a, void *b);
@@ -212,7 +212,7 @@ void MemCardFinishLoad(int a, int *b)
         default:
             DbUserGetCurrent();
             DbUserDelete();
-            fn_801D6DE0(fn_801D6844(), type);
+            MemCardMgrMarkSlotCorrupt(MemCardMgrGetSlot(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -243,7 +243,7 @@ void MemCardFinishLoad(int a, int *b)
         default:
             DbUserGetCurrent();
             DbUserDelete();
-            fn_801D6DE0(fn_801D6844(), type);
+            MemCardMgrMarkSlotCorrupt(MemCardMgrGetSlot(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -254,7 +254,7 @@ void MemCardFinishLoad(int a, int *b)
         if (a == 0) {
             SndgApplyVolumeOptions();
         } else {
-            fn_801D6DE0(fn_801D6844(), type);
+            MemCardMgrMarkSlotCorrupt(MemCardMgrGetSlot(), type);
             if (*b >= 0) {
                 *b = -100;
             }
@@ -278,15 +278,15 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
 
     switch (state) {
     case 0:
-        *b = fn_801D6620(c);
+        *b = MemCardMgrGetResult(c);
         break;
     case 1:
         state = 4;
-        *b = fn_801D6620(c);
+        *b = MemCardMgrGetResult(c);
         break;
     case 4:
-        *b = fn_801D6620(c);
-        if (fn_801D6EA0(0)) {
+        *b = MemCardMgrGetResult(c);
+        if (MemCardMgrIsStreamReady(0)) {
             MemCardBeginSave();
             state = 5;
         }
@@ -294,10 +294,10 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
     case 5:
         *b = 0;
         if ((unsigned int)(_MemCard_iResult - 45) > 1) {
-            if (fn_801D6EA0((int)&val)) {
+            if (MemCardMgrIsStreamReady((int)&val)) {
                 MemCardFreeIOBuffer();
                 state = 6;
-                fn_801D6EFC();
+                MemCardMgrEndStream();
             }
             if (val) {
                 MemCardFreeIOBuffer();
@@ -308,7 +308,7 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
     case 6: {
         int type;
         int slot;
-        *b = fn_801D6620(c);
+        *b = MemCardMgrGetResult(c);
         if (*b != 0) {
             if (_MemCard_iResult == 0 && c != 0 && *c < 0) {
                 _MemCard_iResult = 36;
@@ -325,11 +325,11 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
     }
     case 7:
         state = 9;
-        *b = fn_801D6620(c);
+        *b = MemCardMgrGetResult(c);
         break;
     case 9:
-        *b = fn_801D6620(c);
-        if (fn_801D6EA0(0)) {
+        *b = MemCardMgrGetResult(c);
+        if (MemCardMgrIsStreamReady(0)) {
             MemCardBeginLoad();
             state = 10;
         }
@@ -337,10 +337,10 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
     case 10:
         *b = 0;
         if ((unsigned int)(_MemCard_iResult - 45) > 1) {
-            if (fn_801D6EA0((int)&val)) {
+            if (MemCardMgrIsStreamReady((int)&val)) {
                 MemCardFreeIOBuffer();
                 state = 11;
-                fn_801D6EFC();
+                MemCardMgrEndStream();
             }
             if (val) {
                 MemCardFreeIOBuffer();
@@ -349,7 +349,7 @@ int MemCardUpdateSaveLoad(int a, int *b, int *c)
         }
         break;
     case 11:
-        *b = fn_801D6620(c);
+        *b = MemCardMgrGetResult(c);
         if (*b != 0) {
             if (_MemCard_iResult == 0 && c != 0 && *c < 0) {
                 _MemCard_iResult = 36;

@@ -101,11 +101,11 @@ int MathAngleDiff(int a, int b);
 }
 
 extern "C" {
-void fn_8009A5DC(int a, int b, void *pA, int *pB);
+void CatchAnimUnpackHandle(int a, int b, void *pA, int *pB);
 }
 
 extern "C" {
-int fn_8009A578(int handle);
+int CatchAnimGetType(int handle);
 }
 
 extern "C" {
@@ -478,11 +478,11 @@ extern float gFrameTimeScale;
 }
 
 extern "C" {
-int fn_800A7F58(int team);
+int GamebreakerGetShedFlag(int team);
 }
 
 extern "C" {
-int fn_800AC074(int team, int value);
+int GameSkillScaleEngageOffense(int team, int value);
 }
 
 extern "C" {
@@ -512,7 +512,7 @@ int fn_8011F1CC(void);
 extern "C" float Vec2Distance(void *pA, void *pB);
 
 extern "C" {
-int fn_800ACD04(Object_80039F5C *p);
+int GameSkillGetTackleTurnLimit(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -840,7 +840,7 @@ extern "C" int PlyrAlignEnter(Object_80039F5C *p) {
 
 extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
-extern "C" int fn_8009F780(void);
+extern "C" int DefCoverIsAlignHeld(void);
 extern "C" int PlyrAlignIsFree(Object_80039F5C *p);
 extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int angle);
 extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
@@ -892,7 +892,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
     PlayerActionGetAlignSpot(p, &target, &heading);
     if ((fabsf(p->mMotion.mPos.mX - target.mX) > 1.0f || fabsf(p->mMotion.mPos.mY - target.mY) > 1.0f) &&
         !(pState->mUnknown24 && pState->mUnknown30) && !pState->mUnknown36 && !PlayerActionAnimIsReactionAlt(p) &&
-        !(pState->mUnknown49 && fn_8009F780()) && !pState->mUnknown0) {
+        !(pState->mUnknown49 && DefCoverIsAlignHeld()) && !pState->mUnknown0) {
         pState->mUnknown1 = 1;
     }
     if (pState->mUnknown0 && p->mUnknown8 == 255) {
@@ -1095,7 +1095,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
 {
     State_800E513C *pState = (State_800E513C *)&p->mUnknown336;
     Input_800B6D34 input;
-    FieldPoint_t dir;
+    Vector_80039F5C dir;
     float limit;
     float speed;
     int near;
@@ -1106,7 +1106,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     if (fn_800AD9B4() == 8) {
         return 0;
     }
-    if (lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == ScrmGetDefenseTeam() &&
+    if ((unsigned char)lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == ScrmGetDefenseTeam() &&
         p == fn_800B6544(fn_800B65A0(p->mIdBytes[2]))) {
         return 0;
     }
@@ -1161,36 +1161,40 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = heading;
         if (turn >= 0x200000 && turn <= 0x600000) {
             if (fn_801BE648(p->mpUnknown792) == 86) {
+                int side = heading >= 0x400000 && heading <= 0xC00000 ? 0x800000 : 0;
                 if (pState->mUnknown3 == 0) {
-                    PlyrAlignStartShuffle(p, (State_800E4120 *)pState, heading >= 0x400000 && heading <= 0xC00000 ? 0x800000 : 0, 0.975f);
+                    PlyrAlignStartShuffle(p, (State_800E4120 *)pState, side, 0.975f);
                     return 0;
                 }
-            } else if (pState->mUnknown3 == 0) {
+                p->mUnknown512.mUnknown14 = 0;
+            } else if (pState->mUnknown3 != 0) {
+                p->mUnknown512.mUnknown14 = 0;
+            } else {
                 p->mFlags &= ~0x40000;
-                return 0;
             }
-            p->mUnknown512.mUnknown14 = 0;
         } else {
             p->mFlags &= ~0x40000;
             pState->mUnknown3 = 0;
         }
     } else if (fn_801BE648(p->mpUnknown792) == 189 && (p->mFlags & 4)) {
         p->mFlags &= ~4;
-        if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) > 0xAAAAA) {
-            PlayerPathStartSideAnim(p, 8, 1);
-        } else if (pState->mUnknown3 != 0 || PlayerActionIsNearLine(p)) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);
-            pState->mUnknown3 = 0;
+        if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0xAAAAA) {
+            if (pState->mUnknown3 != 0 || PlayerActionIsNearLine(p)) {
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);
+                pState->mUnknown3 = 0;
+            } else {
+                int close = 0;
+                if (p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f) {
+                    close = fabsf(p->mMotion.mPos.mX) < 8.0f;
+                }
+                if (close) {
+                    PlayerPathStartSideAnim(p, 8, 1);
+                } else if (!(p->mFlags & 0x40000)) {
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 85, 1.0f, p);
+                }
+            }
         } else {
-            int close = 0;
-            if (p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f) {
-                close = fabsf(p->mMotion.mPos.mX) < 8.0f;
-            }
-            if (close) {
-                PlayerPathStartSideAnim(p, 8, 1);
-            } else if (!(p->mFlags & 0x40000)) {
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 85, 1.0f, p);
-            }
+            PlayerPathStartSideAnim(p, 8, 1);
         }
     }
     return 0;
@@ -1428,10 +1432,10 @@ extern "C" {
 int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA, Record_800E5EA4 *pB,
                 unsigned int kind)
 {
-    if (fn_800A7F58(p->mIdBytes[2]) == 2) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 2) {
         return 1;
     }
-    if (fn_800A7F58(p->mIdBytes[2]) == 0) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 0) {
         return 0;
     }
     short *pOtherRatings = pOther->mRatings;
@@ -1467,7 +1471,7 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
             defense += (int)(defense * scale);
         }
     }
-    offense = fn_800AC074(p->mIdBytes[2], offense);
+    offense = GameSkillScaleEngageOffense(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
         float scale = PlayTrackGetPlayIdRate() * 0.5f;
         offense += (int)(offense * scale);
@@ -1668,8 +1672,8 @@ extern "C" {
 int PlyrEngageGetInputDir(Object_80039F5C *p)
 {
     int direction = 1;
-
-    int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - p->mMotion.mFacing)) & 0xFFFFFF)
+    int facing = p->mMotion.mFacing;
+    int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - facing)) & 0xFFFFFF)
                      * 0.000021457672119140625f);
     if (angle <= 179) {
         angle = angle < 0 ? 0 : angle > 135 ? 135 : angle;
@@ -1681,10 +1685,10 @@ int PlyrEngageGetInputDir(Object_80039F5C *p)
     else if (angle >= 293 && angle <= 337) direction = 15;
     else if (angle >= 338 && angle <= 358) return 1;
     else if (angle >= 0 && angle <= 22) return 1;
-    else if (angle >= 23 && angle <= 67) direction = 4;
-    else if (angle >= 68 && angle <= 112) direction = 4;
-    else if (angle >= 113 && angle <= 157) direction = 4;
-    else if (angle >= 113 && angle <= 135) direction = 4;
+    // FAKEMATCH: the ranges are listed out of order so fold does not merge the adjacent 23..67 and 68..112 tests into one range; the result is 4 for the same angles.
+    else if ((angle >= 23 && angle <= 67) || (angle >= 113 && angle <= 157) || (angle >= 68 && angle <= 112) ||
+             (angle >= 113 && angle <= 135))
+        direction = 4;
     return direction;
 }
 }
@@ -1712,7 +1716,8 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
     Input_800B6D34 input;
     Vector_80039F5C target;
     fn_800B6D34(p, &input);
-    if (human == 1 && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
+    // FAKEMATCH: human is only 0 or 1; testing its low bit keeps this first test a separate compare from the two later human tests, which gcse would otherwise merge into one condition register held across the calls.
+    if ((human & 1) && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
 
         FieldPoint_t dir;
         if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
@@ -1936,7 +1941,11 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
     fn_8009BD60(p);
     switch (pBlock->mUnknown5) {
     case 0:
-        p->mUnknown1008.mUnknown0 = p == BallGetCurrentHolder() ? 1 : 2;
+        if (p == BallGetCurrentHolder()) {
+            p->mUnknown1008.mUnknown0 = 1;
+        } else {
+            p->mUnknown1008.mUnknown0 = 2;
+        }
         p->mUnknown1008.mUnknown2 = 1;
         p->mUnknown1011 = pBlock->mUnknown9;
         switch (pBlock->mUnknown8) {
@@ -2016,6 +2025,10 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
                 }
             }
             float edge = MIN(p->mMotion.mPos.mX - 4.0f, -ScrmGetSidelineX());
+            // FAKEMATCH: the never-read clamp keeps the MIN's reload of mX alive until register allocation, so 4.0f stays in f30 across the call as in the target; the function stays a holdout.
+            if (edge < 0.0f) {
+                edge = 0.0f;
+            }
             if (PlayerMoveGetKind(p)) {
                 p->mUnknown1011 = p->mpState->mUnknown3[0];
             }
@@ -2203,7 +2216,7 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     FieldPoint_t delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
     int heading = delta.Heading() & 0xFFFFFF;
-    int limit = fn_800ACD04(p);
+    int limit = GameSkillGetTackleTurnLimit(p);
     if (!(point.mY >= ScrmGetBallSpot().mY) && !ScrmTestPlayFlag(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
     int step;
@@ -2562,6 +2575,9 @@ extern "C" int PlyrTurnEnter(Object_80039F5C *p) {
         p->mUnknown512.mUnknown4 = state->mUnknown0;
         p->mUnknown512.mUnknown8 = state->mUnknown0;
         p->mUnknown512.mUnknown0 = state->mUnknown4;
+        // FAKEMATCH: the empty do/while (a compiled-out macro in form) keeps the three move-command copies ahead of the flag clear and the animation call arguments, as the target schedules them; it does nothing.
+        do {
+        } while (0);
         p->mFlags &= ~4;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, 1.0f, p);
         state->mUnknown8 = 1;
@@ -2762,8 +2778,8 @@ extern "C" int PlyrContactCanReact(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5 || fn_8009A578(handle) == 4)
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        if (CatchAnimGetType(handle) == 5 || CatchAnimGetType(handle) == 4)
             result = 0;
         break;
     }
@@ -2790,8 +2806,8 @@ extern "C" int PlyrContactCanBeHit(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5)
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        if (CatchAnimGetType(handle) == 5)
             result = 0;
         if ((handle >> 29 & 3) == 1)
             result = 0;

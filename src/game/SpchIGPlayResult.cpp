@@ -17,7 +17,7 @@ int SpchIGGetTeamPlayer(int side);
 void SpchIGGetScoreSituation(int *pResult);
 void SpchIGGetScoreMargin(int *pResult);
 void SpchIGGetPlayerCategory(int *pResult, int value);
-int fn_800A21A8(int bit);
+int PlayResultTestEventBit(int bit);
 int ScrmGetPlayDown(void);
 FieldPoint_t ScrmGetBallSpot(void);
 float ScrmGetPrevLineToGain(void);
@@ -96,10 +96,10 @@ extern "C" int SpchIGClassifyPlayResult(void)
     if (SndgSpchGetPlayFlags() & 2) {
         return 6;
     }
-    if (fn_800A21A8(2)) {
+    if (PlayResultTestEventBit(2)) {
         return 14;
     }
-    if (fn_800A21A8(0)) {
+    if (PlayResultTestEventBit(0)) {
         if (p->mUnknown18 & 0x10000) {
             return 13;
         }
@@ -107,7 +107,7 @@ extern "C" int SpchIGClassifyPlayResult(void)
         return 12;
     }
     if (p->mUnknown18 & 0x8000) {
-        if (fn_800A21A8(1)) {
+        if (PlayResultTestEventBit(1)) {
             SpchIGFindNearestOpponent(SpchIGGetPassTarget());
             if (p->mUnknown18 & 0x10000) {
                 return 11;

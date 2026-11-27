@@ -18,8 +18,8 @@ struct AnimSkeleton_t {
     unsigned short mUnknown1040[1][3];
 };
 
-/* Element of the two-entry array at +116, passed to fn_800ADDFC,
-   fn_800ADD7C and fn_800ADEFC. */
+/* Element of the two-entry array at +116, passed to PlyrHandInitPose,
+   PlyrHandUpdateBlend and PlyrHandGetBlend. */
 struct PlyrPosePart_t {
     unsigned char mUnknown0;
     char mUnknown1[3];

@@ -27,7 +27,7 @@ static MemCardListCallbacks_t _MemCardScreen_ListCallbacks = {
 
 extern "C" void MemCardScreenInstallList()
 {
-    fn_801D6714(-1);
+    MemCardMgrSetPort(-1);
     MemCardUISetCallbacks(&_MemCardScreen_ListCallbacks);
 }
 
@@ -42,7 +42,7 @@ extern "C" void MemCardScreenListBegin(int value, int *pCount)
     index = MemCardFilesGetSlotPort(a, b);
     if (index == -1) {
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            fn_801D6680(fn_801D671C());
+            MemCardMgrUnmount(fn_801D671C());
         }
         index = 0;
         if (_MemCardScreen_iForcedSlot != -1) {
@@ -50,14 +50,14 @@ extern "C" void MemCardScreenListBegin(int value, int *pCount)
         }
     } else if (_MemCardScreen_iForcedSlot != -1 && _MemCardScreen_iForcedSlot != index) {
         if (fn_801D671C() >= 0 && fn_801D671C() <= 1) {
-            fn_801D6680(fn_801D671C());
+            MemCardMgrUnmount(fn_801D671C());
         }
         index = _MemCardScreen_iForcedSlot;
     }
-    fn_801D6714(index);
-    fn_801D65B4(0);
-    fn_801D654C(1);
-    fn_801D6650(8);
+    MemCardMgrSetPort(index);
+    MemCardMgrSetIdleMode(0);
+    MemCardMgrEnablePolling(1);
+    MemCardMgrStartOperation(8);
 }
 
 extern "C" void MemCardScreenListReset()
@@ -82,7 +82,7 @@ extern "C" int MemCardScreenListGetItem(int *p0, int *p4, int *p8, int *p12)
     if (a == 1 || ((a == 2 || a == 3) && MemCardFilesIsSlotSaved(a, b))) {
         char text[32];
         fn_801D6B24(text, 32);
-        *p8 = fn_801D6CF4(text, a, &flag);
+        *p8 = MemCardMgrFindSlot(text, a, &flag);
         int found = *p8 != -1;
         if (found) {
             *p4 += 256;
@@ -115,14 +115,14 @@ extern "C" int MemCardScreenMsg(unsigned int id, int *p, int c, int *pResult)
         break;
     case 0x80000002:
         _MemCardScreen_iForcedSlot = -1;
-        fn_801D65B4(0);
-        fn_801D654C(1);
-        fn_801D6714(0);
+        MemCardMgrSetIdleMode(0);
+        MemCardMgrEnablePolling(1);
+        MemCardMgrSetPort(0);
         MemCardUIClearCallbacks();
         break;
     case 0x80000005:
-        fn_801D6714(-1);
-        fn_801D654C(0);
+        MemCardMgrSetPort(-1);
+        MemCardMgrEnablePolling(0);
         MemCardUIClearCallbacks();
         break;
     case 0x80000006:

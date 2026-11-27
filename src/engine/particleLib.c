@@ -650,9 +650,9 @@ void ParticleObjInitParms(ParticleSysObj_t *pDst, ParticleTemplate_t *pSrc)
 
 void ParticleObjInitState(ParticleSysObj_t *pObj)
 {
+    pObj->mCount = 0;
     pObj->mUnknown35B = 0;
     pObj->mUnknown3D0 = 0.0f;
-    pObj->mCount = 0;
     pObj->mUnknown3AC = 0.0f;
     pObj->mUnknown3B0 = 0.0f;
     pObj->mUnknown2B6 = 0;

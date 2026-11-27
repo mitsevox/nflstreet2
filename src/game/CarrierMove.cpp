@@ -45,7 +45,7 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 void fn_8009BD60(Object_80039F5C *p);
 void AnimSeqSetSpeed(void *p, float value);
 float MathInverse(float value);
-int fn_800A7EF4(int team);
+int GamebreakerGetSpeedFlag(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
 float PlayerGetActionScale(int kind, Object_80039F5C *p);
 float LevelGetWallHeight(LevelWall_t *pRecord);
@@ -97,7 +97,7 @@ extern "C" void CarrierMoveStartWallAnim(Object_80039F5C *p) {
             AnimChannel_t *pRecords = p->mpUnknown800;
             int entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, 228, 0);
             float speed;
-            if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
+            if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 0) {
                 speed = _CarrierMove_fBaseAnimTime;
             } else {
                 speed = 1.0f;
@@ -182,7 +182,7 @@ extern "C" void CarrierMoveStartAnim(Object_80039F5C *p) {
         else
             index = AnimChanGetStateChannelByIndex(p->mpUnknown796, pRecords, 24, 0);
         float speed;
-        if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
+        if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 0) {
             speed = _CarrierMove_fBaseAnimTime;
         } else {
             float rating = p->mRatings[4];

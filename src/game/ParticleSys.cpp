@@ -70,9 +70,9 @@ void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
                  void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int size,
                  const char *pName);
 int BigObjEffectSlotCount(int index);
-void fn_800A3170(void);
-void fn_800A3450(void);
-int fn_800A34C8(int index);
+void StadiumSpawnEmitters(void);
+void StadiumReleaseEmitters(void);
+int StadiumGetEffectCount(int index);
 void *fn_800C47C4(void);
 void FxParticleDrawBegin(void);
 void FxParticleDrawEnd(void);
@@ -207,7 +207,7 @@ void ParticleSysLoadEffects(void)
         ParticleSysLoadEffect(i, _ParticleSys_aEffectFiles[i].mUnknown8);
     }
     for (i = 1; i <= 11; i++) {
-        id = fn_800A34C8(i);
+        id = StadiumGetEffectCount(i);
         if (id != 0) {
             ParticleSysLoadEffect(i, id);
         }
@@ -339,14 +339,14 @@ void ParticleSysInit(int handle)
     ObjSetPriority(handle, _ParticleSys_iDrawObj, 12);
     _ParticleSys_bInit = 1;
     WeatherInit();
-    fn_800A3170();
+    StadiumSpawnEmitters();
     _ParticleSys_nReplayRecords = 0;
     memset(_ParticleSys_aReplayRecords, 0, sizeof(_ParticleSys_aReplayRecords));
 }
 
 void ParticleSysShutdown(int handle)
 {
-    fn_800A3450();
+    StadiumReleaseEmitters();
     WeatherShutdown();
     FxAnimTexFreeAll(_ParticleSys_apAnimTex);
     ParticleLibShutdown();

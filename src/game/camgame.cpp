@@ -35,7 +35,7 @@ extern float gFrameTimeScale;
 int VptManagerPushCamera(void *pObject, void *pItem, int (*a)(void *, void *), int (*b)(void *, void *));
 int VptManagerPopCamera(void *pObject, void *pItem);
 int VptManagerReplaceCamera(void *pObject, void *pItem, void *pOther);
-void fn_800AD9C0(float value);
+void GamePlayStartFreeze(float value);
 void CamPlaySetYOffset(float value);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
@@ -244,7 +244,7 @@ void CamGameResumeAll(void)
     CamGameState_t *pState = _CamGame_pState;
 
     if (pState != 0 && pState->mSet.mUnknown14 != 0) {
-        fn_800AD9C0(gFrameTimeScale * 30.0f);
+        GamePlayStartFreeze(gFrameTimeScale * 30.0f);
         pState->mSet.mUnknown14 = 0;
     }
     _CamGameForAllCamerasDo(CamMainSetActive, 1, 0, 0);

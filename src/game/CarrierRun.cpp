@@ -34,13 +34,13 @@ void fn_800A5A8C(int a, void *pA, void *pB);
 int fn_800A8444(int team);
 int fn_800A8740(void);
 int fn_800ABDA4(int team);
-short fn_800ACC80(Object_80039F5C *p, short value);
+short GameSkillScaleMoveDelay(Object_80039F5C *p, short value);
 int fn_800B76E8(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
 void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
-int fn_8009AD30(Object_80039F5C *p, int value);
+int CatchUpAdjustMoveTimer(Object_80039F5C *p, int value);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
@@ -125,7 +125,7 @@ int ScrmIsNotReplay(void);
 int ScrmIsFieldFlipped(void);
 struct BigObj_t;
 BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
-float fn_800AD168(int team, float value);
+float GameSkillJitterObstacleDistance(int team, float value);
 float SyncRandGetFloat(int a);
 int fn_800F22D8(Object_80039F5C *p, int a, int b, int c);
 float fn_8011F4D4(void);
@@ -1076,8 +1076,8 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
     block->mUnknown0 = (signed char)(((unsigned char *)&block->mUnknown0)[1] - 1);
     if (block->mUnknown0 > 0) return;
     block->mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
-    block->mUnknown0 = fn_800ACC80(p, block->mUnknown0);
-    block->mUnknown0 = fn_8009AD30(p, block->mUnknown0);
+    block->mUnknown0 = GameSkillScaleMoveDelay(p, block->mUnknown0);
+    block->mUnknown0 = CatchUpAdjustMoveTimer(p, block->mUnknown0);
     if (control) control->mUnknown51[0] = 7;
     float distance;
     int team = ScrmGetDefenseTeam();
@@ -1120,7 +1120,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
     float nearest;
     BigObj_t *found = BigObjFindNearestOfType(&position, 7, &nearest);
 
-    nearest = fn_800AD168(p->mIdBytes[2], nearest);
+    nearest = GameSkillJitterObstacleDistance(p->mIdBytes[2], nearest);
     if (found && !(nearest >= 3.0f)) {
         if (!(SyncRandGetFloat(0) >= 0.5f)) {
             fn_800F22D8(p, 4, 1, 4);
@@ -1379,8 +1379,8 @@ extern "C" int CarrierRunNotify(Object_80039F5C *p)
     pControl->mUnknown52 = 0;
     pControl->mUnknown49 = 0;
     pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
-    pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
-    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = GameSkillScaleMoveDelay(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = CatchUpAdjustMoveTimer(p, pControl->mUnknown56.mUnknown0);
     return 0;
 }
 
@@ -1395,8 +1395,8 @@ extern "C" void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *p
     pControl->mUnknown44 = 0;
     pControl->mUnknown49 = 0;
     pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
-    pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
-    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = GameSkillScaleMoveDelay(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = CatchUpAdjustMoveTimer(p, pControl->mUnknown56.mUnknown0);
     pControl->mUnknown52 = 1;
     pControl->mUnknown40 = 1.0f;
     pControl->mUnknown0 = 0;

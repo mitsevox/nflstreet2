@@ -15,7 +15,7 @@
 #include <dolphin/gx/GXTev.h>
 
 extern "C" {
-int fn_800A34F8(int index);
+int StadiumIsAnimTexGroupOn(int index);
 void MatMakeUnitMatrix(Mtx44 m);
 void MatPush(void);
 void MatPushUnit(void);
@@ -53,7 +53,7 @@ void FxAnimTexLoadAll(AnimTexFile_t *pEntries, AnimTex_t **pValues, void *pData)
 
     for (i = 0; i <= 7; i++) {
         pEntries[i].mData = pData;
-        if (fn_800A34F8(i)) {
+        if (StadiumIsAnimTexGroupOn(i)) {
             void *pBuffer = fn_801D2BB0(1, ResGetSize(pEntries[i].mData, pEntries[i].mIndex), 4, 0);
 
             ResLoadToBuffer(pEntries[i].mData, pEntries[i].mIndex, pBuffer);
@@ -68,7 +68,7 @@ void FxAnimTexFreeAll(AnimTex_t **pValues)
     unsigned char i;
 
     for (i = 0; i <= 7; i++) {
-        if (fn_800A34F8(i)) {
+        if (StadiumIsAnimTexGroupOn(i)) {
             AnimTexFree(pValues[i]);
         }
     }

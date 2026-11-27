@@ -84,7 +84,7 @@ float *MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(float *, int);
 float *MatInvertRigid(void);
 int ScrmIsFieldFlipped(void);
-int fn_800A33E8(void);
+int StadiumGetWindDir(void);
 void Vec2FromAngle(void *, int, float);
 void Vec3Add(void *, void *, void *);
 void MatCat(void *);
@@ -92,10 +92,10 @@ void TMClipMatrix(int);
 unsigned int TMClipBBox(void *, void *, int);
 void WeatherDrawLines(unsigned int);
 void WeatherDrawQuads(unsigned int);
-int fn_800A33B8(void);
+int StadiumGetWeatherMode(void);
 int fn_800A3444(void);
-float fn_800A33C4(void);
-float fn_800A33F4(void);
+float StadiumGetPrecipLevel(void);
+float StadiumGetWindLevel(void);
 void MatGetSlot(int, void *);
 void TMClipProjection(int);
 void MatCatSlot(int);
@@ -320,7 +320,7 @@ void WeatherGetDrawBounds(WeatherBounds_t *bounds, float *matrix,
 }
 void WeatherUpdateDrift(float a, float b, float step) {
   Vector_80039F5C v;
-  Vec2FromAngle(&v, fn_800A33E8(), (a * b) * step);
+  Vec2FromAngle(&v, StadiumGetWindDir(), (a * b) * step);
   v.mZ = 0.0f;
   Vec3Add(&_Weather_vDrift, &_Weather_vDrift, &v);
   float *position = &_Weather_vDrift.mX;
@@ -391,7 +391,7 @@ void WeatherDrawCell(float x, float y, float z) {
   MatPop();
 }
 void WeatherInit(void) {
-  _Weather_iMode = fn_800A33B8();
+  _Weather_iMode = StadiumGetWeatherMode();
   _Weather_fLastWind = 0.0f;
   if (_Weather_iMode) {
     switch (_Weather_iMode) {
@@ -441,7 +441,7 @@ void WeatherShutdown(void) { _Weather_iMode = 0; }
 void WeatherUpdate(float step) {
   if (!_Weather_iMode)
     return;
-  float value = fn_800A33C4();
+  float value = StadiumGetPrecipLevel();
   switch (_Weather_iMode) {
   case 2:
     _Weather_uParticleCount = (unsigned int)(value * 96.0f);
@@ -450,7 +450,7 @@ void WeatherUpdate(float step) {
     _Weather_uParticleCount = (unsigned int)(value * 96.0f);
     break;
   }
-  float a = fn_800A33F4();
+  float a = StadiumGetWindLevel();
   WeatherUpdateDrift(a, _Weather_fWindScale, step);
   WeatherUpdateSpin(a, step);
   WeatherUpdateParticles(_Weather_aParticles, 96, _Weather_fFallSpeed, step);

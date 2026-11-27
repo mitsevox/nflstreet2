@@ -40,8 +40,8 @@ struct FldObjLinePass_t {
 
 extern "C" {
 void DivotDraw(void);
-void *fn_800A336C(void);
-int fn_800A3398(void);
+void *StadiumGetResDevice(void);
+int StadiumGetFldObjResIndex(void);
 void SimpShadowDrawAll(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int a);
@@ -214,9 +214,9 @@ void FldObjAddObjType(int handle)
     _FldObj_fDegradeScale = 1.0f;
     ObjNewType_(7, sizeof(FldObj_t), 1, FldObjInit, FldObjRelease);
     ObjSetListObjFunc(handle, 7, 0, FldObjRender);
-    args[0] = (int)fn_800A336C();
+    args[0] = (int)StadiumGetResDevice();
     for (i = 0; i < 5; i++) {
-        args[i + 1] = fn_800A3398() + i;
+        args[i + 1] = StadiumGetFldObjResIndex() + i;
     }
     _FldObj_iItem = ObjNewInList(handle, 7, 0, args);
     ObjSetPriority(handle, _FldObj_iItem, 1);

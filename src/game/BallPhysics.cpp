@@ -30,8 +30,8 @@ extern float gFrameTimeScale;
 extern "C" {
 BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 BigObj_t *BigObjGet(int index);
-float fn_800A33D0(void);
-int fn_800A33DC(void);
+float StadiumGetPrecipFactor(void);
+int StadiumGetTempLevel(void);
 void fn_800B1508(void);
 unsigned char fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
@@ -90,7 +90,7 @@ int BallIsContactRaised(Ball_t *pBall);
 void BallSetSpinMode(Ball_t *pBall, int a);
 void BallPredictLanding(Ball_t *pBall);
 void PlyrPoseGetAttachTransform(void *pObject, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
-void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
+void PlyrGetBallHoldTransform(Object_80039F5C *p, Vector_80039F5C *pPos, Quat_801EB488 *pRot);
 void Vec3ScaleLength(Vector_80039F5C *pOut, Vector_80039F5C *pIn, float length);
 int Vec3Equal(Vector_80039F5C *pA, Vector_80039F5C *pB, float eps);
 void BallStatePreUpdate(Ball_t *pBall, float dt);
@@ -628,7 +628,7 @@ void BallFollowHolder(Ball_t *pBall, float dt)
     Block_80170E64 *pHolderBlock = pHolder->mpUnknown4;
     Block_80170E64 *pBlock = BallGetModel(pBall);
 
-    fn_8009BFD0(pHolder, &pBall->mState.mPos, &rot);
+    PlyrGetBallHoldTransform(pHolder, &pBall->mState.mPos, &rot);
     QuatFromEuler(&turn, 0, 0, 0xFFC00000);
     QuatMultiply(&rot, &rot, &turn);
     QuatNormalize(&rot, &rot);
@@ -745,8 +745,8 @@ float BallGetHeightAtTime(Ball_t *pBall, float t)
 
 void BallResetPhysics(Ball_t *pBall)
 {
-    fn_800A33DC();
-    fn_800A33D0();
+    StadiumGetTempLevel();
+    StadiumGetPrecipFactor();
     // FAKEMATCH: The overwritten zero store recovers the register allocation for both scales.
     pBall->mState.mUnknownE8 = 0.0f;
     pBall->mState.mUnknownE8 = 1.2f;

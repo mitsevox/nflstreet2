@@ -8,7 +8,7 @@
 
 extern "C" {
 int fn_800A8444(int team);
-int fn_800A8468(int team);
+int GamebreakerIsLevelTwoActive(int team);
 int ScrmGetDown(void);
 int ScrmGetTeamScore(int team);
 int ScrmGetOffenseTeam(void);
@@ -183,7 +183,7 @@ void SpchIGGetGamebreakerState(int *pResult)
     if (fn_800A8444(ScrmGetDefenseTeam())) {
         *pResult |= 2;
     }
-    if (fn_800A8468(ScrmGetDefenseTeam()) || fn_800A8468(ScrmGetOffenseTeam())) {
+    if (GamebreakerIsLevelTwoActive(ScrmGetDefenseTeam()) || GamebreakerIsLevelTwoActive(ScrmGetOffenseTeam())) {
         *pResult |= 8;
     }
     if (*pResult) {

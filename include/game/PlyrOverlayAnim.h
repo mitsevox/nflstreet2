@@ -1,5 +1,5 @@
-#ifndef GAME_FN_800A3530_H
-#define GAME_FN_800A3530_H
+#ifndef GAME_PLYROVERLAYANIM_H
+#define GAME_PLYROVERLAYANIM_H
 
 #include "game/Table_80089904.h"
 #include "game/Object_80039F5C.h"
@@ -10,13 +10,13 @@ typedef int (*Callback_800A3530)(Table_80089904 *pTable, unsigned short key, voi
                                  AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" {
-int fn_800A3530(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
+int PlyrOverlayAnimTableCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                 Object_80039F5C *p, unsigned int phase);
-int fn_800A37D8(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
+int PlyrOverlayAnimPoseCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                 Object_80039F5C *p, unsigned int phase);
-int fn_800A3898(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
+int PlyrOverlayAnimIndexCallback(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                 Object_80039F5C *p, unsigned int phase);
-int fn_800A3B10(Object_80039F5C *p);
+int PlyrOverlayAnimCountActive(Object_80039F5C *p);
 }
 
 #endif

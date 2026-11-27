@@ -349,8 +349,8 @@ const unsigned char *XmlFindChild(const unsigned char *p, const unsigned char *p
 
 const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned char *pPath)
 {
-    const unsigned char *pEnd = 0;
     const unsigned char *pResult = 0;
+    const unsigned char *pEnd = 0;
     const unsigned char *q;
     int depth;
     int i;
@@ -376,21 +376,24 @@ const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned cha
         if (pEnd == 0) {
             depth = 0;
             q = p;
+            /* FAKEMATCH: the scan is a for (;;) entered by goto so its loop notes give the target registers without a rotated exit test; same logic as a plain goto scan. */
             goto checkText;
-        openTag:
-            ++depth;
-        nextText:
-            ++q;
-        checkText:
-            if (*q == 0)
+            for (;;) {
+                ++depth;
+            nextText:
+                ++q;
+            checkText:
+                if (*q == 0)
+                    goto scanDone;
+                if (*q != '<' || q[1] == '?' || q[1] == '!')
+                    goto nextText;
+                if (q[1] != '/')
+                    continue;
+                if (--depth != 0)
+                    goto nextText;
+                pEnd = q;
                 goto scanDone;
-            if (*q != '<' || q[1] == '?' || q[1] == '!')
-                goto nextText;
-            if (q[1] != '/')
-                goto openTag;
-            if (--depth != 0)
-                goto nextText;
-            pEnd = q;
+            }
         scanDone:
             ;
         } else if (p > pEnd) {

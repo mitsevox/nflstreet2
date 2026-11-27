@@ -39,7 +39,7 @@ int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
 int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_800A5DD0(Object_80039F5C *p);
-int fn_800AC980(Object_80039F5C *p, int value);
+int GameSkillScalePursueDelay(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
@@ -94,7 +94,7 @@ int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 float MathCos(int angle);
 int ScrmIsNotReplay(void);
-int fn_800A7F30(int team);
+int GamebreakerGetPursueFlag(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 int ScrmTestPlayFlag(int bit);
 float ScrmGetGoalLineY(void);
@@ -115,7 +115,7 @@ float SyncRandGetFloat(int stream);
 
 extern "C" {
 int fn_800A8444(int team);
-int fn_800A8408(int team);
+int GamebreakerGetReadyType(int team);
 float SyncRandGetFloat(int stream);
 int fn_801486A0(void);
 }
@@ -173,7 +173,7 @@ extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
     short *pRatings = p->mRatings;
     short value;
 
-    if (fn_800A8444(p->mIdBytes[2]) && fn_800A8408(p->mIdBytes[2]) == 1) {
+    if (fn_800A8444(p->mIdBytes[2]) && GamebreakerGetReadyType(p->mIdBytes[2]) == 1) {
         value = (int)(SyncRandGetFloat(0) * 45.0f);
     } else {
         value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
@@ -239,7 +239,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
     Vec2Sub(delta, &position, &motion->mPos);
     int heading = MathArcTan2(delta[1], delta[0]);
     PursueState_t *state = (PursueState_t *)&p->mUnknown336;
-    if (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
+    if (!GamebreakerGetPursueFlag((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
         state->mUnknown13 = 0;
     else state->mUnknown13--;
     state->mUnknown14--;
@@ -287,7 +287,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
                 }
             } else if (!(distance >= 10.0f) && PursueGetTarget() == BallGetCurrentHolder()) odds = 80;
             if (SyncRandGetRange(0, 100) < (unsigned int)odds ||
-                (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
+                (!GamebreakerGetPursueFlag((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
                 reference = fn_8009BCE8(&block->mUnknown4);
                 int mode;
                 if (reference->mUnknown1052 == 1) mode = 8;
@@ -1384,7 +1384,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             int facing;
 
             pState->mUnknown12 = (255 - p->mRatings[5]) >> 4;
-            pState->mUnknown12 = fn_800AC980(p, pState->mUnknown12);
+            pState->mUnknown12 = GameSkillScalePursueDelay(p, pState->mUnknown12);
             pState->mUnknown12 = fn_8009AF00(p->mIdBytes[2], pState->mUnknown12);
             if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
                 pState->mUnknown12 = (int)(pState->mUnknown12 * 0.1f);
