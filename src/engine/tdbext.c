@@ -15,7 +15,7 @@ typedef struct TDbExtResRef_t {
 } TDbExtResRef_t;
 
 extern unsigned char MemHeapActive(int handle);
-extern int fn_801D2130(MemPoolDesc_t *pParams);
+extern int MemInitHeap(MemPoolDesc_t *pParams);
 extern int fn_801D2570(int handle);
 extern void *MemReallocMem(void *p, int size, int flags, int d);
 extern int ResIsOpen(void *pPath);
@@ -40,7 +40,7 @@ void TDbExtInit(MemPoolDesc_t *pParams)
     _TDbExt_HeapDesc = *pParams;
     _TDbExt_bHeapActive = MemHeapActive(pParams->mUnknown8);
     if (_TDbExt_bHeapActive == 0) {
-        fn_801D2130(&_TDbExt_HeapDesc);
+        MemInitHeap(&_TDbExt_HeapDesc);
     }
     _TDbExt_bInitialized = 1;
     _TDbExt_pOverrideHeap = 0;
