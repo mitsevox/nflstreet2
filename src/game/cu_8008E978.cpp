@@ -5972,7 +5972,7 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 
 extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef);
 
-extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone);
+extern "C" void PlyrTrackTurnBone(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone);
 
 extern "C" void fn_8009CB0C(Object_80039F5C *p);
 
@@ -14307,7 +14307,7 @@ extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef)
     fn_8009BF5C(fn_8009BCE8(pRef), pRef[1], pOut, 0);
 }
 
-extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone)
+extern "C" void PlyrTrackTurnBone(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone)
 {
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
     Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
@@ -14326,13 +14326,15 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
     MatTranspose();
     Vec3Mat33Mul(&dir, &dir);
     MatPop();
-    angle = -MathArcTan2(dir.mZ, dir.mX) + 0x400000;
+    angle = -MathArcTan2(dir.mZ, dir.mX);
+    angle += 0x400000;
     if (angle > lbl_803EA9A0) {
         angle = lbl_803EA9A0;
     } else if (angle < lbl_803EA99C) {
         angle = lbl_803EA99C;
     }
-    rot = angle >> 8;
+    angle >>= 8;
+    rot = angle;
     if (pBlock->mUnknown8 != 6) {
         short prev;
 
@@ -14363,8 +14365,8 @@ extern "C" void fn_8009CB0C(Object_80039F5C *p)
             if (pBlock->mUnknown8 < 6) {
                 pBlock->mUnknown8++;
             }
-            fn_8009C9D0(p, pTarget, 29);
-            fn_8009C9D0(p, pTarget, 28);
+            PlyrTrackTurnBone(p, pTarget, 29);
+            PlyrTrackTurnBone(p, pTarget, 28);
             MatPop();
         } else {
             short *pRot29 = &pObject->mUnknown44.mUnknown48[29 * 3];
