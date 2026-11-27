@@ -224,11 +224,11 @@ int _LZHProcess(LZHBlock_t *a, LZHBlock_t *b, int mode)
     }
     lbl_803ED420 = 1;
     lbl_803ED474 = a;
-    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
     lbl_803ED488 = a->mUnknown04 - a->mUnknown08;
-    lbl_803ED490 = b->mUnknown04 - b->mUnknown08;
     lbl_803ED48C = a->mUnknown00 + a->mUnknown08;
+    lbl_803ED490 = b->mUnknown04 - b->mUnknown08;
     lbl_803ED478 = b;
+    lbl_803ED494 = b->mUnknown00 + b->mUnknown08;
     if (lbl_803ED428.mpProcess != 0) {
         do {
             switch ((unsigned char)lbl_803ED428.mpProcess()) {

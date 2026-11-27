@@ -29649,7 +29649,7 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 27 of 37 functions exact, the 10 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 28 of 37 functions exact, the 9 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29679,12 +29679,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8028257C",
-          "end": "0x80282654"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80282740",
           "end": "0x8028291C"
         },
         {
@@ -29717,10 +29711,6 @@
             "evidence": "evidence.tsv source-form 0x802824A8-0x8028257C"
           },
           {
-            "function": "_LZHProcess",
-            "evidence": "evidence.tsv source-form 0x80282654-0x80282740"
-          },
-          {
             "function": "_LZHEncodeInput",
             "evidence": "evidence.tsv source-form 0x8028291C-0x80282D70"
           },
@@ -29749,7 +29739,7 @@
             "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHProcess, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact)."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact; lane 8 follow-up: _LZHProcess)."
       }
     },
     {
