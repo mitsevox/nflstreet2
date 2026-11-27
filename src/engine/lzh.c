@@ -492,12 +492,17 @@ int _LZHEncodeCodeBuffer(void)
     return 0;
 }
 
+/* Takes the next byte of the compressed input. */
+static __inline unsigned char _LZHNextInByte(void)
+{
+    return *lbl_803ED48C++;
+}
+
 int _LZHDecodeNewBlock(void)
 {
     lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
     while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0) {
-        lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-        lbl_803ED48C++;
+        lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
         lbl_803ED47E = lbl_803ED484;
         lbl_803ED488--;
         lbl_803ED484 = (lbl_803ED484 + 1) & 0xFF;
@@ -587,8 +592,7 @@ int _LZHDecodeInput(void)
         lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
         while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0)
         {
-            lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-            lbl_803ED48C++;
+            lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
             lbl_803ED47E = lbl_803ED484++;
             lbl_803ED488--;
             lbl_803ED484 &= 0xFF;
@@ -642,8 +646,9 @@ int _LZHDecodeInput(void)
             }
             else
             {
+                unsigned char bits = lbl_802C28D0[symbol];
                 distance = lbl_802C28EE[symbol];
-                distance += _LZHReadBits(lbl_802C28D0[symbol]);
+                distance += _LZHReadBits(bits);
             }
             distance = (lbl_803ED43C - (distance + 0x8000)) & 0x7FFF;
             do
@@ -885,8 +890,7 @@ unsigned int _LZHReadBits(short n)
         lbl_803ED484 = (lbl_803ED47E + 1) & 0xFF;
         while (lbl_803ED484 != lbl_803ED486 && lbl_803ED488 != 0)
         {
-            lbl_803B7DD4[lbl_803ED47E] = *lbl_803ED48C;
-            lbl_803ED48C++;
+            lbl_803B7DD4[lbl_803ED47E] = _LZHNextInByte();
             lbl_803ED47E = lbl_803ED484++;
             lbl_803ED488--;
             lbl_803ED484 &= 0xFF;

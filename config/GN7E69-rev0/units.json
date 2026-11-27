@@ -22892,12 +22892,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80281C68",
-          "end": "0x80281C74"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802821E4",
           "end": "0x802821E8"
         },
         {
@@ -22932,10 +22926,6 @@
           {
             "function": "_LZMCoProcess",
             "evidence": "evidence.tsv source-form 0x80281940-0x80281C68"
-          },
-          {
-            "function": "_LZMDecProcess",
-            "evidence": "evidence.tsv source-form 0x80281C74-0x802821E4"
           }
         ],
         "evidence": "merge notes of the wave p1 lane p1g pull request: src/engine/lzm.c holds out sFlushBuffer, sFlushMatch, _LZMCoProcess, _LZMDecProcess."
@@ -29725,14 +29715,14 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80284030",
+          "start": "0x80283E48",
           "end": "0x8028410C"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80282F24",
-          "end": "0x802830F0"
+          "end": "0x80283660"
         },
         {
           "section": ".text",
@@ -29800,20 +29790,8 @@
             "evidence": "evidence.tsv source-form 0x80282D70-0x80282F24"
           },
           {
-            "function": "_LZHDecodeNewBlock",
-            "evidence": "evidence.tsv source-form 0x802830F0-0x802832CC"
-          },
-          {
-            "function": "_LZHDecodeInput",
-            "evidence": "evidence.tsv source-form 0x802832CC-0x80283660"
-          },
-          {
             "function": "_LZHDecodeInputFull",
             "evidence": "evidence.tsv source-form 0x80283660-0x80283E48"
-          },
-          {
-            "function": "_LZHReadBits",
-            "evidence": "evidence.tsv source-form 0x80283E48-0x80284030"
           },
           {
             "function": "_LZHMemDecodeInput",
