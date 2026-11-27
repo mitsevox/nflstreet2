@@ -6,10 +6,10 @@
 extern "C" {
 
 
-Entry_801AF84C *iSPCH_GetPhraseParmInfo(Record_801AF75C *p, int i)
+SpchPhraseParm_t *iSPCH_GetPhraseParmInfo(SpchPhrase_t *p, int i)
 {
     // FAKEMATCH: the base-pointer local keeps the target's add order (base + 8 first)
-    Entry_801AF84C *entries = p->mEntries;
+    SpchPhraseParm_t *entries = p->mEntries;
     return entries + i;
 }
 
@@ -52,14 +52,14 @@ int iSPCH_SentenceUsesParm(unsigned char *p, int value)
     int result = 0;
     int count = VoxSentence_GetNumPhrases(p);
     for (int i = 0; i < count; i++) {
-        Record_801AF75C *record = (Record_801AF75C *)iSPCH_GetOffset8((char *)p, p + 8, i);
-        if (record->mUnknown2 == value) {
+        SpchPhrase_t *record = (SpchPhrase_t *)iSPCH_GetOffset8((char *)p, p + 8, i);
+        if (record->mEventParm == value) {
             result = 1;
             break;
         }
-        int n = record->mUnknown4;
+        int n = record->mParmCount;
         for (int j = 0; j < n; j++) {
-            if (iSPCH_GetPhraseParmInfo(record, j)->mUnknown4 == value) {
+            if (iSPCH_GetPhraseParmInfo(record, j)->mEventParm == value) {
                 result = 1;
                 break;
             }

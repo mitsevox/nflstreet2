@@ -38,7 +38,7 @@ int iSPCH_BindData(char *data, unsigned int key)
     int i;
 
     if ((p->mUnknown0 & 0xFFFF0000) == 0x03100000) {
-        fn_801AFABC(p, &a, &b);
+        SPCH_GetEventDatInfo(p, &a, &b);
         for (i = 0; i < 8; i++) {
             VoxDat_t *bank = gEventDats[i].mBank;
             // FAKEMATCH: goto to the shared return instead of return result, so the found case branches to the final mr r3,r29 as in the target

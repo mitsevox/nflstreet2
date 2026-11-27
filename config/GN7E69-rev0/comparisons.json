@@ -24249,290 +24249,82 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x801AF75C-0x801B1A3C (src/engine/spchpick.c), the speech_cxx compiler row and the compiler, source-form, type and external rows 0x801AE3E4-0x801B2AD4, and the function and name rows of every registered function. Draft comparisons only; original assembly remains linked and data is referenced through neutral external labels.",
+      "evidence": "Complete spchpick.c reconstructed and named. Twelve full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AF75C",
           "end": "0x801B1A3C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F475C",
+          "end": "0x802F477C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037E294",
+          "end": "0x8037E794"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801AF75C",
-          "start": "0x801AF75C",
-          "end": "0x801AF780"
-        },
-        {
-          "symbol": "fn_801AF780",
-          "start": "0x801AF780",
-          "end": "0x801AF7B8"
-        },
-        {
-          "symbol": "fn_801AF7B8",
-          "start": "0x801AF7B8",
-          "end": "0x801AF80C"
-        },
-        {
-          "symbol": "fn_801AF80C",
-          "start": "0x801AF80C",
-          "end": "0x801AF84C"
-        },
-        {
-          "symbol": "fn_801AF84C",
-          "start": "0x801AF84C",
-          "end": "0x801AF85C"
-        },
-        {
-          "symbol": "fn_801AF85C",
-          "start": "0x801AF85C",
-          "end": "0x801AF868"
-        },
-        {
-          "symbol": "fn_801AF868",
-          "start": "0x801AF868",
-          "end": "0x801AF874"
-        },
-        {
-          "symbol": "fn_801AF874",
-          "start": "0x801AF874",
-          "end": "0x801AF8B0"
-        },
-        {
-          "symbol": "fn_801AF8B0",
-          "start": "0x801AF8B0",
-          "end": "0x801AF8E4"
-        },
-        {
-          "symbol": "fn_801AF8E4",
-          "start": "0x801AF8E4",
-          "end": "0x801AF8EC"
-        },
-        {
-          "symbol": "fn_801AF8EC",
-          "start": "0x801AF8EC",
-          "end": "0x801AF8F8"
-        },
-        {
-          "symbol": "fn_801AF8F8",
-          "start": "0x801AF8F8",
-          "end": "0x801AF904"
-        },
-        {
-          "symbol": "fn_801AF904",
-          "start": "0x801AF904",
-          "end": "0x801AF910"
-        },
-        {
-          "symbol": "fn_801AF910",
-          "start": "0x801AF910",
-          "end": "0x801AF91C"
-        },
-        {
-          "symbol": "fn_801AF91C",
-          "start": "0x801AF91C",
-          "end": "0x801AF928"
-        },
-        {
-          "symbol": "fn_801AF928",
-          "start": "0x801AF928",
-          "end": "0x801AF938"
-        },
-        {
-          "symbol": "fn_801AF938",
-          "start": "0x801AF938",
-          "end": "0x801AF94C"
-        },
-        {
-          "symbol": "fn_801AF94C",
-          "start": "0x801AF94C",
-          "end": "0x801AF968"
-        },
-        {
-          "symbol": "fn_801AF968",
-          "start": "0x801AF968",
-          "end": "0x801AF9B4"
-        },
-        {
-          "symbol": "fn_801AF9B4",
-          "start": "0x801AF9B4",
-          "end": "0x801AFA14"
-        },
-        {
-          "symbol": "fn_801AFA14",
+          "symbol": "VoxEvent_GetSentenceParmMask",
           "start": "0x801AFA14",
           "end": "0x801AFA70"
         },
         {
-          "symbol": "fn_801AFA70",
-          "start": "0x801AFA70",
-          "end": "0x801AFABC"
-        },
-        {
-          "symbol": "fn_801AFABC",
-          "start": "0x801AFABC",
-          "end": "0x801AFAD0"
-        },
-        {
-          "symbol": "fn_801AFAD0",
-          "start": "0x801AFAD0",
-          "end": "0x801AFB70"
-        },
-        {
-          "symbol": "fn_801AFB70",
-          "start": "0x801AFB70",
-          "end": "0x801AFBD8"
-        },
-        {
-          "symbol": "fn_801AFBD8",
-          "start": "0x801AFBD8",
-          "end": "0x801AFD04"
-        },
-        {
-          "symbol": "fn_801AFD04",
+          "symbol": "iSPCH_GetPhraseBank",
           "start": "0x801AFD04",
           "end": "0x801AFDFC"
         },
         {
-          "symbol": "fn_801AFDFC",
-          "start": "0x801AFDFC",
-          "end": "0x801AFE58"
-        },
-        {
-          "symbol": "fn_801AFE58",
-          "start": "0x801AFE58",
-          "end": "0x801AFE90"
-        },
-        {
-          "symbol": "fn_801AFE90",
-          "start": "0x801AFE90",
-          "end": "0x801AFEE8"
-        },
-        {
-          "symbol": "fn_801AFEE8",
+          "symbol": "iSPCH_SampleExists",
           "start": "0x801AFEE8",
           "end": "0x801AFF74"
         },
         {
-          "symbol": "fn_801AFF74",
-          "start": "0x801AFF74",
-          "end": "0x801AFFA4"
+          "symbol": "iSPCH_ChooseSamples",
+          "start": "0x801B0050",
+          "end": "0x801B01E8"
         },
         {
-          "symbol": "fn_801AFFA4",
-          "start": "0x801AFFA4",
-          "end": "0x801B0050"
-        },
-        {
-          "symbol": "fn_801B01E8",
-          "start": "0x801B01E8",
-          "end": "0x801B0208"
-        },
-        {
-          "symbol": "fn_801B0208",
+          "symbol": "iSPCH_SentenceLength",
           "start": "0x801B0208",
           "end": "0x801B029C"
         },
         {
-          "symbol": "fn_801B029C",
-          "start": "0x801B029C",
-          "end": "0x801B02B8"
-        },
-        {
-          "symbol": "fn_801B02B8",
-          "start": "0x801B02B8",
-          "end": "0x801B02DC"
-        },
-        {
-          "symbol": "fn_801B040C",
-          "start": "0x801B040C",
-          "end": "0x801B0474"
-        },
-        {
-          "symbol": "fn_801B0474",
+          "symbol": "iSPCH_ShortRuleStatus",
           "start": "0x801B0474",
           "end": "0x801B04D4"
         },
         {
-          "symbol": "fn_801B04D4",
-          "start": "0x801B04D4",
-          "end": "0x801B052C"
+          "symbol": "iSPCH_TestMatchParms",
+          "start": "0x801B05E4",
+          "end": "0x801B07A0"
         },
         {
-          "symbol": "fn_801B052C",
-          "start": "0x801B052C",
-          "end": "0x801B05E4"
-        },
-        {
-          "symbol": "fn_801B08DC",
+          "symbol": "iSPCH_RandomizeSentencePicks",
           "start": "0x801B08DC",
           "end": "0x801B0974"
         },
         {
-          "symbol": "fn_801B0974",
+          "symbol": "iSPCH_IterateChoice",
           "start": "0x801B0974",
           "end": "0x801B0A18"
         },
         {
-          "symbol": "fn_801B0A18",
-          "start": "0x801B0A18",
-          "end": "0x801B0B18"
+          "symbol": "iSPCH_ConstantRuleSet",
+          "start": "0x801B0D5C",
+          "end": "0x801B0EA4"
         },
         {
-          "symbol": "fn_801B0B18",
-          "start": "0x801B0B18",
-          "end": "0x801B0B5C"
-        },
-        {
-          "symbol": "fn_801B0B5C",
-          "start": "0x801B0B5C",
-          "end": "0x801B0C7C"
-        },
-        {
-          "symbol": "fn_801B0C7C",
-          "start": "0x801B0C7C",
-          "end": "0x801B0D5C"
-        },
-        {
-          "symbol": "fn_801B10AC",
-          "start": "0x801B10AC",
-          "end": "0x801B10D8"
-        },
-        {
-          "symbol": "fn_801B10D8",
-          "start": "0x801B10D8",
-          "end": "0x801B118C"
-        },
-        {
-          "symbol": "fn_801B118C",
-          "start": "0x801B118C",
-          "end": "0x801B1214"
-        },
-        {
-          "symbol": "fn_801B1368",
-          "start": "0x801B1368",
-          "end": "0x801B1380"
-        },
-        {
-          "symbol": "fn_801B1474",
-          "start": "0x801B1474",
-          "end": "0x801B14B4"
-        },
-        {
-          "symbol": "fn_801B14B4",
-          "start": "0x801B14B4",
-          "end": "0x801B1528"
-        },
-        {
-          "symbol": "fn_801B15E4",
-          "start": "0x801B15E4",
-          "end": "0x801B1628"
-        },
-        {
-          "symbol": "fn_801B192C",
-          "start": "0x801B192C",
-          "end": "0x801B1934"
+          "symbol": "iSPCH_MakeSampleRequests",
+          "start": "0x801B0EA4",
+          "end": "0x801B10AC"
         },
         {
           "symbol": "iSPCH_EACrandom",
