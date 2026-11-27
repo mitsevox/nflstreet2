@@ -29384,7 +29384,7 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 28 of 37 functions exact, the 9 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); linked with holdouts (owner ruling of 2026-11-20): 28 of 37 functions exact, the 9 holdouts keep the original bytes. Its data sections are linked from the compiled object (da2 wave, lane da2b): .rodata 0x802C2848-0x802C292C (the four code sets and the length/position tables), .bss 0x803B53FC-0x803B7ED4, .sdata 0x803EC584-0x803EC588 and .sbss 0x803ED420-0x803ED4B8 (their data rows; NASCAR 2005 names and sizes).",
       "sections": [
         {
           "section": ".text",
@@ -29433,6 +29433,30 @@
           "placement": ".text",
           "start": "0x802851E8",
           "end": "0x802855EC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2848",
+          "end": "0x802C292C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B53FC",
+          "end": "0x803B7ED4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC584",
+          "end": "0x803EC588"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED420",
+          "end": "0x803ED4B8"
         }
       ],
       "holdouts": {

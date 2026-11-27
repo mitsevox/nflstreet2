@@ -28657,6 +28657,30 @@
           "placement": ".text",
           "start": "0x802821E8",
           "end": "0x802856D8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C2848",
+          "end": "0x802C292C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803B53FC",
+          "end": "0x803B7ED4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC584",
+          "end": "0x803EC588"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ED420",
+          "end": "0x803ED4B8"
         }
       ],
       "functions": [
