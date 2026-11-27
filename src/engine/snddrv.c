@@ -822,7 +822,7 @@ int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream)
     return 0;
 }
 
-int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SNDSAMPLEFORMAT *info, SNDSAMPLEATTR *p)
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;

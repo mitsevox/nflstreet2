@@ -1762,6 +1762,7 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
         id[0] = fn[0];
         id[2] = fn[1];
     }
+    // FAKEMATCH: the fixup base through the bank-relative offset of the fixups, for the target's subf/add pair
     offset = (unsigned char *)fixups - (unsigned char *)bank;
     base = (unsigned char *)bank + offset - bank->mFixupHeaderOffset;
     relocs = (AemsFixupHeader_t *)(base + bank->mRelocOffset);
@@ -1806,6 +1807,7 @@ void SNDAEMSI_resolvemodulebank(AemsModuleBank_t *bank, AemsFixupHeader_t *fixup
         bank->mpName = 0;
     }
     if (first) {
+        // FAKEMATCH: callback and next through a state pointer and the rest through client, for the target's base-relative stores
         SndAemsState_t *state = &sndaems;
         SndAemsTimerClient_t *client = &state->mTimerClient;
 

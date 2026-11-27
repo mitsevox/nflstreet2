@@ -57,15 +57,15 @@ typedef struct SndPlayOpts_t {
 
 /* A packet player's stream format (copied whole into the player at +0x60): halfword +0x0, channel
    count +0x2, byte +0x3. */
-typedef struct SNDSAMPLEFORMAT {
+typedef struct SndPacketFormat_t {
     unsigned short m0;
     unsigned char m2;
     unsigned char m3;
-} SNDSAMPLEFORMAT;
+} SndPacketFormat_t;
 
 /* The per-channel start parameters of a packet player: per-channel halfwords +0xC and data
    pointers +0x18. */
-typedef struct SNDSAMPLEATTR {
+typedef struct SndPacketAttr_t {
     unsigned short m0;
     unsigned char mUnknown2;
     unsigned char m3;
@@ -76,7 +76,7 @@ typedef struct SNDSAMPLEATTR {
     unsigned char mUnknownA[2];
     unsigned short mC[6];
     void *m18[8];
-} SNDSAMPLEATTR;
+} SndPacketAttr_t;
 
 typedef struct Record_803A6DF0 {
     int m0;

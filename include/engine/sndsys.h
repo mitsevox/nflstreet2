@@ -100,7 +100,7 @@ typedef struct SndPacketPlayer_t {
     SndPacketReleaseFn_t mReleaseCallback;
     SndPacketFramesDoneFn_t mFramesDoneCallback;
     void *mCallbackContext;
-    SNDSAMPLEFORMAT mFormat;
+    SndPacketFormat_t mFormat;
     void *mChannelBuffers[6];
     SndPacketEntry_t mEntries[1];
 } SndPacketPlayer_t;

@@ -378,7 +378,7 @@ int SNDPLATFORM_asyncresolvetimbre(SNDIPATCHHEADER *p, int value, int *base);
 int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream);
 int SNDPLATFORM_outputlatency(void);
 int SNDPLATFORM_timemult(int index, int value);
-int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SNDSAMPLEFORMAT *info, SNDSAMPLEATTR *p);
+int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p);
 int SNDPLATFORM_stop(int index);
 void *SNDPLATFORM_memalloc(int unused, int size);
 int SNDPLATFORM_memfree(int unused, void *p);
