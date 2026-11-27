@@ -252,14 +252,14 @@ int StoreIsItemLocked(int index, int id)
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue, 0x4C544154, category);
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (status != 0) id++;
     } else {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mLockedColumn, pDescriptor->mLockedValue);
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (status != 0) id++;
     }
     if (status == 0) {
@@ -279,14 +279,14 @@ int StoreIsItemNew(int index, int id)
     if (category != 3) {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85 and \x8c = \x82\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1, 0x4C544154, category);
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (status != 0) id++;
     } else {
         status = TDbCompilePerformOp(0, "use \x8c select count(*) into \x85 from \x8c where \x8c = \x85 and \x8c = \x85\n", db, &count,
                 pDescriptor->mProfileTable, pDescriptor->mIdColumn, id, pDescriptor->mNewColumn, 1);
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (status != 0) id++;
     }
     if (status == 0) {
@@ -301,8 +301,8 @@ void StoreClearItemNew(int index, int id)
     int db = DbUserGetDb(DbUserGetCurrent());
     int category = StoreGetTattooLocation(index);
     if (category != 3) {
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 where \x8c = \x85 and \x8c = \x82\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category) != 0) id++;
     } else {
@@ -317,8 +317,8 @@ void StoreUnlockItem(int index, int id)
     int db = DbUserGetDb(DbUserGetCurrent());
     int category = StoreGetTattooLocation(index);
     if (category != 3) {
-        // FAKEMATCH: dead increment of the unused id on a failed query; keeps the status test
-        // the original's stripped error check left (flow deletes the increment after cse)
+        // FAKEMATCH: id is not used after the query; its dead increment on a failed query keeps the
+        // status test, likely left by a stripped error check (flow deletes the increment after cse)
         if (TDbCompilePerformOp(0, "use \x8c update \x8c set \x8c = 0 and \x8c = 1 where \x8c = \x85 and \x8c = \x82\n", db,
                 pDescriptor->mProfileTable, pDescriptor->mLockedColumn, pDescriptor->mNewColumn, pDescriptor->mIdColumn, id, 0x4C544154, category) != 0) id++;
     } else {

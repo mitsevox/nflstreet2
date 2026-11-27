@@ -3378,7 +3378,7 @@
     {
       "source": "src/game/TeamTables.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the one non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -10090,7 +10090,7 @@
     {
       "source": "src/game/TeamDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the three non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its individual exact function extents and its .rodata/.data/.sdata/.sbss data rows. The source is linked with holdouts (units.json); the one non-exact function stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
