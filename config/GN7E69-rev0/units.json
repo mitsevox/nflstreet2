@@ -29154,41 +29154,16 @@
     },
     {
       "source": "src/engine/splytree.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 13 of 15 functions exact, the 2 holdouts keep the original bytes.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70) and its function rows; no data sections (its data is referenced through extern labels); every function exact (round 6 lane 4: _DSListSplay and _DSListAddSplayNode, the last holdouts, made exact).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C7684",
-          "end": "0x801C7844"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7A34",
-          "end": "0x801C7A98"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7C1C",
           "end": "0x801C7F70"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "_DSListSplay",
-            "evidence": "evidence.tsv source-form 0x801C7844-0x801C7A34"
-          },
-          {
-            "function": "_DSListAddSplayNode",
-            "evidence": "evidence.tsv source-form 0x801C7A98-0x801C7C1C"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98 (round 5 lane 2 merge notes, 2026-11-27: _DSListGetSplayPrev and _DSListGetSplayNext made exact; _DSListSplay and _DSListAddSplayNode remain)."
-      }
+      ]
     },
     {
       "source": "src/engine/pathvol.c",
