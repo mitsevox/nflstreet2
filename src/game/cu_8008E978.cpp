@@ -5444,7 +5444,7 @@ struct Turn_800CBBAC {
 
 extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p);
 
-extern "C" void fn_8008E9B0(Object_80039F5C *p);
+extern "C" void PlayerMoveAnimUpdateTurn(Object_80039F5C *p);
 
 extern "C" void fn_8008EB18(int id,int flag,void *data);
 
@@ -8105,7 +8105,7 @@ static void (*const lbl_80297D68[11])(Object_80039F5C *) = {
     PlayerMoveAnimUpdateLimited,
     PlayerMoveAnimUpdateSpecial,
     PlayerMoveAnimUpdateSpecial,
-    fn_8008E9B0,
+    PlayerMoveAnimUpdateTurn,
     PlayerMoveAnimUpdateDefault,
     PlayerMoveAnimUpdateHold,
 };
@@ -8116,7 +8116,7 @@ extern "C" void PlayerMoveAnimUpdateState(Object_80039F5C *p)
     lbl_80297D68[p->mUnknown512.mUnknown14](p);
 }
 
-extern "C" void fn_8008E9B0(Object_80039F5C *p)
+extern "C" void PlayerMoveAnimUpdateTurn(Object_80039F5C *p)
 {
     unsigned short key=fn_801BE648(p->mpUnknown792);
     PlyrMoveCmd_t *next=&p->mUnknown528;
@@ -8138,9 +8138,12 @@ extern "C" void fn_8008E9B0(Object_80039F5C *p)
         next->mUnknown14=current->mUnknown14;
         next->mUnknown4=current->mUnknown4;
     } else {
-        next->mUnknown14=1;
-        next->mUnknown4=current->mUnknown4;
-        next->mUnknown8=current->mUnknown8;
+        // FAKEMATCH: the do-while(0) block weights these pointer uses by loop depth so the next pointer outranks current in register allocation.
+        do {
+            next->mUnknown14=1;
+            next->mUnknown4=current->mUnknown4;
+            next->mUnknown8=current->mUnknown8;
+        } while(0);
         p->mUnknown528.mUnknown0=p->mUnknown512.mUnknown0;
     }
     if(!PlayerMoveAnimCheckReverse(p,key) && fn_801BE648(p->mpUnknown792)!=key)

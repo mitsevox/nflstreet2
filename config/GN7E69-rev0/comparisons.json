@@ -11892,7 +11892,7 @@
           "end": "0x8008E9B0"
         },
         {
-          "symbol": "fn_8008E9B0",
+          "symbol": "PlayerMoveAnimUpdateTurn",
           "start": "0x8008E9B0",
           "end": "0x8008EB18"
         },
