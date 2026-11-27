@@ -1149,7 +1149,7 @@ extern "C" {
 extern unsigned int lbl_8030C084[];
 }
 
-/* Nearby eligible tacklers that fn_800C845C rebuilds; PlyrContactQueryPutFirst copies the
+/* Nearby eligible tacklers that PlyrContactCollectTacklers rebuilds; PlyrContactQueryPutFirst copies the
    list into a query and moves the preferred target to the front. */
 extern Object_80039F5C *lbl_80317AD8[7];
 
@@ -7752,63 +7752,63 @@ extern "C" void PlyrContactNothing(Object_80039F5C *p, Object_80039F5C *pOther, 
 
 extern "C" int PlyrContactIsCompatible(Object_800C6640 *pSource, int value);
 
-extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type);
+extern "C" int PlyrContactTryReaction(Object_80039F5C *p, Object_80039F5C *pOther, int type);
 
-extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int);
+extern "C" int PlyrContactTryWallHit(Object_80039F5C *p, Object_80039F5C *pOther, int);
 
-extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int);
+extern "C" int PlyrContactTryWallBreak(Object_80039F5C *p, Object_80039F5C *pOther, int);
 
-extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type, float distance, int angle, unsigned int chance);
+extern "C" int PlyrContactTryTackleAnim(Object_80039F5C *p, Object_80039F5C *pOther, int type, float distance, int angle, unsigned int chance);
 
-extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b);
+extern "C" int PlyrContactTryAnim(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b);
 
 extern "C" int PlyrContactTryBreakTackle(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b, unsigned int c);
 
-extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int PlyrContactIsTargetEngaged(Object_80039F5C *p, Object_80039F5C *pOther);
 
-extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p);
+extern "C" Object_80039F5C *PlyrContactFindNearestTarget(Object_80039F5C *p);
 
-extern "C" int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther);
+extern "C" int PlyrContactHasPending(Object_80039F5C *p, Object_80039F5C *pOther);
 
-extern "C" int fn_800C76C0(Object_80039F5C *p);
+extern "C" int PlyrContactIsPending(Object_80039F5C *p);
 
-extern "C" void fn_800C76D8(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
+extern "C" void PlyrContactSetPending(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 
-extern "C" void fn_800C7708(Object_80039F5C *p);
+extern "C" void PlyrContactClearPending(Object_80039F5C *p);
 
-extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p);
+extern "C" int PlyrContactIsFacingBack(Object_80039F5C *pOther, Object_80039F5C *p);
 
-extern "C" void fn_800C7794(Object_80039F5C *p);
+extern "C" void PlyrContactUpdateDefender(Object_80039F5C *p);
 
-extern "C" void fn_800C7D44(Object_80039F5C *p);
+extern "C" void PlyrContactUpdateCarrier(Object_80039F5C *p);
 
-extern "C" void fn_800C8270(Object_80039F5C *p);
+extern "C" void PlyrContactReset(Object_80039F5C *p);
 
-extern "C" void fn_800C82C0(Object_80039F5C *p);
+extern "C" void PlyrContactResetTarget(Object_80039F5C *p);
 
-extern "C" void fn_800C8330(Object_80039F5C *p);
+extern "C" void PlyrContactUpdate(Object_80039F5C *p);
 
-extern "C" int fn_800C8420(Object_80039F5C *p, float value);
+extern "C" int PlyrContactRaisePower(Object_80039F5C *p, float value);
 
-extern "C" void fn_800C845C(void);
+extern "C" void PlyrContactCollectTacklers(void);
 
-extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char a);
+extern "C" int PlyrContactStartEngage(Object_80039F5C *p, unsigned short key, unsigned char a);
 
-extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
+extern "C" void PlyrContactFinish(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 
-extern "C" int fn_800C8694(Object_80039F5C *p);
+extern "C" int PlyrIsBreakTackleAnim(Object_80039F5C *p);
 
 extern "C" int fn_800C8704(int *pA, int *pB);
 
 extern "C" int fn_800C8744(int team);
 
-extern "C" int fn_800C8774(int team);
+extern "C" int GameInfoGetTeamScore(int team);
 
 extern "C" void fn_800C87CC(int team, int value);
 
 extern "C" int fn_800C8818(int team);
 
-extern "C" void fn_800C8860(Model_800C8860 *pModel, int angle, int which);
+extern "C" void PlyrModelAddTwist(Model_800C8860 *pModel, int angle, int which);
 
 extern "C" void fn_800C8954(Object_80039F5C *p);
 
@@ -8187,8 +8187,8 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
             p->mUnknown1240.mUnknown0=(short)AnimSeqGetOpcodeParameter();
             p->mUnknown1240.mUnknown2=(signed char)AnimSeqGetOpcodeParameter();
             if(p->mUnknown1240.mUnknown2!=7) {
-                fn_800C8688(p,0,p->mUnknown1240.mUnknown0,0);
-                if(fn_800C8694(p) && p->mpState->mId==16) p->mFlags|=0x10000;
+                PlyrContactFinish(p,0,p->mUnknown1240.mUnknown0,0);
+                if(PlyrIsBreakTackleAnim(p) && p->mpState->mId==16) p->mFlags|=0x10000;
             } else {
                 PhysPlayerHitObject(p);AudmonEventPostId(46,&p->mMotion.mPos,p->mId,0,0,0);
             }
@@ -16660,7 +16660,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
         }
         fn_800A14E4(result,update);
         if(result->mUnknown18&8 && result->mUnknown1D==2 && fn_801486A0()!=4 && GameOptionsGet(14)==0) {
-            int score=fn_800C8774(ScrmGetOffenseTeam());
+            int score=GameInfoGetTeamScore(ScrmGetOffenseTeam());
             if(score>=GameOptionsGet(1)) {
                 Vector_80039F5C pos={0};
                 BallGetPosition(BallGetCurrent(),&pos);
@@ -16732,7 +16732,7 @@ extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
 
 extern "C" void fn_800A20D0(int team, int delta)
 {
-    int value = fn_800C8774(team);
+    int value = GameInfoGetTeamScore(team);
 
     ScrmGetTeamScore(team);
     value += delta;
@@ -33259,7 +33259,7 @@ extern "C" void PlyrContactApplyTackle(Object_80039F5C *p, int value)
         ScrmSetTackler(fn_8009BCE8(&p->mUnknown560.mUnknown48));
         p->mFlags |= 0x10000;
         p->mFlags &= ~0x80000;
-        fn_800C8688(p, pOther, 0, 0);
+        PlyrContactFinish(p, pOther, 0, 0);
     }
     if (pOther != 0 && PlyrContactIsKnockable(pOther, value)) {
         PlyrContactSendCarrierHit(pOther);
@@ -33363,7 +33363,7 @@ extern "C" void PlyrContactApplyHit(Object_80039F5C *p, int value, int chance)
             }
         }
     }
-    fn_800C8688(p, pOther, 0, 0);
+    PlyrContactFinish(p, pOther, 0, 0);
 }
 
 extern "C" void PlyrContactApplyKnockdown(Object_80039F5C *p, int value)
@@ -33586,7 +33586,7 @@ extern "C" int PlyrContactRollBreakChance(Object_80039F5C *p, Object_800C6640 *p
         }
         if ((fn_801486A0() || (pTarget != 0 && fn_800F06F4(0, pTarget->mpState, 51, 0xFFFF) == 0xFFFF))
             && pTarget != 0 && PlyrContactIsKnockable(p, value) && PlyrContactCanHit(pTarget, p)) {
-            if (fn_800C769C(pTarget, p)) {
+            if (PlyrContactHasPending(pTarget, p)) {
                 return pTarget->mUnknown1221;
             }
             pStats = &p->mUnknown2900;
@@ -33609,7 +33609,7 @@ extern "C" int PlyrContactRollBreakChance(Object_80039F5C *p, Object_800C6640 *p
             chance = total < 0 ? 0 : (total > 100 ? 100 : total);
             if (pSource == 0 || pSource->mUnknown0 == 0
                 || (ScrmSpotRecordHit(p, &pTarget->mId), !PlyrContactIsCompatible(pSource, pTarget->mpState->mId))
-                || fn_800C8420(pTarget, pSource->mUnknown32)) {
+                || PlyrContactRaisePower(pTarget, pSource->mUnknown32)) {
                 if (chance != 0) {
                     chance = fn_800AC584(pTarget->mIdBytes[2], chance);
                     chance = PlyrContactAdjustHitPower(p, pTarget, chance);
@@ -33799,7 +33799,7 @@ extern "C" int PlyrContactIsCompatible(Object_800C6640 *pSource, int value)
     return 1;
 }
 
-extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type)
+extern "C" int PlyrContactTryReaction(Object_80039F5C *p, Object_80039F5C *pOther, int type)
 {
     Query_800CE770 query;
     int result = 0;
@@ -33839,7 +33839,7 @@ extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type
     return result;
 }
 
-extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
+extern "C" int PlyrContactTryWallHit(Object_80039F5C *p, Object_80039F5C *pOther, int)
 {
     Query_800CE770 query;
     int result = 0;
@@ -33864,7 +33864,7 @@ extern "C" int fn_800C6BD8(Object_80039F5C *p, Object_80039F5C *pOther, int)
     return result;
 }
 
-extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
+extern "C" int PlyrContactTryWallBreak(Object_80039F5C *p, Object_80039F5C *pOther, int)
 {
     Query_800CE770 query;
     int result = 0;
@@ -33891,7 +33891,7 @@ extern "C" int fn_800C6CDC(Object_80039F5C *p, Object_80039F5C *pOther, int)
     return result;
 }
 
-extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type, float distance, int angle,
+extern "C" int PlyrContactTryTackleAnim(Object_80039F5C *p, Object_80039F5C *pOther, int type, float distance, int angle,
                            unsigned int chance)
 {
     int result = 0;
@@ -33931,7 +33931,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
         } else {
             kinds[count] = 2;
         }
-        if (fn_800C7720(pOther, p)) {
+        if (PlyrContactIsFacingBack(pOther, p)) {
             kinds[count] = 3;
         }
     } else {
@@ -33955,7 +33955,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
     return result;
 }
 
-extern "C" int fn_800C7084(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
+extern "C" int PlyrContactTryAnim(Object_80039F5C *p, Object_80039F5C *pOther, int a, float value, int b)
 {
     Query_800CE770 query;
     int result = 0;
@@ -34054,7 +34054,7 @@ extern "C" int PlyrContactTryBreakTackle(Object_80039F5C *p, Object_80039F5C *pO
     return result;
 }
 
-extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int PlyrContactIsTargetEngaged(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Vector_80039F5C ballPos;
     Vector_80039F5C ballDir;
@@ -34089,7 +34089,7 @@ extern "C" int fn_800C73E0(Object_80039F5C *p, Object_80039F5C *pOther)
     return 0;
 }
 
-extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
+extern "C" Object_80039F5C *PlyrContactFindNearestTarget(Object_80039F5C *p)
 {
     Object_80039F5C *pBest = 0;
     float bestDistance = 500000.0f;
@@ -34100,7 +34100,7 @@ extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
         Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2] ^ 1, i);
         float distance = Vec2DistanceSqr(&pOther->mMotion.mPos, &p->mMotion.mPos);
 
-        if (distance < 16.0f && distance < bestDistance && fn_800C73E0(p, pOther)) {
+        if (distance < 16.0f && distance < bestDistance && PlyrContactIsTargetEngaged(p, pOther)) {
             pBest = pOther;
             bestDistance = distance;
         }
@@ -34108,7 +34108,7 @@ extern "C" Object_80039F5C *fn_800C75C0(Object_80039F5C *p)
     return pBest;
 }
 
-extern "C" int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther)
+extern "C" int PlyrContactHasPending(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     if (p->mUnknown1220 != 0 && p->mpUnknown1224 == pOther) {
         return 1;
@@ -34116,7 +34116,7 @@ extern "C" int fn_800C769C(Object_80039F5C *p, Object_80039F5C *pOther)
     return 0;
 }
 
-extern "C" int fn_800C76C0(Object_80039F5C *p)
+extern "C" int PlyrContactIsPending(Object_80039F5C *p)
 {
     if (p->mUnknown1220 != 0) {
         return 1;
@@ -34124,7 +34124,7 @@ extern "C" int fn_800C76C0(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_800C76D8(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
+extern "C" void PlyrContactSetPending(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
 {
     if (p->mUnknown1220 != 0 && p->mpUnknown1224 == pOther) {
         return;
@@ -34135,7 +34135,7 @@ extern "C" void fn_800C76D8(Object_80039F5C *p, Object_80039F5C *pOther, int a, 
     p->mpUnknown1224 = pOther;
 }
 
-extern "C" void fn_800C7708(Object_80039F5C *p)
+extern "C" void PlyrContactClearPending(Object_80039F5C *p)
 {
     p->mpUnknown1224 = 0;
     p->mUnknown1221 = 0;
@@ -34143,7 +34143,7 @@ extern "C" void fn_800C7708(Object_80039F5C *p)
     p->mUnknown1220 = 0;
 }
 
-extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
+extern "C" int PlyrContactIsFacingBack(Object_80039F5C *pOther, Object_80039F5C *p)
 {
     int result = 0;
 
@@ -34156,14 +34156,14 @@ extern "C" int fn_800C7720(Object_80039F5C *pOther, Object_80039F5C *p)
     return result;
 }
 
-extern "C" void fn_800C7794(Object_80039F5C *p)
+extern "C" void PlyrContactUpdateDefender(Object_80039F5C *p)
 {
     int kindA;
     int kindB;
     int kindC;
     unsigned int chance;
     int result = 0;
-    Object_80039F5C *pOther = fn_800C75C0(p);
+    Object_80039F5C *pOther = PlyrContactFindNearestTarget(p);
     unsigned char key;
     unsigned char blocked;
     unsigned int roll;
@@ -34178,7 +34178,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         chance = 100;
     }
     blocked = PlayerMoveGetKind(pOther);
-    if (fn_800C769C(p, pOther)) {
+    if (PlyrContactHasPending(p, pOther)) {
         roll = p->mUnknown1222;
     } else {
         roll = SyncRandGetRange(0, 100);
@@ -34187,18 +34187,18 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         roll = 0;
     }
     PlyrContactGetAnimIds(pOther, key, &kindA, &kindB, &kindC);
-    if (roll >= chance && !fn_800C7720(p, pOther)) {
+    if (roll >= chance && !PlyrContactIsFacingBack(p, pOther)) {
         unsigned int chance2 = PlyrContactGetDodgeChance(pOther, 0, p, key, chance);
 
         if (chance2 != 0) {
             if (PlyrContactTestEvenHit(p, pOther, SyncRandGetRange(0, 100), chance2)) {
-                result = fn_800C7084(pOther, p, 172, 0.9f, 0x88888);
+                result = PlyrContactTryAnim(pOther, p, 172, 0.9f, 0x88888);
                 if (result) {
                     pOther->mFlags &= ~0x80000;
                 }
             }
             if (!result) {
-                result = fn_800C6CDC(pOther, p, 0);
+                result = PlyrContactTryWallBreak(pOther, p, 0);
                 if (!result) {
                     result = PlyrContactTryBreakTackle(pOther, p, kindB, 0.45f, 0x66666, chance);
                     if (!result && kindB == 93 && (p->mpState->mId == 12 || p->mpState->mId == 94)
@@ -34237,9 +34237,9 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
                     pRecord->mUnknown16 = 1;
                     fn_800B1508();
                 }
-                fn_800C7708(p);
+                PlyrContactClearPending(p);
             } else {
-                fn_800C76D8(p, pOther, chance, roll);
+                PlyrContactSetPending(p, pOther, chance, roll);
             }
         }
         tackle = 0;
@@ -34248,7 +34248,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     }
     if (tackle) {
         if (PlyrContactTestEvenHit(p, pOther, roll, chance)) {
-            result = fn_800C7084(pOther, p, 172, 0.9f, 0x88888);
+            result = PlyrContactTryAnim(pOther, p, 172, 0.9f, 0x88888);
             if (result) {
                 pOther->mFlags &= ~0x80000;
             }
@@ -34256,21 +34256,21 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
         if (!result && !fn_800C53D8(pOther)) {
             if (!result) {
                 if (PlyrContactCanSpecialHit(p, pOther)) {
-                    result = fn_800C6DF8(pOther, p, 234, lbl_803ED6BC * 2.0f, (int)(lbl_803ED6B4 * 2.0f), chance);
+                    result = PlyrContactTryTackleAnim(pOther, p, 234, lbl_803ED6BC * 2.0f, (int)(lbl_803ED6B4 * 2.0f), chance);
                 } else {
-                    result = fn_800C6BD8(pOther, p, 0);
+                    result = PlyrContactTryWallHit(pOther, p, 0);
                     if (!result) {
-                        result = fn_800C6A3C(pOther, p, kindC);
+                        result = PlyrContactTryReaction(pOther, p, kindC);
                     }
                     if (!result) {
                         int reach = (int)(lbl_803ED6B4 * 1.5f);
                         float speed = lbl_803ED6BC * 1.5f;
 
-                        result = fn_800C6DF8(pOther, p, kindA, speed, reach, chance);
+                        result = PlyrContactTryTackleAnim(pOther, p, kindA, speed, reach, chance);
                         if (!result && kindA == 94 && (p->mpState->mId == 12 || p->mpState->mId == 94)
                             && fn_800CD2B4(1, p)) {
                             PlyrContactGetAnimIds(pOther, 31, &kindA, &kindB, &kindC);
-                            result = fn_800C6DF8(pOther, p, kindA, speed, reach, chance);
+                            result = PlyrContactTryTackleAnim(pOther, p, kindA, speed, reach, chance);
                             PlyrContactGetAnimIds(pOther, key, &kindA, &kindB, &kindC);
                         }
                     }
@@ -34281,9 +34281,9 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
                 pOther->mFlags &= ~0x80000;
                 ScrmSetTackler(p);
                 PlyrContactNothing(p, pOther, kindA);
-                fn_800C7708(p);
+                PlyrContactClearPending(p);
             } else {
-                fn_800C76D8(p, pOther, chance, roll);
+                PlyrContactSetPending(p, pOther, chance, roll);
             }
         }
     }
@@ -34292,7 +34292,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800C7D44(Object_80039F5C *p)
+extern "C" void PlyrContactUpdateCarrier(Object_80039F5C *p)
 {
     int kindA;
     int kindB;
@@ -34324,7 +34324,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
     if (chance == 0) {
         return;
     }
-    if (fn_800C769C(pOther, p)) {
+    if (PlyrContactHasPending(pOther, p)) {
         roll = pOther->mUnknown1222;
     } else {
         roll = SyncRandGetRange(0, 100);
@@ -34336,19 +34336,19 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
         PlyrContactGetAnimIds(p, p->mUnknown2914, &kindA, &kindB, &kindC);
         if (pOther != 0 && PlyrContactCanTackle(pOther, p)) {
             if (!result && PlyrContactCanSpecialHit(pOther, p)) {
-                result = fn_800C6DF8(p, pOther, 234, lbl_803ED6BC * 2.0f * lbl_803EAC20,
+                result = PlyrContactTryTackleAnim(p, pOther, 234, lbl_803ED6BC * 2.0f * lbl_803EAC20,
                                      (int)(lbl_803ED6B4 * 2.0f * lbl_803EAC20), chance);
             }
             if (!result) {
                 if (PlyrContactTestEvenHit(pOther, p, roll, chance)) {
-                    stolen = fn_800C7084(p, pOther, 172, 0.9f, 0x88888);
+                    stolen = PlyrContactTryAnim(p, pOther, 172, 0.9f, 0x88888);
                 }
                 if (!stolen) {
-                    result = fn_800C6BD8(p, pOther, 1);
+                    result = PlyrContactTryWallHit(p, pOther, 1);
                 }
                 if (!result) {
                     if (!stolen) {
-                        result = fn_800C6A3C(p, pOther, kindC);
+                        result = PlyrContactTryReaction(p, pOther, kindC);
                     }
                     if (!result && !stolen) {
                         unsigned char scale;
@@ -34366,7 +34366,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                         float speed = scale * 1.5f;
                         int reach = (int)(lbl_803ED6B4 * 1.5f);
 
-                        result = fn_800C6DF8(p, pOther, kindA, lbl_803ED6BC * speed, reach * count, chance);
+                        result = PlyrContactTryTackleAnim(p, pOther, kindA, lbl_803ED6BC * speed, reach * count, chance);
                     }
                 }
             }
@@ -34405,10 +34405,10 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
         p->mUnknown1160.mUnknown48 += bonus;
         PlyrContactApplyHit(p, key, chance);
     }
-    fn_800C7708(pOther);
+    PlyrContactClearPending(pOther);
 }
 
-extern "C" void fn_800C8270(Object_80039F5C *p)
+extern "C" void PlyrContactReset(Object_80039F5C *p)
 {
     p->mUnknown1160.mUnknown4 = p->mUnknown1160.mUnknown0 = 0.0f;
     p->mUnknown1160.mUnknown8 = 0;
@@ -34427,7 +34427,7 @@ extern "C" void fn_800C8270(Object_80039F5C *p)
     p->mUnknown1222 = 0;
 }
 
-extern "C" void fn_800C82C0(Object_80039F5C *p)
+extern "C" void PlyrContactResetTarget(Object_80039F5C *p)
 {
     p->mUnknown1160.mUnknown12Word = 0x400000;
     p->mUnknown1160.mUnknown16 = 0.0f;
@@ -34440,7 +34440,7 @@ extern "C" void fn_800C82C0(Object_80039F5C *p)
     p->mUnknown1160.mUnknown40 = 0;
 }
 
-extern "C" void fn_800C8330(Object_80039F5C *p)
+extern "C" void PlyrContactUpdate(Object_80039F5C *p)
 {
     Block_800C8330 *pBlock = &p->mUnknown1160Wide;
 
@@ -34450,7 +34450,7 @@ extern "C" void fn_800C8330(Object_80039F5C *p)
     if (pBlock->mBlock.mUnknown0 != 0.0f) {
         pBlock->mBlock.mUnknown0 -= pBlock->mBlock.mUnknown4;
         if (--pBlock->mBlock.mUnknown8 < 0) {
-            fn_800C8270(p);
+            PlyrContactReset(p);
         }
     }
     if (pBlock->mBlock.mUnknown53) {
@@ -34471,12 +34471,12 @@ extern "C" void fn_800C8330(Object_80039F5C *p)
     case 58:
         break;
     default:
-        fn_800C82C0(p);
+        PlyrContactResetTarget(p);
         break;
     }
 }
 
-extern "C" int fn_800C8420(Object_80039F5C *p, float value)
+extern "C" int PlyrContactRaisePower(Object_80039F5C *p, float value)
 {
     Block_801718E8 *pBlock = &p->mUnknown1160;
 
@@ -34489,7 +34489,7 @@ extern "C" int fn_800C8420(Object_80039F5C *p, float value)
     return 0;
 }
 
-extern "C" void fn_800C845C(void)
+extern "C" void PlyrContactCollectTacklers(void)
 {
     Object_80039F5C *pCarrier;
 
@@ -34513,7 +34513,7 @@ extern "C" void fn_800C845C(void)
     }
 }
 
-extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char a)
+extern "C" int PlyrContactStartEngage(Object_80039F5C *p, unsigned short key, unsigned char a)
 {
     Query_800CE770 query;
     Object_80039F5C *pOther;
@@ -34559,13 +34559,13 @@ extern "C" int fn_800C854C(Object_80039F5C *p, unsigned short key, unsigned char
     return result;
 }
 
-extern "C" void fn_800C8688(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
+extern "C" void PlyrContactFinish(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b)
 {
     
     float local[12];
 }
 
-extern "C" int fn_800C8694(Object_80039F5C *p)
+extern "C" int PlyrIsBreakTackleAnim(Object_80039F5C *p)
 {
     switch (fn_801BE648(p->mpUnknown792)) {
     case 94:
@@ -34605,7 +34605,7 @@ static inline const char *_StrippedQueries_80297850(int which)
     return "select 'CSAG' into \x82 from 'FNIG'\n";
 }
 
-extern "C" int fn_800C8774(int team)
+extern "C" int GameInfoGetTeamScore(int team)
 {
     int value = 0;
     int field = team == 0 ? 0x43534847 /* 'CSHG' */ : 0x43534147 /* 'CSAG' */;
@@ -34630,7 +34630,7 @@ extern "C" int fn_800C8818(int team)
     return result;
 }
 
-extern "C" void fn_800C8860(Model_800C8860 *pModel, int angle, int which)
+extern "C" void PlyrModelAddTwist(Model_800C8860 *pModel, int angle, int which)
 {
     angle = angle << 8 >> 8;
     switch (which) {
@@ -34689,7 +34689,7 @@ extern "C" void fn_800C8A98(Object_80039F5C *p)
         Block_80170E64 *pBlock = p->mpUnknown4;
 
         for (i = 0; i <= 1; i++) {
-            fn_800C8860(&pBlock->mModel44, pTurn->mAngle[i], i);
+            PlyrModelAddTwist(&pBlock->mModel44, pTurn->mAngle[i], i);
         }
     }
 }
@@ -36494,7 +36494,7 @@ extern "C" int fn_800CC800(Object_80039F5C *p)
     if (fn_801BE648(p->mpUnknown792) == 185) {
         result = 0;
     }
-    if (fn_800C76C0(p) != 0) {
+    if (PlyrContactIsPending(p) != 0) {
         result = 0;
     }
     return result;

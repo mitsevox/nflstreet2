@@ -13968,7 +13968,7 @@
             "evidence": "evidence.tsv source-form 0x800C68BC-0x800C6A3C"
           },
           {
-            "function": "fn_800C6DF8",
+            "function": "PlyrContactTryTackleAnim",
             "evidence": "evidence.tsv source-form 0x800C6DF8-0x800C7084"
           },
           {

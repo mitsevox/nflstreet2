@@ -127,8 +127,8 @@ void PlyrPoseBlendEntries(void *pBlock, int a);
 void PlyrPoseBlendRootAngles(void *pBlock, void *a, unsigned short b, void *c);
 void MotionClampToGround(Object_800B26B0 *pMotion);
 void PlyrCheckSidelineNeighbor(Object_80039F5C *p);
-void fn_800C8270(Object_80039F5C *p);
-void fn_800C82C0(Object_80039F5C *p);
+void PlyrContactReset(Object_80039F5C *p);
+void PlyrContactResetTarget(Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
 void fn_800CE684(Object_800CE674 *p);
 void PlyrBallHandUpdate(Object_80039F5C *p);
@@ -219,16 +219,16 @@ unsigned char fn_800B65A0(int team);
 int ScrmIsNotReplay(void);
 void fn_800F1700(void);
 void PassLaneUpdateReceivers(void);
-void fn_800C845C(void);
+void PlyrContactCollectTacklers(void);
 void PlayerMoveTickAll(void);
-void fn_800C8330(Object_80039F5C *p);
-void fn_800C7794(Object_80039F5C *p);
+void PlyrContactUpdate(Object_80039F5C *p);
+void PlyrContactUpdateDefender(Object_80039F5C *p);
 void PlyrContactHitWall(Object_80039F5C *p);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
 void fn_800A5E68(Object_80039F5C *p);
 void PlyrUpdateControlFlag(Object_80039F5C *p, int flag);
-void fn_800C7D44(Object_80039F5C *p);
+void PlyrContactUpdateCarrier(Object_80039F5C *p);
 void fn_8011E13C(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void *fn_800AEE20(Object_80039F5C *p);
@@ -485,8 +485,8 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     p->mUnknown512.mUnknown8 = 0;
     p->mUnknown512.mUnknown4 = 0;
     p->mUnknown512.mUnknown0 = 0.0f;
-    fn_800C8270(&pPlayer->mObject);
-    fn_800C82C0(&pPlayer->mObject);
+    PlyrContactReset(&pPlayer->mObject);
+    PlyrContactResetTarget(&pPlayer->mObject);
     fn_800CE674(pReset);
     fn_800CE684(pReset);
     PlyrCollideClearExempt(p);
@@ -696,7 +696,7 @@ extern "C" void PlyrMgrUpdate(void)
 
     fn_800F1700();
     PassLaneUpdateReceivers();
-    fn_800C845C();
+    PlyrContactCollectTacklers();
     PlayerMoveTickAll();
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
@@ -715,8 +715,8 @@ extern "C" void PlyrMgrUpdate(void)
             active = 1;
         }
         if (replay == 0 && p->mIdBytes[2] == team && fn_801486A0() != 1) {
-            fn_800C8330(p);
-            fn_800C7794(p);
+            PlyrContactUpdate(p);
+            PlyrContactUpdateDefender(p);
         }
         if (replay == 0) {
             PlyrContactHitWall(p);
@@ -727,7 +727,7 @@ extern "C" void PlyrMgrUpdate(void)
         PlyrUpdatePendingMsg(p);
         PlyrUpdateControlFlag(p, active);
     }
-    fn_800C7D44(BallGetCurrentHolder());
+    PlyrContactUpdateCarrier(BallGetCurrentHolder());
     fn_8011E13C();
 }
 
@@ -1083,8 +1083,8 @@ extern "C" void PlyrMgrResetAll(void)
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
         p->mUnknown772 = 1.0f;
-        fn_800C8270(p);
-        fn_800C82C0(p);
+        PlyrContactReset(p);
+        PlyrContactResetTarget(p);
     }
 }
 

@@ -18047,27 +18047,27 @@
           "end": "0x800C6A3C"
         },
         {
-          "symbol": "fn_800C6A3C",
+          "symbol": "PlyrContactTryReaction",
           "start": "0x800C6A3C",
           "end": "0x800C6BD8"
         },
         {
-          "symbol": "fn_800C6BD8",
+          "symbol": "PlyrContactTryWallHit",
           "start": "0x800C6BD8",
           "end": "0x800C6CDC"
         },
         {
-          "symbol": "fn_800C6CDC",
+          "symbol": "PlyrContactTryWallBreak",
           "start": "0x800C6CDC",
           "end": "0x800C6DF8"
         },
         {
-          "symbol": "fn_800C6DF8",
+          "symbol": "PlyrContactTryTackleAnim",
           "start": "0x800C6DF8",
           "end": "0x800C7084"
         },
         {
-          "symbol": "fn_800C7084",
+          "symbol": "PlyrContactTryAnim",
           "start": "0x800C7084",
           "end": "0x800C7118"
         },
@@ -18077,87 +18077,87 @@
           "end": "0x800C73E0"
         },
         {
-          "symbol": "fn_800C73E0",
+          "symbol": "PlyrContactIsTargetEngaged",
           "start": "0x800C73E0",
           "end": "0x800C75C0"
         },
         {
-          "symbol": "fn_800C75C0",
+          "symbol": "PlyrContactFindNearestTarget",
           "start": "0x800C75C0",
           "end": "0x800C769C"
         },
         {
-          "symbol": "fn_800C769C",
+          "symbol": "PlyrContactHasPending",
           "start": "0x800C769C",
           "end": "0x800C76C0"
         },
         {
-          "symbol": "fn_800C76C0",
+          "symbol": "PlyrContactIsPending",
           "start": "0x800C76C0",
           "end": "0x800C76D8"
         },
         {
-          "symbol": "fn_800C76D8",
+          "symbol": "PlyrContactSetPending",
           "start": "0x800C76D8",
           "end": "0x800C7708"
         },
         {
-          "symbol": "fn_800C7708",
+          "symbol": "PlyrContactClearPending",
           "start": "0x800C7708",
           "end": "0x800C7720"
         },
         {
-          "symbol": "fn_800C7720",
+          "symbol": "PlyrContactIsFacingBack",
           "start": "0x800C7720",
           "end": "0x800C7794"
         },
         {
-          "symbol": "fn_800C7794",
+          "symbol": "PlyrContactUpdateDefender",
           "start": "0x800C7794",
           "end": "0x800C7D44"
         },
         {
-          "symbol": "fn_800C7D44",
+          "symbol": "PlyrContactUpdateCarrier",
           "start": "0x800C7D44",
           "end": "0x800C8270"
         },
         {
-          "symbol": "fn_800C8270",
+          "symbol": "PlyrContactReset",
           "start": "0x800C8270",
           "end": "0x800C82C0"
         },
         {
-          "symbol": "fn_800C82C0",
+          "symbol": "PlyrContactResetTarget",
           "start": "0x800C82C0",
           "end": "0x800C8330"
         },
         {
-          "symbol": "fn_800C8330",
+          "symbol": "PlyrContactUpdate",
           "start": "0x800C8330",
           "end": "0x800C8420"
         },
         {
-          "symbol": "fn_800C8420",
+          "symbol": "PlyrContactRaisePower",
           "start": "0x800C8420",
           "end": "0x800C845C"
         },
         {
-          "symbol": "fn_800C845C",
+          "symbol": "PlyrContactCollectTacklers",
           "start": "0x800C845C",
           "end": "0x800C854C"
         },
         {
-          "symbol": "fn_800C854C",
+          "symbol": "PlyrContactStartEngage",
           "start": "0x800C854C",
           "end": "0x800C8688"
         },
         {
-          "symbol": "fn_800C8688",
+          "symbol": "PlyrContactFinish",
           "start": "0x800C8688",
           "end": "0x800C8694"
         },
         {
-          "symbol": "fn_800C8694",
+          "symbol": "PlyrIsBreakTackleAnim",
           "start": "0x800C8694",
           "end": "0x800C8704"
         },
@@ -18172,7 +18172,7 @@
           "end": "0x800C8774"
         },
         {
-          "symbol": "fn_800C8774",
+          "symbol": "GameInfoGetTeamScore",
           "start": "0x800C8774",
           "end": "0x800C87CC"
         },
@@ -18187,7 +18187,7 @@
           "end": "0x800C8860"
         },
         {
-          "symbol": "fn_800C8860",
+          "symbol": "PlyrModelAddTwist",
           "start": "0x800C8860",
           "end": "0x800C8954"
         },

@@ -481,7 +481,7 @@ void AnimMomentumInit(AnimMomentum_t *, Object_80039F5C *, int);
 void AnimMomentumUpdate(AnimMomentum_t *, Object_80039F5C *);
 void AnimMomentumUpdateLinked(AnimMomentum_t *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
-int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
+int PlyrContactStartEngage(Object_80039F5C *, unsigned short, unsigned char);
 void PlayerActionAnimUpdatePairAlign(Object_80039F5C *, Block_800DE3B0 *);
 }
 

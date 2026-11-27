@@ -1701,7 +1701,7 @@ extern "C" int PlayerActionAnimGenericPhase(Table_80089904 *pTable, unsigned sho
         } else if (!PlayerActionAnimIsFlaggedKey(fn_801BE648(p->mpUnknown792))) p->mFlags &= ~512;
         switch (key) {
         case 172: case 173:
-            if (p->mFlags & 4) fn_800C854C(p, key, pBlock->mUnknown3C);
+            if (p->mFlags & 4) PlyrContactStartEngage(p, key, pBlock->mUnknown3C);
             break;
         }
         break;
