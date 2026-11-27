@@ -22672,13 +22672,13 @@
     },
     {
       "source": "src/engine/animmotroot.c",
-      "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8 and the two HOLDOUT source-form rows. AnimMotRotateHalfTurn links exact; AnimMotBlendRootAngle and AnimMotBlendRootOffset keep the original code; the .rodata pool links whole.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row 0x801BCA74-0x801BCF40 (src/engine/animmotroot.c), its data row 0x802AEDC0-0x802AEDC8 and the source-form rows of AnimMotBlendRootAngle and AnimMotBlendRootOffset; every function exact and linked since round 5 lane 2 (2026-11-27; the two blends were holdouts of the e1d pull request), so the file links whole with engine_c_fastmath and no holdouts; the .rodata pool links whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801BCEEC",
+          "start": "0x801BCA74",
           "end": "0x801BCF40"
         },
         {
@@ -22687,20 +22687,7 @@
           "start": "0x802AEDC0",
           "end": "0x802AEDC8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "AnimMotBlendRootAngle",
-            "evidence": "evidence.tsv source-form 0x801BCA74-0x801BCCAC"
-          },
-          {
-            "function": "AnimMotBlendRootOffset",
-            "evidence": "evidence.tsv source-form 0x801BCCAC-0x801BCEEC"
-          }
-        ],
-        "evidence": "Two blend functions stay measured partials after copy-form, indexing-form and inline-helper tries; merge notes of the e1d pull request list them."
-      }
+      ]
     },
     {
       "source": "src/engine/llvector.c",
@@ -27171,19 +27158,13 @@
     },
     {
       "source": "src/engine/pathserv.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, name, source-form and data rows. Seven exact routines and complete native header string link. Only the integer-return project sort retains original bytes.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B343C-0x801B3AD0, name, source-form and data rows. All eight routines are exact and link with the complete native header string.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B343C",
-          "end": "0x801B3568"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B3724",
           "end": "0x801B3AD0"
         },
         {
@@ -27192,16 +27173,7 @@
           "start": "0x802AEA58",
           "end": "0x802AEA60"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_sortprojects",
-            "evidence": "evidence.tsv source-form 0x801B3568-0x801B3724"
-          }
-        ],
-        "evidence": "merge notes of the pull request linking the exact pathserv.c functions"
-      }
+      ]
     },
     {
       "source": "src/engine/pathtrack.c",
@@ -29055,8 +29027,14 @@
     {
       "source": "src/game/GlowRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/GlowRender.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 8 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/GlowRender.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 8 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019723C",
+          "end": "0x80197680"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -29073,10 +29051,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "ParticleTrailDraw",
-            "evidence": "evidence.tsv source-form 0x8019723C-0x80197680"
-          },
-          {
             "function": "GlowRender",
             "evidence": "evidence.tsv source-form 0x80197680-0x80197D08"
           },
@@ -29085,7 +29059,7 @@
             "evidence": "evidence.tsv source-form 0x80197D08-0x80197E64"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/GlowRender.cpp holds out fn_8019723C, fn_80197680, fn_80197D08."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/GlowRender.cpp holds out fn_8019723C, fn_80197680, fn_80197D08 (round 5 lane 2 merge notes, 2026-11-27: ParticleTrailDraw made exact)."
       }
     },
     {
@@ -29260,13 +29234,13 @@
     {
       "source": "src/engine/splytree.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 11 of 15 functions exact, the 4 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 13 of 15 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C7684",
-          "end": "0x801C77DC"
+          "end": "0x801C7844"
         },
         {
           "section": ".text",
@@ -29284,14 +29258,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "_DSListGetSplayPrev",
-            "evidence": "evidence.tsv source-form 0x801C77DC-0x801C7810"
-          },
-          {
-            "function": "_DSListGetSplayNext",
-            "evidence": "evidence.tsv source-form 0x801C7810-0x801C7844"
-          },
-          {
             "function": "_DSListSplay",
             "evidence": "evidence.tsv source-form 0x801C7844-0x801C7A34"
           },
@@ -29300,7 +29266,7 @@
             "evidence": "evidence.tsv source-form 0x801C7A98-0x801C7C1C"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98 (round 5 lane 2 merge notes, 2026-11-27: _DSListGetSplayPrev and _DSListGetSplayNext made exact; _DSListSplay and _DSListAddSplayNode remain)."
       }
     },
     {
@@ -29610,18 +29576,12 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Four documented holdouts (iSPCH_GetPhraseBank, iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Three documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AF75C",
-          "end": "0x801AFD04"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AFDFC",
           "end": "0x801B0050"
         },
         {
@@ -29651,10 +29611,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "iSPCH_GetPhraseBank",
-            "evidence": "evidence.tsv source-form 0x801AFD04-0x801AFDFC"
-          },
           {
             "function": "iSPCH_ChooseSamples",
             "evidence": "evidence.tsv source-form 0x801B0050-0x801B01E8"
@@ -29707,24 +29663,12 @@
     },
     {
       "source": "src/engine/pathnode.c",
-      "profile": "path_cxx_holdouts",
+      "profile": "path_cxx",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B6780",
-          "end": "0x801B6A18"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B6CB4",
-          "end": "0x801B6ED0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B7178",
           "end": "0x801B7778"
         },
         {
@@ -29734,20 +29678,7 @@
           "end": "0x802AED50"
         }
       ],
-      "evidence": "evidence.tsv provisional unit row 0x801B6780-0x801B7778; full file reconstructed and named, exact functions and whole native data linked around documented holdouts.",
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_choosesynchtime",
-            "evidence": "evidence.tsv source-form 0x801B6A18-0x801B6CB4"
-          },
-          {
-            "function": "PATHI_enternode",
-            "evidence": "evidence.tsv source-form 0x801B6ED0-0x801B7178"
-          }
-        ],
-        "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."
-      }
+      "evidence": "evidence.tsv provisional unit row 0x801B6780-0x801B7778; full file reconstructed and named; every function exact (the last two, PATHI_choosesynchtime and PATHI_enternode, in round 5) and linked with the whole native read-only data."
     },
     {
       "source": "src/engine/pathaction.c",
@@ -29756,8 +29687,8 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B84E4",
-          "end": "0x801B8580"
+          "start": "0x801B845C",
+          "end": "0x801B864C"
         },
         {
           "section": ".text",
@@ -29784,14 +29715,6 @@
           {
             "function": "PATHI_serviceaction",
             "evidence": "evidence.tsv source-form 0x801B7880-0x801B845C"
-          },
-          {
-            "function": "PATHI_conditiondone",
-            "evidence": "evidence.tsv source-form 0x801B845C-0x801B84E4"
-          },
-          {
-            "function": "PATHI_trackstatus",
-            "evidence": "evidence.tsv source-form 0x801B8580-0x801B864C"
           },
           {
             "function": "PATHI_getvalue",

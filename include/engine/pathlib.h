@@ -347,7 +347,7 @@ void PATH_seteventcallbacks(void (*a)(int, int), void (*b)(int, int), void (*c)(
 unsigned int PATH_milliseconds(void);
 unsigned int PATHI_switchproject(unsigned int index, unsigned int flags);
 int PATHI_switchvoice(unsigned int flags);
-int PATHI_sortprojects(void);
+void PATHI_sortprojects(void);
 void PATHI_service(int mode);
 void PATHI_servicetask(void);
 void PATHI_servicetimer(void);

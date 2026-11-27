@@ -49,16 +49,18 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
             _AnimMotBlendOrient(&pRecords[index].mUnknown10, &pEntry->mUnknownC, &target, pRecords[index].mUnknown4C.mUnknown14);
             i++;
         } else {
-            Triple_801BCA74 *pDst = &pRecords[index].mUnknown10;
+            Triple_801BCA74 *pDst;
 
-            pDst->mUnknown0 = pEntry->mUnknownC.mUnknown0;
+            // FAKEMATCH: the first word is stored through pRecords[index] and the other two through
+            // pDst; one uniform copy form gives the base+offset add order instead of offset+base.
+            pRecords[index].mUnknown10.mUnknown0 = pEntry->mUnknownC.mUnknown0;
+            pDst = &pRecords[index].mUnknown10;
             pDst->mUnknown4 = pEntry->mUnknownC.mUnknown4;
             pDst->mUnknown8 = pEntry->mUnknownC.mUnknown8;
         }
         if (pEntry->mUnknown8 & 2) {
             int angle;
             int delta;
-            int blend;
             float weight;
 
             if (pRecords[index].mUnknown4C.mUnknown1E & 8) {
@@ -73,7 +75,7 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
             pRecords[index].mUnknown10.mUnknown4 = 0;
             delta = angle - pRecords[index].mUnknown1C;
             pRecords[index].mUnknown1C = angle;
-            blend = (int)(((long long)pRecords[index].mUnknown20 * delta) >> 24);
+            delta = (int)(((long long)pRecords[index].mUnknown20 * delta) >> 24);
             total += pEntry->mUnknown0;
             weight = total != 0.0f ? pEntry->mUnknown0 / total : 0.0f;
             {
@@ -84,7 +86,7 @@ int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_8
                     apply = 1;
                 }
                 if (apply) {
-                    OrientLerpAngle(&value, blend, value, weight);
+                    OrientLerpAngle(&value, delta, value, weight);
                 }
             }
         }
@@ -101,6 +103,19 @@ void Vec2Add(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void Vec2Sub(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void Vec2Lerp(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB, float t);
 
+// FAKEMATCH: the channel-offset reset and the running blend go through these two inline helpers;
+// their parameter copies keep the 0.0f reload and the &sum/&delta addresses in the target's registers.
+static inline void _AnimMotVec2Zero(Pair_802270A4 *pVec)
+{
+    pVec->mUnknown4 = 0.0f;
+    pVec->mUnknown0 = 0.0f;
+}
+
+static inline void _AnimMotBlendSum(Pair_802270A4 *pSum, Pair_802270A4 *pDelta, float weight)
+{
+    Vec2Lerp(pSum, pDelta, pSum, weight);
+}
+
 int AnimMotBlendRootOffset(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
 {
     Pair_802270A4 sum;
@@ -111,8 +126,8 @@ int AnimMotBlendRootOffset(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_
     int i;
 
     sum.mUnknown4 = 0.0f;
-    total = 0.0f;
     sum.mUnknown0 = 0.0f;
+    total = 0.0f;
     for (i = 0; i < pAnim->mUnknown0; i++) {
         Entry_801BCA74 *pEntry = &pAnim->mUnknown4[i];
 
@@ -126,9 +141,8 @@ int AnimMotBlendRootOffset(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_
             }
             if (apply == 1) {
                 if (pRecords[index].mUnknown4C.mUnknown1E & 1) {
-                    pRecords[index].mUnknown24.mUnknown0 = 0.0f;
+                    _AnimMotVec2Zero(&pRecords[index].mUnknown24);
                     pRecords[index].mUnknown4C.mUnknown1E = (pRecords[index].mUnknown4C.mUnknown1E & ~1) | 2;
-                    pRecords[index].mUnknown24.mUnknown4 = 0.0f;
                 }
                 if (pRecords[index].mUnknown4C.mUnknown1E & 4) {
                     pRecords[index].mUnknown4C.mUnknown1E &= ~7;
@@ -149,7 +163,7 @@ int AnimMotBlendRootOffset(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_
                 Vec2Scale(&delta, &delta, pRecords[index].mUnknown2C);
                 Vec2Rotate(&delta, &delta, pRecords[index].mUnknownC);
                 total += pEntry->mUnknown0;
-                Vec2Lerp(&sum, &delta, &sum, total != 0.0f ? pEntry->mUnknown0 / total : 0.0f);
+                _AnimMotBlendSum(&sum, &delta, total != 0.0f ? pEntry->mUnknown0 / total : 0.0f);
             }
         }
     }

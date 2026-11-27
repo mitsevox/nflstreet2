@@ -10,6 +10,8 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
     const char *header = "%s  %s";
     static unsigned int lastwhile = 0;
     static unsigned int lastendif = 0;
+    PathTrack_t saved;
+    int lhs, rhs;
     int queued = pfstate->mUnknown1100;
     unsigned int operand = action->mOperand;
     for (int track = 0; track < 24; ++track) {
@@ -28,25 +30,31 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             continue;
         switch (action->mBits4.operation) {
         case 2: {
-            int wait = PATHI_getvalue((short)(operand >> 16), action->mBits4.rhsKind, p, event);
-            short id = operand >> 16;
+            lhs = PATHI_getvalue((short)(operand >> 16), action->mBits4.rhsKind, p, event);
+            rhs = (int)operand >> 16;
             short limit = operand;
-            if (limit > 0 && limit < wait)
-                wait = 0;
-            if (action->mBits4.rhsKind == 1 && id <= 22 && id >= 20) {
-                if (!action->mHalves.low || action->mHalves.low > wait)
-                    action->mHalves.low = wait;
-                if (wait > 0)
-                    wait = gPathMilliseconds + 3000;
+            if (limit > 0 && limit < lhs)
+                lhs = 0;
+            if (action->mBits4.rhsKind == 1) {
+                switch ((short)rhs) {
+                case 20:
+                case 21:
+                case 22:
+                    if (!action->mHalves.low || action->mHalves.low > lhs)
+                        action->mHalves.low = lhs;
+                    if (lhs > 0)
+                        lhs = gPathMilliseconds + 3000;
+                    break;
+                }
             }
-            if (wait <= (int)(Path::IPathToReal::realimp->GetMilliseconds() - event->mActionStartedAt)) {
+            if (lhs <= (int)(Path::IPathToReal::realimp->GetMilliseconds() - event->mActionStartedAt)) {
                 action->mHalves.low = 0;
                 action->mBits4.complete = 1;
             }
             break;
         }
         case 3: {
-            int wait = (short)(operand >> 16);
+            int wait = (int)operand >> 16;
             if (!wait) {
                 PathBeatInfo_t info;
                 p->mUnknown100->vfn_03();
@@ -62,18 +70,23 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             break;
         }
         case 4: {
-            PathTrack_t saved = *p;
             int result = -9999;
-            int node = PATHI_getvalue((short)(operand >> 16), action->mBits4.lhsKind, p, event);
-            int section = PATHI_getvalue((signed char)(operand >> 8), action->mBits4.rhsKind, p, event);
+            saved = *p;
+            int node = PATHI_getvalue((int)operand >> 16, action->mBits4.lhsKind, p, event);
+            int section = PATHI_getvalue((short)operand >> 8, action->mBits4.rhsKind, p, event);
             if (node < -1 || node > pfstate->mUnknown18->mUnknown12) {
                 if (debugchannels & 0x20)
                     PATHI_printf("( %.8s )  PATHACTION_BRANCHTO bad node ID = %d, \n", p->mUnknownD0, node);
                 node = -1;
             }
-            PathMapEntry_t *destination = 0;
-            if (node > 0)
-                destination = PATHI_getnode(node);
+            PathMapEntry_t *destination;
+            if (node > 0) {
+                if (node > pfstate->mUnknown18->mUnknown12)
+                    destination = 0;
+                else
+                    destination = (PathMapEntry_t *)((unsigned char *)pfstate->mUnknown18 + pfstate->mUnknown1C[node] * 4);
+            } else
+                destination = 0;
             if (destination && destination->mBits0.mTrack != p->mUnknown0)
                 break;
             if (p->mUnknown8.bits.flag20)
@@ -95,8 +108,10 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             int previous = p->mUnknown4;
             if (operand & 0x80)
                 PATHI_stop(p);
-            int ready = 0;
-            if (p->mUnknownF0 < 0)
+            int ready;
+            if (p->mUnknownF0 >= 0)
+                ready = 0;
+            else
                 ready = p->mUnknown100->vfn_08();
             if (ready) {
                 p->mUnknown8.bits.mUnknown7 = -1;
@@ -113,34 +128,36 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
         }
         case 5: {
             int duration = PATHI_getvalue((unsigned short)operand, action->mBits4.rhsKind, p, event);
-            PATHI_fade(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
+            PATHI_fade(p, (int)operand >> 24, duration, ((int)(operand << 8)) >> 25);
             action->mBits4.complete = 1;
             break;
         }
         case 7: {
             int duration = PATHI_getvalue((unsigned short)operand, action->mBits4.rhsKind, p, event);
-            PATHI_customsfxfade(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
+            PATHI_customsfxfade(p, (int)operand >> 24, duration, ((int)(operand << 8)) >> 25);
             action->mBits4.complete = 1;
             break;
         }
         case 6: {
             int duration = PATHI_getvalue((unsigned short)operand, action->mBits4.rhsKind, p, event);
-            PATHI_customdrylevelfade(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
+            PATHI_customdrylevelfade(p, (int)operand >> 24, duration, ((int)(operand << 8)) >> 25);
             action->mBits4.complete = 1;
             break;
         }
         case 9: {
             PathMapEntry_t *found = PATHI_findevent(operand >> 8);
-            if (found)
-                PATHI_addevent(pfstate->mUnknown14 | 0xF0000000, PATHI_copyevent((PathEvent_t *)found));
+            if (found) {
+                PathEvent_t *copy = PATHI_copyevent((PathEvent_t *)found);
+                PATHI_addevent(pfstate->mUnknown14 | 0xF0000000, copy);
+            }
             action->mBits4.complete = 1;
             break;
         }
         case 13: {
-            int first = PATHI_getvalue((operand >> 8) & 255, action->mBits4.rhsKind, p, event);
-            int second = PATHI_getvalue((short)(operand >> 16), action->mBits4.lhsKind, p, event);
+            rhs = PATHI_getvalue((operand >> 8) & 255, action->mBits4.rhsKind, p, event);
+            lhs = PATHI_getvalue((int)operand >> 16, action->mBits4.lhsKind, p, event);
             if (eventaction)
-                eventaction(first, second);
+                eventaction(rhs, lhs);
             action->mBits4.complete = 1;
             break;
         }
@@ -157,7 +174,7 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             action->mBits4.complete = 1;
             break;
         case 8: {
-            int value = PATHI_getvalue((short)(operand >> 16), action->mBits4.rhsKind, p, event);
+            int value = PATHI_getvalue((int)operand >> 16, action->mBits4.rhsKind, p, event);
             action->mBits4.complete = 1;
             PATHI_setvalue((operand >> 8) & 255, action->mBits4.lhsKind, value, p, event);
             break;
@@ -177,22 +194,24 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
             break;
         }
         case 15: {
-            int wait = PATHI_getvalue(operand >> 16, action->mBits4.rhsKind, p, event);
+            lhs = PATHI_getvalue(operand >> 16, action->mBits4.rhsKind, p, event);
             action->mBits4.complete = 1;
-            if (wait <= 0) {
+            if (lhs <= 0) {
                 p->mUnknown8.bits.flag40 = (operand >> 15) & 1;
                 p->mUnknown100->vfn_05((operand >> 15) & 1);
             } else if (operand & 0x8000)
-                p->mPauseTime = gPathMilliseconds + wait;
+                p->mPauseTime = gPathMilliseconds + lhs;
             else
-                p->mResumeTime = gPathMilliseconds + wait;
+                p->mResumeTime = gPathMilliseconds + lhs;
             break;
         }
-        case 16:
-            PATHI_getvalue(operand >> 24, action->mBits4.rhsKind, p, event);
+        case 16: {
+            int bank = operand >> 24;
+            PATHI_getvalue(bank, action->mBits4.rhsKind, p, event);
             action->mBits4.complete = 1;
-            PATHI_loadbank(p, operand >> 24);
+            PATHI_loadbank(p, bank);
             break;
+        }
         case 1: {
             if (action->mBits4.condition == 3) {
                 action->mBits4.complete = 1;
@@ -208,22 +227,23 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
                 }
                 return action->mBits4.complete;
             }
-            int id = (short)(operand >> 16);
-            int lhs = PATHI_getvalue(id, action->mBits4.lhsKind, p, event);
-            int rhs = PATHI_getvalue((short)operand, action->mBits4.rhsKind, p, event);
+            int id = (int)operand >> 16;
+            lhs = PATHI_getvalue(id, action->mBits4.lhsKind, p, event);
+            rhs = PATHI_getvalue((short)operand, action->mBits4.rhsKind, p, event);
+
             if (action->mBits4.lhsKind == 1 && id == 17) {
                 int status = PATHI_trackstatus(p);
                 if (rhs == 4 && status == 1)
                     action->mBits4.complete = 1;
             }
             switch (action->mBits4.comparison) {
-            case 0: action->mBits4.complete = 1; break;
             case 1: action->mBits4.complete = lhs == rhs; break;
             case 2: action->mBits4.complete = lhs != rhs; break;
             case 3: action->mBits4.complete = lhs > rhs; break;
             case 4: action->mBits4.complete = lhs < rhs; break;
             case 5: action->mBits4.complete = lhs >= rhs; break;
             case 6: action->mBits4.complete = lhs <= rhs; break;
+            case 0: action->mBits4.complete = 1; break;
             }
             if (!action->mBits4.condition) {
                 if (!action->mBits4.complete)
@@ -252,20 +272,21 @@ extern "C" PathAction_t *PATHI_conditiondone(PathAction_t *p, int state, PathAct
     // The entry state controls where to stop even after marking has begun.
     const int initialState = state;
     ++p;
-    while (p <= end && state >= 0) {
+    // FAKEMATCH: the loop test is repeated as a guard around a do-while; a plain while gives a different rotation.
+    if (p <= end && state >= 0) do {
         if (((p->mControl >> 3) & 7) == value) {
             if ((p->mControl & 0x00FE0E00) == 0x00020800) {
                 p->mControl |= 0x10000;
-                return p;
+                break;
             }
             if (!initialState)
-                return p;
+                break;
             state = 0;
         }
         if (!state)
             p->mControl |= 0x10000;
         ++p;
-    }
+    } while (p <= end && state >= 0);
     return p;
 }
 
@@ -301,8 +322,10 @@ extern "C" int PATHI_trackstatus(PathTrack_t *p)
         p->mUnknown110 = 3;
     else if (p->mUnknown4 >= 0) {
         p->mUnknown110 = 5;
-        int value = 0;
-        if (p->mUnknownF0 < 0)
+        int value;
+        if (p->mUnknownF0 >= 0)
+            value = 0;
+        else
             value = p->mUnknown100->vfn_08();
         if (value && PATHI_timeremaining(p) <= (p->mUnknown8.halves.high))
             p->mUnknown110 = 4;
@@ -360,8 +383,8 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *eve
             id = p->mUnknown8.bits.flag1;
             break;
         case 11: {
-            int next = PATHI_nextnode(p->mUnknown4, p->mUnknown1, 0);
-            id = PATHI_enternode(p->mUnknown4, next, p->mUnknown1, 0);
+            id = PATHI_nextnode(p->mUnknown4, p->mUnknown1, 0);
+            id = PATHI_enternode(p->mUnknown4, id, p->mUnknown1, 0);
             break;
         }
         case 12:
