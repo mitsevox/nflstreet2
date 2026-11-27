@@ -442,9 +442,8 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
             if (samples > 8) samples = 8;
             PlayAlignBuildCurveStrip(controls, strip, samples, width);
             for (int j = 0; j < samples; ++j) {
-                vertices[count] = strip[j*2];
-                vertices[count+1] = strip[j*2+1];
-                count += 2;
+                vertices[count++] = strip[j*2];
+                vertices[count++] = strip[j*2+1];
             }
             drawn = 1;
             break;
