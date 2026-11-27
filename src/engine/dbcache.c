@@ -432,7 +432,9 @@ void DbCacheUpdateHandler(int ready, unsigned short id, unsigned char *pDone);
 int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable);
 int DbCacheDeleteRows(int key, int db, unsigned int tableMask);
 extern void ScaleBlockReset(void *p);
-extern void ModelObjEnvMapTexCoords(Table_803E96E8 *pTable, void *pEntry);
+struct TMRenderState_t;
+struct TMGeomNode_t;
+extern void ModelObjEnvMapTexCoords(struct TMRenderState_t *pState, struct TMGeomNode_t *pNode);
 extern void fn_80236F00(void);
 
 void DbOccpUpdateHandler(void *p, int mode, unsigned char *pDone);

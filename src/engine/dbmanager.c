@@ -352,7 +352,9 @@ extern int DbUserGetDb(int key);
 extern int DbCacheCreate(int key, Cache_8022F8A8 **ppCache);
 extern int DbCacheCopyRows(unsigned short id, int a, int b, int c, int d, int e, int f);
 extern void ScaleBlockReset(void *p);
-extern void ModelObjEnvMapTexCoords(Table_803E96E8 *pTable, void *pEntry);
+struct TMRenderState_t;
+struct TMGeomNode_t;
+extern void ModelObjEnvMapTexCoords(struct TMRenderState_t *pState, struct TMGeomNode_t *pNode);
 extern void fn_80236F00(void);
 
 void DbOccpUpdateHandler(void *p, int mode, unsigned char *pDone);

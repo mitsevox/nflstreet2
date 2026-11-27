@@ -38,9 +38,6 @@ typedef void (*func_ptr) (void);
 
 extern func_ptr __CTOR_LIST__[];
 
-extern int _exit_dummy_decl;
-int *_exit_dummy_ref = &_exit_dummy_decl;
-
 void
 __do_global_ctors (void)
 {
@@ -64,6 +61,9 @@ __main (void)
       __do_global_ctors ();
     }
 }
+
+extern int _exit_dummy_decl;
+int *_exit_dummy_ref = &_exit_dummy_decl;
 
 DItype
 __ashldi3 (DItype u, word_type b)
