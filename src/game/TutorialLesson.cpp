@@ -572,7 +572,7 @@ void TutorialSetupRosters(void)
     DepthChartGetSide(1, &records[1]);
     TDbCompilePerformOp(0, "delete from 'AGCD'\n");
     /* 0x41474344 is 'AGCD', the table cleared by the query above. */
-    fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
+    DbThcdSetLineups(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);

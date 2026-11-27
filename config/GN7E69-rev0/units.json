@@ -1237,6 +1237,42 @@
     "_e_sbss": {
       "address": "0x803ED681",
       "evidence": "Linker-defined end of .sbss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
+    },
+    "DbYalpModuleInit": {
+      "address": "0x802299FC",
+      "evidence": "evidence.tsv function and name rows at 0x802299FC. src/engine/dbmanager.c calls the original-byte DbYalpModuleInit provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpModuleShutdown": {
+      "address": "0x80229A70",
+      "evidence": "evidence.tsv function and name rows at 0x80229A70. src/engine/dbmanager.c calls the original-byte DbYalpModuleShutdown provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbFindUnusedPlayerIds": {
+      "address": "0x80229AA4",
+      "evidence": "evidence.tsv function and name rows at 0x80229AA4. src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp and src/game/TeamDb.cpp calls the original-byte DbFindUnusedPlayerIds provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpGetOverallRating": {
+      "address": "0x80229CFC",
+      "evidence": "evidence.tsv function and name rows at 0x80229CFC. src/game/cu_80081CDC.cpp calls the original-byte DbYalpGetOverallRating provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpBeginGame": {
+      "address": "0x80229E78",
+      "evidence": "evidence.tsv function and name rows at 0x80229E78. src/engine/dbfnig.c calls the original-byte DbYalpBeginGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbYalpResumeGame": {
+      "address": "0x80229E80",
+      "evidence": "evidence.tsv function and name rows at 0x80229E80. src/engine/dbfnig.c calls the original-byte DbYalpResumeGame provider (src/engine/dbyalp.c is a registered comparison, not linked; w2d fix round)."
+    },
+    "DbMttsBeginGame": {
+      "address": "0x8022C02C",
+      "evidence": "evidence.tsv function and name rows at 0x8022C02C. src/engine/dbfnig.c calls the original-byte DbMttsBeginGame provider (src/engine/dbmtts.c is a registered comparison)."
+    },
+    "DbMttsResumeGame": {
+      "address": "0x8022C098",
+      "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/dbmtts.c is a registered comparison)."
+    },
+    "DbFindUnusedTeamIds": {
+      "address": "0x8022C628",
+      "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
     }
   },
   "units": [
@@ -4571,6 +4607,71 @@
           "end": "0x803EC00C"
         }
       ]
+    },
+    {
+      "source": "src/engine/dbsplp.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x80229E88-0x8022A428 (src/engine/dbsplp.c), its function, name, type and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); every function exact, its complete .text and its own .rodata and .data linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80229E88",
+          "end": "0x8022A428"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B2CA0",
+          "end": "0x802B2F64"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA180",
+          "end": "0x802FA600"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbsrpt.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The file's .sdata 0x803EC030-0x803EC03C and .bss 0x803A2390-0x803A23E8 link from this file; its query strings keep their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C0E0",
+          "end": "0x8022C628"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022C81C",
+          "end": "0x8022C894"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC030",
+          "end": "0x803EC03C"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A2390",
+          "end": "0x803A23E8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "DbFindUnusedTeamIds",
+            "evidence": "evidence.tsv source-form 0x8022C628-0x8022C81C"
+          }
+        ],
+        "evidence": "w2d merge notes (PR #1490 holdouts table): src/engine/dbsrpt.c holds out DbFindUnusedTeamIds (0x8022C628)."
+      }
     },
     {
       "source": "src/engine/dbevas.c",
@@ -28300,21 +28401,220 @@
       ]
     },
     {
-      "source": "src/engine/cu_8022C9A8.c",
+      "source": "src/engine/dbuslp.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row of src/engine/cu_8022C9A8.c (0x8022C9A8-0x8022EA74), its function rows and the data row of its .rodata 0x802B5078-0x802B5080; the whole file links: all 66 functions exact.",
+      "evidence": "evidence.tsv provisional unit row 0x8022C9A8-0x8022D6E8 (src/engine/dbuslp.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",
+      "link_roots": {
+        "symbols": [
+          "DbUslpAllocNodes",
+          "DbUslpFreeNodes",
+          "DbBuildPendingNodeList",
+          "DbUslpClearLists",
+          "DbUslpSortOpen",
+          "DbUslpFindSlot",
+          "DbUslpFindPlayer",
+          "DbUslpListRemove",
+          "DbUslpListPush",
+          "DbUslpAllocEntries",
+          "DbUslpFreeEntries",
+          "DbUslpOpenSlotCursor",
+          "DbUslpCloseSlotCursor",
+          "DbUslpApplyStoredSlots",
+          "DbAssignPendingNodeIds",
+          "DbUslpFilterNone",
+          "DbUslpModuleInit",
+          "DbUslpModuleShutdown",
+          "DbUslpResetFilter1",
+          "DbUslpSetFilter1",
+          "DbUslpSetFilter2",
+          "DbUslpRunStep",
+          "DbUslpFillSlots",
+          "DbUslpFinish",
+          "DbUslpGetSlotPlayer",
+          "DbOpenDepthChartCursor",
+          "DbCloseDepthChartCursor",
+          "DbLoadTeamDepthChart"
+        ],
+        "discarded": [
+          "DbUslpDeleteSlot",
+          "DbUslpInsertSlot",
+          "DbUslpDeletePlayerSlots",
+          "DbUslpDeletePlayer"
+        ],
+        "evidence": "evidence.tsv linker rows of src/engine/dbuslp.c: the target keeps the listed functions; the discarded ones have no code in the target while their query strings remain in its .rodata."
+      },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022C9A8",
+          "end": "0x8022D6E8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B45F0",
+          "end": "0x802B4920"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA8B0",
+          "end": "0x802FA8C0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A23E8",
+          "end": "0x803A25F0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC048",
+          "end": "0x803EC064"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbthcd.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022D6E8-0x8022DA90 (src/engine/dbthcd.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",
+      "link_roots": {
+        "symbols": [
+          "DbThcdModuleInit",
+          "DbThcdModuleShutdown",
+          "DbThcdGetMaxDepth",
+          "DbThcdSetEntry",
+          "DbThcdGetFallbackPosition",
+          "DbThcdBeginGame",
+          "DbThcdResumeGame",
+          "DbThcdSetSlotPlayer",
+          "DbThcdSetLineup",
+          "DbThcdSetLineups"
+        ],
+        "discarded": [
+          "DbThcdFillFromRoster",
+          "DbThcdSumRatings",
+          "DbThcdGetPositionPlayers",
+          "DbThcdGetDepth",
+          "DbThcdRemovePlayerPosition",
+          "DbThcdRemovePlayer",
+          "DbThcdCopyTeam",
+          "DbThcdRebuildTeam",
+          "DbThcdReadTeam"
+        ],
+        "evidence": "evidence.tsv linker rows of src/engine/dbthcd.c: the target keeps the listed functions; the discarded ones have no code in the target while their query strings remain in its .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022D6E8",
+          "end": "0x8022DA90"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B4920",
+          "end": "0x802B4E9C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA8C0",
+          "end": "0x802FB270"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC064",
+          "end": "0x803EC068"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbfnig.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022DA90-0x8022E568 (src/engine/dbfnig.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",
+      "link_roots": {
+        "symbols": [
+          "DbFnigModuleInit",
+          "DbFnigModuleShutdown",
+          "DbResetGameInfo",
+          "DbFnigSetHomeTeam",
+          "DbFnigSetAwayTeam",
+          "DbFnigSetHomeOffPlaybook",
+          "DbFnigSetHomeDefPlaybook",
+          "DbFnigSetAwayOffPlaybook",
+          "DbFnigSetAwayDefPlaybook",
+          "fn_8022DD4C",
+          "fn_8022DD80",
+          "DbFnigWriteBlock",
+          "DbUpdateSettingsRecord",
+          "DbFnigCopyGamePlayers",
+          "DbRunUpdateChain",
+          "DbRunLoadChain",
+          "fn_8022E558",
+          "fn_8022E560"
+        ],
+        "discarded": [
+          "DbFnigSetDotg",
+          "DbFnigSetHtwg",
+          "DbFnigSetColumn",
+          "DbFnigDecOthg",
+          "DbFnigDecOtag",
+          "DbFnigAddHchg",
+          "DbFnigAddHcag",
+          "DbFnigSetFloatColumn",
+          "DbFnigCopyGameDepthCharts",
+          "DbFnigGetTeams"
+        ],
+        "evidence": "evidence.tsv linker rows of src/engine/dbfnig.c: the target keeps the listed functions; the discarded ones have no code in the target while their query strings remain in its .rodata."
+      },
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022DA90",
+          "end": "0x8022E568"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B4EA0",
+          "end": "0x802B5A48"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC068",
+          "end": "0x803EC084"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/dbleague.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022E568-0x8022EA74 (src/engine/dbleague.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_8022C9A8.c); every kept function exact, its complete .text and its own .rodata, .data, .bss and .sdata linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8022E568",
           "end": "0x8022EA74"
         },
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B5078",
-          "end": "0x802B5080"
+          "start": "0x802B5A48",
+          "end": "0x802B5C1C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC084",
+          "end": "0x803EC09C"
         }
       ]
     },

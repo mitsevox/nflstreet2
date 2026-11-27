@@ -27,8 +27,8 @@ int DbUserGetId(int index);
 int DbUserGetDb(int handle);
 int TDbTblFindUnusedId(int handle, int *pTable);
 int TDbTblDestroy(int handle, int table);
-int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 int MemCardFilesNeedsSave(int type, int index);
 void MemCardFilesStoreChecksum(int type, int index);
 int PortraitAllocSlot(int value, int group);
@@ -89,7 +89,7 @@ int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
     int ytrp;
-    fn_8022C628(destination, 0x4D414554, &team, &teamCount);
+    DbFindUnusedTeamIds(destination, 0x4D414554, &team, &teamCount);
     TDbTblFindUnusedId(destination, &table);
     TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
     TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
@@ -111,7 +111,7 @@ int StoryTeamLoad(int source, int teamTable, int playerTable, int destination,
         } else {
             count = *pCount;
         }
-        fn_80229AA4(destination, 0x59414C50, ids, &count);
+        DbFindUnusedPlayerIds(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
             TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
@@ -335,7 +335,7 @@ void CopyRdrcPlayersToTeam(int index, int team, int rumt)
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     TDbTblGetCount(0x54415453, 0x52445243, &arg, &total);
     count = total;
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;

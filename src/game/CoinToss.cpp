@@ -90,7 +90,7 @@ void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
 int MathArcTan2(float y, float x);
 void Vec2Sub(void *pOut, void *pA, void *pB);
-int fn_8022DDB4(int tag, void *data);
+int DbFnigWriteBlock(int tag, void *data);
 float SyncRandGetFloat(int stream);
 void *SyncStateGetData(void *pHandle);
 
@@ -483,7 +483,7 @@ void CoinTossApplyResult(void)
         ScrmMirrorField(1, 1);
     }
     if (FELoopIsMainFEActive() == 0) {
-        fn_8022DDB4(0x53544347, &_CoinToss_pState->mUnknown40);
+        DbFnigWriteBlock(0x53544347, &_CoinToss_pState->mUnknown40);
     }
 }
 

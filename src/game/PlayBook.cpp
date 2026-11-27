@@ -1897,7 +1897,7 @@ void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int co
 
 extern "C" {
 int fn_8011F1CC(void);
-int fn_8022DDB4(int tag, void *data);
+int DbFnigWriteBlock(int tag, void *data);
 unsigned char PlayTrackMatchesGainFlags(FieldPoint_t *pTo);
 float PlayTrackGetPlayIdRate(void);
 float PlayTrackGetResult5Rate(void);
@@ -2141,7 +2141,7 @@ void PlayTrackReset(void)
 
 void PlayTrackRegister(void)
 {
-    fn_8022DDB4(0x53545047, _PlayTrack_pData);
+    DbFnigWriteBlock(0x53545047, _PlayTrack_pData);
 }
 
 extern "C" {
