@@ -171,8 +171,9 @@ void SNDSTRMI_startstream(SndStreamChannel_t *channel)
 int SNDSTRMI_calcdatarate(SndSampleFormat_t *format)
 {
     int bits = 0;
-    int rate = format->mRate * format->mChannels;
+    int rate = format->mRate;
 
+    rate *= format->mChannels;
     if (format->mCodec == 10) {
         bits = 136;
     } else if (format->mCodec == 4) {

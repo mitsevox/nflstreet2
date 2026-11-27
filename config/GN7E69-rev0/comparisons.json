@@ -29518,7 +29518,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 17 functions are exact and linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 18 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29540,11 +29540,6 @@
         }
       ],
       "functions": [
-        {
-          "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
-          "start": "0x8026D53C",
-          "end": "0x8026D5B4"
-        },
         {
           "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
           "start": "0x8026D9CC",

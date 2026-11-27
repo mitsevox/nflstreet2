@@ -24029,18 +24029,12 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 17 of 20 functions exact, the holdouts SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 18 of 20 functions exact, the holdouts SNDSTRMI_parsedata and SNDSTRMI_create keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8026D200",
-          "end": "0x8026D53C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026D5B4",
           "end": "0x8026D9CC"
         },
         {
@@ -24071,10 +24065,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
-            "evidence": "evidence.tsv source-form 0x8026D53C-0x8026D5B4"
-          },
-          {
             "function": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
             "evidence": "evidence.tsv source-form 0x8026D9CC-0x8026DAE4"
           },
@@ -24083,7 +24073,7 @@
             "evidence": "evidence.tsv source-form 0x8026DE00-0x8026E160"
           }
         ],
-        "evidence": "src/engine/sst.c holds out SNDSTRMI_calcdatarate, SNDSTRMI_parsedata and SNDSTRMI_create (round 6 lane 5 link); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
+        "evidence": "src/engine/sst.c holds out SNDSTRMI_parsedata and SNDSTRMI_create (round 6 lane 5 link; SNDSTRMI_calcdatarate exact in the same PR); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
       }
     },
     {
