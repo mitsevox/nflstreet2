@@ -13,7 +13,7 @@ int fn_8011F1F4(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int ScrmGetOffenseTeam(void);
 int ScrmIsFieldFlipped(void);
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 }
 
 static float _PassIcon_fHeight = 2.5f;
@@ -64,7 +64,7 @@ void PassIconsCreate(void *pOwner)
 
     PassIconObjRegister(pOwner);
     for (i = 0; i < 3; i++) {
-        _PassIcon_pIcons[i] = PassIconObjNew(pOwner, i, StadiumGetArchive(), i + 1);
+        _PassIcon_pIcons[i] = PassIconObjNew(pOwner, i, fn_800C47C4(), i + 1);
     }
 }
 

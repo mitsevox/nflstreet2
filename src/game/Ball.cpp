@@ -24,7 +24,7 @@ void BallModelReplayPlayback(Block_80170E64 *pBlock, int a, int b, int c, int d,
 void ReplayRegisterChannel(void (*pCallback0)(int a), void (*pCallback4)(int a, int b, int c, int d, float e), int size, const char *pName);
 void SpchIGSetBallCarrier(int id);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 void BallSyncModel(Ball_t *pBall);
 void BallStepGroundContact(Ball_t *pBall, float step);
 void BallFollowHolder(Ball_t *pBall, float value);
@@ -371,7 +371,7 @@ void BallsCreateModels(int a)
             notFirst = 1;
         }
 
-        pBalls[i].mpUnknown00 = BallModelNew(a, pFirst, StadiumGetArchive(), 0xD, notFirst);
+        pBalls[i].mpUnknown00 = BallModelNew(a, pFirst, fn_800C47C4(), 0xD, notFirst);
         if (i == 0) {
             pFirst = pBalls->mpUnknown00;
         }

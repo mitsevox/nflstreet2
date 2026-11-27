@@ -73,7 +73,7 @@ int BigObjEffectSlotCount(int index);
 void fn_800A3170(void);
 void fn_800A3450(void);
 int fn_800A34C8(int index);
-void *StadiumGetArchive(void);
+void *fn_800C47C4(void);
 void FxParticleDrawBegin(void);
 void FxParticleDrawEnd(void);
 void FxAnimTexLoadAll(AnimTexFile_t *pEntries, AnimTex_t **pValues, void *pData);
@@ -188,7 +188,7 @@ void ParticleSysFreeDrawList(void)
 void ParticleSysLoadEffect(int index, int id)
 {
     char desc[1632];
-    void *pArchive = StadiumGetArchive();
+    void *pArchive = fn_800C47C4();
     void *pBuffer = fn_801D2BB0(1, ResGetSize(pArchive, _ParticleSys_aEffectFiles[index].mFile), 4, 0);
     void *pData = ResLoadToBuffer(pArchive, _ParticleSys_aEffectFiles[index].mFile, pBuffer);
 
@@ -328,7 +328,7 @@ void ParticleSysInit(int handle)
     }
     _ParticleSys_AnimTexConfig.unk_0x4 = gParticleAnimTexFlag;
     AnimTexLibInit(&_ParticleSys_AnimTexConfig);
-    FxAnimTexLoadAll(_ParticleSys_aAnimTexFiles, _ParticleSys_apAnimTex, StadiumGetArchive());
+    FxAnimTexLoadAll(_ParticleSys_aAnimTexFiles, _ParticleSys_apAnimTex, fn_800C47C4());
     ParticleLibInit(&_ParticleSys_EmitterDesc);
     ParticleSysLoadEffects();
     ParticleSysAllocDrawList();

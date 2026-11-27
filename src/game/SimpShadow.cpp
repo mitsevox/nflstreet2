@@ -24,7 +24,7 @@ struct SimpShadowEntry {
 };
 
 extern "C" {
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 int GlibRenderGetBin(int index);
 int GlibRenderSelectBin(int a);
 void MatSetStack(int a);
@@ -108,7 +108,7 @@ void SimpShadowInit(void)
     }
     for (i = 0; i < 1; i++) {
         ResTextureClear(&_SimpShadow_aTextures[i]);
-        ResTextureOpen(&_SimpShadow_aTextures[i], 0, StadiumGetArchive(), _SimpShadow_aiTextureIds[i], "LLSimpShadow");
+        ResTextureOpen(&_SimpShadow_aTextures[i], 0, fn_800C47C4(), _SimpShadow_aiTextureIds[i], "LLSimpShadow");
     }
     _SimpShadow_uCount = 0;
     _SimpShadow_bInit = 1;

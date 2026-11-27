@@ -17887,7 +17887,7 @@
           "end": "0x800C47C4"
         },
         {
-          "symbol": "StadiumGetArchive",
+          "symbol": "fn_800C47C4",
           "start": "0x800C47C4",
           "end": "0x800C47EC"
         },

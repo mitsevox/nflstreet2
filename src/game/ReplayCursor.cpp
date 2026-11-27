@@ -18,7 +18,7 @@ struct ReplayCursor_t {
 };
 
 extern "C" {
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int a);
 void MatPush(void);
@@ -99,7 +99,7 @@ void ReplayCursorCreate(int handle)
 
     ObjNewType_(10, sizeof(ReplayCursor_t), 1, ReplayCursorObjInit, ReplayCursorObjRelease);
     ObjSetListObjFunc(handle, 10, 0, ReplayCursorObjDraw);
-    desc[0] = StadiumGetArchive();
+    desc[0] = fn_800C47C4();
     desc[1] = 7;
     _ReplayCursor_pObject = (ReplayCursor_t *)ObjNewInList(handle, 10, 0, desc);
     ObjSetPriority(handle, _ReplayCursor_pObject, 3);

@@ -25,7 +25,7 @@ struct PassIconClut {
 };
 
 extern "C" {
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 Mtx44Ptr MatGetCurMatrixPtr(void);
 void TMRenderReset(void);
 void TMTexLibLoad(PassIconTexLib *pElement, int a);
@@ -59,7 +59,7 @@ void PassIconTexLoad(void)
 {
     int i;
 
-    _PassIconTex_hTextures = ResLoad((void *)StadiumGetArchive(), 4, 1);
+    _PassIconTex_hTextures = ResLoad((void *)fn_800C47C4(), 4, 1);
     TMTexLibLoad(&_PassIconTex_TexLib, _PassIconTex_hTextures);
     for (i = 0; i < 3; i++) {
         _PassIconTex_apTextures[i] = TMTexLibGetTexture(&_PassIconTex_TexLib, 0xFF000000 + i);
@@ -78,7 +78,7 @@ void PassIconTexFree(void)
 {
     TMTexLibUnload(&_PassIconTex_TexLib);
     _PassIconTex_hTextures = 0;
-    ResUnLoad((void *)StadiumGetArchive(), 4);
+    ResUnLoad((void *)fn_800C47C4(), 4);
     _PassIconTex_bLoaded = 0;
 }
 

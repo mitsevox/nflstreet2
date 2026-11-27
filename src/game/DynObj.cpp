@@ -153,7 +153,7 @@ unsigned char ObjParseGetFloats(int handle, const char *pKey, float *pValues, in
 int ObjParseGetVector(int handle, const char *pKey, float *pValues);
 int ObjParseGetCursor(int handle);
 void ObjParseSetCursor(int handle, int position);
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 void ParticleSysSetEffectFile(int type, int index);
 int ResFindIndexByName(int set, const char *pName);
 void BigObjEmitParticles(void *pData, float t, BigObjInst *pObject, BigObj_t *pOwner);
@@ -1202,7 +1202,7 @@ void BigObjParseSwapEvent(int handle, BigObjInst *pObject)
                 pEmitter->mUnknown40 = 1;
             }
             if (ObjParseGetString(handle, "psf", text, 64)) {
-                int index = ResFindIndexByName(StadiumGetArchive(), text);
+                int index = ResFindIndexByName(fn_800C47C4(), text);
 
                 if (index == -1) {
                     pEmitter->mUnknown0 = 21;

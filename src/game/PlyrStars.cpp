@@ -94,7 +94,7 @@ int ObjSetListObjFunc(void *, int, int, int (*)(PlyrStar_t *));
 int ObjNewInList(void *, int, int, void *);
 void ObjSetPriority(void *, int, int);
 void ObjRemoveFromList(void *, int);
-void *StadiumGetArchive(void);
+void *fn_800C47C4(void);
 void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float), int,
                  const char *);
@@ -430,7 +430,7 @@ void PlyrStarDelete(void *arg, PlyrStar_t *item) {
     }
 }
 void PlyrStarInit(void *arg) {
-    void *data = StadiumGetArchive();
+    void *data = fn_800C47C4();
     PlyrStarRegisterType(arg);
     PlyrStar_t *shared = 0;
     for (unsigned int i = 0; i < 9; ++i) {

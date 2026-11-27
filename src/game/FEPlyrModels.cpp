@@ -76,7 +76,7 @@ int fn_800ADEFC(void *pObject, unsigned int a);
 void MotionClear(Object_800B267C *pObject);
 void MotionIntegrate(Object_800B267C *pObject);
 void MotionApplyInput(Object_800B267C *pObject, unsigned char *a);
-int StadiumGetArchive(void);
+int fn_800C47C4(void);
 void fn_800D7A0C(FEPlyrModel_t *pRecord, int a);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
@@ -366,7 +366,7 @@ void FEPlyrInit(int count)
     }
     FEPlyrLoadInit();
     BallModelRegisterType(0);
-    desc.mUnknown0 = StadiumGetArchive();
+    desc.mUnknown0 = fn_800C47C4();
     desc.mUnknown8 = 0;
     desc.mUnknown12 = 0;
     pView = ObjNew(3, 0, &desc);

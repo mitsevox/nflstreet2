@@ -7688,7 +7688,7 @@ extern "C" void fn_800C471C(int handle);
 
 extern "C" void FieldUpdateEffects(float dt);
 
-extern "C" void *StadiumGetArchive(void);
+extern "C" void *fn_800C47C4(void);
 
 extern "C" void fn_800C47EC(LevelData_t *pLevel);
 
@@ -17140,7 +17140,7 @@ extern "C" void fn_800A2D2C(void)
             }
         }
         lbl_8030E6E8.mUnknown6C[i + 8] = count;
-        ParticleSysSetEffectFile(i + 8, ResFindIndexByName(StadiumGetArchive(), &gLevelData->mUnknown52[i * 24]));
+        ParticleSysSetEffectFile(i + 8, ResFindIndexByName(fn_800C47C4(), &gLevelData->mUnknown52[i * 24]));
     }
 }
 
@@ -17170,7 +17170,7 @@ extern "C" void fn_800A2F48(void)
     lbl_8030E6E8.mUnknown1C = lbl_802D7D00[lbl_8030E6E8.mUnknown0];
     lbl_803EA9F4 = ResOpenDevice(lbl_802EBFB4, 44);
     LevelLoad();
-    GlowInit(StadiumGetArchive());
+    GlowInit(fn_800C47C4());
     GlowSetScale(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);
     fn_800A2D2C();
     fn_800A29D8(lbl_8030E6E8.mUnknown0);
@@ -32870,7 +32870,7 @@ extern "C" void FieldUpdateEffects(float dt)
     RouteArrowUpdateHighlights();
 }
 
-extern "C" void *StadiumGetArchive(void)
+extern "C" void *fn_800C47C4(void)
 {
     return gStaData.GetArchive();
 }
