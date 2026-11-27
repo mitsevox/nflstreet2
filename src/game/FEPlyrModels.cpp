@@ -88,8 +88,8 @@ void UISGameSetDrawMode(int a);
 void UISViewObjSetDrawFunc(void (*pCallback)(int, float, float, float, float));
 void AnimChanProcess(AnimHeader_t *pObject, void *a, float b, FEPlyrModel_t *pRecord);
 int AnimMotCreateWeightList(AnimHeader_t *pObject, void *a, void *b);
-int fn_801BCA74(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
-int fn_801BCCAC(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
+int AnimMotBlendRootAngle(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
+int AnimMotBlendRootOffset(AnimHeader_t *pObject, void *a, int b, void *c, int d, int e);
 void fn_801BE420(void *a, AnimHeader_t *pObject, void *b, FEPlyrModel_t *pRecord, float c);
 void GlibSetZBufferEnable(int a);
 float MathTan(int a);
@@ -206,8 +206,8 @@ static void _FEPlyrUpdateAnims(FEPlyrModel_t *pRecord, float step)
     AnimChanProcess(&pRecord->mUnknown1244, pRecord->mUnknown1256, step, pRecord);
     result = AnimMotCreateWeightList(&pRecord->mUnknown1244, pRecord->mUnknown1256, pRecord->mUnknown2496);
     PlyrPoseBlendEntries(pObject, result);
-    pRecord->mUnknown544 = fn_801BCA74(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown548, 0xFFFF, 1);
-    pRecord->mUnknown545 = fn_801BCCAC(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown552,
+    pRecord->mUnknown544 = AnimMotBlendRootAngle(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown548, 0xFFFF, 1);
+    pRecord->mUnknown545 = AnimMotBlendRootOffset(&pRecord->mUnknown1244, pRecord->mUnknown1256, result, pRecord->mUnknown552,
                                        fn_801BE648(pRecord->mUnknown792), (pRecord->mUnknown12 & 0x200) == 0);
     PlyrPoseBlendRootAngles(pObject, pRecord->mUnknown1256, pRecord->mUnknown1244.mUnknown4, pRecord->mUnknown2496);
 }

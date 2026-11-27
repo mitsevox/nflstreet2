@@ -540,7 +540,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(&luma[0], 16);
         } else {
-            fn_801DB670(&luma[0], 16);
+            idctcompute(&luma[0], 16);
         }
     } else {
         bias = getdelta() * 2 - 128;
@@ -550,7 +550,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(&luma[8], 16);
         } else {
-            fn_801DB670(&luma[8], 16);
+            idctcompute(&luma[8], 16);
         }
     } else {
         bias = getdelta() * 2 - 128;
@@ -560,7 +560,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(&luma[128], 16);
         } else {
-            fn_801DB670(&luma[128], 16);
+            idctcompute(&luma[128], 16);
         }
     } else {
         bias = getdelta() * 2 - 128;
@@ -570,7 +570,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(&luma[136], 16);
         } else {
-            fn_801DB670(&luma[136], 16);
+            idctcompute(&luma[136], 16);
         }
     } else {
         bias = getdelta() * 2 - 128;
@@ -580,7 +580,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(madchroma[0], 8);
         } else {
-            fn_801DB670(madchroma[0], 8);
+            idctcompute(madchroma[0], 8);
         }
     } else {
         bias = getdelta() * 2 - 128;
@@ -590,7 +590,7 @@ void MAD_decodemacroblock(const unsigned char *pRefY, const unsigned char *pRefU
         if (madvlcdecode() == 1) {
             dcblock(madchroma[1], 8);
         } else {
-            fn_801DB670(madchroma[1], 8);
+            idctcompute(madchroma[1], 8);
         }
     } else {
         bias = getdelta() * 2 - 128;
