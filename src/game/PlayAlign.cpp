@@ -226,7 +226,7 @@ int PauseIsOpen(void);
 void Vec2Add(void *, void *, void *);
 float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
-int fn_801C2E18(char *, const char *, ...);
+int sprintf(char *, const char *, ...);
 int DbTextToTag(const char *);
 int ScrmGetOffenseTeam(void);
 unsigned int ScrmGetTeamPlayerCount(int);
@@ -527,15 +527,15 @@ int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, u
         for (int j = 0; j < steps; ++j) {
             // FAKEMATCH: ax sized 5 (the formatted name and its NUL) so it is not a DImode array
             char ax[5], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
-            fn_801C2E18(ax, "ax%02d", j+1);
-            fn_801C2E18(ay, "ay%02d", j+1);
-            fn_801C2E18(au, "au%02d", j+1);
-            fn_801C2E18(av, "av%02d", j+1);
-            fn_801C2E18(at, "at%02d", j+1);
-            fn_801C2E18(sp, "sp%02d", j+1);
-            fn_801C2E18(ct, "ct%02d", j+1);
-            fn_801C2E18(lt, "lt%02d", j+1);
-            fn_801C2E18(ls, "ls%02d", j+1);
+            sprintf(ax, "ax%02d", j+1);
+            sprintf(ay, "ay%02d", j+1);
+            sprintf(au, "au%02d", j+1);
+            sprintf(av, "av%02d", j+1);
+            sprintf(at, "at%02d", j+1);
+            sprintf(sp, "sp%02d", j+1);
+            sprintf(ct, "ct%02d", j+1);
+            sprintf(lt, "lt%02d", j+1);
+            sprintf(ls, "ls%02d", j+1);
             int x, y, u, v, type, speed, link, arrow, color;
             int axTag = DbTextToTag(ax), ayTag = DbTextToTag(ay), atTag = DbTextToTag(at);
             int auTag = DbTextToTag(au), avTag = DbTextToTag(av), ctTag = DbTextToTag(ct);

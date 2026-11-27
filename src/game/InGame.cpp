@@ -11,6 +11,7 @@
 #include "game/TDbCompilePerformOp.h"
 #include "game/InGame.h"
 #include "game/GameModules.h"
+#include "game/InGameModules.h"
 #include "game/TimeScale.h"
 #include "game/DepthChartSide.h"
 #include "game/MemCardUtil.h"
@@ -20,8 +21,6 @@
 
 extern "C" {
 double fabs(double);
-extern char lbl_8030716C[];
-extern char lbl_803072C4[];
 extern float gFrameTimeScale;
 extern void *gpReplay;
 extern void *gUISMainInfo;
@@ -136,7 +135,7 @@ static int _InGame_iFrameCount;
 static int _InGame_iPauseCount;
 static int _InGame_bInputPaused;
 
-static ModuleDependency sDependencies[] = { &gUIS, lbl_8030716C, lbl_803072C4, 0 };
+static ModuleDependency sDependencies[] = { &gUIS, &gPause, &gReplay, 0 };
 InGame gInGame;
 
 static void _InGamePadHandler(int a, int b, float c)

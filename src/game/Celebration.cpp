@@ -1,14 +1,13 @@
 #include "game/GameState.h"
 #include "game/GameModules.h"
+#include "game/InGameModules.h"
 
 extern "C" {
-extern char lbl_80306DFC[];
-
 void CelebrationBlocksInit(void *);
 void fn_8009B7E0(void);
 }
 
-static ModuleDependency sDependencies[] = { &gGameState, &gAnimData, lbl_80306DFC, 0 };
+static ModuleDependency sDependencies[] = { &gGameState, &gAnimData, &gAnimScriptMan, 0 };
 static ModuleDependency sLinks[] = { &gAnmsCelebration, 0 };
 Celebration gCelebration;
 

@@ -7,7 +7,7 @@ struct PlayerHeadIds_t {
     int mUnknown4;
 };
 
-/* Field accessors of the player records gPlayerLooks, defined in
+/* Field accessors of the player records _PlayerLook_aLooks, defined in
    src/game/PlayerLook.cpp. */
 extern "C" {
 void PlayerLookApply(int player);

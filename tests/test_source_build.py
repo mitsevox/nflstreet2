@@ -1162,7 +1162,7 @@ class Holdouts(Fixture):
                                 comparisons or self.COMPARISONS, self.EVIDENCE if evidence is None else evidence)
 
     def native(self, symbols=None, b_size=12, c_align=4, a_relocations=((0, 7, 10, 0), (4, 4, 10, 0)),
-               b_relocations=((0, 6, 10, 0),)):
+               b_relocations=((0, 6, 10, 0),), rodata_size=8, rodata_relocations=((0, 3, 1, 4), (4, 9, 1, 0))):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         path = Path(temporary.name) / "unit.o"
@@ -1173,12 +1173,107 @@ class Holdouts(Fixture):
         for symbol in symbols:
             if symbol["name"] == "b":
                 symbol["size"] = b_size
-        sb.write_object(path, code + [rodata(8)], symbols)
+        sb.write_object(path, code + [rodata(rodata_size)], symbols)
         with_relocations(path, 1, a_relocations)  # a, by default: call b; branch to c's section
         with_relocations(path, 2, b_relocations)  # b, by default: call a (dropped with b)
         with_relocations(path, 3, ((0, 5, 6, 0), (4, 10, 10, 0)))  # c: .rodata; call Other
-        with_relocations(path, 4, ((0, 3, 1, 4), (4, 9, 1, 0)))    # .rodata: into b's section; Label
+        with_relocations(path, 4, rodata_relocations)  # .rodata, by default: into b's section; Label
         return path
+
+    def test_a_holdout_pool_keeps_the_tail_of_its_data_section(self):
+        # b's constant pool is the 4-byte tail of .rodata (offset 8): the unit links .rodata
+        # 0x80004008-0x80004010 and the pool word 0x80004010-0x80004014 keeps the original bytes.
+        pool = {"section": ".rodata", "start": "0x80004010", "end": "0x80004014"}
+        manifest = self.held_manifest(functions=({"function": "b", "evidence": self.LOCATORS["b"], "pool": pool},))
+        units, _, _ = self.held(manifest)
+        self.assertEqual(units[0]["holdouts"][0]["pool"],
+                         {"section": ".rodata", "start": 0x80004010, "end": 0x80004014, "offset": 8})
+        # b loads its pool word (.rodata + 8); the pool word itself names Other.
+        tail = ((0, 3, 1, 4), (4, 9, 1, 0), (8, 10, 1, 0))
+        unit = dict(units[0], object=self.native(b_relocations=((0, 6, 10, 0), (4, 5, 6, 8)), rodata_size=12,
+                                                 rodata_relocations=tail))
+        sb.link_object(unit)
+        derived = unit["link_object"].read_bytes()
+        sections, _ = sb.read_elf(derived)
+        self.assertEqual(next(s["size"] for s in sections if s["name"] == ".rodata"), 8)
+        self.assertEqual(unit["held"]["pools"], [{"symbol": "b", "section": ".rodata", "start": 0x80004010,
+                                                  "end": 0x80004014, "compiled": 4}])
+        self.assertNotIn("Other", [name for at, name, kind, addend in relocations(derived) if at == 8])
+        # Any other function or data word that reaches the tail fails, as does a pool that does not
+        # start where the configured range ends or a tail the section does not compile.
+        unit = dict(units[0], object=self.native(a_relocations=((0, 7, 10, 0), (4, 5, 6, 8)), rodata_size=12,
+                                                 rodata_relocations=tail))
+        with self.assertRaisesRegex(ValueError, "reaches holdout b's pool"):
+            sb.link_object(unit)
+        unit = dict(units[0], object=self.native(rodata_size=8))
+        with self.assertRaisesRegex(ValueError, "does not compile past offset 0x8"):
+            sb.link_object(unit)
+        manifest = self.held_manifest(functions=({"function": "b", "evidence": self.LOCATORS["b"],
+                                                  "pool": dict(pool, start="0x80004014", end="0x80004018")},))
+        with self.assertRaisesRegex(ValueError, "pool must start where"):
+            self.held(manifest)
+
+    def test_a_holdout_pool_fails_closed(self):
+        pool = {"section": ".rodata", "start": "0x80004010", "end": "0x80004014"}
+        b = {"function": "b", "evidence": self.LOCATORS["b"], "pool": pool}
+        units, _, _ = self.held(self.held_manifest(functions=(b,)))
+        reaches = ((4, 5, 6, 8),)  # b loads its pool word, .rodata + 8
+        tail = ((0, 3, 1, 4), (4, 9, 1, 0), (8, 10, 1, 0))
+
+        def link(**native):
+            native.setdefault("b_relocations", ((0, 6, 10, 0),) + reaches)
+            native.setdefault("rodata_relocations", tail)
+            sb.link_object(dict(units[0], object=self.native(rodata_size=12, **native)))
+
+        link()  # the accepted shape, as in the test above
+        # A .rodata word before the cut that points into the tail is a data reference to the pool.
+        with self.assertRaisesRegex(ValueError, r"\.rodata reaches holdout b's pool \(section \+ 0x8\)"):
+            link(rodata_relocations=((0, 5, 1, 8), (4, 9, 1, 0), (8, 10, 1, 0)))
+        # An object that straddles the cut, or a global symbol in the tail, is not the holdout's pool.
+        across = {"name": "Across", "value": 4, "size": 8, "shndx": 4, "bind": sb.STB_LOCAL}
+        with self.assertRaisesRegex(ValueError, "Across lies in or across holdout b's pool"):
+            link(symbols=self.SYMBOLS + [across])
+        tail_global = {"name": "TailWord", "value": 8, "size": 4, "shndx": 4}
+        with self.assertRaisesRegex(ValueError, "TailWord lies in or across holdout b's pool"):
+            link(symbols=self.SYMBOLS + [tail_global])
+        # Another holdout of the same unit (a) may not reach b's pool either.
+        both = self.held_manifest(functions=({"function": "a", "evidence": self.LOCATORS["a"]}, b),
+                                  runs=(("0x80003120", "0x80003128"),))
+        units, _, _ = self.held(both)
+        link(a_relocations=((0, 7, 10, 0),))
+        with self.assertRaisesRegex(ValueError, r"\.text\.a reaches holdout b's pool"):
+            link(a_relocations=((0, 7, 10, 0),) + reaches)
+        # One pool per data section, and a pool ends inside its placement (.data2 ends at 0x80004020).
+        two = self.held_manifest(functions=({"function": "a", "evidence": self.LOCATORS["a"], "pool": pool}, b),
+                                 runs=(("0x80003120", "0x80003128"),))
+        with self.assertRaisesRegex(ValueError, "two holdouts keep a pool at the end of the same data section"):
+            self.held(two)
+        past = self.held_manifest(functions=(dict(b, pool=dict(pool, end="0x80004024")),))
+        with self.assertRaisesRegex(ValueError, "pool must start where"):
+            self.held(past)
+        self.held(self.held_manifest(functions=(dict(b, pool=dict(pool, end="0x80004020")),)))
+        # A pool is initialized data: one declared on a code section (where the unit's first .text
+        # run ends) or on an uninitialized section (where its .bss range ends) fails.
+        code = self.held_manifest(functions=(dict(b, pool={"section": ".text", "start": "0x80003118",
+                                                           "end": "0x80003120"}),))
+        with self.assertRaisesRegex(ValueError, "pool must start where the unit's configured .text range ends"):
+            self.held(code)
+        uninitialized = self.held_manifest(functions=(dict(b, pool={"section": ".bss", "start": "0x80005008",
+                                                                    "end": "0x8000500C"}),))
+        uninitialized["units"][0]["sections"].append({"section": ".bss", "placement": ".bss",
+                                                      "start": "0x80005000", "end": "0x80005008"})
+        with self.assertRaisesRegex(ValueError, "pool must start where the unit's configured .bss range ends"):
+            self.held(uninitialized)
+        uninitialized["units"][0]["holdouts"]["functions"] = [b]
+        self.held(uninitialized)  # the same unit loads with its pool on .rodata
+        # The pool's own words may name each other: a tail word relocated to another tail word links.
+        wide = dict(b, pool=dict(pool, end="0x80004018"))
+        units, _, _ = self.held(self.held_manifest(functions=(wide,)))
+        unit = dict(units[0], object=self.native(b_relocations=((0, 6, 10, 0),) + reaches, rodata_size=16,
+                                                 rodata_relocations=((0, 3, 1, 4), (4, 9, 1, 0), (8, 5, 1, 12))))
+        sb.link_object(unit)
+        self.assertEqual(unit["held"]["pools"], [{"symbol": "b", "section": ".rodata", "start": 0x80004010,
+                                                  "end": 0x80004018, "compiled": 8}])
 
     def test_manifest_holdouts(self):
         units, _, _ = self.held()

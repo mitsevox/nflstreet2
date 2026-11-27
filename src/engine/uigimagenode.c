@@ -30,7 +30,7 @@ typedef union UIGImageNodeColorWord_t {
     Uint32 Value;
 } UIGImageNodeColorWord_t;
 
-extern GXLightObj lbl_803E9880;
+GXLightObj LLUIGTexLightObj;
 
 static Float32 _UIGImageNode_afTexMtx[4][4] = {
     { 1.0f, 0.0f, 0.0f, 0.0f },
@@ -584,8 +584,8 @@ void UIGImageNodeSetColors(void)
     Light.Color = pColor->mLightColor;
     if (Mat.Value != _UIGImageNode_uMatColor || Light.Value != _UIGImageNode_uLightColor) {
         GXSetChanMatColor(GX_COLOR0A0, Mat.Color);
-        GXInitLightColor(&lbl_803E9880, Light.Color);
-        GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
+        GXInitLightColor(&LLUIGTexLightObj, Light.Color);
+        GXLoadLightObjImm(&LLUIGTexLightObj, GX_LIGHT7);
         _UIGImageNode_uMatColor = Mat.Value;
         _UIGImageNode_uLightColor = Light.Value;
     }
