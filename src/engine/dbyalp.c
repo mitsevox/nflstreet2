@@ -28,8 +28,8 @@ typedef struct DbYalpWeightRow_t {
     float mWeightSum;
 } DbYalpWeightRow_t;
 
-extern DbYalpWeightRow_t lbl_803A1C60[];
-extern DbYalpWeightRow_t lbl_803A20A4[];
+DbYalpWeightRow_t gDbYalpCropWeights[21];
+DbYalpWeightRow_t gDbYalpRobpWeights[14];
 
 int DbTatsCopyTblDestroy(int db, int tbl);
 
@@ -96,18 +96,18 @@ int DbYalpLoadWeightTable(void *pTable, int tag)
 
 int DbYalpModuleInit(void)
 {
-    int result = DbYalpLoadWeightTable(lbl_803A1C60, 0x43524F50);
+    int result = DbYalpLoadWeightTable(gDbYalpCropWeights, 0x43524F50);
     if (result == 0) {
-        result = DbYalpLoadWeightTable(lbl_803A20A4, 0x524F4250);
+        result = DbYalpLoadWeightTable(gDbYalpRobpWeights, 0x524F4250);
     } else {
-        DbYalpLoadWeightTable(lbl_803A20A4, 0x524F4250);
+        DbYalpLoadWeightTable(gDbYalpRobpWeights, 0x524F4250);
     }
     return result;
 }
 
 int DbYalpModuleShutdown(void)
 {
-    return MemFill((char *)lbl_803A1C60, 1092, 0, 4);
+    return MemFill((char *)gDbYalpCropWeights, 1092, 0, 4);
 }
 
 int DbFindUnusedPlayerIds(int db, int tbl, int *pIds, unsigned short *pCount)
@@ -265,22 +265,22 @@ static unsigned int _DbYalpGetOverallRatingFrom(DbYalpWeightRow_t *pRow, int *pR
 
 float DbYalpGetLowRating(int index)
 {
-    return lbl_803A20A4[index].mLow;
+    return gDbYalpRobpWeights[index].mLow;
 }
 
 float DbYalpGetHighRating(int index)
 {
-    return lbl_803A20A4[index].mHigh;
+    return gDbYalpRobpWeights[index].mHigh;
 }
 
 float DbYalpGetRatingWeight(int index, int item)
 {
-    return lbl_803A20A4[index].aWeights[item];
+    return gDbYalpRobpWeights[index].aWeights[item];
 }
 
 float DbYalpGetWeightSum(int index)
 {
-    return lbl_803A20A4[index].mWeightSum;
+    return gDbYalpRobpWeights[index].mWeightSum;
 }
 
 /* Turns a player's ten ratings into one overall rating (0-99 scale) with weight row index; clamp 1 keeps it within 12-100. */

@@ -26,7 +26,7 @@ struct CardStreamTarget;
 struct SaveStreamOps_t;
 #include "engine/DbUserEntry.h"
 extern char lbl_802B5C8C[];
-extern char lbl_803A1C60[];
+extern char gDbYalpCropWeights[];
 extern char *_DbEvas_pFileName;
 extern int _DbEvas_iMode;
 extern int _DbEvas_iSize;

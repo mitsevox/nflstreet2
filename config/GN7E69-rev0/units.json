@@ -4204,7 +4204,7 @@
     {
       "source": "src/engine/dbyalp.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The file defines its whole native .rodata 0x802B2430-0x802B2CA0, including the literals and pool of its discarded file statics.",
+      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The file defines its whole native .rodata 0x802B2430-0x802B2CA0, including the literals and pool of its discarded file statics. Its two COMMON weight tables gDbYalpCropWeights 0x803A1C60-0x803A20A4 and gDbYalpRobpWeights 0x803A20A4-0x803A237C are placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "link_roots": {
         "symbols": [
           "DbYalpLoadWeightTable",
@@ -4248,6 +4248,18 @@
           "placement": ".data3",
           "start": "0x802B2430",
           "end": "0x802B2CA0"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "gDbYalpCropWeights",
+          "start": "0x803A1C60",
+          "end": "0x803A20A4"
+        },
+        {
+          "symbol": "gDbYalpRobpWeights",
+          "start": "0x803A20A4",
+          "end": "0x803A237C"
         }
       ]
     },
@@ -23577,6 +23589,19 @@
           "placement": ".data4",
           "start": "0x8030199C",
           "end": "0x803019B8"
+        }
+      ]
+    },
+    {
+      "source": "src/dolphin/os/OSFatal.c",
+      "profile": "dolphin_release",
+      "evidence": "evidence.tsv unit row 0x803BA898-0x803BAB70 (src/dolphin/os/OSFatal.c) and its data and name rows: the code-less file of the SDK fatal-error screen statics FatalParam and FatalContext, whose functions are not in the executable (#1528 rulings 1 and 3).",
+      "sections": [
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803BA898",
+          "end": "0x803BAB70"
         }
       ]
     },
