@@ -31,15 +31,14 @@ void SFILTER_add(Node_80279D90 **list, Node_80279D90 *node)
 void SFILTER_remove(Node_80279D90 **list, Node_80279D90 *node)
 {
     Node_80279D90 *prev = *list;
-    Node_80279D90 *cur;
     if (node == prev) {
         *list = prev->m8;
         return;
     }
-    while ((cur = prev->m8) != 0 && cur != node) {
-        prev = cur;
+    while (prev->m8 != 0 && prev->m8 != node) {
+        prev = prev->m8;
     }
-    if (cur != 0 && cur == node) {
+    if (prev->m8 != 0 && prev->m8 == node) {
         node = node->m8;
         if (node != 0) {
             node->m10 = prev;

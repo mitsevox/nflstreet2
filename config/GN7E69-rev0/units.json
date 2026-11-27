@@ -683,10 +683,6 @@
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
     },
-    "SFILTER_remove": {
-      "address": "0x80279DF8",
-      "evidence": "evidence.tsv function/name/source-form rows for 0x80279DF8; registered holdout of src/engine/sfilter.c. Its original code stays linked; called by src/engine/smixhip.c."
-    },
     "calcFIRCoeffs": {
       "address": "0x80279E74",
       "evidence": "evidence.tsv function and name rows for 0x80279E74 (calcFIRCoeffs, sfir.c, registered in comparisons.json, original bytes linked); referenced by the linked src/engine/sfhpffir8.c (SFILTER_modifyHPFFIR8)."
@@ -24831,25 +24827,16 @@
     },
     {
       "source": "src/engine/sfilter.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80279D90-0x80279E74, function and name rows, and sound_cxx compiler and source-form rows. SFILTER_add links exactly; SFILTER_remove remains a measured holdout. This file emits no native data.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv provisional unit row 0x80279D90-0x80279E74, function and name rows, and sound_cxx compiler and source-form rows. SFILTER_add and SFILTER_remove (exact since lane k1e, 2026-11-27) link from source. This file emits no native data.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80279D90",
-          "end": "0x80279DF8"
+          "end": "0x80279E74"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "SFILTER_remove",
-            "evidence": "evidence.tsv source-form 0x80279DF8-0x80279E74"
-          }
-        ],
-        "evidence": "evidence.tsv source-form 0x80279DF8-0x80279E74 describes the loop shape difference."
-      }
+      ]
     },
     {
       "source": "src/engine/sfir8.c",
