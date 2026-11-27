@@ -336,3 +336,5 @@
 0x801DD730	lifewillbeokay	_genNewParticles src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.
 0x801DF3E4	lifewillbeokay	_partReadWrite src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.
 0x801DF620	lifewillbeokay	ParticleParmLoad src/engine/particleLib.c made exact in #1445; landed through the merge lane integration PR.
+0x802297D8	adampreddy	DbYalpLoadWeightTable made exact by adampreddy on offer/k1f-dbyalp (2df292c), adopted by round 5 lane 4.
+0x80229CFC	adampreddy	DbYalpGetOverallRating made exact by adampreddy on offer/k1f-dbyalp (2f5d138), adopted by round 5 lane 4.

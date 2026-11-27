@@ -137,7 +137,7 @@ Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
         break;
     case 2:
         pInfo->Flags |= 2;
-        fn_80219854(pInfo, &pInfo->RunState, pAction->Words[0], -8, Count, pArgs, 1);
+        UISInternalProcessEvent(pInfo, &pInfo->RunState, pAction->Words[0], -8, Count, pArgs, 1);
         pInfo->Flags &= ~2;
         break;
     case 3:
@@ -162,7 +162,7 @@ Int32 *_UISDoThreadAction(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
         break;
     case 7:
         pInfo->Flags |= 2;
-        fn_80219854(pInfo, &pInfo->RunState, pAction->Words[1], pAction->Words[0], Count, pArgs,
+        UISInternalProcessEvent(pInfo, &pInfo->RunState, pAction->Words[1], pAction->Words[0], Count, pArgs,
                     0);
         pInfo->Flags &= ~2;
         break;

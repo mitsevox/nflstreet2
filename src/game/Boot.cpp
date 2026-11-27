@@ -55,7 +55,7 @@ void STREAM_setfilter(int a, int b, int c, int d, int e);
 void STREAM_destroy(int a);
 int STREAM_taphandle(int a, int b);
 int STREAM_queuefile(int a, struct MovieStreamDesc_t *pDesc, int b, int c);
-int fn_80219044(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
+int UISLoadModalScreen(void *p, int a, int b, int c, struct Entry_80219044 **ppEntries);
 void fn_802195E4(void *p, short a, short b);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
 }
@@ -156,7 +156,7 @@ static void _BootProgressiveCheck(void)
         _Boot_apMessageLines[0] = &_Boot_aMessageLines[0];
         _Boot_apMessageLines[1] = &_Boot_aMessageLines[1];
         _Boot_apMessageLines[2] = &_Boot_aMessageLines[2];
-        fn_80219044(gUISMainInfo, 1, 3, 3, _Boot_apMessageLines);
+        UISLoadModalScreen(gUISMainInfo, 1, 3, 3, _Boot_apMessageLines);
         _BootWaitForScreen(gUISMainInfo, 1, 3, -1);
         MsgGameSetMemCardActive(0);
     } else {

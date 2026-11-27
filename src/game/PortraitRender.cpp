@@ -9,7 +9,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/Object_8003DEC4.h"
 #include "game/CAPPortrait.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "engine/viewport.h"
 #include <dolphin/gx/GXEnum.h>
 #include <dolphin/gx/GXStruct.h>
