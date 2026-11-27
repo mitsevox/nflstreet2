@@ -661,13 +661,21 @@ int DbFindUnusedPlayerIds(int db, int tbl, int *pIds, unsigned short *pCount)
         if (status == 0) {
             if (id > prev + 1) {
                 next = prev + 1;
-                while (status == 0 && next < id && count < *pCount && next <= 0x7F14) {
-                    pIds[count] = next;
-                    count++;
-                    next++;
+                while (status == 0 && next < id) {
+                    if (count < *pCount && next <= 0x7F14) {
+                        pIds[count] = next;
+                        count++;
+                        next++;
+                    } else {
+                        break;
+                    }
                 }
             }
-            last = (next > id) ? next : id;
+            if (next > id) {
+                last = next;
+            } else {
+                last = id;
+            }
             prev = id;
         }
     }
@@ -681,14 +689,19 @@ int DbFindUnusedPlayerIds(int db, int tbl, int *pIds, unsigned short *pCount)
         TDbSQLDestroyCursor(&cursor);
     }
     if (status == 0 && count < *pCount) {
-        next = last + 1;
         if (last == 0x7FFF) {
             next = 0;
+        } else {
+            next = last + 1;
         }
-        while (count < *pCount && next <= 0x7F14) {
-            pIds[count] = next;
-            count++;
-            next++;
+        while (count < *pCount) {
+            if (next <= 0x7F14) {
+                pIds[count] = next;
+                count++;
+                next++;
+            } else {
+                break;
+            }
         }
     }
     *pCount = count;
