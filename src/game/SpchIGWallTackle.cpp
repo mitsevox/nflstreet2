@@ -5,7 +5,7 @@
 
 extern "C" {
 void SpchIGGetPlayerCategory(int *pResult, int value);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 }
 
 static int _SpchIG_iWallTacklePlayer = 0;
@@ -15,7 +15,7 @@ extern "C" void SpchIGSayWallTackle(void)
     int result;
 
     SpchIGGetPlayerCategory(&result, _SpchIG_iWallTacklePlayer);
-    if (fn_80178320() == 0) {
+    if (ScrmGetDefenseTeam() == 0) {
         gSPCH_AddEvent(SPCH_MakeEventSpec(1, 0, 0x201C), 1, result);
     } else {
         gSPCH_AddEvent(SPCH_MakeEventSpec(2, 0, 0x401C), 1, result);

@@ -102,35 +102,35 @@ void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(int, int));
 void ObjDelList(int handle);
 int ObjNewInList(int handle, int a, int b, int c);
 void ObjRemoveFromList(int handle, int a);
-int fn_802188A0(int a, int b, int c, int d, int e, int f);
-void fn_802188D4(void *p, int a, int b, int c, int d, int e, int f, unsigned int g);
-void fn_80218A34(void *p);
-void fn_80218AA8(void *p, void (*pCallback)());
-void fn_80218AB0(void *p, int (*pA)(int, int), void (*pB)(int, int));
-void fn_80218ABC(void *p, void (*pCallback)());
-void fn_80218AC4(void *p, void (*pCallback)());
-void fn_80218ACC(void *p, void (*pCallback)());
-void fn_80218AD4(void *p, int index, void (*pCallback)());
-void fn_80218CB8(void *p, int a);
-void fn_8021992C(void *p, int a);
+int UISGetMemSize(int a, int b, int c, int d, int e, int f);
+void UISInit(void *p, int a, int b, int c, int d, int e, int f, unsigned int g);
+void UISShutdown(void *p);
+void UISRegisterMessageFnc(void *p, void (*pCallback)());
+void UISRegisterResourceFncs(void *p, int (*pA)(int, int), void (*pB)(int, int));
+void UISRegisterShutdownFnc(void *p, void (*pCallback)());
+void UISRegisterTransformFncs(void *p, void (*pCallback)());
+void UISRegisterScreenActivatedFnc(void *p, void (*pCallback)());
+void UISRegisterPluginFnc(void *p, int index, void (*pCallback)());
+void UISSetGlobalScript(void *p, int a);
+void UISDrawObjects(void *p, int a);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
-void fn_80219A54(void *p, int a);
-int fn_80219AF8(void *p, int a, int b, int c);
-int fn_8021A020(void *p);
-int fn_8021D828(void *p, unsigned short a, unsigned short b);
-void fn_8021D880(void (*pCallback)());
+void UISProcessEvent(void *p, int a, int b, int c, float *pD, unsigned char e);
+void UISIdleProcess(void *p, int a);
+int UISFindStaticObject(void *p, int a, int b, int c);
+int UISIsActiveScreenEnabled(void *p);
+int UISAreEventsEnabled(void *p, unsigned short a, unsigned short b);
+void UISRegisterRuntimeErrorFnc(void (*pCallback)());
 void UIGLibraryShutdown(void *p);
 void *UIGLibraryGetGlobal(int index);
 void UIGLibraryProcess(void *p);
 void UIGLibrarySetLoadFlagsFunc(void (*pCallback)());
-void fn_8021EFD8(void);
-void fn_80220CDC(int a);
-void fn_80220CFC(int a);
-void fn_80220D04(void);
-void fn_802212C8(void);
+void UIGImageNodeObjAction(void);
+void UIGRenderSetActive(int a);
+void UIGRenderSetLast(int a);
+void UIGRenderReset(void);
+void UIGRenderTransformNodeAction(void);
 void UIGLibTextObjAction(void);
-void fn_80225654(void);
+void UIGArcObjAction(void);
 void LLLightAttachViewport(Viewport_t *pObject);
 void LLLightDetachViewport(Viewport_t *pObject);
 int LLFogEnable(int a);
@@ -187,20 +187,20 @@ void UISGameFreeTable(void)
 
 void UISGameSetCallbacks(void *p)
 {
-    fn_80218AB0(p, UISGameLoadItem, UISGameFreeItem);
-    fn_80218AC4(p, fn_802212C8);
-    fn_80218AA8(p, ScreenMsgDispatch);
-    fn_80218ABC(p, UISGameDrawDone);
-    fn_80218ACC(p, UISGameRepeatResetCB);
-    fn_80218AD4(p, 0, fn_8021EFD8);
-    fn_80218AD4(p, 1, UISSoundObjAction);
-    fn_80218AD4(p, 2, (void (*)(void))UIGCurveObjAction);
-    fn_80218AD4(p, 3, UISViewObjAction);
-    fn_80218AD4(p, 4, fn_80225654);
-    fn_80218AD4(p, 5, UISTextTableAction);
-    fn_80218AD4(p, 6, UISModelObjAction);
-    fn_80218AD4(p, 7, UISGameObjSlot7);
-    fn_80218AD4(p, 8, UIGLibTextObjAction);
+    UISRegisterResourceFncs(p, UISGameLoadItem, UISGameFreeItem);
+    UISRegisterTransformFncs(p, UIGRenderTransformNodeAction);
+    UISRegisterMessageFnc(p, ScreenMsgDispatch);
+    UISRegisterShutdownFnc(p, UISGameDrawDone);
+    UISRegisterScreenActivatedFnc(p, UISGameRepeatResetCB);
+    UISRegisterPluginFnc(p, 0, UIGImageNodeObjAction);
+    UISRegisterPluginFnc(p, 1, UISSoundObjAction);
+    UISRegisterPluginFnc(p, 2, (void (*)(void))UIGCurveObjAction);
+    UISRegisterPluginFnc(p, 3, UISViewObjAction);
+    UISRegisterPluginFnc(p, 4, UIGArcObjAction);
+    UISRegisterPluginFnc(p, 5, UISTextTableAction);
+    UISRegisterPluginFnc(p, 6, UISModelObjAction);
+    UISRegisterPluginFnc(p, 7, UISGameObjSlot7);
+    UISRegisterPluginFnc(p, 8, UIGLibTextObjAction);
 }
 
 int UISGameDrawObj(int a, int b)
@@ -217,14 +217,14 @@ int UISGameDrawObj(int a, int b)
     saved = LLFogEnable(0);
     if (a == _UISGame_pMainObj) {
         if (gUISMainInfo && (_UISGame_iDrawMask & 1)) {
-            fn_8021992C(gUISMainInfo, b);
+            UISDrawObjects(gUISMainInfo, b);
             PlyrIconQueueReset();
         }
         if (gUISSubInfo && (_UISGame_iDrawMask & 2)) {
-            fn_8021992C(gUISSubInfo, b);
+            UISDrawObjects(gUISSubInfo, b);
         }
         if (gUISSub2Info && (_UISGame_iDrawMask & 4)) {
-            fn_8021992C(gUISSub2Info, b);
+            UISDrawObjects(gUISSub2Info, b);
         }
     }
     LLFogEnable(saved);
@@ -500,8 +500,8 @@ void UISGameCreateMain(void)
     if (!FELoopIsMainFEActive()) {
         ScreenTransInit(_UISGame_pMainVpt, 0);
     }
-    gUISMainInfo = fn_801D2B7C(fn_802188A0(12, 9, 160, 7, 640, 160), 0, 0);
-    fn_802188D4(gUISMainInfo, 12, 9, 160, 7, 640, 160, (unsigned int)(gFrameTimeScale * 16.666668f));
+    gUISMainInfo = fn_801D2B7C(UISGetMemSize(12, 9, 160, 7, 640, 160), 0, 0);
+    UISInit(gUISMainInfo, 12, 9, 160, 7, 640, 160, (unsigned int)(gFrameTimeScale * 16.666668f));
     UISGameSetCallbacks(gUISMainInfo);
     UISGameEnableDraw(gUISMainInfo);
 }
@@ -534,8 +534,8 @@ void UISGameCreateSub(void)
     ObjSetListObjFunc(_UISGame_pSubObjList, 21, 0, UISGameDrawObj);
     VptSetObjectList(_UISGame_pSubVpt, _UISGame_pSubObjList, 0);
     _UISGame_pSubObj = ObjNewInList(_UISGame_pSubObjList, 21, 0, 0);
-    gUISSubInfo = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
-    fn_802188D4(gUISSubInfo, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
+    gUISSubInfo = fn_801D2B7C(UISGetMemSize(6, 9, 64, 1, 128, 128), 0, 0);
+    UISInit(gUISSubInfo, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
     UISGameSetCallbacks(gUISSubInfo);
     UISGameEnableDraw(gUISSubInfo);
 }
@@ -568,8 +568,8 @@ void UISGameCreateSub2(void)
     ObjSetListObjFunc(_UISGame_pSub2ObjList, 21, 0, UISGameDrawObj);
     VptSetObjectList(_UISGame_pSub2Vpt, _UISGame_pSub2ObjList, 0);
     _UISGame_pSub2Obj = ObjNewInList(_UISGame_pSub2ObjList, 21, 0, 0);
-    gUISSub2Info = fn_801D2B7C(fn_802188A0(6, 9, 64, 1, 128, 128), 0, 0);
-    fn_802188D4(gUISSub2Info, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
+    gUISSub2Info = fn_801D2B7C(UISGetMemSize(6, 9, 64, 1, 128, 128), 0, 0);
+    UISInit(gUISSub2Info, 6, 9, 64, 1, 128, 128, (unsigned int)(gFrameTimeScale * 16.666668f));
     UISGameSetCallbacks(gUISSub2Info);
     UISGameEnableDraw(gUISSub2Info);
 }
@@ -584,7 +584,7 @@ void UISGameInit(void)
     int result = 0;
 
     _UISGame_iDrawMask = 0;
-    fn_8021D880(UISGameRuntimeError);
+    UISRegisterRuntimeErrorFnc(UISGameRuntimeError);
     ObjNewType_(21, 20, 4, UISGameObjNew, UISGameObjDelete);
     desc.mUnknown0 = 1;
     desc.mUnknown4 = 15;
@@ -624,7 +624,7 @@ void UISGameInit(void)
         fn_801D342C(-1);
     }
     result = UISGameLoadItem(14, 0);
-    fn_80218CB8(gUISMainInfo, result);
+    UISSetGlobalScript(gUISMainInfo, result);
     if (FELoopIsMainFEActive()) {
         if (!flag) {
             UISGameRefKey(0);
@@ -647,7 +647,7 @@ void UISGameInit(void)
         InGameStateReset();
         GameEventFlagsInit();
     }
-    fn_80220D04();
+    UIGRenderReset();
     {
         unsigned char record;
         unsigned char index;
@@ -669,7 +669,7 @@ void UISGameInit(void)
 void UISGameDestroyMain(void)
 {
     UISGameShutdownHook();
-    fn_80218A34(gUISMainInfo);
+    UISShutdown(gUISMainInfo);
     fn_801D2BD0(gUISMainInfo);
     gUISMainInfo = 0;
     if (!FELoopIsMainFEActive()) {
@@ -690,7 +690,7 @@ void UISGameDestroyMain(void)
 
 void UISGameDestroySub(void)
 {
-    fn_80218A34(gUISSubInfo);
+    UISShutdown(gUISSubInfo);
     fn_801D2BD0(gUISSubInfo);
     gUISSubInfo = 0;
     ObjRemoveFromList(_UISGame_pSubObjList, _UISGame_pSubObj);
@@ -707,7 +707,7 @@ void UISGameDestroySub(void)
 
 void UISGameDestroySub2(void)
 {
-    fn_80218A34(gUISSub2Info);
+    UISShutdown(gUISSub2Info);
     fn_801D2BD0(gUISSub2Info);
     gUISSub2Info = 0;
     ObjRemoveFromList(_UISGame_pSub2ObjList, _UISGame_pSub2Obj);
@@ -777,11 +777,11 @@ void UISGameHandleInput(int a, unsigned int id, float value)
         if (id == 8) {
             if (value == 1.0f && UISHeldObjIsEnabled()) {
                 fn_80219650(gUISMainInfo, &unknown0, &unknown1);
-                if (fn_8021D828(gUISMainInfo, unknown0, unknown1) && fn_8021A020(gUISMainInfo)) {
+                if (UISAreEventsEnabled(gUISMainInfo, unknown0, unknown1) && UISIsActiveScreenEnabled(gUISMainInfo)) {
                     int result;
 
-                    fn_80219A54(gUISMainInfo, 1);
-                    result = fn_80219AF8(gUISMainInfo, unknown0, unknown1, 5);
+                    UISIdleProcess(gUISMainInfo, 1);
+                    result = UISFindStaticObject(gUISMainInfo, unknown0, unknown1, 5);
                     if (result) {
                         UISHeldObjSet(result);
                     }
@@ -795,11 +795,11 @@ void UISGameHandleInput(int a, unsigned int id, float value)
             if ((id == 7 || id == 0) && FELoopIsMainFEActive()) {
                 MsgMainMenuSetActivePad(a);
             }
-            fn_802196B4(gUISMainInfo, a, id, 1, &value, _UISGame_bInputFlag);
+            UISProcessEvent(gUISMainInfo, a, id, 1, &value, _UISGame_bInputFlag);
         }
     }
     if (UISGameIsEvent20Pending()) {
-        fn_802196B4(gUISMainInfo, -1, 20, 1, &value, 1);
+        UISProcessEvent(gUISMainInfo, -1, 20, 1, &value, 1);
         UISGameSetEvent20Pending(0);
     }
 }
@@ -823,13 +823,13 @@ void UISGameFreeKeyItem(int a, int b)
 void UISGameRefreshAll(void)
 {
     if (gUISMainInfo) {
-        fn_80219A54(gUISMainInfo, 1);
+        UISIdleProcess(gUISMainInfo, 1);
     }
     if (gUISSub2Info) {
-        fn_80219A54(gUISSub2Info, 1);
+        UISIdleProcess(gUISSub2Info, 1);
     }
     if (gUISSubInfo) {
-        fn_80219A54(gUISSubInfo, 1);
+        UISIdleProcess(gUISSubInfo, 1);
     }
 }
 
@@ -906,8 +906,8 @@ void UISGameSetInputFlag(unsigned char value)
 
 void UISGameSetDrawMode(int a)
 {
-    fn_80220CDC(a);
-    fn_80220CFC(a);
+    UIGRenderSetActive(a);
+    UIGRenderSetLast(a);
     GlibRenderSelectBin(GlibRenderGetBin(14));
 }
 }

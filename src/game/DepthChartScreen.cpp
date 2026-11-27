@@ -8,7 +8,7 @@ void MsgChallengeSetFlowState(int value);
 int MsgChallengeGetFlowState(void);
 int TeamFilterGet(void);
 void ChalCloseCursors(void);
-int fn_80082414(int index);
+int PlayerPoolGetCount(int index);
 int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue, char *pLabel, int labelSize);
 void EditMenuRequest(int mode, int value);
 int CreateTeamExists(int a);
@@ -116,16 +116,16 @@ int FeCountsHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pR
 {
     switch (id) {
     case 372:
-        *pResult = fn_80082414(0);
+        *pResult = PlayerPoolGetCount(0);
         break;
     case 373:
-        *pResult = fn_80082414(1);
+        *pResult = PlayerPoolGetCount(1);
         break;
     case 374:
-        *pResult = fn_80082414(2);
+        *pResult = PlayerPoolGetCount(2);
         break;
     case 375:
-        *pResult = fn_80082414(3);
+        *pResult = PlayerPoolGetCount(3);
         break;
     default:
         return 0;

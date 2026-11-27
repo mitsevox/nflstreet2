@@ -7,7 +7,7 @@
 #include <string.h>
 #include "game/Entry_80219044.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include <string.h>
 #include "game/TDbCompilePerformOp.h"
 
@@ -96,10 +96,10 @@ void SysResetSystem(int a);
 int GameModeTypeIsSpecial(void);
 void MsgNameEntryGetName(char *pDest, int length);
 int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
-int fn_80177F70(void);
-float fn_80178298(void);
-Point_8017886C fn_80177FE0(void);
-float fn_80178A2C(void);
+int ScrmGetDown(void);
+float ScrmGetLineToGain(void);
+FieldPoint_t ScrmGetBallSpot(void);
+float ScrmGetGoalLineY(void);
 int RoundToNearestInt(float value);
 unsigned int fn_8009D990(int index);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
@@ -249,7 +249,7 @@ int GameTextGetQuarter(void)
 
 void GameTextFormatDown(char *pText)
 {
-    switch (fn_80177F70()) {
+    switch (ScrmGetDown()) {
     case 0:
     case 6:
         sprintf(pText, " ");
@@ -274,7 +274,7 @@ void GameTextFormatDown(char *pText)
 
 void GameTextFormatDistance(char *pText)
 {
-    switch (fn_80177F70()) {
+    switch (ScrmGetDown()) {
     case 0:
     case 6:
         sprintf(pText, "%s", "--");
@@ -284,9 +284,9 @@ void GameTextFormatDistance(char *pText)
     case 3:
     case 4:
     case 5: {
-        float distance = fn_80178298() - fn_80177FE0().mY;
+        float distance = ScrmGetLineToGain() - ScrmGetBallSpot().mY;
         signed char yards = RoundToNearestInt(distance);
-        if (!(distance < fn_80178A2C())) {
+        if (!(distance < ScrmGetGoalLineY())) {
             sprintf(pText, "Goal");
         } else if (distance < 1.0f) {
             sprintf(pText, "Inches");
@@ -300,10 +300,10 @@ void GameTextFormatDistance(char *pText)
 
 void GameTextFormatYardsToGo(char *pText)
 {
-    int down = fn_80177F70();
+    int down = ScrmGetDown();
     sprintf(pText, "%s", "  ");
     if (down > 0 && down <= 5) {
-        signed char yards = RoundToNearestInt(fn_80178298() - fn_80177FE0().mY);
+        signed char yards = RoundToNearestInt(ScrmGetLineToGain() - ScrmGetBallSpot().mY);
         if (yards == 0) {
             yards = 1;
         }
@@ -313,13 +313,13 @@ void GameTextFormatYardsToGo(char *pText)
 
 int GameTextFormatBallOn(char *pText)
 {
-    signed char yards = RoundToNearestInt(fn_80177FE0().mY);
+    signed char yards = RoundToNearestInt(ScrmGetBallSpot().mY);
     int side;
     if (yards < 0) {
-        yards += (int)fn_80178A2C();
+        yards += (int)ScrmGetGoalLineY();
         side = 0;
     } else {
-        yards = (int)(fn_80178A2C() - (float)yards);
+        yards = (int)(ScrmGetGoalLineY() - (float)yards);
         side = 1;
     }
     sprintf(pText, "%2d", yards);
@@ -328,9 +328,9 @@ int GameTextFormatBallOn(char *pText)
 
 int GameTextFormatDownAndDistance(char *pText)
 {
-    float scrimmage = fn_80178298();
-    Point_8017886C marker = fn_80177FE0();
-    int down = fn_80177F70();
+    float scrimmage = ScrmGetLineToGain();
+    FieldPoint_t marker = ScrmGetBallSpot();
+    int down = ScrmGetDown();
     const char *pLabel = 0;
     const char *pDown = 0;
     signed char yards = RoundToNearestInt(scrimmage - marker.mY);
@@ -364,16 +364,16 @@ int GameTextFormatDownAndDistance(char *pText)
     signed char line = RoundToNearestInt(marker.mY);
     int side;
     if (line == 0) {
-        line = (int)fn_80178A2C();
+        line = (int)ScrmGetGoalLineY();
         side = 0;
     } else if (line < 0) {
-        line += (int)fn_80178A2C();
+        line += (int)ScrmGetGoalLineY();
         side = -1;
     } else {
-        line = (int)(fn_80178A2C() - (float)line);
+        line = (int)(ScrmGetGoalLineY() - (float)line);
         side = 1;
     }
-    if (!(scrimmage < fn_80178A2C())) {
+    if (!(scrimmage < ScrmGetGoalLineY())) {
         sprintf(pText, "%s and Goal on %d", pDown, line);
     } else if (yards > 0) {
         sprintf(pText, "%s and %d on %d", pDown, yards, line);
@@ -394,7 +394,7 @@ void GameTextFormatGameClock(char *pText, int length)
 void GameTextFormatPlayClock(char *pText, int length)
 {
     char text[8];
-    if (fn_80177F70() == 0) {
+    if (ScrmGetDown() == 0) {
         sprintf(pText, " ");
         return;
     }

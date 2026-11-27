@@ -44,10 +44,10 @@ int strcmp(const char *, const char *);
 void *fn_801D2B7C(unsigned int, int, int);
 void fn_801D2BD0(void *);
 void MemFill(void *, unsigned int, int, int);
-void fn_80197E64(void);
-void fn_80197E68(void);
-void fn_80197E6C(void *);
-void fn_80197F84(void *);
+void GlowRenderInit(void);
+void GlowRenderShutdown(void);
+void GlowTextureLoad(void *);
+void GlowTextureUnload(void *);
 void GlowDraw(void *, void *);
 void EffectBlendBegin(void *, int);
 void EffectBlendEnd(void *, int);
@@ -196,7 +196,7 @@ void GlowInit(void *owner)
     }
     for (unsigned int i = 0; i < 40; ++i) _Glow_apLevelGlows[i] = 0;
     GlowInitGroup(0, gLevelData->mUnknown80 + 17);
-    _Glow_iNextElement = 0; _Glow_iNextGlow = 0; fn_80197E64(); _Glow_nFlickers = 0;
+    _Glow_iNextElement = 0; _Glow_iNextGlow = 0; GlowRenderInit(); _Glow_nFlickers = 0;
     if (fn_800A33B0()) {
         if (fn_800A3420() == 1) { if (fn_800A33B8() == 0) _GlowCreateEnvFlare(); }
         else if (fn_800A3420() == 2) { if (fn_800A33B8() == 0) _GlowCreateEnvFlare(); }
@@ -234,14 +234,14 @@ void GlowInit(void *owner)
 }
 void GlowShutdown(void)
 {
-    fn_80197E68();
+    GlowRenderShutdown();
     for (unsigned int i = 0; i < 1; ++i) {
         (&_Glow_Group)[i].mUnknown0 = 0; (&_Glow_Group)[i].mUnknown4 = 0;
         (&_Glow_Group)[i].mUnknown8 = 0; (&_Glow_Group)[i].mUnknownC = 0;
     }
     GlowTexture_t *p = _Glow_aTextures;
     do {
-        if (p->mUnknownC) { fn_80197F84(p); p->mUnknownC = 0; }
+        if (p->mUnknownC) { GlowTextureUnload(p); p->mUnknownC = 0; }
         ++p;
     } while (p <= &_Glow_aTextures[10]);
     _Glow_pEnvFlare = 0; fn_801D2BD0(_Glow_pPool); _Glow_pPool = 0;
@@ -261,7 +261,7 @@ void GlowAddGhost(Glow_t *p, GlowGhostDesc_t *q)
     slot->mUnknown0->mUnknown14 = q->mUnknown0.mUnknown14;
     slot->mUnknown4 = q->mUnknown18;
     if (!_Glow_aTextures[q->mUnknown0.mUnknown0].mUnknownC) {
-        fn_80197E6C(&_Glow_aTextures[q->mUnknown0.mUnknown0]);
+        GlowTextureLoad(&_Glow_aTextures[q->mUnknown0.mUnknown0]);
         _Glow_aTextures[q->mUnknown0.mUnknown0].mUnknownC = 1;
     }
     ++p->mUnknown36;
@@ -301,7 +301,7 @@ Glow_t *GlowCreate(int index, GlowDesc_t *q)
     p->mUnknown0->mUnknownC = q->mUnknown0.mUnknownC; p->mUnknown0->mUnknown10 = q->mUnknown0.mUnknown10;
     p->mUnknown0->mUnknown14 = q->mUnknown0.mUnknown14;
     if (!_Glow_aTextures[p->mUnknown0->mUnknown0].mUnknownC) {
-        fn_80197E6C(&_Glow_aTextures[p->mUnknown0->mUnknown0]);
+        GlowTextureLoad(&_Glow_aTextures[p->mUnknown0->mUnknown0]);
         _Glow_aTextures[p->mUnknown0->mUnknown0].mUnknownC = 1;
     }
     p->mUnknown36 = 0; p->mUnknown35 = 0; p->mUnknown10 = 1; p->mUnknown11 = 0; p->mUnknown14 = 0.0f;

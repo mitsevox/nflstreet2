@@ -41,7 +41,7 @@ int fn_800BA864(void);
 int fn_800C47C4(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int a);
 void MatPush(void);
@@ -90,7 +90,7 @@ void BallMarkerUpdateEntry(int index)
         pEntry->mEnabled = 1;
     }
     pEntry->mPosition.mZ = 0.0f;
-    if (fn_801784C4() != 0) {
+    if (ScrmIsFieldFlipped() != 0) {
         pEntry->mPosition.mX = -pEntry->mPosition.mX;
         pEntry->mPosition.mY = -pEntry->mPosition.mY;
     }

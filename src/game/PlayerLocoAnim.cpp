@@ -16,7 +16,7 @@
 #include "game/fn_800AD9B4.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include <math.h>
 
 extern "C" {
@@ -24,7 +24,7 @@ extern "C" {
 struct PlayerLocoTrimKey_t { unsigned short mUnknown0; unsigned short mUnknown2; };
 int fn_801486A0(void);
 int PassIconsAreShown(void);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerMoveGetRunVariant(Object_80039F5C *p);
 int PlayerLocoUseAltCategory(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag);
@@ -33,17 +33,17 @@ int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerLocoIsEngaged(Object_80039F5C *p, int flag);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
-void Vec2Add(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
-void Vec2Sub(Point_8017886C *pOut, Point_8017886C *pA, Point_8017886C *pB);
-void Vec2Scale(Point_8017886C *pOut, Point_8017886C *pIn, float scale);
-void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
-Point_8017886C fn_80177FFC(int team);
+void Vec2Add(FieldPoint_t *pOut, FieldPoint_t *pA, FieldPoint_t *pB);
+void Vec2Sub(FieldPoint_t *pOut, FieldPoint_t *pA, FieldPoint_t *pB);
+void Vec2Scale(FieldPoint_t *pOut, FieldPoint_t *pIn, float scale);
+void Vec2Rotate(FieldPoint_t *pOut, FieldPoint_t *pIn, int angle);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *out, int *scratch);
 int CharSkelGetJointByName(void *p, const char *name);
 int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *object);
 int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void PlayerLocoSetCycleDuration(float value, Block_801BE60C *block, LocoBlendSet_t *object, AnimChannel_t *entries);
-unsigned char fn_800D78C4(Object_80039F5C *p, unsigned short key);
+unsigned char PlyrBallHandFromAnim(Object_80039F5C *p, unsigned short key);
 void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int AnimChanIsMirrored(AnimChannel_t *entry);
@@ -62,7 +62,7 @@ int PlayerLocoNotInState84(Object_80039F5C *);
 
 extern float gFrameTimeScale;
 
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 int PlayerLocoGetPrimaryCategory(Object_80039F5C *p, int team, int flag, unsigned char *pValue);
 int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, int team, int flag, unsigned char value);
 void PlayerLocoSelectStates(void *a, Block_801BE60C *pBlock, Object_80039F5C *p, int value);
@@ -152,8 +152,8 @@ int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, 
         }
         if (p->mUnknown528.mUnknown14 == 9) result = PlayerLocoUseAltCategory(p, pOther, team, flag) ? 20 : 2;
         if (p->mpState->mId == 42 && MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0x2AAAA9) {
-            Point_8017886C point;
-            point = fn_80177FFC(p->mIdBytes[2]);
+            FieldPoint_t point;
+            point = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
             if (!(p->mMotion.mPos.mY - point.mY >= 6.0f)) {
                 result = 15;
                 if (!(fabsf(p->mMotion.mPos.mX - point.mX) >= 9.0f)) result = 13;
@@ -163,7 +163,7 @@ int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, 
         result = 2;
     }
 finish:
-    if (fn_801787A0()) {
+    if (ScrmIsNotReplay()) {
         switch (result) {
         case 2: result = 18; break;
         case 1: result = 43; break;
@@ -180,7 +180,7 @@ int PlayerLocoUpdateCategories(void *a, Block_801BE60C *pBlock, Object_80039F5C 
     int second;
 
     if (p->mIdBytes[3] == 1) {
-        int team = fn_80178308();
+        int team = ScrmGetOffenseTeam();
         int flag = 1;
         if (fn_800AD9B4() == 3) {
             flag = 0;
@@ -283,7 +283,7 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
         fn_801BE760(p->mpUnknown792, key, 1);
         mode = PlayerLocoGetStartSide(p, 1, 0);
         other = BallGetCurrentHolder();
-        int team = fn_80178308();
+        int team = ScrmGetOffenseTeam();
         int flag = 1;
         if (fn_800AD9B4() == 3) {
             flag = 0;
@@ -384,7 +384,7 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
         } else if (p == other) {
             unsigned char state = p->mUnknown528.mUnknown15;
             if (state != 6 && state != 8 && state != 7 && state != 9 &&
-                fn_800D78C4(p, key) != p->mUnknown776) p->mUnknown778 = -1;
+                PlyrBallHandFromAnim(p, key) != p->mUnknown776) p->mUnknown778 = -1;
         }
         block->mUnknown20.mUnknownC = p->mMotion.mUnknown28;
         if ((signed char)block->mUnknown3A[1] > 0) {
@@ -420,7 +420,7 @@ struct LocoTurnBlock_t {
     unsigned char mUnknown0;
     int mUnknown4;
     int mUnknown8;
-    Point_8017886C mUnknownC;
+    FieldPoint_t mUnknownC;
 };
 
 /* True when the first two bytes of the key match those of the reference;
@@ -442,10 +442,10 @@ unsigned char PlayerLocoKeyMatches(Key_80110630 *pKey, Key_80110630 *pRef)
    needs and returns its table index, with the turn, the playback scale and
    the offset the turn moves the player by. */
 unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C *p, int *pTurn, float *pScale,
-                                         Point_8017886C *pOffset)
+                                         FieldPoint_t *pOffset)
 {
-    Point_8017886C dir;
-    Point_8017886C off;
+    FieldPoint_t dir;
+    FieldPoint_t off;
     Info_80089904 *best;
     unsigned int bestIndex;
     unsigned int i;
@@ -457,7 +457,7 @@ unsigned short PlayerLocoSelectTurnEntry(Table_80089904 *table, Object_80039F5C 
     dir.mX = (float)(signed char)p->mUnknown1008.mUnknown2 * 0.25f;
     dir.mY = (float)(signed char)p->mUnknown1011 * 0.5f;
     facing = p->mMotion.mFacing & 0xFFFFFF;
-    Vec2Sub(&dir, &dir, (Point_8017886C *)&p->mMotion.mPos);
+    Vec2Sub(&dir, &dir, (FieldPoint_t *)&p->mMotion.mPos);
     heading = dir.Heading();
     if (p->mUnknown1008.mUnknown1 == 1 && (p->mpState->mId == 7 || p->mpState->mId == 63)) {
         heading = *(int *)&p->mpUnknown352;
@@ -539,7 +539,7 @@ int PlayerLocoTurnPhase(Table_80089904 *table, unsigned short key, FEPlyrModel_t
             AnimChannel_t *pEntry = &p->mpUnknown800[block->mUnknown4];
             pEntry->mUnknownC = (pEntry->mUnknownC + block->mUnknown8) & 0xFFFFFF;
         } else {
-            Vec2Add((Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos,
+            Vec2Add((FieldPoint_t *)&p->mMotion.mPos, (FieldPoint_t *)&p->mMotion.mPos,
                         &block->mUnknownC);
         }
         if (p->mFlags & 4) {

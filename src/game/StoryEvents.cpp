@@ -131,7 +131,7 @@ void StoryTeamCursorOpen(DbCursor *pCursor, int index);
 void StoryTeamCursorClose(DbCursor *pCursor);
 int StoryTeamLoadToStats(int index, int a, int *pIds, int *pCount);
 int StoryTeamGetLogo(DbCursor *pCursor);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 void StoryClearFlags(int index);
 void StoryClearCompletedEvents(int index);
 void StoryPlayerCursorOpen(DbCursor *pCursor, int index);
@@ -165,7 +165,7 @@ void InGameRewardSetAlt(unsigned char value);
 void StoryTournamentClearEvent(void);
 void StoryTournamentBegin(void);
 int MsgGameGetSetupState(void);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 }
 
 Object_8008044C _StoryEvents_PlayerCursor;
@@ -273,9 +273,9 @@ void StoryEventsSyncDatabases(void)
 {
     SndgMusicPumpFrame(1);
     SndgMusicPumpFrame(0);
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     SndgMusicPumpFrame(1);
-    fn_8018C48C(0x454D4147);
+    TeamTablesPurgeCreated(0x454D4147);
     SndgMusicPumpFrame(0);
 }
 
@@ -1422,7 +1422,7 @@ int StoryEventsRecordGameResult(void)
     if (!_StoryEvents_pEvent) {
         active = 0;
     } else {
-        int result = fn_80178AE0();
+        int result = ScrmGetWinner();
         active = 1;
         switch (result) {
         case 0:
@@ -1486,12 +1486,12 @@ void StoryEventsBuildPickupTables(int *pFirst, int *pSecond)
         DbCursorOpen(&cursor, _StoryEvents_iPlayerTable, 0x44494750, 0, 0, 0x54415453);
         for (i = 1; i <= 6; i++) {
             if (PlayerDbSeekId((Object_8008044C *)&cursor, pSecond[i], 0)) {
-                fn_80081F50((Object_8008044C *)&cursor, secondSide, 1);
+                PlayerDbSetPickedFlag((Object_8008044C *)&cursor, secondSide, 1);
             }
         }
         for (i = 0; i <= 6; i++) {
             if (PlayerDbSeekId((Object_8008044C *)&cursor, pFirst[i], 0)) {
-                fn_80081F50((Object_8008044C *)&cursor, firstSide, 1);
+                PlayerDbSetPickedFlag((Object_8008044C *)&cursor, firstSide, 1);
             }
         }
         DbCursorClose(&cursor);

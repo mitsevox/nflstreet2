@@ -16,7 +16,7 @@ void PlyrContactSendKnock(Object_80039F5C *p);
 void BallRecordBounce(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
-int fn_80178348(void);
+int ScrmGetSnapOffense(void);
 int CharSkelGetJointByName(void *p, const char *pName);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void Vec3Normalize(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
@@ -202,7 +202,7 @@ extern "C" void BallHitPlayerPart(Ball_t *pBall, Object_80039F5C *p, CollideCont
         BallDeflect(pBall, &span, &dir, pContact, 1, value);
         if (BallStateGet(pBall, 0) == 4 && flag && p->mpState->mId == 28) {
             BallKickUp(pBall, 1);
-            if (fn_80178348() == p->mIdBytes[2]) {
+            if (ScrmGetSnapOffense() == p->mIdBytes[2]) {
                 Record_800B15FC *pRecord = fn_800B15FC();
 
                 fn_8009BD2C(p, &pRecord->mUnknown0);

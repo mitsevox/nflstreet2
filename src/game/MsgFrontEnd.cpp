@@ -16,7 +16,7 @@
 #include "game/DepthChartSide.h"
 #include "game/SndgMusic.h"
 #include "game/GameOptions.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
 #include <string.h>
 #include <string.h>
@@ -163,7 +163,7 @@ void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 int PlayerDbGetPortraitId(Object_8008044C *pObject);
 int PlayerDbGetWeight(Object_8008044C *pObject);
 int PlayerDbGetBoostedRating(Object_8008044C *pObject, int index);
-void fn_80082558(int a, int b);
+void PlayerRecordLoadTeam(int a, int b);
 void TeamDbOpenQuery(DbCursor *pObject, TeamQuery *pQuery);
 int TeamDbGetId(DbCursor *pObject);
 int TeamDbSeekTmur(DbCursor *pObject, int id, int *pResult);
@@ -191,8 +191,8 @@ int fn_801486A0(void);
 void fn_80148AF8(MiniGameC *pObject);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 int MsgGameGetSetupState(void);
 void MsgGameIgnoreValue(int a);
 void MsgGameSetSetupState(int a);
@@ -217,7 +217,7 @@ void GameTextSetSetupActive(unsigned char a);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 int StoryTeamExists(int a);
 void StoryTeamLoadUserTeams(int a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamExists(int a);
 void CreateTeamLoadUserTeams(void);
 int GauntletGetCurrentTeam(int a);
@@ -242,10 +242,10 @@ int DbNiomEndMode(void);
 void fn_8022A490(int a);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int DbUtilRandomRange(unsigned int low, unsigned int high);
-void fn_8022DC7C(int a);
-void fn_8022DCB0(int a);
-void fn_8022DCE4(int a);
-void fn_8022DD18(int a);
+void DbFnigSetHomeOffPlaybook(int a);
+void DbFnigSetHomeDefPlaybook(int a);
+void DbFnigSetAwayOffPlaybook(int a);
+void DbFnigSetAwayDefPlaybook(int a);
 int DbUserGetId(int index);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
@@ -399,8 +399,8 @@ void MsgMainMenuEnter(void)
         if (!FELoopWasVisited()) {
             FELoopSetVisited(1);
         }
-        fn_8018C48C(0x54415453);
-        fn_8018C48C(0x454D4147);
+        TeamTablesPurgeCreated(0x54415453);
+        TeamTablesPurgeCreated(0x454D4147);
         FELoopResetIdle();
         if (GameInfoIsInitialized()) {
             GameInfoShutdown();
@@ -1911,7 +1911,7 @@ void MsgTeamSelectResetPicks(unsigned char team)
         }
         if (DbCursorFirst((DbCursor *)&_MsgTeamSelect_aPlayerDb[team])) {
             do {
-                fn_80081F50(&_MsgTeamSelect_aPlayerDb[team], team, 0);
+                PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[team], team, 0);
             } while (DbCursorNext((DbCursor *)&_MsgTeamSelect_aPlayerDb[team]));
         }
         _MsgTeamSelect_bMainFE = 1;
@@ -2345,7 +2345,7 @@ int MsgTeamSelectHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int
         break;
     case 0x149:
         DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
-        *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
+        *pArgs[3].pi = ScrmGetActivePlayerCount(pArgs[0].i ? ScrmGetOffenseTeam() : ScrmGetDefenseTeam());
         break;
     case 0x14A: {
         int *pList = pArgs[1].pi;
@@ -2802,7 +2802,7 @@ void MsgTeamSelectSetTeam(int team, int id)
             if (index == -1) {
                 index = UserProfileGetSelected(team == 0);
             }
-            fn_80082558(id, index);
+            PlayerRecordLoadTeam(id, index);
             MsgTeamSelectResetPicks(team);
             MsgTeamSelectFillRoster(team);
             MsgTeamSelectResetScroll(team);
@@ -2851,10 +2851,10 @@ void MsgTeamSelectExit(void)
         GameInfoSet(1, id1);
         fn_8022A508(0, id0, id0, 0, value0);
         fn_8022A508(1, id1, id1, 0, value1);
-        fn_8022DC7C(0);
-        fn_8022DCB0(0);
-        fn_8022DCE4(0);
-        fn_8022DD18(0);
+        DbFnigSetHomeOffPlaybook(0);
+        DbFnigSetHomeDefPlaybook(0);
+        DbFnigSetAwayOffPlaybook(0);
+        DbFnigSetAwayDefPlaybook(0);
     }
 
     for (unsigned int i = 0; i < 2; i++) {
@@ -2874,10 +2874,10 @@ void MsgTeamSelectExit(void)
         DepthChartGetSide(1, &records[1]);
         for (unsigned char i = 0; i <= 6; i++) {
             PlayerDbSeekId(&_MsgTeamSelect_aPlayerDb[0], records[0].mUnknown[i], 0);
-            fn_80081F50(&_MsgTeamSelect_aPlayerDb[0], 0, 1);
+            PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[0], 0, 1);
             ids[0][i] = _MsgTeamSelect_aRoster[0].mEntries[i].mId;
             PlayerDbSeekId(&_MsgTeamSelect_aPlayerDb[1], records[1].mUnknown[i], 0);
-            fn_80081F50(&_MsgTeamSelect_aPlayerDb[1], 1, 1);
+            PlayerDbSetPickedFlag(&_MsgTeamSelect_aPlayerDb[1], 1, 1);
             ids[1][i] = _MsgTeamSelect_aRoster[1].mEntries[i].mId;
         }
         PlyrObjsSetTeamIds(0, ids[0]);
@@ -2908,12 +2908,12 @@ void MsgTeamSelectExit(void)
         GameTextSetSetupActive(0);
         if (GameModeTypeGet() == 6) {
             if (!ChalGameHasGeneratedOpponent() || _MsgTeamSelect_iMode != 0x6B) {
-                fn_8018C48C(0x454D4147);
-                fn_8018C48C(0x54415453);
+                TeamTablesPurgeCreated(0x454D4147);
+                TeamTablesPurgeCreated(0x54415453);
             }
         } else {
-            fn_8018C48C(0x454D4147);
-            fn_8018C48C(0x54415453);
+            TeamTablesPurgeCreated(0x454D4147);
+            TeamTablesPurgeCreated(0x54415453);
         }
     }
 

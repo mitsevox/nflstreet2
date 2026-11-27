@@ -8,7 +8,7 @@
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
 #include "game/FEPlyrLoad.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/EditMenu.h"
 
 struct ShopSavedLook_t {
@@ -376,7 +376,7 @@ void ShopItemList::Highlight(int id)
         } else {
             ShopGetState()->mPrice = -1;
         }
-        fn_8021D7B8(gUISMainInfo, 0x8000007E, 0, 0);
+        UISProcessHint(gUISMainInfo, 0x8000007E, 0, 0);
     }
 }
 

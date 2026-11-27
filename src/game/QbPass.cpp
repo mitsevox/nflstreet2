@@ -9,12 +9,12 @@
 #include "engine/animchan.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/Directions_8012430C.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/PlayBookTeam.h"
 #include <string.h>
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
@@ -57,7 +57,7 @@ void QbPassResetTarget(Object_80039F5C *);
 void fn_800D7A0C(Object_80039F5C *, int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 int fn_800AD9B4(void);
 int PassIconsAreShown(void);
 int PassIconsWereShown(void);
@@ -66,14 +66,14 @@ void CamGameSetModeAll(int);
 void PassIconObjSetEnabled(int);
 void fn_800B8344(Object_80039F5C *);
 
-int fn_8010A2DC(Object_80039F5C *, int, short);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
 int MathAngleDiff(int, int);
 unsigned char QbPassRateReceiver(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
-int fn_80177F70(void);
+int ScrmGetDown(void);
 void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int TutorialIsActive(void);
-float fn_80178A2C(void);
+float ScrmGetGoalLineY(void);
 void Vec2FromAngle(Vec2_t *, int, float);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 void fn_800F00D4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
@@ -82,14 +82,14 @@ int fn_80104688(Object_80039F5C *);
 void fn_801024FC(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
 void PlayerActionAnimSteerPassReady(Object_80039F5C *, int, float);
-int fn_801783AC(int);
+int ScrmTestPlayFlag(int);
 void fn_800A02B4(void);
 void fn_800A02FC(void);
 
 int fn_801486A0(void);
 int fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
 
 int MathArcTan2(float, float);
@@ -98,11 +98,11 @@ unsigned int fn_800ABDA4(int);
 Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
 float fn_80124FE0(Object_80039F5C *, int);
 float fn_80125004(Object_80039F5C *, int, int);
-float fn_80178298(void);
-int fn_801787DC(int);
-int fn_801788D8(int *);
-float fn_80178A08(void);
-float fn_80178A44(void);
+float ScrmGetLineToGain(void);
+int ScrmGetTeamScore(int);
+int ScrmGetScoreGoal(int *);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 float SyncRandGetFloat(int);
 
 
@@ -118,8 +118,8 @@ int QbPassInSpecialMode(void)
 
 void QbPassScoreDirections(Object_80039F5C *p, float *values)
 {
-    int team = fn_80178320();
-    unsigned char count = fn_80178D18(fn_80178320());
+    int team = ScrmGetDefenseTeam();
+    unsigned char count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
     float distance;
     fn_801244F0(p, team, 0, count, &distance, 0);
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
@@ -128,20 +128,20 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
         values[4] > 2.0f || values[5] > 2.0f || values[6] > 2.0f || !(values[7] <= 2.0f)) {
         s->mUnknown3 = 1;
         s->mUnknown6 = 10;
-        if (!(p->mMotion.mPos.mY >= fn_80177FE0().mY - 13.0f)) {
+        if (!(p->mMotion.mPos.mY >= ScrmGetBallSpot().mY - 13.0f)) {
             values[5] += 3.0f;
             values[6] += 4.0f;
             values[7] += 3.0f;
-        } else if (!(fabsf(p->mMotion.mPos.mY) <= fn_80178A44() - 4.0f)) {
+        } else if (!(fabsf(p->mMotion.mPos.mY) <= ScrmGetEndLineY() - 4.0f)) {
             values[5] += 3.0f;
             values[6] += 4.0f;
             values[7] += 3.0f;
         }
     } else {
         s->mUnknown6 = 10;
-        unsigned int n = fn_80178D18(fn_80178320());
+        unsigned int n = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
         for (unsigned short i = 0; i < n; ++i) {
-            Object_80039F5C *other = PlyrGet(fn_80178320(), i);
+            Object_80039F5C *other = PlyrGet(ScrmGetDefenseTeam(), i);
             float delta[2];
             Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (!(Vec2Magnitude(delta) >= 3.0f)) {
@@ -188,26 +188,26 @@ int QbPassPickRandomReceiver(Object_80039F5C *p, PlyrModeState_t *s,
 int QbPassShouldRun(Object_80039F5C *p)
 {
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
-    if (!fn_801783AC(0)) {
+    if (!ScrmTestPlayFlag(0)) {
         unsigned int kind = p->mUnknown2914;
         if (QbPassInSpecialMode() || !(kind <= 1 || kind == 3)) return 0;
         float threshold = (float)p->mRatings[4] * _QbPass_fRunWeightA + (float)p->mRatings[0] * _QbPass_fRunWeightB;
         threshold *= 0.003921568859368563f;
         if (SyncRandGetFloat(0) > threshold) return 0;
-        int mode = fn_80177F70();
-        float limit = (_QbPass_fRunRoom + fn_80177FE0().mY - p->mMotion.mPos.mY) * (2.0f - threshold);
+        int mode = ScrmGetDown();
+        float limit = (_QbPass_fRunRoom + ScrmGetBallSpot().mY - p->mMotion.mPos.mY) * (2.0f - threshold);
         if (mode == 4 || mode == 6) {
-            limit = (fn_80178298() - p->mMotion.mPos.mY) * (2.0f - threshold);
+            limit = (ScrmGetLineToGain() - p->mMotion.mPos.mY) * (2.0f - threshold);
             if (mode == 6) {
                 int time;
-                if (!fn_801788D8(&time)) {
-                    time -= fn_801787DC(fn_80178308());
+                if (!ScrmGetScoreGoal(&time)) {
+                    time -= ScrmGetTeamScore(ScrmGetOffenseTeam());
                     if ((unsigned int)time <= 24 && !((time - 2) & 7)) return 0;
                 }
             }
         }
         float distance;
-        fn_80124E5C(p, fn_80178320(), &distance, (int)(_QbPass_fRunConeDegrees * 46603.37890625f), _QbPass_fRunConeRange, 0x400000, _QbPass_fRunConeLimit);
+        fn_80124E5C(p, ScrmGetDefenseTeam(), &distance, (int)(_QbPass_fRunConeDegrees * 46603.37890625f), _QbPass_fRunConeRange, 0x400000, _QbPass_fRunConeLimit);
         if (distance > limit) {
             s->mUnknown18 = 1;
             return 1;
@@ -228,14 +228,14 @@ float *QbPassGetDirectionWeights(Object_80039F5C *p, int *count)
             values = _QbPass_afDirWeights[0];
     } else
         values = _QbPass_afDirWeights[2];
-    if (!(p->mMotion.mPos.mY >= -(fn_80178A2C() + 6.5f))) {
+    if (!(p->mMotion.mPos.mY >= -(ScrmGetGoalLineY() + 6.5f))) {
         values = _QbPass_afDirWeights[3];
         *count = -20;
-        if (!(p->mMotion.mPos.mY >= -(fn_80178A2C() + 8.0f))) *count = -10;
+        if (!(p->mMotion.mPos.mY >= -(ScrmGetGoalLineY() + 8.0f))) *count = -10;
     }
-    if (!(p->mMotion.mPos.mX <= fn_80178A08() - 5.0f) && !(p->mMotion.mUnknown40 <= 0.0f))
+    if (!(p->mMotion.mPos.mX <= ScrmGetSidelineX() - 5.0f) && !(p->mMotion.mUnknown40 <= 0.0f))
         values = _QbPass_afDirWeights[5];
-    else if (!(p->mMotion.mPos.mX >= 5.0f - fn_80178A08()) && !(p->mMotion.mUnknown40 >= 0.0f))
+    else if (!(p->mMotion.mPos.mX >= 5.0f - ScrmGetSidelineX()) && !(p->mMotion.mUnknown40 >= 0.0f))
         values = _QbPass_afDirWeights[6];
     return values;
 }
@@ -319,10 +319,10 @@ int QbPassEnter(Object_80039F5C *player) {
             state->mUnknown1C = 29;
         else
             state->mUnknown1C = 0;
-        int team = fn_80178320();
-        Point_8017886C point;
-        point = fn_80177FE0();
-        unsigned int size = fn_80178D18((unsigned char)team);
+        int team = ScrmGetDefenseTeam();
+        FieldPoint_t point;
+        point = ScrmGetBallSpot();
+        unsigned int size = ScrmGetTeamPlayerCount((unsigned char)team);
         for (int i = 0; i < (int)size; ++i) {
             Object_80039F5C *other = PlyrGet((unsigned char)team, (unsigned short)i);
             if (other->mUnknown8 != 255 || other->mpState->mId == 2 || other->mpState->mId == 30 ||
@@ -359,14 +359,14 @@ int QbPassUpdate(Object_80039F5C *player) {
     PlyrModeState_t *state = (PlyrModeState_t *)&player->mUnknown336;
     Object_80039F5C *candidate = 0;
     if (!_QbPass_bDroppedBack) {
-        if (fn_80177FE0().mY - player->mMotion.mPos.mY > 4.5f)
+        if (ScrmGetBallSpot().mY - player->mMotion.mPos.mY > 4.5f)
             _QbPass_bDroppedBack = 1;
     }
     if (_QbPass_bDroppedBack)
         QbPassCheckSpeech(player);
-    fn_8010A2DC(player, 0, -1);
-    Point_8017886C point;
-    point = fn_80177FE0();
+    PlyrTryQueueMsg62(player, 0, -1);
+    FieldPoint_t point;
+    point = ScrmGetBallSpot();
     QbPassUpdateReceiverOptions(player, state);
     if (!(player->mFlags & 0x4000)) {
         if (player != BallGetCurrentHolder())
@@ -384,7 +384,7 @@ int QbPassUpdate(Object_80039F5C *player) {
             int value = 0;
             fn_8012430C(&values, 4, player);
             QbPassScoreDirections(player, values.mCost);
-            if (player->mMotion.mPos.mY > fn_80177FE0().mY - 1.5f)
+            if (player->mMotion.mPos.mY > ScrmGetBallSpot().mY - 1.5f)
                 weights = _QbPass_afDirWeights[4];
             else
                 weights = QbPassGetDirectionWeights(player, &value);
@@ -420,12 +420,12 @@ int QbPassUpdate(Object_80039F5C *player) {
 
                 }
             }
-            unsigned int size = fn_80178D18(fn_80178320());
+            unsigned int size = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
             for (unsigned char n = 0; n < size; ++n) {
-                Object_80039F5C *other = PlyrGet(fn_80178320(), n);
+                Object_80039F5C *other = PlyrGet(ScrmGetDefenseTeam(), n);
                 int first = 13, last = 18;
                 if (other->mUnknown8 != 255 && other->mUnknown2914 <= last && other->mUnknown2914 >= first) {
-                    if (other->mMotion.mPos.mY < fn_80177FE0().mY)
+                    if (other->mMotion.mPos.mY < ScrmGetBallSpot().mY)
                         state->mUnknown1 = -1;
                 }
             }
@@ -492,10 +492,10 @@ int QbPassUpdate(Object_80039F5C *player) {
                         predicted.mY = 0.0f;
                         unsigned int bonus = 0;
                         candidate = PlyrGet(player->mIdBytes[2], indices[i]);
-                        if (fn_80177F70() != 6) {
+                        if (ScrmGetDown() != 6) {
                             fn_800C146C(&predicted, player, candidate, 20, 0, 0, 0, 0);
                             if (predicted.mY > point.mY)
-                                bonus = (unsigned int)(predicted.mY - point.mY) * fn_80177F70();
+                                bonus = (unsigned int)(predicted.mY - point.mY) * ScrmGetDown();
                         }
                         weight = state->mUnknown2D[i] + bonus;
                         action = state->mUnknown23[i];
@@ -519,8 +519,8 @@ int QbPassUpdate(Object_80039F5C *player) {
                         found = 1;
                         if (!QbPassPickRandomReceiver(player, state, &selected, &action, indices))
                             selected = candidate;
-                    } else if (fn_80177F70() == 4 || TutorialIsActive()) {
-                        float highest = -fn_80178A2C();
+                    } else if (ScrmGetDown() == 4 || TutorialIsActive()) {
+                        float highest = -ScrmGetGoalLineY();
                         unsigned char best = 0;
                         for (i = 0; i < 3; ++i) {
                             Object_80039F5C *other = PlyrGet(player->mIdBytes[2], indices[i]);
@@ -569,7 +569,7 @@ int QbPassUpdate(Object_80039F5C *player) {
 
         }
         if (QbPassInSpecialMode()) {
-            if (player->mMotion.mPos.mY > fn_80177FE0().mY - 0.5f) {
+            if (player->mMotion.mPos.mY > ScrmGetBallSpot().mY - 0.5f) {
                 if (MathAngleDiff(state->mUnknown8, 0x400000) <= 0xE38E2)
                     state->mUnknown3 = 0;
                 else {
@@ -587,7 +587,7 @@ int QbPassUpdate(Object_80039F5C *player) {
         } else
             PlayerActionAnimSteerPassReady(player, state->mUnknown8, 0.0f);
         --state->mUnknown6;
-    } else if (fn_801783AC(0) == 1) {
+    } else if (ScrmTestPlayFlag(0) == 1) {
 
         fn_800A02B4();
         fn_800A02FC();
@@ -611,7 +611,7 @@ void QbPassResetTarget(Object_80039F5C *p)
 
 int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned char *choices)
 {
-    Point_8017886C point = fn_80177FE0();
+    FieldPoint_t point = ScrmGetBallSpot();
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
     if (s->mUnknown3 == 1 && !(s->mUnknown14 <= _QbPass_fMinMoveScore)) {
         int angle = s->mUnknown10;
@@ -635,7 +635,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
         return 1;
     }
     if (fn_801486A0() != 4 && fn_801486A0() != 3 && (s->mUnknown18 || QbPassShouldRun(p))) {
-        if (!(p->mMotion.mPos.mY <= fn_80177FE0().mY - _QbPass_fRunLineMargin)) {
+        if (!(p->mMotion.mPos.mY <= ScrmGetBallSpot().mY - _QbPass_fRunLineMargin)) {
             Message_800F01CC m;
             memset(&m, 0, 4);
             m.mId = 1;
@@ -656,7 +656,7 @@ unsigned char QbPassRateReceiver(Object_80039F5C *p, Object_80039F5C *other, int
         result = fn_800C13A0(other, a, b);
         if (!(s->mUnknown14 < 5.0f) && !s->mUnknown19) {
             int team = p->mIdBytes[2] ^ 1;
-            unsigned char n = fn_80178D18(team);
+            unsigned char n = ScrmGetTeamPlayerCount(team);
             float distance;
             Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
@@ -697,7 +697,7 @@ int QbPassCarrierWillCross(void)
         Vec2FromAngle(&step, p->mMotion.mUnknown32, p->mMotion.mUnknown28 * 40.0f);
         ahead.mX = step.mX + p->mMotion.mPos.mX;
         ahead.mY = step.mY + p->mMotion.mPos.mY;
-        return ahead.mY < fn_80177FE0().mY;
+        return ahead.mY < ScrmGetBallSpot().mY;
     }
     return 0;
 }

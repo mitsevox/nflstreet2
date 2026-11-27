@@ -63,7 +63,7 @@ int PlayerDbGetPbpo(Object_8008044C *pObject);
 void PlayerGetGearRatings(Object_8008044C *pObject, int *pValues);
 int PlayerDbReadGear(Object_8008044C *pObject, PlayerGear_t *pInfo);
 void PlayerDbWriteGear(Object_8008044C *pObject, PlayerGear_t *pInfo);
-void fn_80081F50(Object_8008044C *pObject, unsigned char side, int a);
+void PlayerDbSetPickedFlag(Object_8008044C *pObject, unsigned char side, int a);
 }
 
 #endif

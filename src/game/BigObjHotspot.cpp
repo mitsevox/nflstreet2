@@ -16,7 +16,7 @@
 #include "game/fn_800B65A0.h"
 #include "game/Record_8011F4F8.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include <string.h>
 #include "engine/texture.h"
 #include "engine/texfile.h"
@@ -68,7 +68,7 @@ static int _Hotspot_iPendingNext = 0;
 int fn_800AD9B4(void);
 Object_80039F5C *BallGetCurrentHolder(void);
 int fn_801486A0(void);
-int fn_80177C38(void);
+int ScrmGetPlayTurnovers(void);
 void BigObjEmitParticles(void *, float, BigObjInst *, BigObj_t *);
 void DynObjSetPartState(BigObj_t *, int, int);
 void InGameSetLegendsUnlocked(int);
@@ -80,14 +80,14 @@ int fn_800A3444(void);
 int fn_801485D4(void);
 int TutorialIsActive(void);
 void TutorialSetMoveDone(int, int);
-int fn_801784C4(void);
-void fn_8017CA3C(int, int);
+int ScrmIsFieldFlipped(void);
+void ScrmStatAddHotspotCapture(int, int);
 void HudShowAlert(const char *);
 void MsgGameGetPlayerStatus(int, int *, int *);
 int UserProfileGetSelected(unsigned char);
 int TeamLogoGetSlot(int);
 void *UIGLibraryGetGlobal(int);
-unsigned char *fn_80220BFC(int, int);
+unsigned char *UIGCSLoadPalette(int, int);
 void *LLUIGTexNodeGet(void *, int, int);
 void TMTexLibReplaceClut(void *, TexFilePalette_t *, int, void *);
 void TMTexLibReplaceTexture(void *, void *, int, TexFileImage_t *, int, int);
@@ -155,13 +155,13 @@ int HotspotClassifyPlay(HotspotPlay_t *pPlay)
         pPlay->mKind = 4;
         found = 1;
     } else if (type == 228 || type == 229) {
-        if (!fn_80177C38()) {
-            if (fn_801784C4()) {
-                if (1.5f - pObject->mUnknown472->mState.mUnknown4 <= fn_80177FE0().mY) {
+        if (!ScrmGetPlayTurnovers()) {
+            if (ScrmIsFieldFlipped()) {
+                if (1.5f - pObject->mUnknown472->mState.mUnknown4 <= ScrmGetBallSpot().mY) {
                     goto done;
                 }
             } else {
-                if (pObject->mUnknown472->mState.mUnknown4 + 1.5f <= fn_80177FE0().mY) {
+                if (pObject->mUnknown472->mState.mUnknown4 + 1.5f <= ScrmGetBallSpot().mY) {
                     goto done;
                 }
             }
@@ -224,7 +224,7 @@ void HotspotLoadTeamLogos(BigObj_t *)
         if (value == 0) {
             int slot;
             if (i == 0) slot = 0; else slot = 1;
-            pPalette = fn_80220BFC(5, TeamLogoGetSlot(slot));
+            pPalette = UIGCSLoadPalette(5, TeamLogoGetSlot(slot));
         }
         _Hotspot_aLogo[i].mImage.mWidth = pTexture->mWidth;
         _Hotspot_aLogo[i].mImage.mHeight = pTexture->mHeight;
@@ -280,7 +280,7 @@ void HotspotCapture(HotspotPlay_t *pPlay)
         HotspotRecordCapture(pPlay);
     }
     StyleTrackerAwardHotspot(fn_8009BCE8(pRef), count, changed);
-    fn_8017CA3C(*pRef, 1);
+    ScrmStatAddHotspotCapture(*pRef, 1);
     BigObj_t *pOther = pObject->mUnknown472->mUnknown152[0];
     if (pOther) {
         pOther->mUnknown232_31 = 0;
@@ -378,7 +378,7 @@ int BigObjHotspotFrameUpdate(BigObjInst *pInst, BigObj_t *pOwner, int mode)
         position.mX = pInst->mUnknown360.mX;
         position.mY = pInst->mUnknown360.mY;
         position.mZ = pInst->mUnknown360.mZ;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             position.mX = -position.mX;
             position.mY = -position.mY;
         }

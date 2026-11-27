@@ -15,8 +15,8 @@ extern "C" {
 float fn_800C4A2C(AnimMomentumActor_t *p);
 void DivotOnMomentum(AnimMomentumActor_t *p, AnimMomentum_t *pState);
 AnimMomentumActor_t *BallGetCurrentHolder(void);
-int fn_801784C4(void);
-int fn_801787A0(void);
+int ScrmIsFieldFlipped(void);
+int ScrmIsNotReplay(void);
 float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTime(AnimSeq_t *p);
 void Vec2Scale(Pair_802270A4 *p, Pair_802270A4 *pOther, float value);
@@ -71,7 +71,7 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
                 p->mUnknown8 /= pBlock->mUnknown4;
                 p->mUnknownC /= pBlock->mUnknown4;
                 p->mUnknown14 = 1;
-                p->mUnknown15 = fn_801784C4();
+                p->mUnknown15 = ScrmIsFieldFlipped();
                 DivotOnMomentum(pOther, p);
             } else if (value < p->mUnknownC) {
                 float alpha = (value - p->mUnknown8) / (p->mUnknownC - p->mUnknown8);
@@ -89,11 +89,11 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
                         Vec2ScaleLength(&p->mUnknown0, &p->mUnknown0, 0.25f);
                     }
                 }
-                int otherFlag = fn_801784C4();
+                int otherFlag = ScrmIsFieldFlipped();
                 if (p->mUnknown15 != otherFlag) {
                     p->mUnknown0.mUnknown0 = -p->mUnknown0.mUnknown0;
                     p->mUnknown0.mUnknown4 = -p->mUnknown0.mUnknown4;
-                    p->mUnknown15 = fn_801784C4();
+                    p->mUnknown15 = ScrmIsFieldFlipped();
                 }
                 Pair_802270A4 other;
                 Vec2Scale(&other, &p->mUnknown0, 1.0f - alpha);
@@ -156,7 +156,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
             p->mUnknown8 /= pBlock->mUnknown4;
             p->mUnknownC /= pBlock->mUnknown4;
             p->mUnknown14 = 1;
-            p->mUnknown15 = fn_801784C4();
+            p->mUnknown15 = ScrmIsFieldFlipped();
             DivotOnMomentum(pOther, p);
         } else if (value < p->mUnknownC) {
             float alpha = (value - p->mUnknown8) / (p->mUnknownC - p->mUnknown8);
@@ -174,23 +174,23 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
                     Vec2ScaleLength(&p->mUnknown0, &p->mUnknown0, 0.25f);
                 }
             }
-            int otherFlag = fn_801784C4();
+            int otherFlag = ScrmIsFieldFlipped();
             if (p->mUnknown15 != otherFlag) {
                 p->mUnknown0.mUnknown0 = -p->mUnknown0.mUnknown0;
                 p->mUnknown0.mUnknown4 = -p->mUnknown0.mUnknown4;
-                p->mUnknown15 = fn_801784C4();
+                p->mUnknown15 = ScrmIsFieldFlipped();
             }
             Pair_802270A4 other;
             Vec2Scale(&other, &p->mUnknown0, 1.0f - alpha);
             Vec2Add(&pOther->mUnknown1A8, &pOther->mUnknown1A8, &other);
             Vec2Scale(&p->mUnknown0, &p->mUnknown0, 0.85f);
-            if ((pOther->mUnknownC & 8) && !fn_801787A0()) {
+            if ((pOther->mUnknownC & 8) && !ScrmIsNotReplay()) {
                 Vec2Add(&pThird->mMotion.mPos, &pThird->mMotion.mPos, &other);
                 pState->mUnknown0.mUnknown0 = p->mUnknown0.mUnknown0;
                 pState->mUnknown0.mUnknown4 = p->mUnknown0.mUnknown4;
             }
         }
-        if ((pOther->mUnknownC & 8) && BallGetCurrentHolder() == pOther && !fn_801787A0()) {
+        if ((pOther->mUnknownC & 8) && BallGetCurrentHolder() == pOther && !ScrmIsNotReplay()) {
             pState->mUnknown8 = p->mUnknown8;
             pState->mUnknownC = p->mUnknownC;
             pState->mUnknown14 = 1;

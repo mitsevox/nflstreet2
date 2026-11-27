@@ -3,7 +3,7 @@
    enforcing it from the penalty kind table: marching off 5, 10 or 15 yards with the
    half-the-distance rule, picking the next down, the new line to gain and the team in possession. */
 #include "game/Entry_800B206C.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Object_80039F5C.h"
 #include "game/Point2.h"
 #include "game/Ball.h"
@@ -65,15 +65,15 @@ PenaltyKindInfo_t _Penalty_aKindInfo[18] = {
     {15, 15, 0xFE00000C, PenaltyEnforceKind15}, {15, 15, 0xFE000004, PenaltyEnforceKind17},
 };
 extern float gPlyrMoveFwdSpeed;
-unsigned char fn_80178308(void);
-unsigned char fn_80178320(void);
-unsigned char fn_80178348(void);
-int fn_801783AC(int);
-void fn_801783D0(int, int);
-float fn_80178A2C(void);
-float fn_80178A08(void);
-int fn_80177F70(void);
-int fn_801784E8(void);
+unsigned char ScrmGetOffenseTeam(void);
+unsigned char ScrmGetDefenseTeam(void);
+unsigned char ScrmGetSnapOffense(void);
+int ScrmTestPlayFlag(int);
+void ScrmSetPlayFlag(int, int);
+float ScrmGetGoalLineY(void);
+float ScrmGetSidelineX(void);
+int ScrmGetDown(void);
+int ScrmHasFieldFlippedInPlay(void);
 void PenaltyResolveOutcome(PenaltySituation_t *, PenaltyOutcome_t *, float, int);
 void fn_800B2640(int, int);
 int fn_800B2600(void);
@@ -83,7 +83,7 @@ int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 void Vec2Sub(void *, void *, void *);
 int BallStateGet(void *, int *);
-int fn_80177C38(void);
+int ScrmGetPlayTurnovers(void);
 void PenaltyApplyDiscipline(float *, Object_80039F5C *, int);
 void fn_800B2370(Object_80039F5C *, int, Object_80039F5C *, float);
 int fn_8009D86C(void);
@@ -93,10 +93,10 @@ void SortArray(int, void *, int, int,
 int PenaltyIsPlayingBall(Object_80039F5C *, Object_80039F5C *, void *);
 void PenaltyCallInterference(int, Object_80039F5C *, Object_80039F5C *);
 extern const char *gPossJointNames[];
-unsigned int fn_80178D18(int team);
-void fn_80178370(void);
+unsigned int ScrmGetTeamPlayerCount(int team);
+void ScrmEndPlay(void);
 int fn_800BA6F8(void);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int CharSkelGetJointByName(void *p, const char *pName);
 float Vec2Magnitude(void *);
@@ -110,10 +110,10 @@ void PenaltyResolveOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out, float 
                  int type) {
   if (!in || !out)
     return;
-  int team = fn_80178348();
+  int team = ScrmGetSnapOffense();
   if (in->mUnknown22)
     team = (unsigned char)(team ^ 1);
-  if (team == fn_80178308() && in->mUnknown20 == team && !in->mUnknown21) {
+  if (team == ScrmGetOffenseTeam() && in->mUnknown20 == team && !in->mUnknown21) {
     if (in->mUnknown14 == 6) {
       out->mUnknown10 = 3;
       return;
@@ -125,8 +125,8 @@ void PenaltyResolveOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out, float 
     out->mUnknown0 = -PenaltyMarchOff(out->mUnknown8, value, 0);
     return;
   }
-  if (team != fn_80178308() && !in->mUnknown21 &&
-      in->mUnknown20 == fn_80178320()) {
+  if (team != ScrmGetOffenseTeam() && !in->mUnknown21 &&
+      in->mUnknown20 == ScrmGetDefenseTeam()) {
     if (in->mUnknown14 == 6) {
       out->mUnknown10 = 3;
       return;
@@ -135,14 +135,14 @@ void PenaltyResolveOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out, float 
     if (in->mUnknown24 > 0) {
       out->mUnknown14 = in->mUnknown24;
       if (out->mUnknown14 == 6 || out->mUnknown14 == 9) {
-        out->mUnknown8 = fn_80178A2C() - 5.0f;
+        out->mUnknown8 = ScrmGetGoalLineY() - 5.0f;
         out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, value, 0);
       }
     }
     return;
   }
-  if (team != fn_80178308() && !in->mUnknown21 &&
-      in->mUnknown20 != fn_80178320()) {
+  if (team != ScrmGetOffenseTeam() && !in->mUnknown21 &&
+      in->mUnknown20 != ScrmGetDefenseTeam()) {
     out->mUnknown8 = -out->mUnknown8;
     out->mUnknown14 = 0;
     if (in->mUnknown22)
@@ -162,8 +162,8 @@ void PenaltyResolveOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out, float 
       out->mUnknown10 = type;
     return;
   }
-  if (team != fn_80178308() && in->mUnknown21 == 1 &&
-      in->mUnknown20 != fn_80178308()) {
+  if (team != ScrmGetOffenseTeam() && in->mUnknown21 == 1 &&
+      in->mUnknown20 != ScrmGetOffenseTeam()) {
     out->mUnknown14 = 0;
     out->mUnknown10 = 0;
     out->mUnknown15 ^= 1;
@@ -199,10 +199,10 @@ int PenaltyResolvePair(Entry_800B206C *events, int, unsigned char *result) {
   int handled = 0;
   *result = 0;
   int team = events[0].mUnknown4Bytes[2], other = events[1].mUnknown4Bytes[2];
-  unsigned short a = team == fn_80178308()
+  unsigned short a = team == ScrmGetOffenseTeam()
                          ? _Penalty_aKindInfo[events[0].mUnknown0].mUnknown0
                          : _Penalty_aKindInfo[events[0].mUnknown0].mUnknown2;
-  unsigned short b = other == fn_80178308()
+  unsigned short b = other == ScrmGetOffenseTeam()
                          ? _Penalty_aKindInfo[events[1].mUnknown0].mUnknown0
                          : _Penalty_aKindInfo[events[1].mUnknown0].mUnknown2;
   if (team == other) {
@@ -234,37 +234,37 @@ int PenaltyCompareEvents(Entry_800B206C *a, Entry_800B206C *b) {
   return a->mUnknown14 - b->mUnknown14;
 }
 float PenaltyMarchOff(float value, float amount, int direction) {
-  if (!(value >= -fn_80178A2C()))
-    value = -fn_80178A2C();
-  else if (!(value <= fn_80178A2C()))
-    value = fn_80178A2C();
+  if (!(value >= -ScrmGetGoalLineY()))
+    value = -ScrmGetGoalLineY();
+  else if (!(value <= ScrmGetGoalLineY()))
+    value = ScrmGetGoalLineY();
   float out;
   if (direction) {
     out = value - amount;
-    float limit = value - fabsf(value + fn_80178A2C()) * 0.5f;
+    float limit = value - fabsf(value + ScrmGetGoalLineY()) * 0.5f;
     if (!(out >= limit))
       out = limit;
   } else {
     out = value + amount;
-    float limit = fabsf(value - fn_80178A2C()) * 0.5f + value;
+    float limit = fabsf(value - ScrmGetGoalLineY()) * 0.5f + value;
     if (!(out <= limit))
       out = limit;
   }
-  if (!(out >= -fn_80178A2C()))
-    return -fn_80178A2C();
-  if (out <= fn_80178A2C())
+  if (!(out >= -ScrmGetGoalLineY()))
+    return -ScrmGetGoalLineY();
+  if (out <= ScrmGetGoalLineY())
     return out;
-  return fn_80178A2C();
+  return ScrmGetGoalLineY();
 }
 void PenaltySetupOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out) {
-  unsigned char side = fn_80178348();
+  unsigned char side = ScrmGetSnapOffense();
   if (in->mUnknown22)
     side ^= 1;
-  int other = side != fn_80178308();
+  int other = side != ScrmGetOffenseTeam();
   unsigned char direction = in->mUnknown21;
   out->mUnknown0 = in->mUnknown0;
   out->mUnknown14 = 0;
-  out->mUnknown15 = fn_80178308();
+  out->mUnknown15 = ScrmGetOffenseTeam();
   if (direction) {
     out->mUnknown10 = 1;
     if (in->mUnknown22)
@@ -284,7 +284,7 @@ void PenaltySetupOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out) {
       if (in->mUnknown22)
         return;
       if (!(in->mUnknown8 >= in->mUnknown0)) {
-        if (!(in->mUnknown8 <= -fn_80178A2C()))
+        if (!(in->mUnknown8 <= -ScrmGetGoalLineY()))
           out->mUnknown8 = in->mUnknown0;
         else {
           out->mUnknown8 = in->mUnknown8;
@@ -293,7 +293,7 @@ void PenaltySetupOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out) {
       }
       if (!(in->mUnknown8 <= in->mUnknown0) &&
           !(in->mUnknown4 >= in->mUnknown0)) {
-        if (!(in->mUnknown4 <= -fn_80178A2C()))
+        if (!(in->mUnknown4 <= -ScrmGetGoalLineY()))
           out->mUnknown8 = in->mUnknown0;
         else {
           out->mUnknown8 = in->mUnknown8;
@@ -319,46 +319,46 @@ void PenaltySetupOutcome(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     goto clampLow;
   }
   if (!direction) {
-    if (in->mUnknown20 == fn_80178308()) {
+    if (in->mUnknown20 == ScrmGetOffenseTeam()) {
       out->mUnknown8 = in->mUnknown8;
       out->mUnknown15 ^= 1;
       goto clampLow;
     }
     if (!(in->mUnknown4 >= out->mUnknown8))
       out->mUnknown8 = in->mUnknown4;
-    if (!fn_801783AC(2)) {
-      if (!(in->mUnknown8 <= -fn_80178A2C()) &&
+    if (!ScrmTestPlayFlag(2)) {
+      if (!(in->mUnknown8 <= -ScrmGetGoalLineY()) &&
           !(in->mUnknown8 >= in->mUnknown4))
         out->mUnknown8 = in->mUnknown8;
       else
         out->mUnknown8 = in->mUnknown4;
     }
   clampLow:
-    if (!(out->mUnknown8 >= -fn_80178A2C()))
-      out->mUnknown8 = -fn_80178A2C();
+    if (!(out->mUnknown8 >= -ScrmGetGoalLineY()))
+      out->mUnknown8 = -ScrmGetGoalLineY();
     return;
   }
-  if (fn_801783AC(15) && !in->mUnknown23) {
+  if (ScrmTestPlayFlag(15) && !in->mUnknown23) {
     out->mUnknown8 = in->mUnknown0;
     out->mUnknown15 ^= 1;
     return;
   }
-  if (in->mUnknown20 == fn_80178308()) {
+  if (in->mUnknown20 == ScrmGetOffenseTeam()) {
     if (!(out->mUnknown8 <= in->mUnknown4))
       out->mUnknown8 = in->mUnknown4;
   } else {
     if (!in->mUnknown22 && !(in->mUnknown8 >= in->mUnknown0)) {
-      if (!(in->mUnknown8 <= -fn_80178A2C()))
+      if (!(in->mUnknown8 <= -ScrmGetGoalLineY()))
         out->mUnknown8 = in->mUnknown0;
       else {
         out->mUnknown8 = in->mUnknown8;
         out->mUnknown14 = -2;
       }
     }
-    if (!(out->mUnknown8 <= fn_80178A2C()))
-      out->mUnknown8 = fn_80178A2C();
+    if (!(out->mUnknown8 <= ScrmGetGoalLineY()))
+      out->mUnknown8 = ScrmGetGoalLineY();
   }
-  if (in->mUnknown20 == fn_80178320())
+  if (in->mUnknown20 == ScrmGetDefenseTeam())
     out->mUnknown15 ^= 1;
   else
     out->mUnknown10 = 2;
@@ -395,7 +395,7 @@ void PenaltyEnforceKind2(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown14 = 0;
 }
 void PenaltyEnforceKind4(PenaltySituation_t *in, PenaltyOutcome_t *out) {
-  if (!(in->mUnknown4 <= out->mUnknown8) && in->mUnknown20 == fn_80178320())
+  if (!(in->mUnknown4 <= out->mUnknown8) && in->mUnknown20 == ScrmGetDefenseTeam())
     out->mUnknown8 = in->mUnknown4;
   out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, 5.0f, in->mUnknown21);
   PenaltyResolveOutcome(in, out, 5.0f, 0);
@@ -406,20 +406,20 @@ void PenaltyEnforceKind5(PenaltySituation_t *in, PenaltyOutcome_t *out) {
 }
 void PenaltyEnforceKind7(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown8 = in->mUnknown8;
-  if (!(out->mUnknown8 >= -fn_80178A2C()))
+  if (!(out->mUnknown8 >= -ScrmGetGoalLineY()))
     out->mUnknown8 = -30.0f;
   out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
   out->mUnknown14 = 0;
   if (out->mUnknown15 == in->mUnknown20)
     out->mUnknown15 ^= 1;
-  int team = fn_80178308();
-  if (team == fn_80178348())
+  int team = ScrmGetOffenseTeam();
+  if (team == ScrmGetSnapOffense())
     out->mUnknown0 = -out->mUnknown0;
 }
 void PenaltyEnforceKind6(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown8 = in->mUnknown8;
-  if (!(out->mUnknown8 >= -fn_80178A2C()))
+  if (!(out->mUnknown8 >= -ScrmGetGoalLineY()))
     out->mUnknown8 = -30.0f;
   out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, 15.0f, in->mUnknown21);
   out->mUnknown10 = 2;
@@ -434,7 +434,7 @@ void PenaltyEnforceKind8(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown14 = 0;
 }
 void PenaltyEnforceKind9(PenaltySituation_t *in, PenaltyOutcome_t *out) {
-  if (in->mUnknown20 == fn_80178348()) {
+  if (in->mUnknown20 == ScrmGetSnapOffense()) {
     if (in->mUnknown14 == 6) {
       out->mUnknown14 = 0;
       out->mUnknown10 = 3;
@@ -454,23 +454,23 @@ void PenaltyEnforceKind9(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     }
     out->mUnknown10 = 1;
     out->mUnknown14 = 0;
-    if (!(in->mUnknown0 <= fn_80178A2C() - 2.0f))
-      out->mUnknown0 = (fn_80178A2C() - in->mUnknown0) * 0.5f + in->mUnknown0;
+    if (!(in->mUnknown0 <= ScrmGetGoalLineY() - 2.0f))
+      out->mUnknown0 = (ScrmGetGoalLineY() - in->mUnknown0) * 0.5f + in->mUnknown0;
     else
-      out->mUnknown0 = fn_80178A2C() - 1.0f;
+      out->mUnknown0 = ScrmGetGoalLineY() - 1.0f;
     return;
   }
   out->mUnknown10 = 2;
   out->mUnknown8 = in->mUnknown0;
   out->mUnknown14 = 0;
-  if (!(in->mUnknown8 >= fn_80178A2C())) {
+  if (!(in->mUnknown8 >= ScrmGetGoalLineY())) {
     out->mUnknown0 = in->mUnknown8;
     return;
   }
-  if (!(in->mUnknown0 <= fn_80178A2C() - 2.0f))
-    out->mUnknown0 = (fn_80178A2C() - in->mUnknown0) * 0.5f + in->mUnknown0;
+  if (!(in->mUnknown0 <= ScrmGetGoalLineY() - 2.0f))
+    out->mUnknown0 = (ScrmGetGoalLineY() - in->mUnknown0) * 0.5f + in->mUnknown0;
   else
-    out->mUnknown0 = fn_80178A2C() - 1.0f;
+    out->mUnknown0 = ScrmGetGoalLineY() - 1.0f;
 }
 void PenaltyEnforceKind10(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, 10.0f, in->mUnknown21);
@@ -486,7 +486,7 @@ void PenaltyEnforceKind11(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   else
     out->mUnknown0 = PenaltyMarchOff(out->mUnknown8, 10.0f, in->mUnknown21);
   if (in->mUnknown14 != 6) {
-    if (!(in->mUnknown8 >= -fn_80178A2C())) {
+    if (!(in->mUnknown8 >= -ScrmGetGoalLineY())) {
       out->mUnknown10 = 1;
       out->mUnknown14 = -2;
     } else
@@ -500,7 +500,7 @@ void PenaltyEnforceKind12(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     out->mUnknown14 = in->mUnknown24;
     return;
   }
-  if (!(in->mUnknown4 <= in->mUnknown0) && fn_80178308() == fn_80178348())
+  if (!(in->mUnknown4 <= in->mUnknown0) && ScrmGetOffenseTeam() == ScrmGetSnapOffense())
     out->mUnknown8 = in->mUnknown4;
   else
     out->mUnknown8 = in->mUnknown0;
@@ -509,7 +509,7 @@ void PenaltyEnforceKind12(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown14 = 0;
   if (in->mUnknown14 == 6)
     out->mUnknown10 = 1;
-  out->mUnknown15 = fn_80178348();
+  out->mUnknown15 = ScrmGetSnapOffense();
 }
 void PenaltyEnforceKind13(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   out->mUnknown8 = in->mUnknown0;
@@ -525,8 +525,8 @@ void PenaltyEnforceKind13(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     out->mUnknown14 = in->mUnknown24;
   } else
     out->mUnknown10 = 1;
-  out->mUnknown15 = fn_80178348();
-  if (fn_80177F70() == 6)
+  out->mUnknown15 = ScrmGetSnapOffense();
+  if (ScrmGetDown() == 6)
     fn_800B2640(4, 1);
 }
 void PenaltyEnforceKind14(PenaltySituation_t *in, PenaltyOutcome_t *out) {
@@ -543,32 +543,32 @@ void PenaltyEnforceKind14(PenaltySituation_t *in, PenaltyOutcome_t *out) {
       out->mUnknown10 = 2;
     out->mUnknown14 = 0;
   }
-  out->mUnknown15 = fn_80178348();
-  if (fn_80177F70() == 6)
+  out->mUnknown15 = ScrmGetSnapOffense();
+  if (ScrmGetDown() == 6)
     fn_800B2640(4, 1);
 }
 void PenaltyEnforceKind17(PenaltySituation_t *in, PenaltyOutcome_t *out) {
-  if (fn_801784E8())
+  if (ScrmHasFieldFlippedInPlay())
     in->mUnknown0 = -in->mUnknown0;
-  int special = fn_801783AC(3);
+  int special = ScrmTestPlayFlag(3);
   if (special)
-    in->mUnknown8 = fn_8017827C().mY;
-  else if (in->mUnknown20 == fn_80178308() && out->mUnknown15 != in->mUnknown20)
+    in->mUnknown8 = ScrmGetDeadBallSpot().mY;
+  else if (in->mUnknown20 == ScrmGetOffenseTeam() && out->mUnknown15 != in->mUnknown20)
     in->mUnknown8 = -in->mUnknown8;
   float distance = fabsf(in->mUnknown0 - in->mUnknown8);
   if (!(distance >= 20.0f)) {
-    if ((special || !(distance >= 10.0f)) && !fn_801783AC(17)) {
+    if ((special || !(distance >= 10.0f)) && !ScrmTestPlayFlag(17)) {
       out->mUnknown8 = in->mUnknown0;
       out->mUnknown10 = 3;
       out->mUnknown15 ^= 1;
       if (special)
         out->mUnknown0 = -(in->mUnknown0 + 5.0f);
       else {
-        if (fn_801784E8())
+        if (ScrmHasFieldFlippedInPlay())
           in->mUnknown0 = -in->mUnknown0;
         out->mUnknown0 = in->mUnknown0 - 5.0f;
       }
-      fn_801783D0(17, 1);
+      ScrmSetPlayFlag(17, 1);
     } else {
       out->mUnknown0 = in->mUnknown8;
       out->mUnknown10 = 2;
@@ -579,7 +579,7 @@ void PenaltyEnforceKind17(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     out->mUnknown0 = spot;
     if (!(in->mUnknown8 <= spot))
       out->mUnknown0 = in->mUnknown8;
-    if (in->mUnknown20 == fn_80178308() && out->mUnknown15 != in->mUnknown20)
+    if (in->mUnknown20 == ScrmGetOffenseTeam() && out->mUnknown15 != in->mUnknown20)
       out->mUnknown0 = -out->mUnknown0;
   }
 }
@@ -710,15 +710,15 @@ int PenaltySkipInterference(Ball_t *ball, Object_80039F5C *player) {
     reject = 1;
   if (!reject && !player)
     reject = 1;
-  if (!reject && !(player->mMotion.mPos.mY > fn_80177FE0().mY + 5.0f))
+  if (!reject && !(player->mMotion.mPos.mY > ScrmGetBallSpot().mY + 5.0f))
     reject = 1;
-  if (!reject && fn_801783AC(11) == 1)
+  if (!reject && ScrmTestPlayFlag(11) == 1)
     reject = 1;
-  if (!reject && fn_801783AC(12) == 1)
+  if (!reject && ScrmTestPlayFlag(12) == 1)
     reject = 1;
   if (!reject && BallGetSpinMode(ball) != 1)
     reject = 1;
-  if (!reject && fn_80177C38())
+  if (!reject && ScrmGetPlayTurnovers())
     reject = 1;
   return reject;
 }
@@ -728,7 +728,7 @@ int PenaltySkipInterferenceAt(Object_80039F5C *a, Object_80039F5C *b, Vector_800
     reject = 1;
   if (!reject && a->mIdBytes[2] == b->mIdBytes[2])
     reject = 1;
-  if (!reject && !(fabsf(point.mX) < fn_80178A08() + 2.0f))
+  if (!reject && !(fabsf(point.mX) < ScrmGetSidelineX() + 2.0f))
     reject = 1;
   return reject;
 }
@@ -816,8 +816,8 @@ void PenaltyPickInterferenceFar(Object_80039F5C *a, Object_80039F5C *b, float va
   PenaltyPickInterferenceByFacing(a, valueA, angleA, b, valueB, angleB, point);
 }
 float PenaltyCalcLineToGain(float value) {
-  if (value >= fn_80178A2C() - 10.0f)
-    return fn_80178A2C();
+  if (value >= ScrmGetGoalLineY() - 10.0f)
+    return ScrmGetGoalLineY();
   return value + 10.0f;
 }
 int PenaltyNextDown(int value) {
@@ -869,24 +869,24 @@ void PenaltyEnforce(int type, PenaltySituation_t *in, PenaltyOutcome_t *out) {
   }
   if (_Penalty_aKindInfo[type].mUnknown4 & 16)
     fn_800B2640(4, 1);
-  if ((_Penalty_aKindInfo[type].mUnknown4 & 32) && fn_80178308() == fn_80178348())
+  if ((_Penalty_aKindInfo[type].mUnknown4 & 32) && ScrmGetOffenseTeam() == ScrmGetSnapOffense())
     fn_800B2640(4, 1);
 }
 unsigned int PenaltyGetKindFlags(int type) { return _Penalty_aKindInfo[type].mUnknown4; }
 void PenaltyCheckDefenderContact(Object_80039F5C *player);
 void PenaltyCheckAllPlayers(void) {
   for (unsigned char team = 0; team <= 1; team++) {
-    unsigned int count = fn_80178D18(team);
+    unsigned int count = ScrmGetTeamPlayerCount(team);
     for (unsigned short i = 0; i < count; i++)
       PenaltyCheckDefenderContact(PlyrGet(team, i));
   }
 }
 void PenaltyCheckOffside(void) {
-  Point_8017886C line;
-  line = fn_80177FE0();
-  unsigned int count = fn_80178D18(fn_80178320());
+  FieldPoint_t line;
+  line = ScrmGetBallSpot();
+  unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
   for (unsigned short i = 0; i < count; i++) {
-    Object_80039F5C *player = PlyrGet(fn_80178320(), i);
+    Object_80039F5C *player = PlyrGet(ScrmGetDefenseTeam(), i);
     if (!(player->mMotion.mPos.mY >= line.mY + 3.0f)) {
       if (!(player->mMotion.mPos.mY >= line.mY + 0.15625f)) {
         fn_800B2370(player, 2, 0, 1.0f);
@@ -907,14 +907,14 @@ void PenaltyCheckOffside(void) {
 }
 void PenaltyCheckDefenderContact(Object_80039F5C *player) {
   int mode = fn_800AD9B4();
-  int live = fn_80177F70();
+  int live = ScrmGetDown();
   if (mode != 2 || !live || BallStateGet(BallGetCurrent(), 0) != 6)
     return;
-  int team = fn_80178320();
+  int team = ScrmGetDefenseTeam();
   if (player->mIdBytes[2] == team && player->mUnknown560.mFlags.mBytes[0] &&
       player->mUnknown560.mUnknown53) {
     if (fn_800BA6F8())
-      fn_80178370();
+      ScrmEndPlay();
     else
       fn_800B2370(player, 3, 0, 1.0f);
   }
@@ -924,14 +924,14 @@ void PenaltyCheckOffenseKind1(void) {
   int state = 0;
   if (ball)
     state = BallStateGet(ball, 0);
-  if (fn_80177F70() && state != 6)
-    fn_800B2370(PlyrGet(fn_80178308(), 0), 1, 0, 1.0f);
+  if (ScrmGetDown() && state != 6)
+    fn_800B2370(PlyrGet(ScrmGetOffenseTeam(), 0), 1, 0, 1.0f);
 }
 void PenaltyCheckGrounding(Object_80039F5C *player) {
   if (fn_800B2618(8) <= 0.0f)
     return;
-  Point_8017886C line;
-  line = fn_80177FE0();
+  FieldPoint_t line;
+  line = ScrmGetBallSpot();
   Vector_80039F5C ball;
   if (!BallGetLandingPoint(BallGetCurrent(), &ball))
     return;
@@ -995,7 +995,7 @@ void PenaltyRollPassPlayFoul(Object_80039F5C *player) {
 int PenaltyRollFacemask(void) {
   float chance = 2000.0f;
   PenaltyApplyFrequency(&chance, 2, 10000.0f);
-  if (!fn_801787A0() && (float)SyncRandGetRange(0, 10000) < chance)
+  if (!ScrmIsNotReplay() && (float)SyncRandGetRange(0, 10000) < chance)
     return 1;
   return 0;
 }

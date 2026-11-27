@@ -7,12 +7,12 @@
 #include <string.h>
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 
 extern "C" {
 
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 
 int PlaySetFindRow(PlayBookFormation_t *pObject, int index, const char **ppNames);
 
@@ -85,9 +85,9 @@ int PlaySetGetNextOrder(PlayBookFormation_t *pObject, unsigned char index)
     PlayBookPosition_t *pEntry;
 
     if (pObject->mUnknown4) {
-        count = fn_80178D70(fn_80178308());
+        count = ScrmGetActivePlayerCount(ScrmGetOffenseTeam());
     } else {
-        count = fn_80178D70(fn_80178320());
+        count = ScrmGetActivePlayerCount(ScrmGetDefenseTeam());
     }
     pEntry = &pObject->mUnknown8.mUnknown84[0][index];
     next = pEntry->mUnknown8 + 1;
@@ -112,9 +112,9 @@ int PlaySetGetPrevOrder(PlayBookFormation_t *pObject, unsigned char index)
     PlayBookPosition_t *pEntry;
 
     if (pObject->mUnknown4) {
-        count = fn_80178D70(fn_80178308());
+        count = ScrmGetActivePlayerCount(ScrmGetOffenseTeam());
     } else {
-        count = fn_80178D70(fn_80178320());
+        count = ScrmGetActivePlayerCount(ScrmGetDefenseTeam());
     }
     pEntry = &pObject->mUnknown8.mUnknown84[0][index];
     if (pEntry->mUnknown8 > 1) {
@@ -139,10 +139,10 @@ void PlaySetGetEntryRoles(PlayBookFormation_t *pObject, unsigned char index, uns
 
 Object_80039F5C *PlaySetGetKeyPlayer(PlayBookFormation_t *pObject)
 {
-    if (PlayBookGetPlay(fn_80178308())->mUnknown18 & 0x20000) {
-        return PlyrGet(fn_80178308(), 1);
+    if (PlayBookGetPlay(ScrmGetOffenseTeam())->mUnknown18 & 0x20000) {
+        return PlyrGet(ScrmGetOffenseTeam(), 1);
     }
-    return PlyrGet(fn_80178308(), pObject->mUnknown8.mUnknownE);
+    return PlyrGet(ScrmGetOffenseTeam(), pObject->mUnknown8.mUnknownE);
 }
 
 void PlaySetPointToRoleMate(Object_80039F5C *p)
@@ -154,7 +154,7 @@ void PlaySetPointToRoleMate(Object_80039F5C *p)
     msg.mId = 84;
     if (p->mUnknown2914 == 0) {
         int i;
-        int count = fn_80178D70(p->mIdBytes[2]);
+        int count = ScrmGetActivePlayerCount(p->mIdBytes[2]);
 
         for (i = 0; i < count; i++) {
             Object_80039F5C *pOther = PlyrGet(p->mIdBytes[2], i);

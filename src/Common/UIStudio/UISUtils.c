@@ -1,52 +1,16 @@
+/* UI Studio helpers (EA file name UISUtils.c): screen and event-code lookup, running a
+   script function, the transform and colour accessors, the script text formatter,
+   control focus helpers, screen ordering and hints. */
+
 #include <string.h>
 
-#include <dolphin/gx/GXBump.h>
-#include <dolphin/gx/GXCull.h>
-#include <dolphin/gx/GXGeometry.h>
-#include <dolphin/gx/GXLighting.h>
-#include <dolphin/gx/GXPixel.h>
-#include <dolphin/gx/GXTev.h>
-#include <dolphin/gx/GXTexture.h>
-#include <dolphin/gx/GXTransform.h>
 #include "UIStudio/UIStudio.h"
-#include "engine/Resource.h"
-#include "engine/llmatrix.h"
 #include "engine/cu_8021A438.h"
-#include "game/fn_801D2B7C.h"
-#include "game/ResOpenDevice.h"
-
-/* Partial source for the engine range 0x8021A438-0x8021DE9C (neutral file
-   name). Functions without a body here keep their original bytes. */
-
-Int32 fn_8021A45C(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISScreenT *pScreen,
-                  UISControlStateT *pControlState);
-Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
-                  UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
-                  Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult);
-Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
-                   Int16 ScreenID, Uint32 Type, Int32 Count, Int32 *pArgs);
-void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta);
-void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs);
-
-Int32 fn_8021CF38(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs);
 
 extern Float32 lbl_8039F858[4];
 extern Float32 lbl_8039F868[4];
 
-void *fn_8021A438(UISInfoT *pInfo, Uint8 *pBase, Int32 Offset)
-{
-    void *p;
-
-    if (Offset < 0) {
-        Offset &= 0x7FFFFFFF;
-        p = (Uint8 *)pInfo->pCursor->pTarget + Offset;
-    } else {
-        p = pBase + Offset;
-    }
-    return p;
-}
-
-Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
+Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
     Uint32 Screen;
     UISScreenT *pScreen;
@@ -60,7 +24,7 @@ Uint32 fn_8021C5EC(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
     return Screen;
 }
 
-Int32 fn_8021C654(UISControlT *pControl, Uint32 ID)
+Int32 UISFindEventPC(UISControlT *pControl, Uint32 ID)
 {
     Uint32 Item;
     UISControlItemT *pItem;
@@ -74,7 +38,7 @@ Int32 fn_8021C654(UISControlT *pControl, Uint32 ID)
     return 0;
 }
 
-Int32 fn_8021C6A8(UISControlT *pControl, Int32 Flags, Uint32 ID)
+Int32 UISFindSubControlEventPC(UISControlT *pControl, Int32 Flags, Uint32 ID)
 {
     Uint32 Item;
     UISControlItemT *pItem;
@@ -89,7 +53,7 @@ Int32 fn_8021C6A8(UISControlT *pControl, Int32 Flags, Uint32 ID)
     return 0;
 }
 
-Int32 fn_8021C70C(UISControlT *pControl, Uint32 ID)
+Int32 _UISFindHintPC(UISControlT *pControl, Uint32 ID)
 {
     Uint32 Item;
     UISControlItemT *pItem;
@@ -103,7 +67,7 @@ Int32 fn_8021C70C(UISControlT *pControl, Uint32 ID)
     return 0;
 }
 
-Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
+Int32 UISExecuteFnc(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pControlState,
                   UISRunStateT *pState, Int32 Value, Uint32 NumArgs, Int32 *pArgs,
                   Uint32 NumExtra, Int32 *pExtra, Uint8 bPushArg, Int32 Arg, Int32 *pResult)
 {
@@ -133,9 +97,9 @@ Int32 fn_8021C760(UISInfoT *pInfo, UISScreenT *pScreen, UISControlStateT *pContr
     *pState->pTop = (Int32)pControlState;
     pState->pTop++;
     *pState->pTop = 0;
-    pState->unk_10 = Value;
+    pState->pCode = (Uint8 *)Value;
     pState->pTop++;
-    Result = fn_8021A45C(pInfo, pFrame, pState, pScreen, pControlState);
+    Result = UISStackProcess(pInfo, pFrame, pState, pScreen, pControlState);
     if (pResult != 0) {
         *pResult = *pFrame;
     }
@@ -192,17 +156,17 @@ Float32 *UISGetActionPtrValue(Uint32 Action, UISControlInfoT *pControlInfo)
     return &pControlInfo->f48;
 }
 
-Float32 *fn_8021CA3C(void)
+Float32 *UISGetColorMultipler(void)
 {
     return lbl_8039F858;
 }
 
-Float32 *fn_8021CA48(void)
+Float32 *UISGetColorAdditive(void)
 {
     return lbl_8039F868;
 }
 
-void fn_8021CA54(Float32 a, Float32 b, Float32 c, Float32 d)
+void UISSetColorMultipler(Float32 a, Float32 b, Float32 c, Float32 d)
 {
     lbl_8039F858[0] = a;
     lbl_8039F858[3] = d;
@@ -210,7 +174,7 @@ void fn_8021CA54(Float32 a, Float32 b, Float32 c, Float32 d)
     lbl_8039F858[2] = c;
 }
 
-void fn_8021CA70(Float32 a, Float32 b, Float32 c, Float32 d)
+void UISSetColorAdditive(Float32 a, Float32 b, Float32 c, Float32 d)
 {
     lbl_8039F868[0] = a;
     lbl_8039F868[3] = d;
@@ -220,7 +184,7 @@ void fn_8021CA70(Float32 a, Float32 b, Float32 c, Float32 d)
 
 /* Writes Value in decimal to pDst, stopping at pEnd; returns the end of the
    written text. */
-char *fn_8021CA8C(Uint32 Value, char *pDst, char *pEnd, char Pad, Int32 Width, Int32 bSigned)
+char *_WriteInt(Uint32 Value, char *pDst, char *pEnd, char Pad, Int32 Width, Int32 bSigned)
 {
     char Buffer[16];
     Int32 Length;
@@ -255,8 +219,62 @@ char *fn_8021CA8C(Uint32 Value, char *pDst, char *pEnd, char Pad, Int32 Width, I
     return pDst;
 }
 
+char *_WriteFloat(char *pDst, char *pEnd, Int32 Width, Int32 Precision, Float32 Value)
+{
+    char Buffer[64];
+    Int32 Length;
+    Int32 bNegative;
+    Int32 Count;
+    Int32 Digit;
+    Float32 Round;
+    Float32 Fraction;
+    Float32 Tenth;
+
+    Length = 0;
+    if (Precision < 0) {
+        Precision = 6;
+    }
+    bNegative = Value < 0.0f;
+    if (bNegative) {
+        Value = -Value;
+    }
+    Round = 0.5f;
+    for (Count = 0; Count < Precision; Count++) {
+        Round *= 0.1f;
+    }
+    Value += Round;
+    Fraction = Value - (Int32)Value;
+    do {
+        Tenth = Value * 0.1f;
+        Buffer[Length++] = (Int32)(Value - (Int32)Tenth * 10) + '0';
+        Value = Tenth;
+    } while (Value >= 1.0f);
+    if (bNegative) {
+        Buffer[Length++] = '-';
+    }
+    if (Width != 0) {
+        Count = (Precision != 0 ? Width - 1 : Width) - (Precision + Length);
+        for (; Count > 0; Count--) {
+            Buffer[Length++] = ' ';
+        }
+    }
+    for (Length--; Length >= 0 && pDst < pEnd; Length--) {
+        *pDst++ = Buffer[Length];
+    }
+    if (Precision != 0 && pDst < pEnd) {
+        *pDst++ = '.';
+        do {
+            Fraction *= 10.0f;
+            Digit = (Int32)Fraction;
+            *pDst++ = Digit + '0';
+            Fraction -= Digit;
+        } while (--Precision != 0 && pDst < pEnd);
+    }
+    return pDst;
+}
+
 /* Writes Value in hexadecimal; Case selects the letter case of the digits. */
-char *fn_8021CDAC(Uint32 Value, char *pDst, char *pEnd, Int32 Width, char Pad, Int32 Case)
+char *_WriteHex(Uint32 Value, char *pDst, char *pEnd, Int32 Width, char Pad, Int32 Case)
 {
     char Buffer[16];
     Int32 Length;
@@ -285,7 +303,7 @@ char *fn_8021CDAC(Uint32 Value, char *pDst, char *pEnd, Int32 Width, char Pad, I
 
 /* Copies pString to pDst padded with spaces to Width (left-aligned when
    bLeft is 1), stopping at pEnd. */
-char *fn_8021CE48(const char *pString, char *pDst, char *pEnd, Int32 Width, Int32 Precision,
+char *_WriteString(const char *pString, char *pDst, char *pEnd, Int32 Width, Int32 Precision,
                   Int32 bLeft)
 {
     Int32 Count;
@@ -315,14 +333,109 @@ char *fn_8021CE48(const char *pString, char *pDst, char *pEnd, Int32 Width, Int3
     return pDst;
 }
 
-void fn_8021D1FC(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs)
+Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs)
+{
+    char *pOut;
+    char *pStart;
+    char *pEnd;
+    char *pString;
+    Int32 bLeft;
+    Int32 bUnsigned;
+    Int32 Width;
+    Int32 Precision;
+    Int32 Case;
+    char Pad;
+    char c;
+
+    pOut = pDst;
+    pStart = pOut;
+    bLeft = 0;
+    pEnd = pStart + Size;
+    if (pStart == NULL || Size == 0 || pFormat == NULL) {
+        return -1;
+    }
+    while ((c = *pFormat++) != 0 && pOut < pEnd) {
+        if (c == '%') {
+            bUnsigned = 0;
+            Width = 0;
+            Precision = -1;
+            Pad = ' ';
+            c = *pFormat++;
+            if (c == '-') {
+                bLeft = 1;
+                c = *pFormat++;
+            }
+            if (c == '0') {
+                Pad = '0';
+                c = *pFormat++;
+            }
+            while (c >= '0' && c <= '9') {
+                Width = Width * 10 + c - '0';
+                c = *pFormat++;
+            }
+            if (c == '.') {
+                c = *pFormat++;
+            }
+            if (c >= '0' && c <= '9') {
+                Precision = c - '0';
+                c = *pFormat++;
+                while (c >= '0' && c <= '9') {
+                    Precision = Precision * 10 + c - '0';
+                    c = *pFormat++;
+                }
+            }
+            Case = 0;
+            if (c >= 'A' && c <= 'Z') {
+                Case = -32;
+            }
+            switch (c) {
+            case 'c':
+                *pOut++ = *pArgs++;
+                break;
+            case 's':
+                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
+                if (pString != NULL) {
+                    pOut = _WriteString(pString, pOut, pEnd, Width, Precision, bLeft);
+                } else {
+                    pOut = _WriteString("(null)", pOut, pEnd, Width, Precision, bLeft);
+                }
+                break;
+            case 'u':
+                bUnsigned = 1;
+            case 'd':
+            case 'i':
+                pOut = _WriteInt(*pArgs++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
+                break;
+            case 'f':
+                pOut = _WriteFloat(pOut, pEnd, Width, Precision, *(Float32 *)pArgs++);
+                break;
+            case 'X':
+            case 'p':
+            case 'x':
+                pOut = _WriteHex(*pArgs++, pOut, pEnd, Width, Pad, Case);
+                break;
+            default:
+                if (c != 0) {
+                    *pOut++ = c;
+                }
+                break;
+            }
+        } else {
+            *pOut++ = c;
+        }
+    }
+    *pOut = 0;
+    return pOut - pStart;
+}
+
+void UISStringFormat(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs)
 {
     if (pFormat != NULL && pDst != NULL) {
-        fn_8021CF38(pDst->pText, pDst->Size, pFormat->pText, a, pArgs);
+        UISSprintf(pDst->pText, pDst->Size, pFormat->pText, a, pArgs);
     }
 }
 
-Int32 fn_8021D23C(UISScreenDataT *pData, UISControlT *pControl, UISControlStateT *pState)
+Int32 _IsChildOfControl(UISScreenDataT *pData, UISControlT *pControl, UISControlStateT *pState)
 {
     Uint32 Node;
     Uint32 Entry;
@@ -341,7 +454,7 @@ Int32 fn_8021D23C(UISScreenDataT *pData, UISControlT *pControl, UISControlStateT
     return 0;
 }
 
-UISControlStateT *fn_8021D2DC(UISScreenDataT *pData, UISControlT *pControl)
+UISControlStateT *_GetFirstEnableControl(UISScreenDataT *pData, UISControlT *pControl)
 {
     Uint32 Node;
     Uint32 Entry;
@@ -364,7 +477,7 @@ UISControlStateT *fn_8021D2DC(UISScreenDataT *pData, UISControlT *pControl)
     return 0;
 }
 
-UISControlStateT *fn_8021D37C(UISScreenT *pScreen, UISControlStateT *pState)
+UISControlStateT *UISFindSiblingEnableControl(UISScreenT *pScreen, UISControlStateT *pState)
 {
     UISScreenDataT *pData;
     Uint32 Control;
@@ -373,8 +486,8 @@ UISControlStateT *fn_8021D37C(UISScreenT *pScreen, UISControlStateT *pState)
     pData = pScreen->pData;
     for (Control = 0; Control < pData->NumControls; Control++) {
         pControl = &pData->pControls[Control];
-        if (fn_8021D23C(pData, pControl, pState)) {
-            return fn_8021D2DC(pData, pControl);
+        if (_IsChildOfControl(pData, pControl, pState)) {
+            return _GetFirstEnableControl(pData, pControl);
         }
     }
     return 0;
@@ -382,7 +495,7 @@ UISControlStateT *fn_8021D37C(UISScreenT *pScreen, UISControlStateT *pState)
 
 /* Moves the given screen Delta places through the screen table, keeping
    the active index and screen pointers pointing at the same screens. */
-void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta)
+void UISMoveScreenDrawPosition(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta)
 {
     UISScreenT Temp;
     Int32 Screen;
@@ -393,7 +506,7 @@ void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta)
     Uint32 Rate;
     Uint32 Ref;
 
-    Screen = fn_8021C5EC(pInfo, GroupID, ScreenID);
+    Screen = UISFindScreen(pInfo, GroupID, ScreenID);
     NumScreens = pInfo->NumScreens;
     if (Screen < NumScreens) {
         if (Delta >= 0) {
@@ -435,7 +548,7 @@ void fn_8021D404(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Delta)
     }
 }
 
-void fn_8021D620(UISInfoT *pInfo, UISScreenT *pScreen, UISRunStateT *pState, Int32 Control,
+void _ParseHints(UISInfoT *pInfo, UISScreenT *pScreen, UISRunStateT *pState, Int32 Control,
                  Uint32 ID, Int32 Count, Int32 *pArgs)
 {
     UISControlT *pControl;
@@ -447,17 +560,17 @@ void fn_8021D620(UISInfoT *pInfo, UISScreenT *pScreen, UISRunStateT *pState, Int
     for (Item = 0; Item < pControl->NumItems; Item++) {
         pItem = &pControl->pItems[Item];
         if (pItem->ID == 0xFFFF) {
-            fn_8021D620(pInfo, pScreen, pState, pItem->Value, ID, Count, pArgs);
+            _ParseHints(pInfo, pScreen, pState, pItem->Value, ID, Count, pArgs);
         }
     }
-    Value = fn_8021C70C(pControl, ID);
+    Value = _UISFindHintPC(pControl, ID);
     if (Value != 0) {
-        fn_8021C760(pInfo, pScreen, pControl->pState, pState, Value, Count, pArgs, 0, 0, 0, 0,
+        UISExecuteFnc(pInfo, pScreen, pControl->pState, pState, Value, Count, pArgs, 0, 0, 0, 0,
                     0);
     }
 }
 
-void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
+void UISDoHint(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
 {
     Uint32 Screen;
     Uint32 NumScreens;
@@ -468,13 +581,13 @@ void fn_8021D718(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
         pScreen = &pInfo->Screens[Screen];
         if (pScreen->bWaitingToBeUnloaded == 0) {
             pInfo->Flags |= 2;
-            fn_8021D620(pInfo, pScreen, &pInfo->RunState, 0, Value, Count, pArgs);
+            _ParseHints(pInfo, pScreen, &pInfo->RunState, 0, Value, Count, pArgs);
             pInfo->Flags &= ~2;
         }
     }
 }
 
-void fn_8021D7B8(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
+void UISProcessHint(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
 {
     UISThreadActionT Action;
     Int16 GroupID;
@@ -484,13 +597,13 @@ void fn_8021D7B8(UISInfoT *pInfo, Int32 Value, Int32 Count, Int32 *pArgs)
         GroupID = pInfo->Screens[pInfo->ActiveScreen].GroupID;
         ScreenID = pInfo->Screens[pInfo->ActiveScreen].ScreenID;
         Action.Words[0] = Value;
-        fn_8021D904(GroupID, ScreenID, pInfo, 9, &Action, Count, pArgs);
+        UISAddThreadAction(GroupID, ScreenID, pInfo, 9, &Action, Count, pArgs);
     } else {
-        fn_8021D718(pInfo, Value, Count, pArgs);
+        UISDoHint(pInfo, Value, Count, pArgs);
     }
 }
 
-Int32 fn_8021D828(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
+Int32 UISAreEventsEnabled(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
     Uint32 Screen;
     UISScreenT *pScreen;
@@ -502,230 +615,4 @@ Int32 fn_8021D828(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
         }
     }
     return 1;
-}
-
-void fn_8021D880(UISRuntimeErrorFncT *pFnc)
-{
-    RuntimeErrorFnc = pFnc;
-}
-
-Int32 *fn_8021D888(UISInfoT *pInfo, Int32 *p, UISThreadActionT *pAction, Int16 GroupID,
-                   Int16 ScreenID, Uint32 Type, Int32 Count, Int32 *pArgs)
-{
-    Int32 i;
-    UISThreadActionT *pDst;
-
-    *p = Type;
-    *--p = GroupID;
-    *--p = ScreenID;
-    pDst = (UISThreadActionT *)(p - 5);
-    *pDst = *pAction;
-    p -= 5;
-    *--p = Count;
-    p--;
-    if (pArgs != 0) {
-        for (i = Count - 1; i >= 0; i--) {
-            *p-- = pArgs[i];
-        }
-    }
-    return p;
-}
-
-void fn_8021D904(Int16 GroupID, Int16 ScreenID, UISInfoT *pInfo, Int32 Type,
-                 UISThreadActionT *pAction, Int32 Arg5, Int32 *pArg6)
-{
-    UISActionStackT *pStack;
-
-    pStack = &pInfo->ActionStack;
-    pStack->pTop =
-        fn_8021D888(pInfo, pStack->pTop, pAction, GroupID, ScreenID, Type, Arg5, pArg6);
-}
-
-/* Returns 0 when a queued action of a type above 1 for the given screen
-   lies below p in the thread-action stack. */
-Int32 fn_8021D968(Uint16 GroupID, Uint16 ScreenID, UISInfoT *pInfo, Int32 *p)
-{
-    Uint32 Type;
-    Uint16 Group;
-    Uint16 Screen;
-
-    while (p > pInfo->ActionStack.pTop) {
-        Type = *p--;
-        Group = *p--;
-        Screen = *p--;
-        if (Type > 1 && Group == GroupID && Screen == ScreenID) {
-            return 0;
-        }
-        p -= 4;
-        p -= *--p;
-        p--;
-    }
-    return 1;
-}
-
-Int32 fn_8021D9D4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
-{
-    UISActionStackT *pStack;
-    Int32 *p;
-    Uint32 Type;
-    Uint16 Group;
-    Uint16 Screen;
-    UISThreadActionT *pAction;
-    Int32 Count;
-    Int32 *pArgs;
-
-    if (!(pInfo->Flags & 1)) {
-        pStack = &pInfo->ActionStack;
-        for (p = pStack->pStart; p > pStack->pTop;) {
-            Type = *p;
-            Group = *--p;
-            Screen = *--p;
-            p -= 5;
-            pAction = (UISThreadActionT *)p;
-            Count = *--p;
-            p -= Count;
-            pArgs = p;
-            p--;
-            if (Group == GroupID && Screen == ScreenID && Type == 9 &&
-                fn_8021C5EC(pInfo, GroupID, ScreenID) < pInfo->NumScreens) {
-                fn_8021D718(pInfo, pAction->Words[0], Count, pArgs);
-            }
-        }
-    }
-    return 1;
-}
-
-Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
-{
-    Uint32 Type;
-    Uint16 GroupID;
-    Uint16 ScreenID;
-    UISThreadActionT *pAction;
-    Int32 Count;
-    Int32 *pArgs;
-    Uint16 Group;
-    Uint16 Screen;
-    Uint16 Index;
-    UISScreenT *pScreen;
-
-    Type = *p;
-    GroupID = *--p;
-    ScreenID = *--p;
-    p -= 5;
-    pAction = (UISThreadActionT *)p;
-    Count = *--p;
-    p -= Count;
-    pArgs = p;
-    p--;
-    switch (Type) {
-    case 0:
-        fn_80218AF0(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->s.unk_04,
-                    pAction->s.unk_06, Count, pArgs);
-        break;
-    case 1:
-        Group = pAction->s.GroupID;
-        Screen = pAction->s.ScreenID;
-        Index = fn_8021C5EC(pInfo, Group, Screen);
-        if (Index < (Uint32)pInfo->NumScreens) {
-            pScreen = &pInfo->Screens[Index];
-            pScreen->bWaitingToBeUnloaded = 1;
-        }
-        if (fn_8021D968(Group, Screen, pInfo, p) == 0 ||
-            fn_802191F0(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
-            *ppTop = fn_8021D888(pInfo, *ppTop, pAction, GroupID, ScreenID, 1, Count, pArgs);
-        }
-        break;
-    case 9:
-        fn_8021D718(pInfo, pAction->Words[0], Count, pArgs);
-        break;
-    case 2:
-        pInfo->Flags |= 2;
-        fn_80219854(pInfo, &pInfo->RunState, pAction->Words[0], -8, Count, pArgs, 1);
-        pInfo->Flags &= ~2;
-        break;
-    case 3:
-        fn_80219E18(pInfo, 1, pAction->s.GroupID, pAction->s.ScreenID);
-        break;
-    case 4:
-        fn_80219E18(pInfo, 0, pAction->s.GroupID, pAction->s.ScreenID);
-        break;
-    case 5:
-        if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
-                        pAction->s.unk_0C, pAction->s.unk_0E);
-            pAction->c.bDone = 1;
-        }
-        break;
-    case 6:
-        if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
-                        pAction->s.unk_0C, pAction->s.unk_0E);
-            pAction->c.bDone = 1;
-        }
-        break;
-    case 7:
-        pInfo->Flags |= 2;
-        fn_80219854(pInfo, &pInfo->RunState, pAction->Words[1], pAction->Words[0], Count, pArgs,
-                    0);
-        pInfo->Flags &= ~2;
-        break;
-    case 8:
-        fn_8021D404(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->Words[3]);
-        break;
-    }
-    return p;
-}
-
-Int32 *fn_8021DD50(UISInfoT *pInfo, Int32 *p)
-{
-    Uint32 Type;
-    UISThreadActionT *pAction;
-
-    Type = *p;
-    p -= 7;
-    pAction = (UISThreadActionT *)p;
-    p -= *--p;
-    p--;
-    switch (Type) {
-    case 5:
-        if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
-                        pAction->s.unk_0C, pAction->s.unk_0E);
-            pAction->c.bDone = 1;
-        }
-        break;
-    case 6:
-        if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
-                        pAction->s.unk_0C, pAction->s.unk_0E);
-            pAction->c.bDone = 1;
-        }
-        break;
-    }
-    return p;
-}
-
-void fn_8021DDF4(UISInfoT *pInfo, Int32 bControlOnly)
-{
-    UISActionStackT *pStack;
-    Int32 *p;
-    Int32 *pTop;
-
-    if (!(pInfo->Flags & 1)) {
-        pStack = &pInfo->ActionStack;
-        p = pStack->pStart;
-        pInfo->Flags |= 1;
-        pTop = p;
-        if (bControlOnly) {
-            while (p > pStack->pTop) {
-                p = fn_8021DD50(pInfo, p);
-            }
-        } else {
-            while (p > pStack->pTop) {
-                p = fn_8021DAA4(pInfo, p, &pTop);
-            }
-            pStack->pTop = pTop;
-        }
-        pInfo->Flags &= ~1;
-    }
 }

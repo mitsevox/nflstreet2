@@ -4,9 +4,9 @@
 
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include <string.h>
 #include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
@@ -15,7 +15,7 @@
 #define MIN(a, b) ((a) <= (b) ? (a) : (b))
 
 struct DirectedRunState_t {
-    Point_8017886C mUnknown0;
+    FieldPoint_t mUnknown0;
     float mUnknown8;
     int mUnknown12;
     int mUnknown16;
@@ -25,14 +25,14 @@ struct DirectedRunState_t {
 extern "C" {
 int fn_800ABDA4(int team);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
 int fn_8011F1CC(void);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
-int fn_80177C38(void);
+int ScrmGetPlayTurnovers(void);
 int BallStateGet(Ball_t *p, int *pOut);
 int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
@@ -84,17 +84,17 @@ extern "C" int DirectedRunEnter(Object_80039F5C *p)
 extern "C" int DirectedRunUpdate(Object_80039F5C *p)
 {
     DirectedRunState_t *state = (DirectedRunState_t *)&p->mUnknown336;
-    Point_8017886C ball;
+    FieldPoint_t ball;
     Block_8011E240 *pBlock = &p->mBlock1032;
     Object_80039F5C *carrier;
     Message_800F01CC message;
 
-    ball = fn_80177FE0();
+    ball = ScrmGetBallSpot();
     carrier = BallGetCurrentHolder();
     if (fn_8009FB60(p)) {
         return 1;
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (fn_800A5C04(p, state->mUnknown12, state->mUnknown12) || (p->mFlags & 0x4000)) {
         return 0;
     }
@@ -105,7 +105,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
         }
         state->mUnknown16 = state->mUnknown16 + SyncRandGetRange(0, rating >> 4) + (rating >> 5);
         if (carrier && fn_800B65A0(p->mIdBytes[2]) != 255
-            && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !fn_80177C38()) {
+            && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !ScrmGetPlayTurnovers()) {
             state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
                                           (float)state->mUnknown16 * PlayTrackGetPlayIdRate());
             if (fn_8011F1CC() && (carrier->mFlags & 0x8000)) {

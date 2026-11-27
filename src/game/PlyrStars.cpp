@@ -87,7 +87,7 @@ void ModelObjSetAmbientColor(void *, int, float, float, float, float);
 void ModelObjSetModeNop(void *, int);
 void ModelObjRelocateModelRes(int);
 int PlyrGetIndex(Object_80039F5C *);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 int ObjNewType_(int, int, int, void (*)(PlyrStar_t *, PlyrStarDesc_t *), void (*)(PlyrStar_t *));
 int ObjDelType(int);
 int ObjSetListObjFunc(void *, int, int, int (*)(PlyrStar_t *));
@@ -380,14 +380,14 @@ void PlyrStarUpdatePulses(void) {
             }
             if (item->mUnknown20 & 0x20) {
                 item->mUnknown18 *= 1.1f;
-                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, ScrmIsFieldFlipped());
                 if (!(item->mUnknown18 <= item->mUnknown38)) {
                     item->mUnknown18 = item->mUnknown38;
                     item->mUnknown20 = (item->mUnknown20 & ~0x20) | 0x40;
                 }
             }
             if (item->mUnknown20 & 0x40) {
-                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&item->mUnknown100->mMotion.mPos, ScrmIsFieldFlipped());
                 if (!(item->mUnknown18 <= 1.0f))
                     item->mUnknown18 *= 0.9f;
                 else {
@@ -507,7 +507,7 @@ void PlyrStarUpdate(void) {
                     PlyrStarStartPulse(item);
                     player->mFlags &= ~0x2000000;
                 }
-                PlyrStarSetPosition(item, (Vec2_t *)&player->mMotion.mPos, fn_801784C4());
+                PlyrStarSetPosition(item, (Vec2_t *)&player->mMotion.mPos, ScrmIsFieldFlipped());
                 other->mUnknown20 |= 2;
                 other->mUnknown4.mX = item->mUnknown4.mX;
                 other->mUnknown4.mY = item->mUnknown4.mY;
@@ -635,7 +635,7 @@ void PlyrStarPlace(PlyrStar_t *item, Vector_80039F5C *point) {
     item->mUnknown4.mX = point->mX;
     item->mUnknown4.mY = point->mY;
     item->mUnknown4.mZ = point->mZ;
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         item->mUnknown4.mX = -item->mUnknown4.mX;
         item->mUnknown4.mY = -item->mUnknown4.mY;
     }
@@ -670,7 +670,7 @@ void PlyrStarStartPulse(PlyrStar_t *source) {
             item->mUnknown38 = PlyrStarGetPulseScale(item);
             item->mUnknown30 = source->mUnknown30;
             Vec2_t *point = (Vec2_t *)&item->mUnknown100->mMotion.mPos;
-            PlyrStarSetPosition(item, point, fn_801784C4());
+            PlyrStarSetPosition(item, point, ScrmIsFieldFlipped());
         }
     }
 }

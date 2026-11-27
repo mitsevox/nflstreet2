@@ -13,7 +13,7 @@ int DbUserGetId(int index);
 int DbUserGetDb(int a);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int StoryTeamCreate(void);
 void StoryTeamCreatePlayer(int index, int a);
 int TournamentOpen(int index);
@@ -212,7 +212,7 @@ int StoryStartNew(void)
     int index = DbUserFindIndex(DbUserGetCurrent());
     int result;
 
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     result = StoryTeamCreate();
     StoryTeamCreatePlayer(index, result);
     StoryClearCompletedEvents(index);

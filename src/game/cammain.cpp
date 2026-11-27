@@ -42,7 +42,7 @@ CamMode_t *CamPlayGetDefMode(int id);
 void CamPlayGetPosLimits(int id, int mode, float *pA, float *pB);
 int fn_801486A0(void);
 void fn_801527B8(void *p, Vector_80039F5C *pOut);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void CamConvertHdrToMatrix(void *p, GameCamera_t *pCamera);
 void CamSetZScale(GameCamera_t *pCamera, float value);
 void CamFreeFloatAdd(GameCamera_t *pCamera, int a);
@@ -93,7 +93,7 @@ extern "C" {
 
 unsigned char CamMainIsFlipped(GameCamera_t *pCamera)
 {
-    return ((pCamera->mUnknown94 >> 3) & 1) ^ fn_801784C4();
+    return ((pCamera->mUnknown94 >> 3) & 1) ^ ScrmIsFieldFlipped();
 }
 
 void CamMainFlipPos(Vector_80039F5C *pVec)
@@ -185,7 +185,7 @@ void _CamMainGetFocusPos(int kind, int ref, Vector_80039F5C *pOut)
             pOut->mY = pObject->mMotion.mPos.mY;
             pOut->mZ = pObject->mMotion.mPos.mZ;
         }
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             CamMainFlipPos(pOut);
         }
         break;
@@ -196,7 +196,7 @@ void _CamMainGetFocusPos(int kind, int ref, Vector_80039F5C *pOut)
         pOut->mX = pObject->mMotion.mPos.mX;
         pOut->mY = pObject->mMotion.mPos.mY;
         pOut->mZ = pObject->mMotion.mPos.mZ;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             CamMainFlipPos(pOut);
         }
         break;
@@ -219,7 +219,7 @@ void _CamMainGetFocusPos(int kind, int ref, Vector_80039F5C *pOut)
         break;
     case 7:
         fn_801527B8(lbl_8031BDD4, pOut);
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             CamMainFlipPos(pOut);
         }
         break;

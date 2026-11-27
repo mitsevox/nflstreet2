@@ -6,7 +6,7 @@
 #include "game/AudmonEvent.h"
 #include "game/GameOptions.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/fn_800B65A0.h"
 #include "game/fn_8009D990.h"
 
@@ -33,12 +33,12 @@ int ChalFindGoalValue(Challenge_t *pRecord, int type, int *pValue);
 int ChalHasMedalGoal(Challenge_t *pRecord);
 int fn_800A7E40(unsigned char side);
 unsigned char DriveLogGetTeam(void);
-int fn_80177F70(void);
-int fn_80178308(void);
-int fn_80178348(void);
-int fn_801787DC(unsigned char side);
-int fn_801788D8(int *pValue);
-int fn_80178AE0(void);
+int ScrmGetDown(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetSnapOffense(void);
+int ScrmGetTeamScore(unsigned char side);
+int ScrmGetScoreGoal(int *pValue);
+int ScrmGetWinner(void);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 
 static int _Challenge_iMode = 3;
@@ -56,10 +56,10 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag)
     int other;
 
     result = 2;
-    switch (fn_801788D8(&value)) {
+    switch (ScrmGetScoreGoal(&value)) {
     case 0:
-        own = fn_801787DC(side);
-        other = fn_801787DC((side + 1) & 1);
+        own = ScrmGetTeamScore(side);
+        other = ScrmGetTeamScore((side + 1) & 1);
         break;
     case 1:
         own = StyleTrackerGetTotal(side);
@@ -87,7 +87,7 @@ int ChallengeGoalCheckMargin(int side, int limit, int flag)
 
 int ChallengeGoalCheckWinner(int side)
 {
-    int result = fn_80178AE0();
+    int result = ScrmGetWinner();
 
     if (result == 2) {
         return 2;
@@ -111,7 +111,7 @@ int ChallengeGoalCheckSpstMax(int side, unsigned int value)
     if (stat >= value) {
         int current = DriveLogGetTeam();
 
-        if (current != side || fn_80178308() != current) {
+        if (current != side || ScrmGetOffenseTeam() != current) {
             return 3;
         }
     }
@@ -166,7 +166,7 @@ int ChallengeGoalCheckScoreStats(int side, unsigned int value)
 
 int ChallengeGoalCheckScoreMin(int side, unsigned int value)
 {
-    return fn_801787DC(side) < value ? 2 : 0;
+    return ScrmGetTeamScore(side) < value ? 2 : 0;
 }
 
 int ChallengeGoalCheckScoreAbove(int side, unsigned int value)
@@ -174,9 +174,9 @@ int ChallengeGoalCheckScoreAbove(int side, unsigned int value)
     int mode;
     unsigned int own;
 
-    switch (fn_801788D8(&mode)) {
+    switch (ScrmGetScoreGoal(&mode)) {
     case 0:
-        own = fn_801787DC(side);
+        own = ScrmGetTeamScore(side);
         break;
     case 1:
         own = StyleTrackerGetTotal(side);
@@ -204,8 +204,8 @@ int ChallengeGoalCheckSpstReached(int side, unsigned int value, int flag)
     if (stat >= value) {
         int current = DriveLogGetTeam();
 
-        if (current != side || fn_80178308() != current ||
-            (flag && fn_80177F70() == 6)) {
+        if (current != side || ScrmGetOffenseTeam() != current ||
+            (flag && ScrmGetDown() == 6)) {
             return 3;
         }
     }
@@ -231,10 +231,10 @@ int ChallengeGoalCheckLeading(int side, int value)
     int own;
     int other;
 
-    switch (fn_801788D8(&mode)) {
+    switch (ScrmGetScoreGoal(&mode)) {
     case 0:
-        own = fn_801787DC(side);
-        other = fn_801787DC((side + 1) & 1);
+        own = ScrmGetTeamScore(side);
+        other = ScrmGetTeamScore((side + 1) & 1);
         break;
     case 1:
         own = StyleTrackerGetTotal(side);
@@ -294,7 +294,7 @@ int ChallengeGoalCheckSpstVsScoreStats(int side, int value)
     if (total >= a) {
         return 0;
     }
-    if (total == a - 1 && DriveLogGetTeam() == side && fn_80178308() == side) {
+    if (total == a - 1 && DriveLogGetTeam() == side && ScrmGetOffenseTeam() == side) {
         return 2;
     }
     return 1;
@@ -383,7 +383,7 @@ int ChallengeEvaluateGoals(void)
         }
         return 1;
     }
-    switch (fn_80178AE0()) {
+    switch (ScrmGetWinner()) {
     case 0:
         return 1;
     case 1:
@@ -448,7 +448,7 @@ void ChallengePostOutcome(void)
         if (result == 0) {
             AudmonEventPostArgs(0x5E, 0, fn_800B65A0(0) == 0xFF, 0, 0);
         } else if (result == 1) {
-            AudmonEventPostArgs(0x5D, 0, fn_80178348(), 0, 0);
+            AudmonEventPostArgs(0x5D, 0, ScrmGetSnapOffense(), 0, 0);
         }
     }
 }
@@ -637,7 +637,7 @@ void ChallengeSendGoalList(int flag)
         _Challenge_GoalResults.mUnknown4 = 4;
         args[6].p = &_Challenge_GoalResults;
         if (count > 0 || !flag) {
-            fn_8021D7B8(gUISMainInfo, 0x80000083, 7, args);
+            UISProcessHint(gUISMainInfo, 0x80000083, 7, args);
         }
     }
 }

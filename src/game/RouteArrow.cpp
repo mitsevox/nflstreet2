@@ -12,7 +12,7 @@ void ArrowSetColor(void *p, unsigned char a, unsigned char b, unsigned char c);
 void ArrowSetWidth(void *p, float value);
 void ArrowSetEndWidth(void *p, float value);
 void ArrowSetEndBrightness(void *p, float value);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 
 void RouteArrowStartAtPlayer(RouteArrow_t *p, float *pOut)
 {
@@ -22,7 +22,7 @@ void RouteArrowStartAtPlayer(RouteArrow_t *p, float *pOut)
     pOut[1] = pObject->mMotion.mPos.mY;
     p->mStartX = pOut[0];
     p->mStartY = pOut[1];
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         pOut[1] = -pOut[1];
         pOut[0] = -pOut[0];
     }
@@ -53,11 +53,11 @@ void RouteArrowShutdown(RouteArrow_t *p)
 }
 
 #include "game/RouteArrow.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/State_803EB098.h"
 #include "game/PlayBookGetPlay.h"
 #include "game/PlaySet.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec2Add.h"
 #include "game/Vec3Magnitude.h"
 #include "game/fn_800F06F4.h"
@@ -71,8 +71,8 @@ extern "C" {
 void RouteArrowStartAtPlayer(RouteArrow_t *, float *);
 void RouteArrowInit(RouteArrow_t *);
 void RouteArrowShutdown(RouteArrow_t *);
-int fn_801784C4(void);
-int fn_80178308(void);
+int ScrmIsFieldFlipped(void);
+int ScrmGetOffenseTeam(void);
 PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 float fn_8011F4D4(void);
@@ -81,9 +81,9 @@ int fn_8011E9D8(void *);
 void fn_800F0910(int, void *);
 int fn_800FC014(Object_80039F5C *, void *);
 Object_80039F5C *fn_800FC070(Object_80039F5C *, void *);
-void fn_8009E9EC(int, int, Point_8017886C *);
-float fn_80178A08(void);
-float fn_80178A44(void);
+void fn_8009E9EC(int, int, FieldPoint_t *);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 void ArrowAddPoint(void *, void *);
 void ArrowSetColor(void *, unsigned char, unsigned char, unsigned char);
 void ArrowReset(void *);
@@ -141,8 +141,8 @@ void RouteArrowFlushTurn(RouteArrow_t *p, Vector_80039F5C *pPoint, int angle)
     case 5: case 6: break;
     }
     if (length != 0.0f) {
-        if (fn_801784C4()) turn += 0x800000;
-        Point_8017886C delta;
+        if (ScrmIsFieldFlipped()) turn += 0x800000;
+        FieldPoint_t delta;
         Vec2FromAngle(&delta, turn, length);
         Vec2Add(pPoint, pPoint, &delta);
         ArrowAddPoint(p->mArrow, pPoint);
@@ -158,14 +158,14 @@ void RouteArrowAddSegment(RouteArrow_t *p, unsigned char *pCommand,
     if (pAngle) { angle = *pAngle; length = *pLength; }
     else { length = (float)(unsigned int)pCommand[1] * 0.125f; angle = (pCommand[2] & 0x7f) << 17; }
     RouteArrowFlushTurn(p, pPoint, angle);
-    if (fn_801784C4()) angle += 0x800000;
-    Point_8017886C delta;
+    if (ScrmIsFieldFlipped()) angle += 0x800000;
+    FieldPoint_t delta;
     Vec2FromAngle(&delta, angle, length);
     Vec2Add(pPoint, pPoint, &delta);
-    pPoint->mX = pPoint->mX < -fn_80178A08() ? -fn_80178A08() :
-                pPoint->mX > fn_80178A08() ? fn_80178A08() : pPoint->mX;
-    pPoint->mY = pPoint->mY < -fn_80178A44() ? -fn_80178A44() :
-                pPoint->mY > fn_80178A44() ? fn_80178A44() : pPoint->mY;
+    pPoint->mX = pPoint->mX < -ScrmGetSidelineX() ? -ScrmGetSidelineX() :
+                pPoint->mX > ScrmGetSidelineX() ? ScrmGetSidelineX() : pPoint->mX;
+    pPoint->mY = pPoint->mY < -ScrmGetEndLineY() ? -ScrmGetEndLineY() :
+                pPoint->mY > ScrmGetEndLineY() ? ScrmGetEndLineY() : pPoint->mY;
     ArrowAddPoint(p->mArrow, pPoint);
 }
 
@@ -173,17 +173,17 @@ void RouteArrowAddToSpot(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
 {
     unsigned char index = pCommand[1];
     if (pCommand[0] == 92) index += 14;
-    Point_8017886C origin;
-    Point_8017886C target;
-    origin = fn_80177FE0();
+    FieldPoint_t origin;
+    FieldPoint_t target;
+    origin = ScrmGetBallSpot();
     fn_8009E9EC(0, index, &target);
     if (pCommand[0] == 40 && target.mY - origin.mY > 25.0f)
         target.mY = origin.mY + 25.0f;
-    if (fn_801784C4()) { target.mY = -target.mY; target.mX = -target.mX; }
+    if (ScrmIsFieldFlipped()) { target.mY = -target.mY; target.mX = -target.mX; }
     Vec2Sub(&target, &target, pPoint);
     float length = Vec2Magnitude(&target);
     int angle = MathArcTan2(target.mY, target.mX);
-    if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
+    if (ScrmIsFieldFlipped()) angle = (angle + 0x800000) & 0xffffff;
     RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
@@ -196,8 +196,8 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
 {
     RouteArrowCmd_t command;
     Object_80039F5C *pPlayer = p->mpPlayer;
-    Point_8017886C origin;
-    origin = fn_80177FE0();
+    FieldPoint_t origin;
+    origin = ScrmGetBallSpot();
     fn_8011F4E0();
     unsigned char code = fn_800FC014(pPlayer, pCommand);
     switch (code) {
@@ -216,53 +216,54 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
     }
     Object_80039F5C *pOther = fn_800FC070(pPlayer, pCommand);
     if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
-        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
+        pOther = PlaySetGetKeyPlayer(PlayBookGetFormation(ScrmGetOffenseTeam()));
         if (pOther == PlyrGet(pOther->mIdBytes[2], 0)) {
-            unsigned int count = fn_80178D18(fn_80178308());
-            for (unsigned char i = 0; i < count; ++i) {
-                Object_80039F5C *pCandidate = PlyrGet(fn_80178308(), i);
-                PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
-                void *pCommands = PlayAlignGetRoute(pRecord, fn_80178308(), pCandidate->mIdBytes[1]);
+            unsigned char i = 0;
+            unsigned int count = ScrmGetTeamPlayerCount(ScrmGetOffenseTeam());
+            if (i < count) do {
+                Object_80039F5C *pCandidate = PlyrGet(ScrmGetOffenseTeam(), i);
+                PlayBookPlay_t *pRecord = PlayBookGetPlay(ScrmGetOffenseTeam());
+                void *pCommands = PlayAlignGetRoute(pRecord, ScrmGetOffenseTeam(), pCandidate->mIdBytes[1]);
                 if (fn_800F06F4(0, pCommands, 18, 0xffff) != 0xffff) {
                     pOther = pCandidate;
                     break;
                 }
-            }
+            } while (++i < count);
         }
     }
     float dx = pPlayer->mMotion.mPos.mX - origin.mX;
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;
+    FieldPoint_t target;
+    FieldPoint_t delta;
+    float length;
+    int angle;
     if (__builtin_fabsf(across) < 1.5f && __builtin_fabsf(otherDx) < 4.0f) {
-        Point_8017886C target;
         target.mY = pOther->mMotion.mPos.mY;
         target.mX = 1.5f - __builtin_fabsf(across);
         if (dx < 0.5f) target.mX = -target.mX;
         target.mX += pOther->mMotion.mPos.mX;
-        if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-        Point_8017886C delta;
+        if (ScrmIsFieldFlipped()) { target.mX = -target.mX; target.mY = -target.mY; }
         Vec2Sub(&delta, &target, pPoint);
-        float length = Vec2Magnitude(&delta);
-        int angle = MathArcTan2(delta.mY, delta.mX);
-        if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
+        length = Vec2Magnitude(&delta);
+        angle = MathArcTan2(delta.mY, delta.mX);
+        if (ScrmIsFieldFlipped()) angle = (angle + 0x800000) & 0xffffff;
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
     }
-    Point_8017886C target;
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
-    if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
-    Point_8017886C delta;
+    if (ScrmIsFieldFlipped()) { target.mX = -target.mX; target.mY = -target.mY; }
     Vec2Sub(&delta, &target, pPoint);
-    float length = Vec2Magnitude(&delta);
-    int angle = MathArcTan2(delta.mY, delta.mX);
-    if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
+    length = Vec2Magnitude(&delta);
+    angle = MathArcTan2(delta.mY, delta.mX);
+    if (ScrmIsFieldFlipped()) angle = (angle + 0x800000) & 0xffffff;
     RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
 void RouteArrowAddStraight(RouteArrow_t *p, float distance,
                 unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
-    if (fn_801784C4()) distance = -distance;
+    if (ScrmIsFieldFlipped()) distance = -distance;
     pPoint->mY += distance;
     ArrowAddPoint(p->mArrow, pPoint);
 }
@@ -270,13 +271,13 @@ void RouteArrowAddStraight(RouteArrow_t *p, float distance,
 void RouteArrowAddHook(RouteArrow_t *p, Vector_80039F5C *pPoint)
 {
     float length = 1.0f;
-    if (fn_801784C4()) length = -1.0f;
+    if (ScrmIsFieldFlipped()) length = -1.0f;
     unsigned short index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
     int angle = index != 0xffff ? p->mpCommands[index * 4 + 2] << 17 : 0x400000;
     int turn;
     if (MathAngleDiff(angle, 0) <= 0x3fffff) turn = angle - 0x400000;
     else if (MathAngleDiff(angle, 0) > 0x400000) turn = angle + 0x400000;
-    else turn = pPoint->mX < fn_80177FE0().mX ? 0x800000 : 0;
+    else turn = pPoint->mX < ScrmGetBallSpot().mX ? 0x800000 : 0;
     float point[3];
     Vec2FromAngle(point, turn, length);
     point[2] = 0.0f;
@@ -291,12 +292,12 @@ void RouteArrowAddHook(RouteArrow_t *p, Vector_80039F5C *pPoint)
 void RouteArrowAddToQuarterback(RouteArrow_t *p, Vector_80039F5C *pPoint)
 {
     Object_80039F5C *pPlayer = p->mpPlayer;
-    Object_80039F5C *pOther = PlyrGet(fn_80178308(), 0);
-    Point_8017886C origin = fn_80177FE0();
+    Object_80039F5C *pOther = PlyrGet(ScrmGetOffenseTeam(), 0);
+    FieldPoint_t origin = ScrmGetBallSpot();
     float across = pOther->mMotion.mPos.mX - pPlayer->mMotion.mPos.mX;
     float otherDx = pOther->mMotion.mPos.mX - origin.mX;
     float dx = pPlayer->mMotion.mPos.mX - origin.mX;
-    Point_8017886C target, delta;
+    FieldPoint_t target, delta;
     float length;
     int angle;
     if (__builtin_fabsf(across) < 1.5f && __builtin_fabsf(otherDx) < 4.0f) {
@@ -304,26 +305,26 @@ void RouteArrowAddToQuarterback(RouteArrow_t *p, Vector_80039F5C *pPoint)
         target.mX = 1.5f - __builtin_fabsf(across);
         if (dx < 0.0f) target.mX = -target.mX;
         target.mX += pOther->mMotion.mPos.mX;
-        if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
+        if (ScrmIsFieldFlipped()) { target.mX = -target.mX; target.mY = -target.mY; }
         Vec2Sub(&delta, &target, pPoint);
         length = Vec2Magnitude(&delta);
         angle = MathArcTan2(delta.mY, delta.mX);
-        if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
+        if (ScrmIsFieldFlipped()) angle = (angle + 0x800000) & 0xffffff;
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
     }
     target.mX = pOther->mMotion.mPos.mX;
     target.mY = pOther->mMotion.mPos.mY;
-    if (fn_801784C4()) { target.mX = -target.mX; target.mY = -target.mY; }
+    if (ScrmIsFieldFlipped()) { target.mX = -target.mX; target.mY = -target.mY; }
     Vec2Sub(&delta, &target, pPoint);
     length = Vec2Magnitude(&delta);
     angle = MathArcTan2(delta.mY, delta.mX);
-    if (fn_801784C4()) angle = (angle + 0x800000) & 0xffffff;
+    if (ScrmIsFieldFlipped()) angle = (angle + 0x800000) & 0xffffff;
     RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
 }
 
 void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint)
 {
-    Point_8017886C delta;
+    FieldPoint_t delta;
     switch (pCommand[1]) {
     case 5: case 7: case 11: {
         PlayerCutGetAnimOffset(pCommand[1], pCommand[0], 0x400000, &delta);
@@ -333,12 +334,12 @@ void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C 
         command.mType = 20; command.mArgs[1] = pCommand[1]; command.mArgs[0] = pCommand[0];
         int angle = PlayerCutGetMessageTurn(&command.mType);
         if (pCommand[1] != 7) {
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0xc00000, length);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0xc00000, length);
             else Vec2FromAngle(&delta, 0x400000, length);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
         }
-        if (fn_801784C4()) Vec2FromAngle(&delta, angle + 0xc00000, length);
+        if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, angle + 0xc00000, length);
         else Vec2FromAngle(&delta, angle + 0x400000, length);
         pPoint->mX += delta.mX; pPoint->mY += delta.mY;
         ArrowAddPoint(p->mArrow, pPoint);
@@ -346,12 +347,12 @@ void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C 
     }
     case 8:
         if (pCommand[0] == 2) {
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0x200000, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0x200000, 1.5f);
             else Vec2FromAngle(&delta, 0xa00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
         } else {
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0x600000, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0x600000, 1.5f);
             else Vec2FromAngle(&delta, 0xe00000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
@@ -361,20 +362,20 @@ void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C 
         break;
     case 9:
         if (pCommand[0] == 2) {
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0, 1.5f);
             else Vec2FromAngle(&delta, 0x800000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0xa00000, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0xa00000, 1.5f);
             else Vec2FromAngle(&delta, 0x200000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
         } else {
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0x800000, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0x800000, 1.5f);
             else Vec2FromAngle(&delta, 0, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
-            if (fn_801784C4()) Vec2FromAngle(&delta, 0xe00000, 1.5f);
+            if (ScrmIsFieldFlipped()) Vec2FromAngle(&delta, 0xe00000, 1.5f);
             else Vec2FromAngle(&delta, 0x600000, 1.5f);
             pPoint->mX += delta.mX; pPoint->mY += delta.mY;
             ArrowAddPoint(p->mArrow, pPoint);
@@ -386,6 +387,9 @@ void RouteArrowAddCut(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C 
 int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F5C *pPoint, int hasOther)
 {
     int more = 1;
+    FieldPoint_t target;
+    float length;
+    int angle;
     switch (pCommand[0]) {
     case 30:
         RouteArrowStartAtPlayer(p, &pPoint->mX);
@@ -401,7 +405,7 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
             RouteArrowCmd_t command;
             memset(&command, 0, 4);
             command.mType = 3; command.mArgs[0] = 8;
-            command.mArgs[1] = p->mStartX > fn_80177FE0().mX ? 64 : 0;
+            command.mArgs[1] = p->mStartX > ScrmGetBallSpot().mX ? 64 : 0;
             RouteArrowAddSegment(p, &command.mType, pPoint, 0, 0);
         }
         break;
@@ -418,31 +422,33 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
         if (p->mPendingTurn == 7) break;
     case 1: {
         if (*(unsigned int *)p->mArrow > 1) break;
-        Point_8017886C point = {pPoint->mX, pPoint->mY};
-        if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
-        Point_8017886C target;
+        FieldPoint_t point;
+        point.mX = pPoint->mX;
+        point.mY = pPoint->mY;
+        if (ScrmIsFieldFlipped()) { point.mX = -point.mX; point.mY = -point.mY; }
         target.mX = fn_8011F4D4();
-        Point_8017886C origin = fn_80177FE0();
+        FieldPoint_t origin = ScrmGetBallSpot();
         target.mY = origin.mY;
         Vec2Sub(&target, &target, &point);
-        int angle = MathArcTan2(target.mY, target.mX);
+        angle = MathArcTan2(target.mY, target.mX);
         if (MathAngleDiff(angle, 0x400000) > 0x3fffff) break;
-        float length = Vec2Magnitude(&target);
+        length = Vec2Magnitude(&target);
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         break;
     }
     case 90: {
         if (*(unsigned int *)p->mArrow > 1) break;
-        Point_8017886C point = {pPoint->mX, pPoint->mY};
-        if (fn_801784C4()) { point.mX = -point.mX; point.mY = -point.mY; }
-        Point_8017886C target;
+        FieldPoint_t point;
+        point.mX = pPoint->mX;
+        point.mY = pPoint->mY;
+        if (ScrmIsFieldFlipped()) { point.mX = -point.mX; point.mY = -point.mY; }
         target.mX = fn_8011F4D4() + (signed char)pCommand[1] * 0.0625f;
-        if (target.mX < fn_80177FE0().mX) target.mX -= -2.0f;
+        if (target.mX < ScrmGetBallSpot().mX) target.mX -= -2.0f;
         else target.mX += -2.0f;
-        target.mY = fn_80177FE0().mY + (signed char)pCommand[2] * 0.0625f + -2.0f;
+        target.mY = ScrmGetBallSpot().mY + (signed char)pCommand[2] * 0.0625f + -2.0f;
         Vec2Sub(&target, &target, &point);
-        int angle = MathArcTan2(target.mY, target.mX);
-        float length = Vec2Magnitude(&target);
+        angle = MathArcTan2(target.mY, target.mX);
+        length = Vec2Magnitude(&target);
         RouteArrowAddSegment(p, 0, pPoint, &length, &angle);
         p->mbMotion = 1;
         break;
@@ -499,19 +505,19 @@ void RouteArrowSetStyle(RouteArrow_t *p, unsigned char *pCommand, int hasOther)
     case 40:
         ArrowSetColor(p->mArrow, 224, 141, 18);
         switch (pCommand[1]) {
-        case 0: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, fn_80178A08()); break;
-        case 1: case 2: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
-        case 3: case 4: case 5: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
-        case 6: case 7: case 8: case 9: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
+        case 0: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, ScrmGetSidelineX()); break;
+        case 1: case 2: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, ScrmGetSidelineX() * 0.5f); break;
+        case 3: case 4: case 5: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, ScrmGetSidelineX() * 0.333333343f); break;
+        case 6: case 7: case 8: case 9: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, ScrmGetSidelineX() * 0.25f); break;
         }
         break;
     case 92:
         ArrowSetColor(p->mArrow, 224, 141, 18);
         switch (pCommand[1] + 14) {
-        case 14: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, fn_80178A08()); break;
-        case 15: case 16: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, fn_80178A08() * 0.5f); break;
-        case 17: case 18: case 19: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, fn_80178A08() * 0.333333343f); break;
-        case 20: case 21: case 22: case 23: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, fn_80178A08() * 0.25f); break;
+        case 14: ArrowSetEnd(p->mArrow, 2, 0, 8.0f, ScrmGetSidelineX()); break;
+        case 15: case 16: ArrowSetEnd(p->mArrow, 2, 0, 6.0f, ScrmGetSidelineX() * 0.5f); break;
+        case 17: case 18: case 19: ArrowSetEnd(p->mArrow, 2, 0, 4.5f, ScrmGetSidelineX() * 0.333333343f); break;
+        case 20: case 21: case 22: case 23: ArrowSetEnd(p->mArrow, 2, 0, 3.0f, ScrmGetSidelineX() * 0.25f); break;
         }
         break;
     case 22:
@@ -539,7 +545,7 @@ void RouteArrowBuild(RouteArrow_t *p)
     point.mX = p->mStartX;
     point.mY = p->mStartY;
     point.mZ = 0.0f;
-    if (fn_801784C4()) { point.mY = -point.mY; point.mX = -point.mX; }
+    if (ScrmIsFieldFlipped()) { point.mY = -point.mY; point.mX = -point.mX; }
     ArrowAddPoint(p->mArrow, &point);
     unsigned char *pCommand = p->mpCommands;
     int hasOther = fn_8011E9D8(pCommand);
@@ -559,7 +565,8 @@ void RouteArrowBuild(RouteArrow_t *p)
     PlayBookPlay_t *pRecord = PlayBookGetPlay(pPlayer->mIdBytes[2]);
     if (PlayAlignHasSlots(pRecord)) {
         for (unsigned char i = 0; i <= 2; ++i) {
-            if (pPlayer->mIdBytes[1] == *pRecord->mUnknown1C[i]) {
+            // FAKEMATCH: slot byte addressed as pRecord + (i << 2) + 0x1C, not *pRecord->mUnknown1C[i]
+            if (pPlayer->mIdBytes[1] == *((unsigned char *)pRecord + (i << 2) + 0x1C)) {
                 int index = fn_800F06F4(0, p->mpCommands, 19, 0xffff);
                 if (index == 0xffff && fn_800F06F4(0, p->mpCommands, 21, 0xffff) == index) continue;
                 switch (i) {
@@ -650,7 +657,7 @@ void RouteArrowUpdateHighlights(void)
     }
 }
 
-RouteArrow_t *RouteArrowShow(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
+RouteArrow_t *RouteArrowShow(Object_80039F5C *pPlayer, FieldPoint_t *pPoint,
                             unsigned char *pCommands, unsigned char flag)
 {
     RouteArrow_t *p = 0;
@@ -661,7 +668,7 @@ RouteArrow_t *RouteArrowShow(Object_80039F5C *pPlayer, Point_8017886C *pPoint,
             _RouteArrow_apArrows[i]->mbFlip = flag;
             _RouteArrow_apArrows[i]->mPendingTurn = 10;
             _RouteArrow_apArrows[i]->mpPlayer = pPlayer;
-            *(Point_8017886C *)&_RouteArrow_apArrows[i]->mStartX = *pPoint;
+            *(FieldPoint_t *)&_RouteArrow_apArrows[i]->mStartX = *pPoint;
             _RouteArrow_apArrows[i]->mpCommands = pCommands;
             p = _RouteArrow_apArrows[i];
             break;

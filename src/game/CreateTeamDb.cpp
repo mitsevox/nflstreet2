@@ -26,26 +26,26 @@ int TDbTblFindUnusedId(int, int *);
 int TDbTblDestroy(int, int);
 void TDbInsertRow(int, int, DbColumnValue *, int *, int);
 int TDbTblGetCount(int, int, DbFilter *, unsigned short *);
-int fn_8022C628(int, int, int *, unsigned short *);
-int fn_80229AA4(int, int, int *, unsigned short *);
+int DbFindUnusedTeamIds(int, int, int *, unsigned short *);
+int DbFindUnusedPlayerIds(int, int, int *, unsigned short *);
 int MemCardFilesNeedsSave(int, int);
 void MemCardFilesStoreChecksum(int, int);
 int PortraitAllocSlot(int, int);
 int PlayerDbGetHairStyle(Object_8008044C *);
 int PlayerDbGetPlht(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
-int fn_80082280(Object_8008044C *);
-int fn_800822D4(Object_8008044C *);
+int PlayerDbGetFaceId(Object_8008044C *);
+int PlayerDbGetEyebrows(Object_8008044C *);
 int PlayerDbGetPlex(Object_8008044C *);
 int PlayerDbGetHairColor(Object_8008044C *);
 int PlayerDbGetFacialHairColor(Object_8008044C *);
 void fn_8015F638(int, int, int, int *);
 void PlaTexCacheGetHairTexture(int, int *, int *);
 int PlaTexCacheGetCapFaceId(int);
-void fn_8018C48C(int);
-void fn_8018C344(int database, int firstTable, int secondTable,
+void TeamTablesPurgeCreated(int);
+void TeamTablesCopy(int database, int firstTable, int secondTable,
                  int *pFirstCopy, int *pSecondCopy);
-void fn_8018C3EC(int firstTable, int secondTable);
+void TeamTablesDestroy(int firstTable, int secondTable);
 int UserProfileGetSelected(unsigned char);
 int UserProfileFindIndex(int);
 int GauntletGetCurrentTeam(int);
@@ -203,7 +203,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
     int table = -1;
     QueryCursor cursor = {0, 0, -1, 0};
     int player;
-    fn_8022C628(destination, 0x4D414554, &team, &teamCount);
+    DbFindUnusedTeamIds(destination, 0x4D414554, &team, &teamCount);
     TDbTblFindUnusedId(destination, &table);
     TDbCompilePerformOp(&result, "use \x8c select into \x8c.\x8c * from \x8c where ('DIGT' = \x82)\n", source, destination, table, teamTable, 0);
     TDbCompilePerformOp(&result, "use \x8c update \x8c set 'DIGT' = \x85 and 'DIOT' = \x85\n", destination, table, team, team);
@@ -219,7 +219,7 @@ int CreateTeamLoad(int source, int teamTable, int playerTable, int destination,
     }
     if (status != 23) {
         count = result.mUnknown0;
-        fn_80229AA4(destination, 0x59414C50, ids, &count);
+        DbFindUnusedPlayerIds(destination, 0x59414C50, ids, &count);
         for (unsigned int i = 0; i < count; i++) {
             if (destination == 0x54415453) pOriginalIds[i] = ids[i];
             TDbCompilePerformOp(0, "fetch from \x8a\n", &cursor);
@@ -281,7 +281,7 @@ int CreateTeamInsertNew()
     DbColumnValue list[17];
     unsigned short count = 1;
     int team;
-    fn_8022C628(0x54415453, 0x4D414554, &team, &count);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (unsigned int i = 0; i < 13; i++) {
         list[i].Set(0x4D414554, _CreateTeamDb_aTeamTags[i]);
         list[i].mValue = _CreateTeamDb_aDefaultValues[i];
@@ -309,7 +309,7 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
     arg.Set(6, 0x5244524344494754LL, 2, rumt);
     TDbTblGetCount(0x54415453, 0x52445243, &arg, &total);
     count = total;
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     int player, table;
     cursor.mUnknown0 = 0; cursor.mUnknown4 = 0;
     cursor.mUnknown8 = -1; cursor.mUnknown12 = 0;
@@ -331,12 +331,12 @@ void CreateTeamCopyStylePlayers(int index, int team, int rumt)
         int value6E = PlayerDbGetHairStyle(&object);
         int value6C = PlayerDbGetPlht(&object);
         int value72 = fn_80081E3C(&object);
-        int value73 = fn_80082280(&object);
-        int value74 = fn_800822D4(&object);
+        int value73 = PlayerDbGetFaceId(&object);
+        int value74 = PlayerDbGetEyebrows(&object);
         int value76 = PlayerDbGetPlex(&object);
         unsigned int color18 = PlayerDbGetHairColor(&object);
         unsigned int color19 = PlayerDbGetFacialHairColor(&object);
-        fn_80082138(&object, &block);
+        PlayerDbGetFaceFeatures(&object, &block);
         FaceMorphBuildWeights(&block, &values);
         fn_8015F638(value6E, value6C, 0, resultIds);
         PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
@@ -380,8 +380,8 @@ int CreateTeamHasPlayers(int index)
 void CreateTeamLoadUserTeams()
 {
     int ids[16];
-    fn_8018C48C(0x54415453);
-    fn_8018C48C(0x454D4147);
+    TeamTablesPurgeCreated(0x54415453);
+    TeamTablesPurgeCreated(0x454D4147);
     for (unsigned char i = 0; i <= 1; i++) {
         int index = UserProfileGetSelected(i);
         if (index != -1 && CreateTeamExists(index)) {
@@ -394,7 +394,7 @@ void CreateTeamLoadUserTeams()
 int CreateTeamLoadToStats(int index, int rumt)
 {
     int ids[16];
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     CreateTeamSyncCreatedPlayers(index);
     return CreateTeamLoadAll(0x54415453, rumt, index, ids, 1);
 }
@@ -475,7 +475,7 @@ void CreateTeamAddPlayer(int team, int player, int useDefault)
     unsigned short count = 1;
     int id;
     TDbTblFindUnusedId(0x54415453, &table);
-    fn_80229AA4(0x54415453, 0x59414C50, &id, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, &id, &count);
     TDbCompilePerformOp(&result, "use 'TATS' select into \x8c * from 'YALP' where ('DIGP' = \x82)\n", table, player);
     if (useDefault) player = 0x7FF4;
     TDbCompilePerformOp(0, "use 'TATS' update \x8c set 'DIGP' = \x82 and 'DIOP' = \x82 and 'ITGT' = \x82 and 'DBTP' = \x82 and 'DFTP' = \x82 and 'CDHP' = \x82 and 'DIGT' = \x82\n", table, id, player, team, 0, 0, 0, team);
@@ -484,11 +484,11 @@ void CreateTeamAddPlayer(int team, int player, int useDefault)
 }
 void CreateTeamBackup(int *pFirstCopy, int *pSecondCopy, int database)
 {
-    fn_8018C344(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
+    TeamTablesCopy(database, 0x4D545243, 0x59505243, pFirstCopy, pSecondCopy);
 }
 void CreateTeamFreeBackup(int firstTable, int secondTable)
 {
-    fn_8018C3EC(firstTable, secondTable);
+    TeamTablesDestroy(firstTable, secondTable);
 }
 void CreateTeamRestore(int first, int second)
 {

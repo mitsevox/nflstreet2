@@ -49,7 +49,7 @@ int StoryTeamLoadToStats(int a, int b, int *pIds, int *pCount);
 void StoryTeamStoreFromStats(int a, int b);
 void StoryPlayerMoveToTeam(int a, int b);
 void StoryPlayerDelete(int a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamLoadToStats(int a, int b);
 void CreateTeamStoreFromStats(int a, int b);
 void CreateTeamDeletePlayer(int a, int b);
@@ -64,8 +64,8 @@ int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
 int UIGLibraryUnLoadItem(void *pObject, int a, int b);
 void *UIGLibraryGetGlobal(int index);
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
-int fn_8022C628(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedTeamIds(int handle, int table, int *pIds, unsigned short *pCount);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
 }
@@ -199,9 +199,9 @@ void MsgPlayerPickupCopyTeam(int db)
     value = StoryEventsGetPlayerTable();
     DbCursorOpen(&cursor, value, 0x44494750, 0, 0, 0x54415453);
     n = DbCursorGetRowCount(&cursor);
-    fn_80229AA4(0x54415453, 0x59414C50, ids, &count);
+    DbFindUnusedPlayerIds(0x54415453, 0x59414C50, ids, &count);
     n = count;
-    fn_8022C628(0x54415453, 0x4D414554, &_MsgPlayerPickup_iCopyTeam, &teamCount);
+    DbFindUnusedTeamIds(0x54415453, 0x4D414554, &_MsgPlayerPickup_iCopyTeam, &teamCount);
     for (i = 0; i < n; i++) {
         if (DbCursorSeek(&cursor, i)) {
             DbCursorSetInt(&cursor, 0x44494F50, ids[i]);
@@ -480,12 +480,12 @@ void MsgPlayerPickupShutdown(void)
     FEPlyrLoadReset(1);
     if (_MsgPlayerPickup_bCopyMode != 0) {
         StoryTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
         _MsgPlayerPickup_bCopyMode = 0;
         StoryEventsFreeTables();
     } else {
         CreateTeamStoreFromStats(_MsgPlayerPickup_cProfile, _MsgPlayerPickup_iTeam);
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
     }
     TeamFilterSet(1023);
     _MsgPlayerPickup_bOpen = 0;

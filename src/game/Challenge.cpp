@@ -10,7 +10,7 @@
 #include "game/PostPlayPhase.h"
 #include "game/DbCursor.h"
 #include "game/Challenge.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include <string.h>
 #include "game/TDbCompilePerformOp.h"
 
@@ -179,8 +179,8 @@ int fn_800A7E40(unsigned char side);
 int fn_800AD9B4(void);
 void fn_800B4A18(int index, char *pDest, int size);
 int fn_800B9A90(PostPlayPhase *p);
-int fn_80178308(void);
-int fn_801787DC(int team);
+int ScrmGetOffenseTeam(void);
+int ScrmGetTeamScore(int team);
 int UserProfileFindIndex(int a);
 void UserProfileAddRecordRow(int index);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -843,8 +843,8 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
 
         fn_8022B7A4(side, tag, &a);
         if (tag == 0x73707374 && (fn_800AD9B4() == 2 || fn_800AD9B4() == 5)) {
-            int value2 = fn_80178308();
-            Object_8017886C *pPlay = fn_8017886C();
+            int value2 = ScrmGetOffenseTeam();
+            ScrmPlayResult_t *pPlay = ScrmGetPlayResult();
 
             if (value2 == side && (a == 0 || ((pPlay->mUnknown18 & 8) && fn_800A2178() != 14))) {
                 a++;
@@ -892,7 +892,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x2A:
-            fn_801C2D88(text, 128, pFormat, fn_801787DC(1));
+            fn_801C2D88(text, 128, pFormat, ScrmGetTeamScore(1));
             strncpy(pText, text, size);
             break;
         case 0x2D:
@@ -903,7 +903,7 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             strncpy(pText, text, size);
             break;
         case 0x2E:
-            fn_801C2D88(text, 128, pFormat, fn_801787DC(0));
+            fn_801C2D88(text, 128, pFormat, ScrmGetTeamScore(0));
             strncpy(pText, text, size);
             break;
         case 0x31:

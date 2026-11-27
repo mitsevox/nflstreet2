@@ -3,7 +3,7 @@
 #include <string.h>
 #include "game/DbCursor.h"
 #include "game/EditMenu.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/UISGameMsg.h"
 
 extern void *gUISMainInfo;
@@ -41,7 +41,7 @@ void FEMiscSetHelpText(const char *pText)
         sText.mLength = 80;
         sText.mpText = _FEMisc_szHelpText;
         args[0].pParams = &sText;
-        fn_8021D7B8(gUISMainInfo, 0x80000006, 1, args);
+        UISProcessHint(gUISMainInfo, 0x80000006, 1, args);
     }
 }
 

@@ -7,14 +7,14 @@
 #include "game/Block_800C9D6C.h"
 #include "game/Object_8003DEC4.h"
 #include "game/LevelSurface.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Replay.h"
 #include "game/SndgCrowd.h"
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include "game/PlayBookDb.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/GameModeType.h"
 #include "game/SyncRandGetRange.h"
@@ -50,7 +50,7 @@ unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800A9680(void);
 int SndgMusicGetMode(void);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
-int fn_80178348(void);
+int ScrmGetSnapOffense(void);
 static const unsigned int _SndgEvent_aCrowdEvents[4] = {5, 10, 12, 15};
 extern float gPlyrMoveFwdSpeed;
 extern unsigned char lbl_803EA6EC;
@@ -70,10 +70,10 @@ int SndgEventPlayGroupVolume(int id, Vector_80039F5C *pPos, unsigned int volume)
 int SndgEventGetFootstepSfx(int unused, int value);
 
 
-int fn_80177F70(void);
+int ScrmGetDown(void);
 int fn_801486A0(void);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 PlayBookFormation_t *PlayBookGetFormation(int side);
 int SndgSfxIsPlaying(int id);
 void SndgSfxStop(int id);
@@ -520,14 +520,14 @@ void SndgEventProcess(AudmonEvent_t *p)
         if ((unsigned int)(id - 10) > 1) {
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
-                Point_8017886C point = fn_80177FE0();
-                if (!(player->mMotion.mPos.mY >= point.mY) && PlayAlignHasSlots(PlayBookGetPlay(fn_80178348()))) eligible = BallGetCurrentHolder() == player;
+                FieldPoint_t point = ScrmGetBallSpot();
+                if (!(player->mMotion.mPos.mY >= point.mY) && PlayAlignHasSlots(PlayBookGetPlay(ScrmGetSnapOffense()))) eligible = BallGetCurrentHolder() == player;
             }
             if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }
         break;
     }
-    case 124: fn_8017886C(); break;
+    case 124: ScrmGetPlayResult(); break;
     case 139:
         SndgEventSetSfx5Volume(50);
         SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
@@ -545,14 +545,14 @@ void SndgEventProcess(AudmonEvent_t *p)
 
 void SndgEventProcessInPlay(AudmonEvent_t *p)
 {
-    if (!fn_80177F70()) return;
+    if (!ScrmGetDown()) return;
     switch (p->mType) {
     case 117: lbl_803EA6E4 = 1; break;
     case 118: SyncRandGetRange(1, 2); break;
     case 116: {
         unsigned char side = ((unsigned char *)&p->mUnknown10)[3];
         if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
-        if (side != fn_80178308()) break;
+        if (side != ScrmGetOffenseTeam()) break;
         if (SndgSfxIsPlaying(66) || SndgSfxIsPlaying(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
         if (lbl_803EA6DB == 0) SndgSfxPlay(66, 0);
@@ -617,7 +617,7 @@ void SndgEventCycleBanks145(void)
 void SndgEventLoadFormationBank(void)
 {
     if (!lbl_803EA6FA) return;
-    PlayBookFormation_t *p = PlayBookGetFormation(fn_80178320());
+    PlayBookFormation_t *p = PlayBookGetFormation(ScrmGetDefenseTeam());
     unsigned int count = 0;
     for (int i = 0; i < 7; ++i) {
         float x = p->mUnknown8.mUnknown84[0][i].mUnknown10.mX;
@@ -717,17 +717,17 @@ void SndgEventOnReplayCase2(void)
 
 void SndgEventLoadTeamBanks(void)
 {
-    int side = fn_80178308();
+    int side = ScrmGetOffenseTeam();
     unsigned char value = 0;
     unsigned short index = 0;
-    unsigned int count = fn_80178D18(side);
+    unsigned int count = ScrmGetTeamPlayerCount(side);
     for (; index < count; ++index) {
         Object_80039F5C *p = PlyrGet(side, index);
         if (!p->mUnknown2914) { value = p->mUnknown2912; break; }
     }
     lbl_803EA6DC = (lbl_803EA6DC + 1) % 3;
     int id, other;
-    if (!fn_80178308()) {
+    if (!ScrmGetOffenseTeam()) {
         if (value <= 2) { id = lbl_803EA6DC + 85; other = lbl_803EA6DC + 100; }
         else { id = lbl_803EA6DC + 82; other = lbl_803EA6DC + 94; }
     } else {
@@ -741,7 +741,7 @@ void SndgEventLoadTeamBanks(void)
 void SndgEventPostBallContact(Object_80039F5C *p, Ball_t *ball)
 {
     Vector_80039F5C pos, velocity;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     BallGetPosition(ball, &pos);
     int nearby = 0;
     BallGetVelocity(ball, &velocity);
