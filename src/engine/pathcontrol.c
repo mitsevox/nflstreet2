@@ -52,7 +52,7 @@ extern "C" void PATH_pause(int flags, unsigned char value)
                     PathTrack_t *p = pfstate->mUnknown40[j];
                     // FAKEMATCH: track-mask bit tested as ((mask >> track) ^ 1) & 1 == 0; == 1 drops the target xori
                     if (p && ((((unsigned int)flags >> j) ^ 1) & 1) == 0) {
-                        p->mUnknown100->vfn_05(value);
+                        p->mUnknown100->Pause(value);
                         p->mUnknown8.bits.flag40 = value;
                     }
                 }
@@ -87,7 +87,7 @@ extern "C" int PATHI_status(PathTrack_t *p, void *info)
 {
     int result;
     if (p->mUnknown100)
-        result = p->mUnknown100->vfn_07(info);
+        result = p->mUnknown100->GetPathStatus(info);
     else
         result = -39;
     return result;
@@ -120,7 +120,7 @@ extern "C" void PATH_stop(int flags)
 
 extern "C" int PATHI_stop(PathTrack_t *p)
 {
-    p->mUnknown100->vfn_04();
+    p->mUnknown100->Stop();
     p->mUnknown4 = -1;
     p->mUnknown8.word |= 0xF80;
     return 0;

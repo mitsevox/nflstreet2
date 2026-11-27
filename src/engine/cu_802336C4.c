@@ -358,7 +358,8 @@ extern void TMClipResetExtent(void *p);
 extern void TMBufferNew(void *p, int a, int b);
 extern void TMBufferDelete(void *p);
 extern void TMBufferReset(void *p);
-extern void TMBlendSetWeights(short *pValues, int count);
+/* FAKEMATCH: declared returning int (the src/engine/tmblend.c definition is void; the result is never used), which gives fn_80233760's argument move order. */
+extern int TMBlendSetWeights(short *pValues, int count);
 extern void TMBlendBegin(void *p);
 extern void TMBlendEnd(void);
 extern void TMBlendBindModel(void *p);
@@ -586,7 +587,6 @@ int DbCacheCopy(int a, int b, int c, int key, int e, int f);
 int DbOccpModuleInit(int handle);
 void DbOccpModuleShutdown(void);
 int DbOccpQueryNone(void);
-int DbOccpQueryBlocking(const char *pWhere, int b, int c, int d, int e, struct QueryCursor *pCursor);
 int DbManagerInitModules(void);
 void DbManagerShutdownModules(void);
 int DbManagerPushGameDb(void);
@@ -713,6 +713,7 @@ void fn_80233728(Block_802336C4 *pBlock)
     TMBufferDelete(pBlock);
 }
 
+/* Re-blends the block's model geometry with the given blend weights and flushes it for the GPU. */
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count)
 {
     TMModelResetChannels(pBlock->mUnknown10);
