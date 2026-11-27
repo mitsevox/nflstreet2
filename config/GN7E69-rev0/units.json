@@ -20008,7 +20008,7 @@
     {
       "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -20020,12 +20020,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80080138",
-          "end": "0x8008058C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8008079C",
           "end": "0x800808F8"
         },
         {
@@ -20050,10 +20044,6 @@
           {
             "function": "PlayerRecordWriteById",
             "evidence": "evidence.tsv source-form 0x80080084-0x80080138"
-          },
-          {
-            "function": "PlayerQueryOpen",
-            "evidence": "evidence.tsv source-form 0x8008058C-0x8008079C"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (round 2 lane 2 holdout table)"
