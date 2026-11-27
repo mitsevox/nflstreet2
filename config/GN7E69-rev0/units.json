@@ -565,51 +565,11 @@
     },
     "gModelObjEyePos": {
       "address": "0x802FB458",
-      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
-    },
-    "__pure_virtual": {
-      "address": "0x8025F088",
-      "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
-    },
-    "__main": {
-      "address": "0x8025E1D8",
-      "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
-    },
-    "__ashldi3": {
-      "address": "0x8025E210",
-      "evidence": "evidence.tsv external row for 0x8025E210 (__ashldi3)."
-    },
-    "__ashrdi3": {
-      "address": "0x8025E250",
-      "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
-    },
-    "__divdi3": {
-      "address": "0x8025E290",
-      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
-    },
-    "__fixsfdi": {
-      "address": "0x8025E80C",
-      "evidence": "evidence.tsv external row for 0x8025E80C (__fixsfdi)."
-    },
-    "__moddi3": {
-      "address": "0x8025EB54",
-      "evidence": "evidence.tsv external row for 0x8025EB54 (__moddi3)."
+      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_80235010.c reads; unlinked .data whose owner is open, original bytes."
     },
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
-    },
-    "__lshrdi3": {
-      "address": "0x8025EB14",
-      "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
-    },
-    "__fixunssfdi": {
-      "address": "0x8025E850",
-      "evidence": "evidence.tsv external row for 0x8025E850 (__fixunssfdi)."
-    },
-    "__floatdisf": {
-      "address": "0x8025EA64",
-      "evidence": "evidence.tsv external row for 0x8025EA64 (__floatdisf)."
     },
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
@@ -671,14 +631,6 @@
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
     },
-    "__udivdi3": {
-      "address": "0x8025F0A8",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
-    },
-    "__umoddi3": {
-      "address": "0x8025F58C",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
-    },
     "StevQueryRowCount": {
       "address": "0x8018EA3C",
       "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
@@ -730,22 +682,6 @@
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
-    },
-    "_savegpr_23": {
-      "address": "0x8025FA48",
-      "evidence": "evidence.tsv external row for 0x8025FA48 (_savegpr_23)."
-    },
-    "_restgpr_23": {
-      "address": "0x8025FA94",
-      "evidence": "evidence.tsv external row for 0x8025FA94 (_restgpr_23)."
-    },
-    "_savegpr_24": {
-      "address": "0x8025FA4C",
-      "evidence": "evidence.tsv external row for 0x8025FA4C (_savegpr_24)."
-    },
-    "_restgpr_24": {
-      "address": "0x8025FA98",
-      "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     },
     "SFILTER_remove": {
       "address": "0x80279DF8",
@@ -810,18 +746,6 @@
     "DbTatsCopyAllTables": {
       "address": "0x8022ED50",
       "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
-    },
-    "ModelLodBalance": {
-      "address": "0x80234424",
-      "evidence": "evidence.tsv function/name rows for 0x80234424 (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "FloatArrayAlloc": {
-      "address": "0x8023491C",
-      "evidence": "evidence.tsv function/name rows for 0x8023491C (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "ScaleBlockReset": {
-      "address": "0x802349CC",
-      "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
     },
     "FEPlyrPoseTransitionCallback": {
       "address": "0x80089E70",
@@ -898,6 +822,10 @@
     "DbMttsUpdateTeamColumn": {
       "address": "0x8022B8C8",
       "evidence": "evidence.tsv function and name rows at 0x8022B8C8. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdateTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "__CTOR_LIST__": {
+      "address": "0x80289A20",
+      "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
     }
   },
   "units": [
@@ -4644,6 +4572,69 @@
         ],
         "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbmanager.c holds out fn_802331BC only."
       }
+    },
+    {
+      "source": "src/engine/cu_802336C4.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the two holdouts, whose ranges keep the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802336C4",
+          "end": "0x80233760"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802337D4",
+          "end": "0x802338D4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80233BB8",
+          "end": "0x80235010"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7120",
+          "end": "0x802B7128"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80233760",
+            "evidence": "evidence.tsv source-form 0x80233760-0x802337D4"
+          },
+          {
+            "function": "fn_802338D4",
+            "evidence": "evidence.tsv source-form 0x802338D4-0x80233BB8"
+          }
+        ],
+        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_80233760 and fn_802338D4."
+      }
+    },
+    {
+      "source": "src/engine/cu_80235010.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80235010-0x802355E4 (src/engine/cu_80235010.c, split from cu_802336C4.c in r1a), its function, name and source-form rows and the data row of its whole .rodata 0x802B7188-0x802B7198; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80235010",
+          "end": "0x802355E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7188",
+          "end": "0x802B7198"
+        }
+      ]
     },
     {
       "source": "src/engine/modelobj.c",
@@ -21645,6 +21636,119 @@
           "placement": ".sbss",
           "start": "0x803ED3F8",
           "end": "0x803ED40D"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_main.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E148-0x8025E80C (src/engine/libgcc2_main.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .sdata2 __clz_tab copy 0x803ED9C4-0x803EDAC4 and the __main flag .bss 0x803A6A08-0x803A6A0C, and its .data _exit_dummy_ref and _exit_dummy_decl 0x802FF4A0-0x802FF4A8 (data rows; the word before them, __do_global_dtors' p, keeps its original bytes under rule 8, data row 0x802FF49C).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E148",
+          "end": "0x8025E80C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A0",
+          "end": "0x802FF4A8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9C4",
+          "end": "0x803EDAC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A08",
+          "end": "0x803A6A0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixsfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E80C-0x8025E850 (src/engine/libgcc2_fixsfdi.c), its compiler, function, name and data rows; the one function exact, linked with its .rodata float 0.0 at 0x802B7264-0x802B7268.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E80C",
+          "end": "0x8025E850"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7264",
+          "end": "0x802B7268"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixunssfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E850-0x8025FA24 (src/engine/libgcc2_fixunssfdi.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .rodata 0x802B7268-0x802B72B0 and its three .sdata2 __clz_tab copies 0x803EDAC4-0x803EDDC4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E850",
+          "end": "0x8025FA24"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7268",
+          "end": "0x802B72B0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDAC4",
+          "end": "0x803EDDC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/eabi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FA24-0x8025FABC (src/engine/eabi.c), its compiler, function, name and data rows; the assembly register save and restore sequences, byte-identical.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FA24",
+          "end": "0x8025FABC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_cmpdi2.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FABC-0x8025FBD4 (src/engine/libgcc2_cmpdi2.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .data handler pointers 0x802FF4A8-0x802FF4B0 and the exception-context .bss 0x803A6A0C-0x803A6A28.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FABC",
+          "end": "0x8025FBD4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A8",
+          "end": "0x802FF4B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A0C",
+          "end": "0x803A6A28"
         }
       ]
     },

@@ -19854,7 +19854,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
-          "end": "0x802355E4"
+          "end": "0x80235010"
         },
         {
           "section": ".rodata",
@@ -20050,7 +20050,7 @@
           "end": "0x80234908"
         },
         {
-          "symbol": "fn_80234908",
+          "symbol": "ModelPassShadersClear",
           "start": "0x80234908",
           "end": "0x8023491C"
         },
@@ -20183,51 +20183,6 @@
           "symbol": "fn_80234F74",
           "start": "0x80234F74",
           "end": "0x80235010"
-        },
-        {
-          "symbol": "fn_80235328",
-          "start": "0x80235328",
-          "end": "0x802353CC"
-        },
-        {
-          "symbol": "fn_802353CC",
-          "start": "0x802353CC",
-          "end": "0x802353D0"
-        },
-        {
-          "symbol": "fn_802353D0",
-          "start": "0x802353D0",
-          "end": "0x802353D4"
-        },
-        {
-          "symbol": "fn_802353D4",
-          "start": "0x802353D4",
-          "end": "0x802353D8"
-        },
-        {
-          "symbol": "fn_802353D8",
-          "start": "0x802353D8",
-          "end": "0x802353E8"
-        },
-        {
-          "symbol": "fn_802353E8",
-          "start": "0x802353E8",
-          "end": "0x802353F8"
-        },
-        {
-          "symbol": "fn_802353F8",
-          "start": "0x802353F8",
-          "end": "0x80235510"
-        },
-        {
-          "symbol": "fn_80235510",
-          "start": "0x80235510",
-          "end": "0x80235588"
-        },
-        {
-          "symbol": "fn_80235588",
-          "start": "0x80235588",
-          "end": "0x802355E4"
         },
         {
           "symbol": "fn_802338D4",
@@ -20402,135 +20357,6 @@
           "symbol": "LLLightLoadDirectional",
           "start": "0x80236C10",
           "end": "0x80236DD8"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/cu_8025E148.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x8025E148-0x8025FBD4 (src/engine/cu_8025E148.c), its compiler, source-form, function and name rows and the exact data rows 0x802B7268-0x802B72B0 (.rodata), 0x802FF4A8-0x802FF4B0 (.data) and 0x803A6A08-0x803A6A28 (.bss). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025E148",
-          "end": "0x8025FBD4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7268",
-          "end": "0x802B72B0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FF4A8",
-          "end": "0x802FF4B0"
-        },
-        {
-          "section": ".sdata2",
-          "placement": ".data6",
-          "start": "0x803ED9C4",
-          "end": "0x803EDDC4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6A08",
-          "end": "0x803A6A28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8025E148",
-          "start": "0x8025E148",
-          "end": "0x8025E1D8"
-        },
-        {
-          "symbol": "__main",
-          "start": "0x8025E1D8",
-          "end": "0x8025E210"
-        },
-        {
-          "symbol": "__ashldi3",
-          "start": "0x8025E210",
-          "end": "0x8025E250"
-        },
-        {
-          "symbol": "__ashrdi3",
-          "start": "0x8025E250",
-          "end": "0x8025E290"
-        },
-        {
-          "symbol": "__divdi3",
-          "start": "0x8025E290",
-          "end": "0x8025E80C"
-        },
-        {
-          "symbol": "__fixunssfdi",
-          "start": "0x8025E850",
-          "end": "0x8025EA08"
-        },
-        {
-          "symbol": "__floatdidf",
-          "start": "0x8025EA08",
-          "end": "0x8025EA64"
-        },
-        {
-          "symbol": "__floatdisf",
-          "start": "0x8025EA64",
-          "end": "0x8025EB14"
-        },
-        {
-          "symbol": "__lshrdi3",
-          "start": "0x8025EB14",
-          "end": "0x8025EB54"
-        },
-        {
-          "symbol": "__moddi3",
-          "start": "0x8025EB54",
-          "end": "0x8025F088"
-        },
-        {
-          "symbol": "__pure_virtual",
-          "start": "0x8025F088",
-          "end": "0x8025F0A8"
-        },
-        {
-          "symbol": "__udivdi3",
-          "start": "0x8025F0A8",
-          "end": "0x8025F58C"
-        },
-        {
-          "symbol": "__umoddi3",
-          "start": "0x8025F58C",
-          "end": "0x8025FA24"
-        },
-        {
-          "symbol": "__cmpdi2",
-          "start": "0x8025FABC",
-          "end": "0x8025FAF8"
-        },
-        {
-          "symbol": "fn_8025FAF8",
-          "start": "0x8025FAF8",
-          "end": "0x8025FB08"
-        },
-        {
-          "symbol": "fn_8025FB08",
-          "start": "0x8025FB08",
-          "end": "0x8025FB34"
-        },
-        {
-          "symbol": "fn_8025FB34",
-          "start": "0x8025FB34",
-          "end": "0x8025FB68"
-        },
-        {
-          "symbol": "fn_8025FB68",
-          "start": "0x8025FB68",
-          "end": "0x8025FBD4"
         }
       ]
     },
