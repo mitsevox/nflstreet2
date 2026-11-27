@@ -20,8 +20,8 @@ struct PassBlockControl_t {
 
 extern "C" {
 void PlyrSteerAroundBlocker(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *);
-int fn_8011E3F4(Object_80039F5C *);
-int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
+int AssignEngageIsInContact(Object_80039F5C *);
+int AssignIsInLane(Object_80039F5C *, Object_80039F5C *, int, float, float);
 Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *, float *, int, float, float, int);
 
 extern float gPlyrMoveFwdSpeed;
@@ -37,26 +37,26 @@ int ScrmUsesBothTeams(void);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
 void PassBlockSteer(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *, FieldPoint_t);
-int fn_8011E8A4(Object_80039F5C *);
+int AssignEngageIsFree(Object_80039F5C *);
 int fn_800B7E60(Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
-void fn_8011E240(Object_80039F5C *);
+void AssignEngageEnd(Object_80039F5C *);
 float ScrmGetSidelineX(void);
 int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 float Vec2Distance(void *, void *);
 void Vec2Sub(void *, void *, void *);
 float Vec2Magnitude(void *);
-int fn_80120794(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int, float);
+int AssignGetPursuitHeading(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int, float);
 int AssignIsPlayType21(void);
 Object_80039F5C *BallGetCurrentTarget(void);
 Object_80039F5C *BallGetCurrentHolder(void);
 int ScrmTestPlayFlag(int);
 int AssignIsPlayType5(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
-int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
+int AssignIsLaneClear(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int ScrmGetDefenseTeam(void);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
@@ -79,7 +79,7 @@ void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockCont
         if (!(distance >= 3.25f)) {
             fallback = 0;
             aim->mUnknown10 = MathArcTan2(delta[1], delta[0]);
-            int angle = fn_80120794(motion, &other->mMotion,
+            int angle = AssignGetPursuitHeading(motion, &other->mMotion,
                 &other->mMotion.mUnknown40, motion->mUnknown28,
                 other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
             if (AngleSub(motion->mFacing, angle) > 0x800000)
@@ -256,8 +256,8 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
     if (other && p->mUnknown1032 == 3 &&
         (other->mMotion.mUnknown44 > gPlyrMoveFwdSpeed * 0.5f || other->mMotion.mPos.mY - point.mY > 3.0f ||
          fabsf(s->mUnknown0 - motion->mPos.mX) > 1.5f || (short)p->mUnknown1134 > 60)) {
-        if (!fn_8011E3F4(p)) {
-            fn_8011E240(p);
+        if (!AssignEngageIsInContact(p)) {
+            AssignEngageEnd(p);
             other = 0;
             AssignEngageStart(p, 0, 0, 1);
         }
@@ -267,7 +267,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
         Vec2Sub(delta, &other->mMotion.mPos, &motion->mPos);
         int toward = MathArcTan2(delta[1], delta[0]);
         distance = Vec2Magnitude(delta);
-        s->mUnknownC = fn_80120794(motion, &other->mMotion,
+        s->mUnknownC = AssignGetPursuitHeading(motion, &other->mMotion,
             &other->mMotion.mUnknown40, motion->mUnknown28,
             other->mMotion.mUnknown28, other->mMotion.mUnknown32, distance);
         Vec2Sub(delta, &other->mMotion.mPos, reference);
@@ -289,7 +289,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
                 s->mUnknownC = ((turn - toward) & 0xFFFFFF) <= 0x7FFFFF ? s->mUnknown10 + 0x400000 : s->mUnknown10 - 0x400000;
                 if (!(distance >= 3.5f)) {
                     if (other->mMotion.mUnknown28 == 0.0f &&
-                        fn_80124B1C(p, other, 0x200000, distance + 1.0f, 0.5f)) {
+                        AssignIsInLane(p, other, 0x200000, distance + 1.0f, 0.5f)) {
                         s->mUnknown8 = 0.0f;
                         goto finish;
                     }
@@ -366,7 +366,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, PassBlockCont
     Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
     if (other) {
         Vector_80039F5C *pos = &p->mMotion.mPos;
-        int clear = fn_80124714(p, other, &target);
+        int clear = AssignIsLaneClear(p, other, &target);
         if (!clear) {
             float delta[2];
             Vec2Sub(delta, &target->mMotion.mPos, pos);
@@ -461,7 +461,7 @@ int PassBlockEnter(Object_80039F5C *p)
     }
     if (ScrmIsNotReplay()) {
         AssignEngageSetMode(p, 0);
-        fn_8011E240(p);
+        AssignEngageEnd(p);
         return 1;
     }
     if (*pRole != 3) AssignEngageStart(p, 0, 0, 1);
@@ -479,7 +479,7 @@ int PassBlockUpdate(Object_80039F5C *p)
     Message_800F01CC message;
     if (p == ball) {
         AssignEngageSetMode(p, 0);
-        fn_8011E240(p);
+        AssignEngageEnd(p);
         memset(&message, 0, 4);
         message.mId = 1;
         PlyrStateQueueSet(0, p->mpState, &message, p);
@@ -488,7 +488,7 @@ int PassBlockUpdate(Object_80039F5C *p)
     if (fn_8009FB60(p)) return 1;
     if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         AssignEngageSetMode(p, 0);
-        fn_8011E240(p);
+        AssignEngageEnd(p);
         memset(&message, 0, 4);
         message.mId = 2;
         PlyrStateQueueSet(0, p->mpState, &message, p);
@@ -497,7 +497,7 @@ int PassBlockUpdate(Object_80039F5C *p)
     if ((AssignIsSnapPlayType2Or17() && !AssignIsPlayType2()) || ScrmTestPlayFlag(0) || ScrmIsNotReplay()) {
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             AssignEngageSetMode(p, 0);
-            fn_8011E240(p);
+            AssignEngageEnd(p);
         }
         memset(&message, 0, 4);
         message.mId = 33;
@@ -507,10 +507,10 @@ int PassBlockUpdate(Object_80039F5C *p)
     if (ScrmIsNotReplay()) {
         if ((block->mUnknown0 != 4 && block->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
             AssignEngageSetMode(p, 0);
-            fn_8011E240(p);
+            AssignEngageEnd(p);
         }
     } else if (!block->mUnknown0) {
-        fn_8011E240(p);
+        AssignEngageEnd(p);
         AssignEngageStart(p, 0, 0, 1);
         AssignEngageSetMode(p, 1);
     }
@@ -544,7 +544,7 @@ int PassBlockUpdate(Object_80039F5C *p)
     } else if (p->mpState[1].mId == 19) {
         AssignEngageSetMode(p, 0);
         result = 1;
-        fn_8011E240(p);
+        AssignEngageEnd(p);
     }
     if (s->mUnknown18) {
         --s->mUnknown14;
@@ -555,7 +555,7 @@ int PassBlockUpdate(Object_80039F5C *p)
             ((p->mFlags & 0x4000) && !(p->mMotion.mPos.mY <= ScrmGetBallSpot().mY))) {
             AssignEngageSetMode(p, 0);
             result = 1;
-            fn_8011E240(p);
+            AssignEngageEnd(p);
         }
     }
     return result;
@@ -564,14 +564,14 @@ int PassBlockUpdate(Object_80039F5C *p)
 int PassBlockExit(Object_80039F5C *p)
 {
     AssignEngageSetMode(p, 0);
-    fn_8011E240(p);
+    AssignEngageEnd(p);
     return 1;
 }
 
 int PassBlockInput(Object_80039F5C *p)
 {
     int result = 0;
-    if (fn_8011E8A4(p))
+    if (AssignEngageIsFree(p))
         result = fn_800B7E60(p);
     else {
         Block_8011E240 *block = &p->mBlock1032;
@@ -584,7 +584,7 @@ int PassBlockInput(Object_80039F5C *p)
             Vec2Sub(delta, &other->mMotion.mPos, &p->mMotion.mPos);
             if (MathAngleDiff(p->mUnknown512.mUnknown4, MathArcTan2(delta[1], delta[0])) > 0x600000) {
                 AssignEngageSetMode(p, 0);
-                fn_8011E240(p);
+                AssignEngageEnd(p);
                 goto done;
             }
             if (input.mUnknown92 & 1) block->mUnknown105 = 1;

@@ -247,7 +247,7 @@ struct State_80039F5C {
 /* Object that +3092 points to; its layout is declared where it is read. */
 struct Object_800EA284;
 /* Block at player +1072 (Block_8011E240 +40), passed to AssignEngageResetScales. +52 is
-   a halfword counter (fn_8011E884, fn_8011E88C, fn_8011DA40); +40, +44 and +48
+   a halfword counter (fn_8011E884, fn_8011E88C, AssignEngageSysTick); +40, +44 and +48
    are reset to 1.0f by AssignEngageResetScales. The byte at +54 is player +1126. */
 struct Block_8011DBC8 {
     char mUnknown0[40];
@@ -260,7 +260,7 @@ struct Block_8011DBC8 {
 
 /* View of the 108 bytes at player +1032 as one block: AssignEngageSysReset clears
    them with one 108-byte memset call, and AssignEngageSetFlags, AssignEngageClearFlags,
-   AssignEngageStart, fn_8011E240, AssignEngageSetOpponent and AssignEngageClear address them
+   AssignEngageStart, AssignEngageEnd, AssignEngageSetOpponent and AssignEngageClear address them
    through a register holding player +1032. The per-field view is the
    mUnknown1032-mUnknown1139 members; this view declares the bytes the
    block-relative code accesses and leaves the others opaque. +102 is the

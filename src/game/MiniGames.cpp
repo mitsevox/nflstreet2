@@ -923,7 +923,7 @@ void ParticleTrailStartAfterimage(Block_80170E64 *p);
 void PlyrStateQueueRemove(int a, State_80039F5C *pQueue, int id);
 void PlyrStateQueueInsertAt(int a, State_80039F5C *pQueue, Message_800F01CC *pMessage, Object_80039F5C *p,
                  unsigned char position);
-void fn_80120618(void);
+void AssignPursueReset(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 int ScrmIsNotReplay(void);
 int ScrmClassifyPosition(void *pPos, float *pOut, int a);
@@ -958,7 +958,7 @@ void PlyrMgrResetAll(void);
 void fn_801527E0(MiniGameJumpBallC *p, int value);
 void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p);
 void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p);
-void fn_801024FC(Object_80039F5C *p, int kind, int b, int c, int d);
+void PlyrBallReleaseStart(Object_80039F5C *p, int kind, int b, int c, int d);
 void SndgEventSetCrowdCycle(int value);
 void OSReport(const char *pMessage, ...);
 void RefreshFourPlayerScoreRows(MiniGameJumpBallDuringPlayC *p);
@@ -3543,7 +3543,7 @@ void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
             PlyrStateQueueInsertAt(0, pOther->mpState, &message, pOther, position + 1);
         }
     }
-    fn_80120618();
+    AssignPursueReset();
 }
 
 void MiniGameCrushCarrierDuringPlayC::OnUpdate(float dt)
@@ -4560,7 +4560,7 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
             message.mUnknown1[0] = (int)((delay + 2.0f) * 32.0f);
         }
         PlyrStateQueueSet(0, pPlayer->mpState, &message, pPlayer);
-        fn_801024FC(pPlayer, 8, 15, 5, 0);
+        PlyrBallReleaseStart(pPlayer, 8, 15, 5, 0);
         memset(&message, 0, 4);
         message.mId = 62;
         message.mUnknown1[0] = 0;

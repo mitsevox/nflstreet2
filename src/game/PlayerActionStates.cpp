@@ -632,7 +632,7 @@ extern "C" int PlayerActionGetInterceptHeading(Object_80039F5C *p, Object_80039F
 {
     int result = 0;
     if (p && pOther) {
-        result = fn_80120794(&p->mMotion, &pOther->mMotion, &pOther->mMotion.mUnknown40, 0.2f,
+        result = AssignGetPursuitHeading(&p->mMotion, &pOther->mMotion, &pOther->mMotion.mUnknown40, 0.2f,
                              pOther->mMotion.mUnknown28, pOther->mMotion.mUnknown32,
                              Vec2Distance(&pOther->mMotion, &p->mMotion));
     }

@@ -55,9 +55,9 @@ int AssignIsPlayType11To18(void);
 int AssignPlayHasSlots(void);
 int AssignIsPlayType21(void);
 unsigned int AssignPlayInfoGetSpotIndex(void);
-int fn_80120794(Object_800B26B0 *pMotion, Vector_80039F5C *pTarget, Vector_80039F5C *pDir, float speed, float length,
+int AssignGetPursuitHeading(Object_800B26B0 *pMotion, Vector_80039F5C *pTarget, Vector_80039F5C *pDir, float speed, float length,
                 int angle, float distance);
-int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
+int AssignIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 int PursueShouldPlayBall(Object_80039F5C *p);
 void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *pOther, Vector_80039F5C pos, float distance, int forced);
 void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *pState, float distance);
@@ -108,8 +108,8 @@ Object_80039F5C *PursueGetTarget(void);
 int PlyrEngageTryShed(Object_80039F5C *p, int mode);
 int fn_800F2C1C(Object_80039F5C *p, int a);
 Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
-int fn_8011E9B4(Object_80039F5C *p);
-void fn_8011E240(Object_80039F5C *p);
+int AssignEngageIsEngaged(Object_80039F5C *p);
+void AssignEngageEnd(Object_80039F5C *p);
 float SyncRandGetFloat(int stream);
 }
 
@@ -335,7 +335,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
         if (angle > 0x471C72) {
             int mode = ((state->mUnknown8 - motion->mFacing) & 0xFFFFFF) > 0x800000;
             if (angle <= 0x5FFFFF) PlyrEngageTryShed(p, mode);
-            else fn_8011E240(reference);
+            else AssignEngageEnd(reference);
         }
     }
 }
@@ -356,7 +356,7 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
     if (distance >= limit) return;
     if (other == BallGetCurrentHolder() && !ScrmIsNotReplay()) return;
     int inside = 0;
-    int mode = fn_8011E9B4(other);
+    int mode = AssignEngageIsEngaged(other);
     if (other->mIdBytes[2] == p->mIdBytes[2] && !mode) limit *= 0.5f;
     if (distance >= limit) return;
     float delta[2];
@@ -1414,7 +1414,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
                 }
             }
             if (ok) {
-                facing = fn_80120794(pMotion, &pos, &dir, speed, dirLength, dirAngle, distance);
+                facing = AssignGetPursuitHeading(pMotion, &pos, &dir, speed, dirLength, dirAngle, distance);
             } else {
                 Vec2_t delta;
 
@@ -1507,7 +1507,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
     int result = 0;
 
     *pOut = _Pursue_iTackleChance;
-    if (pOther == 0 || fn_80124714(p, pOther, 0) != 0) {
+    if (pOther == 0 || AssignIsLaneClear(p, pOther, 0) != 0) {
         if (pOther != 0 && pOther->mIdBytes[2] != p->mIdBytes[2] && (pOther->mFlags & 0x10000) != 0
             && distance < _Pursue_fTackleRange * 0.5f && fn_801486A0() != 0) {
             result = 1;

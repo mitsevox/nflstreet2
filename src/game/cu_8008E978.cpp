@@ -114,7 +114,7 @@
 #include "engine/vec.h"
 #include <math.h>
 #include "game/AnimChanStartAnim.h"
-#include "game/fn_801248D4.h"
+#include "game/AssignIsPathClear.h"
 #include "game/Lookup_8012078C.h"
 #include "game/AnimFrameHeader.h"
 #include "game/PenaltySituation.h"
@@ -896,7 +896,7 @@ void Vec2Rotate(void *pOut, void *pIn, int angle);
 }
 
 extern "C" {
-int fn_80120794(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pVelocity, float speedA, float speedB,
+int AssignGetPursuitHeading(Object_800B26B0 *pA, Object_800B26B0 *pB, float *pVelocity, float speedA, float speedB,
                 int angle, float distance);
 }
 
@@ -1804,7 +1804,7 @@ int fn_8010BC90(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimC
 }
 
 extern "C" {
-int fn_8010D834(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
+int PlyrTakeSnapSelectAnim(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p,
               unsigned int phase);
 }
 
@@ -2373,7 +2373,7 @@ void AssignEngageSetMode(Object_80039F5C *p, int a);
 }
 
 extern "C" {
-void fn_8011E240(Object_80039F5C *p);
+void AssignEngageEnd(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -2527,7 +2527,7 @@ void PlaySetSwapRow(PlayBookFormation_t *pObject, int row, int index);
 }
 
 extern "C" {
-void fn_8010B1FC(Object_80039F5C *p, int a, short b);
+void PlyrSnapperSetStore(Object_80039F5C *p, int a, short b);
 }
 
 extern "C" {
@@ -2743,7 +2743,7 @@ int LooseBallIsIdle(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_8011E9B4(Object_80039F5C *p);
+int AssignEngageIsEngaged(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -2856,7 +2856,7 @@ int fn_800F2C1C(Object_80039F5C *p, int a);
 }
 
 extern "C" {
-int fn_8010279C(Object_80039F5C *p);
+int QbPassInput(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -5266,7 +5266,7 @@ int fn_80114A30(Object_80039F5C *p, int a);
 }
 
 extern "C" {
-int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
+int AssignIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **ppBlocker);
 }
 
 extern "C" {
@@ -13216,7 +13216,7 @@ extern "C" int CatchAnimStateUpdate(Table_80089904 *pTable, unsigned short key, 
                 delta.mY = pBlock->mUnknown1C;
                 delta.mZ = 0.0f;
                 Vec3Add(&pos, &p->mMotion.mPos, &delta);
-                if (fn_801248D4(p, 0, &pos, 0, 0.5f, 0.5f, 0, 0)) {
+                if (AssignIsPathClear(p, 0, &pos, 0, 0.5f, 0.5f, 0, 0)) {
                     p->mMotion.mPos.mX += pBlock->mUnknown18;
                     p->mMotion.mPos.mY += pBlock->mUnknown1C;
                 }
@@ -17911,7 +17911,7 @@ extern "C" int DefReactGetInterceptAngle(Object_80039F5C *p, Object_80039F5C *pT
     if (reverse) {
         Vec2Rotate(velocity, velocity, 0x800000);
     }
-    return fn_80120794(&p->mMotion, &pTarget->mMotion, velocity, p->mMotion.mUnknown28, pTarget->mMotion.mUnknown28,
+    return AssignGetPursuitHeading(&p->mMotion, &pTarget->mMotion, velocity, p->mMotion.mUnknown28, pTarget->mMotion.mUnknown28,
                        MathArcTan2(velocity[1], velocity[0]), Vec2Distance(&p->mMotion, &pTarget->mMotion));
 }
 
@@ -19201,7 +19201,7 @@ extern "C" void GamebreakerActivate(int team)
                 if (p == 0) {
                     p = PlyrGet(ScrmGetOffenseTeam(), 0);
                 }
-                fn_8010B1FC(p, 0, 0);
+                PlyrSnapperSetStore(p, 0, 0);
                 PlayBookSelectAudible(ScrmGetOffenseTeam(), 0);
                 PlayRealignTeam(ScrmGetOffenseTeam());
                 fn_800B0DA4();
@@ -22933,7 +22933,7 @@ extern "C" void fn_800AEF74(Object_80039F5C *p, Message_800F01CC *pMessages)
     }
     if (result != 0xFFFF) {
         AssignEngageSetMode(p, 0);
-        fn_8011E240(p);
+        AssignEngageEnd(p);
     }
     PlyrStateQueueClear(0, p->mpState);
     for (i = 0; pMessages[i].mId != 0; i++) {
@@ -23724,7 +23724,7 @@ extern "C" void fn_800B0730(Object_80039F5C *p, int group)
                     PlyrStateQueueClear(0, p->mpState);
                     lbl_803EAB14->mUnknown2E5 = 1;
                     if (p->mFlags & 0x40000) {
-                        fn_8010B1FC(PlyrGet(p->mIdBytes[2], 0), 1, 0);
+                        PlyrSnapperSetStore(PlyrGet(p->mIdBytes[2], 0), 1, 0);
                         memset(&message, 0, sizeof(message));
                         message.mId = 51;
                         message.mUnknown1[0] = 16;
@@ -25633,7 +25633,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[157] = PlayerActionAnimSpeedBlendPhase;
     lbl_8030FB60[236] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[86] = PlayerActionAnimReactionPhase;
-    lbl_8030FB60[176] = fn_8010D834;
+    lbl_8030FB60[176] = PlyrTakeSnapSelectAnim;
     lbl_8030FB60[68] = fn_800F2CB4;
     lbl_8030FB60[192] = fn_800D7E9C;
     lbl_8030FB60[204] = fn_8010680C;
@@ -25648,7 +25648,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[69] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[178] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[85] = PlayerActionAnimReactionPhase;
-    lbl_8030FB60[37] = fn_8010D834;
+    lbl_8030FB60[37] = PlyrTakeSnapSelectAnim;
     lbl_8030FB60[100] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[47] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[70] = fn_800D7E9C;
@@ -26065,7 +26065,7 @@ extern "C" Object_80039F5C *fn_800B57F4(unsigned char team, Vector_80039F5C *pPo
                 Vec2ScaleAcc(&offset, &drift, -lbl_803EAB44);
                 offset.mX = 0.0f;
             }
-            if (fn_8011E9B4(p) == 0) {
+            if (AssignEngageIsEngaged(p) == 0) {
                 if (pCarrier != 0) {
                     if (pos.mY < line.mY && (pCarrier->mFlags & 0x10000000)) {
                         switch (p->mpState->mId) {
@@ -27030,7 +27030,7 @@ extern "C" int fn_800B7E60(Object_80039F5C *p)
         if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             if (fn_800B5FEC(p) != 0) {
                 if (PlyrStateQueueFind(0, p->mpState, 18, 0xFFFF) != 0xFFFF && ScrmTestPlayFlag(0) == 0) {
-                    return fn_8010279C(p);
+                    return QbPassInput(p);
                 }
                 if (BallFindHeldBy(p) != 0) {
                     return fn_800B76E8(p);
@@ -29960,7 +29960,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
         unsigned char t;
 
         lbl_803EABB4 = 1;
-        fn_8010B1FC(fn_800B6544(index), 0, 0);
+        PlyrSnapperSetStore(fn_800B6544(index), 0, 0);
         if (action == 0xFE) {
             PlayBookRestoreSelection(team);
             if (lbl_803EABA8->mUnknownC7 != 0) {
@@ -33418,7 +33418,7 @@ extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
     void *pKind;
     int handle;
 
-    if (fn_8011E9B4(p) != 0) {
+    if (AssignEngageIsEngaged(p) != 0) {
         result = 0;
     } else {
         switch (pState->mId) {
@@ -33530,14 +33530,14 @@ extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther)
             result = 0;
             break;
         }
-        if (!fn_80124714(p, pOther, &pBlocker) && pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
+        if (!AssignIsLaneClear(p, pOther, &pBlocker) && pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
             result = 0;
         }
         break;
     default:
         if (Vec2Distance(&pOther->mMotion.mPos, &p->mMotion.mPos) > 3.0f) {
             result = 0;
-        } else if (!fn_80124714(p, pOther, &pBlocker)) {
+        } else if (!AssignIsLaneClear(p, pOther, &pBlocker)) {
             if (pBlocker != 0 && !(pBlocker->mFlags & 0x800)) {
                 result = 0;
             }
@@ -33836,7 +33836,7 @@ extern "C" int fn_800C6A3C(Object_80039F5C *p, Object_80039F5C *pOther, int type
         } else {
             query.mUnknown54 = 1;
         }
-        if (!fn_8011E9B4(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
+        if (!AssignEngageIsEngaged(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
             query.mUnknown32 = 0x800000;
         }
         fn_800C5234(&query, pOther);
@@ -33931,7 +33931,7 @@ extern "C" int fn_800C6DF8(Object_80039F5C *p, Object_80039F5C *pOther, int type
         query.mUnknown44 = distance;
         query.mUnknown36 = angle * 46603.378f;
     }
-    if (!fn_8011E9B4(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
+    if (!AssignEngageIsEngaged(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) <= 0x2AAAA9) {
         query.mUnknown32 = 0x800000;
     }
     if (type != 94 && type != 234 && !(otherBlocking && fn_800CD2B4(1, pOther)) && !special) {
@@ -34009,7 +34009,7 @@ extern "C" int PlyrContactTryBreakTackle(Object_80039F5C *p, Object_80039F5C *pO
         query.mUnknown44 = value;
     }
     query.mUnknown52 = a;
-    if (!fn_8011E9B4(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) < 0x2AAAAA) {
+    if (!AssignEngageIsEngaged(pOther) && MathAngleDiff(p->mMotion.mUnknown32, pOther->mMotion.mFacing) < 0x2AAAAA) {
         query.mUnknown32 = 0x800000;
     }
     if (p->mpState->mId == 43) {
@@ -34366,7 +34366,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
                         if (kindA == 94) {
                             scale = (unsigned char)lbl_803EAC24;
                             count = (unsigned char)lbl_803EAC28;
-                        } else if (fn_8011E9B4(pOther) == 1) {
+                        } else if (AssignEngageIsEngaged(pOther) == 1) {
                             scale = 1;
                             count = 2;
                         } else {
@@ -34389,7 +34389,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
             }
         }
         if (!result && !stolen) {
-            if (fn_8011E9B4(pOther)) {
+            if (AssignEngageIsEngaged(pOther)) {
                 fn_800C56C0(p, key, chance);
             } else {
                 fn_800C561C(p, key);
@@ -36440,7 +36440,7 @@ extern "C" int fn_800CC6A8(Object_80039F5C *p)
         break;
     default:
         result = 1;
-        if (fn_8011E9B4(p) != 0) {
+        if (AssignEngageIsEngaged(p) != 0) {
             check = 1;
         }
         break;
@@ -37201,7 +37201,7 @@ extern "C" int fn_800CE2B8(Query_800CE770 *p)
     int kind = p->mUnknown52Unsigned == 247 ? 3 : 1;
     for (unsigned char i = 0; i <= 6; i++) {
         Object_80039F5C *pB = p->mpUnknown4Entries[i];
-        if (pB != 0 && fn_8011E9B4(pB)) {
+        if (pB != 0 && AssignEngageIsEngaged(pB)) {
             p->mUnknown56 = 1;
             break;
         }

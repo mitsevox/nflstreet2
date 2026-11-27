@@ -52,7 +52,7 @@ extern "C" void PlayerActionAnimReleasePitch(Object_80039F5C *p, Ball_t *pBall, 
     } else {
         pRecord8011F518->mUnknown12 = p->mMotion.mUnknown32;
     }
-    fn_801061E8(p, pBall);
+    PitchReleaseBall(p, pBall);
 }
 
 extern "C" void PlayerActionAnimAdjustToss(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
@@ -125,7 +125,7 @@ extern "C" void PlayerActionAnimGetReleaseTime(Object_80039F5C *p, float *pOut)
 extern "C" void PlayerActionAnimArmPitch(Record_800DB074 *pRecord, Object_80039F5C *p, Ball_t *pBall)
 {
     PlayerActionAnimGetReleaseTime(p, &pRecord->mUnknown20);
-    if (fn_80105FF8(p, pBall, pRecord->mUnknown20)) {
+    if (PitchIsReadyToRelease(p, pBall, pRecord->mUnknown20)) {
         pRecord->mUnknown1 = 1;
     }
     pRecord->mUnknown20 += (unsigned int)SyncTimeGetGameTime();
@@ -267,7 +267,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
         allow = allow == 0;
     }
     FieldPoint_t point;
-    Object_80039F5C *pOther = fn_80105384(p, 0, &point);
+    Object_80039F5C *pOther = PitchFindTarget(p, 0, &point);
     if (!pOther) {
         return;
     }
@@ -276,7 +276,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
         return;
     }
     int ready = 0;
-    if (fn_801066D0(p, pOther, 9)) {
+    if (PitchIsLaneClear(p, pOther, 9)) {
         ready = 1;
     }
     if (!ready) {

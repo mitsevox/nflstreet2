@@ -79,7 +79,7 @@ void PlyrRunLegEncode(Message_800F01CC *, void *, void *);
 void PlyrStateQueuePush(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 void Vec2Sub(void *, void *, void *);
 int fn_80104688(Object_80039F5C *);
-void fn_801024FC(Object_80039F5C *, int, int, int, int);
+void PlyrBallReleaseStart(Object_80039F5C *, int, int, int, int);
 int QbPassHoldOrRun(Object_80039F5C *, float *, float *, unsigned char *);
 void PlayerActionAnimSteerPassReady(Object_80039F5C *, int, float);
 int ScrmTestPlayFlag(int);
@@ -95,7 +95,7 @@ void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
 int MathArcTan2(float, float);
 void SndgSpchSetPlayFlags(int);
 unsigned int fn_800ABDA4(int);
-Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
+Object_80039F5C *AssignFindNearestFreeInLane(Object_80039F5C *, int, float *, int, float, int, float);
 float fn_80124FE0(Object_80039F5C *, int);
 float AssignDirGetRankedCost(Object_80039F5C *, int, int);
 float ScrmGetLineToGain(void);
@@ -207,7 +207,7 @@ int QbPassShouldRun(Object_80039F5C *p)
             }
         }
         float distance;
-        fn_80124E5C(p, ScrmGetDefenseTeam(), &distance, (int)(_QbPass_fRunConeDegrees * 46603.37890625f), _QbPass_fRunConeRange, 0x400000, _QbPass_fRunConeLimit);
+        AssignFindNearestFreeInLane(p, ScrmGetDefenseTeam(), &distance, (int)(_QbPass_fRunConeDegrees * 46603.37890625f), _QbPass_fRunConeRange, 0x400000, _QbPass_fRunConeLimit);
         if (distance > limit) {
             s->mUnknown18 = 1;
             return 1;
@@ -553,7 +553,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                         Vec2Magnitude(&diff);
                         if (TutorialIsActive())
                             action = 5;
-                        fn_801024FC(player, 0, selected->mIdBytes[1], action, fn_80104688(player));
+                        PlyrBallReleaseStart(player, 0, selected->mIdBytes[1], action, fn_80104688(player));
                         return 1;
                     }
                 } else if (QbPassHoldOrRun(player, weights, values.mCost, indices))
@@ -631,7 +631,7 @@ int QbPassHoldOrRun(Object_80039F5C *p, float *values, float *costs, unsigned ch
         }
     }
     if (!SyncRandGetRange(0, 85) && !(s->mUnknown14 < 2.0f) && !(s->mUnknown14 > 3.0f)) {
-        fn_801024FC(p, 4, choices[selection], 12, 0);
+        PlyrBallReleaseStart(p, 4, choices[selection], 12, 0);
         return 1;
     }
     if (fn_801486A0() != 4 && fn_801486A0() != 3 && (s->mUnknown18 || QbPassShouldRun(p))) {

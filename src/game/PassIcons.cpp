@@ -8,7 +8,7 @@
 
 extern "C" {
 void *PassIconStateGetFlags(int value);
-int fn_8011E9D8(State_80039F5C *pState);
+int AssignIsBlockBeforeRoute(State_80039F5C *pState);
 int AssignIsPlayType14(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int ScrmGetOffenseTeam(void);
@@ -38,7 +38,7 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
             result = 0;
             break;
         default:
-            result = fn_8011E9D8(pPlayer->mpState) == 0;
+            result = AssignIsBlockBeforeRoute(pPlayer->mpState) == 0;
             break;
         }
         if (result) {

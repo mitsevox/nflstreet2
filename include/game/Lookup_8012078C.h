@@ -2,7 +2,7 @@
 #define GAME_LOOKUP_8012078C_H
 
 /* Eight-byte entry of the third array: a distance and the player index it
-   belongs to (fn_8011FBE0). */
+   belongs to (AssignPursueFillDistances). */
 struct Entry_8011FBE0 {
     float mUnknown0;
     unsigned char mUnknown4;

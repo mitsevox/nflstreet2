@@ -165,7 +165,7 @@ void PlyrApplyPose(Object_80039F5C *p);
 void PlyrTrackUpdateAll(Object_80039F5C *p);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void PlyrTrackEnable(void *p, int *pRecord);
-int fn_8011E8A4(void);
+int AssignEngageIsFree(void);
 void AssignEngageRelease(Object_80039F5C *p);
 CollideSet_t *StatcollGetSet(void);
 }
@@ -537,7 +537,7 @@ extern "C" void PlyrUpdatePendingMsg(Object_80039F5C *p)
     if (p->mUnknown3044[0] != 0) {
         if (--p->mUnknown3040 <= 0) {
             p->mUnknown3040 = 0;
-            if (fn_8011E8A4() != 0) {
+            if (AssignEngageIsFree() != 0) {
                 AssignEngageRelease(p);
                 PlyrStateQueueSet(0, p->mQueue, (Message_800F01CC *)p->mUnknown3044, p);
                 if (p->mQueue[0].mId == (unsigned char)p->mUnknown3044[0]) {

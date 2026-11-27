@@ -147,7 +147,7 @@ void AnimChanSetMirrored(AnimChannel_t *entry, int value);
 extern "C" void Vec2FromAngle(void *pOut, int angle, float length);
 
 extern "C" {
-void fn_8011E240(Object_80039F5C *p);
+void AssignEngageEnd(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -155,7 +155,7 @@ void AssignEngageSetMode(Object_80039F5C *p, int a);
 }
 
 extern "C" {
-int fn_8011E9D8(State_80039F5C *pState);
+int AssignIsBlockBeforeRoute(State_80039F5C *pState);
 }
 
 extern "C" {
@@ -2922,7 +2922,7 @@ extern "C" int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther) 
         message.mUnknown1[0] = PlyrContactGetSide(away, difference) | _PlyrContact_aDirOctants[octant] << 4;
         message.mUnknown1[2] = PlyrContactPickHeight(p);
         if (p->mpState->mId == 31) {
-            if (fn_8011E9D8(p->mpState))
+            if (AssignIsBlockBeforeRoute(p->mpState))
                 PlyrStateQueueReplaceHead(0, p->mpState, &message, p);
             else
                 PlyrStateQueuePush(0, p->mpState, &message, p);
@@ -3065,11 +3065,11 @@ extern "C" int CarrierMomentumEnter(Object_80039F5C *p) {
     if (p->mIdBytes[3] == 1) {
         AssignEngageSetMode(p, 0);
         if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
-            fn_8011E240(p);
+            AssignEngageEnd(p);
         } else {
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
             if (pOther)
-                fn_8011E240(pOther);
+                AssignEngageEnd(pOther);
         }
     }
     if (state->mUnknown20[0] == 1 || state->mUnknown20[1] == 1)

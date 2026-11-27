@@ -93,7 +93,7 @@ void AssignEngageSysReset(void);
 void AssignEngageSysStartPlay(void);
 void fn_8011F3A8(void);
 void AssignPlayInfoResetPitchCounts(void);
-void fn_80120618(void);
+void AssignPursueReset(void);
 void BallPrimeKickUp(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int CamGameGetCurrentSlot(void);
@@ -457,7 +457,7 @@ extern "C" void ScrmStartPlay(void)
         ReplayEventAdd(gpReplay, 2, 0, &ballPos, 0);
     }
     ScrmLogSnap();
-    fn_80120618();
+    AssignPursueReset();
     fn_800C9FC0();
     fn_800CA3C4();
     if (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && GameClockIsTimerRunning(4) == 0) {

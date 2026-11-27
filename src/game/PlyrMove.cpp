@@ -16,9 +16,9 @@ float fn_800C4914(Object_80039F5C *p, float value);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
-int fn_8011E9B4(Object_80039F5C *p);
+int AssignEngageIsEngaged(Object_80039F5C *p);
 Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
-int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
+int AssignIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 Object_80039F5C *BallGetCurrentHolder(void);
 void PlyrMoveApplyGroundScale(Object_80039F5C *p);
 void PlyrMoveModeEngage(Object_80039F5C *p);
@@ -148,13 +148,13 @@ void PlyrMovePickSideType(Object_80039F5C *p)
         int team = ScrmGetOffenseTeam();
         Object_80039F5C *pOther = AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x355555, &distance, 0);
 
-        if (pOther && distance < 2.0f && !(pOther->mFlags & 0x800) && fn_8011E9B4(pOther)) {
+        if (pOther && distance < 2.0f && !(pOther->mFlags & 0x800) && AssignEngageIsEngaged(pOther)) {
             int angle;
 
             Vec2Sub(delta, &pOther->mMotion, &p->mMotion);
             angle = MathArcTan2(delta[1], delta[0]);
             if (distance < 2.0f - MathAngleDiff(angle, p->mMotion.mFacing) / 3495253.0f &&
-                fn_80124714(p, pOther, 0)) {
+                AssignIsLaneClear(p, pOther, 0)) {
                 if (((angle - p->mUnknown512.mUnknown4) & 0xFFFFFF) <= 0x7FFFFF) {
                     if (p->mUnknown776 == 2) {
                         p->mUnknown528.mUnknown15 = 3;

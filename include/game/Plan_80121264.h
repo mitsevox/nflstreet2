@@ -31,7 +31,7 @@ struct Entry_801230B8 {
     float mUnknown28;
 };
 
-/* 2376-byte record cleared and filled by fn_80121264 (AssignGapGetHeading keeps one
+/* 2376-byte record cleared and filled by AssignGapCollectPoints (AssignGapGetHeading keeps one
    on its stack). */
 struct Plan_80121264 {
     Entry_80120E98 mUnknown0[30];

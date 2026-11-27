@@ -27,8 +27,8 @@ void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
-int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
+int PitchIsTargetValid(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
+int PitchIsLaneClear(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
@@ -36,10 +36,10 @@ void AssignEngageSetMode(Object_80039F5C *p, int a);
 void AssignPlayInfoSetSpotIndex(int a);
 int AssignGapGetHeading(Object_80039F5C *p, int angle);
 void AssignDirEvaluate(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
-unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
+unsigned char AssignDirGetBestOctant(Directions_8012430C *pValues, int angle);
 Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
-int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
+int AssignIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 float AssignDirGetTotalCost(Object_80039F5C *p, int kind);
 int AssignDirGetBestHeading(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
@@ -147,7 +147,7 @@ extern "C" int OptionRunIsThreat(Object_80039F5C *p, Object_80039F5C *pOther)
     FieldPoint_t delta;
     int result = 1;
 
-    if (fn_80124714(pOther, p, &pFound) == 0 && pFound->mIdBytes[2] == p->mIdBytes[2]) {
+    if (AssignIsLaneClear(pOther, p, &pFound) == 0 && pFound->mIdBytes[2] == p->mIdBytes[2]) {
         result = 0;
     }
     if (result) {
@@ -197,7 +197,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
         Object_80039F5C *pOther;
 
         if (pControl->mUnknown81 == 0 && own < 42.0f && OptionRunFindThreat(p, 0x200000, 5.5f, 0.0f) != 0 &&
-            fn_801066D0(p, pTarget, 9) && OptionRunCanPitchTo(p, 0, 0)) {
+            PitchIsLaneClear(p, pTarget, 9) && OptionRunCanPitchTo(p, 0, 0)) {
             float rating = p->mRatings[6] / 255.0f;
             float chance;
 
@@ -218,7 +218,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
             Vec2Sub(&toTarget, &pTarget->mMotion.mPos, &p->mMotion.mPos);
             if (Vec2DotProduct(&toOther, &toTarget) > 0.0f) {
                 result = 4;
-            } else if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
+            } else if (target < 30.0f && PitchIsLaneClear(p, pTarget, 9) &&
                        OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
                 result = 2;
             }
@@ -233,7 +233,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
             if (flag) {
                 result = 6;
             } else if (own > 65.0f) {
-                if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
+                if (target < 30.0f && PitchIsLaneClear(p, pTarget, 9) &&
                     OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
                     result = 2;
                 } else if (MathAngleDiff(AssignGapGetHeading(p, 0x400000), 0x400000) <= 0x71C70) {
@@ -258,7 +258,7 @@ extern "C" int OptionRunThrow(Object_80039F5C *p, int kind, int arg)
     Object_80039F5C *pCurrent = BallGetCurrentHolder();
 
     if (pCurrent == p) {
-        if (fn_80105E90(pCurrent, pTarget, kind)) {
+        if (PitchIsTargetValid(pCurrent, pTarget, kind)) {
             Message_800F01CC message;
 
             result = 1;
@@ -313,7 +313,7 @@ extern "C" void OptionRunSteerCarrier(Object_80039F5C *p, Directions_8012430C *p
 
 extern "C" void OptionRunSteerTrailer(Object_80039F5C *p, Directions_8012430C *pValues, OptionRunControl_t *pControl)
 {
-    pControl->mUnknown44 = fn_801243E0(pValues, -1) << 21;
+    pControl->mUnknown44 = AssignDirGetBestOctant(pValues, -1) << 21;
     pControl->mUnknown40 = 0.72f;
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = pControl->mUnknown44;

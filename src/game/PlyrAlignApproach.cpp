@@ -37,7 +37,7 @@ void PlyrAlignStartShuffle(Object_80039F5C *, PlyrAlignApproachState_t *, int, f
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int ScrmGetDefenseTeam(void);
 int ScrmGetOffenseTeam(void);
-int fn_80124CE4(Object_80039F5C *, int, void *, int, float, int, float);
+int AssignFindNearestInLane(Object_80039F5C *, int, void *, int, float, int, float);
 int PlayerActionIsNearLine(Object_80039F5C *);
 void PlayerPathStartSideAnim(Object_80039F5C *, int, int);
 int PlayerPathIsLaneClear(Object_80039F5C *, FieldPoint_t *);
@@ -145,7 +145,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int an
     unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
     for (unsigned char i = 0; i < count; ++i) {
       int value;
-      if (fn_80124CE4(player, player->mIdBytes[2], &value, 0x155555, 5.0f,
+      if (AssignFindNearestInLane(player, player->mIdBytes[2], &value, 0x155555, 5.0f,
                       facing, 1.0f)) {
         if (MathAngleDiff(facing, 0) <= 0x2AAAA9) {
           player->mUnknown512.mUnknown4 += (int)(lbl_803EAD48 * 46603.379f);

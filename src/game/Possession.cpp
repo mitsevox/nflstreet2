@@ -106,7 +106,7 @@ void PlyrBallHandUpdate(Object_80039F5C *p);
 int PlayerActionIsUserCatch(Object_80039F5C *p);
 int PlayerActionIsCatchBlocked(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
-int fn_8011E9B4(Object_80039F5C *p);
+int AssignEngageIsEngaged(Object_80039F5C *p);
 Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 void *BallGetCurrent(void);
 int BallGetIndex(void *pBall);
@@ -606,7 +606,7 @@ unsigned short PossApplyCoverage(Object_80039F5C *p, float *pChance)
     for (; i < n && count <= 3; i++) {
         Object_80039F5C *pOther = PlyrGet((p->mId >> 8 & 0xFF) ^ 1, i);
 
-        if (Vec2Distance(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !fn_8011E9B4(pOther)) {
+        if (Vec2Distance(&pOther->mMotion.mPos, &p->mMotion.mPos) < 2.5f && !AssignEngageIsEngaged(pOther)) {
             short *pRatings = pOther->mRatings;
             float value = (pRatings[8] + pRatings[5] / 2) / 382.0f;
             unsigned int state;

@@ -77,7 +77,7 @@ PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *AssignPlayInfoGetCover(void);
 float AssignPlayInfoGetSpotX(void);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
-int fn_8011E9D8(void *);
+int AssignIsBlockBeforeRoute(void *);
 void PlyrStateMirrorMessage(int, void *);
 int AssignGetCoverSlot(Object_80039F5C *, void *);
 Object_80039F5C *AssignGetCoverReceiver(Object_80039F5C *, void *);
@@ -548,7 +548,7 @@ void RouteArrowBuild(RouteArrow_t *p)
     if (ScrmIsFieldFlipped()) { point.mY = -point.mY; point.mX = -point.mX; }
     ArrowAddPoint(p->mArrow, &point);
     unsigned char *pCommand = p->mpCommands;
-    int hasOther = fn_8011E9D8(pCommand);
+    int hasOther = AssignIsBlockBeforeRoute(pCommand);
     unsigned char more;
     do {
         command = *(RouteArrowCmd_t *)pCommand;

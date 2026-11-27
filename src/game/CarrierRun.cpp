@@ -46,11 +46,11 @@ void PlyrRunLegEncode(Message_800F01CC *, void *, void *);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void CarrierTightropeStart(Object_80039F5C *p);
 int CarrierSpinStart(Object_80039F5C *p, int a, int b, int c);
-int fn_8011E9B4(Object_80039F5C *p);
+int AssignEngageIsEngaged(Object_80039F5C *p);
 void AssignGapPlan(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
 Entry_801230B8 *AssignGapGetBestOrNull(Plan_80121264 *pPlan);
 void AssignDirEvaluate(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
-unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
+unsigned char AssignDirGetBestOctant(Directions_8012430C *pValues, int angle);
 void GetOpenGetRunOnPoint(Object_80039F5C *p, FieldPoint_t *pOut);
 void PlayerCutStartAnim(Object_80039F5C *p);
 void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, FieldPoint_t *pOut);
@@ -113,12 +113,12 @@ int ScrmGetOffenseTeam(void);
 int ScrmIsNearWin(int team);
 int PlayerMoveGetKind(Object_80039F5C *p);
 float MathCos(int angle);
-Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, FieldPoint_t *pOut);
+Object_80039F5C *PitchFindTarget(Object_80039F5C *p, int mode, FieldPoint_t *pOut);
 int OptionRunCanPitchTo(Object_80039F5C *p, FieldPoint_t *pOut, Object_80039F5C *pOther);
-int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int a);
+int PitchIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, int a);
 float AssignDirGetTotalCost(Object_80039F5C *p, int kind);
 int AssignPlayInfoGetPitchCount(int a);
-int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pOther, int kind);
+int PitchIsTargetValid(Object_80039F5C *p, Object_80039F5C *pOther, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int PitchStart(Object_80039F5C *p, int a);
 int ScrmIsNotReplay(void);
@@ -139,12 +139,12 @@ static float _CarrierRun_fPitchFarRange = 7.0f;
 static unsigned char _CarrierRun_aucMoveOrder[3][7] = {
     {3, 4, 2, 0, 1, 6, 5}, {0, 1, 3, 4, 2, 6, 5}, {0, 1, 2, 3, 4, 6, 5}
 };
-Object_80039F5C *fn_80124CE4(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
+Object_80039F5C *AssignFindNearestInLane(Object_80039F5C *p, int team, float *pOut, int angle, float a, int facing, float b);
 extern float gPlyrMoveFwdSpeed;
 }
 
 extern "C" int fn_800F2828(Object_80039F5C *p, Object_80039F5C *pOther);
-extern "C" int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
+extern "C" int AssignIsLaneClear(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 extern "C" int fn_80110EB0(Object_80039F5C *p, Object_80039F5C *pOther);
 
 extern "C" void fn_8009A8D4(void *p);
@@ -507,7 +507,7 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
         return;
     }
     int blocked = 0;
-    int linked = fn_8011E9B4(other);
+    int linked = AssignEngageIsEngaged(other);
     Vector_80039F5C point;
     FieldPoint_t delta;
     int direction;
@@ -729,7 +729,7 @@ extern "C" int CarrierRunIsShielded(Object_80039F5C *p, Object_80039F5C *pOther)
     OptionRunControl_t *state = (OptionRunControl_t *)&p->mUnknown336;
     int result = 0;
 
-    if (fn_8011E9B4(pOther)) {
+    if (AssignEngageIsEngaged(pOther)) {
         result = 1;
     } else {
         Object_80039F5C *pRef = fn_8009BCE8(&pOther->mUnknown1036);
@@ -768,8 +768,8 @@ extern "C" int CarrierRunTryJuke(Object_80039F5C *p, Object_80039F5C *, float di
     float reduction = scale * 0.8f;
 
     chance = (unsigned char)(int)((float)chance - reduction * (float)chance);
-    Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, motion->mFacing, 1.0f);
-    if (pOther && p->mIdBytes[2] != pOther->mIdBytes[2] && !fn_8011E9B4(pOther)) {
+    Object_80039F5C *pOther = AssignFindNearestInLane(p, p->mIdBytes[2] ^ 1, &distance, 0x271C71, 10.0f, motion->mFacing, 1.0f);
+    if (pOther && p->mIdBytes[2] != pOther->mIdBytes[2] && !AssignEngageIsEngaged(pOther)) {
         FieldPoint_t delta;
         Vec2Sub(&delta, &pOther->mMotion.mPos, motion);
         int threshold = 0xAAAAA;
@@ -818,7 +818,7 @@ extern "C" int CarrierRunTrySpinOffBlock(Object_80039F5C *p, Object_80039F5C *pO
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
-    if (fn_8011E9B4(pOther) && SyncRandGetRange(0, 100) < (unsigned int)(p->mRatings[0] >> 3 & 0x7FFFFFFF)) {
+    if (AssignEngageIsEngaged(pOther) && SyncRandGetRange(0, 100) < (unsigned int)(p->mRatings[0] >> 3 & 0x7FFFFFFF)) {
         FieldPoint_t delta;
         int direction;
 
@@ -851,7 +851,7 @@ extern "C" int CarrierRunTrySpin(Object_80039F5C *p, Object_80039F5C *pOther, fl
     if (p->mIdBytes[2] != pOther->mIdBytes[2] && !(pOther->mFlags & 0x800)
         && (MathAngleDiff(pOther->mMotion.mUnknown32, 0) <= 0x31C71B
             || MathAngleDiff(pOther->mMotion.mUnknown32, 0x800000) <= 0x31C71B)
-        && !CarrierRunIsShielded(p, pOther) && fn_80124714(p, pOther, 0) == 1) {
+        && !CarrierRunIsShielded(p, pOther) && AssignIsLaneClear(p, pOther, 0) == 1) {
         int threshold = 0x438E39;
         int difference = MathAngleDiff((angle + 0x800000) & 0xFFFFFF, pOther->mMotion.mFacing);
         if (difference > 0x200000) {
@@ -934,7 +934,7 @@ extern "C" int CarrierRunTryDive(Object_80039F5C *p, Object_80039F5C *pOther, fl
     unsigned int chance = (unsigned int)(((pRatings[0] >> 3) * 2) + (pRatings[2] >> 4)) >> 1;
 
     if (!(distance > 4.0f) && turn <= 0x2AAAA9
-        && !fn_8011E9B4(pOther) && p->mIdBytes[2] != pOther->mIdBytes[2]) {
+        && !AssignEngageIsEngaged(pOther) && p->mIdBytes[2] != pOther->mIdBytes[2]) {
         float remaining = ScrmGetGoalLineY() - motion->mPos.mY;
         float limit = 4.2f;
 
@@ -959,7 +959,7 @@ extern "C" int CarrierRunTryStiffArm(Object_80039F5C *p, Object_80039F5C *pOther
     Object_800B26B0 *motion = &p->mMotion;
     short *pRatings = p->mRatings;
 
-    if (!(pOther->mFlags & 0x800) && !fn_8011E9B4(pOther) && !(distance > 4.5f)
+    if (!(pOther->mFlags & 0x800) && !AssignEngageIsEngaged(pOther) && !(distance > 4.5f)
         && p->mIdBytes[2] != pOther->mIdBytes[2]) {
         int delta = (angle - motion->mFacing) & 0xFFFFFF;
         int side;
@@ -1006,11 +1006,11 @@ extern "C" int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *, float, 
     int result = 0;
 
     ball = ScrmGetBallSpot();
-    Object_80039F5C *other = fn_80105384(p, 1, &aim);
+    Object_80039F5C *other = PitchFindTarget(p, 1, &aim);
     int valid = OptionRunCanPitchTo(p, &aim, other);
 
     if (other) {
-        int open = valid && fn_801066D0(p, other, 9);
+        int open = valid && PitchIsLaneClear(p, other, 9);
 
         if (open && !(p->mMotion.mPos.mY <= ball.mY)) {
             if (!(other->mRatings[4] <= p->mRatings[4] * _CarrierRun_fPitchRatingScale)) {
@@ -1037,7 +1037,7 @@ extern "C" int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *, float, 
 
         if (count + AssignPlayInfoGetPitchCount(1) > 1) result = 0;
     }
-    if (result && fn_80105E90(p, other, 11)) {
+    if (result && PitchIsTargetValid(p, other, 11)) {
         result = PitchStart(p, fn_801067D8(p));
     }
     return result;
@@ -1238,10 +1238,10 @@ extern "C" int CarrierRunCheckBlocked(Object_80039F5C *p, OptionRunControl_t *pC
 
     if (p && pControl && BallGetCurrentHolder() == p) {
         float distance;
-        Object_80039F5C *pOther = fn_80124CE4(p, p->mIdBytes[2], &distance, 0x200000,
+        Object_80039F5C *pOther = AssignFindNearestInLane(p, p->mIdBytes[2], &distance, 0x200000,
                                            1.5f, p->mMotion.mFacing, 1.0f);
 
-        if (pOther && fn_8011E9B4(pOther)
+        if (pOther && AssignEngageIsEngaged(pOther)
             && MathAngleDiff(p->mMotion.mFacing, 0x400000) <= 0x200000) {
             result = p->mMotion.mUnknown28 <= gPlyrMoveFwdSpeed * 0.4f;
         }
@@ -1316,7 +1316,7 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
             pControl->mUnknown52 = 1;
             AssignDirEvaluate(pValues, 1, p);
             CarrierRunAddSideCosts(p);
-            pControl->mUnknown48 = fn_801243E0(pValues, pMotion->mFacing);
+            pControl->mUnknown48 = AssignDirGetBestOctant(pValues, pMotion->mFacing);
             pControl->mUnknown44 = pControl->mUnknown48 << 21;
             CarrierRunPickHeading(p, mode);
             AssignGapPlan(p, &plan, pControl->mUnknown44);

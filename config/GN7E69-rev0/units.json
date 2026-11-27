@@ -14800,7 +14800,7 @@
             "evidence": "evidence.tsv source-form 0x800FF094-0x800FF538"
           },
           {
-            "function": "fn_80100BF8",
+            "function": "AssignPassApplyError",
             "evidence": "evidence.tsv source-form 0x80100BF8-0x80100EA0"
           },
           {
@@ -14812,7 +14812,7 @@
             "evidence": "evidence.tsv source-form 0x80103F80-0x80104328"
           },
           {
-            "function": "fn_80104D98",
+            "function": "PitchStartAnim",
             "evidence": "evidence.tsv source-form 0x80104D98-0x801050DC"
           },
           {
@@ -14844,7 +14844,7 @@
             "evidence": "evidence.tsv source-form 0x80114EE4-0x80114F64"
           },
           {
-            "function": "fn_8011569C",
+            "function": "AssignZoneComputeSpot",
             "evidence": "evidence.tsv source-form 0x8011569C-0x801163B4"
           },
           {
@@ -14856,7 +14856,7 @@
             "evidence": "evidence.tsv source-form 0x801167C4-0x80116880"
           },
           {
-            "function": "fn_8011BAE0",
+            "function": "AssignEngageGetFocusPoint",
             "evidence": "evidence.tsv source-form 0x8011BAE0-0x8011BCDC"
           },
           {
@@ -14864,7 +14864,7 @@
             "evidence": "evidence.tsv source-form 0x8011BCDC-0x8011C4E0"
           },
           {
-            "function": "fn_8011E484",
+            "function": "AssignEngageCanContact",
             "evidence": "evidence.tsv source-form 0x8011E484-0x8011E7CC"
           },
           {
@@ -14872,7 +14872,7 @@
             "evidence": "evidence.tsv source-form 0x80121918-0x80121BE8"
           },
           {
-            "function": "fn_801227DC",
+            "function": "AssignGapScore",
             "evidence": "evidence.tsv source-form 0x801227DC-0x80123024"
           },
           {

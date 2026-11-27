@@ -85,7 +85,7 @@ int fn_8009F0B8(Object_80039F5C *p, int angle);
 void PlyrFindNearest(void *pPos, float *pExtra, int team);
 void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
 int ScrmGetSnapDefense(void);
-void fn_8011E240(Object_80039F5C *p);
+void AssignEngageEnd(Object_80039F5C *p);
 void AssignEngageSetMode(Object_80039F5C *p, int a);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
@@ -98,7 +98,7 @@ float ScrmGetEndLineY(void);
 float ScrmGetDistanceToBounds(FieldPoint_t *pPos);
 Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8011E8A4(Object_80039F5C *p);
+int AssignEngageIsFree(Object_80039F5C *p);
 void AssignEngageRelease(Object_80039F5C *p);
 int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c);
 int LooseBallGetEdge(Ball_t *pBall);
@@ -144,7 +144,7 @@ extern "C" void LooseBallPredictPos(Vector_80039F5C *pOut, Ball_t *pBall, float 
 
 extern "C" int LooseBallStartAnim(Object_80039F5C *p, int a, int b, int c) {
     int result = 0xFFFF;
-    if (fn_8011E8A4(p)) {
+    if (AssignEngageIsFree(p)) {
         AssignEngageRelease(p);
         p->mUnknown1008.mUnknown0 = a;
         p->mUnknown1008.mUnknown1 = b;
@@ -429,11 +429,11 @@ extern "C" int LooseBallEnter(Object_80039F5C *p) {
     if (p->mIdBytes[3] == 1) {
         AssignEngageSetMode(p, 0);
         if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
-            fn_8011E240(p);
+            AssignEngageEnd(p);
         } else {
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
             if (pOther)
-                fn_8011E240(pOther);
+                AssignEngageEnd(pOther);
         }
     }
     state->mUnknown44 = -1;

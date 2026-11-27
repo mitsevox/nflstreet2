@@ -142,7 +142,7 @@ void fn_800C9FC0(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void AssignEngageSysReset(void);
 void AssignPlayInfoResetPitchCounts(void);
-void fn_80120618(void);
+void AssignPursueReset(void);
 void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
@@ -768,7 +768,7 @@ extern "C" void ScrmChangePossession(int a)
     case 1:
         break;
     default:
-        fn_80120618();
+        AssignPursueReset();
         AssignPlayInfoResetPitchCounts();
         if (++_Scrm_pState->mPlayTurnovers > 3) {
             _Scrm_pState->mPlayTurnovers = 2;
