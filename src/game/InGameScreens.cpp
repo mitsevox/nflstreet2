@@ -162,15 +162,19 @@ struct GameStatsRecord {
     unsigned char exceeded;
     unsigned char unknown11[3];
     int side;
-
-    void SetValue(int player, int incoming)
-    {
-        _InGameScreens_bRecordsChanged = 1;
-        value[player] = incoming;
-        if (side == 2 || incoming > value[side])
-            side = player;
-    }
 };
+
+/* Stores one side's value of record index and moves the record's leader to that side
+   when no side leads yet or the value beats the leader's. */
+#define GAME_STATS_SET_VALUE(index, player, incoming) \
+    { \
+        GameStatsRecord *records = _InGameScreens_aRecords; \
+        int value_ = (incoming); \
+        _InGameScreens_bRecordsChanged = 1; \
+        records[index].value[player] = value_; \
+        if (records[index].side == 2 || value_ > records[index].value[records[index].side]) \
+            records[index].side = player; \
+    }
 
 /* Text buffer argument of message 0x80000001. */
 struct GameStatsText_t {
@@ -387,27 +391,27 @@ void GameStatsGather(void)
                 &values[12], &values[13], &values[14], &values[15], &values[16], &values[17]);
             int score = StyleTrackerGetTotal(side);
             if (result == 0) {
-                _InGameScreens_aRecords[0].SetValue(side, values[0]);
-                _InGameScreens_aRecords[1].SetValue(side, values[1]);
-                _InGameScreens_aRecords[2].SetValue(side, values[2]);
-                _InGameScreens_aRecords[3].SetValue(side, score);
-                _InGameScreens_aRecords[4].SetValue(side, score);
-                _InGameScreens_aRecords[5].SetValue(side, values[11]);
-                _InGameScreens_aRecords[6].SetValue(side, values[3] + values[4]);
-                _InGameScreens_aRecords[7].SetValue(side, values[3]);
-                _InGameScreens_aRecords[8].SetValue(side, values[4]);
-                _InGameScreens_aRecords[9].SetValue(side, values[5]);
-                _InGameScreens_aRecords[10].SetValue(side, values[6]);
-                _InGameScreens_aRecords[11].SetValue(side, values[7]);
-                _InGameScreens_aRecords[12].SetValue(side, values[8]);
-                _InGameScreens_aRecords[13].SetValue(side, values[9]);
-                _InGameScreens_aRecords[14].SetValue(side, values[10]);
-                _InGameScreens_aRecords[15].SetValue(side, values[12]);
-                _InGameScreens_aRecords[16].SetValue(side, values[13]);
-                _InGameScreens_aRecords[17].SetValue(side, values[14]);
-                _InGameScreens_aRecords[18].SetValue(side, values[15]);
-                _InGameScreens_aRecords[19].SetValue(side, values[16]);
-                _InGameScreens_aRecords[20].SetValue(side, values[17]);
+                GAME_STATS_SET_VALUE(0, side, values[0]);
+                GAME_STATS_SET_VALUE(1, side, values[1]);
+                GAME_STATS_SET_VALUE(2, side, values[2]);
+                GAME_STATS_SET_VALUE(3, side, score);
+                GAME_STATS_SET_VALUE(4, side, score);
+                GAME_STATS_SET_VALUE(5, side, values[11]);
+                GAME_STATS_SET_VALUE(6, side, values[3] + values[4]);
+                GAME_STATS_SET_VALUE(7, side, values[3]);
+                GAME_STATS_SET_VALUE(8, side, values[4]);
+                GAME_STATS_SET_VALUE(9, side, values[5]);
+                GAME_STATS_SET_VALUE(10, side, values[6]);
+                GAME_STATS_SET_VALUE(11, side, values[7]);
+                GAME_STATS_SET_VALUE(12, side, values[8]);
+                GAME_STATS_SET_VALUE(13, side, values[9]);
+                GAME_STATS_SET_VALUE(14, side, values[10]);
+                GAME_STATS_SET_VALUE(15, side, values[12]);
+                GAME_STATS_SET_VALUE(16, side, values[13]);
+                GAME_STATS_SET_VALUE(17, side, values[14]);
+                GAME_STATS_SET_VALUE(18, side, values[15]);
+                GAME_STATS_SET_VALUE(19, side, values[16]);
+                GAME_STATS_SET_VALUE(20, side, values[17]);
             }
         }
     }
@@ -2408,12 +2412,9 @@ void InGameEndGameApplyChoice(int index)
 void InGameEndGameGetChoices(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuText_t *pSecond,int *pAllowed)
 {
     fn_800C1E50();InGamePauseClearForfeit();
-    int enabled;
-    if(GameModeTypeIsSpecial()) enabled=0;
-    else if(ChallengeIsPairingGame() && !ChallengeEvaluateGoals()) enabled=0;
-    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(ScrmGetWinner())!=255) enabled=0;
-    else enabled=1;
-    *pEnabled=enabled;
+    if(GameModeTypeIsSpecial() || (ChallengeIsPairingGame() && !ChallengeEvaluateGoals())) *pEnabled=0;
+    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(ScrmGetWinner())!=255) *pEnabled=0;
+    else *pEnabled=1;
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
     else {score1=ScrmGetTeamScore(1);score0=ScrmGetTeamScore(0);}
@@ -2770,7 +2771,7 @@ int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
 void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
     Stats_8005C844 stats;fn_8014BA20(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
+    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
 }
 int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
@@ -2792,7 +2793,7 @@ void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *se
     Stats_8005CAE4 stats;
     DbCursor cursor;
     fn_8014CCE8(MiniGameGetCurrent(),team,&stats);
-    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);*value=GameInfoGet(team!=0);
+    fn_801C2D88(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
 }

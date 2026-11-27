@@ -170,6 +170,9 @@ void SndgEventSetSfx5Volume(int value)
 
 void SndgEventProcess(AudmonEvent_t *p)
 {
+    int value;
+    Vector_80039F5C *pos;
+
     switch (p->mType) {
     case 53: SndgSfxPlay(48, &p->mPos); break;
     case 50: SndgSfxPlay(55, &p->mPos); break;
@@ -191,11 +194,11 @@ void SndgEventProcess(AudmonEvent_t *p)
         break;
     case 109: case 130: SndgSetVolumeOption(2, (unsigned char)(GameOptionsGet(5) * 10) & ~1U); break;
     case 88: {
-        int surface = 15;
+        value = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
-        int id = SndgEventGetSurfaceSfx(surface);
+        if (pose && pose->mUnknown972) value = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
+        int id = SndgEventGetSurfaceSfx(value);
         if (BallGetCurrentHolder() == player) {
             SndgSfxPlayVolume(id, &p->mPos,
                 (unsigned char)(SndgSfxGetVolume(id) * 2 <= 127 ? SndgSfxGetVolume(id) * 2 : 127));
@@ -204,35 +207,36 @@ void SndgEventProcess(AudmonEvent_t *p)
     }
     case 97: {
         Block_800C9D6C *table = fn_800CA8EC();
-        int active = 0;
+        value = 0;
         unsigned char index = 0;
         unsigned int side = ((unsigned int)p->mUnknown0 >> 8) & 255;
-        for (; index < 2; ++index) {
-            Entry_800C9D6C *entry = &table->mEntries[side][index];
-            if (entry->mRef == p->mUnknown0) { active = entry->mUnknown10 == 1; break; }
+        while (index < 2) {
+            if (table->mEntries[side][index].mRef == p->mUnknown0) { value = table->mEntries[side][index].mUnknown10 == 1; break; }
+            index++;
         }
         int id;
         if (p->mUnknown10.mValue == 12) {
             SndgEventPlayVariant24(&p->mPos);
             break;
         }
-        if (p->mUnknown10.mValue == 34) id = active ? 46 : 45;
-        else if (p->mUnknown10.mValue == 35) id = active ? 48 : 47;
-        else if (p->mUnknown10.mValue == 36) id = active ? 50 : 49;
-        else if (p->mUnknown10.mValue == 43) id = active ? 52 : 51;
+        if (p->mUnknown10.mValue == 34) id = value ? 46 : 45;
+        else if (p->mUnknown10.mValue == 35) id = value ? 48 : 47;
+        else if (p->mUnknown10.mValue == 36) id = value ? 50 : 49;
+        else if (p->mUnknown10.mValue == 43) id = value ? 52 : 51;
         else break;
-        SndgSfxPlay(id, &p->mPos);
-        SndgEventPlayVariant18(&p->mPos);
+        pos = &p->mPos;
+        SndgSfxPlay(id, pos);
+        SndgEventPlayVariant18(pos);
         break;
     }
     case 36: {
-        int surface = 15;
+        value = 15;
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
         Object_8003DEC4 *pose = (Object_8003DEC4 *)player->mpUnknown4;
-        if (pose && pose->mUnknown972) surface = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
+        if (pose && pose->mUnknown972) value = ((LevelSurface_t *)pose->mUnknown972)->mSurface;
         int state = fn_800A3444();
         lbl_803EA6D1 = (lbl_803EA6D1 + 1) % 2;
-        SndgSfxPlay(SndgEventGetFootstepSfx(state, surface) + lbl_803EA6D1, &p->mPos);
+        SndgSfxPlay(lbl_803EA6D1 + SndgEventGetFootstepSfx(state, value), &p->mPos);
         break;
     }
     case 101: SndgEventPlaySfx34(&p->mPos); break;
@@ -347,14 +351,15 @@ void SndgEventProcess(AudmonEvent_t *p)
             SndgSfxPlay(107, &p->mPos);
         } else { SndgEventPlayGroup(8, &p->mPos); SndgEventQueueDelayed(&p->mPos); }
         break;
+    case 47: SndgAmbObjStop(4, (unsigned char)p->mUnknown18); break;
     case 78:
         SndgEventPlayGroup(1, &p->mPos);
         if (p->mUnknown14) SndgAmbObjStop(4, (unsigned char)p->mUnknown18);
         else SndgEventQueueDelayed(&p->mPos);
         break;
-    case 47: SndgAmbObjStop(4, (unsigned char)p->mUnknown18); break;
     case 86: case 87:
-        SndgSoundObjControl(7, SndgAmbObjExists(7, 0) ? 2 : 1, &p->mPos, 0, 0);
+        if (SndgAmbObjExists(7, 0)) SndgSoundObjControl(7, 2, &p->mPos, 0, 0);
+        else SndgSoundObjControl(7, 1, &p->mPos, 0, 0);
         break;
     case 85: SndgSoundObjUpdateFromEvent(12, p); break;
     case 81: SndgSoundObjUpdateFromEvent(5, p); break;
@@ -363,7 +368,8 @@ void SndgEventProcess(AudmonEvent_t *p)
     case 82: SndgSoundObjUpdateFromEvent(9, p); break;
     case 83: SndgSoundObjUpdateFromEvent(10, p); break;
     case 84:
-        SndgSoundObjControl(6, SndgAmbObjExists(6, (unsigned char)SndgAmbObjFindSlot(6, p->mUnknown18)) ? 2 : 1, &p->mPos, 0, 0);
+        if (SndgAmbObjExists(6, (unsigned char)SndgAmbObjFindSlot(6, p->mUnknown18))) SndgSoundObjControl(6, 2, &p->mPos, 0, 0);
+        else SndgSoundObjControl(6, 1, &p->mPos, 0, 0);
         break;
     case 44: lbl_803EA6EC = 1; break;
     case 46: SndgEventQueueDelayed(&p->mPos); break;
@@ -427,13 +433,14 @@ void SndgEventProcess(AudmonEvent_t *p)
             id = lbl_803EA6CF + 12;
         }
         unsigned char volume;
+        pos = &a->mMotion.mPos;
         if (fn_800A9680()) volume = SndgSfxGetVolume(id);
         else {
-            float scaled = (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * SndgSfxGetVolume(id) / (gPlyrMoveFwdSpeed * 100621.1171875f);
-            if (!(scaled <= SndgSfxGetVolume(id))) volume = (unsigned char)(int)(float)SndgSfxGetVolume(id);
-            else volume = (unsigned char)(int)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * SndgSfxGetVolume(id) / (gPlyrMoveFwdSpeed * 100621.1171875f));
+            volume = (unsigned char)((a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * SndgSfxGetVolume(id) / (gPlyrMoveFwdSpeed * 100621.1171875f) > SndgSfxGetVolume(id)
+                ? SndgSfxGetVolume(id)
+                : (a->mUnknown560.mUnknown28 + a->mUnknown560.mUnknown28) * SndgSfxGetVolume(id) / (gPlyrMoveFwdSpeed * 100621.1171875f));
         }
-        SndgSfxPlayVolume(id, &a->mMotion.mPos, volume);
+        SndgSfxPlayVolume(id, pos, volume);
         break;
     }
     case 27:
@@ -471,8 +478,11 @@ void SndgEventProcess(AudmonEvent_t *p)
     case 105:
         if (fn_801486A0()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
-            if (!lbl_803EA6F9 || SndgMusicGetMode() == 7) SndgMusicSetMode(8);
-            lbl_803EA6F9 = 0;
+            // FAKEMATCH: the hold flag is cleared in both arms instead of once after the if; same stores
+            if (!lbl_803EA6F9 || SndgMusicGetMode() == 7) {
+                SndgMusicSetMode(8);
+                lbl_803EA6F9 = 0;
+            } else lbl_803EA6F9 = 0;
             SndgCrowdTriggerEvent(7, player->mIdBytes[2]);
             lbl_803EA6F8 = 0;
         }
@@ -488,14 +498,13 @@ void SndgEventProcess(AudmonEvent_t *p)
         int previous = p->mUnknown18;
         SndgFadeOutChannelGroup();
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
-        float value = (float)amount;
         int id;
         if (((unsigned int)state <= 1 || state == 3 || state == 5 || state == 7) &&
             ((unsigned int)previous <= 1 || previous == 3 || previous == 5 || previous == 7)) {
-            if (!(value <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
+            if (!((float)amount <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
                 lbl_803EA6D2 = (lbl_803EA6D2 + 1) % 2;
                 id = lbl_803EA6D2 + 6;
-            } else if (value > gPlyrMoveFwdSpeed * 3144.409912109375f) {
+            } else if ((float)amount > gPlyrMoveFwdSpeed * 3144.409912109375f) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -503,7 +512,7 @@ void SndgEventProcess(AudmonEvent_t *p)
                 id = lbl_803EA6D4 + 10;
             }
         } else {
-            if (!(value <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
+            if (!((float)amount <= gPlyrMoveFwdSpeed * 12577.6396484375f)) {
                 lbl_803EA6D3 = (lbl_803EA6D3 + 1) % 2;
                 id = lbl_803EA6D3 + 8;
             } else {
@@ -520,8 +529,9 @@ void SndgEventProcess(AudmonEvent_t *p)
         if ((unsigned int)(id - 10) > 1) {
             int eligible = 0;
             if (player && (player->mFlags & 0x10000000)) {
-                FieldPoint_t point = ScrmGetBallSpot();
-                if (!(player->mMotion.mPos.mY >= point.mY) && PlayAlignHasSlots(PlayBookGetPlay(ScrmGetSnapOffense()))) eligible = BallGetCurrentHolder() == player;
+                if (!(player->mMotion.mPos.mY >= ScrmGetBallSpot().mY)) {
+                    if (PlayAlignHasSlots(PlayBookGetPlay(ScrmGetSnapOffense()))) eligible = BallGetCurrentHolder() == player;
+                }
             }
             if (eligible) SndgCrowdTriggerEvent(8, player->mIdBytes[2]);
         }
