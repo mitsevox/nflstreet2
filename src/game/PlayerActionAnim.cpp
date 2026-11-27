@@ -1110,7 +1110,9 @@ extern "C" void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_8003
     int i;
     for (i = 0; i < pTable->mCount; ++i) {
         pInfo = (unsigned char *)pTable->mEntries[i].mpInfo;
-        int weight;
+        // FAKEMATCH: redundant zero initializer (every switch arm sets weight); its dead store keeps the
+        // loop at 69 insns in the first loop pass so the constant 1 of bit is hoisted in the second pass
+        int weight = 0;
         switch (pInfo[4]) {
         case 1: weight = 100; break;
         case 2: weight = 50; break;
