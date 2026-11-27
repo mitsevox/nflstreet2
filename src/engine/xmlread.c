@@ -376,6 +376,7 @@ const unsigned char *XmlFindInElement(const unsigned char *p, const unsigned cha
         if (pEnd == 0) {
             depth = 0;
             q = p;
+            /* FAKEMATCH: the scan is a for (;;) entered by goto so its loop notes give the target registers without a rotated exit test; same logic as a plain goto scan. */
             goto checkText;
             for (;;) {
                 ++depth;
