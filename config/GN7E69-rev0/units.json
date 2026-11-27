@@ -25808,6 +25808,12 @@
         {
           "section": ".text",
           "placement": ".text",
+          "start": "0x80267114",
+          "end": "0x802671D0"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
           "start": "0x80266E88",
           "end": "0x80266EC0"
         },
@@ -25815,12 +25821,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8026739C",
-          "end": "0x802687AC"
+          "end": "0x80268B88"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80268F54",
+          "start": "0x80268DA8",
           "end": "0x80269084"
         },
         {
@@ -25855,28 +25861,12 @@
             "evidence": "evidence.tsv source-form 0x80266EC0-0x80267114"
           },
           {
-            "function": "UpdateCallFunction",
-            "evidence": "evidence.tsv source-form 0x80267114-0x802671D0"
-          },
-          {
             "function": "UpdateControlClass",
             "evidence": "evidence.tsv source-form 0x802671D0-0x8026739C"
           },
           {
-            "function": "SNDAEMSI_playerupdatebank",
-            "evidence": "evidence.tsv source-form 0x802687AC-0x8026898C"
-          },
-          {
-            "function": "SNDAEMSI_updateplayer",
-            "evidence": "evidence.tsv source-form 0x8026898C-0x80268B88"
-          },
-          {
             "function": "SNDAEMSI_updateoscillator",
             "evidence": "evidence.tsv source-form 0x80268B88-0x80268DA8"
-          },
-          {
-            "function": "SNDAEMSI_updateramp",
-            "evidence": "evidence.tsv source-form 0x80268DA8-0x80268F54"
           },
           {
             "function": "SNDAEMSI_CreateModuleInstance",

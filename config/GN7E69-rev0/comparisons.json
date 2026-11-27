@@ -28937,34 +28937,14 @@
           "end": "0x80267114"
         },
         {
-          "symbol": "UpdateCallFunction",
-          "start": "0x80267114",
-          "end": "0x802671D0"
-        },
-        {
           "symbol": "UpdateControlClass",
           "start": "0x802671D0",
           "end": "0x8026739C"
         },
         {
-          "symbol": "SNDAEMSI_playerupdatebank",
-          "start": "0x802687AC",
-          "end": "0x8026898C"
-        },
-        {
-          "symbol": "SNDAEMSI_updateplayer",
-          "start": "0x8026898C",
-          "end": "0x80268B88"
-        },
-        {
           "symbol": "SNDAEMSI_updateoscillator",
           "start": "0x80268B88",
           "end": "0x80268DA8"
-        },
-        {
-          "symbol": "SNDAEMSI_updateramp",
-          "start": "0x80268DA8",
-          "end": "0x80268F54"
         },
         {
           "symbol": "SNDAEMSI_CreateModuleInstance",
