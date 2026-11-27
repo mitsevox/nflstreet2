@@ -739,10 +739,6 @@
       "address": "0x800E2FE4",
       "evidence": "evidence.tsv function and name rows for the PlyrAlignApproach.cpp holdout, called by PlyrAlignUpdate in src/game/PlyrTackle.cpp."
     },
-    "iSPCH_GetSampleSizeData": {
-      "address": "0x801B22E0",
-      "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368; original sample-size code retained as the only spchrule.c holdout. Called by the speech pick comparison."
-    },
     "_f_bss": {
       "address": "0x803064C0",
       "evidence": "Linker-defined start of .bss: __start forms it with lis/ori at 0x80003134-0x80003164 and passes the span to memset; no object storage claimed."
@@ -1338,7 +1334,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and MemInitHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 37 of 39 functions exact, the holdouts _ShortenBlock and MemInitHeap keep the original bytes. It links its 52-byte .sdata run 0x803EBCC4-0x803EBCF8 (the fifteen _Mem_* state objects, NASCAR 2005 names, their data rows); the strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -1349,13 +1345,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801D1ACC",
-          "end": "0x801D1C14"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D1E30",
+          "start": "0x801D18A0",
           "end": "0x801D2130"
         },
         {
@@ -1363,6 +1353,12 @@
           "placement": ".text",
           "start": "0x801D2478",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCC4",
+          "end": "0x803EBCF8"
         },
         {
           "section": ".bss",
@@ -1376,14 +1372,6 @@
           {
             "function": "_ShortenBlock",
             "evidence": "evidence.tsv source-form 0x801D177C-0x801D18A0"
-          },
-          {
-            "function": "_SplitBlock",
-            "evidence": "evidence.tsv source-form 0x801D18A0-0x801D1ACC"
-          },
-          {
-            "function": "_SplitBlockTail",
-            "evidence": "evidence.tsv source-form 0x801D1C14-0x801D1E30"
           },
           {
             "function": "MemInitHeap",
@@ -15755,30 +15743,18 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts MemCardMgrEnablePolling, MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 64 exact functions and all of the file's data linked, the holdouts MemCardMgrUpdate and MemCardMgrGetFileSize keep the original bytes (MemCardMgrEnablePolling and MemCardMgrFormatDate promoted in round 6).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D5D30",
-          "end": "0x801D654C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D65B4",
           "end": "0x801D6F58"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D83F0",
-          "end": "0x801D84DC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801D85A8",
           "end": "0x801D8618"
         },
         {
@@ -15821,23 +15797,15 @@
       "holdouts": {
         "functions": [
           {
-            "function": "MemCardMgrEnablePolling",
-            "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
-          },
-          {
             "function": "MemCardMgrUpdate",
             "evidence": "evidence.tsv source-form 0x801D6F58-0x801D83F0"
-          },
-          {
-            "function": "MemCardMgrFormatDate",
-            "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
           },
           {
             "function": "MemCardMgrGetFileSize",
             "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
           }
         ],
-        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618)."
+        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618); round 6 promoted MemCardMgrEnablePolling and MemCardMgrFormatDate, leaving MemCardMgrUpdate and MemCardMgrGetFileSize."
       }
     },
     {
@@ -17954,31 +17922,16 @@
     },
     {
       "source": "src/engine/spchrule.c",
-      "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. Fifteen routines link from the speech rule source. The 136-byte sample size helper keeps the original bytes. This source has no allocated data section.",
+      "profile": "speech_cxx",
+      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0 and its name and function records. All sixteen routines link from the speech rule source. This source has no allocated data section.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B1CFC",
-          "end": "0x801B22E0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B2368",
           "end": "0x801B23A0"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "iSPCH_GetSampleSizeData",
-            "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368"
-          }
-        ],
-        "evidence": "evidence.tsv source-form 0x801B22E0-0x801B2368 records the remaining status register and store ordering differences."
-      }
+      ]
     },
     {
       "source": "src/engine/pathinit.c",
@@ -27942,19 +27895,13 @@
     },
     {
       "source": "src/engine/flowman.cpp",
-      "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CC350, native FlowManagerC vtable row and StopModuleList HOLDOUT source-form row. Sixteen functions and all native data link; the 116-byte holdout retains original instructions.",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CC350, native FlowManagerC vtable row and StopModuleList FAKEMATCH source-form row. All seventeen functions and all native data link.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CBC50",
-          "end": "0x801CC168"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CC1DC",
           "end": "0x801CC350"
         },
         {
@@ -27963,16 +27910,7 @@
           "start": "0x802AF388",
           "end": "0x802AF3B8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "StopModuleList__12FlowManagerCP16ModuleDependency",
-            "evidence": "evidence.tsv source-form 0x801CC168-0x801CC1DC"
-          }
-        ],
-        "evidence": "The original StopModuleList range stays linked and its full source remains a registered partial."
-      }
+      ]
     },
     {
       "source": "src/engine/saramman.c",
@@ -29175,41 +29113,16 @@
     },
     {
       "source": "src/engine/splytree.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 13 of 15 functions exact, the 2 holdouts keep the original bytes.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row of src/engine/splytree.c (0x801C7684-0x801C7F70) and its function rows; no data sections (its data is referenced through extern labels); every function exact (round 6 lane 4: _DSListSplay and _DSListAddSplayNode, the last holdouts, made exact).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801C7684",
-          "end": "0x801C7844"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7A34",
-          "end": "0x801C7A98"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7C1C",
           "end": "0x801C7F70"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "_DSListSplay",
-            "evidence": "evidence.tsv source-form 0x801C7844-0x801C7A34"
-          },
-          {
-            "function": "_DSListAddSplayNode",
-            "evidence": "evidence.tsv source-form 0x801C7A98-0x801C7C1C"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/splytree.c holds out fn_801C77DC, fn_801C7810, fn_801C7844, fn_801C7A98 (round 5 lane 2 merge notes, 2026-11-27: _DSListGetSplayPrev and _DSListGetSplayNext made exact; _DSListSplay and _DSListAddSplayNode remain)."
-      }
+      ]
     },
     {
       "source": "src/engine/pathvol.c",
@@ -29450,7 +29363,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Three documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Two documented holdouts (iSPCH_ChooseSamples, iSPCH_MakeSampleRequests) retain original code; all other code links through the existing owner-approved named profile.",
       "sections": [
         {
           "section": ".text",
@@ -29468,7 +29381,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801B10AC",
-          "end": "0x801B1934"
+          "end": "0x801B1A3C"
         },
         {
           "section": ".data",
@@ -29492,10 +29405,6 @@
           {
             "function": "iSPCH_MakeSampleRequests",
             "evidence": "evidence.tsv source-form 0x801B0EA4-0x801B10AC"
-          },
-          {
-            "function": "iSPCH_EACrandom",
-            "evidence": "evidence.tsv source-form 0x801B1934-0x801B1A3C"
           }
         ],
         "evidence": "PR1447 merge notes list all12 full measured partials; existing owner holdouts ruling2026-11-20. Entire native data sections kept."
@@ -29722,8 +29631,14 @@
     {
       "source": "src/engine/sprintf.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteInt, _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteInt (r6 lane 4, FAKEMATCH source-form row 0x801C20F0), _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C20F0",
+          "end": "0x801C21D0"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -29746,10 +29661,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "_WriteInt",
-            "evidence": "evidence.tsv source-form 0x801C20F0-0x801C21D0"
-          },
-          {
             "function": "_WriteFloat",
             "evidence": "evidence.tsv source-form 0x801C21D0-0x801C2428"
           },
@@ -29762,7 +29673,7 @@
             "evidence": "evidence.tsv source-form 0x801C289C-0x801C2D88"
           }
         ],
-        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteInt, _WriteFloat, _WriteSci and vsnprintf."
+        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteFloat, _WriteSci and vsnprintf (_WriteInt linked in r6 lane 4)."
       }
     },
     {
