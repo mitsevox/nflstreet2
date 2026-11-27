@@ -654,7 +654,8 @@ void UISRegisterPluginFnc(UISInfoT *pInfo, Uint32 Fnc, UISActionFncT *pFnc)
 }
 
 /* Loads a screen as the newest in the table, with ParentGroupID/ParentScreenID
-   as the screen to go back to: patches its data (event -9 the first time), runs
+   as the screen to go back to: patches its data and sends it event -9 (the patch
+   result is never 0, so the test always passes), runs
    its initializers and transforms and sends it event -2 with the arguments. A
    loaded screen is set up again instead. Returns 0 when it was already loaded or
    the load callback gave nothing. */
