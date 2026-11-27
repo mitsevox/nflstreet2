@@ -376,10 +376,10 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
     PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
     int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
     PlayArtVertex_t starts[13], ends[13], controls[3] = {0};
-    int drawn = 0;
+    int count = 0;
     PlayArtVertex_t strip[20] = {0};
     PlayArtVertex_t axis[2];
-    int count = 0;
+    int drawn = 0;
     int stop = 0;
     for (int i = 0; i <= 11 && !stop; ++i) {
         PlayArtStep_t *step = &record->mUnknown1C[i];
