@@ -1668,8 +1668,8 @@ extern "C" {
 int PlyrEngageGetInputDir(Object_80039F5C *p)
 {
     int direction = 1;
-
-    int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - p->mMotion.mFacing)) & 0xFFFFFF)
+    int facing = p->mMotion.mFacing;
+    int angle = (int)(((0x1000000 - (p->mUnknown512.mUnknown4 - facing)) & 0xFFFFFF)
                      * 0.000021457672119140625f);
     if (angle <= 179) {
         angle = angle < 0 ? 0 : angle > 135 ? 135 : angle;
@@ -1681,10 +1681,10 @@ int PlyrEngageGetInputDir(Object_80039F5C *p)
     else if (angle >= 293 && angle <= 337) direction = 15;
     else if (angle >= 338 && angle <= 358) return 1;
     else if (angle >= 0 && angle <= 22) return 1;
-    else if (angle >= 23 && angle <= 67) direction = 4;
-    else if (angle >= 68 && angle <= 112) direction = 4;
-    else if (angle >= 113 && angle <= 157) direction = 4;
-    else if (angle >= 113 && angle <= 135) direction = 4;
+    // FAKEMATCH: the ranges are listed out of order so fold does not merge the adjacent 23..67 and 68..112 tests into one range; the result is 4 for the same angles.
+    else if ((angle >= 23 && angle <= 67) || (angle >= 113 && angle <= 157) || (angle >= 68 && angle <= 112) ||
+             (angle >= 113 && angle <= 135))
+        direction = 4;
     return direction;
 }
 }
@@ -1712,7 +1712,8 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
     Input_800B6D34 input;
     Vector_80039F5C target;
     fn_800B6D34(p, &input);
-    if (human == 1 && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
+    // FAKEMATCH: human is only 0 or 1; testing its low bit keeps this first test a separate compare from the two later human tests, which gcse would otherwise merge into one condition register held across the calls.
+    if ((human & 1) && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
 
         FieldPoint_t dir;
         if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
@@ -1936,7 +1937,11 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
     fn_8009BD60(p);
     switch (pBlock->mUnknown5) {
     case 0:
-        p->mUnknown1008.mUnknown0 = p == BallGetCurrentHolder() ? 1 : 2;
+        if (p == BallGetCurrentHolder()) {
+            p->mUnknown1008.mUnknown0 = 1;
+        } else {
+            p->mUnknown1008.mUnknown0 = 2;
+        }
         p->mUnknown1008.mUnknown2 = 1;
         p->mUnknown1011 = pBlock->mUnknown9;
         switch (pBlock->mUnknown8) {
@@ -2016,6 +2021,10 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
                 }
             }
             float edge = MIN(p->mMotion.mPos.mX - 4.0f, -ScrmGetSidelineX());
+            // FAKEMATCH: the never-read clamp keeps the MIN's reload of mX alive until register allocation, so 4.0f stays in f30 across the call as in the target; the function stays a holdout.
+            if (edge < 0.0f) {
+                edge = 0.0f;
+            }
             if (PlayerMoveGetKind(p)) {
                 p->mUnknown1011 = p->mpState->mUnknown3[0];
             }
