@@ -27175,11 +27175,6 @@
           "end": "0x801B4824"
         },
         {
-          "symbol": "fn_801B4824",
-          "start": "0x801B4824",
-          "end": "0x801B4898"
-        },
-        {
           "symbol": "PATHI_fade",
           "start": "0x801B4898",
           "end": "0x801B4960"
@@ -27231,29 +27226,14 @@
       ],
       "functions": [
         {
-          "symbol": "PATHI_sampleoffset",
-          "start": "0x801B6780",
-          "end": "0x801B67F8"
-        },
-        {
           "symbol": "PATHI_choosesynchtime",
           "start": "0x801B6A18",
           "end": "0x801B6CB4"
         },
         {
-          "symbol": "PATHI_timeremaining",
-          "start": "0x801B6CB4",
-          "end": "0x801B6D20"
-        },
-        {
           "symbol": "PATHI_enternode",
           "start": "0x801B6ED0",
           "end": "0x801B7178"
-        },
-        {
-          "symbol": "PATHI_queuenode",
-          "start": "0x801B7460",
-          "end": "0x801B7778"
         }
       ]
     },

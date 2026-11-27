@@ -29533,18 +29533,12 @@
     {
       "source": "src/engine/pathvol.c",
       "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 9 functions exact, the 4 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 9 functions exact, the 3 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B45D0",
-          "end": "0x801B4824"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B4898",
           "end": "0x801B4A24"
         },
         {
@@ -29556,10 +29550,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "fn_801B4824",
-            "evidence": "evidence.tsv source-form 0x801B4824-0x801B4898"
-          },
           {
             "function": "PATHI_setfadevolume",
             "evidence": "evidence.tsv source-form 0x801B4A24-0x801B4CE4"
@@ -29573,7 +29563,7 @@
             "evidence": "evidence.tsv source-form 0x801B4F50-0x801B51AC"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out fn_801B4824, PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
       }
     },
     {
@@ -29964,20 +29954,20 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B67F8",
+          "start": "0x801B6780",
           "end": "0x801B6A18"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B6D20",
+          "start": "0x801B6CB4",
           "end": "0x801B6ED0"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B7178",
-          "end": "0x801B7460"
+          "end": "0x801B7778"
         },
         {
           "section": ".rodata",
@@ -29990,24 +29980,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "PATHI_sampleoffset",
-            "evidence": "evidence.tsv source-form 0x801B6780-0x801B67F8"
-          },
-          {
             "function": "PATHI_choosesynchtime",
             "evidence": "evidence.tsv source-form 0x801B6A18-0x801B6CB4"
           },
           {
-            "function": "PATHI_timeremaining",
-            "evidence": "evidence.tsv source-form 0x801B6CB4-0x801B6D20"
-          },
-          {
             "function": "PATHI_enternode",
             "evidence": "evidence.tsv source-form 0x801B6ED0-0x801B7178"
-          },
-          {
-            "function": "PATHI_queuenode",
-            "evidence": "evidence.tsv source-form 0x801B7460-0x801B7778"
           }
         ],
         "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."

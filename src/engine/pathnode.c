@@ -15,8 +15,8 @@ extern "C" int PATHI_sampleoffset(int index)
     PathMapEntry_t *p = PATHI_getnode(index);
     int value = p->mSample;
     if (value > 0) {
-        value -= 1;
-        result = pfstate->mUnknown3C[value * 2];
+        int slot = value - 1;
+        result = pfstate->mUnknown3C[slot * 2];
     }
     return result;
 }
@@ -106,15 +106,13 @@ extern "C" int PATHI_choosesynchtime(int index, const PathFindNode_t &find, cons
 extern "C" int PATHI_timeremaining(PathTrack_t *p)
 {
     int sum = 0;
-    int i = 0;
-    while (1) {
+    for (int i = 0;; ++i) {
         int value = p->mUnknown100->vfn_09(i);
-        if (value < 0)
-            goto finished;
-        sum += value;
-        ++i;
+        if (value >= 0)
+            sum += value;
+        else
+            break;
     }
-finished:
     return sum;
 }
 
@@ -189,7 +187,7 @@ extern "C" int PATHI_enternode(int track, int index, int value, int advance)
                 if (songprogress)
                     songprogress(pfstate->mUnknown14, index);
             } else if (node->mSample == -1) {
-                if (node->mBits0.mLoop && p->mUnknown6 != index) {
+                if (node->mBits0.mLoop && index != p->mUnknown6) {
                     p->mUnknown6 = index;
                     p->mUnknown8.bits.mLoop = node->mBits0.mLoop;
                 }
@@ -197,8 +195,10 @@ extern "C" int PATHI_enternode(int track, int index, int value, int advance)
                 value = PATHI_random() & 127;
             else if (node->mSample == -3) {
                 PathMapEntry_t *event = PATHI_findevent(node->mFlagsAndEvent >> 8);
-                if (event)
-                    PATHI_addevent(pfstate->mUnknown14 | 0xF0000000, PATHI_copyevent((PathEvent_t *)event));
+                if (event) {
+                    PathEvent_t *copy = PATHI_copyevent((PathEvent_t *)event);
+                    PATHI_addevent(pfstate->mUnknown14 | 0xF0000000, copy);
+                }
             }
         }
         index = PATHI_nextnode(index, value, advance);
@@ -280,10 +280,11 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
     if (pfstate->mUnknown0 >= 0)
         master = pfstate->mUnknown40[pfstate->mUnknown0];
     if (p->mUnknown4 < 0) {
+        // FAKEMATCH: reset-store order measured (five of the 24 orders compile to the target's store schedule); independent stores, same behavior
         p->mUnknown34 = 0;
-        p->mUnknown8.bits.mUnknown7 = -1;
         p->mUnknown4C = -1;
         p->mUnknown4 = -1;
+        p->mUnknown8.bits.mUnknown7 = -1;
         return 0;
     }
     PathMapEntry_t *node = PATHI_getnode(p->mUnknown4);
@@ -303,7 +304,7 @@ extern "C" int PATHI_queuenode(PathTrack_t *p)
         int sync = 0;
         if ((int)next->mFlagsAndEvent < 0 && slave)
             sync = 1;
-        int bar = (next->mFlagsAndEvent >> 30) & 1;
+        int bar = (((PathMapEntry_t *)p->mUnknown34)->mFlagsAndEvent >> 30) & 1;
         PathBeatInfo_t info;
         info.mBeatRemaining = 0;
         if (slave)
