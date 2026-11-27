@@ -13770,35 +13770,35 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8008FF44",
+            "function": "PlayResultSeqStart",
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
           },
           {
-            "function": "fn_80090558",
+            "function": "AnimSeqPushPlayersFromArea",
             "evidence": "evidence.tsv source-form 0x80090558-0x80090BDC"
           },
           {
-            "function": "fn_800919F0",
+            "function": "AnimSeqReleaseTaggedBalls",
             "evidence": "evidence.tsv source-form 0x800919F0-0x80091AD0"
           },
           {
-            "function": "fn_80094C4C",
+            "function": "AnimSeqQueueEntryStart",
             "evidence": "evidence.tsv source-form 0x80094C4C-0x80094D94"
           },
           {
-            "function": "fn_800955D8",
+            "function": "AnimSeqListRoleCandidates",
             "evidence": "evidence.tsv source-form 0x800955D8-0x80095FD8"
           },
           {
-            "function": "fn_800975EC",
+            "function": "StateAnimListSetState",
             "evidence": "evidence.tsv source-form 0x800975EC-0x8009780C"
           },
           {
-            "function": "fn_80097A88",
+            "function": "CatchAnimComputeTiming",
             "evidence": "evidence.tsv source-form 0x80097A88-0x8009817C"
           },
           {
-            "function": "fn_8009817C",
+            "function": "CatchAnimSearch",
             "evidence": "evidence.tsv source-form 0x8009817C-0x80098EAC"
           },
           {

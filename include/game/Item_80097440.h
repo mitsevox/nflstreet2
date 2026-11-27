@@ -42,7 +42,7 @@ struct Record_80097518 {
     unsigned short mUnknownBFA[7];
 };
 
-/* Block at player +336 passed to fn_80099734, fn_800997F4 and fn_8009817C.
+/* Block at player +336 passed to fn_80099734, fn_800997F4 and CatchAnimSearch.
    Only the accessed fields are declared. */
 struct Block_800997F4 {
     int mUnknown0;

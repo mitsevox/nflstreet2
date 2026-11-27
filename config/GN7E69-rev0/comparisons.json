@@ -11977,7 +11977,7 @@
           "end": "0x8008FF44"
         },
         {
-          "symbol": "fn_8008FF44",
+          "symbol": "PlayResultSeqStart",
           "start": "0x8008FF44",
           "end": "0x80090244"
         },
@@ -12007,7 +12007,7 @@
           "end": "0x80090558"
         },
         {
-          "symbol": "fn_80090558",
+          "symbol": "AnimSeqPushPlayersFromArea",
           "start": "0x80090558",
           "end": "0x80090BDC"
         },
@@ -12072,7 +12072,7 @@
           "end": "0x800919F0"
         },
         {
-          "symbol": "fn_800919F0",
+          "symbol": "AnimSeqReleaseTaggedBalls",
           "start": "0x800919F0",
           "end": "0x80091AD0"
         },
@@ -12457,7 +12457,7 @@
           "end": "0x80094C4C"
         },
         {
-          "symbol": "fn_80094C4C",
+          "symbol": "AnimSeqQueueEntryStart",
           "start": "0x80094C4C",
           "end": "0x80094D94"
         },
@@ -12517,7 +12517,7 @@
           "end": "0x800955D8"
         },
         {
-          "symbol": "fn_800955D8",
+          "symbol": "AnimSeqListRoleCandidates",
           "start": "0x800955D8",
           "end": "0x80095FD8"
         },
@@ -12702,7 +12702,7 @@
           "end": "0x800975EC"
         },
         {
-          "symbol": "fn_800975EC",
+          "symbol": "StateAnimListSetState",
           "start": "0x800975EC",
           "end": "0x8009780C"
         },
@@ -12722,12 +12722,12 @@
           "end": "0x80097A88"
         },
         {
-          "symbol": "fn_80097A88",
+          "symbol": "CatchAnimComputeTiming",
           "start": "0x80097A88",
           "end": "0x8009817C"
         },
         {
-          "symbol": "fn_8009817C",
+          "symbol": "CatchAnimSearch",
           "start": "0x8009817C",
           "end": "0x80098EAC"
         },
