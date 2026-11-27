@@ -29406,7 +29406,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes. The COMMON GX light LLUIGTexLightObj 0x803E9880-0x803E98C0, shared with uigcurverender.c and uigarc.c, is placed by its storage map (data row; COMMON ruling (a) of #1329).",
+      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 13 of 14 functions exact, the holdout UIGImageNodeRender keeps the original bytes. The COMMON GX light LLUIGTexLightObj 0x803E9880-0x803E98C0, shared with uigcurverender.c and uigarc.c, is placed by its storage map (data row; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -29417,7 +29417,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80220988",
+          "start": "0x8021FB30",
           "end": "0x80220B4C"
         },
         {
@@ -29444,17 +29444,9 @@
           {
             "function": "UIGImageNodeRender",
             "evidence": "evidence.tsv source-form 0x8021F984-0x8021FB30"
-          },
-          {
-            "function": "UIGImageNodeSendTextured",
-            "evidence": "evidence.tsv source-form 0x8021FB30-0x80220310"
-          },
-          {
-            "function": "UIGImageNodeSendColored",
-            "evidence": "evidence.tsv source-form 0x80220310-0x80220988"
           }
         ],
-        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
+        "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender (UIGImageNodeSendTextured and UIGImageNodeSendColored matched in round 5)."
       },
       "storage": [
         {
@@ -29881,7 +29873,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes. Its .bss (the two colour vectors 0x8039F858-0x8039F878) is linked from the compiled object (data row).",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 22 of 24 functions exact, the holdouts _WriteFloat, UISSprintf keep the original bytes. Its .bss (the two colour vectors 0x8039F858-0x8039F878) is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -29893,7 +29885,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8021CDAC",
-          "end": "0x8021CE48"
+          "end": "0x8021CF38"
         },
         {
           "section": ".text",
@@ -29921,15 +29913,11 @@
             "evidence": "evidence.tsv source-form 0x8021CB68-0x8021CDAC"
           },
           {
-            "function": "_WriteString",
-            "evidence": "evidence.tsv source-form 0x8021CE48-0x8021CF38"
-          },
-          {
             "function": "UISSprintf",
             "evidence": "evidence.tsv source-form 0x8021CF38-0x8021D1FC"
           }
         ],
-        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISUtils.c holds out _WriteFloat, _WriteString, UISSprintf."
+        "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISUtils.c holds out _WriteFloat, UISSprintf (_WriteString matched in round 5)."
       }
     },
     {

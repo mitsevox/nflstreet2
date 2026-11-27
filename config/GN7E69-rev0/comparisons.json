@@ -24179,7 +24179,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -28689,7 +28689,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its holdout UIGImageNodeRender (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",

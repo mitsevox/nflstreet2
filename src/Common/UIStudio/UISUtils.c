@@ -320,7 +320,10 @@ char *_WriteString(const char *pString, char *pDst, char *pEnd, Int32 Width, Int
             Count++;
         }
     }
-    while (*pString != 0 && pDst != pEnd) {
+    while (*pString != 0) {
+        if (pDst == pEnd) {
+            break;
+        }
         *pDst++ = *pString++;
         Count++;
     }
@@ -335,6 +338,7 @@ char *_WriteString(const char *pString, char *pDst, char *pEnd, Int32 Width, Int
 
 Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *pArgs)
 {
+    Int32 *pParam;
     char *pOut;
     char *pStart;
     char *pEnd;
@@ -354,7 +358,9 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
     if (pStart == NULL || Size == 0 || pFormat == NULL) {
         return -1;
     }
-    while ((c = *pFormat++) != 0 && pOut < pEnd) {
+    if ((c = *pFormat++) != 0 && pOut < pEnd) {
+        pParam = pArgs;
+        do {
         if (c == '%') {
             bUnsigned = 0;
             Width = 0;
@@ -390,10 +396,10 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
             }
             switch (c) {
             case 'c':
-                *pOut++ = *pArgs++;
+                *pOut++ = *pParam++;
                 break;
             case 's':
-                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
+                pString = ((UIGTextBuffer_t *)*pParam++)->pText;
                 if (pString != NULL) {
                     pOut = _WriteString(pString, pOut, pEnd, Width, Precision, bLeft);
                 } else {
@@ -404,15 +410,15 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
                 bUnsigned = 1;
             case 'd':
             case 'i':
-                pOut = _WriteInt(*pArgs++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
+                pOut = _WriteInt(*pParam++, pOut, pEnd, Pad, Width, bUnsigned ^ 1);
                 break;
             case 'f':
-                pOut = _WriteFloat(pOut, pEnd, Width, Precision, *(Float32 *)pArgs++);
+                pOut = _WriteFloat(pOut, pEnd, Width, Precision, *(Float32 *)pParam++);
                 break;
             case 'X':
             case 'p':
             case 'x':
-                pOut = _WriteHex(*pArgs++, pOut, pEnd, Width, Pad, Case);
+                pOut = _WriteHex(*pParam++, pOut, pEnd, Width, Pad, Case);
                 break;
             default:
                 if (c != 0) {
@@ -420,9 +426,10 @@ Int32 UISSprintf(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *p
                 }
                 break;
             }
-        } else {
+        } else if (c != 0) {
             *pOut++ = c;
         }
+        } while ((c = *pFormat++) != 0 && pOut < pEnd);
     }
     *pOut = 0;
     return pOut - pStart;
