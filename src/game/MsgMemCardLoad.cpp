@@ -99,7 +99,7 @@ extern "C" void MsgMemCardLoadSelectEntry(int key, int value)
     MemCardFilesSetLoadTarget(key, (key == 2 || key == 3) ? UserRecGetCount() : 0);
     char first[32];
     char second[32];
-    fn_801D6B74((signed char)value, key, first, 32, 0, -1, 0);
+    MemCardMgrGetSlotInfo((signed char)value, key, first, 32, 0, -1, 0);
     fn_801D6C70((signed char)value, key, second, 32);
     fn_801D67E4(first, second);
     fn_801D6838(value);
@@ -109,7 +109,7 @@ extern "C" int MsgMemCardLoadGetEntryName(int key, int value, TextRecord_t *p)
 {
     if (key == 2 || key == 3) {
         char text[32];
-        fn_801D6B74((signed char)value, key, text, 32, 0, -1, 0);
+        MemCardMgrGetSlotInfo((signed char)value, key, text, 32, 0, -1, 0);
         strcpy(p->mUnknown8, text);
     } else if (fn_801D6DA8(0, 1)) {
         strcpy(p->mUnknown8, "???");

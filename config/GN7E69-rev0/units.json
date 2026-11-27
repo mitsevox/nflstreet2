@@ -524,15 +524,11 @@
   "externals": {
     "YUV_convert": {
       "address": "0x801DB900",
-      "evidence": "evidence.tsv function and related name rows at 0x801DB900. render.c calls the original-byte YUV_convert provider (yuvconv.c is a registered comparison)."
+      "evidence": "evidence.tsv function and related name rows at 0x801DB900 (YUV_convert, a registered holdout of src/engine/yuvconv.c, original bytes linked). render.c calls it by name."
     },
     "YUV_convert_noscale": {
       "address": "0x801DBEB4",
-      "evidence": "evidence.tsv function and name rows at 0x801DBEB4. render.c calls the original-byte YUV_convert_noscale provider (yuvconv.c is a registered comparison)."
-    },
-    "YUV_convert_RGBA": {
-      "address": "0x801DC86C",
-      "evidence": "evidence.tsv function and related name rows at 0x801DC86C. LLUIGFmv.c calls the original-byte YUV_convert_RGBA provider (yuvconv.c is a registered comparison)."
+      "evidence": "evidence.tsv function and name rows at 0x801DBEB4 (YUV_convert_noscale, a registered holdout of src/engine/yuvconv.c, original bytes linked). render.c calls it by name."
     },
     "ColorRampEval": {
       "address": "0x801E0844",
@@ -1140,15 +1136,19 @@
     },
     "MemCAsyncOpen": {
       "address": "0x801D4A3C",
-      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D4A3C (MemCAsyncOpen, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
     },
     "MemCAsyncDelete": {
       "address": "0x801D4FF4",
-      "evidence": "evidence.tsv function and name rows for 0x801D4FF4 (MemCAsyncDelete, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D4FF4 (MemCAsyncDelete, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
     },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
-      "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/cu_801D5D30.c (n1e naming wave)."
+      "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
+    },
+    "MemCardMgrGetSlotInfo": {
+      "address": "0x801D6B74",
+      "evidence": "evidence.tsv function and name rows for 0x801D6B74 (MemCardMgrGetSlotInfo, exact in the registered comparison src/engine/memcardmgr.c, original bytes linked); called by name from src/game/MemCardUI.cpp, MemCardFiles.cpp, MemCardCallbacks.cpp and MsgMemCardLoad.cpp (wave e2 lane e2b)."
     },
     "SNDPLATFORM_packetplay": {
       "address": "0x80274464",
@@ -15985,6 +15985,50 @@
           "end": "0x803ECF4C"
         }
       ]
+    },
+    {
+      "source": "src/engine/yuvconv.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x801DB900-0x801DC9C8 (src/engine/yuvconv.c), its function and name rows, the engine_c compiler row and the exact luty/lutcb/lutcr data rows; linked with holdouts (owner ruling of 2026-11-20): YUV_convert_RGBA exact and linked with the file's whole .data 0x802F7CA0-0x802F94A0, the holdouts YUV_convert, YUV_convert_noscale, yuvtoRGB32_C, yuvtoA32_C and yuvtoRGBA32_C keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801DC86C",
+          "end": "0x801DC9C8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7CA0",
+          "end": "0x802F94A0"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "YUV_convert",
+            "evidence": "evidence.tsv source-form 0x801DB900-0x801DBEB4"
+          },
+          {
+            "function": "YUV_convert_noscale",
+            "evidence": "evidence.tsv source-form 0x801DBEB4-0x801DC1C4"
+          },
+          {
+            "function": "yuvtoRGB32_C",
+            "evidence": "evidence.tsv source-form 0x801DC1C4-0x801DC42C"
+          },
+          {
+            "function": "yuvtoA32_C",
+            "evidence": "evidence.tsv source-form 0x801DC42C-0x801DC584"
+          },
+          {
+            "function": "yuvtoRGBA32_C",
+            "evidence": "evidence.tsv source-form 0x801DC584-0x801DC86C"
+          }
+        ],
+        "evidence": "e2b merge notes (PR body holdout table, wave e2 lane e2b): src/engine/yuvconv.c holds out YUV_convert, YUV_convert_noscale, yuvtoRGB32_C, yuvtoA32_C and yuvtoRGBA32_C."
+      }
     },
     {
       "source": "src/engine/terfhash.c",

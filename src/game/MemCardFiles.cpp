@@ -260,7 +260,7 @@ void MemCardFilesAddSlot(int type, int index, int value, const char *name)
     }
     slot->mUnknown0 = fn_801D671C();
     slot->mUnknown4 = fn_801D6844();
-    fn_801D6B74((signed char)slot->mUnknown4, type, slot->mUnknown21, 0x20, 0, 0, 0);
+    MemCardMgrGetSlotInfo((signed char)slot->mUnknown4, type, slot->mUnknown21, 0x20, 0, 0, 0);
     fn_801D868C(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
     slot->mUnknown8 = value;
     if (_MemCardFiles_bUseSlotState) {

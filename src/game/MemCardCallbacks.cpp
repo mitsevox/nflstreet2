@@ -57,7 +57,7 @@ void MemCardGetIcon(void *pData, int index, unsigned char **pOptional, unsigned 
 }
 
 /* For each of the three save types, counts its first slot whose
-   fn_801D6B74 flag is clear and adds that type's MemCardFilesGetFileSize size. */
+   MemCardMgrGetSlotInfo flag is clear and adds that type's MemCardFilesGetFileSize size. */
 void MemCardGetNewSaveSpace(int *pFiles, int *pBlocks)
 {
     int files = *pFiles;
@@ -71,7 +71,7 @@ void MemCardGetNewSaveSpace(int *pFiles, int *pBlocks)
         for (i = 0; i < fn_801D6AC8(type); i++) {
             unsigned char flag;
 
-            fn_801D6B74((signed char)i, type, 0, 0, 0, 0, &flag);
+            MemCardMgrGetSlotInfo((signed char)i, type, 0, 0, 0, 0, &flag);
             if (!flag) {
                 count++;
                 size += MemCardFilesGetFileSize(type);

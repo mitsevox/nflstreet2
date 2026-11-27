@@ -1,3 +1,8 @@
+/* Memory-card manager: the layer between the game's save and load screens and the memorycard.c
+   driver. It keeps the table of save-file types, sorts the card's directory into per-type slot
+   tables, runs the asynchronous probe, load, save, delete and format operations as a state
+   machine, and gives the screens each save's name, date and status. */
+
 #include "engine/system.h"
 #include "game/fn_801D2B7C.h"
 #include "engine/memorycard.h"
@@ -86,6 +91,26 @@ extern const char lbl_802AFF0C[];
 extern const char lbl_802AFF14[];
 extern const char lbl_802AFF18[];
 
+typedef struct Str3_t {
+    char mText[3];
+} Str3_t;
+
+typedef struct Str4_t {
+    char mText[4];
+} Str4_t;
+
+typedef struct Str6_t {
+    char mText[6];
+} Str6_t;
+
+extern const char lbl_802AFEC8[];
+extern const char lbl_802AFEE0[];
+extern const char lbl_802AFF20[];
+extern const char lbl_802AFF24[];
+extern const char lbl_802AFF28[];
+
+extern int MemCAsyncProbe(int port);
+
 extern void *memset();
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
@@ -95,6 +120,7 @@ int fn_801D673C(int port);
 void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused);
 void fn_801D8498(char *pDst, const char *pSrc);
 int fn_801D84B8(const char *pA, const char *pB);
+void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry);
 void fn_801D868C(int type, int port, char *pBuffer, int size);
 
 void fn_801D5D30(int state)
@@ -138,6 +164,82 @@ void fn_801D5E08(const char *pName, char *pOut)
             strcpy(pOut, pTitle + length);
             return;
         }
+    }
+}
+
+void MemCardMgrBuildSlotTables(int count)
+{
+    int i;
+    int type;
+    int n;
+
+    if (lbl_803EBD2C != 0) {
+        for (i = 0; i < lbl_803EBD1C; i++) {
+            if (lbl_803EBD2C[i].mSlots != 0) {
+                fn_801D2BD0(lbl_803EBD2C[i].mSlots);
+                lbl_803EBD2C[i].mSlots = 0;
+            }
+            lbl_803EBD2C[i].mCount = 0;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        fn_801D5D38(lbl_803EBD28[i].mName, &type);
+        if (type < lbl_803EBD1C && fn_801D84B8(lbl_803EBD20[type].mCode, lbl_80398DFC.mCode) == 0
+            && lbl_803EBD2C[type].mCount < lbl_803EBD20[type].mMaxFiles) {
+            lbl_803EBD2C[type].mCount++;
+        }
+    }
+    for (i = 0; i < count; i++) {
+        fn_801D5D38(lbl_803EBD28[i].mName, &type);
+        if (type < lbl_803EBD1C) {
+            if (fn_801D84B8(lbl_803EBD20[type].mCode, lbl_80398DFC.mCode) == 0) {
+                if (lbl_803EBD2C[type].mSlots == 0) {
+                    lbl_803EBD2C[type].mSlots = fn_801D2B7C(lbl_803EBD2C[type].mCount * sizeof(Struct_803ECF18), 0, 0);
+                    lbl_803EBD2C[type].mCount = 0;
+                }
+                n = lbl_803EBD2C[type].mCount;
+                if (n < lbl_803EBD20[type].mMaxFiles) {
+                    lbl_803EBD2C[type].mSlots[n].mUsed = 1;
+                    lbl_803EBD2C[type].mSlots[n].mFlag = 1;
+                    lbl_803EBD2C[type].mSlots[n].mEntry = &lbl_803EBD28[i];
+                    lbl_803EBD2C[type].mSlots[n].mIndex = i;
+                    lbl_803ECF18[i] = &lbl_803EBD2C[type].mSlots[n];
+                    lbl_803EBD2C[type].mCount++;
+                }
+            }
+        } else {
+            lbl_803ECF18[i] = 0;
+        }
+    }
+}
+
+void MemCardMgrUpdateProbe(void)
+{
+    int result = -1;
+
+    switch (lbl_803EBD00) {
+    case 0x102F:
+        if (MemCAsyncPoll(&result)) {
+            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)lbl_802AFEC8;
+            lbl_803EBD0C = 0;
+            MemCAsyncProbe(lbl_803ECF14);
+            fn_801D5D30(0x1030);
+        }
+        break;
+    case 0x1030:
+        if (MemCAsyncPoll(&result) == 1) {
+            if (result >= 0) {
+                lbl_80398DE0.mCardType[lbl_803ECF14] = result;
+            } else {
+                lbl_80398DE0.mCardType[lbl_803ECF14] = 0;
+            }
+            fn_801D868C(fn_801D673C(lbl_803ECF14), lbl_803ECF14, lbl_80398DE0.mTypeName, sizeof(lbl_80398DE0.mTypeName));
+            lbl_803EBD0C = result;
+            lbl_803EBD10 = 1;
+            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
+            fn_801D5D30(lbl_803EBD04);
+        }
+        break;
     }
 }
 
@@ -444,6 +546,33 @@ void fn_801D6B4C(char *pDst, int size)
     strcpy(pDst, lbl_80398DFC.mDescription);
 }
 
+int MemCardMgrGetSlotInfo(int slot, int type, char *pName, int nameSize, char *pDate, int dateArg, unsigned char *pFlag)
+{
+    int used = 0;
+    Struct_803ECF18 *pSlot;
+
+    if (slot < lbl_803EBD2C[type].mCount) {
+        if (lbl_803EBD2C[type].mSlots[slot].mUsed) {
+            pSlot = &lbl_803EBD2C[type].mSlots[slot];
+            used = pSlot->mUsed;
+            if (pName != 0) {
+                if (pSlot->mFlag) {
+                    *(Str4_t *)pName = *(const Str4_t *)lbl_802AFEE0;
+                } else {
+                    strcpy(pName, pSlot->mName);
+                }
+            }
+            if (pDate != 0) {
+                MemCardMgrFormatDate(pDate, dateArg, lbl_803EBD2C[type].mSlots[slot].mEntry);
+            }
+            if (pFlag != 0) {
+                *pFlag = lbl_803EBD2C[type].mSlots[slot].mFlag;
+            }
+        }
+    }
+    return used;
+}
+
 int fn_801D6C70(int slot, int type, char *pDst, int count)
 {
     return (int)strnzcpy(pDst, lbl_803EBD2C[type].mSlots[slot].mEntry->mName, count);
@@ -559,6 +688,31 @@ void fn_801D8498(char *pDst, const char *pSrc)
 int fn_801D84B8(const char *pA, const char *pB)
 {
     return memcmp(pA, pB, 8);
+}
+
+void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry)
+{
+    Str3_t suffix;
+    unsigned short hour = pEntry->mHour;
+    int minute = pEntry->mMinute;
+    int month = pEntry->mMonth;
+    int day = pEntry->mDay;
+    int year;
+
+    year = pEntry->mYear;
+
+    if (hour == 0) {
+        hour = 12;
+        suffix = *(const Str3_t *)lbl_802AFF20;
+    } else if (hour <= 11) {
+        suffix = *(const Str3_t *)lbl_802AFF20;
+    } else if (hour == 12) {
+        suffix = *(const Str3_t *)lbl_802AFF24;
+    } else {
+        hour -= 12;
+        suffix = *(const Str3_t *)lbl_802AFF24;
+    }
+    sprintf(pBuffer, lbl_802AFF28, month, day, year, hour, minute, suffix.mText);
 }
 
 int fn_801D85A8(int unused)

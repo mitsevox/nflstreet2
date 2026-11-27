@@ -1,10 +1,12 @@
-/* The integer, float, scientific, hex and string field writers used by vsnprintf. */
+/* Formatted text output of the engine's C library: sprintf, snprintf and vsnprintf, which build
+   the game's printed strings (labels, numbers, file names), and the integer, float, scientific,
+   hex and string field writers vsnprintf uses for each conversion. */
 
 #include <string.h>
 #include <stdarg.h>
 
 
-static char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
+static char *_WriteInt(unsigned int value, char *pOut, char *pEnd, char pad, int width, int isSigned)
 {
     char buf[16];
     int count = 0;
@@ -35,7 +37,7 @@ static char *fn_801C20F0(unsigned int value, char *pOut, char *pEnd, char pad, i
     return pOut;
 }
 
-static char *fn_801C21D0(float value, char *pOut, char *pEnd, int width, int precision)
+static char *_WriteFloat(float value, char *pOut, char *pEnd, int width, int precision)
 {
     char buf[64];
     int count = 0;
@@ -89,7 +91,7 @@ static char *fn_801C21D0(float value, char *pOut, char *pEnd, int width, int pre
     return pOut;
 }
 
-static char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int precision, int caseOffset, int isExponent)
+static char *_WriteSci(float value, char *pOut, char *pEnd, int width, int precision, int caseOffset, int isExponent)
 {
     int exponent = 0;
     int negative;
@@ -121,7 +123,7 @@ static char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int pre
         }
     }
     if (!isExponent && exponent >= -4 && exponent < precision) {
-        return fn_801C21D0(value, pOut, pEnd, width, precision);
+        return _WriteFloat(value, pOut, pEnd, width, precision);
     }
     expNegative = exponent < 0;
     if (expNegative) {
@@ -171,7 +173,7 @@ static char *fn_801C2428(float value, char *pOut, char *pEnd, int width, int pre
     return pOut;
 }
 
-static char *fn_801C2728(unsigned int value, char *pOut, char *pEnd, int width, char pad, int caseOffset)
+static char *_WriteHex(unsigned int value, char *pOut, char *pEnd, int width, char pad, int caseOffset)
 {
     char buf[16];
     int count = 0;
@@ -197,7 +199,7 @@ static char *fn_801C2728(unsigned int value, char *pOut, char *pEnd, int width, 
     return pOut;
 }
 
-static char *fn_801C27D0(const char *pString, char *pOut, char *pEnd, int width, int precision, int leftAlign)
+static char *_WriteString(const char *pString, char *pOut, char *pEnd, int width, int precision, int leftAlign)
 {
     int count = 0;
     int length;
@@ -292,9 +294,9 @@ int vsnprintf(char *pBuffer, int size, const char *pFormat, va_list args)
             case 's': {
                 const char *pString = va_arg(args, const char *);
                 if (pString != NULL) {
-                    pOut = fn_801C27D0(pString, pOut, pEnd, width, precision, leftAlign);
+                    pOut = _WriteString(pString, pOut, pEnd, width, precision, leftAlign);
                 } else {
-                    pOut = fn_801C27D0("(null)", pOut, pEnd, width, precision, leftAlign);
+                    pOut = _WriteString("(null)", pOut, pEnd, width, precision, leftAlign);
                 }
                 break;
             }
@@ -302,22 +304,22 @@ int vsnprintf(char *pBuffer, int size, const char *pFormat, va_list args)
                 alt = 1;
             case 'd':
             case 'i':
-                pOut = fn_801C20F0(va_arg(args, int), pOut, pEnd, pad, width, !alt);
+                pOut = _WriteInt(va_arg(args, int), pOut, pEnd, pad, width, !alt);
                 break;
             case 'f':
-                pOut = fn_801C21D0(va_arg(args, double), pOut, pEnd, width, precision);
+                pOut = _WriteFloat(va_arg(args, double), pOut, pEnd, width, precision);
                 break;
             case 'g':
             case 'G':
                 alt = 1;
             case 'e':
             case 'E':
-                pOut = fn_801C2428(va_arg(args, double), pOut, pEnd, width, precision, caseOffset, !alt);
+                pOut = _WriteSci(va_arg(args, double), pOut, pEnd, width, precision, caseOffset, !alt);
                 break;
             case 'x':
             case 'X':
             case 'p':
-                pOut = fn_801C2728(va_arg(args, unsigned int), pOut, pEnd, width, pad, caseOffset);
+                pOut = _WriteHex(va_arg(args, unsigned int), pOut, pEnd, width, pad, caseOffset);
                 break;
             default:
                 if (c != 0) {

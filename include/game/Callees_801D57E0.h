@@ -14,7 +14,7 @@ void fn_801D67E4(const char *, const char *);
 void fn_801D6838(int);
 void fn_801D685C(const char *, int);
 void fn_801D6B24(char *, int);
-int fn_801D6B74(int, int, char *, int, char *, int, unsigned char *);
+int MemCardMgrGetSlotInfo(int, int, char *, int, char *, int, unsigned char *);
 void fn_801D6C70(int, int, char *, int);
 int fn_801D6CF4(const char *, int, unsigned char *);
 int fn_801D6DA8(int, int);
