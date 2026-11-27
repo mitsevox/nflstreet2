@@ -69,7 +69,7 @@ extern "C" void PATH_fade(int flags, int a, int b, int c)
     }
 }
 
-extern "C" void fn_801B4824(PathTrack_t *p, int value)
+extern "C" void PATHI_volume(PathTrack_t *p, int value)
 {
     p->mUnknown3 = value;
     if (p->mUnknown1A & 0x80)
