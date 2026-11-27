@@ -19095,16 +19095,6 @@
           "end": "0x802178E4"
         },
         {
-          "symbol": "_DetermineVisibility",
-          "start": "0x802178E4",
-          "end": "0x80217A7C"
-        },
-        {
-          "symbol": "_ParseVisibility",
-          "start": "0x80217A7C",
-          "end": "0x80217C38"
-        },
-        {
           "symbol": "_ParseObjects",
           "start": "0x80217D30",
           "end": "0x802180A0"

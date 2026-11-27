@@ -139,8 +139,8 @@ static Int32 _DetermineVisibility(UISScreenT *pScreen, void **ppTarget, Int32 Ty
                 for (Item = 0; Item < NumItems; Item++) {
                     pEntry = &pNode->pEntries[Item];
                     if (pEntry->ID == 0xFFFF) {
-                        Result = _DetermineVisibility(pScreen, ppTarget, 8,
-                                             &pScreen->pData->pControls[pEntry->Value]);
+                        pControl = &pScreen->pData->pControls[pEntry->Value];
+                        Result = _DetermineVisibility(pScreen, ppTarget, 8, pControl);
                         if (Result != -1) {
                             return Result;
                         }
@@ -185,8 +185,8 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
                 for (Item = 0; Item < NumItems; Item++) {
                     pEntry = &pNode->pEntries[Item];
                     if (pEntry->ID == 0xFFFF) {
-                        _ParseVisibility(pInfo, pScreen, Value, 8,
-                                    &pScreen->pData->pControls[pEntry->Value], 0);
+                        pControl = &pScreen->pData->pControls[pEntry->Value];
+                        _ParseVisibility(pInfo, pScreen, Value, 8, pControl, 0);
                     } else if (pEntry->ID < pInfo->NumActionFncs &&
                                pInfo->ActionFncs[pEntry->ID].pFnc != 0) {
                         pObject = pEntry->Value != 0
