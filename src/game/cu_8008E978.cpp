@@ -6050,7 +6050,7 @@ extern "C" void DefCoverInitReceivers(void);
 
 extern "C" void DefCoverFlipFormation(int flag);
 
-extern "C" int DefCoverAreReceiversAhead(State_8011F4EC *p);
+extern "C" int DefCoverComputeStrongSide(State_8011F4EC *p);
 
 extern "C" void DefCoverClearState(State_8011F4EC *p);
 
@@ -14955,12 +14955,12 @@ static inline void GetEntryPos(PlayBookFormation_t *pTeam, PlayBookPosition_t *p
     pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
 }
 
-extern "C" int DefCoverAreReceiversAhead(State_8011F4EC *p)
+extern "C" int DefCoverComputeStrongSide(State_8011F4EC *p)
 {
     int result = 0;
     int team = ScrmGetOffenseTeam();
-    unsigned char behind = 0;
-    unsigned char ahead = 0;
+    unsigned char minusSide = 0;
+    unsigned char plusSide = 0;
     PlayBookFormation_t *pTeam = PlayBookGetFormation(team);
     unsigned char i = 0;
     float ballX = ScrmGetBallSpot().mX;
@@ -14981,14 +14981,14 @@ extern "C" int DefCoverAreReceiversAhead(State_8011F4EC *p)
         p->mUnknown1AC[i] = pos.mX;
         if (!(__builtin_fabsf(pos.mX - ballX) <= 0.5f)) {
             if (!(pos.mX < ballX)) {
-                ahead++;
+                plusSide++;
             } else {
-                behind++;
+                minusSide++;
             }
         }
         i++;
     } while (i <= 2);
-    if (ahead >= behind) {
+    if (plusSide >= minusSide) {
         result = 1;
     }
     return result;
@@ -15063,7 +15063,7 @@ extern "C" void DefCoverSetupFormation(int flag)
     if ((pObject->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
         p->mUnknown1A8 = pObject->mUnknown8.mUnknownF == 0;
-        if (DefCoverAreReceiversAhead(p) != 0) {
+        if (DefCoverComputeStrongSide(p) != 0) {
             if (p->mUnknown1A8 == 0) {
                 p->mUnknown1A8 = 1;
             }
@@ -15094,7 +15094,7 @@ extern "C" void fn_8009E01C(void)
     team = ScrmGetDefenseTeam();
     if ((PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
-        if (DefCoverAreReceiversAhead(p) != 0) {
+        if (DefCoverComputeStrongSide(p) != 0) {
             if (p->mUnknown1A8 == 0) {
                 p->mUnknown1A8 = 1;
             }
@@ -15114,7 +15114,7 @@ extern "C" void DefCoverStartPlay(void)
 
     DefCoverInitReceivers();
     p->mUnknown1A2 = 0;
-    p->mUnknown1A8 = DefCoverAreReceiversAhead(p);
+    p->mUnknown1A8 = DefCoverComputeStrongSide(p);
     DefCoverBuildZones();
     DefReactResetCounts();
 }

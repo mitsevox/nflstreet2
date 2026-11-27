@@ -13812,7 +13812,7 @@
             "evidence": "evidence.tsv source-form 0x8009D0AC-0x8009D1AC"
           },
           {
-            "function": "DefCoverAreReceiversAhead",
+            "function": "DefCoverComputeStrongSide",
             "evidence": "evidence.tsv source-form 0x8009DBB4-0x8009DD10"
           },
           {

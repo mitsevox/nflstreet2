@@ -13417,7 +13417,7 @@
           "end": "0x8009DBB4"
         },
         {
-          "symbol": "DefCoverAreReceiversAhead",
+          "symbol": "DefCoverComputeStrongSide",
           "start": "0x8009DBB4",
           "end": "0x8009DD10"
         },
