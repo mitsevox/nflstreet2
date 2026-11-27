@@ -18887,7 +18887,7 @@
     },
     {
       "source": "src/Common/UIStudio/UIStudio.c",
-      "profile": "uistudio",
+      "profile": "uistudio_fastmath",
       "evidence": "evidence.tsv provisional unit row 0x802176E8-0x8021A068 for ../../../Source/Common/UIStudio/UIStudio.c, exact whole-function rows and neutral name rows for the 23 draft bodies, and the file compiler row. The drafts use no static data; the .rodata block data_802B1D40 and all other functions remain original and unmeasured.",
       "sections": [
         {
@@ -18895,66 +18895,84 @@
           "placement": ".text",
           "start": "0x802176E8",
           "end": "0x8021A068"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B1D40",
+          "end": "0x802B1DF0"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECFE8",
+          "end": "0x803ECFF0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBF28",
+          "end": "0x803EBF2C"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_80217C38",
+          "symbol": "_ParseTransforms",
           "start": "0x80217C38",
           "end": "0x80217D30"
         },
         {
-          "symbol": "fn_802182E4",
+          "symbol": "_UISKillRateFncsInScreen",
           "start": "0x802182E4",
           "end": "0x80218364"
         },
         {
-          "symbol": "fn_802188A0",
+          "symbol": "UISGetMemSize",
           "start": "0x802188A0",
           "end": "0x802188D4"
         },
         {
-          "symbol": "fn_80218A34",
+          "symbol": "UISShutdown",
           "start": "0x80218A34",
           "end": "0x80218AA8"
         },
         {
-          "symbol": "fn_80218AA8",
+          "symbol": "UISRegisterMessageFnc",
           "start": "0x80218AA8",
           "end": "0x80218AB0"
         },
         {
-          "symbol": "fn_80218AB0",
+          "symbol": "UISRegisterResourceFncs",
           "start": "0x80218AB0",
           "end": "0x80218ABC"
         },
         {
-          "symbol": "fn_80218ABC",
+          "symbol": "UISRegisterShutdownFnc",
           "start": "0x80218ABC",
           "end": "0x80218AC4"
         },
         {
-          "symbol": "fn_80218AC4",
+          "symbol": "UISRegisterTransformFncs",
           "start": "0x80218AC4",
           "end": "0x80218ACC"
         },
         {
-          "symbol": "fn_80218ACC",
+          "symbol": "UISRegisterScreenActivatedFnc",
           "start": "0x80218ACC",
           "end": "0x80218AD4"
         },
         {
-          "symbol": "fn_80218AD4",
+          "symbol": "UISRegisterPluginFnc",
           "start": "0x80218AD4",
           "end": "0x80218AF0"
         },
         {
-          "symbol": "fn_80218CB8",
+          "symbol": "UISSetGlobalScript",
           "start": "0x80218CB8",
           "end": "0x80218D20"
         },
         {
-          "symbol": "fn_80218D20",
+          "symbol": "_UISInternalReInitScreen",
           "start": "0x80218D20",
           "end": "0x80218DDC"
         },
@@ -18989,34 +19007,109 @@
           "end": "0x8021992C"
         },
         {
-          "symbol": "fn_80219A54",
+          "symbol": "UISIdleProcess",
           "start": "0x80219A54",
           "end": "0x80219AF8"
         },
         {
-          "symbol": "fn_80219AF8",
+          "symbol": "UISFindStaticObject",
           "start": "0x80219AF8",
           "end": "0x80219BA0"
         },
         {
-          "symbol": "fn_80219F84",
+          "symbol": "UISUpdateVisibility",
           "start": "0x80219F84",
           "end": "0x8021A020"
         },
         {
-          "symbol": "fn_8021A020",
+          "symbol": "UISIsActiveScreenEnabled",
           "start": "0x8021A020",
           "end": "0x8021A060"
         },
         {
-          "symbol": "fn_8021A060",
+          "symbol": "UISIsShuttingDown",
           "start": "0x8021A060",
           "end": "0x8021A068"
         },
         {
-          "symbol": "fn_8021992C",
+          "symbol": "UISDrawObjects",
           "start": "0x8021992C",
           "end": "0x80219A54"
+        },
+        {
+          "symbol": "_ParseInitialize",
+          "start": "0x802176E8",
+          "end": "0x802178E4"
+        },
+        {
+          "symbol": "_DetermineVisibility",
+          "start": "0x802178E4",
+          "end": "0x80217A7C"
+        },
+        {
+          "symbol": "_ParseVisibility",
+          "start": "0x80217A7C",
+          "end": "0x80217C38"
+        },
+        {
+          "symbol": "_ParseObjects",
+          "start": "0x80217D30",
+          "end": "0x802180A0"
+        },
+        {
+          "symbol": "_ParseMaps",
+          "start": "0x802180A0",
+          "end": "0x802182E4"
+        },
+        {
+          "symbol": "_ParseRateFncs",
+          "start": "0x80218364",
+          "end": "0x8021861C"
+        },
+        {
+          "symbol": "PatchScrData",
+          "start": "0x8021861C",
+          "end": "0x802188A0"
+        },
+        {
+          "symbol": "UISInit",
+          "start": "0x802188D4",
+          "end": "0x80218A34"
+        },
+        {
+          "symbol": "UISProcessEvent",
+          "start": "0x802196B4",
+          "end": "0x80219854"
+        },
+        {
+          "symbol": "UISInternalLoadScreen",
+          "start": "0x80218AF0",
+          "end": "0x80218CB8"
+        },
+        {
+          "symbol": "_UISInternalLoad",
+          "start": "0x80218DDC",
+          "end": "0x80218FC4"
+        },
+        {
+          "symbol": "UISInternalUnloadModal",
+          "start": "0x80219070",
+          "end": "0x802191F0"
+        },
+        {
+          "symbol": "UISInternalUnloadScreen",
+          "start": "0x802191F0",
+          "end": "0x8021956C"
+        },
+        {
+          "symbol": "UISInternalActivateScreen",
+          "start": "0x80219E18",
+          "end": "0x80219F84"
+        },
+        {
+          "symbol": "UISInternalActivateControl",
+          "start": "0x80219BA0",
+          "end": "0x80219E18"
         }
       ]
     },
