@@ -253,7 +253,13 @@ char *_WriteFloat(char *pDst, char *pEnd, Int32 Width, Int32 Precision, Float32 
         Buffer[Length++] = '-';
     }
     if (Width != 0) {
-        Count = (Precision != 0 ? Width - 1 : Width) - (Precision + Length);
+        Digit = Precision + Length;
+        if (Precision != 0) {
+            Count = Width - 1;
+            Count -= Digit;
+        } else {
+            Count = Width - Digit;
+        }
         for (; Count > 0; Count--) {
             Buffer[Length++] = ' ';
         }
