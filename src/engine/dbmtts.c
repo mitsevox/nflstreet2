@@ -217,6 +217,8 @@ extern int TDbQryGetSingleRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbEx
                        TDbCol_801F9718 *pCols);
 extern int TDbQrySetFirstRow(int db, TDbSQLTableRef_801FDC18 *pTableRefs, TDbExpr_t *pWhere,
                        TDbCol_801F9718 *pCols, void *pResult, int callback);
+extern int TDbQryUpdateExpr(int db, TDbSQLTableRef_801FDC18 *pTables, TDbExpr_t *pWhere,
+                            unsigned long long *pKeys, TDbExpr_t *pTerms, void *pRes, int cb);
 /* Set index per column letter ('A'/'a' first); neutral label. */
 extern unsigned char lbl_802FA614[];
 extern int *lbl_803EC010[1];
@@ -852,6 +854,53 @@ static inline unsigned long long _DbColKey(unsigned int table, unsigned int col)
     return ((unsigned long long)table << 32) | col;
 }
 
+/* One table reference of a query's table list (as dboccp.c's _DbOccpSetTable). */
+static inline void _DbMttsSetTable(TDbSQLTableRef_801FDC18 *pRef, unsigned int id, unsigned int join,
+                                   TDbExpr_t *pExpr)
+{
+    pRef->mExpr = pExpr;
+    pRef->mId = id;
+    pRef->mJoinType = join;
+}
+
+/* One column of a column list: its value, table and column code. */
+static inline void _DbMttsSetCol(TDbCol_801F9718 *pCol, int value, int table, int col)
+{
+    pCol->mUnk4 = table;
+    pCol->mCol = col;
+    pCol->mUnk0 = value;
+}
+
+/* column op unsigned value */
+static inline void _DbMttsSetColUInt(TDbExpr_t *pExpr, int op, unsigned int table, unsigned int col, int value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = _DbColKey(table, col);
+    pExpr->mRight.mType = TDB_TYPE_UINT;
+    pExpr->mRight.mValue.i = value;
+}
+
+/* column op integer */
+static inline void _DbMttsSetColInt(TDbExpr_t *pExpr, int op, unsigned long long col, int value)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mLeft.mValue.l = col;
+    pExpr->mRight.mType = TDB_TYPE_INT;
+    pExpr->mRight.mValue.i = value;
+}
+
+/* sub-expression op sub-expression */
+static inline void _DbMttsSetSubSub(TDbExpr_t *pExpr, int op, TDbExpr_t *pLeft, TDbExpr_t *pRight)
+{
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_UINT;
+    pExpr->mLeft.mValue.p = pLeft;
+    pExpr->mRight.mType = TDB_TYPE_EXPR_UINT;
+    pExpr->mRight.mValue.p = pRight;
+}
+
 /* Writes value into column col of the 'DIGP' row key of the set selected by the column's
    third letter; when no row matched (23) the row is added through 0x8022AF5C. Returns 131
    for a column letter without a set. */
@@ -875,21 +924,11 @@ int fn_8022B2CC(int key, unsigned int col, int value)
         return 131;
     }
     table = lbl_803EC010[0][index];
-    aCols[0].mUnk0 = value;
-    aCols[0].mUnk4 = table;
-    aCols[0].mCol = col;
+    _DbMttsSetCol(&aCols[0], value, table, col);
     fn_801F9718_SetEnd(&aCols[1]);
-    expr.mLeft.mType = 6;
-    expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
-    expr.mRight.mType = 3;
-    expr.mRight.mValue.i = key;
-    expr.mOp = 0x10003;
-    aTables[0].mId = table;
-    aTables[0].mJoinType = 2;
-    aTables[0].mExpr = &expr;
-    aTables[1].mId = -1;
-    aTables[1].mJoinType = 2;
-    aTables[1].mExpr = 0;
+    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+    _DbMttsSetTable(&aTables[0], table, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
     err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
     if (err == 23) {
         err = fn_8022AF5C(key, -1, col, value, 0, index);
@@ -899,7 +938,7 @@ int fn_8022B2CC(int key, unsigned int col, int value)
 
 /* Reads column col of the 'DIGP' row key of the set selected by the column's third letter
    into *pOut; returns 131 for a letter without a set, 132 when no row matched. */
-int fn_8022B414(int key, unsigned int col, int *pOut)
+int DbMttsGetPlayerColumn(int key, unsigned int col, int *pOut)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -910,7 +949,8 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
     int err;
     int ok;
 
-    *pOut = 0;
+    err = 0;
+    *pOut = err;
     c = (col >> 8) & 0xFF;
     if (c > 96) {
         index = lbl_802FA614[c - 97];
@@ -923,17 +963,9 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
         aCols[0].mUnk4 = table;
         aCols[0].mCol = col;
         fn_801F9718_SetEnd(&aCols[1]);
-        expr.mLeft.mType = 6;
-        expr.mLeft.mValue.l = _DbColKey(table, 0x44494750);
-        expr.mRight.mType = 3;
-        expr.mRight.mValue.i = key;
-        expr.mOp = 0x10003;
-        aTables[0].mId = table;
-        aTables[0].mJoinType = 2;
-        aTables[0].mExpr = &expr;
-        aTables[1].mId = -1;
-        aTables[1].mJoinType = 2;
-        aTables[1].mExpr = 0;
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
         err = TDbQryGetSingleRow(0, aTables, 0, aCols);
         ok = 0;
         if (err == 0 || err == 23 || err == 21 || err == 20) {
@@ -952,9 +984,67 @@ int fn_8022B414(int key, unsigned int col, int *pOut)
     return err;
 }
 
+/* Sets column col of the 'DIGP' row key of the set selected by the column's third letter, by
+   the column's kind (0x8022AEFC): kind 2 stores value, kinds 0 and 3 update the column with the
+   expression ops 0x4000D and 0x40013 of value; when no row matched (23) the row is added through
+   0x8022AF5C. Returns 130 for another kind, 131 for a letter without a set. */
+int DbMttsUpdatePlayerColumn(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    unsigned long long aKeys[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    TDbExpr_t term;
+    unsigned int c;
+    signed char index;
+    int table;
+    int err;
+
+    c = (col >> 8) & 0xFF;
+    if (c > 96) {
+        index = lbl_802FA614[c - 97];
+    } else {
+        index = lbl_802FA614[c - 65];
+    }
+    if (index >= 0) {
+        table = lbl_803EC010[0][index];
+        _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494750, key);
+        _DbMttsSetTable(&aTables[0], table, 2, &expr);
+        _DbMttsSetTable(&aTables[1], -1, 2, 0);
+        switch (fn_8022AEFC(col)) {
+        case 0:
+            aKeys[0] = _DbColKey(table, col);
+            aKeys[1] = -1;
+            _DbMttsSetColInt(&term, 0x4000D, _DbColKey(table, col), value);
+            err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+            break;
+        case 2:
+            _DbMttsSetCol(&aCols[0], value, table, col);
+            fn_801F9718_SetEnd(&aCols[1]);
+            err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+            break;
+        case 3:
+            aKeys[0] = _DbColKey(table, col);
+            aKeys[1] = -1;
+            _DbMttsSetColInt(&term, 0x40013, _DbColKey(table, col), value);
+            err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+            break;
+        default:
+            err = 130;
+            break;
+        }
+        if (err == 23) {
+            err = fn_8022AF5C(key, -1, col, value, 0, (unsigned char)index);
+        }
+    } else {
+        err = 131;
+    }
+    return err;
+}
+
 /* Reads column col of the row of the first table whose 'DIGT' column equals value; returns
    0 with the value in *pOut, 132 when the query ended without a row, or the query error. */
-int fn_8022B7A4(int value, int col, int *pOut)
+int DbMttsGetTeamColumn(int value, int col, int *pOut)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -970,17 +1060,9 @@ int fn_8022B7A4(int value, int col, int *pOut)
     aCols[0].mUnk4 = table;
     aCols[0].mCol = col;
     fn_801F9718_SetEnd(&aCols[1]);
-    expr.mLeft.mType = 6;
-    expr.mLeft.mValue.l = _DbColKey(table, 0x44494754);
-    expr.mRight.mType = 3;
-    expr.mRight.mValue.i = value;
-    expr.mOp = 0x10003;
-    aTables[0].mId = table;
-    aTables[0].mJoinType = 2;
-    aTables[0].mExpr = &expr;
-    aTables[1].mId = -1;
-    aTables[1].mJoinType = 2;
-    aTables[1].mExpr = 0;
+    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494754, value);
+    _DbMttsSetTable(&aTables[0], table, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
     err = TDbQryGetSingleRow(0, aTables, 0, aCols);
     ok = 0;
     if (err == 0 || err == 23 || err == 21 || err == 20) {
@@ -992,6 +1074,143 @@ int fn_8022B7A4(int value, int col, int *pOut)
         } else {
             err = 132;
         }
+    }
+    return err;
+}
+
+/* Sets column col of the row of the first team table whose 'DIGT' column equals key, by the
+   column's kind as DbMttsUpdatePlayerColumn does; when no row matched (23) the row is added through
+   0x8022ACEC. Returns 130 for a kind without an update. */
+int DbMttsUpdateTeamColumn(int key, unsigned int col, int value)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    unsigned long long aKeys[2];
+    TDbCol_801F9718 aCols[2];
+    TDbExpr_t expr;
+    TDbExpr_t term;
+    int table;
+    int err = 0;
+
+    table = lbl_803EC020[0];
+    _DbMttsSetColUInt(&expr, 0x10003, table, 0x44494754, key);
+    _DbMttsSetTable(&aTables[0], table, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    switch (fn_8022AEFC(col)) {
+    case 0:
+        aKeys[0] = _DbColKey(table, col);
+        aKeys[1] = -1;
+        _DbMttsSetColInt(&term, 0x4000D, _DbColKey(table, col), value);
+        err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+        break;
+    case 2:
+        _DbMttsSetCol(&aCols[0], value, table, col);
+        fn_801F9718_SetEnd(&aCols[1]);
+        err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
+        break;
+    case 3:
+        aKeys[0] = _DbColKey(table, col);
+        aKeys[1] = -1;
+        _DbMttsSetColInt(&term, 0x40013, _DbColKey(table, col), value);
+        err = TDbQryUpdateExpr(0, aTables, 0, aKeys, &term, 0, 0);
+        break;
+    default:
+        err = 130;
+        break;
+    }
+    if (err == 23) {
+        err = fn_8022ACEC(key, -1, col, value, 0);
+    }
+    return err;
+}
+
+/* The score-margin class of a game result: 0 below -9, 1 from -9 to 8, 2 above 8. */
+static inline int _DbMarginClass(int margin)
+{
+    return margin < -9 ? 0 : (margin <= 8 ? 1 : 2);
+}
+
+/* Adds one game to the 'RPST' row of team key and the margin class of margin: 'apst' counts
+   the games, 'cpst' and 'post' add a and b; when no row matched (23) the row is inserted with
+   these values. */
+int fn_8022BAB4(int key, int a, int margin, int b)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbExpr_t expr;
+    TDbExpr_t keyExpr;
+    TDbExpr_t classExpr;
+    TDbExpr_t aTerms[3];
+    unsigned long long aKeys[4];
+    TDbCol_801F9718 aCols[6];
+    int cls;
+    int err;
+
+    cls = _DbMarginClass(margin);
+    _DbMttsSetSubSub(&expr, 0x20009, &keyExpr, &classExpr);
+    _DbMttsSetColUInt(&keyExpr, 0x10003, 0x52505354, 0x44494754, key);
+    _DbMttsSetColUInt(&classExpr, 0x10003, 0x52505354, 0x63647374, cls);
+    _DbMttsSetTable(&aTables[0], 0x52505354, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    aKeys[0] = _DbColKey(0x52505354, 0x61707374);
+    aKeys[1] = _DbColKey(0x52505354, 0x63707374);
+    aKeys[2] = _DbColKey(0x52505354, 0x706F7374);
+    aKeys[3] = -1;
+    _DbMttsSetColInt(&aTerms[0], 0x4000D, _DbColKey(0x52505354, 0x61707374), 1);
+    _DbMttsSetColInt(&aTerms[1], 0x4000D, _DbColKey(0x52505354, 0x63707374), a);
+    _DbMttsSetColInt(&aTerms[2], 0x4000D, _DbColKey(0x52505354, 0x706F7374), b);
+    err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
+    if (err == 23) {
+        _DbMttsSetCol(&aCols[0], key, 0x52505354, 0x44494754);
+        _DbMttsSetCol(&aCols[1], cls, 0x52505354, 0x63647374);
+        _DbMttsSetCol(&aCols[2], 1, 0x52505354, 0x61707374);
+        _DbMttsSetCol(&aCols[3], a, 0x52505354, 0x63707374);
+        _DbMttsSetCol(&aCols[4], b, 0x52505354, 0x706F7374);
+        fn_801F9718_SetEnd(&aCols[5]);
+        err = TDbInsertRow(0, 0x52505354, aCols, 0, 0);
+    }
+    return err;
+}
+
+/* Adds one game to the 'DRST' row of team key and the margin class of margin: 'arst' counts
+   the games and 'rost' adds a; when no row matched (23) the row is inserted with these values. */
+int fn_8022BD30(int key, int margin, int a)
+{
+    TDbSQLTableRef_801FDC18 aTables[2];
+    TDbExpr_t aTerms[2];
+    TDbExpr_t expr;
+    TDbExpr_t keyExpr;
+    TDbExpr_t classExpr;
+    unsigned long long aKeys[3];
+    TDbCol_801F9718 aCols[5];
+    int cls;
+    int err;
+
+    cls = _DbMarginClass(margin);
+    _DbMttsSetSubSub(&expr, 0x20009, &keyExpr, &classExpr);
+    _DbMttsSetColUInt(&keyExpr, 0x10003, 0x44525354, 0x44494754, key);
+    _DbMttsSetColUInt(&classExpr, 0x10003, 0x44525354, 0x63647374, cls);
+    _DbMttsSetTable(&aTables[0], 0x44525354, 2, &expr);
+    _DbMttsSetTable(&aTables[1], -1, 2, 0);
+    aKeys[2] = -1;
+    aKeys[0] = _DbColKey(0x44525354, 0x61727374);
+    aKeys[1] = _DbColKey(0x44525354, 0x726F7374);
+    _DbMttsSetColInt(&aTerms[0], 0x4000D, _DbColKey(0x44525354, 0x61727374), 1);
+    _DbMttsSetColInt(&aTerms[1], 0x4000D, _DbColKey(0x44525354, 0x726F7374), a);
+    err = TDbQryUpdateExpr(0, aTables, 0, aKeys, aTerms, 0, 0);
+    if (err == 23) {
+        aCols[0].mCol = 0x44494754;
+        aCols[0].mUnk0 = key;
+        aCols[0].mUnk4 = 0x44525354;
+        aCols[1].mCol = 0x63647374;
+        aCols[1].mUnk0 = cls;
+        aCols[1].mUnk4 = 0x44525354;
+        aCols[2].mCol = 0x61727374;
+        aCols[2].mUnk0 = 1;
+        aCols[2].mUnk4 = 0x44525354;
+        aCols[3].mUnk4 = 0x44525354;
+        aCols[3].mCol = 0x726F7374;
+        aCols[3].mUnk0 = a;
+        fn_801F9718_SetEnd(&aCols[4]);
+        err = TDbInsertRow(0, 0x44525354, aCols, 0, 0);
     }
     return err;
 }

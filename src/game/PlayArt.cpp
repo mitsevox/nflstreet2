@@ -320,7 +320,7 @@ extern PlayArtVertex_t lbl_802E98FC[];
 void Vec2Add(void *, void *, void *);
 float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
-int fn_801C2E18(char *, const char *, ...);
+int sprintf(char *, const char *, ...);
 int DbTextToTag(const char *);
 int ScrmGetOffenseTeam(void);
 unsigned int ScrmGetTeamPlayerCount(int);

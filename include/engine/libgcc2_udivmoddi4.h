@@ -1,7 +1,7 @@
 /* libgcc2.c's L_udivmoddi4 block: the count-leading-zeros table and the inline 64-bit unsigned
    divide used by __divdi3, __moddi3, __udivdi3 and __umoddi3. Each of those was its own libgcc2
-   object with its own static copy of both; cu_8025E148.c includes this block once per object, with
-   CLZ_TAB and UDIVMODDI4 naming that object's copies. */
+   object with its own static copy of both; libgcc2_main.c and libgcc2_fixunssfdi.c include this
+   block once per object, with CLZ_TAB and UDIVMODDI4 naming that object's copies. */
 
 /* From GCC 2.95.3 libgcc2.c:
    Copyright (C) 1989, 92-98, 1999 Free Software Foundation, Inc.
@@ -31,8 +31,9 @@ Boston, MA 02111-1307, USA.  */
    the executable file might be covered by the GNU General Public License.  */
 
 /* FAKEMATCH: the target keeps each 256-byte table in .sdata2. ProDG 3.9.3 puts it there only from
-   -G256 and only when the array is declared with its size, but any -G of 8 or more also moves this
-   file's .data and .bss into .sdata/.sbss, so the section is named on the table. */
+   -G256 and only when the array is declared with its size, but any -G of 8 or more also moves the
+   .data and .bss of libgcc2_main.c, which includes this header, into .sdata/.sbss, so the section
+   is named on the table. */
 static const UQItype CLZ_TAB[] __attribute__ ((section (".sdata2"))) =
 {
   0,1,2,2,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,

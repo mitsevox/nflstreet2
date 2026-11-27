@@ -3,7 +3,7 @@
 extern "C" {
 void GlibSyncFrame(void);
 void fn_802348CC(int);
-void fn_80234908(void);
+void ModelPassShadersClear(void);
 }
 
 static void *sDependencies[] = { 0 };
@@ -22,6 +22,6 @@ int GRender::Init()
 int GRender::Shutdown()
 {
     GlibSyncFrame();
-    fn_80234908();
+    ModelPassShadersClear();
     return 1;
 }

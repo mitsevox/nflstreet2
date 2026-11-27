@@ -9,7 +9,7 @@
 
 extern "C" {
 int PlayCallGetPlaybookId(int a);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int FormationLineupStoreUser(int formation, int team, int *pValues);
 }
 
@@ -122,7 +122,7 @@ int FormationSlotGetInfo(int a, int b, float *pX, float *pY, int *pValue,
         *pX = 0.0f;
         *pY = 0.0f;
         *pValue = 0;
-        fn_801C2E18(pLabel, "??");
+        sprintf(pLabel, "??");
     }
     return result;
 }

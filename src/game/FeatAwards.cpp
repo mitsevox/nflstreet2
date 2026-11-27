@@ -34,7 +34,7 @@ int UserRecGetCount(void);
 int UserRecGetName(int index, char *pText);
 signed char UserProfileFindIndex(int a);
 signed char UserProfileGetSelected(unsigned char index);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int DbUserGetId(signed char index);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
@@ -64,7 +64,7 @@ int FeatAwardByKey(DbCursor *pCursor, DbCursor *pOther, int key, FeatAward_t *pE
     UnlockStatusSetCurrent(pOther, 1);
     UnlockListReadItem(pCursor, &record);
     UserInfoAddPoints(db, record.mUnknown148);
-    fn_801C2E18(pEntry->mName, record.mName);
+    sprintf(pEntry->mName, record.mName);
     UserRecGetName(UserProfileFindIndex(db), pEntry->mText);
     pEntry->mCredits = record.mUnknown148;
     return 1;
@@ -92,7 +92,7 @@ void FeatAwardStatFeats(DbCursor *pCursor, DbCursor *pOther, signed char pad)
                     UserInfoAddPoints(DbUserGetId(pad), record.mUnknown148);
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
-                    fn_801C2E18(pEntry->mName, record.mName);
+                    sprintf(pEntry->mName, record.mName);
                     UserRecGetName(pad, pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
@@ -127,8 +127,8 @@ void FeatAwardModeFeat(DbCursor *pCursor, DbCursor *pOther, int db)
     }
     if (FeatAwardByKey(pCursor, pOther, key, &entry, db)) {
         _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
-        fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
-        fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
+        sprintf(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
+        sprintf(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
         _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
         _Feat_uAwardedCount++;
     }
@@ -150,7 +150,7 @@ void FeatAwardSettingFeats(DbCursor *pCursor, DbCursor *pOther, int db)
                     UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
-                    fn_801C2E18(pEntry->mName, record.mName);
+                    sprintf(pEntry->mName, record.mName);
                     UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
@@ -174,7 +174,7 @@ void FeatAwardValueFeat(DbCursor *pCursor, DbCursor *pOther, int db, int key, in
                     UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
-                    fn_801C2E18(pEntry->mName, record.mName);
+                    sprintf(pEntry->mName, record.mName);
                     UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
@@ -247,7 +247,7 @@ void FeatAwardEAGameSaveFeats(void)
                     UserInfoAddPoints(db, record.mUnknown148);
                     pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
                     _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
-                    fn_801C2E18(pEntry->mName, record.mName);
+                    sprintf(pEntry->mName, record.mName);
                     UserRecGetName(DbUserFindIndex(db), pEntry->mText);
                     pEntry->mCredits = record.mUnknown148;
                     _Feat_uAwardedCount++;
@@ -276,7 +276,7 @@ void FeatAwardNewUserFeats(void)
         UserInfoAddPoints(db, record.mUnknown148);
         pEntry = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
         _Feat_apAwarded[_Feat_uAwardedCount] = pEntry;
-        fn_801C2E18(pEntry->mName, record.mName);
+        sprintf(pEntry->mName, record.mName);
         UserRecGetName(DbUserFindIndex(db), pEntry->mText);
         pEntry->mCredits = record.mUnknown148;
         _Feat_uAwardedCount++;
@@ -300,8 +300,8 @@ void FeatAwardAllUsersFeat(void)
         UnlockStatusOpenDb(&other, db);
         if (FeatAwardByKey(&cursor, &other, 38, &entry, db)) {
             _Feat_apAwarded[_Feat_uAwardedCount] = (FeatAward_t *)fn_801D2B7C(168, 0, 0);
-            fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
-            fn_801C2E18(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
+            sprintf(_Feat_apAwarded[_Feat_uAwardedCount]->mName, entry.mName);
+            sprintf(_Feat_apAwarded[_Feat_uAwardedCount]->mText, entry.mText);
             _Feat_apAwarded[_Feat_uAwardedCount]->mCredits = entry.mCredits;
             _Feat_uAwardedCount++;
         }
@@ -318,8 +318,8 @@ unsigned int FeatGetAwardedCount(void)
 void FeatGetAwarded(int index, FeatAward_t *pEntry)
 {
     if (index <= 100) {
-        fn_801C2E18(pEntry->mName, _Feat_apAwarded[index]->mName);
-        fn_801C2E18(pEntry->mText, _Feat_apAwarded[index]->mText);
+        sprintf(pEntry->mName, _Feat_apAwarded[index]->mName);
+        sprintf(pEntry->mText, _Feat_apAwarded[index]->mText);
         pEntry->mCredits = _Feat_apAwarded[index]->mCredits;
     }
 }
@@ -388,7 +388,7 @@ void FeatSetEAGameSave(int index)
 
 void FeatGetEAGameCode(int index, char *pDest)
 {
-    fn_801C2E18(pDest, _Feat_aszEAGameCode[index]);
+    sprintf(pDest, _Feat_aszEAGameCode[index]);
 }
 
 int FeatAwardGameCredits(int side)

@@ -58,7 +58,7 @@ int StoryGetFlag100(int a);
 void StorySetFlag100(int index, int value);
 int StoryGetFlag200(int a);
 void StorySetFlag200(int index, int value);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int TDbTblDestroy(int handle, int table);
 int TDbTblFindUnusedId(int handle, int *pTable);
 int UIGLibraryLoadItem(void *pObject, int a, int b);
@@ -312,12 +312,12 @@ void MsgPlayerPickupGetHeight(char *pBuffer, int size)
 {
     unsigned int height = PlayerDbGetHeight(_MsgPlayerPickup_pList);
 
-    fn_801C2D88(pBuffer, size, "%d ft %d in", height / 12, height % 12);
+    snprintf(pBuffer, size, "%d ft %d in", height / 12, height % 12);
 }
 
 void MsgPlayerPickupGetWeight(char *pBuffer, int size)
 {
-    fn_801C2D88(pBuffer, size, "%d lbs", PlayerDbGetWeight(_MsgPlayerPickup_pList));
+    snprintf(pBuffer, size, "%d lbs", PlayerDbGetWeight(_MsgPlayerPickup_pList));
 }
 
 int MsgPlayerPickupSelectList(void)

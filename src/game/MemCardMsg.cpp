@@ -19,7 +19,7 @@ unsigned int MemCardFilesGetFileSize(int value);
 int MemCardFilesGetTotalSize(void);
 char *fn_801D6918(void);
 void MemCardUtilFormatBlocks(int value, char *pOut, int size, int unused, const char *pText);
-int fn_801C2D88(char *pOut, int size, const char *pFormat, ...);
+int snprintf(char *pOut, int size, const char *pFormat, ...);
 void MemCardMsgFormat(int value, int index, char *pA, char *pB, int flag, char *pC, char *pD, char *pE);
 extern unsigned char lbl_803EB720;
 
@@ -82,7 +82,7 @@ void MemCardMsgGetText(int value, MemCardMsgText_t *pA, MemCardMsgText_t *pB, Me
                     MemCardFilesGetTypeName(fn_801D6850(), text, 32);
                 } else {
                     MemCardFilesGetTypeName(fn_801D6850(), textD, 32);
-                    fn_801C2D88(text, 32, "%s %s", textD, textC);
+                    snprintf(text, 32, "%s %s", textD, textC);
                 }
             }
         }

@@ -7,8 +7,8 @@
 #include "UIStudio/UIStudio.h"
 #include "engine/cu_8021A438.h"
 
-extern Float32 lbl_8039F858[4];
-extern Float32 lbl_8039F868[4];
+static Float32 _UISUtils_afColorMultiplier[4];
+static Float32 _UISUtils_afColorAdditive[4];
 
 Uint32 UISFindScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID)
 {
@@ -158,28 +158,28 @@ Float32 *UISGetActionPtrValue(Uint32 Action, UISControlInfoT *pControlInfo)
 
 Float32 *UISGetColorMultipler(void)
 {
-    return lbl_8039F858;
+    return _UISUtils_afColorMultiplier;
 }
 
 Float32 *UISGetColorAdditive(void)
 {
-    return lbl_8039F868;
+    return _UISUtils_afColorAdditive;
 }
 
 void UISSetColorMultipler(Float32 a, Float32 b, Float32 c, Float32 d)
 {
-    lbl_8039F858[0] = a;
-    lbl_8039F858[3] = d;
-    lbl_8039F858[1] = b;
-    lbl_8039F858[2] = c;
+    _UISUtils_afColorMultiplier[0] = a;
+    _UISUtils_afColorMultiplier[3] = d;
+    _UISUtils_afColorMultiplier[1] = b;
+    _UISUtils_afColorMultiplier[2] = c;
 }
 
 void UISSetColorAdditive(Float32 a, Float32 b, Float32 c, Float32 d)
 {
-    lbl_8039F868[0] = a;
-    lbl_8039F868[3] = d;
-    lbl_8039F868[1] = b;
-    lbl_8039F868[2] = c;
+    _UISUtils_afColorAdditive[0] = a;
+    _UISUtils_afColorAdditive[3] = d;
+    _UISUtils_afColorAdditive[1] = b;
+    _UISUtils_afColorAdditive[2] = c;
 }
 
 /* Writes Value in decimal to pDst, stopping at pEnd; returns the end of the

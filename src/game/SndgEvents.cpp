@@ -99,7 +99,7 @@ static const unsigned char _SndgEvent_aSfxGroups[][2] = {
     {0x44, 4}, {0x66, 2}, {0x4C, 2}, {0x48, 4}, {0x50, 4}, {0x54, 4},
     {0x58, 4}, {0x5C, 4}, {0x60, 4}, {0x64, 2}, {0x4E, 2},
 };
-extern Vector_80039F5C lbl_8030AA7C;
+static Vector_80039F5C _SndgEvent_DelayedPos;
 extern int lbl_803EA6C0;
 extern unsigned char lbl_803EA6C4;
 extern unsigned char lbl_803EA6C5;
@@ -127,15 +127,15 @@ extern unsigned int lbl_803EA6F0;
 extern int lbl_803EA6F4;
 extern unsigned char lbl_803EA6FA;
 extern unsigned char lbl_803EA6FB;
-extern int lbl_803EC820;
-extern int lbl_803EC824;
-extern int lbl_803EC828;
-extern int lbl_803EC82C;
-extern int lbl_803EC830;
-extern int lbl_803EC834;
-extern int lbl_803EC838;
-extern int lbl_803EC83C;
-extern int lbl_803EC840;
+static int _SndgEvent_iCrowdBankPool;
+static int _SndgEvent_iRandomPool1;
+static int _SndgEvent_iFormationPoolLarge;
+static int _SndgEvent_iFormationPoolMedium;
+static int _SndgEvent_iFormationPoolSmall;
+static int _SndgEvent_iRandomPool5;
+static int _SndgEvent_iRandomPool6;
+static int _SndgEvent_iRandomPool7;
+static int _SndgEvent_iRandomPool8;
 
 
 void SndgSfxSetVolume(int index, int value, unsigned char volume);
@@ -635,9 +635,9 @@ void SndgEventLoadFormationBank(void)
         if (!(x <= -6.0f) && !(x >= 6.0f) && !(y >= 3.0f)) ++count;
     }
     int id;
-    if (count > 2) id = SyncRandBitPoolDraw(lbl_803EC828) + 40;
-    else if (count > 1) id = SyncRandBitPoolDraw(lbl_803EC82C) + 56;
-    else id = SyncRandBitPoolDraw(lbl_803EC830) + 72;
+    if (count > 2) id = SyncRandBitPoolDraw(_SndgEvent_iFormationPoolLarge) + 40;
+    else if (count > 1) id = SyncRandBitPoolDraw(_SndgEvent_iFormationPoolMedium) + 56;
+    else id = SyncRandBitPoolDraw(_SndgEvent_iFormationPoolSmall) + 72;
     SndgRequestBank(6, id, 0);
 }
 
@@ -683,10 +683,10 @@ void SndgEventReloadCrowdBanks(void)
         case 0: {
             SndgNullUpdate();
             unsigned char id;
-            lbl_803EA6C4 = SyncRandBitPoolDraw(lbl_803EC820);
+            lbl_803EA6C4 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
             id = lbl_803EA6C4;
             while (SndgIsBankIndexLoaded(3, id)) {
-                lbl_803EA6C4 = SyncRandBitPoolDraw(lbl_803EC820);
+                lbl_803EA6C4 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
                 id = lbl_803EA6C4;
             }
             if (fn_801486A0()) {
@@ -696,10 +696,10 @@ void SndgEventReloadCrowdBanks(void)
                 }
             }
             SndgRequestBank(3, id, 0);
-            lbl_803EA6C5 = SyncRandBitPoolDraw(lbl_803EC820);
+            lbl_803EA6C5 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
             id = lbl_803EA6C5;
             while (SndgIsBankIndexLoaded(4, id)) {
-                lbl_803EA6C5 = SyncRandBitPoolDraw(lbl_803EC820);
+                lbl_803EA6C5 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
                 id = lbl_803EA6C5;
             }
             if (fn_801486A0()) {
@@ -781,15 +781,15 @@ void SndgEventPostRecord(void *record)
 
 void SndgEventInitRandom(void)
 {
-    lbl_803EC820 = SyncRandBitPoolNew(1, 30);
-    lbl_803EC824 = SyncRandBitPoolNew(1, 10);
-    lbl_803EC828 = SyncRandBitPoolNew(1, 16);
-    lbl_803EC82C = SyncRandBitPoolNew(1, 16);
-    lbl_803EC830 = SyncRandBitPoolNew(1, 5);
-    lbl_803EC834 = SyncRandBitPoolNew(1, 5);
-    lbl_803EC838 = SyncRandBitPoolNew(1, 3);
-    lbl_803EC83C = SyncRandBitPoolNew(1, 10);
-    lbl_803EC840 = SyncRandBitPoolNew(1, 13);
+    _SndgEvent_iCrowdBankPool = SyncRandBitPoolNew(1, 30);
+    _SndgEvent_iRandomPool1 = SyncRandBitPoolNew(1, 10);
+    _SndgEvent_iFormationPoolLarge = SyncRandBitPoolNew(1, 16);
+    _SndgEvent_iFormationPoolMedium = SyncRandBitPoolNew(1, 16);
+    _SndgEvent_iFormationPoolSmall = SyncRandBitPoolNew(1, 5);
+    _SndgEvent_iRandomPool5 = SyncRandBitPoolNew(1, 5);
+    _SndgEvent_iRandomPool6 = SyncRandBitPoolNew(1, 3);
+    _SndgEvent_iRandomPool7 = SyncRandBitPoolNew(1, 10);
+    _SndgEvent_iRandomPool8 = SyncRandBitPoolNew(1, 13);
     lbl_803EA6C5 = 1;
     lbl_803EA6CF = 0;
     lbl_803EA6D0 = 0;
@@ -806,15 +806,15 @@ void SndgEventInitRandom(void)
 
 void SndgEventFreeRandom(void)
 {
-    SyncRandBitPoolDelete(lbl_803EC820);
-    SyncRandBitPoolDelete(lbl_803EC824);
-    SyncRandBitPoolDelete(lbl_803EC828);
-    SyncRandBitPoolDelete(lbl_803EC82C);
-    SyncRandBitPoolDelete(lbl_803EC830);
-    SyncRandBitPoolDelete(lbl_803EC834);
-    SyncRandBitPoolDelete(lbl_803EC838);
-    SyncRandBitPoolDelete(lbl_803EC83C);
-    SyncRandBitPoolDelete(lbl_803EC840);
+    SyncRandBitPoolDelete(_SndgEvent_iCrowdBankPool);
+    SyncRandBitPoolDelete(_SndgEvent_iRandomPool1);
+    SyncRandBitPoolDelete(_SndgEvent_iFormationPoolLarge);
+    SyncRandBitPoolDelete(_SndgEvent_iFormationPoolMedium);
+    SyncRandBitPoolDelete(_SndgEvent_iFormationPoolSmall);
+    SyncRandBitPoolDelete(_SndgEvent_iRandomPool5);
+    SyncRandBitPoolDelete(_SndgEvent_iRandomPool6);
+    SyncRandBitPoolDelete(_SndgEvent_iRandomPool7);
+    SyncRandBitPoolDelete(_SndgEvent_iRandomPool8);
 }
 
 void SndgEventUpdatePatch(void)
@@ -851,7 +851,7 @@ void SndgEventUpdateDelayed(void)
     if (lbl_803EA6E8 > 0 && SysGetSystemTime() >= (unsigned int)lbl_803EA6E8) {
         lbl_803EA6D8 = (lbl_803EA6D8 + 1) % 6;
         lbl_803EA6E8 = -1;
-        SndgSfxPlay(lbl_803EA6D8 + 28, &lbl_8030AA7C);
+        SndgSfxPlay(lbl_803EA6D8 + 28, &_SndgEvent_DelayedPos);
     }
 }
 
@@ -859,9 +859,9 @@ void SndgEventQueueDelayed(Vector_80039F5C *pos)
 {
     if (lbl_803EA6E8 == -1) {
         lbl_803EA6E8 = SysGetSystemTime() + 6;
-        lbl_8030AA7C.mX = pos->mX;
-        lbl_8030AA7C.mY = pos->mY;
-        lbl_8030AA7C.mZ = pos->mZ;
+        _SndgEvent_DelayedPos.mX = pos->mX;
+        _SndgEvent_DelayedPos.mY = pos->mY;
+        _SndgEvent_DelayedPos.mZ = pos->mZ;
     }
 }
 
