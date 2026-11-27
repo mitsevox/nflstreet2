@@ -22,7 +22,7 @@ extern "C" {
 void PlyrSteerAroundBlocker(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *);
 int fn_8011E3F4(Object_80039F5C *);
 int fn_80124B1C(Object_80039F5C *, Object_80039F5C *, int, float, float);
-Object_80039F5C *fn_80124C28(Object_80039F5C *, float *, int, float, float, int);
+Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *, float *, int, float, float, int);
 
 extern float gPlyrMoveFwdSpeed;
 unsigned int AssignEngageSysGetFrames(void);
@@ -30,8 +30,8 @@ void AssignEngageSetMode(Object_80039F5C *, int);
 void AssignEngageStart(Object_80039F5C *, Object_80039F5C *, int, int);
 int ScrmIsNotReplay(void);
 int fn_8009FB60(Object_80039F5C *);
-int fn_8011F524(void);
-int fn_8011F2C4(void);
+int AssignIsSnapPlayType2Or17(void);
+int AssignIsPlayType2(void);
 int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 int ScrmUsesBothTeams(void);
 int fn_800BA6F8(void);
@@ -50,11 +50,11 @@ float Vec2Distance(void *, void *);
 void Vec2Sub(void *, void *, void *);
 float Vec2Magnitude(void *);
 int fn_80120794(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int, float);
-int fn_8011F32C(void);
+int AssignIsPlayType21(void);
 Object_80039F5C *BallGetCurrentTarget(void);
 Object_80039F5C *BallGetCurrentHolder(void);
 int ScrmTestPlayFlag(int);
-int fn_8011F2F8(void);
+int AssignIsPlayType5(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
 int ScrmGetDefenseTeam(void);
@@ -115,7 +115,7 @@ int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_8003
             Vec2Distance(&location, pos) < Vec2Distance(&location, otherPos)) {
             result = 1;
         } else if (!(pos->mY <= reference.mY - 9.0f) && !(pos->mY >= otherPos->mY + 1.0f) &&
-                   (otherPos->mY > reference.mY || distance < 3.5f || fn_8011F32C())) {
+                   (otherPos->mY > reference.mY || distance < 3.5f || AssignIsPlayType21())) {
             if (ball && !(ball->mMotion.mPos.mY <= reference.mY - 3.5f) &&
                 (ball->mMotion.mUnknown32 & 0xFFFFFF) > 0x800000) {
                 result = 1;
@@ -140,7 +140,7 @@ int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_8003
 void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockControl_t *s, Vector_80039F5C location, FieldPoint_t point)
 {
     Vector_80039F5C *pos = &p->mMotion.mPos;
-    if (fn_8011F32C()) {
+    if (AssignIsPlayType21()) {
         s->mUnknown10 = 0x400000;
         s->mUnknown8 = 0.0f;
         return;
@@ -310,7 +310,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
             goto finish;
         }
         float interceptionDistance;
-        candidate = fn_80124C28(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
+        candidate = AssignFindNearestAhead(p, &interceptionDistance, 0x2E38E3, distance, 0.2f, s->mUnknownC);
         if (!candidate || candidate == other) {
             Vec2Sub(delta, &location, &motion->mPos);
             nearest = Vec2Magnitude(delta);
@@ -402,7 +402,7 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, PassBlockCont
 
 void PassBlockFlagDefenderAtLine(Object_80039F5C *p, Object_80039F5C *other)
 {
-    if (other && ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
+    if (other && ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(0) && !BallGetCurrentHolder() && AssignIsPlayType5()) {
         if (!(other->mMotion.mPos.mY - ScrmGetBallSpot().mY >= 2.5f))
             p->mUnknown1137 = 1;
     }
@@ -439,7 +439,7 @@ int PassBlockEnter(Object_80039F5C *p)
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = AngleSub(p->mMotion.mFacing, 0x800000);
         } else {
-            if (fn_8011F32C())
+            if (AssignIsPlayType21())
                 s->mUnknown4 = p->mMotion.mPos.mY;
             else
                 s->mUnknown4 = values.mY - 4.0f;
@@ -494,7 +494,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         PlyrStateQueueSet(0, p->mpState, &message, p);
         return 1;
     }
-    if ((fn_8011F524() && !fn_8011F2C4()) || ScrmTestPlayFlag(0) || ScrmIsNotReplay()) {
+    if ((AssignIsSnapPlayType2Or17() && !AssignIsPlayType2()) || ScrmTestPlayFlag(0) || ScrmIsNotReplay()) {
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             AssignEngageSetMode(p, 0);
             fn_8011E240(p);

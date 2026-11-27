@@ -339,7 +339,7 @@ void AssignEngageSetOpponent(Object_80039F5C *p, Object_80039F5C *pOther, int a)
 }
 
 extern "C" {
-int fn_8011F1A4(void);
+int AssignIsPlayType11To18(void);
 }
 
 extern "C" {
@@ -446,7 +446,7 @@ struct Record_800E5EA4 {
 };
 
 extern "C" {
-Record_8011F4E0 *fn_8011F4E0(void);
+Record_8011F4E0 *AssignPlayInfoGetCover(void);
 }
 
 extern "C" {
@@ -506,7 +506,7 @@ int MathArcTan(float value);
 }
 
 extern "C" {
-int fn_8011F1CC(void);
+int AssignPlayHasSlots(void);
 }
 
 extern "C" float Vec2Distance(void *pA, void *pB);
@@ -524,7 +524,7 @@ float ScrmGetGoalLineY(void);
 }
 
 extern "C" {
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 }
 
 extern "C" float Vec2Magnitude(void *p);
@@ -846,13 +846,13 @@ extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *tar
 extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
 extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p);
 extern "C" void PlayerReleaseFlaggedJointCtrls(Object_80039F5C *p);
-extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width,
+extern "C" Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *p, float *pOut, int angle, float length, float width,
                                          int facing);
 extern "C" unsigned short fn_801BE648(void *p);
 
 extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
 {
-    Record_8011F4E0 *pRecord = fn_8011F4E0();
+    Record_8011F4E0 *pRecord = AssignPlayInfoGetCover();
     State_800E4494 *pState = (State_800E4494 *)&p->mUnknown336;
     FieldPoint_t target;
     int heading;
@@ -920,7 +920,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
         }
         if (pState->mUnknown54) {
             float spot[2];
-            Object_80039F5C *pOther = fn_80124C28(p, spot, 0xE38E3, 2.75f, 0.1f, p->mMotion.mFacing);
+            Object_80039F5C *pOther = AssignFindNearestAhead(p, spot, 0xE38E3, 2.75f, 0.1f, p->mMotion.mFacing);
             if (pOther) {
                 FieldPoint_t delta;
                 Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -1204,7 +1204,7 @@ extern "C" {
 void PlyrAlignReset(Object_80039F5C *p)
 {
     Message_800F01CC *pMessage = 0;
-    Record_8011F4E0 *pInfo = fn_8011F4E0();
+    Record_8011F4E0 *pInfo = AssignPlayInfoGetCover();
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     PlayerReleaseJointCtrls(p);
     state->mUnknown1 = 1;
@@ -1492,7 +1492,7 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
 }
 }
 
-extern "C" float fn_8011F4D4(void);
+extern "C" float AssignPlayInfoGetSpotX(void);
 
 extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, Block_8011E240 *pBlock)
 {
@@ -1511,7 +1511,7 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
         kind = pBlock->mUnknown0;
     }
     if (kind == 4 || kind == 6) {
-        if (fn_8011F1CC() && !ScrmTestPlayFlag(0)) {
+        if (AssignPlayHasSlots() && !ScrmTestPlayFlag(0)) {
             if (pCarrier && (pCarrier->mFlags & 0x8000)) {
                 result = SyncRandGetRange(0, 5);
             } else {
@@ -1555,7 +1555,7 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
                     result = 3;
                 }
             }
-        } else if (fn_8011F1A4()) {
+        } else if (AssignIsPlayType11To18()) {
             result = 4;
         }
     }
@@ -1567,7 +1567,7 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
             int diff;
             if (pCarrier->mpState->mId == 26) {
                 FieldPoint_t goal;
-                goal.mX = fn_8011F4D4();
+                goal.mX = AssignPlayInfoGetSpotX();
                 goal.mY = ScrmGetBallSpot().mY;
                 int target = goal.Heading();
                 if (SyncRandGetFloat(0) > 0.5f) {
@@ -1651,7 +1651,7 @@ extern "C" int *PlyrEngageGetMoveList(int flag, unsigned int index) {
     if (index <= 6) {
         if (fn_800A8444(ScrmGetDefenseTeam()) != 0) {
             pList = _PlyrEngage_aRushMoveLists[index][0];
-        } else if (fn_8011F1A4() != 0 || ScrmTestPlayFlag(0) != 0) {
+        } else if (AssignIsPlayType11To18() != 0 || ScrmTestPlayFlag(0) != 0) {
             if (flag) {
                 pList = _PlyrEngage_aRunMoveLists[index][0];
             } else {
@@ -1918,7 +1918,7 @@ extern "C" int PlyrTackleCanReach(Object_80039F5C *p)
         Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
         float distance = Vec2Magnitude(&delta);
         int difference = MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing);
-        if (fn_8011F1CC() && pCarrier->mMotion.mPos.mY < ScrmGetBallSpot().mY) {
+        if (AssignPlayHasSlots() && pCarrier->mMotion.mPos.mY < ScrmGetBallSpot().mY) {
             int id = PlyrStateQueueFind(0, pCarrier->mpState, 18, 0xFFFF);
             if (id != 0xFFFF || PlyrStateQueueFind(0, pCarrier->mpState, 15, 0xFFFF) != id) {
                 if (difference > (int)(_PlyrTackle_fReachAngle * 46603.3789f) || distance > _PlyrTackle_fReachDistance) {
@@ -2287,7 +2287,7 @@ int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
         if (kind == 1) {
             int team = ScrmGetDefenseTeam();
             unsigned char count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
-            Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
+            Object_80039F5C *other = AssignFindNearestInCone(p, team, 0, count, 0x18E38E, &range, 0);
             if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
         }
     } else if (carrier && p->mIdBytes[2] == ScrmGetDefenseTeam()) {

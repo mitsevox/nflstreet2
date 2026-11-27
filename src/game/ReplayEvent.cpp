@@ -16,7 +16,7 @@ extern "C" {
 int ReplayIsRecording(Type_803EA368 *p);
 int ReplayGetLength(Type_803EA368 *p);
 int ReplayGetStartFrame(Type_803EA368 *p);
-int fn_8011F1A4(void);
+int AssignIsPlayType11To18(void);
 int SyncTimeGetGameTime(void);
 }
 
@@ -179,7 +179,7 @@ int ReplayEventInWindow(Type_803EA368 *p, int id)
 
 void ReplayEventAddPlayer(Object_80039F5C *p)
 {
-    if (fn_8011F1A4() || !p->mUnknown2914) {
+    if (AssignIsPlayType11To18() || !p->mUnknown2914) {
         ReplayEventAdd(gpReplay, 0x13, p, &p->mMotion.mPos, 0);
     }
 }

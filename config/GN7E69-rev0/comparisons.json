@@ -3851,7 +3851,7 @@
           "end": "0x800F4AD4"
         },
         {
-          "symbol": "fn_800F4AD4",
+          "symbol": "JumpBallChaseUpdate",
           "start": "0x800F4AD4",
           "end": "0x800F4E14"
         },
@@ -3901,7 +3901,7 @@
           "end": "0x800F6370"
         },
         {
-          "symbol": "fn_800F6370",
+          "symbol": "PlyrMoveToSpotUpdate",
           "start": "0x800F6370",
           "end": "0x800F6790"
         },
@@ -4101,12 +4101,12 @@
           "end": "0x800FA0DC"
         },
         {
-          "symbol": "fn_800FA0DC",
+          "symbol": "AssignBlockEnter",
           "start": "0x800FA0DC",
           "end": "0x800FA300"
         },
         {
-          "symbol": "fn_800FA300",
+          "symbol": "AssignBlockUpdate",
           "start": "0x800FA300",
           "end": "0x800FAD10"
         },
@@ -4246,7 +4246,7 @@
           "end": "0x800FD41C"
         },
         {
-          "symbol": "fn_800FD41C",
+          "symbol": "PlyrRunLegUpdate",
           "start": "0x800FD41C",
           "end": "0x800FD580"
         },
@@ -4296,7 +4296,7 @@
           "end": "0x800FDAC8"
         },
         {
-          "symbol": "fn_800FDAC8",
+          "symbol": "PlyrLineUpUpdate",
           "start": "0x800FDAC8",
           "end": "0x800FDFD8"
         },
@@ -4356,7 +4356,7 @@
           "end": "0x800FF094"
         },
         {
-          "symbol": "fn_800FF094",
+          "symbol": "PlyrGotoPointUpdate",
           "start": "0x800FF094",
           "end": "0x800FF538"
         },
@@ -4451,7 +4451,7 @@
           "end": "0x801000EC"
         },
         {
-          "symbol": "fn_801000EC",
+          "symbol": "AssignIsInBlockState",
           "start": "0x801000EC",
           "end": "0x8010016C"
         },
@@ -4551,17 +4551,17 @@
           "end": "0x80101CB4"
         },
         {
-          "symbol": "fn_80101CB4",
+          "symbol": "PlyrBallReleaseEnter",
           "start": "0x80101CB4",
           "end": "0x801021C0"
         },
         {
-          "symbol": "fn_801021C0",
+          "symbol": "PlyrBallReleaseUpdate",
           "start": "0x801021C0",
           "end": "0x80102470"
         },
         {
-          "symbol": "fn_80102470",
+          "symbol": "PlyrBallReleaseExit",
           "start": "0x80102470",
           "end": "0x801024FC"
         },
@@ -4571,7 +4571,7 @@
           "end": "0x80102664"
         },
         {
-          "symbol": "fn_80102664",
+          "symbol": "PlyrBallReleaseInput",
           "start": "0x80102664",
           "end": "0x8010279C"
         },
@@ -4596,7 +4596,7 @@
           "end": "0x80103CB0"
         },
         {
-          "symbol": "fn_80103CB0",
+          "symbol": "PlyrBallReleasePerform",
           "start": "0x80103CB0",
           "end": "0x80103D6C"
         },
@@ -4716,12 +4716,12 @@
           "end": "0x80105898"
         },
         {
-          "symbol": "fn_80105898",
+          "symbol": "PitchEnter",
           "start": "0x80105898",
           "end": "0x80105AF4"
         },
         {
-          "symbol": "fn_80105AF4",
+          "symbol": "PitchUpdate",
           "start": "0x80105AF4",
           "end": "0x80105DF0"
         },
@@ -4866,7 +4866,7 @@
           "end": "0x80109248"
         },
         {
-          "symbol": "fn_80109248",
+          "symbol": "PlyrPlayBallUpdate",
           "start": "0x80109248",
           "end": "0x801096D4"
         },
@@ -5011,7 +5011,7 @@
           "end": "0x8010B87C"
         },
         {
-          "symbol": "fn_8010B87C",
+          "symbol": "AssignIsPlayerAhead",
           "start": "0x8010B87C",
           "end": "0x8010B924"
         },
@@ -5051,7 +5051,7 @@
           "end": "0x8010BEA4"
         },
         {
-          "symbol": "fn_8010BEA4",
+          "symbol": "AssignResetAnimInUse",
           "start": "0x8010BEA4",
           "end": "0x8010BED4"
         },
@@ -5101,12 +5101,12 @@
           "end": "0x8010CEB8"
         },
         {
-          "symbol": "fn_8010CEB8",
+          "symbol": "AssignPushRunAhead",
           "start": "0x8010CEB8",
           "end": "0x8010CFD4"
         },
         {
-          "symbol": "fn_8010CFD4",
+          "symbol": "AssignSetRunSideCode",
           "start": "0x8010CFD4",
           "end": "0x8010D004"
         },
@@ -5146,12 +5146,12 @@
           "end": "0x8010D80C"
         },
         {
-          "symbol": "fn_8010D80C",
+          "symbol": "AssignCatchGetPoint",
           "start": "0x8010D80C",
           "end": "0x8010D82C"
         },
         {
-          "symbol": "fn_8010D82C",
+          "symbol": "AssignCatchGetTime",
           "start": "0x8010D82C",
           "end": "0x8010D834"
         },
@@ -5201,7 +5201,7 @@
           "end": "0x8010F43C"
         },
         {
-          "symbol": "fn_8010F43C",
+          "symbol": "PlyrTrackTargetEnter",
           "start": "0x8010F43C",
           "end": "0x8010F654"
         },
@@ -5211,22 +5211,22 @@
           "end": "0x8010FB10"
         },
         {
-          "symbol": "fn_8010FB10",
+          "symbol": "PlyrTrackTargetExit",
           "start": "0x8010FB10",
           "end": "0x8010FB4C"
         },
         {
-          "symbol": "fn_8010FB4C",
+          "symbol": "PlyrTrackTargetInput",
           "start": "0x8010FB4C",
           "end": "0x8010FC40"
         },
         {
-          "symbol": "fn_8010FC40",
+          "symbol": "PlyrPlayAnimEnter",
           "start": "0x8010FC40",
           "end": "0x8010FD8C"
         },
         {
-          "symbol": "fn_8010FD8C",
+          "symbol": "PlyrPlayAnimUpdate",
           "start": "0x8010FD8C",
           "end": "0x8010FD94"
         },
@@ -5411,12 +5411,12 @@
           "end": "0x80111964"
         },
         {
-          "symbol": "fn_80111964",
+          "symbol": "CarrierTightropeExit",
           "start": "0x80111964",
           "end": "0x80111974"
         },
         {
-          "symbol": "fn_80111974",
+          "symbol": "CarrierTightropeInput",
           "start": "0x80111974",
           "end": "0x80111A28"
         },
@@ -5436,12 +5436,12 @@
           "end": "0x80111F80"
         },
         {
-          "symbol": "fn_80111F80",
+          "symbol": "PlyrChaseBallEnter",
           "start": "0x80111F80",
           "end": "0x80111FBC"
         },
         {
-          "symbol": "fn_80111FBC",
+          "symbol": "PlyrChaseBallUpdate",
           "start": "0x80111FBC",
           "end": "0x80112928"
         },
@@ -5521,12 +5521,12 @@
           "end": "0x80113AAC"
         },
         {
-          "symbol": "fn_80113AAC",
+          "symbol": "PlyrHitStrikeExit",
           "start": "0x80113AAC",
           "end": "0x80113B28"
         },
         {
-          "symbol": "fn_80113B28",
+          "symbol": "PlyrHitStrikeInput",
           "start": "0x80113B28",
           "end": "0x80113BCC"
         },
@@ -5556,7 +5556,7 @@
           "end": "0x80114838"
         },
         {
-          "symbol": "fn_80114838",
+          "symbol": "PlyrHitImpactInput",
           "start": "0x80114838",
           "end": "0x80114A30"
         },
@@ -5651,7 +5651,7 @@
           "end": "0x80116C34"
         },
         {
-          "symbol": "fn_80116C34",
+          "symbol": "AssignZoneUpdate",
           "start": "0x80116C34",
           "end": "0x801170A0"
         },
@@ -5691,12 +5691,12 @@
           "end": "0x80118210"
         },
         {
-          "symbol": "fn_80118210",
+          "symbol": "AssignZoneUpperEnter",
           "start": "0x80118210",
           "end": "0x801182C8"
         },
         {
-          "symbol": "fn_801182C8",
+          "symbol": "AssignZoneUpperUpdate",
           "start": "0x801182C8",
           "end": "0x80118704"
         },
@@ -6046,77 +6046,77 @@
           "end": "0x8011EFD4"
         },
         {
-          "symbol": "fn_8011EFD4",
+          "symbol": "AssignPlayInfoSyncCompare",
           "start": "0x8011EFD4",
           "end": "0x8011F068"
         },
         {
-          "symbol": "fn_8011F068",
+          "symbol": "AssignPlayInfoUpdateSpotX",
           "start": "0x8011F068",
           "end": "0x8011F0D8"
         },
         {
-          "symbol": "fn_8011F0D8",
+          "symbol": "AssignPlayInfoInit",
           "start": "0x8011F0D8",
           "end": "0x8011F174"
         },
         {
-          "symbol": "fn_8011F174",
+          "symbol": "AssignPlayInfoShutdown",
           "start": "0x8011F174",
           "end": "0x8011F1A4"
         },
         {
-          "symbol": "fn_8011F1A4",
+          "symbol": "AssignIsPlayType11To18",
           "start": "0x8011F1A4",
           "end": "0x8011F1CC"
         },
         {
-          "symbol": "fn_8011F1CC",
+          "symbol": "AssignPlayHasSlots",
           "start": "0x8011F1CC",
           "end": "0x8011F1F4"
         },
         {
-          "symbol": "fn_8011F1F4",
+          "symbol": "AssignIsPlayType14",
           "start": "0x8011F1F4",
           "end": "0x8011F228"
         },
         {
-          "symbol": "fn_8011F228",
+          "symbol": "AssignIsPlayType16",
           "start": "0x8011F228",
           "end": "0x8011F25C"
         },
         {
-          "symbol": "fn_8011F25C",
+          "symbol": "AssignIsPlayStyle4",
           "start": "0x8011F25C",
           "end": "0x8011F290"
         },
         {
-          "symbol": "fn_8011F290",
+          "symbol": "AssignIsPlayStyle18",
           "start": "0x8011F290",
           "end": "0x8011F2C4"
         },
         {
-          "symbol": "fn_8011F2C4",
+          "symbol": "AssignIsPlayType2",
           "start": "0x8011F2C4",
           "end": "0x8011F2F8"
         },
         {
-          "symbol": "fn_8011F2F8",
+          "symbol": "AssignIsPlayType5",
           "start": "0x8011F2F8",
           "end": "0x8011F32C"
         },
         {
-          "symbol": "fn_8011F32C",
+          "symbol": "AssignIsPlayType21",
           "start": "0x8011F32C",
           "end": "0x8011F354"
         },
         {
-          "symbol": "fn_8011F354",
+          "symbol": "AssignIsSnapPlayType21",
           "start": "0x8011F354",
           "end": "0x8011F37C"
         },
         {
-          "symbol": "fn_8011F37C",
+          "symbol": "AssignGetPlayFlag16",
           "start": "0x8011F37C",
           "end": "0x8011F3A8"
         },
@@ -6126,22 +6126,22 @@
           "end": "0x8011F45C"
         },
         {
-          "symbol": "fn_8011F45C",
+          "symbol": "AssignPlayInfoSetSpotIndex",
           "start": "0x8011F45C",
           "end": "0x8011F4C8"
         },
         {
-          "symbol": "fn_8011F4C8",
+          "symbol": "AssignPlayInfoGetSpotIndex",
           "start": "0x8011F4C8",
           "end": "0x8011F4D4"
         },
         {
-          "symbol": "fn_8011F4D4",
+          "symbol": "AssignPlayInfoGetSpotX",
           "start": "0x8011F4D4",
           "end": "0x8011F4E0"
         },
         {
-          "symbol": "fn_8011F4E0",
+          "symbol": "AssignPlayInfoGetCover",
           "start": "0x8011F4E0",
           "end": "0x8011F4EC"
         },
@@ -6151,7 +6151,7 @@
           "end": "0x8011F4F8"
         },
         {
-          "symbol": "fn_8011F4F8",
+          "symbol": "AssignPlayInfoGetBallRelease",
           "start": "0x8011F4F8",
           "end": "0x8011F50C"
         },
@@ -6161,92 +6161,92 @@
           "end": "0x8011F518"
         },
         {
-          "symbol": "fn_8011F518",
+          "symbol": "AssignPlayInfoGetPassRecord",
           "start": "0x8011F518",
           "end": "0x8011F524"
         },
         {
-          "symbol": "fn_8011F524",
+          "symbol": "AssignIsSnapPlayType2Or17",
           "start": "0x8011F524",
           "end": "0x8011F54C"
         },
         {
-          "symbol": "fn_8011F54C",
+          "symbol": "AssignGetKeyPlayer",
           "start": "0x8011F54C",
           "end": "0x8011F574"
         },
         {
-          "symbol": "fn_8011F574",
+          "symbol": "AssignPlayInfoResetPitchCounts",
           "start": "0x8011F574",
           "end": "0x8011F59C"
         },
         {
-          "symbol": "fn_8011F59C",
+          "symbol": "AssignPlayInfoGetPitchCount",
           "start": "0x8011F59C",
           "end": "0x8011F5AC"
         },
         {
-          "symbol": "fn_8011F5AC",
+          "symbol": "AssignPlayInfoAddPitch",
           "start": "0x8011F5AC",
           "end": "0x8011F5CC"
         },
         {
-          "symbol": "fn_8011F5CC",
+          "symbol": "AssignPursueAlloc",
           "start": "0x8011F5CC",
           "end": "0x8011F698"
         },
         {
-          "symbol": "fn_8011F698",
+          "symbol": "AssignPursueSyncAlloc",
           "start": "0x8011F698",
           "end": "0x8011F6BC"
         },
         {
-          "symbol": "fn_8011F6BC",
+          "symbol": "AssignPursueSyncFree",
           "start": "0x8011F6BC",
           "end": "0x8011F71C"
         },
         {
-          "symbol": "fn_8011F71C",
+          "symbol": "AssignPursueSyncCompare",
           "start": "0x8011F71C",
           "end": "0x8011F904"
         },
         {
-          "symbol": "fn_8011F904",
+          "symbol": "AssignPursueSyncSave",
           "start": "0x8011F904",
           "end": "0x8011F99C"
         },
         {
-          "symbol": "fn_8011F99C",
+          "symbol": "AssignPursueSyncLoad",
           "start": "0x8011F99C",
           "end": "0x8011FA54"
         },
         {
-          "symbol": "fn_8011FA54",
+          "symbol": "AssignPursueSyncGetSize",
           "start": "0x8011FA54",
           "end": "0x8011FA78"
         },
         {
-          "symbol": "fn_8011FA78",
+          "symbol": "AssignPursueCompareX",
           "start": "0x8011FA78",
           "end": "0x8011FAFC"
         },
         {
-          "symbol": "fn_8011FAFC",
+          "symbol": "AssignPursueCompareY",
           "start": "0x8011FAFC",
           "end": "0x8011FB80"
         },
         {
-          "symbol": "fn_8011FB80",
+          "symbol": "AssignPursueCompareEntry",
           "start": "0x8011FB80",
           "end": "0x8011FBA8"
         },
         {
-          "symbol": "fn_8011FBA8",
+          "symbol": "AssignPursueSwapByte",
           "start": "0x8011FBA8",
           "end": "0x8011FBBC"
         },
         {
-          "symbol": "fn_8011FBBC",
+          "symbol": "AssignPursueSwapEntry",
           "start": "0x8011FBBC",
           "end": "0x8011FBE0"
         },
@@ -6256,7 +6256,7 @@
           "end": "0x8011FCA4"
         },
         {
-          "symbol": "fn_8011FCA4",
+          "symbol": "AssignPursueSort",
           "start": "0x8011FCA4",
           "end": "0x8011FD64"
         },
@@ -6276,12 +6276,12 @@
           "end": "0x8012055C"
         },
         {
-          "symbol": "fn_8012055C",
+          "symbol": "AssignPursueInit",
           "start": "0x8012055C",
           "end": "0x8012060C"
         },
         {
-          "symbol": "fn_8012060C",
+          "symbol": "AssignPursueShutdown",
           "start": "0x8012060C",
           "end": "0x80120618"
         },
@@ -6291,12 +6291,12 @@
           "end": "0x80120720"
         },
         {
-          "symbol": "fn_80120720",
+          "symbol": "AssignPursueTick",
           "start": "0x80120720",
           "end": "0x8012078C"
         },
         {
-          "symbol": "fn_8012078C",
+          "symbol": "AssignPursueGet",
           "start": "0x8012078C",
           "end": "0x80120794"
         },
@@ -6316,7 +6316,7 @@
           "end": "0x80120B4C"
         },
         {
-          "symbol": "fn_80120B4C",
+          "symbol": "AssignListClearValue",
           "start": "0x80120B4C",
           "end": "0x80120B84"
         },
@@ -6331,12 +6331,12 @@
           "end": "0x80120D98"
         },
         {
-          "symbol": "fn_80120D98",
+          "symbol": "AssignGetJointBounds",
           "start": "0x80120D98",
           "end": "0x80120E98"
         },
         {
-          "symbol": "fn_80120E98",
+          "symbol": "AssignGapRemovePoint",
           "start": "0x80120E98",
           "end": "0x80120EF8"
         },
@@ -6351,7 +6351,7 @@
           "end": "0x801218EC"
         },
         {
-          "symbol": "fn_801218EC",
+          "symbol": "AssignGapIsInside",
           "start": "0x801218EC",
           "end": "0x80121918"
         },
@@ -6371,7 +6371,7 @@
           "end": "0x80122670"
         },
         {
-          "symbol": "fn_80122670",
+          "symbol": "AssignGapBuildGaps",
           "start": "0x80122670",
           "end": "0x801227DC"
         },
@@ -6381,32 +6381,32 @@
           "end": "0x80123024"
         },
         {
-          "symbol": "fn_80123024",
+          "symbol": "AssignGapScoreAll",
           "start": "0x80123024",
           "end": "0x801230B8"
         },
         {
-          "symbol": "fn_801230B8",
+          "symbol": "AssignGapGetBest",
           "start": "0x801230B8",
           "end": "0x8012311C"
         },
         {
-          "symbol": "fn_8012311C",
+          "symbol": "AssignGapPlan",
           "start": "0x8012311C",
           "end": "0x80123174"
         },
         {
-          "symbol": "fn_80123174",
+          "symbol": "AssignGapGetBestOrNull",
           "start": "0x80123174",
           "end": "0x801231E4"
         },
         {
-          "symbol": "fn_801231E4",
+          "symbol": "AssignGapGetHeading",
           "start": "0x801231E4",
           "end": "0x80123254"
         },
         {
-          "symbol": "fn_80123254",
+          "symbol": "AssignDirCompareCost",
           "start": "0x80123254",
           "end": "0x8012327C"
         },
@@ -6416,7 +6416,7 @@
           "end": "0x80123594"
         },
         {
-          "symbol": "fn_80123594",
+          "symbol": "AssignDirCostCrowd",
           "start": "0x80123594",
           "end": "0x8012368C"
         },
@@ -6436,7 +6436,7 @@
           "end": "0x80123E2C"
         },
         {
-          "symbol": "fn_80123E2C",
+          "symbol": "AssignDirCostNone",
           "start": "0x80123E2C",
           "end": "0x80123E30"
         },
@@ -6451,17 +6451,17 @@
           "end": "0x801242E0"
         },
         {
-          "symbol": "fn_801242E0",
+          "symbol": "AssignDirGetSpreadCost",
           "start": "0x801242E0",
           "end": "0x8012430C"
         },
         {
-          "symbol": "fn_8012430C",
+          "symbol": "AssignDirEvaluate",
           "start": "0x8012430C",
           "end": "0x80124374"
         },
         {
-          "symbol": "fn_80124374",
+          "symbol": "AssignDirEvaluateVs",
           "start": "0x80124374",
           "end": "0x801243E0"
         },
@@ -6471,12 +6471,12 @@
           "end": "0x801244F0"
         },
         {
-          "symbol": "fn_801244F0",
+          "symbol": "AssignFindNearestPlayer",
           "start": "0x801244F0",
           "end": "0x801245DC"
         },
         {
-          "symbol": "fn_801245DC",
+          "symbol": "AssignFindNearestInCone",
           "start": "0x801245DC",
           "end": "0x80124714"
         },
@@ -6496,7 +6496,7 @@
           "end": "0x80124C28"
         },
         {
-          "symbol": "fn_80124C28",
+          "symbol": "AssignFindNearestAhead",
           "start": "0x80124C28",
           "end": "0x80124CE4"
         },
@@ -6516,22 +6516,22 @@
           "end": "0x80125004"
         },
         {
-          "symbol": "fn_80125004",
+          "symbol": "AssignDirGetRankedCost",
           "start": "0x80125004",
           "end": "0x8012506C"
         },
         {
-          "symbol": "fn_8012506C",
+          "symbol": "AssignDirGetTotalCost",
           "start": "0x8012506C",
           "end": "0x801250B8"
         },
         {
-          "symbol": "fn_801250B8",
+          "symbol": "AssignDirGetTotalCostVs",
           "start": "0x801250B8",
           "end": "0x8012510C"
         },
         {
-          "symbol": "fn_8012510C",
+          "symbol": "AssignDirGetBestHeading",
           "start": "0x8012510C",
           "end": "0x801251FC"
         },

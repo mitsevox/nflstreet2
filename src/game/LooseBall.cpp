@@ -67,7 +67,7 @@ float Vec3Distance(Vector_80039F5C *pA, Vector_80039F5C *pB);
 int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, void *pBlock, int b, int c, int d, int e,
                 float f);
 int fn_80099F04(Object_80039F5C *p, int a, unsigned char index);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding);
 int CharSkelGetJointByName(void *p, const char *pName);
 int BallStateCheckPlayerHit(Ball_t *pBall, void *pData, int value);
@@ -96,7 +96,7 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 float ScrmGetSidelineX(void);
 float ScrmGetEndLineY(void);
 float ScrmGetDistanceToBounds(FieldPoint_t *pPos);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011E8A4(Object_80039F5C *p);
 void AssignEngageRelease(Object_80039F5C *p);
@@ -113,12 +113,12 @@ extern "C" int LooseBallTryEngage(Object_80039F5C *p, Ball_t *pBall) {
     BallGetPosition(pBall, &pos);
     Vec2Sub(&delta, &pos, &p->mMotion.mPos);
     if (Vec2Magnitude(&delta) > _LooseBall_fEngageMinDist) {
-        Object_80039F5C *pOther = fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1),
+        Object_80039F5C *pOther = AssignFindNearestInCone(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1),
                                               (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
         if (pOther && distance < _LooseBall_fEngageRange)
             result = fn_8011EAC0(p, pOther);
         if (!fn_801486A0() && !result) {
-            pOther = fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]),
+            pOther = AssignFindNearestInCone(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]),
                                  (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
             if (pOther && distance < _LooseBall_fEngageRange)
                 result = fn_8011EAC0(p, pOther);
@@ -563,7 +563,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 if (LooseBallGetEdge(pBall) != 5)
                     type = 5;
                 int team = p->mIdBytes[2] ^ 1;
-                Object_80039F5C *pOther = fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
+                Object_80039F5C *pOther = AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
                 if (pOther) {
                     FieldPoint_t offset;
                     Vec2Sub(&offset, &ballPos, &pOther->mMotion.mPos);

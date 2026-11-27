@@ -9,7 +9,7 @@
 extern "C" {
 void *PassIconStateGetFlags(int value);
 int fn_8011E9D8(State_80039F5C *pState);
-int fn_8011F1F4(void);
+int AssignIsPlayType14(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
 int ScrmGetOffenseTeam(void);
 int ScrmIsFieldFlipped(void);
@@ -123,7 +123,7 @@ int PassIconGetSlot(int index, int force)
     }
     if (slot == 0xFF || found == 0) {
         int mode = fn_800AD9B4();
-        if (mode == 2 || (mode == 3 && fn_8011F1F4() != 0)) {
+        if (mode == 2 || (mode == 3 && AssignIsPlayType14() != 0)) {
             if (slot == 0xFF) {
                 slot = _PassIcon_DefaultSlots[index];
             }
@@ -134,7 +134,7 @@ int PassIconGetSlot(int index, int force)
     if ((*pFlags & 4) && force == 0) {
         slot = 0xFF;
     }
-    if (fn_8011F1F4() == 0 && pPlayer != 0 && _PassIconIsEligible(pPlayer) == 0) {
+    if (AssignIsPlayType14() == 0 && pPlayer != 0 && _PassIconIsEligible(pPlayer) == 0) {
         slot = 0xFF;
     }
     return slot;

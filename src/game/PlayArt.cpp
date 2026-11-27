@@ -326,7 +326,7 @@ int ScrmGetOffenseTeam(void);
 unsigned int ScrmGetTeamPlayerCount(int);
 int ScrmGetActivePlayerCount(int);
 PlayBookFormation_t *PlayBookGetFormation(int);
-Record_8011F4E0 *fn_8011F4E0(void);
+Record_8011F4E0 *AssignPlayInfoGetCover(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
 void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
 void PlyrStateMirrorMessage(int, Message_800F01CC *);

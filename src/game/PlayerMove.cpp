@@ -20,7 +20,7 @@ extern "C" {
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ABDA4(int team);
 int fn_800CA5CC(Object_80039F5C *p, int a, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int a, int b);
@@ -167,7 +167,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
             }
         } else {
             float distance;
-            if (fn_801486A0() == 2 && fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, 7, 0x471C72, &distance, 0)) {
+            if (fn_801486A0() == 2 && AssignFindNearestInCone(p, p->mIdBytes[2] ^ 1, 0, 7, 0x471C72, &distance, 0)) {
                 return 0;
             }
             if (fn_800B65A0(p->mIdBytes[2]) == 255) {

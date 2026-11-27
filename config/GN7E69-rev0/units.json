@@ -14724,11 +14724,11 @@
             "evidence": "evidence.tsv source-form 0x800F3344-0x800F3838"
           },
           {
-            "function": "fn_800F4AD4",
+            "function": "JumpBallChaseUpdate",
             "evidence": "evidence.tsv source-form 0x800F4AD4-0x800F4E14"
           },
           {
-            "function": "fn_800F6370",
+            "function": "PlyrMoveToSpotUpdate",
             "evidence": "evidence.tsv source-form 0x800F6370-0x800F6790"
           },
           {
@@ -14756,7 +14756,7 @@
             "evidence": "evidence.tsv source-form 0x800FA098-0x800FA0DC"
           },
           {
-            "function": "fn_800FA300",
+            "function": "AssignBlockUpdate",
             "evidence": "evidence.tsv source-form 0x800FA300-0x800FAD10"
           },
           {
@@ -14788,7 +14788,7 @@
             "evidence": "evidence.tsv source-form 0x800FD2AC-0x800FD3F0"
           },
           {
-            "function": "fn_800FDAC8",
+            "function": "PlyrLineUpUpdate",
             "evidence": "evidence.tsv source-form 0x800FDAC8-0x800FDFD8"
           },
           {
@@ -14796,7 +14796,7 @@
             "evidence": "evidence.tsv source-form 0x800FEB60-0x800FEDBC"
           },
           {
-            "function": "fn_800FF094",
+            "function": "PlyrGotoPointUpdate",
             "evidence": "evidence.tsv source-form 0x800FF094-0x800FF538"
           },
           {
@@ -14804,7 +14804,7 @@
             "evidence": "evidence.tsv source-form 0x80100BF8-0x80100EA0"
           },
           {
-            "function": "fn_80101CB4",
+            "function": "PlyrBallReleaseEnter",
             "evidence": "evidence.tsv source-form 0x80101CB4-0x801021C0"
           },
           {
@@ -14824,7 +14824,7 @@
             "evidence": "evidence.tsv source-form 0x8010BED4-0x8010BF5C"
           },
           {
-            "function": "fn_8010F43C",
+            "function": "PlyrTrackTargetEnter",
             "evidence": "evidence.tsv source-form 0x8010F43C-0x8010F654"
           },
           {
@@ -14876,7 +14876,7 @@
             "evidence": "evidence.tsv source-form 0x801227DC-0x80123024"
           },
           {
-            "function": "fn_8012510C",
+            "function": "AssignDirGetBestHeading",
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],

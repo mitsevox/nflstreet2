@@ -18,7 +18,7 @@ struct Entry_80120E98 {
     int mUnknown44;
 };
 
-/* 32-byte entry of Plan_80121264; the array fills +1444 to +2372. fn_80122670
+/* 32-byte entry of Plan_80121264; the array fills +1444 to +2372. AssignGapBuildGaps
    fills one per pair of neighbouring Entry_80120E98 records: their midpoint,
    the angle and distance to it from the player, and the gap between them. */
 struct Entry_801230B8 {
@@ -31,7 +31,7 @@ struct Entry_801230B8 {
     float mUnknown28;
 };
 
-/* 2376-byte record cleared and filled by fn_80121264 (fn_801231E4 keeps one
+/* 2376-byte record cleared and filled by fn_80121264 (AssignGapGetHeading keeps one
    on its stack). */
 struct Plan_80121264 {
     Entry_80120E98 mUnknown0[30];

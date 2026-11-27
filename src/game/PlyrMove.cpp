@@ -17,7 +17,7 @@ float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
 Object_80039F5C *BallGetCurrentHolder(void);
 void PlyrMoveApplyGroundScale(Object_80039F5C *p);
@@ -146,7 +146,7 @@ void PlyrMovePickSideType(Object_80039F5C *p)
 
     if (MathAngleDiff(0x400000, p->mMotion.mFacing) < 0x355555 && p == BallGetCurrentHolder()) {
         int team = ScrmGetOffenseTeam();
-        Object_80039F5C *pOther = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x355555, &distance, 0);
+        Object_80039F5C *pOther = AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x355555, &distance, 0);
 
         if (pOther && distance < 2.0f && !(pOther->mFlags & 0x800) && fn_8011E9B4(pOther)) {
             int angle;

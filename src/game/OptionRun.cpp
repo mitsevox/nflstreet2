@@ -33,15 +33,15 @@ int fn_801067D8(Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void AssignEngageStart(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void AssignEngageSetMode(Object_80039F5C *p, int a);
-void fn_8011F45C(int a);
-int fn_801231E4(Object_80039F5C *p, int angle);
-void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
+void AssignPlayInfoSetSpotIndex(int a);
+int AssignGapGetHeading(Object_80039F5C *p, int angle);
+void AssignDirEvaluate(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
-float fn_8012506C(Object_80039F5C *p, int kind);
-int fn_8012510C(Directions_8012430C *pValues);
+float AssignDirGetTotalCost(Object_80039F5C *p, int kind);
+int AssignDirGetBestHeading(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
 void PassIconsShow(int mode);
 PlayBookFormation_t *PlayBookGetFormation(int team);
@@ -124,7 +124,7 @@ extern "C" void OptionRunScoreDirections(Object_80039F5C *p, int index, int side
     float *pB = 0;
     int i;
 
-    fn_8012430C(pValues, 3, p);
+    AssignDirEvaluate(pValues, 3, p);
     if (fabsf(p->mMotion.mPos.mX - ScrmGetBallSpot().mX) < 7.0f) {
         pA = _OptionRun_NearSpotCosts[index];
     }
@@ -163,7 +163,7 @@ extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, f
 {
     float distance;
     Object_80039F5C *pOther =
-        fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), angle, &distance, 1);
+        AssignFindNearestInCone(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), angle, &distance, 1);
 
     if (pOther != 0) {
         if (distance > maxA || !OptionRunIsThreat(p, pOther)) {
@@ -171,7 +171,7 @@ extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, f
         }
     }
     if (pOther == 0) {
-        pOther = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &distance, 1);
+        pOther = AssignFindNearestPlayer(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &distance, 1);
         if (distance > maxB || !OptionRunIsThreat(p, pOther)) {
             pOther = 0;
         }
@@ -192,8 +192,8 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
 
     if (p == BallGetCurrentHolder()) {
         Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
-        float own = fn_8012506C(p, 3);
-        float target = fn_8012506C(pTarget, 3);
+        float own = AssignDirGetTotalCost(p, 3);
+        float target = AssignDirGetTotalCost(pTarget, 3);
         Object_80039F5C *pOther;
 
         if (pControl->mUnknown81 == 0 && own < 42.0f && OptionRunFindThreat(p, 0x200000, 5.5f, 0.0f) != 0 &&
@@ -236,7 +236,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
                 if (target < 30.0f && fn_801066D0(p, pTarget, 9) &&
                     OptionRunCanPitchTo(p, &pTarget->mMotion.mPos, 0)) {
                     result = 2;
-                } else if (MathAngleDiff(fn_801231E4(p, 0x400000), 0x400000) <= 0x71C70) {
+                } else if (MathAngleDiff(AssignGapGetHeading(p, 0x400000), 0x400000) <= 0x71C70) {
                     result = 4;
                 }
             }
@@ -271,9 +271,9 @@ extern "C" int OptionRunThrow(Object_80039F5C *p, int kind, int arg)
         }
         if (kind == 9) {
             if (pControl->mUnknown68 == 0) {
-                fn_8011F45C(13);
+                AssignPlayInfoSetSpotIndex(13);
             } else {
-                fn_8011F45C(12);
+                AssignPlayInfoSetSpotIndex(12);
             }
         }
     }
@@ -286,13 +286,13 @@ extern "C" void OptionRunSteerCarrier(Object_80039F5C *p, Directions_8012430C *p
 
     pControl->mUnknown52 = 1;
     pControl->mUnknown40 = 1.0f;
-    angle = fn_8012510C(pValues);
+    angle = AssignDirGetBestHeading(pValues);
     pControl->mUnknown44 = angle;
     pControl->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
     if (pControl->mUnknown76 <= 0 && pControl->mUnknown49 <= 0) {
         pControl->mUnknown49--;
         if ((angle & 0xFFFFFF) <= 0x7FFFFF) {
-            angle = fn_801231E4(p, angle);
+            angle = AssignGapGetHeading(p, angle);
             pControl->mUnknown44 = angle;
             pControl->mUnknown48 = ((angle + 0x100000) >> 21) & 7;
         }

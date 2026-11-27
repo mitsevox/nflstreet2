@@ -51,10 +51,10 @@ int fn_80110C68(Object_80039F5C *p);
 void AssignTrySendKnock(Object_80039F5C *p);
 int fn_80112C04(Object_80039F5C *p, Ball_t *pBall, int *pAngle, float *pValue);
 unsigned int AssignEngageSysGetFrames(void);
-int fn_8011F1A4(void);
-int fn_8011F1CC(void);
-int fn_8011F32C(void);
-unsigned int fn_8011F4C8(void);
+int AssignIsPlayType11To18(void);
+int AssignPlayHasSlots(void);
+int AssignIsPlayType21(void);
+unsigned int AssignPlayInfoGetSpotIndex(void);
 int fn_80120794(Object_800B26B0 *pMotion, Vector_80039F5C *pTarget, Vector_80039F5C *pDir, float speed, float length,
                 int angle, float distance);
 int fn_80124714(Object_80039F5C *p, Object_80039F5C *pOther, Object_80039F5C **pOut);
@@ -102,12 +102,12 @@ int fn_800ABDA4(int team);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos, float distance, int *pOut);
 int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 int fn_8011E88C(Object_80039F5C *p);
-int fn_8011F1A4(void);
-unsigned int fn_8011F4C8(void);
+int AssignIsPlayType11To18(void);
+unsigned int AssignPlayInfoGetSpotIndex(void);
 Object_80039F5C *PursueGetTarget(void);
 int PlyrEngageTryShed(Object_80039F5C *p, int mode);
 int fn_800F2C1C(Object_80039F5C *p, int a);
-Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
+Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *p, float *pOut, int angle, float length, float width, int facing);
 int fn_8011E9B4(Object_80039F5C *p);
 void fn_8011E240(Object_80039F5C *p);
 float SyncRandGetFloat(int stream);
@@ -193,7 +193,7 @@ extern "C" int PursueShouldPlayBall(Object_80039F5C *p)
     float playerDelta[2];
     Ball_t *ball = BallGetCurrent();
     if (BallStateGet(ball, &info) == 3) {
-        Record_8011F518 *record = fn_8011F518();
+        Record_8011F518 *record = AssignPlayInfoGetPassRecord();
         if (record->mUnknown4 == 11 || record->mUnknown4 == 9) {
             Object_80039F5C *other = fn_8009BCE8(&record->mUnknown0);
             BallGetPosition(ball, &position);
@@ -273,9 +273,9 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
         if (block->mUnknown0 == 4 && !fn_8011E88C(p)) {
             int odds = 35;
             if (!ScrmTestPlayFlag(0)) {
-                if (fn_8011F1A4()) {
+                if (AssignIsPlayType11To18()) {
                     if (!forced) {
-                        if (distance < 10.0f || (fn_8011F1A4() && fn_8011F4C8() > 3)) {
+                        if (distance < 10.0f || (AssignIsPlayType11To18() && AssignPlayInfoGetSpotIndex() > 3)) {
                             odds = 80;
                             if (PursueGetTarget() != BallGetCurrentHolder()) odds = 0;
                         } else odds = 0;
@@ -303,7 +303,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
     if (done) return;
     Ball_t *ball = BallGetCurrent();
     if (BallStateGet(ball, 0) == 4) {
-        Record_8011F4F8 *record = fn_8011F4F8(BallGetIndex(ball));
+        Record_8011F4F8 *record = AssignPlayInfoGetBallRelease(BallGetIndex(ball));
         int ballAngle;
         if (other && (fn_801BE648(other->mpUnknown792) == 69 || fn_801BE648(other->mpUnknown792) == 178) &&
             (record->mUnknown1D <= 1 || record->mUnknown1D == 6 || record->mUnknown1D == 7)) {
@@ -350,7 +350,7 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
     target.mX = target.mY = target.mZ = 0.0f;
     if (p->mUnknown1032 == 4) return;
     float distance;
-    Object_80039F5C *other = fn_80124C28(p, &distance, 0x38E38E, 3.0f, 0.5f, state->mUnknown8);
+    Object_80039F5C *other = AssignFindNearestAhead(p, &distance, 0x38E38E, 3.0f, 0.5f, state->mUnknown8);
     if (!other) return;
     float limit = 3.0f;
     if (distance >= limit) return;
@@ -528,9 +528,9 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
 
 extern "C" void PursueSquareHeading(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos, int angle2)
 {
-    if (ScrmTestPlayFlag(0) == 0 && fn_8011F1A4() != 0 && fn_8011F4C8() > 3
-        && ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && MathAngleDiff(*pAngle, 0) <= 0x3FFFFF)
-            || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) && MathAngleDiff(*pAngle, 0) > 0x400000))) {
+    if (ScrmTestPlayFlag(0) == 0 && AssignIsPlayType11To18() != 0 && AssignPlayInfoGetSpotIndex() > 3
+        && ((AssignIsPlayType11To18() != 0 && (AssignPlayInfoGetSpotIndex() & 1) == 0 && MathAngleDiff(*pAngle, 0) <= 0x3FFFFF)
+            || (AssignIsPlayType11To18() != 0 && (AssignPlayInfoGetSpotIndex() & 1) && MathAngleDiff(*pAngle, 0) > 0x400000))) {
         FieldPoint_t point;
 
         point = ScrmGetBallSpot();
@@ -604,7 +604,7 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         int flag;
         float dy;
 
-        if (distance > 5.5f && fn_8011F32C() != 0) {
+        if (distance > 5.5f && AssignIsPlayType21() != 0) {
             pState->mUnknown16 = 1;
         }
         Vec2Sub(&delta, &pOther->mMotion.mPos, pMotion);
@@ -1364,7 +1364,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
         angle = MathArcTan2(velocity.mY, velocity.mX);
         distance = Vec2Distance(pMotion, &pos);
     }
-    pLookup = fn_8012078C();
+    pLookup = AssignPursueGet();
     if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
         if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             memset(&message, 0, sizeof(message));
@@ -1392,7 +1392,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
                 && ScrmGetPlayTurnovers() == 0) {
                 pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetPlayIdRate());
-                if (fn_8011F1CC() != 0 && (pOther->mFlags & 0x8000) != 0) {
+                if (AssignPlayHasSlots() != 0 && (pOther->mFlags & 0x8000) != 0) {
                     pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetResult5Rate());
                 }
             }
@@ -1524,7 +1524,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                 unsigned int odds = _Pursue_uTackleOdds;
                 int boosted = 0;
 
-                if (fn_8011F1CC() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
+                if (AssignPlayHasSlots() != 0 && (pOther->mUnknown2914 == 0 || pOther->mpState->mId == 18)) {
                     odds += (unsigned int)(odds * PlayTrackGetResult5Rate());
                     boosted = 1;
                 }

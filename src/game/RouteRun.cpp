@@ -45,11 +45,11 @@ void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
 int PlyrRunLegEnter(Object_80039F5C *p);
-int fn_800FD41C(Object_80039F5C *p);
+int PlyrRunLegUpdate(Object_80039F5C *p);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80112928(Object_80039F5C *p);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int ScrmGetDefenseTeam(void);
 int ScrmTestPlayFlag(int bit);
 float ScrmGetSidelineX(void);
@@ -252,10 +252,10 @@ extern "C" int RouteRunIsOpen(Object_80039F5C *p)
 {
     float dist;
 
-    if (fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), 0x11C71C, &dist, 1) && dist < 5.0f) {
+    if (AssignFindNearestInCone(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), 0x11C71C, &dist, 1) && dist < 5.0f) {
         return 0;
     }
-    if (fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &dist, 0) && dist < 2.5f) {
+    if (AssignFindNearestPlayer(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &dist, 0) && dist < 2.5f) {
         return 0;
     }
     return 1;
@@ -356,7 +356,7 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
         RouteRunAvoidDefenders(p, pBlock);
     }
     RouteRunAvoidWalls(p, pBlock);
-    result = fn_800FD41C(p);
+    result = PlyrRunLegUpdate(p);
     if (RouteRunCanSprint(p, pBlock)) {
         int move = 1;
 

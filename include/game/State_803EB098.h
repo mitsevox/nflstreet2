@@ -4,8 +4,8 @@
 #include "game/Record_8011F518.h"
 #include "game/Record_8011F4F8.h"
 
-/* Record at State_803EB098 +8, whose address fn_8011F4E0 returns. The
-   48-byte span is the one fn_8011EFD4 compares as a unit (li r5,48 at
+/* Record at State_803EB098 +8, whose address AssignPlayInfoGetCover returns. The
+   48-byte span is the one AssignPlayInfoSyncCompare compares as a unit (li r5,48 at
    0x8011F008); inside it only the accessed fields are declared. */
 struct Record_8011F4E0 {
     short mUnknown0;
@@ -24,7 +24,7 @@ struct Record_8011F4E0 {
     unsigned char mUnknown40[8];
 };
 
-/* State allocated through SyncStateRegister under the id 'pinf' (fn_8011F0D8):
+/* State allocated through SyncStateRegister under the id 'pinf' (AssignPlayInfoInit):
    576 bytes followed by mUnknown572 records of 32 bytes. */
 struct State_803EB098 {
     float mUnknown0;

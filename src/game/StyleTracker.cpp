@@ -209,8 +209,8 @@ void PlayResultAddScore(int, signed char);
 float fn_800A32B4(void);
 void GamebreakerUpdateActive(void);
 void fn_800A7B5C(void);
-Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
-Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned char, int, float *, int);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *, int, unsigned char, unsigned char, int, float *, int);
 float ScrmGetGoalLineY(void);
 FieldPoint_t ScrmGetPlayStartSpot(void);
 int ScrmGetTeamScore(int);
@@ -793,7 +793,7 @@ extern "C" void StyleTrackerAccumulateRunTime(void) {
     Object_80039F5C *p = _StyleTracker_pState->mpRunPlayer;
     int team = p->mIdBytes[2] ^ 1;
     float distance;
-    fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
+    AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
     unsigned int limit;
     if (distance < 5.0f) limit = 1;
     else if (distance < 10.0f) limit = 3;
@@ -1757,7 +1757,7 @@ extern "C" void StyleTrackerOnPumpFake(Object_80039F5C *p) {
         if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(3, 1);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
-        fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
+        AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
         if (_StyleTracker_pState->mRules[6].mOpponentDistance == 0.0f || !(distance > _StyleTracker_pState->mRules[6].mOpponentDistance)) {
             if (_StyleTracker_pState->mFakeout) {
                 _StyleTracker_pState->mFakeout = 0;
@@ -1842,7 +1842,7 @@ extern "C" void StyleTrackerBeginJuke(Object_80039F5C *p, int kind) {
         } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
-            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0 && kind != 0) {
             if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(4, 1);
@@ -1944,7 +1944,7 @@ extern "C" void StyleTrackerBeginSpin(Object_80039F5C *p, int kind, unsigned cha
         } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
-            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0) {
             if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(7, 1);
@@ -2173,7 +2173,7 @@ extern "C" void StyleTrackerAwardDive(Object_80039F5C *p, int kind, unsigned cha
         fn_800AE7F0(12, p->mIdBytes[2], p);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
-        fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
+        AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
         if (p->mpState->mId == 12 && p->mUnknown355[0] == 0) return;
         if (_StyleTracker_pState->mRules[id].mOpponentDistance != 0.0f && distance > _StyleTracker_pState->mRules[id].mOpponentDistance) return;
         StyleTrackerProcessEvent(id, p->mIdBytes[2], 1);
@@ -2213,9 +2213,9 @@ extern "C" void StyleTrackerBeginHurdle(Object_80039F5C *p, int kind, unsigned c
         } else {
             float distance;
             int team = p->mIdBytes[2] ^ 1;
-            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
             if (accept == 0) {
-                if (fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+                if (AssignFindNearestInCone(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
             }
         }
     }

@@ -1062,7 +1062,7 @@ int ScrmTestPlayFlag(int bit);
 }
 
 extern "C" {
-int fn_8011F1CC(void);
+int AssignPlayHasSlots(void);
 }
 
 extern "C" {
@@ -2978,11 +2978,11 @@ int SpchIGAreChannelsIdle(void);
 }
 
 extern "C" {
-int fn_8011F32C(void);
+int AssignIsPlayType21(void);
 }
 
 extern "C" {
-int fn_8011F228(void);
+int AssignIsPlayType16(void);
 }
 
 extern "C" {
@@ -3799,7 +3799,7 @@ void AnimMomentumUpdate(AnimMomentum_t *pState, Object_80039F5C *p);
 }
 
 extern "C" {
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 }
 
 extern "C" {
@@ -3864,11 +3864,11 @@ struct AnimSlots_8009C630 {
 };
 
 extern "C" {
-int fn_8011F2C4(void);
+int AssignIsPlayType2(void);
 }
 
 extern "C" {
-int fn_8011F1A4(void);
+int AssignIsPlayType11To18(void);
 }
 
 extern "C" {
@@ -3928,7 +3928,7 @@ extern float lbl_803EA9C8;
 extern float lbl_803EA9CC;
 
 extern "C" {
-int fn_8011F37C(void);
+int AssignGetPlayFlag16(void);
 }
 
 extern "C" {
@@ -3938,7 +3938,7 @@ void HudShowAlert(const char *pText);
 extern unsigned char lbl_803EA9E0;
 
 extern "C" {
-void fn_80120720(unsigned int);
+void AssignPursueTick(unsigned int);
 }
 
 extern "C" {
@@ -3968,15 +3968,15 @@ void PlyrRouteShowTeam(int,int);
 
 
 extern "C" {
-int fn_8011F354(void);
+int AssignIsSnapPlayType21(void);
 }
 
 extern "C" {
-int fn_8011F524(void);
+int AssignIsSnapPlayType2Or17(void);
 }
 
 extern "C" {
-float fn_8011F4D4(void);
+float AssignPlayInfoGetSpotX(void);
 }
 
 extern "C" {
@@ -4296,7 +4296,7 @@ float Vec2DistanceSqr(void *pA, void *pB);
 }
 
 extern "C" {
-unsigned char fn_8011F4C8(void);
+unsigned char AssignPlayInfoGetSpotIndex(void);
 }
 
 extern "C" {
@@ -4518,7 +4518,7 @@ extern const char *lbl_802D8754[2][5];
 }
 
 extern "C" {
-int fn_8011F1F4(void);
+int AssignIsPlayType14(void);
 }
 
 
@@ -4622,7 +4622,7 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
 }
 
 extern "C" {
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, int a, unsigned char count, int angle, float *pOut, int b);
 }
 
 extern "C" {
@@ -13318,7 +13318,7 @@ extern "C" int PlyrRollContestedCatch(Object_80039F5C *p)
     short chance;
     short rating;
 
-    fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 1);
+    AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 1);
     if (ScrmGetDown() == 4) {
         bonus = (distance - 10.0f) * 20.0f;
     } else {
@@ -14923,7 +14923,7 @@ extern "C" void DefCoverInitReceivers(void)
     unsigned char i;
 
     p->mUnknown198 = 3;
-    if (fn_8011F1CC() != 0) {
+    if (AssignPlayHasSlots() != 0) {
         for (i = 0; i < p->mUnknown198; i++) {
             p->mUnknown199[i] = PlayBookGetReceiver(team, i, &p->mUnknown19C[i]);
         }
@@ -15145,7 +15145,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
             }
             pending = PlyrStateQueueFind(0, pCarrier->mpState, 18, 0xFFFF);
             if (pending != 0xFFFF || PlyrStateQueueFind(0, pCarrier->mpState, 15, 0xFFFF) != pending
-                || fn_8011F2C4() != 0) {
+                || AssignIsPlayType2() != 0) {
                 Object_80039F5C *pTarget;
                 FieldPoint_t ball;
 
@@ -15155,7 +15155,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
                 pTarget = fn_8009BCE8(&p->mUnknown1036);
                 if (pTarget != 0 && (pTarget->mUnknown1052 == 2 || pTarget->mUnknown1052 == 3)) {
                     unsigned int limit = GameSkillGetTargetReactFrames(p->mIdBytes[2]);
-                    Lookup_8012078C *pLookup = fn_8012078C();
+                    Lookup_8012078C *pLookup = AssignPursueGet();
 
                     if (pLookup->mpUnknown4[0] != p->mIdBytes[1] && pLookup->mpUnknown4[1] != p->mIdBytes[1]) {
                         int kind = pLookup->mpUnknown12[p->mIdBytes[1]];
@@ -15167,10 +15167,10 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
                 }
                 ball = ScrmGetBallSpot();
                 if (p->mpState->mId == 30 && p->mMotion.mPos.mY < ball.mY - 1.0f) {
-                    if (fn_8011F1CC() != 0) {
+                    if (AssignPlayHasSlots() != 0) {
                         return 4;
                     }
-                    if (fn_8011F1A4() != 0) {
+                    if (AssignIsPlayType11To18() != 0) {
                         return 5;
                     }
                 }
@@ -15179,7 +15179,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
             }
             if (check != 0) {
                 unsigned int limit = GameSkillGetBallReactFrames(p->mIdBytes[2]);
-                int kind = fn_8012078C()->mpUnknown12[p->mIdBytes[1]];
+                int kind = AssignPursueGet()->mpUnknown12[p->mIdBytes[1]];
                 Object_80039F5C *pHolder;
 
                 if (kind == 4) {
@@ -15188,7 +15188,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
                     limit += 6;
                 }
                 pHolder = BallGetHolder(pBall);
-                if (fn_8011F1A4() != 0 && (pHolder->mUnknown2914 != 0 || pHolder->mpState->mId == 91)) {
+                if (AssignIsPlayType11To18() != 0 && (pHolder->mUnknown2914 != 0 || pHolder->mpState->mId == 91)) {
                     limit /= 2;
                 }
                 if (BallGetStateFrames(pBall) > limit) {
@@ -15209,7 +15209,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p)
             if (ScrmTestPlayFlag(0) == 1) {
                 return 6;
             }
-            if (fn_8011F2C4() != 0) {
+            if (AssignIsPlayType2() != 0) {
                 return 1;
             }
             return 3;
@@ -15265,7 +15265,7 @@ extern "C" void DefCoverSortReceivers(void)
     State_8011F4EC *p = fn_8011F4EC();
     int team = ScrmGetOffenseTeam();
 
-    if (fn_8011F1CC() == 1) {
+    if (AssignPlayHasSlots() == 1) {
         unsigned char i;
         int swapped;
 
@@ -16034,7 +16034,7 @@ extern "C" void DefPredScoreGuess(void)
         DefPredSetResult(0);
         break;
     case 1:
-        if (fn_8011F1A4() && !fn_8011F37C()) {
+        if (AssignIsPlayType11To18() && !AssignGetPlayFlag16()) {
             DefPredSetResult(1);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Run");
@@ -16047,7 +16047,7 @@ extern "C" void DefPredScoreGuess(void)
         }
         break;
     case 2:
-        if (fn_8011F1CC() && !fn_8011F37C()) {
+        if (AssignPlayHasSlots() && !AssignGetPlayFlag16()) {
             DefPredSetResult(4);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Pass");
@@ -16060,7 +16060,7 @@ extern "C" void DefPredScoreGuess(void)
         }
         break;
     case 3:
-        if (fn_8011F37C()) {
+        if (AssignGetPlayFlag16()) {
             DefPredSetResult(4);
             if (lbl_803EA9E0) {
                 HudShowAlert("Correctly Predicted Trick");
@@ -16199,7 +16199,7 @@ void LivePlayPhase::OnUpdate(float dt)
     } else {
         HudCycleMashPrompt();
         CatchToggleParity();
-        fn_80120720((unsigned int)dt);
+        AssignPursueTick((unsigned int)dt);
         fn_800FB314();
         AssignCoverTickSortSlots();
         DefCoverUpdate();
@@ -16251,17 +16251,17 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
     point=ScrmGetBallSpot();
     unsigned short count=fn_800B15D4();
     int ref=0;
-    if(count>1 && !fn_8011F354()) {
+    if(count>1 && !AssignIsSnapPlayType21()) {
         PlayTrackPushPlay(team,PlayBookGetSavedPlay(team)->mUnknown4);
         PlayTrackSetEntryWord4(team,PlayBookGetSavedPlay((unsigned char)(team^1))->mUnknown4);
-        if(fn_8011F1CC())PlayTrackSetKind(team,2);
+        if(AssignPlayHasSlots())PlayTrackSetKind(team,2);
         else {
             PlayTrackSetKind(team,1);
-            if(fn_8011F524())PlayTrackSetResult(team,6);
-            to.mY=point.mY;to.mX=fn_8011F4D4();
+            if(AssignIsSnapPlayType2Or17())PlayTrackSetResult(team,6);
+            to.mY=point.mY;to.mX=AssignPlayInfoGetSpotX();
             PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());
         }
-        PlayTrackSetFlag10(team,fn_8011F37C());
+        PlayTrackSetFlag10(team,AssignGetPlayFlag16());
         tracked=true;
         PlayTrackSetFlag11(team,0);
     }
@@ -16280,7 +16280,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             PlayResultSetRef((int)state,&out->mUnknown00,state->mUnknown10);
             if(tracked) {
                 if(fabsf(e->mUnknownC-point.mX)>4.0f)PlayTrackSetResult(team,5);
-                else if(fn_8011F1CC() && !(e->mUnknown10>=point.mY))PlayTrackSetResult(team,4);
+                else if(AssignPlayHasSlots() && !(e->mUnknown10>=point.mY))PlayTrackSetResult(team,4);
             }
             break;
         case 22:
@@ -16352,7 +16352,7 @@ extern "C" void PlayResultApplyEvents(Record_800A0624 *state,ScrmPlayResult_t *o
             {out->mUnknown08.mX=e->mUnknownC;out->mUnknown08.mY=e->mUnknown10;}break;
         case 17:ref=e->mUnknown0;break;
         case 24:
-            if(tracked && !special && fn_8011F1CC() && fn_8009BCE8(&e->mUnknown0)) {
+            if(tracked && !special && AssignPlayHasSlots() && fn_8009BCE8(&e->mUnknown0)) {
                 PlayTrackSetKind(team,1);PlayTrackSetEntryByteC(team,fn_8009BCE8(&e->mUnknown0)->mIdBytes[1]);
                 to.mX=e->mUnknownC;to.mY=e->mUnknown10;
                 PlayTrackSetDirection(team,point,to,DefCoverGetStrongSide());PlayTrackSetResult(team,5);
@@ -17990,7 +17990,7 @@ extern "C" void DefReactParamsByDistance(Object_80039F5C *p, Object_80039F5C *pO
         pParams->mUnknown0 = pParams->mUnknown0
                              - (int)MIN(pParams->mUnknown0 - pParams->mUnknown4 - 1,
                                         (pParams->mUnknown0 - pParams->mUnknown4) * PlayTrackGetPlayIdRate());
-        if (fn_8011F1CC() && (pOther->mFlags & 0x8000)) {
+        if (AssignPlayHasSlots() && (pOther->mFlags & 0x8000)) {
             pParams->mUnknown8 = pParams->mUnknown8 - (int)MIN(pParams->mUnknown8 - 1, pParams->mUnknown8 * PlayTrackGetResult5Rate());
             pParams->mUnknown0 = pParams->mUnknown0
                                  - (int)MIN(pParams->mUnknown0 - pParams->mUnknown4,
@@ -18295,7 +18295,7 @@ extern "C" int DefReactSteerFixedHeading(Object_80039F5C *p, Object_80039F5C *pT
         if (pTarget->mpState->mId != 52) {
             result = 0;
         } else {
-            if (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1)) {
+            if (AssignIsPlayType11To18() != 0 && (AssignPlayInfoGetSpotIndex() & 1)) {
                 *pState = 0;
             } else {
                 *pState = 0x800000;
@@ -18568,7 +18568,7 @@ extern "C" void HandoffCamEnd(void)
     team = ScrmGetOffenseTeam();
     if (p == 0) {
         CamGameSetModeAll(1);
-    } else if (fn_8011F1CC() && fn_800B65A0(team) != 255 && p->mpState->mId == 18) {
+    } else if (AssignPlayHasSlots() && fn_800B65A0(team) != 255 && p->mpState->mId == 18) {
         PassIconsShow(0);
         CamGameSetModeAll(2);
     }
@@ -18976,23 +18976,23 @@ extern "C" int GamebreakerSelectCinemaType(int team)
     }
     if (team == ScrmGetOffenseTeam()) {
         if (ScrmGetGoalLineY() - ScrmGetBallSpot().mY < 10.0f) {
-            if (allowed && fn_8011F37C()) {
+            if (allowed && AssignGetPlayFlag16()) {
                 result = 5;
-            } else if (fn_8011F1CC()) {
+            } else if (AssignPlayHasSlots()) {
                 result = 4;
-            } else if (fn_8011F1A4()) {
+            } else if (AssignIsPlayType11To18()) {
                 result = 3;
             }
-        } else if (allowed && fn_8011F37C()) {
+        } else if (allowed && AssignGetPlayFlag16()) {
             result = 2;
-        } else if (fn_8011F1CC()) {
+        } else if (AssignPlayHasSlots()) {
             result = 1;
-        } else if (fn_8011F1A4()) {
+        } else if (AssignIsPlayType11To18()) {
             result = 0;
         }
-    } else if (fn_8011F1CC()) {
+    } else if (AssignPlayHasSlots()) {
         result = 7;
-    } else if (fn_8011F1A4()) {
+    } else if (AssignIsPlayType11To18()) {
         result = 6;
     }
     return result;
@@ -22331,7 +22331,7 @@ extern "C" void PlyrHandOpcodeSetPose(Object_80039F5C *p, int mirror)
         break;
     }
     if (p != 0 && value == 9 && p->mpState->mId == 15
-        && fn_8011F4F8(((State_800FDA58 *)&p->mUnknown336)->mUnknown3Byte)->mUnknown1D == 4) {
+        && AssignPlayInfoGetBallRelease(((State_800FDA58 *)&p->mUnknown336)->mUnknown3Byte)->mUnknown1D == 4) {
         value = 5;
     }
     key = AnimSeqGetOpcodeParameter();
@@ -22834,7 +22834,7 @@ extern "C" Object_80039F5C *fn_800AEBA0(void)
 {
     Object_80039F5C *p = 0;
 
-    if (fn_8011F1CC() != 0 && fn_8011F37C() == 0) {
+    if (AssignPlayHasSlots() != 0 && AssignGetPlayFlag16() == 0) {
         if (fn_801486A0() == 4) {
             Vector_80039F5C pos;
 
@@ -23998,7 +23998,7 @@ extern "C" int fn_800B1200(void)
     int team = ScrmGetOffenseTeam();
     float left = 0.0f;
 
-    if (fn_800B65A0(team) != 0xFF || fn_8011F32C() != 0 || fn_8011F228() != 0) {
+    if (fn_800B65A0(team) != 0xFF || AssignIsPlayType21() != 0 || AssignIsPlayType16() != 0) {
         return 1;
     }
     if (lbl_803EAB14->mUnknown2E5 == 0) {
@@ -24027,22 +24027,22 @@ extern "C" int fn_800B1200(void)
     FieldPoint_t los;
     los = ScrmGetBallSpot();
 
-    if ((fn_8011F1CC() != 0 || fn_8011F1F4() != 0) && !(x < left - 0.5f) && x <= right + 0.5f) {
+    if ((AssignPlayHasSlots() != 0 || AssignIsPlayType14() != 0) && !(x < left - 0.5f) && x <= right + 0.5f) {
         PickPlay();
         return 0;
     }
-    if (fn_8011F1A4() == 0) {
+    if (AssignIsPlayType11To18() == 0) {
         return 1;
     }
-    if (!(x < fn_8011F4D4() - 0.5f) && x <= fn_8011F4D4() + 0.5f) {
+    if (!(x < AssignPlayInfoGetSpotX() - 0.5f) && x <= AssignPlayInfoGetSpotX() + 0.5f) {
         return 1;
     }
     if (!(x < left - 0.5f) && !(x > right + 0.5f)) {
         PickPlay();
         return 0;
     }
-    if ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && x < los.mX)
-        || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) != 0 && x > los.mX)) {
+    if ((AssignIsPlayType11To18() != 0 && (AssignPlayInfoGetSpotIndex() & 1) == 0 && x < los.mX)
+        || (AssignIsPlayType11To18() != 0 && (AssignPlayInfoGetSpotIndex() & 1) != 0 && x > los.mX)) {
         return 0;
     }
     return 1;
@@ -25935,8 +25935,8 @@ extern "C" int CarrierTryMoveOrDive(Object_80039F5C *p, int mode)
     float otherDistance;
     float limit;
 
-    pNearest = fn_801245DC(p, ScrmGetDefenseTeam(), 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), 0x200000, &distance, 0);
-    pOther = fn_801245DC(p, ScrmGetOffenseTeam(), 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x200000, &otherDistance, 0);
+    pNearest = AssignFindNearestInCone(p, ScrmGetDefenseTeam(), 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), 0x200000, &distance, 0);
+    pOther = AssignFindNearestInCone(p, ScrmGetOffenseTeam(), 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x200000, &otherDistance, 0);
     if (pNearest == 0 || (pOther != 0 && otherDistance < distance)) {
         pNearest = pOther;
         distance = otherDistance;
@@ -26948,7 +26948,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
                 return 0;
             }
         } else {
-            if (fn_8011F1CC() != 0) {
+            if (AssignPlayHasSlots() != 0) {
                 pCarrier = BallGetHolder(pBall);
                 if (pCarrier != 0 && (pCarrier->mpState->mId == 18 || pCarrier->mpState->mId == 15)) {
                     Vec2Distance(&pCarrier->mMotion, &p->mMotion);
@@ -30399,7 +30399,7 @@ extern "C" void PreSnapInitPickTime(void)
     if (GameClockIsTimerRunning(1) == 0) {
         mode = 0;
     }
-    if (fn_8011F32C() != 0 || fn_8011F228() != 0 || fn_800B119C() == 0) {
+    if (AssignIsPlayType21() != 0 || AssignIsPlayType16() != 0 || fn_800B119C() == 0) {
         // FAKEMATCH: redundant zero store (value is already 0); it lengthens the life of value so mode takes r31 as in the target
         value = 0;
     } else {
@@ -33407,7 +33407,7 @@ static inline int _ContactStateNot14(Object_80039F5C *p)
 
 static inline int _ContactPlayKindNot8(void)
 {
-    return fn_8011F518()->mUnknown4 != 8;
+    return AssignPlayInfoGetPassRecord()->mUnknown4 != 8;
 }
 
 extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
@@ -33555,7 +33555,7 @@ extern "C" int fn_800C5DE4(Object_80039F5C *p, Object_80039F5C *pOther)
 
 extern "C" void fn_800C5F80(Object_80039F5C *p, int value, int *pA, int *pB, int *pC)
 {
-    if (value == 0 && fn_801486A0() && !ScrmTestPlayFlag(0) && fn_8011F1CC() && BallGetCurrentHolder() == p) {
+    if (value == 0 && fn_801486A0() && !ScrmTestPlayFlag(0) && AssignPlayHasSlots() && BallGetCurrentHolder() == p) {
         *pA = 94;
         *pB = 93;
         *pC = 164;
@@ -33625,7 +33625,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                     if (fn_800B65A0(p->mIdBytes[2]) != 255 && fn_800B65A0(pTarget->mIdBytes[2]) == 255) {
                         bonus = PlayTrackGetPlayIdRate() * 0.25f;
                         chance += (int)(chance * bonus);
-                        if (!ScrmGetPlayTurnovers() && fn_8011F1CC() && (p->mFlags & 0x8000)) {
+                        if (!ScrmGetPlayTurnovers() && AssignPlayHasSlots() && (p->mFlags & 0x8000)) {
                             bonus = PlayTrackGetResult5Rate() * 0.25f;
                             chance += (int)(chance * bonus);
                         }
@@ -34731,7 +34731,7 @@ extern "C" int fn_800C8BBC(Object_80039F5C *p)
     int result = 0;
 
     ScrmGetBallSpot();
-    if (fn_8011F1CC() && p != 0) {
+    if (AssignPlayHasSlots() && p != 0) {
         result = ScrmTestPlayFlag(0) == 0;
     }
     return result;

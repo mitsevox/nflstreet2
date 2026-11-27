@@ -81,8 +81,8 @@ void PlyrStateQueueReplaceHead(int a, State_80039F5C *pState, Message_800F01CC *
 void fn_8010AEC4(Object_80039F5C *p);
 void Vec2Rotate(void *pOut, void *pIn, int angle);
 void fn_800D7A0C(Object_80039F5C *p, int a);
-int fn_8011F4C8(void);
-float fn_8011F4D4(void);
+int AssignPlayInfoGetSpotIndex(void);
+float AssignPlayInfoGetSpotX(void);
 int fn_800CE590(Query_800CE770 *pQuery, Record_800CE608 *pA, Record_800CE608 *pB);
 void fn_800CE608(Object_80039F5C *p, Record_800CE608 *pRecord);
 void PlyrCollideAddExempt(Object_80039F5C *p, Object_80039F5C *pOther);
@@ -112,11 +112,11 @@ void HuddleArrive(Object_80039F5C *p, HuddleBlock_t *pState);
 float MathCos(int angle);
 void PlayerActionAnimSteerPassReady(Object_80039F5C *p, int angle, float value);
 int PassIconsAreShown(void);
-int fn_8011F2C4(void);
+int AssignIsPlayType2(void);
 void fn_800A5A8C(int a, void *pA, void *pB);
 void fn_800A60D8(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget);
-int fn_800FF094(Object_80039F5C *p);
+int PlyrGotoPointUpdate(Object_80039F5C *p);
 int fn_800CB708(Object_80039F5C *p, int *pOut, FieldPoint_t point, int angle, int a);
 int fn_800CB580(Object_80039F5C *p, int *pOut, FieldPoint_t point, int angle, int a);
 void fn_800CBB00(Object_80039F5C *p, int value, FieldPoint_t point, int angle, int a);
@@ -126,7 +126,7 @@ int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 FieldPoint_t ScrmGetMarkerSpot(void);
 float ScrmGetGoalLineY(void);
 void fn_800FF598(HuddleBlock_t *pState, Object_80039F5C *p, FieldPoint_t *pPoint, int value, float scale);
-int fn_8011F1A4(void);
+int AssignIsPlayType11To18(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 FieldPoint_t ScrmGetBallSpot(void);
 }
@@ -372,12 +372,12 @@ extern "C" float HandoffPickSide(Object_80039F5C *p, HandoffBlock_t *state) {
         FieldPoint_t delta;
         Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
         int angle = MathArcTan2(delta.mY, delta.mX);
-        if (fn_8011F1A4() && p->mUnknown2914 == 0) {
-            float x = fn_8011F4D4();
+        if (AssignIsPlayType11To18() && p->mUnknown2914 == 0) {
+            float x = AssignPlayInfoGetSpotX();
             sideFlag = x > p->mMotion.mPos.mX;
             wideFlag = fabsf(x - p->mMotion.mPos.mX) < fabsf(x - pOther->mMotion.mPos.mX);
             wideFlag |= p->mMotion.mPos.mY - pOther->mMotion.mPos.mY > 5.0f;
-            wideFlag |= (unsigned int)fn_8011F4C8() <= 3;
+            wideFlag |= (unsigned int)AssignPlayInfoGetSpotIndex() <= 3;
         } else {
             if (p->mUnknown2914 == 0)
                 angle = (angle - 0x400000) & 0xFFFFFF;
@@ -621,11 +621,11 @@ extern "C" int HandoffSteer(Object_80039F5C *p, Object_80039F5C *pOther, Handoff
         Vec2Sub(&delta, &pOther->mMotion.mPos, &ballPos);
         int angle = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         float distance = Vec2Magnitude(&delta);
-        if (fn_8011F1A4() && p->mUnknown2914 == 0) {
+        if (AssignIsPlayType11To18() && p->mUnknown2914 == 0) {
             id = p->mpState->mUnknown2;
             if (id == 0 || id == 2 || id == 4 || id == 6 || id == 8 || id == 10) {
                 FieldPoint_t point;
-                point.mX = fn_8011F4D4();
+                point.mX = AssignPlayInfoGetSpotX();
                 point.mY = ScrmGetBallSpot().mY;
                 Vec2Sub(&point, &point, &p->mMotion.mPos);
                 int pointAngle = MathArcTan2(point.mY, point.mX) & 0xFFFFFF;
@@ -886,7 +886,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
             case 5: {
                 int none = PlyrStateQueueFind(0, pOther->mpState, 27, 0xFFFF);
                 if (none == 0xFFFF && PlyrStateQueueFind(0, pOther->mpState, 21, 0xFFFF) == none) {
-                    if (fn_800B65A0(p->mIdBytes[2]) != 255 && !fn_8011F1A4())
+                    if (fn_800B65A0(p->mIdBytes[2]) != 255 && !AssignIsPlayType11To18())
                         PassIconsAreShown();
                     memset(&message, 0, 4);
                     message.mId = 3;
@@ -973,7 +973,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                 if (p->mUnknown2914 == 0 || p->mUnknown2914 == 7)
                     fn_800A5A8C(0, p, pOther);
                 fn_800A60D8(p, pOther);
-            } else if (fn_8011F2C4()) {
+            } else if (AssignIsPlayType2()) {
                 fn_800A5A8C(8, p, pOther);
             }
         }
@@ -1019,7 +1019,7 @@ extern "C" int HandoffUpdate(Object_80039F5C *p) {
                 p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
                 p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
                 p->mUnknown512.mUnknown0 = 0.4f;
-                if (fn_800B65A0(p->mIdBytes[2]) != 255 && !fn_8011F1A4())
+                if (fn_800B65A0(p->mIdBytes[2]) != 255 && !AssignIsPlayType11To18())
                     PassIconsAreShown();
                 result = 1;
                 break;
@@ -1168,7 +1168,7 @@ extern "C" int HuddleMoveUpdate(Object_80039F5C *p) {
         if (state->mUnknown49 == 0 && p->mMotion.mUnknown28 < 0.006f) {
             state->mUnknown2 = 3;
             stopped = 1;
-            ready = fn_800FF094(p);
+            ready = PlyrGotoPointUpdate(p);
             checked = 1;
             facing = p->mUnknown512.mUnknown4;
         }
@@ -1188,7 +1188,7 @@ extern "C" int HuddleMoveUpdate(Object_80039F5C *p) {
             }
         }
         state->mUnknown49 = 1;
-        if (ready == 1 || (!checked && fn_800FF094(p) == 1)) {
+        if (ready == 1 || (!checked && PlyrGotoPointUpdate(p) == 1)) {
             int done = 1;
             if (state->mUnknown50 == 0) {
                 if (fn_800CB708(p, &value, state->mUnknown8, state->mUnknown16, 2)) {

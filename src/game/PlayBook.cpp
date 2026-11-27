@@ -1896,7 +1896,7 @@ void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int co
 }
 
 extern "C" {
-int fn_8011F1CC(void);
+int AssignPlayHasSlots(void);
 int DbFnigWriteBlock(int tag, void *data);
 unsigned char PlayTrackMatchesGainFlags(FieldPoint_t *pTo);
 float PlayTrackGetPlayIdRate(void);
@@ -2017,7 +2017,7 @@ unsigned char PlayTrackMatchesGainFlags(FieldPoint_t *pTo)
 {
     int kind = 1;
 
-    if (fn_8011F1CC())
+    if (AssignPlayHasSlots())
         kind = 2;
     return PlayTrackClassifyPlay(kind, ScrmGetBallSpot(), pTo, 1) & _PlayTrack_pData->mUnknown14;
 }

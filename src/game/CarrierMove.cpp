@@ -40,7 +40,7 @@ void CarrierMoveStartWallAnim(Object_80039F5C *p);
 void CarrierMoveStartAnim(Object_80039F5C *p);
 void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void PlyrStateQueueReplaceHead(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
-float fn_801250B8(Object_80039F5C *p, Object_80039F5C *a, int b);
+float AssignDirGetTotalCostVs(Object_80039F5C *p, Object_80039F5C *a, int b);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 void fn_8009BD60(Object_80039F5C *p);
 void AnimSeqSetSpeed(void *p, float value);
@@ -345,5 +345,5 @@ extern "C" int CarrierMoveInput(Object_80039F5C *p)
 
 extern "C" int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *a)
 {
-    return fn_801250B8(p, a, 6) < _CarrierMove_fPickRange;
+    return AssignDirGetTotalCostVs(p, a, 6) < _CarrierMove_fPickRange;
 }

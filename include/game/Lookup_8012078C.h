@@ -9,7 +9,7 @@ struct Entry_8011FBE0 {
 };
 
 /* 24-byte state allocated through SyncStateRegister under the id 'purs'
-   (fn_8012055C) and returned by fn_8012078C. Its four arrays each hold
+   (AssignPursueInit) and returned by AssignPursueGet. Its four arrays each hold
    mUnknown16 elements. */
 struct Lookup_8012078C {
     unsigned char *mpUnknown0;
@@ -23,6 +23,6 @@ struct Lookup_8012078C {
     char mUnknown21[3];
 };
 
-extern "C" Lookup_8012078C *fn_8012078C(void);
+extern "C" Lookup_8012078C *AssignPursueGet(void);
 
 #endif

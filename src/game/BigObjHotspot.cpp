@@ -144,7 +144,7 @@ int HotspotClassifyPlay(HotspotPlay_t *pPlay)
             }
         }
     } else if (type == 235) {
-        if (fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
+        if (AssignPlayInfoGetBallRelease(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
             pPlay->mKind = phase;
             found = 1;
         }

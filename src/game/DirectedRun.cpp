@@ -29,7 +29,7 @@ int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
-int fn_8011F1CC(void);
+int AssignPlayHasSlots(void);
 int DirectedRunEnter(Object_80039F5C *p);
 int DirectedRunUpdate(Object_80039F5C *p);
 int ScrmGetPlayTurnovers(void);
@@ -48,7 +48,7 @@ extern "C" int DirectedRunEnter(Object_80039F5C *p)
 {
     DirectedRunState_t *state = (DirectedRunState_t *)&p->mUnknown336;
 
-    if (fn_800B65A0(p->mIdBytes[2]) == 255 && fn_8011F1CC()
+    if (fn_800B65A0(p->mIdBytes[2]) == 255 && AssignPlayHasSlots()
         && fn_800ABDA4(p->mIdBytes[2]) == 0) {
         switch (p->mUnknown2914) {
         case 10:
@@ -108,7 +108,7 @@ extern "C" int DirectedRunUpdate(Object_80039F5C *p)
             && fn_800B65A0(carrier->mIdBytes[2]) == 255 && !ScrmGetPlayTurnovers()) {
             state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
                                           (float)state->mUnknown16 * PlayTrackGetPlayIdRate());
-            if (fn_8011F1CC() && (carrier->mFlags & 0x8000)) {
+            if (AssignPlayHasSlots() && (carrier->mFlags & 0x8000)) {
                 state->mUnknown16 -= (int)MIN((float)state->mUnknown16,
                                               (float)state->mUnknown16 * PlayTrackGetResult5Rate());
             }

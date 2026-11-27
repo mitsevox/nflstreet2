@@ -107,7 +107,7 @@ int PlayerActionIsUserCatch(Object_80039F5C *p);
 int PlayerActionIsCatchBlocked(Object_80039F5C *p);
 void fn_801039D8(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 void *BallGetCurrent(void);
 int BallGetIndex(void *pBall);
 void BallRelease(void *pBall, int a, int b);
@@ -852,7 +852,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
 int PossTryReceivePitch(void *pBall, Object_80039F5C *p)
 {
     int caught = 0;
-    Record_8011F518 *pPitch = fn_8011F518();
+    Record_8011F518 *pPitch = AssignPlayInfoGetPassRecord();
 
     if (pBall == BallGetCurrent() && !ScrmIsNotReplay()) {
         Object_80039F5C *pReceiver = BallGetTarget(pBall);
@@ -1108,7 +1108,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
             Record_8011F4F8 *pRequest;
 
             state = BallStateGetPrev(pBall, &unknown);
-            pRequest = fn_8011F4F8(BallGetIndex(pBall));
+            pRequest = AssignPlayInfoGetBallRelease(BallGetIndex(pBall));
             if (handoff == 0 && (p->mFlags & 0x2000) && pRequest->mUnknownB) {
                 fn_801039D8(p);
             } else if (handoff == 0) {
@@ -1241,7 +1241,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             StyleTrackerSetCatchFlags(PlayerActionIsUserCatch(p), special, PlayerMoveGetKind(p));
             fn_800A8954(7, p->mId >> 8 & 0xFF, p);
         }
-        if (result == 3 && fn_8011F518()) {
+        if (result == 3 && AssignPlayInfoGetPassRecord()) {
             StyleTrackerFinishPitch(ScrmGetOffenseTeam(), 0, 0);
         }
         if (result == 5 && status == 1) {
@@ -1316,7 +1316,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             resolved = 1;
         }
     } else {
-        Record_8011F518 *pPitch = fn_8011F518();
+        Record_8011F518 *pPitch = AssignPlayInfoGetPassRecord();
         if (pPitch->mUnknown4 == 0xB || pPitch->mUnknown4 == 9 || stolen) {
             resolved = 1;
         }
@@ -1555,7 +1555,7 @@ int PossCheckBallOut(void *pBall, Point2_t *pPos)
                                 pEntry = fn_800B15FC();
                                 pEntry->mUnknown14 = 0x3C;
                                 other = (pCarrier->mId >> 8 & 0xFF) ^ 1;
-                                pOpponent = fn_801244F0(pCarrier, other, 0, ScrmGetTeamPlayerCount(other), &dist, 0);
+                                pOpponent = AssignFindNearestPlayer(pCarrier, other, 0, ScrmGetTeamPlayerCount(other), &dist, 0);
                                 fn_8009BD2C(pOpponent, &pEntry->mUnknown0);
                                 if (pOpponent) {
                                     pEntry->mUnknown4 = pOpponent->mUnknown8 != 0xFF;

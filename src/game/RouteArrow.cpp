@@ -74,8 +74,8 @@ void RouteArrowShutdown(RouteArrow_t *);
 int ScrmIsFieldFlipped(void);
 int ScrmGetOffenseTeam(void);
 PlayBookFormation_t *PlayBookGetFormation(int);
-Record_8011F4E0 *fn_8011F4E0(void);
-float fn_8011F4D4(void);
+Record_8011F4E0 *AssignPlayInfoGetCover(void);
+float AssignPlayInfoGetSpotX(void);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 int fn_8011E9D8(void *);
 void PlyrStateMirrorMessage(int, void *);
@@ -198,7 +198,7 @@ void RouteArrowAddBlockPath(RouteArrow_t *p, unsigned char *pCommand, Vector_800
     Object_80039F5C *pPlayer = p->mpPlayer;
     FieldPoint_t origin;
     origin = ScrmGetBallSpot();
-    fn_8011F4E0();
+    AssignPlayInfoGetCover();
     unsigned char code = AssignGetCoverSlot(pPlayer, pCommand);
     switch (code) {
     case 254:
@@ -426,7 +426,7 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
         point.mX = pPoint->mX;
         point.mY = pPoint->mY;
         if (ScrmIsFieldFlipped()) { point.mX = -point.mX; point.mY = -point.mY; }
-        target.mX = fn_8011F4D4();
+        target.mX = AssignPlayInfoGetSpotX();
         FieldPoint_t origin = ScrmGetBallSpot();
         target.mY = origin.mY;
         Vec2Sub(&target, &target, &point);
@@ -442,7 +442,7 @@ int RouteArrowAddCommand(RouteArrow_t *p, unsigned char *pCommand, Vector_80039F
         point.mX = pPoint->mX;
         point.mY = pPoint->mY;
         if (ScrmIsFieldFlipped()) { point.mX = -point.mX; point.mY = -point.mY; }
-        target.mX = fn_8011F4D4() + (signed char)pCommand[1] * 0.0625f;
+        target.mX = AssignPlayInfoGetSpotX() + (signed char)pCommand[1] * 0.0625f;
         if (target.mX < ScrmGetBallSpot().mX) target.mX -= -2.0f;
         else target.mX += -2.0f;
         target.mY = ScrmGetBallSpot().mY + (signed char)pCommand[2] * 0.0625f + -2.0f;
@@ -588,7 +588,7 @@ void RouteArrowRegisterType(void)
 int RouteArrowGetBlockCommand(RouteArrow_t *p, unsigned char *pCommand)
 {
     Object_80039F5C *pPlayer = p->mpPlayer;
-    Record_8011F4E0 *pInfo = fn_8011F4E0();
+    Record_8011F4E0 *pInfo = AssignPlayInfoGetCover();
     int code;
     if (pInfo->mUnknown4) {
         code = pInfo->mUnknown32[pPlayer->mIdBytes[1]];

@@ -463,7 +463,7 @@ void CamPlayProcess(GameCamera_t *camera)
             Orient3Add(&angles,&angles,&offset);
         } else if (!GameOptionsGet(18) && !fn_800BA6F8() && fn_800AD9B4() == 3 && camera->mUnknownA0 == 1) {
             int side = ScrmGetDefenseTeam();
-            Object_80039F5C *player = PlyrGet(side,*fn_8012078C()->mpUnknown4);
+            Object_80039F5C *player = PlyrGet(side,*AssignPursueGet()->mpUnknown4);
             if (player) {
                 float height = player->mMotion.mPos.mY;
                 float ballY = velocity.mY;

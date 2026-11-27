@@ -290,7 +290,7 @@ extern "C" void PlayerActionDropBallPickVariant(Object_80039F5C *p, Block_800E02
 extern "C" float PlayerActionDropBallGetSpeed(Object_80039F5C *p)
 {
     float value;
-    if (!fn_80124C28(p, &value, 0x355555, 5.0f, 0.5f, p->mMotion.mFacing)) {
+    if (!AssignFindNearestAhead(p, &value, 0x355555, 5.0f, 0.5f, p->mMotion.mFacing)) {
         return 0.5f;
     }
     float result = 1.0f - value * 0.2f;
@@ -822,7 +822,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     FieldPoint_t marked;
     marked.mY = 0.0f;
     marked.mX = 0.0f;
-    Record_8011F4E0 *pTactics = fn_8011F4E0();
+    Record_8011F4E0 *pTactics = AssignPlayInfoGetCover();
     FieldPoint_t goal;
     goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     Object_80039F5C *pLeft = 0, *pRight = 0, *pSpecial = 0, *pMarked = 0;
@@ -1037,7 +1037,7 @@ extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut,
     pOut->mY = !(pOut->mY >= 1.0f - ScrmGetEndLineY()) ? 1.0f - ScrmGetEndLineY()
         : (pOut->mY > ScrmGetEndLineY() - 1.0f ? ScrmGetEndLineY() - 1.0f : pOut->mY);
     if (pBlock->mpUnknown36) {
-        fn_8011F4E0();
+        AssignPlayInfoGetCover();
         Object_80039F5C *pOther = pBlock->mpUnknown36;
         if (pOther) {
             FieldPoint_t delta;

@@ -7,7 +7,7 @@ static unsigned int _PlayerActionAnim_iSteerFrames = 0;
 extern "C" int PlayerActionAnimGetTurnSide(Object_80039F5C *p)
 {
     int result;
-    if (fn_8011F518()->mUnknown4 == 11) {
+    if (AssignPlayInfoGetPassRecord()->mUnknown4 == 11) {
         result = 1;
         if (p->mUnknown776 == 1) {
             result = 2;
@@ -42,7 +42,7 @@ extern "C" int PlayerActionAnimDirectionPhase(Table_80089904 *pTable, int key, v
 
 extern "C" void PlayerActionAnimReleasePitch(Object_80039F5C *p, Ball_t *pBall, Record_800DB074 *pRecord)
 {
-    Record_8011F518 *pRecord8011F518 = fn_8011F518();
+    Record_8011F518 *pRecord8011F518 = AssignPlayInfoGetPassRecord();
     pRecord8011F518->mUnknown8 = pRecord->mUnknown16;
     Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown12);
     if (pOther) {
@@ -68,7 +68,7 @@ extern "C" void PlayerActionAnimAdjustToss(Object_80039F5C *p, Ball_t *pBall, Re
     if (ball.mZ <= joint.mZ - 0.15f) {
         return;
     }
-    Record_8011F4F8 *pRequest = fn_8011F4F8(BallGetIndex(pBall));
+    Record_8011F4F8 *pRequest = AssignPlayInfoGetBallRelease(BallGetIndex(pBall));
     if (pRequest->mUnknownB != 1) {
         return;
     }
@@ -88,7 +88,7 @@ extern "C" void PlayerActionAnimAdjustToss(Object_80039F5C *p, Ball_t *pBall, Re
     float scale = pRequest->mUnknownC * 0.5f;
     pRequest->mUnknown0 -= pRequest->mUnknown0 * scale;
     pRequest->mUnknown4 -= pRequest->mUnknown4 * scale;
-    if (fn_80103CB0(p)) {
+    if (PlyrBallReleasePerform(p)) {
         Object_80039F5C *pOther = fn_8009BCE8(&pRecord->mUnknown12);
         if (pOther) {
             Record_800B15FC *pMessage = fn_800B15FC();
@@ -154,7 +154,7 @@ extern "C" void PlayerActionAnimPitchInit(Record_800DB074 *pRecord, Object_80039
     if (pBall) {
         int kind = fn_801BE648(p->mpUnknown792);
         if (kind == 69 || kind == 178) {
-            if (fn_8011F4F8(BallGetIndex(pBall))->mUnknownB == 1) {
+            if (AssignPlayInfoGetBallRelease(BallGetIndex(pBall))->mUnknownB == 1) {
                 PlayerActionAnimArmToss(pRecord, p, pBall);
             }
         } else if (kind == 135 || kind == 191) {
@@ -198,7 +198,7 @@ extern "C" void PlayerActionAnimTossUpdate(Record_800DB074 *pRecord, Object_8003
         }
         if (!done && pRecord->mUnknown0 == 0) {
             p->mUnknown778 = -1;
-            fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknownB = 0;
+            AssignPlayInfoGetBallRelease(BallGetIndex(BallGetCurrent()))->mUnknownB = 0;
         }
     }
 }
@@ -227,7 +227,7 @@ extern "C" void PlayerActionAnimPitchUpdate(Record_800DB074 *pRecord, Object_800
                 }
                 if (!done && pRecord->mUnknown1 == 0) {
                     p->mUnknown778 = -1;
-                    fn_8009BD2C(0, &fn_8011F518()->mUnknown0);
+                    fn_8009BD2C(0, &AssignPlayInfoGetPassRecord()->mUnknown0);
                 }
             }
         }
@@ -256,7 +256,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
     default:
         return;
     }
-    if (!(fn_8012506C(p, 3) <= 65.0f)) {
+    if (!(AssignDirGetTotalCost(p, 3) <= 65.0f)) {
         allow = 0;
     }
     unsigned int roll = (unsigned int)SyncRandGetRange(0, 255);
@@ -282,19 +282,19 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
     if (!ready) {
         return;
     }
-    allow = fn_8012506C(pOther, 5) < lbl_803EAD14;
+    allow = AssignDirGetTotalCost(pOther, 5) < lbl_803EAD14;
     if (!allow) {
         return;
     }
     if (fn_800ABDA4(ScrmGetOffenseTeam()) == 0) {
-        int count = fn_8011F59C(0);
-        count += fn_8011F59C(1);
+        int count = AssignPlayInfoGetPitchCount(0);
+        count += AssignPlayInfoGetPitchCount(1);
         if (count > 0) {
             allow = 0;
         }
     } else if (fn_800ABDA4(ScrmGetOffenseTeam()) == 1) {
-        int count = fn_8011F59C(0);
-        count += fn_8011F59C(1);
+        int count = AssignPlayInfoGetPitchCount(0);
+        count += AssignPlayInfoGetPitchCount(1);
         if (count > 1) {
             allow = 0;
         }
@@ -303,13 +303,13 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
         return;
     }
     if (failed) {
-        if ((unsigned int)fn_8011F59C(1) < (unsigned int)lbl_803EAD18) {
-            fn_8011F5AC(1);
+        if ((unsigned int)AssignPlayInfoGetPitchCount(1) < (unsigned int)lbl_803EAD18) {
+            AssignPlayInfoAddPitch(1);
         } else {
             allow = 0;
         }
     } else {
-        fn_8011F5AC(0);
+        AssignPlayInfoAddPitch(0);
     }
     if (allow) {
         PlayerActionAnimPitchTryStart(pRecord, p);
@@ -354,7 +354,7 @@ extern "C" int PlayerActionAnimIsAiPasser(Object_80039F5C *p, unsigned char *pOu
         if (!ScrmTestPlayFlag(0)) {
             unsigned char kind = p->mUnknown2914;
             if ((kind == 0 || kind == 20 || kind == 1 || kind == 3)
-                && (fn_8011F1CC() || fn_8011F1F4())
+                && (AssignPlayHasSlots() || AssignIsPlayType14())
                 && mode == 3 && p->mpState->mId == 18 && p->mUnknown360 == 1) {
                 *pOut = 1;
             }
@@ -497,9 +497,9 @@ extern "C" int PlayerActionAnimIsPassReady(Object_80039F5C *p)
         PlayBookFormation_t *pTeam = PlayBookGetFormation(p->mIdBytes[2]);
         if (!ScrmTestPlayFlag(0) && BallFindHeldBy(p)
             && (p == PlaySetGetKeyPlayer(pTeam)
-                || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
+                || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && AssignIsPlayType2()
                     && (PassIconsAreShown() || !(p->mFlags & 0x400))))
-            && (fn_8011F1CC() || fn_8011F1F4())
+            && (AssignPlayHasSlots() || AssignIsPlayType14())
             && mode == 3 && p->mpState->mId != 1 && p->mUnknown512.mUnknown15 != 1) {
             if (!PlayerActionAnimIsAiPasser(p, &flag)) {
                 if (!PassIconsWereShown()) {
@@ -534,9 +534,9 @@ extern "C" int PlayerActionAnimIsPassPending(Object_80039F5C *p)
 
     if (!ScrmTestPlayFlag(0) && BallFindHeldBy(p)
         && (p == PlaySetGetKeyPlayer(pTeam)
-            || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && fn_8011F2C4()
+            || ((p->mUnknown2914 == 1 || p->mUnknown2914 == 3) && AssignIsPlayType2()
                 && (PassIconsAreShown() || !(p->mFlags & 0x400))))
-        && fn_8011F1CC() && mode == 3 && p->mpState->mId != 1 && p->mpState->mId != 91) {
+        && AssignPlayHasSlots() && mode == 3 && p->mpState->mId != 1 && p->mpState->mId != 91) {
         if (!PlayerActionAnimIsAiPasser(p, &flag)) {
             if (!PlayerActionAnimIsPassReady(p)) {
                 result = 1;

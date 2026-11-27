@@ -47,9 +47,9 @@ int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void CarrierTightropeStart(Object_80039F5C *p);
 int CarrierSpinStart(Object_80039F5C *p, int a, int b, int c);
 int fn_8011E9B4(Object_80039F5C *p);
-void fn_8012311C(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
-Entry_801230B8 *fn_80123174(Plan_80121264 *pPlan);
-void fn_8012430C(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
+void AssignGapPlan(Object_80039F5C *p, Plan_80121264 *pPlan, int angle);
+Entry_801230B8 *AssignGapGetBestOrNull(Plan_80121264 *pPlan);
+void AssignDirEvaluate(Directions_8012430C *pOut, int kind, Object_80039F5C *p);
 unsigned char fn_801243E0(Directions_8012430C *pValues, int angle);
 void GetOpenGetRunOnPoint(Object_80039F5C *p, FieldPoint_t *pOut);
 void PlayerCutStartAnim(Object_80039F5C *p);
@@ -96,9 +96,9 @@ int CarrierMoveStart(Object_80039F5C *p, int a);
 int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800C4D54(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
-int fn_8011F1CC(void);
-int fn_8011F1A4(void);
-int fn_8011F4C8(void);
+int AssignPlayHasSlots(void);
+int AssignIsPlayType11To18(void);
+int AssignPlayInfoGetSpotIndex(void);
 int ScrmGetPlayTurnovers(void);
 float MathSin(int angle);
 int PlyrTackleRollKind(Object_80039F5C *p);
@@ -106,9 +106,9 @@ int PlyrTackleStart(Object_80039F5C *p, int a, int b);
 int CarrierStiffArmStart(Object_80039F5C *p, int a);
 int BallStateGetPrev(Ball_t *p, int *pOut);
 int BallStateGet(Ball_t *p, int *pOut);
-Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
-Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
-int fn_8011F32C(void);
+Object_80039F5C *AssignFindNearestInCone(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
+int AssignIsPlayType21(void);
 int ScrmGetOffenseTeam(void);
 int ScrmIsNearWin(int team);
 int PlayerMoveGetKind(Object_80039F5C *p);
@@ -116,8 +116,8 @@ float MathCos(int angle);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int mode, FieldPoint_t *pOut);
 int OptionRunCanPitchTo(Object_80039F5C *p, FieldPoint_t *pOut, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int a);
-float fn_8012506C(Object_80039F5C *p, int kind);
-int fn_8011F59C(int a);
+float AssignDirGetTotalCost(Object_80039F5C *p, int kind);
+int AssignPlayInfoGetPitchCount(int a);
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pOther, int kind);
 int fn_801067D8(Object_80039F5C *p);
 int PitchStart(Object_80039F5C *p, int a);
@@ -128,7 +128,7 @@ BigObj_t *BigObjFindNearestOfType(Vector_80039F5C *p, int a, float *pOut);
 float GameSkillJitterObstacleDistance(int team, float value);
 float SyncRandGetFloat(int a);
 int CarrierJukeStart(Object_80039F5C *p, int a, int b, int c);
-float fn_8011F4D4(void);
+float AssignPlayInfoGetSpotX(void);
 int ScrmTestPlayFlag(int a);
 int CarrierRunTryJuke(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
 int CarrierRunTrySpin(Object_80039F5C *, Object_80039F5C *, float, int, int, int);
@@ -160,7 +160,7 @@ extern "C" int fn_8009E180(Object_80039F5C *p);
 extern "C" int fn_800F2C1C(Object_80039F5C *p, int a);
 extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int a);
 
-extern "C" Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
+extern "C" Object_80039F5C *AssignFindNearestAhead(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
 
 extern "C" int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 
@@ -286,9 +286,9 @@ extern "C" void CarrierRunAddSideCosts(Object_80039F5C *p)
         int team = ScrmGetDefenseTeam();
         float distance;
 
-        if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), 0x355555, &distance, 1)
+        if (AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), 0x355555, &distance, 1)
             && !(distance >= 15.0f)) {
-            if (fn_8011F32C()) {
+            if (AssignIsPlayType21()) {
                 unsigned int count = ScrmGetTeamPlayerCount(ScrmGetOffenseTeam());
                 unsigned char i;
                 signed char remaining = 6;
@@ -349,7 +349,7 @@ extern "C" void CarrierRunSteerToSideline(Object_80039F5C *p)
         && PlayerMoveGetKind(p)) {
         FieldPoint_t delta;
         int team = ScrmGetDefenseTeam();
-        Object_80039F5C *other = fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), &distance, 0);
+        Object_80039F5C *other = AssignFindNearestPlayer(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), &distance, 0);
 
         Vec2Sub(&delta, &other->mMotion.mPos, &p->mMotion.mPos);
         int side = MathAngleDiff(MathArcTan2(delta.mY, delta.mX), 0) <= 0x3FFFFF;
@@ -406,10 +406,10 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
     int change = 0;
 
     ball = ScrmGetBallSpot();
-    point.mX = fn_8011F4D4();
+    point.mX = AssignPlayInfoGetSpotX();
     float offset = fabsf(motion->mPos.mX - point.mX);
 
-    if (fn_8011F1A4() && fn_8011F1A4() && (unsigned int)fn_8011F4C8() > 3
+    if (AssignIsPlayType11To18() && AssignIsPlayType11To18() && (unsigned int)AssignPlayInfoGetSpotIndex() > 3
         && !(motion->mPos.mY >= ball.mY - 1.0f)
         && !(fabsf(point.mX) <= fabsf(motion->mPos.mX)) && !(offset <= 3.0f)) {
         float distance = ball.mY - motion->mPos.mY;
@@ -428,7 +428,7 @@ extern "C" void CarrierRunPickHeading(Object_80039F5C *p, int mode)
             if (right == left) {
                 float distance;
                 int team = ScrmGetDefenseTeam();
-                Object_80039F5C *nearest = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()),
+                Object_80039F5C *nearest = AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()),
                                                      0x600000, &distance, 1);
 
                 if (nearest && !(distance >= 4.0f)) {
@@ -501,7 +501,7 @@ extern "C" void CarrierRunAvoidPlayer(Object_80039F5C *p, OptionRunControl_t *co
         limit = 2.5f;
     }
     float distance;
-    Object_80039F5C *other = fn_80124C28(p, &distance, 0x355555, limit, 0.35f, control->mUnknown44);
+    Object_80039F5C *other = AssignFindNearestAhead(p, &distance, 0x355555, limit, 0.35f, control->mUnknown44);
     *pMode = (int)other;
     if (!other || distance >= limit) {
         return;
@@ -1014,28 +1014,28 @@ extern "C" int CarrierRunTryPitch(Object_80039F5C *p, Object_80039F5C *, float, 
 
         if (open && !(p->mMotion.mPos.mY <= ball.mY)) {
             if (!(other->mRatings[4] <= p->mRatings[4] * _CarrierRun_fPitchRatingScale)) {
-                float target = fn_8012506C(other, 6);
-                float own = fn_8012506C(p, 6);
+                float target = AssignDirGetTotalCost(other, 6);
+                float own = AssignDirGetTotalCost(p, 6);
 
                 if (!(own <= target) && !(own <= _CarrierRun_fPitchFarRange) && !(target >= _CarrierRun_fPitchFarRange)) {
                     result = 1;
                 }
             } else {
-                if (!(fn_8012506C(p, 6) >= _CarrierRun_fPitchNearRange)
-                    && !(fn_8012506C(other, 6) >= _CarrierRun_fPitchNearRange)) {
+                if (!(AssignDirGetTotalCost(p, 6) >= _CarrierRun_fPitchNearRange)
+                    && !(AssignDirGetTotalCost(other, 6) >= _CarrierRun_fPitchNearRange)) {
                     result = 1;
                 }
             }
         }
     }
     if (fn_800ABDA4(ScrmGetOffenseTeam()) == 0) {
-        int count = fn_8011F59C(0);
+        int count = AssignPlayInfoGetPitchCount(0);
 
-        if (count + fn_8011F59C(1) > 0) result = 0;
+        if (count + AssignPlayInfoGetPitchCount(1) > 0) result = 0;
     } else if (fn_800ABDA4(ScrmGetOffenseTeam()) == 1) {
-        int count = fn_8011F59C(0);
+        int count = AssignPlayInfoGetPitchCount(0);
 
-        if (count + fn_8011F59C(1) > 1) result = 0;
+        if (count + AssignPlayInfoGetPitchCount(1) > 1) result = 0;
     }
     if (result && fn_80105E90(p, other, 11)) {
         result = PitchStart(p, fn_801067D8(p));
@@ -1081,11 +1081,11 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
     if (control) control->mUnknown51[0] = 7;
     float distance;
     int team = ScrmGetDefenseTeam();
-    Object_80039F5C *other = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), _CarrierRun_iMoveSearchAngle, &distance, 0);
+    Object_80039F5C *other = AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetDefenseTeam()), _CarrierRun_iMoveSearchAngle, &distance, 0);
 
     if (!other) {
         team = ScrmGetOffenseTeam();
-        other = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), _CarrierRun_iMoveSearchAngle, &distance, 0);
+        other = AssignFindNearestInCone(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), _CarrierRun_iMoveSearchAngle, &distance, 0);
     }
     if (other && !(distance > 10.0f)) {
         FieldPoint_t delta;
@@ -1147,8 +1147,8 @@ extern "C" void CarrierRunSetSpeed(Object_80039F5C *p, OptionRunControl_t *contr
 
         if (turn > 0x177777) {
             if (turn > 0x355555
-                || fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]), turn, &distance, 0)
-                || fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), turn, &distance, 0)) {
+                || AssignFindNearestInCone(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]), turn, &distance, 0)
+                || AssignFindNearestInCone(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), turn, &distance, 0)) {
                 control->mUnknown52 = 0;
                 if (!(distance >= 3.0f)) {
                     control->mUnknown40 = MathCos(turn / 2) * 0.72f;
@@ -1166,8 +1166,8 @@ extern "C" int CarrierRunFindLeadBlocker(Object_80039F5C *p)
     if (!ScrmGetPlayTurnovers()) {
         if (!(ScrmGetBallSpot().mY - p->mMotion.mPos.mY <= 4.0f)) {
             if (!(fabsf(ScrmGetBallSpot().mX - p->mMotion.mPos.mX) >= 8.0f)) {
-                if (fn_8011F1A4()) {
-                    enabled = (unsigned int)fn_8011F4C8() > 3;
+                if (AssignIsPlayType11To18()) {
+                    enabled = (unsigned int)AssignPlayInfoGetSpotIndex() > 3;
                 }
             }
         }
@@ -1314,13 +1314,13 @@ extern "C" int CarrierRunUpdate(Object_80039F5C *p)
             pControl->mUnknown49 = (255 - ((p->mRatings[0] >> 1) + (p->mRatings[2] >> 1))) >> 4;
             pControl->mUnknown40 = 1.0f;
             pControl->mUnknown52 = 1;
-            fn_8012430C(pValues, 1, p);
+            AssignDirEvaluate(pValues, 1, p);
             CarrierRunAddSideCosts(p);
             pControl->mUnknown48 = fn_801243E0(pValues, pMotion->mFacing);
             pControl->mUnknown44 = pControl->mUnknown48 << 21;
             CarrierRunPickHeading(p, mode);
-            fn_8012311C(p, &plan, pControl->mUnknown44);
-            pEntry = fn_80123174(&plan);
+            AssignGapPlan(p, &plan, pControl->mUnknown44);
+            pEntry = AssignGapGetBestOrNull(&plan);
             if (pEntry) {
                 int angle = pEntry->mUnknown16;
 

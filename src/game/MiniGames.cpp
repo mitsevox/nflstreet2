@@ -849,7 +849,7 @@ void fn_800AD910(int a, float b);
 void CamGameResumeAll(void);
 void ScrmTeamPlaceInHuddle(int team);
 Object_80039F5C *PlyrFindNearest(Vector_80039F5C *pPos, float *pOut, int team);
-int fn_8011F1CC(void);
+int AssignPlayHasSlots(void);
 void HudShowAlert(const char *pText);
 void PlyrMgrClearStates(void);
 int InGameOverlayGetState(void);
@@ -2062,7 +2062,7 @@ void MiniGame2MinuteDuringPlayC::OnUpdate(float dt)
 {
     LivePlayPhase::OnUpdate(dt);
     MiniGameGetCurrent()->vfn_15();
-    if (fn_8011F1CC() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
+    if (AssignPlayHasSlots() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
         !ScrmTestPlayFlag(20)) {
         ScrmEndPlay();
         HudShowAlert("Passer Cannot Run!");
@@ -2612,7 +2612,7 @@ void MiniGame4On4DuringPlayC::OnUpdate(float dt)
         if (pCarrier) {
             special = pCarrier->mpState->mId == 16;
         }
-        if (fn_8011F1CC() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
+        if (AssignPlayHasSlots() && ScrmTestPlayFlag(0) && !ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(1) &&
             !ScrmTestPlayFlag(20) && !mUnknown4 && !special) {
             ScrmEndPlay();
             HudShowAlert(lbl_803EB2BC);

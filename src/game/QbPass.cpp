@@ -67,7 +67,7 @@ void PassIconObjSetEnabled(int);
 void fn_800B8344(Object_80039F5C *);
 
 int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
-void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
+void AssignDirEvaluate(Directions_8012430C *, int, Object_80039F5C *);
 int MathAngleDiff(int, int);
 unsigned char QbPassRateReceiver(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int ScrmGetDown(void);
@@ -88,7 +88,7 @@ void DefPredRefreshRatings(void);
 
 int fn_801486A0(void);
 int fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
-Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
+Object_80039F5C *AssignFindNearestPlayer(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 int ScrmGetOffenseTeam(void);
 void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
 
@@ -97,7 +97,7 @@ void SndgSpchSetPlayFlags(int);
 unsigned int fn_800ABDA4(int);
 Object_80039F5C *fn_80124E5C(Object_80039F5C *, int, float *, int, float, int, float);
 float fn_80124FE0(Object_80039F5C *, int);
-float fn_80125004(Object_80039F5C *, int, int);
+float AssignDirGetRankedCost(Object_80039F5C *, int, int);
 float ScrmGetLineToGain(void);
 int ScrmGetTeamScore(int);
 int ScrmGetScoreGoal(int *);
@@ -121,7 +121,7 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
     int team = ScrmGetDefenseTeam();
     unsigned char count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
     float distance;
-    fn_801244F0(p, team, 0, count, &distance, 0);
+    AssignFindNearestPlayer(p, team, 0, count, &distance, 0);
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
     s->mUnknown3 = 0;
     if (values[0] > 2.0f || values[1] > 2.0f || values[2] > 2.0f || values[3] > 2.0f ||
@@ -158,7 +158,7 @@ void QbPassScoreDirections(Object_80039F5C *p, float *values)
 void QbPassCheckSpeech(Object_80039F5C *p)
 {
     float a = fn_80124FE0(p, 3);
-    float b = fn_80125004(p, 3, 1);
+    float b = AssignDirGetRankedCost(p, 3, 1);
     if (a > 7.0f || (!(a <= 5.0f) && !(b <= 5.0f)))
         SndgSpchSetPlayFlags(16);
 }
@@ -382,7 +382,7 @@ int QbPassUpdate(Object_80039F5C *player) {
             if (player->mUnknown2914)
                 state->mUnknown0 *= 2;
             int value = 0;
-            fn_8012430C(&values, 4, player);
+            AssignDirEvaluate(&values, 4, player);
             QbPassScoreDirections(player, values.mCost);
             if (player->mMotion.mPos.mY > ScrmGetBallSpot().mY - 1.5f)
                 weights = _QbPass_afDirWeights[4];
@@ -658,7 +658,7 @@ unsigned char QbPassRateReceiver(Object_80039F5C *p, Object_80039F5C *other, int
             int team = p->mIdBytes[2] ^ 1;
             unsigned char n = ScrmGetTeamPlayerCount(team);
             float distance;
-            Object_80039F5C *nearest = fn_801244F0(p, team, 0, n, &distance, 0);
+            Object_80039F5C *nearest = AssignFindNearestPlayer(p, team, 0, n, &distance, 0);
             if (nearest && !(distance >= 4.0f) &&
                 (p->mMotion.mUnknown28 < gPlyrMoveFwdSpeed * 0.4f ||
                  MathAngleDiff(p->mMotion.mUnknown32, nearest->mMotion.mUnknown32) > 0x2AAAAA)) {

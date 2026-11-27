@@ -87,12 +87,12 @@ void PlyrStateQueuePush(int a, State_80039F5C *pState, Message_800F01CC *pMessag
 void fn_800FAD2C(void);
 void fn_800FAECC(int a);
 void PlyrSnapToMovePoint(Object_80039F5C *p);
-void fn_8010BEA4(void);
+void AssignResetAnimInUse(void);
 void AssignZoneShiftReset(void);
 void AssignEngageSysReset(void);
 void AssignEngageSysStartPlay(void);
 void fn_8011F3A8(void);
-void fn_8011F574(void);
+void AssignPlayInfoResetPitchCounts(void);
 void fn_80120618(void);
 void BallPrimeKickUp(Ball_t *pBall);
 int BallStateGet(Ball_t *pBall, int *pOut);
@@ -125,8 +125,8 @@ int GamebreakerGetSavedState(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void AssignEngageSysReset(void);
-int fn_8011F1CC(void);
-int fn_8011F2C4(void);
+int AssignPlayHasSlots(void);
+int AssignIsPlayType2(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
 void PossTryJarBall(Object_80039F5C *p);
@@ -408,7 +408,7 @@ extern "C" void ScrmStartPlay(void)
     unsigned int count;
     int side;
 
-    fn_8011F574();
+    AssignPlayInfoResetPitchCounts();
     PlayerMoveResetAll();
     BallGetPosition(BallGetCurrent(), &ballPos);
     PlyrMgrResetAll();
@@ -469,7 +469,7 @@ extern "C" void ScrmStartPlay(void)
 
     side = ScrmGetOffenseTeam();
     BallPrimeKickUp(BallGetCurrent());
-    fn_8010BEA4();
+    AssignResetAnimInUse();
     PlayerActionAnimResetSteerFrames();
     if (fn_800B65A0(side) != 0xFF && ScrmGetDown() != 0) {
         GameCamera_t *pCamera = CamGameGetCamera(CamGameGetCurrentSlot());
@@ -711,7 +711,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                     }
                     break;
                 case 25:
-                    if (fn_8011F518()->mUnknown4 == 8) {
+                    if (AssignPlayInfoGetPassRecord()->mUnknown4 == 8) {
                         crossed = 0;
                     }
                     break;
@@ -720,7 +720,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                 }
             }
             if (p != 0 && p->mpState->mId == 15 &&
-                fn_8011F4F8(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
+                AssignPlayInfoGetBallRelease(BallGetIndex(BallGetCurrent()))->mUnknown1D != 4) {
                 crossed = 0;
             }
             if (fn_801486A0() == 0) {
@@ -784,7 +784,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
         if (GamebreakerGetSavedState(0) == 2 || GamebreakerGetSavedState(1) == 2) {
             conversion = 1;
         }
-        if ((fn_801486A0() == 4 || fn_801486A0() == 3) && fn_8011F1CC() != 0 && !ScrmTestPlayFlag(13) &&
+        if ((fn_801486A0() == 4 || fn_801486A0() == 3) && AssignPlayHasSlots() != 0 && !ScrmTestPlayFlag(13) &&
             !ScrmTestPlayFlag(1) && !ScrmTestPlayFlag(20) && !conversion) {
             return;
         }
@@ -943,7 +943,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
             pOwner->mFlags &= ~0x10000;
             ScrmSetTackler(0);
         }
-        if (p->mUnknown2914 == 0 || (fn_8011F2C4() != 0 && (p->mUnknown2914 == 1 || p->mUnknown2914 == 3))) {
+        if (p->mUnknown2914 == 0 || (AssignIsPlayType2() != 0 && (p->mUnknown2914 == 1 || p->mUnknown2914 == 3))) {
             if (!(p->mFlags & 0x8000)) {
                 FieldPoint_t los;
 

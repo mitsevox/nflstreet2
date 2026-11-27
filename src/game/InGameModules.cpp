@@ -116,10 +116,10 @@ void AssignZoneShiftInit(void);
 void AssignZoneShiftShutdown(void);
 void AssignEngageSysInit(void);
 void AssignEngageSysShutdown(void);
-void fn_8011F0D8(void);
-void fn_8011F174(void);
-void fn_8012055C(int a);
-void fn_8012060C(void);
+void AssignPlayInfoInit(void);
+void AssignPlayInfoShutdown(void);
+void AssignPursueInit(int a);
+void AssignPursueShutdown(void);
 void CamGameStart(void *pObject);
 void CollTypesRegister(void);
 void CollTypesUnregister(void);
@@ -880,13 +880,13 @@ const char *PlayInfo::GetName() { return "PlayInfo"; }
 
 int PlayInfo::Init()
 {
-    fn_8011F0D8();
+    AssignPlayInfoInit();
     return 1;
 }
 
 int PlayInfo::Shutdown()
 {
-    fn_8011F174();
+    AssignPlayInfoShutdown();
     return 1;
 }
 
@@ -1066,13 +1066,13 @@ const char *Pursuit::GetName() { return "Pursuit"; }
 
 int Pursuit::Init()
 {
-    fn_8012055C(7);
+    AssignPursueInit(7);
     return 1;
 }
 
 int Pursuit::Shutdown()
 {
-    fn_8012060C();
+    AssignPursueShutdown();
     return 1;
 }
 
