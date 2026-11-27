@@ -8203,24 +8203,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80012F3C",
-          "end": "0x800133B0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80013438",
-          "end": "0x80014AA8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80014B98",
-          "end": "0x80015BF8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80015D28",
           "end": "0x8001701C"
         },
         {
@@ -8276,18 +8258,6 @@
           {
             "function": "MsgTeamSelectScroll",
             "evidence": "evidence.tsv source-form 0x80012D50-0x80012F3C"
-          },
-          {
-            "function": "MsgTeamSelectSwapEntries",
-            "evidence": "evidence.tsv source-form 0x800133B0-0x80013438"
-          },
-          {
-            "function": "MsgTeamSelectSetTeam",
-            "evidence": "evidence.tsv source-form 0x80014AA8-0x80014B98"
-          },
-          {
-            "function": "MsgStadiumHandleMessage",
-            "evidence": "evidence.tsv source-form 0x80015BF8-0x80015D28"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
@@ -11214,18 +11184,12 @@
     {
       "source": "src/game/MsgEATrax.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8001F56C-0x8001FFE4 (src/game/MsgEATrax.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), each holdout keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x8001F56C-0x8001FFE4 (src/game/MsgEATrax.cpp), its exact function extents and data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout MsgEATraxLoadPlaylist keeping its original bytes (two before round 6 lane 2, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8001F704",
-          "end": "0x8001FC08"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8001FD48",
           "end": "0x8001FFD8"
         },
         {
@@ -11247,10 +11211,6 @@
           {
             "function": "MsgEATraxLoadPlaylist",
             "evidence": "evidence.tsv source-form 0x8001F56C-0x8001F704"
-          },
-          {
-            "function": "MsgEATraxToggleSong",
-            "evidence": "evidence.tsv source-form 0x8001FC08-0x8001FD48"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (round-2 lane 1 tracking table)"
@@ -26088,24 +26048,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80057F20",
-          "end": "0x8005AB04"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005AC18",
           "end": "0x8005B610"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8005B6AC",
-          "end": "0x8005BCA8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8005BE54",
           "end": "0x8005D60C"
         },
         {
@@ -26162,16 +26110,8 @@
             "evidence": "evidence.tsv source-form 0x80057C58-0x80057F20"
           },
           {
-            "function": "InGameLeaderGetCategories",
-            "evidence": "evidence.tsv source-form 0x8005AB04-0x8005AC18"
-          },
-          {
             "function": "InGameRewardFormatLogo",
             "evidence": "evidence.tsv source-form 0x8005B610-0x8005B6AC"
-          },
-          {
-            "function": "InGameRewardMsg",
-            "evidence": "evidence.tsv source-form 0x8005BCA8-0x8005BE54"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
