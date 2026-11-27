@@ -9952,7 +9952,7 @@
     {
       "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (12 bodies exact, 1 partial: PlaDynClutScaleRange) and the exact .rodata data row 0x8028D568-0x8028D588. The exact functions are linked through the units.json holdouts entry; PlaDynClutScaleRange keeps its original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -27182,37 +27182,6 @@
           "symbol": "PATHI_sortprojects",
           "start": "0x801B3568",
           "end": "0x801B3724"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/pathtrack.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and two HOLDOUT source-form rows. Twenty-six exact bodies, including the base constructor, and the complete native read-only section link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B3AD0",
-          "end": "0x801B45D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA60",
-          "end": "0x802AEB90"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_inittrack",
-          "start": "0x801B3FE0",
-          "end": "0x801B4174"
-        },
-        {
-          "symbol": "PATHI_dispatchtrackstate",
-          "start": "0x801B43CC",
-          "end": "0x801B44BC"
         }
       ]
     },

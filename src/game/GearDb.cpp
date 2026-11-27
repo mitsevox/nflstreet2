@@ -259,12 +259,12 @@ void GearDbUpgradeItem(int id)
             if (DbCursorFirst(&teams)) {
                 do {
                     PlayerDbReadGear((Object_8008044C *)&teams, &record);
-                    for (i = 0; i < 14; i++) {
-                        int type = GearDbGetSlotType(i);
+                    for (j = 0; j < 14; j++) {
+                        int type = GearDbGetSlotType(j);
 
-                        for (j = 0; j < 2; j++) {
-                            if (type == types[j] && record.mValues[i] == oldIds[j]) {
-                                record.mValues[i] = newIds[j];
+                        for (i = 0; i < 2; i++) {
+                            if (type == types[i] && record.mValues[j] == oldIds[i]) {
+                                record.mValues[j] = newIds[i];
                             }
                         }
                     }
