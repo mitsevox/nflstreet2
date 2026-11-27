@@ -119,13 +119,13 @@ extern "C" int PATHI_serviceaction(PathEvent_t *event, PathAction_t *action)
         }
         case 7: {
             int duration = PATHI_getvalue((unsigned short)operand, action->mBits4.rhsKind, p, event);
-            fn_801B4960(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
+            PATHI_customsfxfade(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
             action->mBits4.complete = 1;
             break;
         }
         case 6: {
             int duration = PATHI_getvalue((unsigned short)operand, action->mBits4.rhsKind, p, event);
-            fn_801B49C4(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
+            PATHI_customdrylevelfade(p, (signed char)(operand >> 24), duration, ((int)(operand << 8)) >> 25);
             action->mBits4.complete = 1;
             break;
         }
