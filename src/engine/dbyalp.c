@@ -574,7 +574,6 @@ int DbYalpLoadWeightTable(void *pTable, int tag)
     int index;
     unsigned int a;
     unsigned int b;
-    Record_802297D8 *pRow;
     int err = 0;
     unsigned char i;
 
@@ -593,13 +592,12 @@ int DbYalpLoadWeightTable(void *pTable, int tag)
                                   &aVals[4], &aVals[5], &aVals[6], &aVals[7], &aVals[8], &aVals[9],
                                   &index, &a, &b);
         if (err == 0) {
-            pRow = &((Record_802297D8 *)pTable)[index];
-            pRow->mUnknown0 = a;
-            pRow->mUnknown4 = b;
-            pRow->mUnknown30 = 0.0f;
+            ((Record_802297D8 *)pTable)[index].mUnknown0 = a;
+            ((Record_802297D8 *)pTable)[index].mUnknown4 = b;
+            ((Record_802297D8 *)pTable)[index].mUnknown30 = 0.0f;
             for (i = 0; i < 10; i++) {
-                pRow->aUnknown8[i] = aVals[i];
-                pRow->mUnknown30 += aVals[i];
+                ((Record_802297D8 *)pTable)[index].aUnknown8[i] = aVals[i];
+                ((Record_802297D8 *)pTable)[index].mUnknown30 += aVals[i];
             }
         }
     }

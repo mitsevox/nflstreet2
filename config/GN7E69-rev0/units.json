@@ -4500,9 +4500,22 @@
     },
     {
       "source": "src/engine/dbyalp.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdouts, whose ranges keep the original bytes. The file defines its whole native .rodata 0x802B2430-0x802B2CA0, including the literals and pools of its discarded file statics.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The file defines its whole native .rodata 0x802B2430-0x802B2CA0, including the literals and pool of its discarded file statics.",
       "link_roots": {
+        "symbols": [
+          "DbYalpLoadWeightTable",
+          "DbYalpModuleInit",
+          "DbYalpModuleShutdown",
+          "DbFindUnusedPlayerIds",
+          "DbYalpGetLowRating",
+          "DbYalpGetHighRating",
+          "DbYalpGetRatingWeight",
+          "DbYalpGetWeightSum",
+          "DbYalpGetOverallRating",
+          "DbYalpBeginGame",
+          "DbYalpResumeGame"
+        ],
         "discarded": [
           "_DbYalpInsertPlayer",
           "_DbYalpDeletePlayer",
@@ -4518,13 +4531,13 @@
           "_DbYalpGetTableRatings",
           "_DbYalpGetPlayerInfo"
         ],
-        "evidence": "evidence.tsv linker rows 0x802B25B8-0x802B2750 and 0x802B2778-0x802B2CA0: file-static functions SN's linker discarded; only their literals and pool remain"
+        "evidence": "evidence.tsv function rows 0x802297D8-0x80229E88: the target keeps every listed function, all reached from outside the unit or from each other; linker rows 0x802B25B8-0x802B2750 and 0x802B2778-0x802B2CA0: file-static functions SN's linker discarded, whose literals and pool remain."
       },
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x802299FC",
+          "start": "0x802297D8",
           "end": "0x80229E88"
         },
         {
@@ -4533,16 +4546,7 @@
           "start": "0x802B2430",
           "end": "0x802B2CA0"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "DbYalpLoadWeightTable",
-            "evidence": "evidence.tsv source-form 0x802297D8-0x802299FC"
-          }
-        ],
-        "evidence": "k1f merge notes (PR #1503): src/engine/dbyalp.c holds out DbYalpLoadWeightTable 0x802297D8."
-      }
+      ]
     },
     {
       "source": "src/engine/dbsplp.c",

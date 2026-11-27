@@ -19128,32 +19128,6 @@
       ]
     },
     {
-      "source": "src/engine/dbyalp.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c) and the HOLDOUT source-form rows of its two holdouts; the rest of the file is linked (units.json, holdouts).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802297D8",
-          "end": "0x80229E88"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B2430",
-          "end": "0x802B2CA0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbYalpLoadWeightTable",
-          "start": "0x802297D8",
-          "end": "0x802299FC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbmtts.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022A428-0x8022C0E0 (src/engine/dbmtts.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -19270,68 +19244,6 @@
           "symbol": "DbMttsResumeGame",
           "start": "0x8022C098",
           "end": "0x8022C0E0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/dbsrpt.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c). The whole native unit includes its .sdata and .bss and compares the holdout, whose original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022C0E0",
-          "end": "0x8022C894"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC030",
-          "end": "0x803EC03C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A2390",
-          "end": "0x803A23E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbSrptDeleteCursorTeams",
-          "start": "0x8022C0E0",
-          "end": "0x8022C214"
-        },
-        {
-          "symbol": "DbSrptModuleInit",
-          "start": "0x8022C214",
-          "end": "0x8022C3C8"
-        },
-        {
-          "symbol": "DbSrptModuleShutdown",
-          "start": "0x8022C3C8",
-          "end": "0x8022C410"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTeams",
-          "start": "0x8022C410",
-          "end": "0x8022C518"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTypedTeams",
-          "start": "0x8022C518",
-          "end": "0x8022C628"
-        },
-        {
-          "symbol": "DbSrptBeginGame",
-          "start": "0x8022C81C",
-          "end": "0x8022C858"
-        },
-        {
-          "symbol": "DbSrptResumeGame",
-          "start": "0x8022C858",
-          "end": "0x8022C894"
         }
       ]
     },
