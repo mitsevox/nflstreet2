@@ -629,7 +629,7 @@ int fn_8022A59C(int a, Object_8022A59C **ppOut)
 int fn_8022AB6C(Object_8022A59C *p, int a, int b)
 {
     struct QueryCursor cursor;
-    int err;
+    int err = 0;
 
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
