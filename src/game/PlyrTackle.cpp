@@ -1095,7 +1095,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
 {
     State_800E513C *pState = (State_800E513C *)&p->mUnknown336;
     Input_800B6D34 input;
-    FieldPoint_t dir;
+    Vector_80039F5C dir;
     float limit;
     float speed;
     int near;
@@ -1106,7 +1106,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     if (fn_800AD9B4() == 8) {
         return 0;
     }
-    if (lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == ScrmGetDefenseTeam() &&
+    if ((unsigned char)lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == ScrmGetDefenseTeam() &&
         p == fn_800B6544(fn_800B65A0(p->mIdBytes[2]))) {
         return 0;
     }
@@ -1161,36 +1161,40 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = heading;
         if (turn >= 0x200000 && turn <= 0x600000) {
             if (fn_801BE648(p->mpUnknown792) == 86) {
+                int side = heading >= 0x400000 && heading <= 0xC00000 ? 0x800000 : 0;
                 if (pState->mUnknown3 == 0) {
-                    PlyrAlignStartShuffle(p, (State_800E4120 *)pState, heading >= 0x400000 && heading <= 0xC00000 ? 0x800000 : 0, 0.975f);
+                    PlyrAlignStartShuffle(p, (State_800E4120 *)pState, side, 0.975f);
                     return 0;
                 }
-            } else if (pState->mUnknown3 == 0) {
+                p->mUnknown512.mUnknown14 = 0;
+            } else if (pState->mUnknown3 != 0) {
+                p->mUnknown512.mUnknown14 = 0;
+            } else {
                 p->mFlags &= ~0x40000;
-                return 0;
             }
-            p->mUnknown512.mUnknown14 = 0;
         } else {
             p->mFlags &= ~0x40000;
             pState->mUnknown3 = 0;
         }
     } else if (fn_801BE648(p->mpUnknown792) == 189 && (p->mFlags & 4)) {
         p->mFlags &= ~4;
-        if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) > 0xAAAAA) {
-            PlayerPathStartSideAnim(p, 8, 1);
-        } else if (pState->mUnknown3 != 0 || PlayerActionIsNearLine(p)) {
-            fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);
-            pState->mUnknown3 = 0;
+        if (MathAngleDiff(p->mMotion.mFacing, 0xC00000) <= 0xAAAAA) {
+            if (pState->mUnknown3 != 0 || PlayerActionIsNearLine(p)) {
+                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);
+                pState->mUnknown3 = 0;
+            } else {
+                int close = 0;
+                if (p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f) {
+                    close = fabsf(p->mMotion.mPos.mX) < 8.0f;
+                }
+                if (close) {
+                    PlayerPathStartSideAnim(p, 8, 1);
+                } else if (!(p->mFlags & 0x40000)) {
+                    fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 85, 1.0f, p);
+                }
+            }
         } else {
-            int close = 0;
-            if (p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f) {
-                close = fabsf(p->mMotion.mPos.mX) < 8.0f;
-            }
-            if (close) {
-                PlayerPathStartSideAnim(p, 8, 1);
-            } else if (!(p->mFlags & 0x40000)) {
-                fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 85, 1.0f, p);
-            }
+            PlayerPathStartSideAnim(p, 8, 1);
         }
     }
     return 0;
@@ -2571,6 +2575,9 @@ extern "C" int PlyrTurnEnter(Object_80039F5C *p) {
         p->mUnknown512.mUnknown4 = state->mUnknown0;
         p->mUnknown512.mUnknown8 = state->mUnknown0;
         p->mUnknown512.mUnknown0 = state->mUnknown4;
+        // FAKEMATCH: the empty do/while (a compiled-out macro in form) keeps the three move-command copies ahead of the flag clear and the animation call arguments, as the target schedules them; it does nothing.
+        do {
+        } while (0);
         p->mFlags &= ~4;
         fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 100, 1.0f, p);
         state->mUnknown8 = 1;
