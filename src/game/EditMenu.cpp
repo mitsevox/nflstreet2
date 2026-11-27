@@ -11,7 +11,7 @@
 #include "game/PaletteColor.h"
 #include "game/EditMenu.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/UISGameMsg.h"
 
 /* One entry of the screen stack _EditMenu_aScreenStack. */
@@ -88,8 +88,8 @@ void PlayerDbGetShortName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerDbGetFullName(Object_8008044C *pObject, char *pBuffer, int size);
 void PlayerAddGearRatings(Object_8008044C *pObject, PlayerGear_t *pInfo, int *pValues);
 void PlayerGetGearBonuses(Object_8008044C *pObject, short *pValues);
-void fn_80082534(int a, int b);
-void fn_80082558(int a, int b);
+void PlayerRecordSaveTeam(int a, int b);
+void PlayerRecordLoadTeam(int a, int b);
 int StoreTeamCreate(void);
 void StoreTeamDelete(int a);
 void PositionAbbrevFormat(int a, char *pText);
@@ -107,7 +107,7 @@ void StoryTeamClear(void);
 void StoryTeamBackup(int *pA, int *pB, int c);
 void StoryTeamFreeBackup(int a, int b);
 void StoryTeamRestore(int a, int b);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamInsertNew(int a);
 int CreateTeamExists(int a);
 int CreateTeamLoadToStats(int a, int b);
@@ -271,7 +271,7 @@ void EditMenuFreeBackup(void)
 void EditMenuRestoreTeam(void)
 {
     if (EditMenuIsPlayerCopy()) {
-        fn_80082558(_EditMenu_iTeam, _EditMenu_cTeamSlot);
+        PlayerRecordLoadTeam(_EditMenu_iTeam, _EditMenu_cTeamSlot);
         return;
     }
     if (EditMenuIsStoryTeam()) {
@@ -455,14 +455,14 @@ void EditMenuReloadTeam(void)
 
     PlayerCursorClose(&gEditMenuPlayerCursor);
     if (EditMenuIsStoryTeam()) {
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
         if (StoryTeamExists(_EditMenu_cTeamSlot)) {
             _EditMenu_iTeam = StoryTeamLoadToStats(_EditMenu_cTeamSlot, 0, 0, &status);
         }
     } else if (EditMenuIsPlayerCopy()) {
-        fn_80082558(_EditMenu_iTeam, _EditMenu_cTeamSlot);
+        PlayerRecordLoadTeam(_EditMenu_iTeam, _EditMenu_cTeamSlot);
     } else {
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
         if (CreateTeamExists(_EditMenu_cTeamSlot)) {
             _EditMenu_iTeam = CreateTeamLoadToStats(_EditMenu_cTeamSlot, 0);
         }
@@ -505,7 +505,7 @@ void EditMenuClose(unsigned char a)
         case 2:
             break;
         case 5:
-            fn_80082558(_EditMenu_iTeam, _EditMenu_cTeamSlot);
+            PlayerRecordLoadTeam(_EditMenu_iTeam, _EditMenu_cTeamSlot);
             break;
         default:
             EditMenuReloadTeam();
@@ -864,7 +864,7 @@ void EditMenuSaveTeam(void)
         StorySetDevPoints(_EditMenu_cTeamSlot, CreatePlayerGetPoints());
         StoryTeamStoreFromStats(_EditMenu_cTeamSlot, _EditMenu_iTeam);
     } else if (EditMenuIsPlayerCopy()) {
-        fn_80082534(_EditMenu_iTeam, _EditMenu_cTeamSlot);
+        PlayerRecordSaveTeam(_EditMenu_iTeam, _EditMenu_cTeamSlot);
     } else if (EditMenuGetMode() != 2) {
         CreateTeamStoreFromStats(_EditMenu_cTeamSlot, _EditMenu_iTeam);
         if (ChalGetDevPoints() != CreatePlayerGetPoints()) {
@@ -1123,7 +1123,7 @@ void EditMenuSendOwnerText(const char *pText)
             sText.mLength = 27;
             sText.mpText = _EditMenu_szOwnerText;
             args[1].pParams = &sText;
-            fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
+            UISProcessHint(gUISMainInfo, 0x80000088, 2, args);
         }
     } else {
         MenuArg_t args[2];
@@ -1134,7 +1134,7 @@ void EditMenuSendOwnerText(const char *pText)
         sText.mLength = 27;
         sText.mpText = _EditMenu_szOwnerText;
         args[1].pParams = &sText;
-        fn_8021D7B8(gUISMainInfo, 0x80000088, 2, args);
+        UISProcessHint(gUISMainInfo, 0x80000088, 2, args);
     }
 }
 
@@ -1255,7 +1255,7 @@ void EditMenuBegin(int mode, int value)
         EditMenuSetChanged();
         break;
     case 5:
-        fn_80082558(value, _EditMenu_cTeamSlot);
+        PlayerRecordLoadTeam(value, _EditMenu_cTeamSlot);
         _EditMenu_iTeam = value;
         break;
     case 0:
@@ -1287,7 +1287,7 @@ void EditMenuEnd(void)
         TeamDbClose(&gEditMenuTeamCursor);
         PlayerCursorClose(&gEditMenuPlayerCursor);
         if (EditMenuIsStoryTeam()) {
-            fn_8018C48C(0x54415453);
+            TeamTablesPurgeCreated(0x54415453);
             if (MsgGameGetSetupState() == 1 && EditMenuGetMode() == 3) {
                 StoryEventsStartFirstEvent();
             }
@@ -1295,7 +1295,7 @@ void EditMenuEnd(void)
             if (_EditMenu_iMode == 2) {
                 StoreTeamDelete(_EditMenu_iTeam);
             } else {
-                fn_8018C48C(0x54415453);
+                TeamTablesPurgeCreated(0x54415453);
             }
         }
         ChalCloseCursors();

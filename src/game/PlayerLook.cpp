@@ -146,13 +146,13 @@ int PlayerDbGetHairStyle(Object_8008044C *pObject);
 int PlayerDbGetPjen(Object_8008044C *pObject);
 void PlayerGearGetScaledBonuses(Object_8008044C *pObject, short *pValues);
 void PlayerDbReadHairColors(Object_8008044C *pObject, unsigned char *p);
-void fn_80081CDC(void);
-void fn_80081D24(void);
-int fn_80081D4C(Object_8008044C *pObject, unsigned char *p);
+void PlayerGearColorsOpen(void);
+void PlayerGearColorsClose(void);
+int PlayerGearColorsRead(Object_8008044C *pObject, unsigned char *p);
 int fn_80081E3C(Object_8008044C *pObject);
-int fn_80081FD4(Object_8008044C *pObject, int a);
-int fn_80082280(Object_8008044C *pObject);
-int fn_800822D4(Object_8008044C *pObject);
+int PlayerDbGetPickedFlag(Object_8008044C *pObject, int a);
+int PlayerDbGetFaceId(Object_8008044C *pObject);
+int PlayerDbGetEyebrows(Object_8008044C *pObject);
 void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
 void ParticleTrailReset(ParticleTrailSet_t *pObject);
 void PlayerHeadGetHairModels(const char *pName, int b, int c, int d, PlayerHeadIds_t *pIds);
@@ -663,8 +663,8 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     pRecord = &gPlayerLooks[index];
     PlayerDbGetNickname(&_PlayerLook_sPlayerCursor, pRecord->mName, 31);
     pRecord->mUnknown72 = fn_80081E3C(&_PlayerLook_sPlayerCursor) + 1;
-    pRecord->mUnknown73 = fn_80082280(&_PlayerLook_sPlayerCursor);
-    pRecord->mUnknown74 = fn_800822D4(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown73 = PlayerDbGetFaceId(&_PlayerLook_sPlayerCursor);
+    pRecord->mUnknown74 = PlayerDbGetEyebrows(&_PlayerLook_sPlayerCursor);
     pRecord->mUnknown6C = PlayerDbGetPlht(&_PlayerLook_sPlayerCursor);
     pRecord->mUnknown6E = PlayerDbGetHairStyle(&_PlayerLook_sPlayerCursor);
     pRecord->mUnknown77 = PlayerDbGetPjen(&_PlayerLook_sPlayerCursor);
@@ -672,7 +672,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     pRecord->mUnknown78 = PlayerDbGetPybt(&_PlayerLook_sPlayerCursor);
     pRecord->mUnknown76 = PlayerDbGetPlex(&_PlayerLook_sPlayerCursor);
     if (PlayerDbGetPrty(&_PlayerLook_sPlayerCursor)) {
-        fn_80082138(&_PlayerLook_sPlayerCursor, &block);
+        PlayerDbGetFaceFeatures(&_PlayerLook_sPlayerCursor, &block);
         PlayerLookSetFeatures(index, &block);
         pRecord->mInfo.mUnknown03 = FaceMorphIsAllowed(&block);
     } else {
@@ -681,7 +681,7 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
     gPlayerLooks[index].mUnknown70 = PlayerLookGetHatKind(index);
     gPlayerLooks[index].mUnknown75 = PlayerLookGetSlot1Kind(index);
     PlayerDbReadHairColors(&_PlayerLook_sPlayerCursor, &pColors[18]);
-    if (!fn_80081D4C(&_PlayerLook_sPlayerCursor, pColors)) {
+    if (!PlayerGearColorsRead(&_PlayerLook_sPlayerCursor, pColors)) {
         PlaTexRemapColors(pColors);
         PlaTexApplyAwayColors(pColors, gPlayerLooks[index].mUnknown93);
     }
@@ -690,14 +690,14 @@ extern "C" void PlayerLookLoad(int index, int unused, int id, unsigned char flag
 extern "C" void PlayerLookOpen(void)
 {
     PlayerCursorOpen(&_PlayerLook_sPlayerCursor, 0, FELoopIsMainFEActive() ? 0x54415453 : 0x454D4147);
-    fn_80081CDC();
+    PlayerGearColorsOpen();
     GearDbOpen(&_PlayerLook_sGearCursor);
 }
 
 extern "C" void PlayerLookClose(void)
 {
     GearDbClose(&_PlayerLook_sGearCursor);
-    fn_80081D24();
+    PlayerGearColorsClose();
     PlayerCursorClose(&_PlayerLook_sPlayerCursor);
 }
 
@@ -886,7 +886,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
 
         DbCursorOpen(&cursor, 0x59414C50, 0x44494750, 0, 0, 0x54415453);
         if (PlayerDbSeekId((Object_8008044C *)&cursor, id, 0)) {
-            flag = fn_80081FD4((Object_8008044C *)&cursor, 1) == 0;
+            flag = PlayerDbGetPickedFlag((Object_8008044C *)&cursor, 1) == 0;
         }
         DbCursorClose(&cursor);
     } else if ((FELoopIsMainFEActive() && (EditMenuIsOpen() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {

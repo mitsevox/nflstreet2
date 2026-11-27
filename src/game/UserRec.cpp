@@ -8,10 +8,10 @@
 #include "game/DbUserSetCurrent.h"
 
 extern "C" {
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 int fn_801486A0(void);
-int fn_80178EA0(int a);
-int fn_80178EE0(int a);
+int ScrmGetGoalTotal(int a);
+int ScrmGetGoalCount(int a);
 int fn_800A7E40(unsigned char a);
 int fn_800A7E54(unsigned char a);
 int DbUserGetCount(void);
@@ -25,7 +25,7 @@ extern "C" {
 
 int UserRecIsResultTeam(unsigned char value)
 {
-    return value == fn_80178AE0();
+    return value == ScrmGetWinner();
 }
 
 int UserRecGetGameStat(int kind, int a, int b, int c, int d)
@@ -58,10 +58,10 @@ int UserRecGetGameStat(int kind, int a, int b, int c, int d)
             result = UserRecIsResultTeam(c) == 0;
             break;
         case 10:
-            result = fn_80178EA0(c == 0) - fn_80178EE0(c == 0);
+            result = ScrmGetGoalTotal(c == 0) - ScrmGetGoalCount(c == 0);
             break;
         case 11:
-            result = fn_80178EA0(c == 0);
+            result = ScrmGetGoalTotal(c == 0);
             break;
         case 12:
             break;

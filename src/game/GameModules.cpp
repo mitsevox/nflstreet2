@@ -23,10 +23,10 @@ extern char lbl_803EB6F8[];
 void fn_800A1A58(void);
 void fn_800A1A80(void);
 int fn_800A3444(void);
-void fn_801779D8(void);
-void fn_80177B54(void);
-void fn_801787FC(int which, short value);
-void fn_8017885C(void);
+void ScrmInit(void);
+void ScrmShutdown(void);
+void ScrmSetTeamScore(int which, short value);
+void ScrmClearDriveBallPlaced(void);
 void UISGameInit(void);
 void UISGameShutdown(void);
 int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
@@ -199,22 +199,22 @@ const char *ScrmRule::GetName() { return "ScrmRule"; }
 int ScrmRule::Init()
 {
     fn_800A1A58();
-    fn_801779D8();
+    ScrmInit();
     if (!FELoopIsMainFEActive()) {
         int csag;
         int cshg;
 
         TDbCompilePerformOp(0, "select 'CSAG' into \x85 and 'CSHG' into \x85 from 'FNIG'\n", &csag, &cshg);
-        fn_801787FC(1, csag);
-        fn_801787FC(0, cshg);
-        fn_8017885C();
+        ScrmSetTeamScore(1, csag);
+        ScrmSetTeamScore(0, cshg);
+        ScrmClearDriveBallPlaced();
     }
     return 1;
 }
 
 int ScrmRule::Shutdown()
 {
-    fn_80177B54();
+    ScrmShutdown();
     fn_800A1A80();
     return 1;
 }

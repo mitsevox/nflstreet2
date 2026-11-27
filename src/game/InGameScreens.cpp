@@ -201,7 +201,7 @@ void RecordsSeekRow(int type, int row);
 int RecordsGetValue(int column);
 int RecordsGetText(int type, int row, int column, char *text, int size);
 int fn_8022B7A4(int handle, int tag, void *pValue);
-int fn_801788D8(int *pValue);
+int ScrmGetScoreGoal(int *pValue);
 int fn_800A7E40(unsigned char side);
 int fn_800A7E54(unsigned char side);
 int FeatAwardGameCredits(int side);
@@ -212,9 +212,9 @@ void GauntletStatsAdd(DbCursor *pObject, int index, int delta);
 int fn_800A3444(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
-int fn_801787DC(int team);
-int fn_80178EE0(int team);
-int fn_80178AE0(void);
+int ScrmGetTeamScore(int team);
+int ScrmGetGoalCount(int team);
+int ScrmGetWinner(void);
 void *DbUserGetCurrent(void);
 extern char lbl_8031BDD4[];
 extern void *gUISMainInfo;
@@ -228,8 +228,8 @@ void GameTextQueuePlayerPortraits(void);
 void fn_800C1CA0(void);
 void PauseRequestClose(void);
 int fn_801486A0(void);
-int fn_80178308(void);
-int fn_80179138(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetConversionKind(void);
 int PlayBookGetDatabase(int team);
 PlaybookTeamView *PlayBookGetTeam(int team);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned char c);
@@ -245,12 +245,12 @@ void PlayArtReadRoutes(int tag, PlayBookPlay_t *pRecord, int a, int b, int team,
 void PlayArtBuild(int tag, PlayBookPlay_t *pRecord, int a, int b, int c, int team, int index, int first,
                  unsigned char count, Info_8006719C *pInfo);
 void PlayArtSetFlip(signed char team, int value, int index);
-void fn_8021D7B8(void *p, int id, int count, void *pArgs);
-int fn_80178320(void);
-int fn_80177F7C(void);
-int fn_80177F70(void);
+void UISProcessHint(void *p, int id, int count, void *pArgs);
+int ScrmGetDefenseTeam(void);
+int ScrmGetPlayDown(void);
+int ScrmGetDown(void);
 unsigned char fn_800B65A0(int side);
-void fn_80177D78(void);
+void ScrmRestoreFieldFlip(void);
 void fn_8009D964(int index, int value);
 int GameInfoGet(int index);
 void fn_800B4434(void);
@@ -262,8 +262,8 @@ int fn_801485D4(void);
 int InGameIsStopped(void);
 int PauseIsOpen(void);
 unsigned char ReplayIsShowing(void *p);
-void fn_80179144(int a);
-void fn_8017916C(void);
+void ScrmSetConversionKind(int a);
+void ScrmPlaceConversionBall(void);
 unsigned int SyncRandGetRange(int stream, int count);
 void fn_800B41BC(int a, int b, int c);
 int FormationLineupApplyUser(int formation, int team);
@@ -303,7 +303,7 @@ void fn_800AE988(void);
 void PauseSetSavedRumble(unsigned char value);
 void PauseBlock(void);
 int ChallengeGetGoalTexts(int *pResults, char (*pText)[64]);
-void fn_80178B1C(int a);
+void ScrmAwardWin(int a);
 void PauseNullHook(int value);
 void DepthChartSave(void);
 void DepthChartGetSideNames(int group, int kind, int *pList);
@@ -317,7 +317,7 @@ int ReplayIsHalted(void *p);
 int TutorialIsActive(void);
 int DepthChartScreenIsSideShown(unsigned char a);
 void DepthChartScreenGetSideName(unsigned char a, int b, char *pText, int length);
-int fn_80178D70(int team);
+int ScrmGetActivePlayerCount(int team);
 void DepthChartScreenGetSpot(unsigned char a, int b, int c, int *pList0, int *pList1, char *pText, int length);
 int OptAudioHandleMessage(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
 int OptionsScreenMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult);
@@ -338,7 +338,7 @@ int InGameOverlayMsg(int group, unsigned int id, MenuArg_t *pArgs, int unused, i
 int fn_800C8744(int team);
 void GameTextGetTeamDisplayName(int id, char *pText, int size);
 int GameOptionsGet(int a);
-int fn_8017881C(int team);
+int ScrmGetRuleScore(int team);
 int GameTextFindPlayerPad(unsigned int index);
 int GameModeTypeIsSpecial(void);
 extern void *gpReplay;
@@ -548,16 +548,16 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
         } else {
             index = 0;
         }
-        switch (fn_801788D8(&value)) {
+        switch (ScrmGetScoreGoal(&value)) {
         case 2:
-            pStats[side][0] = fn_80178EE0((unsigned char)side);
+            pStats[side][0] = ScrmGetGoalCount((unsigned char)side);
             break;
         case 1:
             pStats[side][0] = -1;
             break;
         case 0:
         default:
-            pStats[side][0] = fn_801787DC((unsigned char)side);
+            pStats[side][0] = ScrmGetTeamScore((unsigned char)side);
             break;
         }
         int a = GameStatsReadTag(pHandles[index], 0x74727374);
@@ -592,8 +592,8 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
             score1 = StyleTrackerGetTotal(1);
             score0 = StyleTrackerGetTotal(0);
         } else {
-            score1 = fn_801787DC(1);
-            score0 = fn_801787DC(0);
+            score1 = ScrmGetTeamScore(1);
+            score0 = ScrmGetTeamScore(0);
         }
         if (score1 > score0) {
             GauntletStatsAdd(&cursor, 0, 1);
@@ -614,7 +614,7 @@ void GameStatsFill(int *pHandles, int *pStats1, int *pStats0, int *pMode, char *
         GauntletStatsAdd(&cursor, 13, score1);
         GauntletStatsClose(&cursor);
     }
-    *pMode = fn_80178AE0();
+    *pMode = ScrmGetWinner();
     if (*pMode == 2) {
         *pMode = 0;
     }
@@ -721,35 +721,35 @@ int InGamePlayCallUsesProfileOrder(void)
 int InGamePlayCallGetMenuKind(int team)
 {
     int value;
-    int count = fn_80179138();
+    int count = ScrmGetConversionKind();
 
     switch (_InGameScreens_pPlayCall->mUnknown46[team]) {
     case 0:
         value = 0;
         break;
     case 1:
-        if (fn_80178308() == (unsigned char)team) {
+        if (ScrmGetOffenseTeam() == (unsigned char)team) {
             value = 1;
         } else {
             value = 4;
         }
         break;
     case 2:
-        if (fn_80178308() == (unsigned char)team) {
+        if (ScrmGetOffenseTeam() == (unsigned char)team) {
             value = 2;
         } else {
             value = 6;
         }
         break;
     case 3:
-        if (fn_80178308() == (unsigned char)team) {
+        if (ScrmGetOffenseTeam() == (unsigned char)team) {
             value = 3;
         } else {
             value = 5;
         }
         break;
     default:
-        if (fn_80178308() == (unsigned char)team && (count == 1 || count == 2)) {
+        if (ScrmGetOffenseTeam() == (unsigned char)team && (count == 1 || count == 2)) {
             if (count == 1) {
                 value = 7;
             } else {
@@ -783,7 +783,7 @@ int InGamePlayCallSelect(int side, int a, int b, int c)
         team = 0;
     }
     if (_InGameScreens_pPlayCall->mUnknown46[team] <= 3) {
-        if (fn_80178308() == team) {
+        if (ScrmGetOffenseTeam() == team) {
             limit = _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
         } else {
             limit = _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
@@ -815,7 +815,7 @@ void InGamePlayCallLoadSlot(int team, unsigned int a, int b)
 {
     unsigned char limit;
 
-    if (fn_80178308() == team) {
+    if (ScrmGetOffenseTeam() == team) {
         limit = _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     } else {
         limit = _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
@@ -824,7 +824,7 @@ void InGamePlayCallLoadSlot(int team, unsigned int a, int b)
     if (index < limit) {
         _InGameScreens_pPlayArt->mUnknown4[team] = PlayBookGetDatabase(team);
         _InGameScreens_pPlayArt->mpTeam[team] = PlayBookGetTeam(team);
-        if (fn_80178308() == team) {
+        if (ScrmGetOffenseTeam() == team) {
             _InGameScreens_pPlayArt->mpSlots[team][b].mUnknownEBC =
                 _InGameScreens_pPlayLists->mpUnknown0[team][_InGameScreens_pPlayCall->mUnknown46[team]][index];
         } else {
@@ -884,12 +884,12 @@ void InGamePlayCallShowSlot(int team, int a, int b)
     args.mpEntry = &_InGameScreens_pPlayCall->mpEntries[team][b];
     args.mpEntry->mpText = _InGameScreens_pPlayCall->mpTexts[team][b];
     args.mpEntry->mUnknown4 = strlen(_InGameScreens_pPlayCall->mpTexts[team][b]);
-    if (fn_80178308() == team) {
+    if (ScrmGetOffenseTeam() == team) {
         args.mLocked = a + b >= _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     } else {
         args.mLocked = a + b >= _InGameScreens_pPlayLists->mUnknown48[team][_InGameScreens_pPlayCall->mUnknown46[team]];
     }
-    fn_8021D7B8(gUISMainInfo, 0x80000011, 5, &args);
+    UISProcessHint(gUISMainInfo, 0x80000011, 5, &args);
 }
 
 int InGamePlayCallGetUserTeam(void)
@@ -897,7 +897,7 @@ int InGamePlayCallGetUserTeam(void)
     int value = -1;
 
     if (fn_801486A0() == 3) {
-        value = fn_80178320();
+        value = ScrmGetDefenseTeam();
         _InGameScreens_pPlayCall->mUnknown4F = value;
     } else if (_InGameScreens_pPlayCall->mUnknown4F != 2) {
         value = _InGameScreens_pPlayCall->mUnknown4F;
@@ -908,8 +908,8 @@ int InGamePlayCallGetUserTeam(void)
 
 void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pType, int *pState, int *pIsMode6)
 {
-    if (fn_80177F7C() == 6 && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)) {
-        fn_80177D78();
+    if (ScrmGetPlayDown() == 6 && (fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)) {
+        ScrmRestoreFieldFlip();
     }
     if (!_InGameScreens_bPlayClockStarted) {
         fn_8009D964(2, 0);
@@ -960,7 +960,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
         *pFlag = 1;
         _InGameScreens_pPlayCall->mUnknown50 = 0;
     }
-    *pSide = fn_80178308() != 0;
+    *pSide = ScrmGetOffenseTeam() != 0;
     for (unsigned char i = 0; i <= 7; i++) {
         pTable[i] = -1;
     }
@@ -973,7 +973,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
     fn_800B3C54();
     *pMode = fn_8009D990(3);
     *pType = -1;
-    if (ChallengeIsActive() && fn_800B65A0(fn_80178308()) != 0xFF) {
+    if (ChallengeIsActive() && fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
         if (ChalGetCurrent()->mUnknown1B0 != 0) {
             switch (ChalGetCurrent()->mUnknown1B0) {
             case 1:
@@ -987,7 +987,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
                 break;
             }
         }
-    } else if (fn_801485D4() && fn_800B65A0(fn_80178308()) != 0xFF) {
+    } else if (fn_801485D4() && fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
         switch (MiniGameGetCurrent()->vfn_08(0)) {
         case 0:
             break;
@@ -1000,23 +1000,23 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
         }
     }
     *pState = InGamePlayCallGetUserTeam();
-    *pIsMode6 = fn_80177F70() == 6;
+    *pIsMode6 = ScrmGetDown() == 6;
 }
 
 
 void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int value0, int *pPair0, int word0, int test0)
 {
-    int count = fn_80179138();
+    int count = ScrmGetConversionKind();
 
     if (InGameIsStopped() == 0) {
         if (PauseIsOpen() == 0 && ReplayIsShowing(gpReplay) == 0) {
-            if (count == 0 && fn_80177F70() == 6) {
-                fn_80179144(1);
+            if (count == 0 && ScrmGetDown() == 6) {
+                ScrmSetConversionKind(1);
                 count = 1;
             }
             _InGameScreens_pPlayCall->mUnknown50 = 0;
             if (count == 1 || count == 2) {
-                fn_8017916C();
+                ScrmPlaceConversionBall();
             }
             if (_InGameScreens_pPlayCall->mUnknown4A[0] != _InGameScreens_pPlayCall->mUnknown4C[0]) {
                 PlayBookToggleFlip(0);
@@ -1025,7 +1025,7 @@ void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int valu
                 PlayBookToggleFlip(1);
             }
             if (_InGameScreens_pPlayCall->mUnknown42[0]) {
-                if (fn_80178308() == 0) {
+                if (ScrmGetOffenseTeam() == 0) {
                     PlayBookSetIndices(0, 0, _InGameScreens_pPlayCall->mUnknown48[0],
                                 _InGameScreens_pPlayLists->mpUnknown0[0][_InGameScreens_pPlayCall->mUnknown48[0]][_InGameScreens_pPlayCall->mUnknown40[0]]);
                 } else {
@@ -1035,7 +1035,7 @@ void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int valu
                 PlayBookLoadCurrentPlay(0);
                 fn_800B41BC(0, 0, 0);
             } else {
-                if (fn_80178308() == 0) {
+                if (ScrmGetOffenseTeam() == 0) {
                     PlayBookSetIndices(0, 0, 0,
                                 _InGameScreens_pPlayLists->mpUnknown0[0][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown40[0][0])]);
                 } else {
@@ -1047,7 +1047,7 @@ void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int valu
             }
             FormationLineupApplyUser(PlayBookGetTeam(0)->mUnknown40, 0);
             if (_InGameScreens_pPlayCall->mUnknown42[1]) {
-                if (fn_80178308() == 1) {
+                if (ScrmGetOffenseTeam() == 1) {
                     PlayBookSetIndices(1, 0, _InGameScreens_pPlayCall->mUnknown48[1],
                                 _InGameScreens_pPlayLists->mpUnknown0[1][_InGameScreens_pPlayCall->mUnknown48[1]][_InGameScreens_pPlayCall->mUnknown40[1]]);
                 } else {
@@ -1057,7 +1057,7 @@ void InGamePlayCallClose(int value1, int *pPair1, int word1, int test1, int valu
                 PlayBookLoadCurrentPlay(1);
                 fn_800B41BC(1, 0, 0);
             } else {
-                if (fn_80178308() == 1) {
+                if (ScrmGetOffenseTeam() == 1) {
                     PlayBookSetIndices(1, 0, 0,
                                 _InGameScreens_pPlayLists->mpUnknown0[1][0][(unsigned char)SyncRandGetRange(0, _InGameScreens_pPlayLists->mUnknown40[1][0])]);
                 } else {
@@ -1127,7 +1127,7 @@ void InGamePlayCallSetPage(int side, int a)
     if (_InGameScreens_pPlayArt->mUnknown1C[team]) {
         _InGameScreens_pPlayArt->mUnknown0[team] = (a + a) * _InGameScreens_pPlayCall->mUnknown4E;
         _InGameScreens_pPlayArt->mUnknown2[team] = 0;
-        if (fn_80178308() == team) {
+        if (ScrmGetOffenseTeam() == team) {
             if (_InGameScreens_pPlayArt->mUnknown0[team] + _InGameScreens_pPlayCall->mUnknown4E * 2 >
                 _InGameScreens_pPlayLists->mUnknown40[team][_InGameScreens_pPlayCall->mUnknown46[team]]) {
                 PlayArtResetTeam(team);
@@ -1152,11 +1152,11 @@ void InGamePlayCallSetMenu(int side, int mode, int *pPages)
     if (team != _InGameScreens_pPlayCall->mUnknown4F) {
         _InGameScreens_pPlayArt->mUnknown1C[team] = 1;
     }
-    if (side == fn_80178308()) {
+    if (side == ScrmGetOffenseTeam()) {
         switch (mode) {
         case 0:
             _InGameScreens_pPlayCall->mUnknown46[team] = mode;
-            if (team == fn_80178308()) {
+            if (team == ScrmGetOffenseTeam()) {
                 *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             } else {
                 *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
@@ -1185,7 +1185,7 @@ void InGamePlayCallSetMenu(int side, int mode, int *pPages)
         switch (mode) {
         case 0:
             _InGameScreens_pPlayCall->mUnknown46[team] = mode;
-            if (team == fn_80178308()) {
+            if (team == ScrmGetOffenseTeam()) {
                 *pPages = (_InGameScreens_pPlayLists->mUnknown40[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
             } else {
                 *pPages = (_InGameScreens_pPlayLists->mUnknown48[team][0] + _InGameScreens_pPlayCall->mUnknown4E * 2 - 1) / (_InGameScreens_pPlayCall->mUnknown4E * 2);
@@ -1526,9 +1526,9 @@ void InGamePlayCallClearSaved(void)
 void InGamePlayCallSetMode(int a, int b)
 {
     if (b == 7) {
-        fn_80179144(1);
+        ScrmSetConversionKind(1);
     } else {
-        fn_80179144(2);
+        ScrmSetConversionKind(2);
     }
 }
 
@@ -1616,7 +1616,7 @@ void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
     _InGameScreens_bForfeitChosen = 0;
     int pad = PauseGetValue();
     int value = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
+    UISProcessHint(gUISMainInfo, 0x8000000E, 1, &value);
     if (pad != -1) {
         fn_801C2E18(pText, "Pause - Controller Socket %d", ConGetChannelInfo(pad, 0) + 1);
         int active = 1;
@@ -1625,13 +1625,13 @@ void InGamePauseOpen(char *pText, int size, int *pActive, int *pSide)
         }
         *pActive = active;
         if (active == 0) {
-            if (fn_80178308()) {
+            if (ScrmGetOffenseTeam()) {
                 *pSide = 0;
             } else {
                 *pSide = 1;
             }
         } else {
-            if (fn_80178308() == 0) {
+            if (ScrmGetOffenseTeam() == 0) {
                 *pSide = 0;
             } else {
                 *pSide = 1;
@@ -1656,7 +1656,7 @@ void InGamePauseClose(void)
         AudmonEventPostArgs(0x72, 0, PauseGetQuitFlag(), 0, 0);
         if (PauseGetSavedMode() != 5) {
             int value = 1;
-            fn_8021D7B8(gUISMainInfo, 0x8000000E, 1, &value);
+            UISProcessHint(gUISMainInfo, 0x8000000E, 1, &value);
         }
         if (GameModeTypeGet() == 6 && fn_800AD9B4() == 2) {
             ChallengeSendGoalList(1);
@@ -1714,7 +1714,7 @@ void InGamePauseGetChallengeGoals(int *pCount, MenuText_t *pName, MenuText_t *pT
 void InGamePauseForfeit(int a)
 {
     _InGameScreens_bForfeitChosen = 1;
-    fn_80178B1C(a);
+    ScrmAwardWin(a);
 }
 
 unsigned char InGamePauseIsRestart(void)
@@ -1838,7 +1838,7 @@ int InGamePauseMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
         break;
     case 0x149:
         DepthChartScreenGetSideName(pArgs[0].i, pArgs[1].i, pArgs[2].pParams->mpText, pArgs[2].pParams->mLength);
-        *pArgs[3].pi = fn_80178D70(pArgs[0].i ? fn_80178308() : fn_80178320());
+        *pArgs[3].pi = ScrmGetActivePlayerCount(pArgs[0].i ? ScrmGetOffenseTeam() : ScrmGetDefenseTeam());
         break;
     case 0x14A: {
         int *pList = (int *)(pArgs[1].i + (*pArgs[1].pi + 1) * 4);
@@ -1946,8 +1946,8 @@ int InGameGetScoreInfo(int *pId1, int *pId0, char *pName1, int size1, char *pNam
     if (GameOptionsGet(14) == 1) {
         ok = 0;
     }
-    int value0 = fn_8017881C(0);
-    int value1 = fn_8017881C(1);
+    int value0 = ScrmGetRuleScore(0);
+    int value1 = ScrmGetRuleScore(1);
     *pId1 = id1;
     *pId0 = id0;
     *pValue1 = value1;
@@ -2031,29 +2031,29 @@ void fn_800A7B5C(void);
 void fn_800B823C(int side);
 int GameTextGetHomeTeam(void);
 int GameTextGetAwayTeam(void);
-int fn_801787DC(int team);
+int ScrmGetTeamScore(int team);
 int fn_800A8444(int team);
 int fn_800A8740(void);
 void HudSetGameBreakerHalf(int team,int mode);
 int fn_800CAAC4(int team,unsigned char index);
 float fn_800C9CF0(int team, int index);
-int fn_80178C24(void);
+int ScrmIsTimed(void);
 unsigned int fn_8009D9F8(int key);
 int fn_8009D9C0(int key);
 PlayBookPlay_t *PlayBookGetAudiblePlay(int team,int index);
 int fn_800AEBA0(void);
-int fn_80178E4C(void);
+int ScrmAllowsPrediction(void);
 int fn_800AF078(int team);
 int InGameIsDemo(void);
 Object_80039F5C *PlyrFindById(int id);
-int fn_8008201C(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
+int PlayerDbFindNextPicked(Object_8008044C *pObject,int a,int b,int *pResult,int *pPosition);
 void PlayerDbGetFirstName(Object_8008044C *pObject,char *pText,int size);
-void fn_8017833C(int enabled);
-void fn_80178354(int enabled);
+void ScrmSetOffenseTeam(int enabled);
+void ScrmSetSnapOffense(int enabled);
 void fn_800C1E50(void);
 int ChallengeIsPairingGame(void);
 int ChallengeEvaluateGoals(void);
-int fn_80178AE0(void);
+int ScrmGetWinner(void);
 void *DbUserGetCurrent(void);
 void *UserProfileFindIndex(void *p);
 int GauntletScreenGetSelection(void);
@@ -2125,16 +2125,16 @@ void InGameHudOpen(int *pList, int *pValues, MenuArg_t *pNames, int *pScores, in
     pValues[0] = GameTextGetHomeTeam(); pValues[1] = GameTextGetAwayTeam();
     if (GameOptionsGet(14) != 1) {
         {MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1];
-        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(0));}
+        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(0));}
         {MenuText_t *pText = ((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2];
-        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", fn_801787DC(1));}
+        fn_801C2D88(pText->mpText, pText->mLength + 1, "%d", ScrmGetTeamScore(1));}
     } else {
         strcpy(((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 1]->mpText, "");
         strcpy(((MenuText_t **)pNames[0].pi)[*pNames[0].pi + 2]->mpText, "");
     }
     pScores[0] = StyleTrackerGetTotal(0); pScores[1] = StyleTrackerGetTotal(1);
     pZero[0] = 0; pZero[1] = 0; pModes[0] = 0; pModes[1] = 0;
-    *pState = fn_80177F70();
+    *pState = ScrmGetDown();
     pFlags[0] = fn_800A8444(0); pFlags[1] = fn_800A8444(1);
     *pEnabled = fn_800A8740() == 0;
     if (*pEnabled == 1) {
@@ -2183,7 +2183,7 @@ void InGameFormatClock(char *pText, int *pRed, int *pGreen, int *pBlue)
     int key;
     int mode = fn_801486A0();
     if (mode == 2 || mode == 4) key = 5;
-    else { key = 4; if (fn_80178C24()) key = 1; }
+    else { key = 4; if (ScrmIsTimed()) key = 1; }
     unsigned int time = fn_8009D990(key);
     unsigned int elapsed = fn_8009D9F8(key);
     int duration = fn_8009D9C0(key);
@@ -2216,11 +2216,11 @@ void InGameGetAudibles(unsigned int team, int *pEnabled, MenuText_t **pNames, in
             strncpy(pNames[i]->mpText, pRecord->mUnknown1F3, pNames[i]->mLength);
         }
     }
-    if ((unsigned int)fn_80178308() == team) {
+    if ((unsigned int)ScrmGetOffenseTeam() == team) {
         *pMode = fn_800AEBA0() != 0;
         if (*pMode == 1) strncpy(pText->mpText, "Max Protect", pText->mLength);
     } else {
-        *pMode = fn_80178E4C();
+        *pMode = ScrmAllowsPrediction();
         strncpy(pText->mpText, "Prediction", pText->mLength);
     }
 }
@@ -2252,7 +2252,7 @@ int InGameHudMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     case 0x80000005: InGameGetHudOffsets(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000007:
         if (ChallengeIsActive()) *pResult = ChalGetCurrent()->mUnknown1A4;
-        else {int mode = fn_801486A0(); if (mode == 2 || mode == 4) *pResult = 1; else *pResult = fn_80178C24();}
+        else {int mode = fn_801486A0(); if (mode == 2 || mode == 4) *pResult = 1; else *pResult = ScrmIsTimed();}
         break;
     case 0x80000006: InGameFormatClock(pArgs[0].pParams->mpText,0,0,0); break;
     case 0x80000009:
@@ -2272,7 +2272,7 @@ int InGameClockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     case 0x80000001: break;
     case 0x80000003: InGameGetPadOrder((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     case 0x80000005: InGameGetPadRatings((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000002: {int mode=fn_801486A0(); if(mode==2||mode==4) *pResult=1; else *pResult=fn_80178C24();} break;
+    case 0x80000002: {int mode=fn_801486A0(); if(mode==2||mode==4) *pResult=1; else *pResult=ScrmIsTimed();} break;
     case 0x80000004: InGameFormatClock(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000006: {MenuText_t *pText=pArgs[4].pParams;
         InGameGetAudibles(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),
@@ -2323,7 +2323,7 @@ void InGameLeaderScore(int team)
     int row;
     float scores[11];
     int values[12];
-    if (fn_8008201C(&_InGameScreens_LeaderCursor,0,team,&row,0)) {
+    if (PlayerDbFindNextPicked(&_InGameScreens_LeaderCursor,0,team,&row,0)) {
         do {
             for (int i=0;i<12;i++) values[i]=InGameQueryStat(_InGameScreens_aLeaderStatWeights[i].mTag,_InGameScreens_aLeaderStatWeights[i].mColumn,row);
             float sum=0.0f;
@@ -2343,7 +2343,7 @@ void InGameLeaderScore(int team)
                 for(int i=0;i<12;i++) _InGameScreens_aLeaderStats[team].mStats[i]=values[i];
                 for(int i=0;i<11;i++) _InGameScreens_aLeaderStats[team].mValues[i]=scores[i];
             }
-        } while(fn_8008201C(&_InGameScreens_LeaderCursor,1,team,&row,0));
+        } while(PlayerDbFindNextPicked(&_InGameScreens_LeaderCursor,1,team,&row,0));
     }
 }
 
@@ -2398,7 +2398,7 @@ void InGameEndGameApplyChoice(int index)
     switch(_InGameScreens_aEndChoices[index]) {
     case 1: break;
     case 2:
-        if(GameModeTypeGet()==8) {fn_800C1CA0();fn_8017833C(1);fn_80178354(1);}
+        if(GameModeTypeGet()==8) {fn_800C1CA0();ScrmSetOffenseTeam(1);ScrmSetSnapOffense(1);}
         else fn_800C1CA0();
         break;
     }
@@ -2411,12 +2411,12 @@ void InGameEndGameGetChoices(int *pEnabled,int *pCount,MenuText_t *pFirst,MenuTe
     int enabled;
     if(GameModeTypeIsSpecial()) enabled=0;
     else if(ChallengeIsPairingGame() && !ChallengeEvaluateGoals()) enabled=0;
-    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(fn_80178AE0())!=255) enabled=0;
+    else if((GameModeTypeGet()==7 || GameModeTypeGet()==10) && fn_800B65A0(ScrmGetWinner())!=255) enabled=0;
     else enabled=1;
     *pEnabled=enabled;
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
-    else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
+    else {score1=ScrmGetTeamScore(1);score0=ScrmGetTeamScore(0);}
     if((score1<score0 && fn_800B65A0(1)!=255)||(score0<score1 && fn_800B65A0(0)!=255)) *pAllowed=0; else *pAllowed=1;
     if(GameModeTypeGet()==8) {
         if(score1>score0) {*pCount=1;strncpy(pFirst->mpText,"Continue",pFirst->mLength);_InGameScreens_aEndChoices[0]=3;}
@@ -2445,7 +2445,7 @@ void InGameEndGameGauntletResult(int *pResult,int *pId,MenuText_t *pText)
 {
     unsigned int score1,score0;
     if(GameOptionsGet(14)==1) {score1=StyleTrackerGetTotal(1);score0=StyleTrackerGetTotal(0);}
-    else {score1=fn_801787DC(1);score0=fn_801787DC(0);}
+    else {score1=ScrmGetTeamScore(1);score0=ScrmGetTeamScore(0);}
     if(GameModeTypeGet()==8) {
         if(score1>score0) {
             void *p=UserProfileFindIndex(DbUserGetCurrent());
@@ -2623,10 +2623,10 @@ int fn_800A8EA4(int team);
 struct TeamPairArgs_t;
 int TeamPairHandleMessage(int,TeamPairArgs_t *,int,int *);
 void PauseOpenScreenArgs(unsigned short,unsigned short,int,unsigned int,int *,int);
-int fn_80178EE0(int team);
-int fn_80178EA0(int team);
+int ScrmGetGoalCount(int team);
+int ScrmGetGoalTotal(int team);
 int MiniGameOpenFieldGetPlayerColor(MiniGameC *,int,int);
-int fn_80178D70(int team);
+int ScrmGetActivePlayerCount(int team);
 int GameInfoGet(int team);
 void fn_8014F3E4(MiniGameC *,int,Stats_8005C4A4 *);
 void fn_8014BA20(MiniGameC *,int,Stats_8005C844 *);
@@ -2683,9 +2683,9 @@ int InGameOverlayOpen(int value) {
     } else ok=0;
     return ok;
 }
-void InGameOverlayReset(void) {fn_8021D7B8(gUISMainInfo,0x8000001C,0,0);_InGameScreens_iOverlayState=4;_InGameScreens_iOverlayScreen=3;}
-void InGameOverlayShow(void) {fn_8021D7B8(gUISMainInfo,0x80000029,0,0);_InGameScreens_iOverlayState=2;}
-void InGameOverlayHide(void) {fn_8021D7B8(gUISMainInfo,0x8000002A,0,0);_InGameScreens_iOverlayState=0;}
+void InGameOverlayReset(void) {UISProcessHint(gUISMainInfo,0x8000001C,0,0);_InGameScreens_iOverlayState=4;_InGameScreens_iOverlayScreen=3;}
+void InGameOverlayShow(void) {UISProcessHint(gUISMainInfo,0x80000029,0,0);_InGameScreens_iOverlayState=2;}
+void InGameOverlayHide(void) {UISProcessHint(gUISMainInfo,0x8000002A,0,0);_InGameScreens_iOverlayState=0;}
 int InGameOverlayGetState(void) {return _InGameScreens_iOverlayState;}
 int InGameOverlayMsg(int group,unsigned int id,MenuArg_t *p,int unused,int *result) {
     int ret=1;
@@ -2707,12 +2707,12 @@ int InGameOverlayMsg(int group,unsigned int id,MenuArg_t *p,int unused,int *resu
 }
 int InGameResetMsg(unsigned int id,MenuArg_t *,int,int *) {
     switch(id){case 0x80000001: break; case 0x80000002: if(_InGameScreens_bResetPending) {
-        fn_800C1CA0();if(GameModeTypeGet()==8) {fn_8017833C(1);fn_80178354(1);}_InGameScreens_bResetPending=0;
+        fn_800C1CA0();if(GameModeTypeGet()==8) {ScrmSetOffenseTeam(1);ScrmSetSnapOffense(1);}_InGameScreens_bResetPending=0;
     }
     PauseRequestClose(); break; default: return 0;}
     return 1;
 }
-void InGameFormatCompletions(int team,char *text,int size) {int a=fn_80178EE0(team);int b=fn_80178EA0(team);fn_801C2D88(text,size,"%d for %d",a,b);}
+void InGameFormatCompletions(int team,char *text,int size) {int a=ScrmGetGoalCount(team);int b=ScrmGetGoalTotal(team);fn_801C2D88(text,size,"%d for %d",a,b);}
 void InGameGetPlayerColor(int team,unsigned char index,int *color) {
     HudLookupColor(MiniGameOpenFieldGetPlayerColor(MiniGameGetCurrent(),team,index),(unsigned char *)(color+0),(unsigned char *)(color+1),(unsigned char *)(color+2));
 }
@@ -2735,7 +2735,7 @@ int InGamePlayerStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     case 0x80000002:InGameFormatCompletions((unsigned char)p[0].i,p[1].pParams->mpText,p[1].pParams->mLength);break;
     case 0x80000003:InGameGetPlayerColor((unsigned char)p[0].i,(unsigned char)p[1].i,(int *)(p[2].i+(*p[2].pi+1)*4));break;
     case 0x80000004:*result=InGameGetPlayerStats((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength,p[4].pParams->mpText,p[5].pParams->mpText,p[6].pParams->mpText,p[7].pParams->mpText,p[4].pParams->mLength,p[5].pParams->mLength);break;
-    case 0x80000005:*result=fn_80178D70((unsigned char)p[0].i);break;
+    case 0x80000005:*result=ScrmGetActivePlayerCount((unsigned char)p[0].i);break;
     default:return 0;
     }return 1;
 }

@@ -3,12 +3,12 @@
 
 #include "game/Ball.h"
 #include "game/Vec3Magnitude.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 extern "C" {
 void BallRestAtAngles(Ball_t *pBall, int *pAngles);
 void BallSetSpinMode(Ball_t *pBall, int a);
-Point_8017886C fn_80177FE0(void);
+FieldPoint_t ScrmGetBallSpot(void);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 void Vec3CrossProduct(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 
@@ -52,10 +52,10 @@ void BallsPark(void)
 void BallPlaceAtSpot(void)
 {
     Vector_80039F5C pos;
-    Point_8017886C point;
+    FieldPoint_t point;
     Ball_t *pBall = BallGetCurrent();
 
-    point = fn_80177FE0();
+    point = ScrmGetBallSpot();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;

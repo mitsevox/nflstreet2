@@ -6,7 +6,7 @@
 
 #include "engine/cu_80229270.h"
 #include "game/StyleTracker.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/TDbCompilePerformOp.h"
 #include "game/Object_80039F5C.h"
 #include "game/DepthChart.h"
@@ -23,7 +23,7 @@
 #include "game/InGame.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/fn_80218FC4.h"
 #include "game/HudEvents.h"
 #include "game/LivePlayPhase.h"
@@ -258,7 +258,7 @@ struct TutorialNewStuffObjects {
 };
 
 
-/* Two floats returned in memory by fn_80177FE0. */
+/* Two floats returned in memory by ScrmGetBallSpot. */
 struct FieldSpot_t {
     float mX;
     float mY;
@@ -364,22 +364,22 @@ void PlayBookSetFormationType(int team, int kind);
 void PlayBookSetIndices(int team, unsigned int a, unsigned int b, unsigned int c);
 PlaybookTeamView * PlayBookGetTeam(int team);
 void ClockRuleClearFlags(unsigned int mask);
-void fn_80177C50(int a);
-void fn_80177E6C(int a, int b);
-int fn_80177F70(void);
-void fn_80177F88(int a);
-FieldSpot_t fn_80177FE0(void);
-void fn_801780A8(FieldSpot_t pos);
-void fn_801782B0(void);
-int fn_80178320(void);
-void fn_8017833C(int value);
-void fn_80178370(void);
-int fn_801784E8(void);
-void fn_801787FC(int which, short value);
-float fn_80178A2C(void);
-int fn_80178C60(void);
-void fn_80178CD8(int a);
-void fn_80178F20(ScrmRuleSet *pObject);
+void ScrmChangePossession(int a);
+void ScrmMirrorField(int a, int b);
+int ScrmGetDown(void);
+void ScrmSetDown(int a);
+FieldSpot_t ScrmGetBallSpot(void);
+void ScrmSetBallSpot(FieldSpot_t pos);
+void ScrmSetFirstDownLine(void);
+int ScrmGetDefenseTeam(void);
+void ScrmSetOffenseTeam(int value);
+void ScrmEndPlay(void);
+int ScrmHasFieldFlippedInPlay(void);
+void ScrmSetTeamScore(int which, short value);
+float ScrmGetGoalLineY(void);
+int ScrmGetGameTime(void);
+void ScrmPlaceBallForDrive(int a);
+void ScrmSetRuleSet(ScrmRuleSet *pObject);
 void HudSetScore(int a, int b);
 void HudShowPressPrompt(int a);
 void HudStop(void);
@@ -547,7 +547,7 @@ extern "C" {
 
 void TutorialPostPrompt(int index, int value)
 {
-    fn_8021D7B8(gUISMainInfo, _Tutorial_aPromptMsgIds[index], 1, &value);
+    UISProcessHint(gUISMainInfo, _Tutorial_aPromptMsgIds[index], 1, &value);
 }
 
 void TutorialSetupRosters(void)
@@ -572,7 +572,7 @@ void TutorialSetupRosters(void)
     DepthChartGetSide(1, &records[1]);
     TDbCompilePerformOp(0, "delete from 'AGCD'\n");
     /* 0x41474344 is 'AGCD', the table cleared by the query above. */
-    fn_8022DA44(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
+    DbThcdSetLineups(home, records[0].mUnknown, away, records[1].mUnknown, 0x41474344);
     for (team = 0; team <= 1; team++) {
         for (i = 0; i <= 6; i++) {
             Object_80039F5C *pObject = PlyrGet((unsigned char)team, i);
@@ -655,7 +655,7 @@ void TutorialLessonStart(void)
     }
     _Tutorial_iSavedSetting14 = GameOptionsGet(14);
     GameOptionsSet(14, 0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     _Tutorial_pLesson->mUnknown0 = step;
     _Tutorial_pLesson->Begin();
     _Tutorial_iSavedSetting0 = GameOptionsGet(0);
@@ -672,7 +672,7 @@ void TutorialLessonStop(void)
     TutorialDbClosePlays();
     GameOptionsSet(14, _Tutorial_iSavedSetting14);
     _Tutorial_iSavedSetting14 = 0;
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     GameOptionsSet(0, _Tutorial_iSavedSetting0);
     _Tutorial_iSavedSetting0 = 1;
     SndgApplyVolumeOptions();
@@ -794,7 +794,7 @@ void TutorialSetupPlays(void)
     b = TutorialGetOtherPlayIndex(TutorialGetLesson(), TutorialGetStep(), side);
     a = TutorialGetPlayIndex(TutorialGetLesson(), TutorialGetStep(), side);
     if (side == 1) {
-        fn_8017833C(0);
+        ScrmSetOffenseTeam(0);
         PlayBookSetFormationType(0, 1);
         PlayBookSetIndices(0, 0, 0, (unsigned char)a);
         PlayBookLoadCurrentPlay(0);
@@ -802,7 +802,7 @@ void TutorialSetupPlays(void)
         PlayBookSetIndices(1, 0, 0, (unsigned char)b);
         PlayBookLoadCurrentPlay(1);
     } else {
-        fn_8017833C(1);
+        ScrmSetOffenseTeam(1);
         PlayBookSetFormationType(1, 1);
         PlayBookSetIndices(1, 0, 0, (unsigned char)b);
         PlayBookLoadCurrentPlay(1);
@@ -919,7 +919,7 @@ void TutorialHidePrompts(void)
 
 float TutorialGetStartLine(void)
 {
-    float base = fn_80178A2C();
+    float base = ScrmGetGoalLineY();
     float offset = TutorialGetStepOffset(TutorialGetLesson(), TutorialGetStep());
 
     if (offset >= base + base) {
@@ -988,8 +988,8 @@ int TutorialFinishCategory(void)
                 fn_8014F3DC(180);
                 break;
             case 4:
-                if (fn_800B65A0(fn_80178320()) == 0xFF) {
-                    fn_80177C50(0);
+                if (fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) {
+                    ScrmChangePossession(0);
                 }
                 MiniGameGetCurrent()->vfn_07(0, 21);
                 PlayBookSetFormationType(1, 1);
@@ -1054,12 +1054,12 @@ int TutorialFinishCategory(void)
         for (unsigned int team = 0; team <= 1; team++) {
             for (unsigned int i = 0; i <= 6; i++) {
                 Object_80039F5C *pPlayer = PlyrGet((unsigned char)team, i);
-                pPlayer->mUnknown9[2] = i < (unsigned int)fn_80178D70((unsigned char)team);
+                pPlayer->mUnknown9[2] = i < (unsigned int)ScrmGetActivePlayerCount((unsigned char)team);
             }
         }
         gTurbo.fn_80035EE0();
         fn_8009D8CC(2);
-        fn_8009D984(fn_80178C60());
+        fn_8009D984(ScrmGetGameTime());
         StyleTrackerReset();
         gPlayBook.fn_800355FC();
         InGamePlayCallCreate();
@@ -1083,7 +1083,7 @@ short TutorialScaleCpuRating(int team, int unused, short value)
 
 void TutorialSetHudVisible(int value)
 {
-    fn_8021D7B8(gUISMainInfo, 0x80000072, 1, &value);
+    UISProcessHint(gUISMainInfo, 0x80000072, 1, &value);
 }
 
 void TutorialReleasePause(void)
@@ -1111,7 +1111,7 @@ void TutorialLessonDefense::Begin()
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
     mpGame.mp->mObject36.ResetGame(2);
-    fn_80178F20(&mpGame.mp->mObject36);
+    ScrmSetRuleSet(&mpGame.mp->mObject36);
     TutorialGetStep();
 }
 
@@ -1121,7 +1121,7 @@ int TutorialLessonDefense::End()
     fn_800BFAB4(0);
     fn_800A039C(0);
     fn_800B9598(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpGame.mp;
     mpGame.mp = 0;
     return 0;
@@ -1149,7 +1149,7 @@ void TutorialLessonNewStuff::Begin()
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject20);
     fn_800B9598(&mpGame.mp->mObject24);
-    fn_80178F20(&mpGame.mp->mObject40);
+    ScrmSetRuleSet(&mpGame.mp->mObject40);
 }
 
 int TutorialLessonNewStuff::End()
@@ -1158,7 +1158,7 @@ int TutorialLessonNewStuff::End()
     fn_800BFAB4(0);
     fn_800A039C(0);
     fn_800B9598(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpGame.mp;
     mpGame.mp = 0;
     return 0;
@@ -1256,7 +1256,7 @@ void TutorialLivePlayNewStuff::OnUpdate(float dt)
             }
         } else {
             if (TutorialTimerIsDone()) {
-                fn_80178370();
+                ScrmEndPlay();
             }
             return;
         }
@@ -1334,7 +1334,7 @@ void TutorialLessonPassing::Begin()
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
-    fn_80178F20(&mpGame.mp->mObject36);
+    ScrmSetRuleSet(&mpGame.mp->mObject36);
     TutorialGetStep();
 }
 
@@ -1344,7 +1344,7 @@ int TutorialLessonPassing::End()
     fn_800BFAB4(0);
     fn_800A039C(0);
     fn_800B9598(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpGame.mp;
     mpGame.mp = 0;
     return 0;
@@ -1372,7 +1372,7 @@ void TutorialLessonRunning::Begin()
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
-    fn_80178F20(&mpGame.mp->mObject36);
+    ScrmSetRuleSet(&mpGame.mp->mObject36);
     TutorialGetStep();
 }
 
@@ -1382,7 +1382,7 @@ int TutorialLessonRunning::End()
     fn_800BFAB4(0);
     fn_800A039C(0);
     fn_800B9598(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpGame.mp;
     mpGame.mp = 0;
     return 0;
@@ -1498,7 +1498,7 @@ void TutorialLivePlayStyling::OnUpdate(float dt)
             }
         } else {
             if (TutorialTimerIsDone()) {
-                fn_80178370();
+                ScrmEndPlay();
             }
             return;
         }
@@ -1514,7 +1514,7 @@ void TutorialLessonStyling::Begin()
     fn_800BFAB4(&mpGame.mp->mObject8);
     fn_800A039C(&mpGame.mp->mObject16);
     fn_800B9598(&mpGame.mp->mObject20);
-    fn_80178F20(&mpGame.mp->mObject36);
+    ScrmSetRuleSet(&mpGame.mp->mObject36);
     TutorialGetStep();
 }
 
@@ -1524,7 +1524,7 @@ int TutorialLessonStyling::End()
     fn_800BFAB4(0);
     fn_800A039C(0);
     fn_800B9598(0);
-    fn_80178F20(0);
+    ScrmSetRuleSet(0);
     delete mpGame.mp;
     mpGame.mp = 0;
     return 0;
@@ -1696,11 +1696,11 @@ void TutorialShowTitles(int show)
         _Tutorial_StepText.mpText = _Tutorial_szStepTitle;
         _Tutorial_StepText.mSize = strlen(_Tutorial_szStepTitle) + 1;
         _Tutorial_pStepText = &_Tutorial_StepText;
-        fn_8021D7B8(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
-        fn_8021D7B8(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);
+        UISProcessHint(gUISMainInfo, 0x80000080, 1, &_Tutorial_pCategoryText);
+        UISProcessHint(gUISMainInfo, 0x80000081, 1, &_Tutorial_pStepText);
     }
     _Tutorial_iTitlesShown = show;
-    fn_8021D7B8(gUISMainInfo, 0x8000007F, 1, &_Tutorial_iTitlesShown);
+    UISProcessHint(gUISMainInfo, 0x8000007F, 1, &_Tutorial_iTitlesShown);
 }
 
 void TutorialReloadRatings(void)
@@ -1880,11 +1880,11 @@ void TutorialPreSnap::OnEnter(float dt)
         AudmonEventPostArgs(0x85, 0, TutorialGetLesson(), TutorialGetStep(), 0);
         SndgMusicPumpFrame(1);
     }
-    fn_801780A8(start);
-    fn_801782B0();
+    ScrmSetBallSpot(start);
+    ScrmSetFirstDownLine();
     pBall = BallGetCurrent();
     BallReleaseStill(pBall, 6, 0);
-    point = fn_80177FE0();
+    point = ScrmGetBallSpot();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;
@@ -1904,9 +1904,9 @@ void TutorialPreSnap::OnEnter(float dt)
     HudSetGameBreakerMeter(0, 0.0f, 0, 0);
     args[0] = 1;
     args[1] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+    UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     args[0] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+    UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     TutorialShowPrompts(TutorialGetLessonObject()->GetStep()->mPrompts, 1, 0);
     PauseRequestCancel();
     if (!PauseIsUnblocked()) {
@@ -1994,7 +1994,7 @@ void TutorialLivePlay::OnUpdate(float dt)
             TutorialTimerStart(pEntry->mDuration);
         }
     } else if (TutorialTimerIsDone()) {
-        fn_80178370();
+        ScrmEndPlay();
     }
 }
 
@@ -2130,12 +2130,12 @@ void TutorialPostPlay::OnExit()
     if (BallGetCurrentHolder()) {
         BallReleaseStill(BallGetCurrent(), 5, 0);
     }
-    if (fn_801784E8()) {
-        fn_80177E6C(1, 1);
+    if (ScrmHasFieldFlippedInPlay()) {
+        ScrmMirrorField(1, 1);
     }
     pBall = BallGetCurrent();
     BallReleaseStill(pBall, 6, 0);
-    point = fn_80177FE0();
+    point = ScrmGetBallSpot();
     pos.mX = point.mX;
     pos.mY = point.mY;
     pos.mZ = 0.3f;
@@ -2199,18 +2199,18 @@ int TutorialRuleSet::UsesBothTeams()
 
 void TutorialRuleSet::ResetPlaySpot()
 {
-    fn_80177F88(1);
+    ScrmSetDown(1);
     ScrmRuleSet::ResetPlaySpot();
-    if (fn_80177F70() == 6) {
-        fn_801787FC(1, 0);
-        fn_801787FC(0, 0);
+    if (ScrmGetDown() == 6) {
+        ScrmSetTeamScore(1, 0);
+        ScrmSetTeamScore(0, 0);
         fn_800C87CC(1, 0);
         fn_800C87CC(0, 0);
-        fn_80177F88(1);
+        ScrmSetDown(1);
         HudSetScore(1, 0);
         HudSetScore(0, 0);
     }
-    fn_80178CD8(0);
+    ScrmPlaceBallForDrive(0);
 }
 
 int TutorialRuleSet::GetWinner()

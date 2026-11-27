@@ -9,8 +9,8 @@
 #include "game/Object_80039F5C.h"
 #include "game/PlayBookTeam.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetBallSpot.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Distance.h"
 #include "game/SyncRandGetRange.h"
@@ -45,7 +45,7 @@ int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int PlayerActionAiConsiderDive(Object_80039F5C *p);
 int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80110C10(Object_80039F5C *p);
 int fn_80110C68(Object_80039F5C *p);
 void fn_80111354(Object_80039F5C *p);
@@ -69,13 +69,13 @@ float PlayTrackGetPlayIdRate(void);
 float PlayTrackGetResult5Rate(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 int PlyrMoveIsFacingHeading(Object_80039F5C *p);
-int fn_80177C38(void);
-int fn_80178308(void);
-int fn_801783AC(int bit);
-int fn_801787A0(void);
-float fn_80178A08(void);
-float fn_80178A2C(void);
-float fn_80178A5C(void);
+int ScrmGetPlayTurnovers(void);
+int ScrmGetOffenseTeam(void);
+int ScrmTestPlayFlag(int bit);
+int ScrmIsNotReplay(void);
+float ScrmGetSidelineX(void);
+float ScrmGetGoalLineY(void);
+float ScrmGetSpotLimitX(void);
 float MathCos(int angle);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -93,11 +93,11 @@ float Vec2Magnitude(void *p);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 float MathCos(int angle);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 int fn_800A7F30(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
-int fn_801783AC(int bit);
-float fn_80178A2C(void);
+int ScrmTestPlayFlag(int bit);
+float ScrmGetGoalLineY(void);
 int fn_800ABDA4(int team);
 int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *other, Vector_80039F5C pos, float distance, int *pOut);
 int PlyrTackleStart(Object_80039F5C *p, int a, int b);
@@ -178,7 +178,7 @@ extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
     } else {
         value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
     }
-    if (fn_801486A0() == 2 && fn_80178D70(p->mIdBytes[2]) == 1) {
+    if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
         value = (int)(value / 10.0f);
     }
     return value < 0 ? 0 : (value > 126 ? 126 : value);
@@ -232,7 +232,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
 {
     int chance = 0;
     int attempt = 0;
-    if (fn_801787A0()) return;
+    if (ScrmIsNotReplay()) return;
     Object_800B26B0 *motion = &p->mMotion;
     Block_8011E240 *block = &p->mBlock1032;
     float delta[2];
@@ -244,9 +244,9 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
     else state->mUnknown13--;
     state->mUnknown14--;
     int done = 0;
-    if (other && ((other->mFlags & 0x8000) || fn_801783AC(0)) &&
+    if (other && ((other->mFlags & 0x8000) || ScrmTestPlayFlag(0)) &&
         !(Vec2Distance(&motion->mPos, &position) >= 5.0f) &&
-        !(fn_80178A2C() - position.mY >= 7.0f)) {
+        !(ScrmGetGoalLineY() - position.mY >= 7.0f)) {
         attempt = 1;
         chance = 100;
     }
@@ -272,7 +272,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
         state->mUnknown13 = PursueGetMoveDelay(p->mRatings);
         if (block->mUnknown0 == 4 && !fn_8011E88C(p)) {
             int odds = 35;
-            if (!fn_801783AC(0)) {
+            if (!ScrmTestPlayFlag(0)) {
                 if (fn_8011F1A4()) {
                     if (!forced) {
                         if (distance < 10.0f || (fn_8011F1A4() && fn_8011F4C8() > 3)) {
@@ -319,8 +319,8 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
             ballAngle = MathArcTan2(velocity.mY, velocity.mX);
         }
         if (!(position.mZ >= 7.0f) && !(position.mZ <= 1.5f) &&
-            !(position.mY >= fn_80177FE0().mY + 2.0f)) {
-            if (block->mUnknown0 != 4 && motion->mPos.mY >= fn_80177FE0().mY) return;
+            !(position.mY >= ScrmGetBallSpot().mY + 2.0f)) {
+            if (block->mUnknown0 != 4 && motion->mPos.mY >= ScrmGetBallSpot().mY) return;
             Vec2Sub(offset, &position, &motion->mPos);
             if (MathAngleDiff(ballAngle, MathArcTan2(offset[1], offset[0])) > 0x78E38E) {
                 int facing = motion->mFacing;
@@ -354,7 +354,7 @@ extern "C" void PursueAvoidPlayers(Object_80039F5C *p, PursueState_t *state, flo
     if (!other) return;
     float limit = 3.0f;
     if (distance >= limit) return;
-    if (other == BallGetCurrentHolder() && !fn_801787A0()) return;
+    if (other == BallGetCurrentHolder() && !ScrmIsNotReplay()) return;
     int inside = 0;
     int mode = fn_8011E9B4(other);
     if (other->mIdBytes[2] == p->mIdBytes[2] && !mode) limit *= 0.5f;
@@ -471,7 +471,7 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         case 11:
         case 12: {
             int flag = 0;
-            if (pos.mY > fn_80177FE0().mY) {
+            if (pos.mY > ScrmGetBallSpot().mY) {
                 flag = BallStateGet(BallGetCurrent(), 0) == 4;
             }
             if (flag != 0) {
@@ -490,7 +490,7 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     }
     turn = 0;
     if (pOther != 0) {
-        if (pMotion->mPos.mY < fn_80177FE0().mY) {
+        if (pMotion->mPos.mY < ScrmGetBallSpot().mY) {
             if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                 turn = 1;
             }
@@ -528,12 +528,12 @@ extern "C" int PursueSteerKind0(Object_80039F5C *p, Object_80039F5C *pOther, Pur
 
 extern "C" void PursueSquareHeading(Object_80039F5C *p, int *pAngle, Vector_80039F5C pos, int angle2)
 {
-    if (fn_801783AC(0) == 0 && fn_8011F1A4() != 0 && fn_8011F4C8() > 3
+    if (ScrmTestPlayFlag(0) == 0 && fn_8011F1A4() != 0 && fn_8011F4C8() > 3
         && ((fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) == 0 && MathAngleDiff(*pAngle, 0) <= 0x3FFFFF)
             || (fn_8011F1A4() != 0 && (fn_8011F4C8() & 1) && MathAngleDiff(*pAngle, 0) > 0x400000))) {
-        Point_8017886C point;
+        FieldPoint_t point;
 
-        point = fn_80177FE0();
+        point = ScrmGetBallSpot();
         if (fabsf(point.mX - p->mMotion.mPos.mX) < 5.0f && p->mMotion.mPos.mY - point.mY < 5.0f && pos.mY < point.mY
             && pos.mY > point.mY - 10.0f && MathAngleDiff(angle2, 0x400000) <= 0x5FFFFF) {
             if (MathAngleDiff(*pAngle, 0) <= 0x3FFFFF) {
@@ -556,7 +556,7 @@ extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     if (pOther != 0) {
         Vec2_t delta;
 
-        if ((distance > 3.0f && pMotion->mPos.mY < fn_80177FE0().mY && PlayerActionAnimIsPassReady(pOther) != 0 && mode != 2)
+        if ((distance > 3.0f && pMotion->mPos.mY < ScrmGetBallSpot().mY && PlayerActionAnimIsPassReady(pOther) != 0 && mode != 2)
             || (mode == 2 && distance < 8.0f)) {
             int target;
             int diff;
@@ -571,7 +571,7 @@ extern "C" int PursueSteerKind2(Object_80039F5C *p, Object_80039F5C *pOther, Pur
             }
             pState->mUnknown16 = 1;
         } else {
-            if (pos.mY < fn_80177FE0().mY + 3.0f) {
+            if (pos.mY < ScrmGetBallSpot().mY + 3.0f) {
                 if (pContext->mpUnknown4[0] != p->mIdBytes[1]
                     && pContext->mpUnknown4[pContext->mUnknown16 - 1] != p->mIdBytes[1]) {
                     PursueSquareHeading(p, &angle, pos, angle2);
@@ -611,7 +611,7 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         turn = 0;
         target = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
         if (distance > 3.0f) {
-            if (pMotion->mPos.mY < fn_80177FE0().mY + 2.0f) {
+            if (pMotion->mPos.mY < ScrmGetBallSpot().mY + 2.0f) {
                 if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                     turn = 1;
                 }
@@ -642,9 +642,9 @@ extern "C" int PursueSteerKind3(Object_80039F5C *p, Object_80039F5C *pOther, Pur
             }
             scale = 1.0f - (35.0f - dy) / 35.0f;
             angle &= 0xFFFFFF;
-            if (pMotion->mPos.mX > fn_80178A5C()) {
+            if (pMotion->mPos.mX > ScrmGetSpotLimitX()) {
                 angle = (angle + (int)(scale * (40.0f * 46603.38f))) & 0xFFFFFF;
-            } else if (pMotion->mPos.mX >= -fn_80178A5C() && pMotion->mPos.mX > pOther->mMotion.mPos.mX) {
+            } else if (pMotion->mPos.mX >= -ScrmGetSpotLimitX() && pMotion->mPos.mX > pOther->mMotion.mPos.mX) {
                 angle = (angle + (int)(scale * (40.0f * 46603.38f))) & 0xFFFFFF;
             } else {
                 angle = (angle - (int)(scale * (40.0f * 46603.38f))) & 0xFFFFFF;
@@ -672,7 +672,7 @@ extern "C" int PursueSteerKind4(Object_80039F5C *p, Object_80039F5C *pOther, Pur
 
     if (distance > 4.0f && distance < 12.0f && (pMotion->mFacing & 0xFFFFFF) > 0x800000
         && pMotion->mPos.mY > pos.mY && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
-        && fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 1.0f) {
+        && fabsf(p->mMotion.mPos.mX) < ScrmGetSidelineX() - 1.0f) {
         if (angle > 0xC00000) {
             angle -= MathAngleDiff(0, angle) / 2;
         } else {
@@ -681,7 +681,7 @@ extern "C" int PursueSteerKind4(Object_80039F5C *p, Object_80039F5C *pOther, Pur
     }
     turn = 0;
     if (pOther != 0 && distance > 3.0f) {
-        if (pMotion->mPos.mY < fn_80177FE0().mY + 2.0f) {
+        if (pMotion->mPos.mY < ScrmGetBallSpot().mY + 2.0f) {
             if ((pOther->mFlags & 0x200000) || PlayerActionAnimIsPassReady(pOther) != 0) {
                 turn = 1;
             }
@@ -719,17 +719,17 @@ extern "C" int PursueSteerKind6(Object_80039F5C *p, Object_80039F5C *pOther, Pur
         Vec2_t target;
         Vec2_t dir;
 
-        if (fabsf(pos.mX) > fn_80178A5C() * 2.0f) {
-            width = fn_80178A08() * 0.85f;
-            offset = fn_80178A08() - width;
+        if (fabsf(pos.mX) > ScrmGetSpotLimitX() * 2.0f) {
+            width = ScrmGetSidelineX() * 0.85f;
+            offset = ScrmGetSidelineX() - width;
             if (pos.mX < 0.0f) {
                 offset = -offset;
             }
         } else {
-            width = fn_80178A08();
+            width = ScrmGetSidelineX();
             offset = 0.0f;
         }
-        step = width / (fn_80178D18(p->mIdBytes[2]) / 2.0f);
+        step = width / (ScrmGetTeamPlayerCount(p->mIdBytes[2]) / 2.0f);
         for (i = 0; i < pContext->mUnknown16 && pContext->mpUnknown0[i] != p->mIdBytes[1]; i++) {
         }
         if (i > pContext->mUnknown16 / 2) {
@@ -754,7 +754,7 @@ extern "C" void PursueAdjustHeading(Object_80039F5C *p, PursueState_t *pState, O
 
     if (pOther != 0 && pMotion->mPos.mY > pos.mY && pContext->mpUnknown12[p->mIdBytes[1]] != 6
         && MathAngleDiff(angle2, 0x400000) <= 0x31C71B && fabsf(p->mMotion.mPos.mX) < fabsf(pos.mX)
-        && fabsf(p->mMotion.mPos.mX) > fn_80178A08() - 1.0f) {
+        && fabsf(p->mMotion.mPos.mX) > ScrmGetSidelineX() - 1.0f) {
         Vec2Sub(&delta, &pos, pMotion);
         if (p->mMotion.mPos.mX > 0.0f) {
             *pAngle -= MathAngleDiff(MathArcTan2(delta.mY, delta.mX), *pAngle) / 4;
@@ -788,7 +788,7 @@ extern "C" void PursueAdjustHeading(Object_80039F5C *p, PursueState_t *pState, O
             }
         }
     }
-    if (fabsf(pMotion->mPos.mX) > fn_80178A08()) {
+    if (fabsf(pMotion->mPos.mX) > ScrmGetSidelineX()) {
         if (pMotion->mPos.mX > 0.0f) {
             if (*pAngle < 0x800000) {
                 *pAngle = 0x600000;
@@ -1034,7 +1034,7 @@ extern "C" int PursueUpdateHold(Object_80039F5C *p, PursueState_t *pState, Vecto
     if (pCarrier != 0 && (pCarrier->mFlags & 0x10000)) {
         Vec2Distance(&pCarrier->mMotion.mPos, pMotion);
     }
-    if (pState->mUnknown40 != 0 || fn_801787A0() != 0) {
+    if (pState->mUnknown40 != 0 || ScrmIsNotReplay() != 0) {
         found = 1;
     }
     if (found == 0) {
@@ -1126,44 +1126,44 @@ extern "C" int PursueClipHeading(Object_800B26B0 *pMotion, int angle, Vector_800
 
     Vec2FromAngle(&dir, angle, pMotion->mUnknown28);
     if (pMotion->mPos.mY > target.mY) {
-        if (fabsf(target.mX) < fn_80178A08()) {
+        if (fabsf(target.mX) < ScrmGetSidelineX()) {
             d = pMotion->mPos.mY - target.mY;
             if (dir.mY < 0.0f) {
                 dir.mY = -dir.mY;
                 s = d / fabsf(dir.mY + offset.mY);
                 dir.mX = dir.mX * s + pMotion->mPos.mX;
-                if (fabsf(dir.mX) > fn_80178A08() - _Pursue_fSidelineMargin) {
-                    dir.mX = CLAMP(dir.mX, _Pursue_fSidelineMargin - fn_80178A08(), fn_80178A08() - _Pursue_fSidelineMargin);
+                if (fabsf(dir.mX) > ScrmGetSidelineX() - _Pursue_fSidelineMargin) {
+                    dir.mX = CLAMP(dir.mX, _Pursue_fSidelineMargin - ScrmGetSidelineX(), ScrmGetSidelineX() - _Pursue_fSidelineMargin);
                     dir.mY = target.mY;
                     Vec2Sub(&dir, &dir, pMotion);
                     angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
                 }
             }
-            if (target.mY < fn_80178A2C() && BallGetCurrentHolder() != 0) {
+            if (target.mY < ScrmGetGoalLineY() && BallGetCurrentHolder() != 0) {
                 Vec2FromAngle(&dir, angle, pMotion->mUnknown28);
                 if (dir.mX != 0.0f) {
                     d = pMotion->mPos.mX - target.mX;
                     s = d / dir.mX;
                     s = fabsf(s);
                     dir.mY = dir.mY * s + pMotion->mPos.mY;
-                    if (dir.mY > fn_80178A2C()) {
+                    if (dir.mY > ScrmGetGoalLineY()) {
                         dir.mX = target.mX;
-                        dir.mY = fn_80178A2C();
+                        dir.mY = ScrmGetGoalLineY();
                         Vec2Sub(&dir, &dir, pMotion);
                         angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
                     }
                 }
             }
         }
-    } else if (target.mY < fn_80178A2C() && BallGetCurrentHolder() != 0 && pMotion->mPos.mY < fn_80178A2C()
+    } else if (target.mY < ScrmGetGoalLineY() && BallGetCurrentHolder() != 0 && pMotion->mPos.mY < ScrmGetGoalLineY()
                && dir.mX != 0.0f && dir.mY > 0.0f) {
         d = pMotion->mPos.mX - target.mX;
         s = d / dir.mX;
         s = fabsf(s);
         dir.mY = dir.mY * s + pMotion->mPos.mY;
-        if (dir.mY > fn_80178A2C()) {
+        if (dir.mY > ScrmGetGoalLineY()) {
             dir.mX = target.mX;
-            dir.mY = fn_80178A2C();
+            dir.mY = ScrmGetGoalLineY();
             Vec2Sub(&dir, &dir, pMotion);
             angle = MathArcTan2(dir.mY, dir.mX) & 0xFFFFFF;
         }
@@ -1242,7 +1242,7 @@ extern "C" void PursueMatchTarget(Object_80039F5C *p, Object_80039F5C *pOther, V
         } else if (id == 34) {
             *pAngle = pOther->mMotion.mFacing;
         } else if (id == 26) {
-            if (p->mMotion.mPos.mY > fn_80177FE0().mY) {
+            if (p->mMotion.mPos.mY > ScrmGetBallSpot().mY) {
                 Object_80039F5C *pLinked = fn_8009BCE8(&pOther->mUnknown336);
                 if (pLinked != 0 && Vec2Distance(&pLinked->mMotion.mPos, &pOther->mMotion.mPos) < _Pursue_fLinkedRange) {
                     pVelocity->mX = pLinked->mMotion.mUnknown40;
@@ -1270,7 +1270,7 @@ extern "C" int PursueEnter(Object_80039F5C *p)
     pState->mUnknown40 = 0;
     pState->mUnknown42 = p->mpState->mUnknown1;
     fn_8009A8D4(pState->mUnknown20);
-    fn_8010A2DC(p, 0, 0);
+    PlyrTryQueueMsg62(p, 0, 0);
     return 0;
 }
 
@@ -1301,7 +1301,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     if (fn_8009FB60(p) != 0) {
         return 1;
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     pOther = PursueGetTarget();
     pBall = BallGetCurrent();
     if (pOther != 0) {
@@ -1323,8 +1323,8 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
 
             velocity.mX = velocity.mY = velocity.mZ = 0.0f;
             BallGetPosition(pBall, &ballPos);
-            if (BallStateGet(pBall, 0) == 4 && ballPos.mY < fn_80177FE0().mY) {
-                high = pos.mY > fn_80177FE0().mY;
+            if (BallStateGet(pBall, 0) == 4 && ballPos.mY < ScrmGetBallSpot().mY) {
+                high = pos.mY > ScrmGetBallSpot().mY;
             }
             if (high) {
                 pOther = BallGetCurrentLastHolder();
@@ -1366,7 +1366,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
     }
     pLookup = fn_8012078C();
     if ((p->mFlags & 0x4000) == 0 && (fn_801486A0() != 0 || p->mUnknown8 == 0xFF)) {
-        if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == fn_80178308()) {
+        if (fn_800A5DD0(p) == 0 && pOther != 0 && p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             memset(&message, 0, sizeof(message));
             message.mId = 33;
             fn_800F053C(0, p->mpState, &message, p);
@@ -1386,11 +1386,11 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             pState->mUnknown12 = (255 - p->mRatings[5]) >> 4;
             pState->mUnknown12 = fn_800AC980(p, pState->mUnknown12);
             pState->mUnknown12 = fn_8009AF00(p->mIdBytes[2], pState->mUnknown12);
-            if (fn_801486A0() == 2 && fn_80178D70(p->mIdBytes[2]) == 1) {
+            if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
                 pState->mUnknown12 = (int)(pState->mUnknown12 * 0.1f);
             }
             if (pOther != 0 && fn_800B65A0(p->mIdBytes[2]) != 0xFF && fn_800B65A0(pOther->mIdBytes[2]) == 0xFF
-                && fn_80177C38() == 0) {
+                && ScrmGetPlayTurnovers() == 0) {
                 pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetPlayIdRate());
                 if (fn_8011F1CC() != 0 && (pOther->mFlags & 0x8000) != 0) {
                     pState->mUnknown12 -= (signed char)MIN(pState->mUnknown12, pState->mUnknown12 * PlayTrackGetResult5Rate());
@@ -1535,7 +1535,7 @@ extern "C" int PursueGetTackleChance(Object_80039F5C *p, Object_80039F5C *pOther
                     *pOut = _Pursue_iAheadTackleChance;
                     if (fabsf(pMotion->mPos.mX - pos.mX) < fabsf(pMotion->mPos.mY - pos.mY) * 0.5f) {
                         *pOut = _Pursue_iLaneTackleChance;
-                        if (pMotion->mPos.mY > fn_80178A2C() - 5.0f) {
+                        if (pMotion->mPos.mY > ScrmGetGoalLineY() - 5.0f) {
                             odds = _Pursue_uLaneLineOdds;
                         } else {
                             odds = _Pursue_uLaneOdds;

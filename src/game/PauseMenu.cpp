@@ -98,7 +98,7 @@ void CamGameSetModeAll(int a);
 void CamGameResumeAll(void);
 void PlyrStarSetShown(int a, int b);
 unsigned char PlyrStarGetRingsShown(void);
-void fn_80178370(void);
+void ScrmEndPlay(void);
 void BannerClear(int a);
 void HudHideMashPrompts(void);
 void HudShowPressPrompt(int a);
@@ -537,7 +537,7 @@ void PauseClose(void)
         }
     }
     if (_Pause_bCallOnClose) {
-        fn_80178370();
+        ScrmEndPlay();
         _Pause_bCallOnClose = 0;
     }
     if (_Pause_bResumeHook == 1) {

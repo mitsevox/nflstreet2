@@ -93,12 +93,12 @@ void PlayerDbSetPjen(Object_8008044C *pObject, int value);
 int PlayerDbGetRating(Object_8008044C *pObject, int index);
 void PlayerDbSetRating(Object_8008044C *pObject, int index, int value);
 int fn_80081E3C(Object_8008044C *pObject);
-void fn_80081E64(Object_8008044C *pObject, char *pBuffer, int size);
-void fn_80081E98(Object_8008044C *pObject, char *pBuffer, int size);
-int fn_80082280(Object_8008044C *pObject);
-void fn_800822A8(Object_8008044C *pObject, int value);
-int fn_800822D4(Object_8008044C *pObject);
-void fn_80082308(Object_8008044C *pObject, int value);
+void PlayerDbSetFirstName(Object_8008044C *pObject, char *pBuffer, int size);
+void PlayerDbSetLastName(Object_8008044C *pObject, char *pBuffer, int size);
+int PlayerDbGetFaceId(Object_8008044C *pObject);
+void PlayerDbSetFaceId(Object_8008044C *pObject, int value);
+int PlayerDbGetEyebrows(Object_8008044C *pObject);
+void PlayerDbSetEyebrows(Object_8008044C *pObject, int value);
 int StoreFindUnlockedRow(int table, DbCursor *pObject, int index, int *pResult);
 int StoreIsRowItemNew(int table, DbCursor *pObject);
 void StoreClearRowItemNew(int table, DbCursor *pObject);
@@ -696,12 +696,12 @@ static void _CreatePlayerQueuePortrait(int id)
     value6E = PlayerDbGetHairStyle(&object);
     value6C = PlayerDbGetPlht(&object);
     value72 = fn_80081E3C(&object);
-    value73 = fn_80082280(&object);
-    value74 = fn_800822D4(&object);
+    value73 = PlayerDbGetFaceId(&object);
+    value74 = PlayerDbGetEyebrows(&object);
     value76 = PlayerDbGetPlex(&object);
     color18 = PlayerDbGetHairColor(&object);
     color19 = PlayerDbGetFacialHairColor(&object);
-    fn_80082138(&object, &block);
+    PlayerDbGetFaceFeatures(&object, &block);
     FaceMorphBuildWeights(&block, &values);
     fn_8015F638(value6E, value6C, 0, ids);
     PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
@@ -937,7 +937,7 @@ void CreatePlayerList::Highlight(int index)
         EditMenuGetPlayerName(buffer, 27);
         EditMenuSetHeading(buffer);
         EditMenuLoadRatings();
-        fn_80082138(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
+        PlayerDbGetFaceFeatures(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
     } else {
         _CreatePlayer_iPlayerId = index;
         if (_CreatePlayerHasContinue()) {
@@ -1334,14 +1334,14 @@ void CreatePlayerNameEditor::SetText(int a, MenuArg_t text)
     switch (a) {
     case 0:
         strnzcpy(buffer, pParams->mpText, 12);
-        fn_80081E64(EditMenuGetPlayerCursor(), buffer, 12);
+        PlayerDbSetFirstName(EditMenuGetPlayerCursor(), buffer, 12);
         EditMenuGetPlayerName(label, 27);
         EditMenuSetName(label);
         PlayerDbSeekId(EditMenuGetPlayerCursor(), _CreatePlayer_iPlayerId, 0);
         break;
     case 1:
         strnzcpy(buffer, pParams->mpText, 15);
-        fn_80081E98(EditMenuGetPlayerCursor(), buffer, 15);
+        PlayerDbSetLastName(EditMenuGetPlayerCursor(), buffer, 15);
         EditMenuGetPlayerName(label2, 27);
         EditMenuSetName(label2);
         PlayerDbSeekId(EditMenuGetPlayerCursor(), _CreatePlayer_iPlayerId, 0);
@@ -1369,7 +1369,7 @@ void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
         *pCount = 12;
         break;
     case 2:
-        _CreatePlayer_sFacialHairCursor.FindFchrRow(fn_80082280(EditMenuGetPlayerCursor()), pOut);
+        _CreatePlayer_sFacialHairCursor.FindFchrRow(PlayerDbGetFaceId(EditMenuGetPlayerCursor()), pOut);
         *pCount = _CreatePlayer_sFacialHairCursor.GetRowCount();
         break;
     case 3:
@@ -1377,7 +1377,7 @@ void CreatePlayerHairOptionList::Enter(int a, int *pCount, int *pOut)
         *pCount = 12;
         break;
     case 4:
-        *pOut = fn_800822D4(EditMenuGetPlayerCursor());
+        *pOut = PlayerDbGetEyebrows(EditMenuGetPlayerCursor());
         *pCount = 3;
         break;
     }
@@ -1397,7 +1397,7 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             break;
         case 2:
             _CreatePlayer_sFacialHairCursor.MoveToRow(a);
-            fn_800822A8(EditMenuGetPlayerCursor(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
+            PlayerDbSetFaceId(EditMenuGetPlayerCursor(), _CreatePlayer_sFacialHairCursor.GetFchrPffh());
             FEPlyrSetPose(0, 26);
             FEPlyrSetPose(1, 26);
             break;
@@ -1407,7 +1407,7 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             FEPlyrSetPose(1, 26);
             break;
         case 4:
-            fn_80082308(EditMenuGetPlayerCursor(), a);
+            PlayerDbSetEyebrows(EditMenuGetPlayerCursor(), a);
             break;
         }
     } else {
@@ -1422,7 +1422,7 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             FEPlyrRequestSwap();
             break;
         case 2:
-            _CreatePlayerSetFacialHair(fn_80082280(EditMenuGetPlayerCursor()));
+            _CreatePlayerSetFacialHair(PlayerDbGetFaceId(EditMenuGetPlayerCursor()));
             break;
         case 3:
             PlayerLookSetFacialHairColor(0, PlayerDbGetFacialHairColor(EditMenuGetPlayerCursor()));
@@ -1431,8 +1431,8 @@ int CreatePlayerHairOptionList::Leave(int a, int b, void **pOut)
             FEPlyrRequestSwap();
             break;
         case 4:
-            PlayerLookSetBrow(0, fn_800822D4(EditMenuGetPlayerCursor()));
-            PlayerLookSetBrow(1, fn_800822D4(EditMenuGetPlayerCursor()));
+            PlayerLookSetBrow(0, PlayerDbGetEyebrows(EditMenuGetPlayerCursor()));
+            PlayerLookSetBrow(1, PlayerDbGetEyebrows(EditMenuGetPlayerCursor()));
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
             break;
@@ -1524,7 +1524,7 @@ int CreatePlayerFaceOptionList::Leave(int a, int b, void **pOut)
             const FaceFeatureRange_t *pRange = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8);
 
             _CreatePlayer_sFace.mUnknown0[pRange->mSlot] = a + pRange->mOffset;
-            fn_80082334(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
+            PlayerDbSetFaceFeatures(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
             PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
             PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
         }
@@ -1535,7 +1535,7 @@ int CreatePlayerFaceOptionList::Leave(int a, int b, void **pOut)
             FEPlyrLoadRequestReload(FEPlyrGetBackIndex(), 15);
             FEPlyrRequestSwap();
         } else {
-            fn_80082138(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
+            PlayerDbGetFaceFeatures(EditMenuGetPlayerCursor(), &_CreatePlayer_sFace);
             PlayerLookSetFeatures(0, &_CreatePlayer_sFace);
             PlayerLookSetFeatures(1, &_CreatePlayer_sFace);
             int slot = _CreatePlayerGetFaceMenu()->GetRange(mUnknown8)->mSlot;

@@ -75,11 +75,11 @@ void PlyrStarSetShown(int a, int b);
 void PlayBookSetupTeams(void);
 void ScrmTeamToHuddle(int a);
 int ClockRuleIsOvertime(void);
-void fn_80177E6C(int a, int b);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_801787DC(int a);
-void fn_801789F8(void);
+void ScrmMirrorField(int a, int b);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetTeamScore(int a);
+void ScrmQuarterEnd(void);
 void BannerClear(int a);
 void HudStop(void);
 void CoinTossApplyResultSwapped(void);
@@ -354,13 +354,13 @@ void QuarterEndPhase::OnEnter()
 {
     fn_800B14E4();
     _QuarterEnd_pState->mState = 0;
-    fn_80177E6C(1, 0);
+    ScrmMirrorField(1, 0);
     _QuarterEnd_pState->mUnknown0 = fn_8009D86C();
     GameEventFlagsSetFlag0(0);
     _QuarterEnd_pState->mUnknown10 = 0;
     _QuarterEnd_pState->mUnknown11 = 0;
     _QuarterEnd_pState->mUnknown36 = 0;
-    fn_801789F8();
+    ScrmQuarterEnd();
     QuarterEndClearClipHandles();
     QuarterEndStartVenueEffect();
 }
@@ -382,7 +382,7 @@ void QuarterEndPhase::OnUpdate(float f)
         switch (_QuarterEnd_pState->mUnknown0) {
         case 4:
         case 5:
-            if (fn_801787DC(0) != fn_801787DC(1)) {
+            if (ScrmGetTeamScore(0) != ScrmGetTeamScore(1)) {
                 _QuarterEnd_pState->mUnknown11 = 1;
             }
             break;
@@ -394,7 +394,7 @@ void QuarterEndPhase::OnUpdate(float f)
             _QuarterEnd_pState->mUnknown11 = 0;
             break;
         }
-        if (fn_800B65A0(fn_80178308()) == 0xFF && fn_800B65A0(fn_80178320()) == 0xFF) {
+        if (fn_800B65A0(ScrmGetOffenseTeam()) == 0xFF && fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) {
             _QuarterEnd_pState->mUnknown11 = 0;
         }
         if (_QuarterEnd_pState->mUnknown11 == 1) {
@@ -418,7 +418,7 @@ void QuarterEndPhase::OnUpdate(float f)
         if (fn_8009D86C() != 6 && fn_8009D86C() == 3) {
             CoinTossApplyResultSwapped();
         }
-        fn_801789F8();
+        ScrmQuarterEnd();
         _QuarterEnd_pState->mState = 1;
         break;
     case 1:
@@ -492,7 +492,7 @@ void QuarterEndPhase::OnExit()
         _QuarterEnd_pState->mUnknown10 = 0;
         fn_800AFE20(QuarterEndOnEvent);
     }
-    fn_801789F8();
+    ScrmQuarterEnd();
     _QuarterEnd_pState->mUnknown35 = 0;
     _QuarterEnd_pState->mUnknown36 = 0;
     _QuarterEnd_pState->mpEntries = 0;

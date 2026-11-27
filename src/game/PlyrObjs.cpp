@@ -138,8 +138,8 @@ void PlayerDbGetNickname(Object_8008044C *, char *, int);
 void PlayerLookLoadBonuses(unsigned char, unsigned char, int);
 int PlayerDbGetPlex(Object_8008044C *);
 int fn_80081E3C(Object_8008044C *);
-int fn_80082280(Object_8008044C *);
-int fn_800822D4(Object_8008044C *);
+int PlayerDbGetFaceId(Object_8008044C *);
+int PlayerDbGetEyebrows(Object_8008044C *);
 PlyrNameTag_t *PlyrNameTagNew(int);
 void PlyrNameTagSetText(PlyrNameTag_t *, const char *);
 void PlaTexCacheSetFace(int, const char *, int);
@@ -790,7 +790,7 @@ int PlyrObjsCreatePlayers(int owner, int mode) {
       init.mUnknown34 = value;
       init.mUnknown5B = PlayerDbGetPlex(&object);
       FaceFeatures_t block;
-      fn_80082138(&object, &block);
+      PlayerDbGetFaceFeatures(&object, &block);
       FaceMorphBuildWeights(&block, &init.mUnknown5C);
       if (owner) {
         _PlyrObjs_ppPlayers[i] =
@@ -824,7 +824,7 @@ int PlyrObjsCreatePlayers(int owner, int mode) {
         PlaTexCacheSetFace(init.mUnknown5A, name, 0);
       else
         PlaTexCacheSetCapFace(init.mUnknown5A, fn_80081E3C(&object) + 1,
-                              fn_80082280(&object), fn_800822D4(&object), 0);
+                              PlayerDbGetFaceId(&object), PlayerDbGetEyebrows(&object), 0);
     }
     PlayerCursorClose(&object);
   }

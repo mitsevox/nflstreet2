@@ -5,7 +5,7 @@
 #include "game/AudmonEvent.h"
 #include "game/GameOptions.h"
 #include "game/fn_800AD9B4.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
 #include "game/ResOpenDevice.h"
 #include "game/fn_801F40F4.h"
@@ -549,7 +549,7 @@ extern "C" void SpchIGFindNearestOpponent(int handle)
         *pNearest = pOther->mId;
         Vec3Sub(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
         best = Vec3Magnitude(&delta);
-        count = fn_80178D18(team);
+        count = ScrmGetTeamPlayerCount(team);
         for (i = 1; i < count; i++) {
             pOther = PlyrGet(team, i);
             Vec3Sub(&delta, &pObject->mMotion.mPos, &pOther->mMotion.mPos);
@@ -609,7 +609,7 @@ extern "C" int SpchIGAreChannelsIdle(void)
 
 extern "C" void SpchIGPickTeamPlayer(int side)
 {
-    int stream = fn_80178D70(side);
+    int stream = ScrmGetActivePlayerCount(side);
 
     if (side == 0) {
         _SpchIG_iTeamPlayer0 = 1 | (SyncRandGetRange(1, stream) & 0xFF) << 16;

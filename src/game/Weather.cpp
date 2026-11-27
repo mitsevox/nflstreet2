@@ -83,7 +83,7 @@ void Vec3Mat34Mul(void *, void *);
 float *MatGetCurMatrixPtr(void);
 void GXLoadPosMtxImm(float *, int);
 float *MatInvertRigid(void);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 int fn_800A33E8(void);
 void Vec2FromAngle(void *, int, float);
 void Vec3Add(void *, void *, void *);
@@ -281,7 +281,7 @@ void WeatherGetDrawBounds(WeatherBounds_t *bounds, float *matrix,
     point.mX = view->mUnknown14C.mX;
     point.mY = view->mUnknown14C.mY;
     point.mZ = view->mUnknown14C.mZ;
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
       point.mX = -point.mX;
       point.mY = -point.mY;
     }

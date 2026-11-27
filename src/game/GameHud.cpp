@@ -7,7 +7,7 @@
 #include "game/HudEvents.h"
 #include "game/GameOptions.h"
 #include "game/fn_80218FC4.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/fn_800B65A0.h"
 
 extern "C" {
@@ -21,9 +21,9 @@ Object_80039F5C *fn_800B6544(int index);
 int fn_800B6644(int index);
 int fn_801486A0(void);
 int TutorialIsActive(void);
-int fn_80177F70(void);
-int fn_80178308(void);
-int fn_80179138(void);
+int ScrmGetDown(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetConversionKind(void);
 int GameTextFindPlayerPad(int index);
 int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
@@ -118,7 +118,7 @@ void HudUpdateMashPrompt(unsigned char id)
     if (p == 0) {
         return;
     }
-    own = (p->mId >> 8 & 0xFF) == fn_80178308();
+    own = (p->mId >> 8 & 0xFF) == ScrmGetOffenseTeam();
     args[2] = _Hud_uMashArg;
     _Hud_MashText.mpText = _Hud_szMash;
     args[3] = (int)&_Hud_MashText;
@@ -130,13 +130,13 @@ void HudUpdateMashPrompt(unsigned char id)
                     args[0] = HudGetPadSlot(_Hud_uMashDefensePad);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
-                        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                        UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
                     }
                 }
                 args[0] = HudGetPadSlot(id);
                 args[1] = 1;
                 if (VptManagerGetPassIcons() && HudIsPadPromptAllowed(id)) {
-                    fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                    UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
                 }
                 _Hud_uMashDefensePad = id;
             }
@@ -147,13 +147,13 @@ void HudUpdateMashPrompt(unsigned char id)
                     args[0] = HudGetPadSlot(_Hud_uMashOffensePad);
                     args[1] = 0;
                     if (VptManagerGetPassIcons()) {
-                        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                        UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
                     }
                 }
                 args[0] = HudGetPadSlot(id);
                 args[1] = 1;
                 if (VptManagerGetPassIcons() && HudIsPadPromptAllowed(id)) {
-                    fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                    UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
                 }
                 _Hud_uMashOffensePad = id;
             }
@@ -164,7 +164,7 @@ void HudUpdateMashPrompt(unsigned char id)
             args[0] = HudGetPadSlot(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
-                fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
             }
             _Hud_uMashDefensePad = 4;
         }
@@ -174,7 +174,7 @@ void HudUpdateMashPrompt(unsigned char id)
             args[0] = HudGetPadSlot(id);
             args[1] = 0;
             if (VptManagerGetPassIcons()) {
-                fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+                UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
             }
             _Hud_uMashOffensePad = 4;
         }
@@ -257,7 +257,7 @@ void HudSetScore(int a, int b)
         _Hud_ScoreText.mpText = _Hud_szScore;
         args[1] = (int)&_Hud_ScoreText;
         _Hud_ScoreText.mLength = strlen(_Hud_ScoreText.mpText);
-        fn_8021D7B8(gUISMainInfo, 0x8000000B, 2, args);
+        UISProcessHint(gUISMainInfo, 0x8000000B, 2, args);
         break;
     }
 }
@@ -265,13 +265,13 @@ void HudSetScore(int a, int b)
 void HudSetDown(void)
 {
     int args[1];
-    int count = fn_80177F70();
+    int count = ScrmGetDown();
 
     if (count > 4) {
-        count = fn_80177F70() + fn_80179138();
+        count = ScrmGetDown() + ScrmGetConversionKind();
     }
     args[0] = count;
-    fn_8021D7B8(gUISMainInfo, 0x80000010, 1, args);
+    UISProcessHint(gUISMainInfo, 0x80000010, 1, args);
 }
 
 void HudShowAlert(const char *pText)
@@ -282,7 +282,7 @@ void HudShowAlert(const char *pText)
     args[0] = &_Hud_MessageText;
     args[0]->mpText = _Hud_szMessage;
     args[0]->mLength = strlen(args[0]->mpText);
-    fn_8021D7B8(gUISMainInfo, 0x8000000C, 1, args);
+    UISProcessHint(gUISMainInfo, 0x8000000C, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
@@ -294,7 +294,7 @@ void HudShowCallout(const char *pText)
     args[0] = &_Hud_MessageText;
     args[0]->mpText = _Hud_szMessage;
     args[0]->mLength = strlen(args[0]->mpText);
-    fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
+    UISProcessHint(gUISMainInfo, 0x80000018, 1, args);
     AudmonEventPost(0x13, 0);
 }
 
@@ -317,7 +317,7 @@ void HudHideMashPrompts(void)
         args[0] = HudGetPadSlot(_Hud_uMashDefensePad);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
-            fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+            UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
         }
         _Hud_uMashDefensePad = 4;
     }
@@ -325,7 +325,7 @@ void HudHideMashPrompts(void)
         args[0] = HudGetPadSlot(_Hud_uMashOffensePad);
         args[1] = 0;
         if (VptManagerGetPassIcons()) {
-            fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+            UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
         }
         _Hud_uMashOffensePad = 4;
     }
@@ -357,7 +357,7 @@ void HudShowPressPrompt(int team)
     args[3] = (int)&_Hud_PressText;
     _Hud_PressText.mLength = strlen(_Hud_PressText.mpText);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+        UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
     }
 }
 
@@ -379,7 +379,7 @@ void HudHidePressPrompt(int team)
     args[3] = (int)&_Hud_PressText;
     _Hud_PressText.mLength = strlen(_Hud_PressText.mpText);
     if (VptManagerGetPassIcons()) {
-        fn_8021D7B8(gUISMainInfo, 0x80000019, 4, args);
+        UISProcessHint(gUISMainInfo, 0x80000019, 4, args);
     }
 }
 
@@ -407,7 +407,7 @@ void HudPost3AOn(void)
     int args[1];
 
     args[0] = 1;
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 1, args);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 1, args);
 }
 
 void HudPost3AOff(void)
@@ -415,7 +415,7 @@ void HudPost3AOff(void)
     int args[1];
 
     args[0] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000003A, 1, args);
+    UISProcessHint(gUISMainInfo, 0x8000003A, 1, args);
 }
 
 void HudHide(void)
@@ -424,7 +424,7 @@ void HudHide(void)
 
     _Hud_bHidden = 1;
     args[0] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x8000001B, 1, args);
+    UISProcessHint(gUISMainInfo, 0x8000001B, 1, args);
 }
 
 void HudUnhide(void)
@@ -433,7 +433,7 @@ void HudUnhide(void)
 
     _Hud_bHidden = 0;
     args[0] = 1;
-    fn_8021D7B8(gUISMainInfo, 0x8000001B, 1, args);
+    UISProcessHint(gUISMainInfo, 0x8000001B, 1, args);
 }
 
 void HudHideOverlay(void)
@@ -443,7 +443,7 @@ void HudHideOverlay(void)
     _Hud_bHidden = 1;
     args[0] = 1;
     if (!TutorialIsActive()) {
-        fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
+        UISProcessHint(gUISMainInfo, 0x80000067, 1, args);
     }
 }
 
@@ -453,7 +453,7 @@ void HudShowOverlay(void)
 
     _Hud_bHidden = 0;
     args[0] = 0;
-    fn_8021D7B8(gUISMainInfo, 0x80000067, 1, args);
+    UISProcessHint(gUISMainInfo, 0x80000067, 1, args);
 }
 
 unsigned char HudIsHidden(void)

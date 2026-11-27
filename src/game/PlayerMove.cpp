@@ -11,9 +11,9 @@
 #include "game/Object_80039F5C.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/SyncRandGetRange.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/fn_800B65A0.h"
 
 extern "C" {
@@ -24,7 +24,7 @@ Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsi
 float fn_80124FE0(Object_80039F5C *p, int kind);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int a, int b);
-int fn_801783AC(int bit);
+int ScrmTestPlayFlag(int bit);
 int MathAngleDiff(int a, int b);
 
 extern unsigned char lbl_803EACAB;
@@ -116,7 +116,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
 {
     int result = 0;
     Object_800B26B0 *pMotion = &p->mMotion;
-    fn_80177FE0();
+    ScrmGetBallSpot();
     PlayerMove_t *pBlock = &p->mUnknown1228;
     unsigned char enable = 0;
     int held = 0;
@@ -175,7 +175,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
                 if (special || (pMotion->mUnknown28 != 0.0f && MathAngleDiff(pMotion->mUnknown32, 0x400000) <= 0x3FFFFF)) {
                     ok = 1;
                 }
-                enable = ok & fn_801783AC(0);
+                enable = ok & ScrmTestPlayFlag(0);
                 if (fn_801486A0() == 0) {
                     enable = 1;
                 }
@@ -240,7 +240,7 @@ extern "C" int PlayerMoveTryStartRun(Object_80039F5C *p)
 extern "C" void PlayerMoveTickAll(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = ScrmGetTeamPlayerCount(team);
         for (unsigned char i = 0; i < count; i++) {
             Object_80039F5C *pPlayer = PlyrGet(team, i);
             PlayerMove_t *pBlock = &pPlayer->mUnknown1228;
@@ -262,7 +262,7 @@ extern "C" void PlayerMoveTickAll(void)
 extern "C" void PlayerMoveResetAll(void)
 {
     for (unsigned char team = 0; team <= 1; team++) {
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = ScrmGetTeamPlayerCount(team);
         for (unsigned char i = 0; i < count; i++) {
             Object_80039F5C *pPlayer = PlyrGet(team, i);
             PlayerMove_t *pBlock = &pPlayer->mUnknown1228;

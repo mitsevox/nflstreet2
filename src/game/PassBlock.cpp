@@ -7,7 +7,7 @@
 #include <math.h>
 #include "game/Object_80039F5C.h"
 #include "game/Input_800B6D34.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include <string.h>
 #include "game/Ball.h"
 
@@ -28,22 +28,22 @@ extern float gPlyrMoveFwdSpeed;
 unsigned int fn_8011E188(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E1BC(Object_80039F5C *, Object_80039F5C *, int, int);
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 int fn_8009FB60(Object_80039F5C *);
 int fn_8011F524(void);
 int fn_8011F2C4(void);
-int fn_8010A2DC(Object_80039F5C *, int, short);
-int fn_80178C9C(void);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
+int ScrmUsesBothTeams(void);
 int fn_800BA6F8(void);
 int fn_800BAA24(void);
-void PassBlockSteer(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *, Point_8017886C);
+void PassBlockSteer(Object_80039F5C *, Object_80039F5C *, PassBlockControl_t *, FieldPoint_t);
 int fn_8011E8A4(Object_80039F5C *);
 int fn_800B7E60(Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void fn_800B6E68(Object_80039F5C *, Input_800B6D34 *);
 
 void fn_8011E240(Object_80039F5C *);
-float fn_80178A08(void);
+float ScrmGetSidelineX(void);
 int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
 float Vec2Distance(void *, void *);
@@ -53,11 +53,11 @@ int fn_80120794(Object_800B26B0 *, Object_800B26B0 *, float *, float, float, int
 int fn_8011F32C(void);
 Object_80039F5C *BallGetCurrentTarget(void);
 Object_80039F5C *BallGetCurrentHolder(void);
-int fn_801783AC(int);
+int ScrmTestPlayFlag(int);
 int fn_8011F2F8(void);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
 int fn_80124714(Object_80039F5C *, Object_80039F5C *, Object_80039F5C **);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 unsigned int SyncRandGetRange(unsigned int, unsigned int);
 unsigned char PlayBookGetReceiver(int, unsigned char, unsigned char *);
 
@@ -67,7 +67,7 @@ unsigned char _PassBlock_cFaceOffsetDeg = 0;
 
 static inline int AngleSub(int a, int b) { return (a - b) & 0xFFFFFF; }
 
-void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *aim, Point_8017886C point)
+void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *aim, FieldPoint_t point)
 {
     Object_800B26B0 *motion = &p->mMotion;
     float delta[2];
@@ -101,7 +101,7 @@ void PassBlockDropBack(Object_80039F5C *p, Object_80039F5C *other, PassBlockCont
 }
 
 int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_80039F5C *other,
-               Point_8017886C reference, Vector_80039F5C location, int angle, int otherAngle, float distance)
+               FieldPoint_t reference, Vector_80039F5C location, int angle, int otherAngle, float distance)
 {
     float delta[2];
     int result = 0;
@@ -137,7 +137,7 @@ int PassBlockShouldEngage(Object_80039F5C *p, Object_80039F5C *ball, Object_8003
     return result;
 }
 
-void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockControl_t *s, Vector_80039F5C location, Point_8017886C point)
+void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockControl_t *s, Vector_80039F5C location, FieldPoint_t point)
 {
     Vector_80039F5C *pos = &p->mMotion.mPos;
     if (fn_8011F32C()) {
@@ -146,12 +146,12 @@ void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockCon
         return;
     }
     float x;
-    if (!(location.mX >= 6.0f - fn_80178A08()))
-        x = 6.0f - fn_80178A08();
-    else if (!(location.mX > fn_80178A08() - 6.0f))
+    if (!(location.mX >= 6.0f - ScrmGetSidelineX()))
+        x = 6.0f - ScrmGetSidelineX();
+    else if (!(location.mX > ScrmGetSidelineX() - 6.0f))
         x = location.mX;
     else
-        x = fn_80178A08() - 6.0f;
+        x = ScrmGetSidelineX() - 6.0f;
     location.mX = x;
     float target[2];
     int n = p->mUnknown2914;
@@ -200,7 +200,7 @@ void PassBlockFormPocket(Object_80039F5C *p, Object_80039F5C *ball, PassBlockCon
     else s->mUnknown8 = 0.0f;
 }
 
-void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *s, Point_8017886C point)
+void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl_t *s, FieldPoint_t point)
 {
     Object_800B26B0 *motion = &p->mMotion;
     float distance;
@@ -234,7 +234,7 @@ void PassBlockSteer(Object_80039F5C *p, Object_80039F5C *other, PassBlockControl
     }
     float reference[2];
     if (ball) {
-        if (fn_801783AC(0) || !(ball->mFlags & 0x8000)) {
+        if (ScrmTestPlayFlag(0) || !(ball->mFlags & 0x8000)) {
             location = ball->mMotion.mPos;
             reference[0] = location.mX;
             reference[1] = location.mY;
@@ -402,8 +402,8 @@ void PlyrSteerAroundBlocker(Object_80039F5C *p, Object_80039F5C *, PassBlockCont
 
 void PassBlockFlagDefenderAtLine(Object_80039F5C *p, Object_80039F5C *other)
 {
-    if (other && fn_801783AC(13) && !fn_801783AC(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
-        if (!(other->mMotion.mPos.mY - fn_80177FE0().mY >= 2.5f))
+    if (other && ScrmTestPlayFlag(13) && !ScrmTestPlayFlag(0) && !BallGetCurrentHolder() && fn_8011F2F8()) {
+        if (!(other->mMotion.mPos.mY - ScrmGetBallSpot().mY >= 2.5f))
             p->mUnknown1137 = 1;
     }
 }
@@ -420,8 +420,8 @@ int PassBlockEnter(Object_80039F5C *p)
         s->mUnknown18 = 0;
     else
         s->mUnknown18 = 1;
-    Point_8017886C values;
-    values = fn_80177FE0();
+    FieldPoint_t values;
+    values = ScrmGetBallSpot();
     s->mUnknown0 = p->mMotion.mPos.mX;
     s->mUnknown4 = 99999.0f;
     s->mUnknown8 = p->mUnknown528.mUnknown0;
@@ -434,7 +434,7 @@ int PassBlockEnter(Object_80039F5C *p)
         s->mUnknown1A = 1;
         if (!(values.mY - p->mMotion.mPos.mY >= 2.0f)) {
             float limit = p->mMotion.mPos.mY - _PassBlock_fDropDepth;
-            limit -= fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) * _PassBlock_fDropDepthPerWidth;
+            limit -= fabsf(p->mMotion.mPos.mX - ScrmGetBallSpot().mX) * _PassBlock_fDropDepthPerWidth;
             s->mUnknown4 = limit;
             s->mUnknown10 = p->mMotion.mFacing;
             s->mUnknownC = AngleSub(p->mMotion.mFacing, 0x800000);
@@ -459,7 +459,7 @@ int PassBlockEnter(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
     }
-    if (fn_801787A0()) {
+    if (ScrmIsNotReplay()) {
         fn_8011E3EC(p, 0);
         fn_8011E240(p);
         return 1;
@@ -486,7 +486,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         return 1;
     }
     if (fn_8009FB60(p)) return 1;
-    if (p->mIdBytes[2] == fn_80178320()) {
+    if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         fn_8011E3EC(p, 0);
         fn_8011E240(p);
         memset(&message, 0, 4);
@@ -494,7 +494,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if ((fn_8011F524() && !fn_8011F2C4()) || fn_801783AC(0) || fn_801787A0()) {
+    if ((fn_8011F524() && !fn_8011F2C4()) || ScrmTestPlayFlag(0) || ScrmIsNotReplay()) {
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
@@ -504,7 +504,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if (fn_801787A0()) {
+    if (ScrmIsNotReplay()) {
         if ((block->mUnknown0 != 4 && block->mUnknown0 != 7) || SyncRandGetRange(0, 100) <= 9) {
             fn_8011E3EC(p, 0);
             fn_8011E240(p);
@@ -514,16 +514,16 @@ int PassBlockUpdate(Object_80039F5C *p)
         fn_8011E1BC(p, 0, 0, 1);
         fn_8011E3EC(p, 1);
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
-        Point_8017886C point;
-        point = fn_80177FE0();
+        FieldPoint_t point;
+        point = ScrmGetBallSpot();
         Object_80039F5C *other = fn_8009BCE8(&block->mUnknown4);
         if (block->mUnknown0 != 4 && block->mUnknown0 != 7) {
             if (ball && (ball->mFlags & 0x8000)) s->mUnknown1A = 0;
             if (s->mUnknown1A && !(p->mMotion.mPos.mY <= s->mUnknown4))
                 PassBlockDropBack(p, other, s, point);
-            else if (!fn_80178C9C() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
+            else if (!ScrmUsesBothTeams() || (fn_800BA6F8() && fn_800BAA24() == 1)) {
                 s->mUnknown8 = 0.0f;
                 s->mUnknown10 = s->mUnknownC = p->mMotion.mFacing;
             } else
@@ -552,7 +552,7 @@ int PassBlockUpdate(Object_80039F5C *p)
         p->mpState->mUnknown1 = (int)(seconds * 32.0f);
         if (s->mUnknown14 > 0 && !p->mpState->mUnknown1) p->mpState->mUnknown1 = 1;
         if (s->mUnknown14 <= 0 ||
-            ((p->mFlags & 0x4000) && !(p->mMotion.mPos.mY <= fn_80177FE0().mY))) {
+            ((p->mFlags & 0x4000) && !(p->mMotion.mPos.mY <= ScrmGetBallSpot().mY))) {
             fn_8011E3EC(p, 0);
             result = 1;
             fn_8011E240(p);

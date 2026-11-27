@@ -7,13 +7,13 @@
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Ball.h"
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include <string.h>
 #include "game/Vec2Distance.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 
 
 
@@ -30,7 +30,7 @@ void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Obje
 int fn_80105E90(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pTarget, int kind);
 int fn_801067D8(Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void fn_8011E1BC(Object_80039F5C *p, Object_80039F5C *pOther, int a, int b);
 void fn_8011E3EC(Object_80039F5C *p, int a);
 void fn_8011F45C(int a);
@@ -45,17 +45,17 @@ int fn_8012510C(Directions_8012430C *pValues);
 void CamGameSetModeAll(int a);
 void PassIconsShow(int mode);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-Point_8017886C fn_80177FE0(void);
-int fn_80178308(void);
-int fn_80177F70(void);
-float fn_80178298(void);
-float fn_80178A08(void);
-float fn_80178A2C(void);
-int fn_801783AC(int bit);
+FieldPoint_t ScrmGetBallSpot(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDown(void);
+float ScrmGetLineToGain(void);
+float ScrmGetSidelineX(void);
+float ScrmGetGoalLineY(void);
+int ScrmTestPlayFlag(int bit);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
-float Vec2DotProduct(Point_8017886C *pA, Point_8017886C *pB);
+float Vec2DotProduct(FieldPoint_t *pA, FieldPoint_t *pB);
 float SyncRandGetFloat(int stream);
 }
 
@@ -85,7 +85,7 @@ extern "C" int OptionRunHasQueuedRun(Object_80039F5C *p)
     int result = 0;
 
     if (BallFindHeldBy(p) != 0 && pState[1].mId == 18) {
-        result = fn_801783AC(0) == 0;
+        result = ScrmTestPlayFlag(0) == 0;
     }
     return result;
 }
@@ -100,13 +100,13 @@ extern "C" int OptionRunIsWide(Object_80039F5C *p, int a, int b)
         switch (b) {
         case 0:
         case 1:
-            if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) > 3.0f) {
+            if (fabsf(p->mMotion.mPos.mX - ScrmGetBallSpot().mX) > 3.0f) {
                 result = 1;
             } else {
                 int flag = 0;
 
-                if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) > 1.0f) {
-                    flag = p->mMotion.mPos.mY < fn_80177FE0().mY - 5.0f;
+                if (fabsf(p->mMotion.mPos.mX - ScrmGetBallSpot().mX) > 1.0f) {
+                    flag = p->mMotion.mPos.mY < ScrmGetBallSpot().mY - 5.0f;
                 }
                 if (flag) {
                     result = 1;
@@ -125,7 +125,7 @@ extern "C" void OptionRunScoreDirections(Object_80039F5C *p, int index, int side
     int i;
 
     fn_8012430C(pValues, 3, p);
-    if (fabsf(p->mMotion.mPos.mX - fn_80177FE0().mX) < 7.0f) {
+    if (fabsf(p->mMotion.mPos.mX - ScrmGetBallSpot().mX) < 7.0f) {
         pA = _OptionRun_NearSpotCosts[index];
     }
     if (OptionRunIsWide(p, side, index)) {
@@ -144,7 +144,7 @@ extern "C" void OptionRunScoreDirections(Object_80039F5C *p, int index, int side
 extern "C" int OptionRunIsThreat(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     Object_80039F5C *pFound;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     int result = 1;
 
     if (fn_80124714(pOther, p, &pFound) == 0 && pFound->mIdBytes[2] == p->mIdBytes[2]) {
@@ -163,7 +163,7 @@ extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, f
 {
     float distance;
     Object_80039F5C *pOther =
-        fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), angle, &distance, 1);
+        fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), angle, &distance, 1);
 
     if (pOther != 0) {
         if (distance > maxA || !OptionRunIsThreat(p, pOther)) {
@@ -171,7 +171,7 @@ extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, f
         }
     }
     if (pOther == 0) {
-        pOther = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &distance, 1);
+        pOther = fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &distance, 1);
         if (distance > maxB || !OptionRunIsThreat(p, pOther)) {
             pOther = 0;
         }
@@ -180,10 +180,10 @@ extern "C" Object_80039F5C *OptionRunFindThreat(Object_80039F5C *p, int angle, f
 }
 
 /* True when the spot is more than 5.0f short of the goal line value
-   fn_80178A2C returns. */
-static inline int IsShortOfGoal(Point_8017886C spot)
+   ScrmGetGoalLineY returns. */
+static inline int IsShortOfGoal(FieldPoint_t spot)
 {
-    return spot.mY < fn_80178A2C() - 5.0f;
+    return spot.mY < ScrmGetGoalLineY() - 5.0f;
 }
 
 extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
@@ -211,8 +211,8 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
 
         pOther = OptionRunFindThreat(p, 0x400000, 2.5f, 1.5f);
         if (pOther != 0) {
-            Point_8017886C toOther;
-            Point_8017886C toTarget;
+            FieldPoint_t toOther;
+            FieldPoint_t toTarget;
 
             Vec2Sub(&toOther, &pOther->mMotion.mPos, &p->mMotion.mPos);
             Vec2Sub(&toTarget, &pTarget->mMotion.mPos, &p->mMotion.mPos);
@@ -225,7 +225,7 @@ extern "C" int OptionRunDecide(Object_80039F5C *p, OptionRunControl_t *pControl)
         } else {
             int flag = 0;
 
-            if (IsShortOfGoal(fn_80177FE0())) {
+            if (IsShortOfGoal(ScrmGetBallSpot())) {
                 if (OptionRunHasQueuedRun(p)) {
                     flag = own < 12.0f;
                 }
@@ -352,17 +352,17 @@ extern "C" int OptionRunIsOutOfRoom(Object_80039F5C *p, OptionRunControl_t *pCon
     int result;
 
     fn_8009BCE8(&pControl->mUnknown64);
-    result = fn_80178A08() - fabsf(p->mMotion.mPos.mX) < 1.5f;
+    result = ScrmGetSidelineX() - fabsf(p->mMotion.mPos.mX) < 1.5f;
     switch (pControl->mUnknown68) {
     case 0:
-        if (p->mMotion.mPos.mX > fn_80177FE0().mX) {
+        if (p->mMotion.mPos.mX > ScrmGetBallSpot().mX) {
             if (p->mMotion.mFacing < 0x400000 || p->mMotion.mFacing > 0xC00000) {
                 result = 1;
             }
         }
         break;
     case 1:
-        if (p->mMotion.mPos.mX < fn_80177FE0().mX) {
+        if (p->mMotion.mPos.mX < ScrmGetBallSpot().mX) {
             if (p->mMotion.mFacing > 0x400000 && p->mMotion.mFacing < 0xC00000) {
                 result = 1;
             }
@@ -376,7 +376,7 @@ extern "C" int OptionRunUseCarryGait(Object_80039F5C *p, int a)
 {
     float y = p->mMotion.mPos.mY;
     int result = 1;
-    float spotY = fn_80177FE0().mY;
+    float spotY = ScrmGetBallSpot().mY;
 
     if (y > spotY + 10.0f) {
         result = 0;
@@ -396,7 +396,7 @@ extern "C" void OptionRunFacePartner(Object_80039F5C *p, OptionRunControl_t *pCo
     Object_80039F5C *pTarget = fn_8009BCE8(&pControl->mUnknown64);
 
     if (pTarget != 0) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
 
         Vec2Sub(&delta, &pTarget->mMotion.mPos, &p->mMotion.mPos);
         MathArcTan2(delta.mY, delta.mX);
@@ -442,7 +442,7 @@ extern "C" int OptionRunUpdate(Object_80039F5C *p)
     int done = 0;
 
     fn_800B8344(p);
-    if (fn_8010A2DC(p, 0, -1)) {
+    if (PlyrTryQueueMsg62(p, 0, -1)) {
         return 0;
     }
     OptionRunScoreDirections(p, pControl->mUnknown68, pControl->mUnknown81, &pControl->mValues);
@@ -580,8 +580,8 @@ extern "C" void OptionRunMirror(Object_80039F5C *p)
         break;
     }
     i = 0;
-    pObject = PlayBookGetFormation(fn_80178308());
-    count = fn_80178D18(fn_80178308());
+    pObject = PlayBookGetFormation(ScrmGetOffenseTeam());
+    count = ScrmGetTeamPlayerCount(ScrmGetOffenseTeam());
     for (; i < count; i++) {
         if (PlaySetGetEntry(pObject, i, 0)->mUnknownB == p->mIdBytes[2]) {
             p->mIdBytes[2] = i;
@@ -592,15 +592,15 @@ extern "C" void OptionRunMirror(Object_80039F5C *p)
 
 extern "C" int OptionRunCanPitchTo(Object_80039F5C *p, Vector_80039F5C *pPos, Object_80039F5C *pOther)
 {
-    signed char line = (signed char)(int)fn_80178A2C();
+    signed char line = (signed char)(int)ScrmGetGoalLineY();
     signed char y = (signed char)(int)p->mMotion.mPos.mY;
     int allowed = (float)(line - y) >= 1.5f;
     if (pPos && pOther) {
-        if (fn_80177F70() > 2 && !(p->mMotion.mPos.mY <= fn_80178298()) && !(pPos->mY >= fn_80178298()))
+        if (ScrmGetDown() > 2 && !(p->mMotion.mPos.mY <= ScrmGetLineToGain()) && !(pPos->mY >= ScrmGetLineToGain()))
             allowed = 0;
-        if (pOther->mpState->mId != 90 && !(pPos->mY >= _OptionRun_fLineMargin - fn_80178A2C()))
+        if (pOther->mpState->mId != 90 && !(pPos->mY >= _OptionRun_fLineMargin - ScrmGetGoalLineY()))
             allowed = 0;
-        if (!(fabsf(pPos->mX) >= fabsf(fn_80178A08())) && !(fabsf(pPos->mX) >= fabsf(pOther->mMotion.mPos.mX))
+        if (!(fabsf(pPos->mX) >= fabsf(ScrmGetSidelineX())) && !(fabsf(pPos->mX) >= fabsf(pOther->mMotion.mPos.mX))
             && !(fabsf(pPos->mX) >= _OptionRun_fMinWidth))
             allowed = 0;
         if (!(Vec2Distance(&p->mMotion.mPos, &pOther->mMotion.mPos) >= _OptionRun_fMinPartnerDist))

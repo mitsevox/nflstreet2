@@ -1,16 +1,16 @@
 /* Selects approach commands and advances lane movement during player alignment. */
 
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/AudmonEvent.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/fn_801BE60C.h"
 #include <math.h>
 
 struct PlyrAlignApproachState_t {
   unsigned char unk_0x0, unk_0x1, unk_0x2, unk_0x3;
-  Point_8017886C mLaneTargets[2];
+  FieldPoint_t mLaneTargets[2];
   unsigned short mLaneTargetIndex;
   unsigned char unk_0x16[8];
   unsigned short mLanePhase;
@@ -24,29 +24,29 @@ struct PlyrAlignApproachState_t {
 extern "C" {
 extern float lbl_803EAD38, lbl_803EAD3C, lbl_803EAD40, lbl_803EAD44,
     lbl_803EAD48;
-Point_8017886C fn_80177FFC(int);
+FieldPoint_t ScrmGetTeamSetupSpot(int);
 void Vec2Sub(void *, void *, void *);
 int MathArcTan2(float, float);
 int MathAngleDiff(int, int);
-int fn_800CB708(Object_80039F5C *, int *, Point_8017886C, int, int);
-int fn_800CB580(Object_80039F5C *, int *, Point_8017886C, int, int);
-int fn_800CBB00(Object_80039F5C *, int, Point_8017886C, int, int);
+int fn_800CB708(Object_80039F5C *, int *, FieldPoint_t, int, int);
+int fn_800CB580(Object_80039F5C *, int *, FieldPoint_t, int, int);
+int fn_800CBB00(Object_80039F5C *, int, FieldPoint_t, int, int);
 void PlayerReleaseJointCtrls(Object_80039F5C *);
-int PlayerActionIsFacingPoint(Object_80039F5C *, Point_8017886C *, float);
+int PlayerActionIsFacingPoint(Object_80039F5C *, FieldPoint_t *, float);
 void PlyrAlignStartShuffle(Object_80039F5C *, PlyrAlignApproachState_t *, int, float);
 void fn_800C89F0(Object_80039F5C *, int, int, int, float);
-int fn_80178320(void);
-int fn_80178308(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetOffenseTeam(void);
 int fn_80124CE4(Object_80039F5C *, int, void *, int, float, int, float);
 int PlayerActionIsNearLine(Object_80039F5C *);
 void PlayerPathStartSideAnim(Object_80039F5C *, int, int);
-int PlayerPathIsLaneClear(Object_80039F5C *, Point_8017886C *);
+int PlayerPathIsLaneClear(Object_80039F5C *, FieldPoint_t *);
 
-void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int angle) {
+void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int angle) {
   PlyrAlignApproachState_t *state = (PlyrAlignApproachState_t *)&player->mUnknown336;
-  Point_8017886C goal;
-  Point_8017886C delta;
-  goal = fn_80177FFC(player->mIdBytes[2]);
+  FieldPoint_t goal;
+  FieldPoint_t delta;
+  goal = ScrmGetTeamSetupSpot(player->mIdBytes[2]);
   int value;
   Vec2Sub(&delta, target, &player->mMotion.mPos);
   float distance = Vec2Magnitude(&delta);
@@ -142,7 +142,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int 
     }
   adjust:
     player->mUnknown512.mUnknown4 = facing;
-    unsigned int count = fn_80178D18(fn_80178320());
+    unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
     for (unsigned char i = 0; i < count; ++i) {
       int value;
       if (fn_80124CE4(player, player->mIdBytes[2], &value, 0x155555, 5.0f,
@@ -163,7 +163,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int 
   {
     int current = fn_801BE648(player->mpUnknown792);
     if (!(player->mMotion.mPos.mY >=
-          fn_80177FFC(player->mIdBytes[2]).mY + 0.15625f + lbl_803EAD38)) {
+          ScrmGetTeamSetupSpot(player->mIdBytes[2]).mY + 0.15625f + lbl_803EAD38)) {
       if (current != 86) {
         player->mUnknown512.mUnknown14 = 3;
         player->mUnknown512.mUnknown4 = 0x400000;
@@ -199,7 +199,7 @@ void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int 
 }
 void PlyrAlignUpdateLane(Object_80039F5C *player) {
   PlyrAlignApproachState_t *state = (PlyrAlignApproachState_t *)&player->mUnknown336;
-  Point_8017886C delta;
+  FieldPoint_t delta;
   switch (state->mLanePhase) {
   case 0: {
     Vec2Sub(&delta, &state->mLaneTargets[state->mLaneTargetIndex],
@@ -237,7 +237,7 @@ void PlyrAlignUpdateLane(Object_80039F5C *player) {
       if (!(distance <= 0.3f) && MathAngleDiff(direction, 0xC00000) <= 0x2AAAA9) {
         if (player->mUnknown560.mFlags.mBytes[0] ||
             !(player->mMotion.mPos.mY >=
-              fn_80177FFC(player->mIdBytes[2]).mY + 0.15625f +
+              ScrmGetTeamSetupSpot(player->mIdBytes[2]).mY + 0.15625f +
                   lbl_803EAD38 * 0.5f)) {
           PlayerPathStartSideAnim(player, 1, 2);
           state->mLanePhase = 1;
@@ -249,9 +249,9 @@ void PlyrAlignUpdateLane(Object_80039F5C *player) {
           player->mUnknown512.mUnknown0 = 0.15f;
         }
       } else {
-        Point_8017886C goal = fn_80177FFC(fn_80178308());
-        Point_8017886C point = goal;
-        Point_8017886C offset;
+        FieldPoint_t goal = ScrmGetTeamSetupSpot(ScrmGetOffenseTeam());
+        FieldPoint_t point = goal;
+        FieldPoint_t offset;
         point.mY -= 5.0f;
         Vec2Sub(&offset, &point, &player->mMotion.mPos);
         state->mLaneApproachHeading = MathArcTan2(offset.mY, offset.mX);

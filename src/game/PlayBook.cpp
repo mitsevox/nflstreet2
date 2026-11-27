@@ -16,11 +16,11 @@
 #include "game/TDbCompilePerformOp.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_800B65A0.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/PlayBookTeam.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmPlayResult.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/SyncRandGetRange.h"
 #include "game/PlaySet.h"
 #include "game/PlayCandidate.h"
@@ -64,12 +64,12 @@ void PlayBookOffsetSpots(Vec2_t *pPoints, int count);
 int PlayAutoFlip(int team);
 int fn_801485D4(void);
 int fn_801486A0(void);
-int fn_80177F70(void);
-int fn_80178308(void);
-float fn_80178A2C(void);
-int fn_80178E10(void);
-void fn_80179144(int a);
-void fn_8017916C(void);
+int ScrmGetDown(void);
+int ScrmGetOffenseTeam(void);
+float ScrmGetGoalLineY(void);
+int ScrmAllowsAudibles(void);
+void ScrmSetConversionKind(int a);
+void ScrmPlaceConversionBall(void);
 int MemFill(void *pDest, int size, int value, int width);
 void TDbIdxDestroy(int tag, int index, int column);
 int TDbIdxExists(int tag, int index, int column);
@@ -297,7 +297,7 @@ void PlayBookLoadCurrentPlay(int team)
     }
     PlayBookClearLoadFlags(3);
     PlayBookSetLoadFlags(flags);
-    if (fn_80178308() == team && fn_800B65A0(team) == 0xFF && !fn_800BA6F8() &&
+    if (ScrmGetOffenseTeam() == team && fn_800B65A0(team) == 0xFF && !fn_800BA6F8() &&
         (!fn_801485D4() || fn_801486A0() != 2)) {
         PlayAutoFlip(team);
     }
@@ -312,7 +312,7 @@ void PlayBookLoadAudibles(int team)
     unsigned char swap;
     unsigned int i;
 
-    if (fn_80178308() == team) {
+    if (ScrmGetOffenseTeam() == team) {
         tag = 0x31544250;
         kind = 1;
     } else {
@@ -375,7 +375,7 @@ void PlayBookClear(void)
 
 void PlayBookLoadAudibleTable(void)
 {
-    if (fn_80178E10()) {
+    if (ScrmAllowsAudibles()) {
         DbCursor cursor;
         unsigned int key;
 
@@ -506,15 +506,15 @@ void PlayBookSetIndices(unsigned char team, unsigned char a, unsigned char b, un
 void PlayBookPickPage(int team, int a, int b, int c)
 {
     if (a == -1 && b == -1) {
-        int mode = fn_80177F70();
+        int mode = ScrmGetDown();
 
         if (mode == 4 || mode == 6) {
             PlayBookSel_t *pState = &_PlayBook_pData->mUnknown4[team].mUnknown20;
-            Point_8017886C point;
+            FieldPoint_t point;
 
-            point = fn_80177FE0();
+            point = ScrmGetBallSpot();
 
-            if (mode == 6 || !(point.mY < fn_80178A2C() - 15.0f)) {
+            if (mode == 6 || !(point.mY < ScrmGetGoalLineY() - 15.0f)) {
                 pState->mUnknownC = 2;
             } else {
                 pState->mUnknownC = 0;
@@ -635,11 +635,11 @@ void PlayBookPickPlay(int team, int kind)
 
     if (fn_800B65A0(team) == 0xFF) {
         if (kind == 14) {
-            fn_80179144(2);
-            fn_8017916C();
+            ScrmSetConversionKind(2);
+            ScrmPlaceConversionBall();
         } else if (kind == 17) {
-            fn_80179144(1);
-            fn_8017916C();
+            ScrmSetConversionKind(1);
+            ScrmPlaceConversionBall();
         }
     }
     PlayBookDbPickAIPlayPath(team, tag, kind, result);
@@ -673,12 +673,12 @@ void PlayBookTurnPage(int team, int delta)
     PlayBookTeam_t *pTeam = &_PlayBook_pData->mUnknown4[(unsigned char)team];
 
     if (delta == 0) {
-        int mode = fn_80177F70();
+        int mode = ScrmGetDown();
 
         if ((mode == 4 || mode == 6) && strcmp(pTeam->mUnknown20.mUnknown14.mUnknownCB0, "Special Teams") == 0) {
-            Point_8017886C point = fn_80177FE0();
+            FieldPoint_t point = ScrmGetBallSpot();
 
-            if (mode == 6 || !(point.mY < fn_80178A2C() - 15.0f)) {
+            if (mode == 6 || !(point.mY < ScrmGetGoalLineY() - 15.0f)) {
                 pTeam->mUnknown20.mUnknownC = 2;
                 return;
             }
@@ -760,18 +760,18 @@ void PlayBookLoadCurrentPlay(int team);
 void fn_800FBAA8(void);
 void fn_8011F3A8(void);
 void PlayRealignTeam(int team);
-int fn_80178308(void);
-int fn_80178320(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
 void fn_800B0DA4(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
 void fn_800A6F04(int team);
-int fn_801788D8(int *p);
-int fn_801787DC(int team);
-int fn_80177F70(void);
-float fn_80178A2C(void);
-float fn_80178298(void);
+int ScrmGetScoreGoal(int *p);
+int ScrmGetTeamScore(int team);
+int ScrmGetDown(void);
+float ScrmGetGoalLineY(void);
+float ScrmGetLineToGain(void);
 int fn_800A8444(int team);
 void PlayBookPickPlay(int team, int kind);
 void PlayBookSelectPlayById(int team, int kind);
@@ -798,11 +798,11 @@ void PlayCallApplyPlay(int team, int value)
         fn_800FBAA8();
         fn_8011F3A8();
         PlayRealignTeam(team);
-        if (team == fn_80178308())
+        if (team == ScrmGetOffenseTeam())
             fn_800B0DA4();
         for (int t = 0; t < 2; ++t) {
             PlayBookFormation_t *pBook = PlayBookGetFormation((unsigned char)t);
-            int count = fn_80178D18((unsigned char)t);
+            int count = ScrmGetTeamPlayerCount((unsigned char)t);
             for (int i = 0; i < count; ++i) {
                 Object_80039F5C *p = PlyrGet((unsigned char)t, i);
                 unsigned char a, b;
@@ -821,25 +821,25 @@ void PlayCallFillDefenseExtra(short *p) {}
 
 void PlayCallFillSituation(short *p)
 {
-    Point_8017886C pos;
-    pos = fn_80177FE0();
-    int offense = fn_80178308();
-    int defense = fn_80178320();
+    FieldPoint_t pos;
+    pos = ScrmGetBallSpot();
+    int offense = ScrmGetOffenseTeam();
+    int defense = ScrmGetDefenseTeam();
     p[15] = fn_800B65A0(offense);
     p[16] = fn_800B65A0(defense);
     int value;
-    if (fn_801788D8(&value) == 0)
-        p[0] = (unsigned short)value - fn_801787DC(offense);
+    if (ScrmGetScoreGoal(&value) == 0)
+        p[0] = (unsigned short)value - ScrmGetTeamScore(offense);
     else
         p[0] = -1;
-    p[1] = fn_80177F70();
-    p[3] = (int)(fn_80178A2C() - pos.mY);
-    p[4] = (int)(pos.mY + fn_80178A2C());
+    p[1] = ScrmGetDown();
+    p[3] = (int)(ScrmGetGoalLineY() - pos.mY);
+    p[4] = (int)(pos.mY + ScrmGetGoalLineY());
     p[7] = p[6] = 0;
-    switch (fn_80177F70()) {
+    switch (ScrmGetDown()) {
     case 0:
         p[1] = 0;
-        p[6] = fn_8017886C()->mUnknown1D == -2 ? 2 : 1;
+        p[6] = ScrmGetPlayResult()->mUnknown1D == -2 ? 2 : 1;
         p[7] = 0;
         break;
     case 3:
@@ -851,15 +851,15 @@ void PlayCallFillSituation(short *p)
         p[7] = 1;
         break;
     }
-    float line = fn_80178298();
-    p[2] = (int)(line - fn_80177FE0().mY);
+    float line = ScrmGetLineToGain();
+    p[2] = (int)(line - ScrmGetBallSpot().mY);
     p[5] = SyncRandGetRange(0, 100);
     p[8] = *(unsigned short *)((char *)PlayBookGetFormation(offense) + 26);
     p[9] = 0;
     p[13] = p[12] = 50;
     p[10] = *(unsigned short *)((char *)PlayBookGetPlay(offense) + 6);
     p[11] = *(unsigned short *)((char *)PlayBookGetPlay(defense) + 6);
-    if (fn_800A8444(fn_80178320()))
+    if (fn_800A8444(ScrmGetDefenseTeam()))
         p[14] = 1;
     else
         p[14] = 0;
@@ -868,7 +868,7 @@ void PlayCallFillSituation(short *p)
 void PlayCallFillOffenseSituation(short *p, short mode)
 {
     PlayCallFillSituation(p);
-    p[9] = fn_80178308();
+    p[9] = ScrmGetOffenseTeam();
     if (mode == 4)
         PlayCallFillOffenseExtra(p);
 }
@@ -876,8 +876,8 @@ void PlayCallFillOffenseSituation(short *p, short mode)
 void PlayCallFillDefenseSituation(short *p, short mode)
 {
     PlayCallFillSituation(p);
-    p[9] = fn_80178320();
-    if (fn_80177F70() == 6)
+    p[9] = ScrmGetDefenseTeam();
+    if (ScrmGetDown() == 6)
         p[1] = 1;
     if (mode == 4)
         PlayCallFillDefenseExtra(p);
@@ -888,7 +888,7 @@ int PlayCallOffenseCommand(int id, short *p, int value)
     int result = 0;
     if (p[18] > 0)
         p[18] = -1;
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     switch (id) {
     case 0: PlayCallFillOffenseSituation(p, value); break;
     case 1:
@@ -911,7 +911,7 @@ int PlayCallOffenseCommand(int id, short *p, int value)
         break;
     case 2:
         fn_800B4300(0);
-        if (fn_800B65A0(fn_80178308()) == 255)
+        if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;
     case 3:
@@ -920,12 +920,12 @@ int PlayCallOffenseCommand(int id, short *p, int value)
         break;
     case 5:
         fn_800B43AC(1);
-        if (fn_800B65A0(fn_80178308()) == 255)
+        if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;
     case 12:
         fn_800B43AC(2);
-        if (fn_800B65A0(fn_80178308()) == 255)
+        if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;
     }
@@ -935,7 +935,7 @@ int PlayCallOffenseCommand(int id, short *p, int value)
 int PlayCallDefenseCommand(int id, short *p, int value)
 {
     int result = 0;
-    int team = fn_80178320();
+    int team = ScrmGetDefenseTeam();
     switch (id) {
     case 0: PlayCallFillDefenseSituation(p, value); break;
     case 1:
@@ -1296,9 +1296,9 @@ int fn_800A8430(int team);
 int fn_800C8744(int team);
 int fn_801485D4(void);
 int PlayBookGetDatabase(int team);
-int fn_80177F70(void);
-int fn_80178308(void);
-float fn_80178A5C(void);
+int ScrmGetDown(void);
+int ScrmGetOffenseTeam(void);
+float ScrmGetSpotLimitX(void);
 int GameTextGetAwayTeam(void);
 int GameTextGetHomeTeam(void);
 void *SyncStateGetData(void);
@@ -1329,7 +1329,7 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
 void PlayTrackWeightDefense(int team, PlayCandidate_t *pList, unsigned int count);
 void PlayTrackFilterByMode(int team, PlayCandidate_t *pList, unsigned int count);
 void PlayTrackFilterByChallenge(int team, PlayCandidate_t *pList, unsigned int count, int mode);
-unsigned int PlayTrackClassifyPlay(int kind, Point_8017886C from, Point_8017886C *pTo, int flag);
+unsigned int PlayTrackClassifyPlay(int kind, FieldPoint_t from, FieldPoint_t *pTo, int flag);
 void PlayTrackGetRatingBias(int team, float *pA, float *pB);
 void PlayTrackInit(void);
 void PlayTrackShutdown(void);
@@ -1337,7 +1337,7 @@ void PlayTrackUpdateSummary(void);
 void PlayTrackPushPlay(int team, int value);
 void PlayTrackSetEntryWord4(int team, int value);
 void PlayTrackSetEntryByteC(int team, unsigned char value);
-void PlayTrackSetDirection(int team, Point_8017886C from, Point_8017886C to, int flag);
+void PlayTrackSetDirection(int team, FieldPoint_t from, FieldPoint_t to, int flag);
 void PlayTrackSetGain(int team, float value);
 void PlayTrackSetResult(int team, unsigned char value);
 void PlayTrackSetKind(int team, unsigned char value);
@@ -1622,8 +1622,8 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
         if (scale < 0.0f)
             scale = 0.0f;
 
-        if (fn_800A82FC(fn_80178308())) {
-            if (fn_80177F70() != 6) {
+        if (fn_800A82FC(ScrmGetOffenseTeam())) {
+            if (ScrmGetDown() != 6) {
                 if (group == 2)
                     pList[i].mUnknown4 = 0;
                 else if (group == 1)
@@ -1714,7 +1714,7 @@ void PlayTrackFilterByChallenge(int team, PlayCandidate_t *pList, unsigned int c
     }
 }
 
-unsigned int PlayTrackClassifyPlay(int kind, Point_8017886C from, Point_8017886C *pTo, int flag)
+unsigned int PlayTrackClassifyPlay(int kind, FieldPoint_t from, FieldPoint_t *pTo, int flag)
 {
     unsigned int result = 0;
     // FAKEMATCH: one local reused for both distances gives the target float registers
@@ -1750,7 +1750,7 @@ unsigned int PlayTrackClassifyPlay(int kind, Point_8017886C from, Point_8017886C
         return result;
     }
 
-    if (fabsf(from.mX) > fn_80178A5C() * 0.33333334f) {
+    if (fabsf(from.mX) > ScrmGetSpotLimitX() * 0.33333334f) {
         if ((pTo->mX > from.mX && from.mX < 0.0f) || (pTo->mX < from.mX && from.mX > 0.0f))
             result |= 0x10000000;
         else
@@ -1809,7 +1809,7 @@ void PlayTrackShutdown(void)
 
 void PlayTrackUpdateSummary(void)
 {
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     PlayBookPlay_t *pRecord = PlayBookGetPlay(team);
 
     _PlayTrack_pData->mUnknown0 = PlayTrackRatePlayId(team, pRecord->mUnknown4);
@@ -1846,7 +1846,7 @@ void PlayTrackSetEntryByteC(int team, unsigned char value)
     _PlayTrack_pData->mUnknown1C[team][0].mUnknownC = value;
 }
 
-void PlayTrackSetDirection(int team, Point_8017886C from, Point_8017886C to, int flag)
+void PlayTrackSetDirection(int team, FieldPoint_t from, FieldPoint_t to, int flag)
 {
     PlayTrackEntry_t *pEntry = &_PlayTrack_pData->mUnknown1C[team][0];
     pEntry->mUnknown8 = PlayTrackClassifyPlay(pEntry->mUnknownF, from, &to, flag);
@@ -1880,15 +1880,15 @@ void PlayTrackSetFlag11(int team, unsigned char value)
 
 void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int count)
 {
-    if (team == fn_80178308())
+    if (team == ScrmGetOffenseTeam())
         PlayTrackWeightOffense(team, pList, count);
     else
         PlayTrackWeightDefense(team, pList, count);
 
-    if (fn_800A82FC(team) && fn_80177F70() != 6)
+    if (fn_800A82FC(team) && ScrmGetDown() != 6)
         PlayTrackFilterByMode(team, pList, count);
 
-    if (ChallengeIsActive() && team == fn_80178308() && fn_800B65A0(team) == 0xFF) {
+    if (ChallengeIsActive() && team == ScrmGetOffenseTeam() && fn_800B65A0(team) == 0xFF) {
         int mode = ChalGetCurrent()->mUnknown1B4;
         if (mode != 0)
             PlayTrackFilterByChallenge(team, pList, count, mode);
@@ -1897,8 +1897,8 @@ void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int co
 
 extern "C" {
 int fn_8011F1CC(void);
-int fn_8022DDB4(int tag, void *data);
-unsigned char PlayTrackMatchesGainFlags(Point_8017886C *pTo);
+int DbFnigWriteBlock(int tag, void *data);
+unsigned char PlayTrackMatchesGainFlags(FieldPoint_t *pTo);
 float PlayTrackGetPlayIdRate(void);
 float PlayTrackGetResult5Rate(void);
 float GetTrackerFloat8(void);
@@ -2013,13 +2013,13 @@ void PlayTrackGetGainTendency(int team, unsigned char *pOut, unsigned int *pFlag
     }
 }
 
-unsigned char PlayTrackMatchesGainFlags(Point_8017886C *pTo)
+unsigned char PlayTrackMatchesGainFlags(FieldPoint_t *pTo)
 {
     int kind = 1;
 
     if (fn_8011F1CC())
         kind = 2;
-    return PlayTrackClassifyPlay(kind, fn_80177FE0(), pTo, 1) & _PlayTrack_pData->mUnknown14;
+    return PlayTrackClassifyPlay(kind, ScrmGetBallSpot(), pTo, 1) & _PlayTrack_pData->mUnknown14;
 }
 
 void PlayTrackGetPlayTendency(int team, PlayBookPlay_t *pRecord, unsigned char *pOut, unsigned int *pFlags)
@@ -2130,7 +2130,7 @@ void PlayTrackGetOffenseTendency(unsigned char *pOut)
         *pOut = 0;
         flags = 0;
     } else {
-        PlayTrackGetCallTendency(fn_80178308(), pOut, &flags);
+        PlayTrackGetCallTendency(ScrmGetOffenseTeam(), pOut, &flags);
     }
 }
 
@@ -2141,7 +2141,7 @@ void PlayTrackReset(void)
 
 void PlayTrackRegister(void)
 {
-    fn_8022DDB4(0x53545047, _PlayTrack_pData);
+    DbFnigWriteBlock(0x53545047, _PlayTrack_pData);
 }
 
 extern "C" {
@@ -2159,14 +2159,14 @@ int PlayAutoFlip(int team)
         return 0;
     }
 
-    x = fn_80177FE0().mX;
+    x = ScrmGetBallSpot().mX;
     PlayTrackGetGainTendency(team, &kind, &flags);
     switch (PlayTrackGetKindGroup(pRecord->mUnknown17)) {
     case 1:
         if (pRecord->mUnknown18 & 2) {
-            if (x < 0.1f - fn_80178A5C()) {
+            if (x < 0.1f - ScrmGetSpotLimitX()) {
                 chance = 67;
-            } else if (x > fn_80178A5C() - 0.1f) {
+            } else if (x > ScrmGetSpotLimitX() - 0.1f) {
                 chance = 33;
             }
             if (flags & 8) {
@@ -2177,9 +2177,9 @@ int PlayAutoFlip(int team)
             }
         }
         if (pRecord->mUnknown18 & 8) {
-            if (x > fn_80178A5C() - 0.1f) {
+            if (x > ScrmGetSpotLimitX() - 0.1f) {
                 chance += 17;
-            } else if (x < 0.1f - fn_80178A5C()) {
+            } else if (x < 0.1f - ScrmGetSpotLimitX()) {
                 chance -= 17;
             }
             if (flags & 2) {
@@ -2192,9 +2192,9 @@ int PlayAutoFlip(int team)
         break;
     case 2:
         if (pRecord->mUnknown18 & 0x80) {
-            if (x < 0.1f - fn_80178A5C()) {
+            if (x < 0.1f - ScrmGetSpotLimitX()) {
                 chance = 67;
-            } else if (x > fn_80178A5C() - 0.1f) {
+            } else if (x > ScrmGetSpotLimitX() - 0.1f) {
                 chance = 33;
             }
             if (flags & 0x200) {
@@ -2205,9 +2205,9 @@ int PlayAutoFlip(int team)
             }
         }
         if (pRecord->mUnknown18 & 0x200) {
-            if (x > fn_80178A5C() - 0.1f) {
+            if (x > ScrmGetSpotLimitX() - 0.1f) {
                 chance += 17;
-            } else if (x < 0.1f - fn_80178A5C()) {
+            } else if (x < 0.1f - ScrmGetSpotLimitX()) {
                 chance -= 17;
             }
             if (flags & 0x80) {
@@ -2232,7 +2232,7 @@ int PlayAutoFlip(int team)
 }
 
 struct PlayRoutePoint_t {
-    Point_8017886C mPos;
+    FieldPoint_t mPos;
     char mUnknown8[8];
     int mType;
     char mUnknown14[0x10];
@@ -2242,7 +2242,7 @@ struct PlayRoute_t {
     int mCount;
     int mKind;
     PlayRoutePoint_t mPoints[12];
-    Point_8017886C mCur;
+    FieldPoint_t mCur;
 };
 
 struct PlayRouteCmd_t {
@@ -2255,10 +2255,10 @@ static unsigned char _PlayRoute_bTurn = 10;
 extern "C" {
 extern unsigned char gGameTextPlayArtShift;
 State_8011F4EC *fn_8011F4EC(void);
-void Vec2FromAngle(Point_8017886C *pOut, int angle, float magnitude);
+void Vec2FromAngle(FieldPoint_t *pOut, int angle, float magnitude);
 int MathArcTan2(float y, float x);
 
-void PlayBookGetZoneCenter(int zone, Point_8017886C *pOut)
+void PlayBookGetZoneCenter(int zone, FieldPoint_t *pOut)
 {
     Box_8009E674 *pBox = &fn_8011F4EC()->mUnknown18[zone];
 
@@ -2266,9 +2266,9 @@ void PlayBookGetZoneCenter(int zone, Point_8017886C *pOut)
     pOut->mY = (pBox->mUnknown0 + pBox->mUnknown4) * 0.5f;
 }
 
-void PlayBookRouteApplyTurn(int heading, Point_8017886C *pPos)
+void PlayBookRouteApplyTurn(int heading, FieldPoint_t *pPos)
 {
-    Point_8017886C step;
+    FieldPoint_t step;
     int turn;
     float scale;
 
@@ -2313,7 +2313,7 @@ done:
 
 void PlayBookRouteAddStep(unsigned char *pArgs, PlayRoute_t *pRoute)
 {
-    Point_8017886C step;
+    FieldPoint_t step;
     int heading = (pArgs[1] & 0x7F) << 17;
     unsigned char distance = pArgs[0];
 
@@ -2332,7 +2332,7 @@ void PlayBookRouteAddZoneStep(unsigned char *pArgs, PlayRoute_t *pRoute)
 {
     PlayRouteCmd_t cmd;
     Box_8009E674 *pBox = &fn_8011F4EC()->mUnknown18[pArgs[0]];
-    Point_8017886C center;
+    FieldPoint_t center;
 
     *(int *)&cmd = 0;
     cmd.mArgs[0] = 0x50;
@@ -2429,7 +2429,7 @@ void PlayBookRouteToArt(PlayRoutePoint_t *pDst, PlayRoutePoint_t *pSrc, unsigned
     }
 }
 
-void PlayBookPointToArt(Point_8017886C *pSrc, Point_8017886C *pDst)
+void PlayBookPointToArt(FieldPoint_t *pSrc, FieldPoint_t *pDst)
 {
     pDst->mX = pSrc->mX * 3.75f;
     pDst->mY = pSrc->mY * (-200.0f / 41.0f);

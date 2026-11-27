@@ -8,7 +8,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
 #include "engine/AnimStateAnimList.h"
@@ -17,8 +17,8 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"
-#include "game/fn_80177FE0.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetBallSpot.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include <string.h>
 #include "game/Vec2Add.h"
 #include "game/Vec3Magnitude.h"
@@ -36,7 +36,7 @@ float AnimSeqGetOpcodeTime(void *p, int key);
 float AnimSeqGetTimeToOpcode(AnimSeq_t *p, int key);
 int MathAngleDiff(int a, int b);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void Vec2Rotate(FieldPoint_t *pOut, FieldPoint_t *pIn, int angle);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int fn_800C4D54(Object_80039F5C *p);
@@ -56,11 +56,11 @@ int PlayerCutGetTargetHeading(Object_80039F5C *p);
 int PlayerCutGetStartHeading(Object_80039F5C *p);
 int PlayerCutGetRunHeading(Object_80039F5C *p);
 int PlayerCutGetMessageTurn(Message_800F01CC *pMessage);
-void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut);
+void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, FieldPoint_t *pOut);
 int PlayerCutGetAnimLength(unsigned char a);
 int PlayerCutGetTimeLeft(Object_80039F5C *p);
 int PlayerCutGetAnimTime(Object_80039F5C *p);
-void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut);
+void PlayerCutGetEndPoint(Object_80039F5C *p, FieldPoint_t *pOut);
 float PlayerCutGetRunSpeed(Object_80039F5C *p, float value);
 }
 
@@ -68,7 +68,7 @@ float PlayerCutGetRunSpeed(Object_80039F5C *p, float value);
    PlayerCutGetStartHeading and PlayerCutGetEndPoint. Only the accessed fields are declared; the
    size is unknown. */
 struct PlayerCutState_t {
-    Point_8017886C mUnknown0;
+    FieldPoint_t mUnknown0;
     int mUnknown8;
     int mUnknown12;
     int mUnknown16;
@@ -323,9 +323,9 @@ extern "C" int PlayerCutGetMessageTurn(Message_800F01CC *pMessage)
     return angle;
 }
 
-extern "C" void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, Point_8017886C *pOut)
+extern "C" void PlayerCutGetAnimOffset(int a, unsigned char b, int angle, FieldPoint_t *pOut)
 {
-    Point_8017886C point;
+    FieldPoint_t point;
     Info_80089904 *pInfo;
 
     point.mX = 0.0f;
@@ -375,7 +375,7 @@ extern "C" int PlayerCutGetAnimTime(Object_80039F5C *p)
     return result;
 }
 
-extern "C" void PlayerCutGetEndPoint(Object_80039F5C *p, Point_8017886C *pOut)
+extern "C" void PlayerCutGetEndPoint(Object_80039F5C *p, FieldPoint_t *pOut)
 {
     PlayerCutState_t *state = (PlayerCutState_t *)&p->mUnknown336;
 

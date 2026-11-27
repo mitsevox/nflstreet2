@@ -12,11 +12,11 @@
 #include "game/AudmonEvent.h"
 #include "game/ReplayEvent.h"
 #include "game/Ball.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/GameModeType.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/SyncStateRegister.h"
 
 enum StyleMessage {};
@@ -211,9 +211,9 @@ void fn_800A72B4(void);
 void fn_800A7B5C(void);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned char, int, float *, int);
-float fn_80178A2C(void);
-Point_8017886C fn_80178070(void);
-int fn_801787DC(int);
+float ScrmGetGoalLineY(void);
+FieldPoint_t ScrmGetPlayStartSpot(void);
+int ScrmGetTeamScore(int);
 void HudShowPlayLeader(int);
 int UserProfileGetSelected(unsigned char);
 int DbUserGetId(int);
@@ -222,22 +222,22 @@ void TkTableOpen(DbCursor *, int);
 void TkTableClose(DbCursor *);
 int TkTableFindId(DbCursor *, int);
 void TkTableReadRow(DbCursor *, StyleAwardRule_t *);
-void fn_8017C5A0(unsigned short, int);
-void fn_8017C5CC(unsigned short, int);
-void fn_8017C5F8(unsigned short, int);
-void fn_8017C648(unsigned short, int);
-void fn_8017C6A0(unsigned short, int);
-void fn_8017C6CC(unsigned short, int, int);
-void fn_8017C724(unsigned short, int);
-void fn_8017C750(unsigned short, int, int);
-void fn_8017C7A8(unsigned short, int);
-void fn_8017C7D4(unsigned short, int);
-void fn_8017C800(unsigned short, int);
-void fn_8017C82C(unsigned short, int);
-void fn_8017C884(unsigned short, int);
-void fn_8017C8DC(unsigned short, int);
-void fn_8017C908(unsigned short, int);
-void fn_8017C98C(unsigned short, int);
+void ScrmStatAddTeamStyleGain(unsigned short, int);
+void ScrmStatAddTeamStylePoints(unsigned short, int);
+void ScrmStatAddTeamPitches(unsigned short, int);
+void ScrmStatAddTeamStylePass(unsigned short, int);
+void ScrmStatAddTeamWp(unsigned short, int);
+void ScrmStatAddTeamSs(unsigned short, int, int);
+void ScrmStatAddTeamSd(unsigned short, int);
+void ScrmStatAddTeamSh(unsigned short, int, int);
+void ScrmStatAddTeamWh(unsigned short, int);
+void ScrmStatAddTeamStylePitch(unsigned short, int);
+void ScrmStatAddTeamQbStopStreak(unsigned short, int);
+void ScrmStatAddTeamUserQbStopStreak(unsigned short, int);
+void ScrmStatAddTeamCatchStreak(unsigned short, int);
+void ScrmStatAddTeamMoveScore(unsigned short, int);
+void ScrmStatAddTeamStyleCatchStreak(unsigned short, int);
+void ScrmStatAddTeamPitchChain(unsigned short, int);
 
 unsigned char CheatFlagsIsSet(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
@@ -252,24 +252,24 @@ void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int a, int b);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
-int fn_80177C38(void);
-int fn_80177F70(void);
-int fn_80177F7C(void);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_80178348(void);
-int fn_80178360(void);
-void fn_80178370(void);
-int fn_801783AC(int bit);
-Object_80039F5C *fn_8017876C(void);
-int fn_801787A0(void);
-int fn_801788D8(int *pValue);
-int fn_80179138(void);
-void fn_8017C674(unsigned short team, int value);
-void fn_8017C9B8(unsigned short team, int value);
-void fn_8017C9E4(unsigned short team, int value);
-void fn_8017CA10(unsigned short team, int value);
-void fn_8017CA68(int team, int value);
+int ScrmGetPlayTurnovers(void);
+int ScrmGetDown(void);
+int ScrmGetPlayDown(void);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetSnapOffense(void);
+int ScrmGetSnapDefense(void);
+void ScrmEndPlay(void);
+int ScrmTestPlayFlag(int bit);
+Object_80039F5C *ScrmGetTackler(void);
+int ScrmIsNotReplay(void);
+int ScrmGetScoreGoal(int *pValue);
+int ScrmGetConversionKind(void);
+void ScrmStatAddTeamVariantCatch(unsigned short team, int value);
+void ScrmStatAddTeamInterceptMove(unsigned short team, int value);
+void ScrmStatAddTeamStyleCatch(unsigned short team, int value);
+void ScrmStatAddTeamNinjaCatch(unsigned short team, int value);
+void ScrmStatAddTeamStrip(int team, int value);
 unsigned short fn_801BE648(void *p);
 int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 int Crc32Update(const void *p, int size, int seed);
@@ -585,7 +585,7 @@ extern "C" void StyleTrackerShowAward(int i, const char *pName, int a, int mode)
         ((Entry_80219044 *)args[1].p)->mLength = strlen(_StyleTracker_pState->mAwardText);
         args[2].i = a;
         args[3].i = mode;
-        fn_8021D7B8(gUISMainInfo, 0x80000013, 4, args);
+        UISProcessHint(gUISMainInfo, 0x80000013, 4, args);
     }
 }
 
@@ -595,7 +595,7 @@ extern "C" void StyleTrackerShowTotal(int i, int a) {
     if (_StyleTracker_bEnabled) {
         args[0].i = i;
         args[1].i = a;
-        fn_8021D7B8(gUISMainInfo, 0x8000001A, 2, args);
+        UISProcessHint(gUISMainInfo, 0x8000001A, 2, args);
     }
 }
 
@@ -616,7 +616,7 @@ extern "C" void StyleTrackerShowCombo(int i) {
         args[0] = &_StyleTracker_pState->mTextArg;
         args[0]->mpText = i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText;
         args[0]->mLength = strlen(i == 0 ? _StyleTracker_pState->mTeamZeroComboText : _StyleTracker_pState->mTeamOneComboText);
-        fn_8021D7B8(gUISMainInfo, 0x80000018, 1, args);
+        UISProcessHint(gUISMainInfo, 0x80000018, 1, args);
     }
 }
 
@@ -711,7 +711,7 @@ extern "C" void StyleTrackerApplyAward(int side, int id, int scaled, int subtrac
                     StyleTrackerShowAward(side, message, value, arg);
                     StyleTrackerShowTotal(side, StyleTrackerGetTotal(side));
                 }
-                if (fn_801486A0() == 3 && text != 0) fn_800A20D0(fn_80178348(), (signed char)text);
+                if (fn_801486A0() == 3 && text != 0) fn_800A20D0(ScrmGetSnapOffense(), (signed char)text);
             } else StyleTrackerTraceEvent(76);
         } else StyleTrackerTraceEvent(77);
     }
@@ -722,7 +722,7 @@ extern "C" void StyleTrackerAwardEvent(int side, int id, int count) {
         int scaled, subtract, value, text, extra, mode, name;
         StyleTrackerCalculateAward(side, id, count, &scaled, &subtract, &value, &text, &extra, &mode, &name);
         switch (id) {
-        case 67: case 68: fn_8017C8DC(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
+        case 67: case 68: ScrmStatAddTeamMoveScore(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
         case 15:
             _StyleTracker_aiPlayPitches[side]++;
             _StyleTracker_acConsecutivePitches[side]++;
@@ -734,19 +734,19 @@ extern "C" void StyleTrackerAwardEvent(int side, int id, int count) {
             _StyleTracker_acConsecutivePitches[side]++;
             if (_StyleTracker_acConsecutivePitches[side] > _StyleTracker_acLongestPitchChain[side]) _StyleTracker_acLongestPitchChain[side] = _StyleTracker_acConsecutivePitches[side];
             _StyleTracker_aiPlayStylePoints[side] += value;
-            fn_8017C7D4(side, 1);
+            ScrmStatAddTeamStylePitch(side, 1);
             break;
         case 10: case 11:
-            if (id == 11) fn_8017C6A0(side, 1); else fn_8017C648(side, 1);
+            if (id == 11) ScrmStatAddTeamWp(side, 1); else ScrmStatAddTeamStylePass(side, 1);
             _StyleTracker_abStylePassThisPlay[side] = 1;
             _StyleTracker_aiPlayStylePoints[side] += value;
             break;
         case 38: case 39: case 50: case 51:
-            fn_8017C6CC(side, 1, 0); _StyleTracker_aiPlayStylePoints[side] += value; break;
+            ScrmStatAddTeamSs(side, 1, 0); _StyleTracker_aiPlayStylePoints[side] += value; break;
         case 53: case 54:
-            fn_8017C724(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
-        case 63: fn_8017C7A8(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
-        case 60: fn_8017C750(side, 1, 0); _StyleTracker_aiPlayStylePoints[side] += value; break;
+            ScrmStatAddTeamSd(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
+        case 63: ScrmStatAddTeamWh(side, 1); _StyleTracker_aiPlayStylePoints[side] += value; break;
+        case 60: ScrmStatAddTeamSh(side, 1, 0); _StyleTracker_aiPlayStylePoints[side] += value; break;
         case 66: _StyleTracker_aiPlayStylePoints[side] += value; break;
         case 77: _StyleTracker_abQbStopThisPlay[side] = 1; _StyleTracker_abUserQbStopThisPlay[side] = 1; break;
         case 76: _StyleTracker_abQbStopThisPlay[side] = 1; break;
@@ -793,7 +793,7 @@ extern "C" void StyleTrackerAccumulateRunTime(void) {
     Object_80039F5C *p = _StyleTracker_pState->mpRunPlayer;
     int team = p->mIdBytes[2] ^ 1;
     float distance;
-    fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+    fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
     unsigned int limit;
     if (distance < 5.0f) limit = 1;
     else if (distance < 10.0f) limit = 3;
@@ -830,8 +830,8 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
         _StyleTracker_abStylePassThisPlay[0] = 0; _StyleTracker_abStylePassThisPlay[1] = 0;
         _StyleTracker_abCatchOpportunity[0] = 0; _StyleTracker_abCatchOpportunity[1] = 0;
         StyleTrackerSetComboWeight(0, 0); StyleTrackerSetComboWeight(1, 0);
-        signed char y = (signed char)(int)fn_80178A2C();
-        _StyleTracker_pState->mDistanceToGoal = y - (signed char)(int)fn_80177FE0().mY;
+        signed char y = (signed char)(int)ScrmGetGoalLineY();
+        _StyleTracker_pState->mDistanceToGoal = y - (signed char)(int)ScrmGetBallSpot().mY;
         StyleTrackerResetRun();
         _StyleTracker_pState->mpContactPlayer = 0;
         _StyleTracker_pState->mUserPlayerCount = 0;
@@ -848,12 +848,12 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
     if (_StyleTracker_pState->mOffenseTouchdown) {
         _StyleTracker_pState->mPlayYardage = _StyleTracker_pState->mDistanceToGoal;
         _StyleTracker_pState->mValidYardage = 1;
-    } else if (fn_80177F7C() != 6) {
-        if (fn_80178348() == fn_80178308()) {
-        float first = fn_80178A2C();
-        float second = fn_80178A2C();
-        _StyleTracker_pState->mPlayYardage = ((signed char)(int)first - (signed char)(int)fn_80178070().mY) -
-                                     ((signed char)(int)second - (signed char)(int)fn_80177FE0().mY);
+    } else if (ScrmGetPlayDown() != 6) {
+        if (ScrmGetSnapOffense() == ScrmGetOffenseTeam()) {
+        float first = ScrmGetGoalLineY();
+        float second = ScrmGetGoalLineY();
+        _StyleTracker_pState->mPlayYardage = ((signed char)(int)first - (signed char)(int)ScrmGetPlayStartSpot().mY) -
+                                     ((signed char)(int)second - (signed char)(int)ScrmGetBallSpot().mY);
         _StyleTracker_pState->mValidYardage = 1;
         } else {
             _StyleTracker_pState->mValidYardage = 0;
@@ -872,10 +872,10 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
     else { StyleTrackerAwardPassGain(); StyleTrackerAwardRushGain(); }
     StyleTrackerAwardDefensiveOutcome(); StyleTrackerAwardTurnoverOnDowns(); StyleTrackerAwardTouchback(); StyleTrackerAwardFirstDown(); StyleTrackerAwardFailedConversion();
     if (_StyleTracker_pState->mMatchSettled == 0) {
-        switch (fn_801788D8(&limit)) {
+        switch (ScrmGetScoreGoal(&limit)) {
         case 0:
-            if (fn_801787DC(1) >= limit) StyleTrackerAwardVictory(1, limit - fn_801787DC(0));
-            else if (fn_801787DC(0) >= limit) StyleTrackerAwardVictory(0, limit - fn_801787DC(1));
+            if (ScrmGetTeamScore(1) >= limit) StyleTrackerAwardVictory(1, limit - ScrmGetTeamScore(0));
+            else if (ScrmGetTeamScore(0) >= limit) StyleTrackerAwardVictory(0, limit - ScrmGetTeamScore(1));
             break;
         case 1:
             if (_StyleTracker_cWinner == 1) StyleTrackerAwardVictory(1, limit - StyleTrackerGetTotal(0));
@@ -893,25 +893,25 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
     if ((_StyleTracker_pState->mMatchSettled == 0 || flag) && fn_800A8740() == 0) { fn_800A72B4(); fn_800A7B5C(); }
     StyleTrackerShowMeter(0, _StyleTracker_pState->mTeamZeroMeter, 0, 1); StyleTrackerShowMeter(1, _StyleTracker_pState->mTeamOneMeter, 0, 1);
     StyleTrackerShowMeter(0, _StyleTracker_pState->mTeamZeroMeter, 0, 0); StyleTrackerShowMeter(1, _StyleTracker_pState->mTeamOneMeter, 0, 0);
-    if (fn_80178348() != fn_80178308() || fn_80177C38() != 0) _StyleTracker_pState->unk_0x1ECE = 1;
+    if (ScrmGetSnapOffense() != ScrmGetOffenseTeam() || ScrmGetPlayTurnovers() != 0) _StyleTracker_pState->unk_0x1ECE = 1;
     else _StyleTracker_pState->unk_0x1ECE = 0;
     _StyleTracker_pState->mPlayStyleGain[0] = StyleTrackerGetTotal(0) - _StyleTracker_pState->mPlayStartTotal[0];
     _StyleTracker_pState->mPlayStyleGain[1] = StyleTrackerGetTotal(1) - _StyleTracker_pState->mPlayStartTotal[1];
-    if (_StyleTracker_pState->mPlayStyleGain[fn_80178320()] > _StyleTracker_pState->mPlayStyleGain[fn_80178308()]) {
-        if (_StyleTracker_pState->mPlayStyleGain[fn_80178320()] > 0) HudShowPlayLeader(fn_80178320());
-    } else if (_StyleTracker_pState->mPlayStyleGain[fn_80178308()] > 0) HudShowPlayLeader(fn_80178308());
-    fn_8017C5A0(0, _StyleTracker_pState->mPlayStyleGain[0]); fn_8017C5A0(1, _StyleTracker_pState->mPlayStyleGain[1]);
-    fn_8017C5CC(0, _StyleTracker_aiPlayStylePoints[0]); fn_8017C5CC(1, _StyleTracker_aiPlayStylePoints[1]);
-    fn_8017C5F8(0, _StyleTracker_aiPlayPitches[0]); fn_8017C5F8(1, _StyleTracker_aiPlayPitches[1]);
-    if (_StyleTracker_abQbStopThisPlay[0]) fn_8017C800(0, ++_StyleTracker_acQbStopStreak[0]); else if (fn_80178360() == 0) _StyleTracker_acQbStopStreak[0] = 0;
-    if (_StyleTracker_abQbStopThisPlay[1]) fn_8017C800(1, ++_StyleTracker_acQbStopStreak[1]); else if (fn_80178360() == 1) _StyleTracker_acQbStopStreak[1] = 0;
-    if (_StyleTracker_abUserQbStopThisPlay[0]) fn_8017C82C(0, ++_StyleTracker_acUserQbStopStreak[0]); else if (fn_80178360() == 0) _StyleTracker_acUserQbStopStreak[0] = 0;
-    if (_StyleTracker_abUserQbStopThisPlay[1]) fn_8017C82C(1, ++_StyleTracker_acUserQbStopStreak[1]); else if (fn_80178360() == 1) _StyleTracker_acUserQbStopStreak[1] = 0;
-    if (_StyleTracker_abCatchThisPlay[0]) fn_8017C884(0, ++_StyleTracker_acCatchStreak[0]); else if (_StyleTracker_abCatchOpportunity[0] && fn_80178348() == 0) _StyleTracker_acCatchStreak[0] = 0;
-    if (_StyleTracker_abCatchThisPlay[1]) fn_8017C884(1, ++_StyleTracker_acCatchStreak[1]); else if (_StyleTracker_abCatchOpportunity[1] && fn_80178348() == 1) _StyleTracker_acCatchStreak[1] = 0;
-    if (_StyleTracker_abCatchThisPlay[0] && _StyleTracker_abStylePassThisPlay[0]) fn_8017C908(0, ++_StyleTracker_acStyleCatchStreak[0]); else if (_StyleTracker_abCatchOpportunity[0] && fn_80178348() == 0) _StyleTracker_acStyleCatchStreak[0] = 0;
-    if (_StyleTracker_abCatchThisPlay[1] && _StyleTracker_abStylePassThisPlay[1]) fn_8017C908(1, ++_StyleTracker_acStyleCatchStreak[1]); else if (_StyleTracker_abCatchOpportunity[1] && fn_80178348() == 1) _StyleTracker_acStyleCatchStreak[1] = 0;
-    fn_8017C98C(0, _StyleTracker_acLongestPitchChain[0]); fn_8017C98C(1, _StyleTracker_acLongestPitchChain[1]);
+    if (_StyleTracker_pState->mPlayStyleGain[ScrmGetDefenseTeam()] > _StyleTracker_pState->mPlayStyleGain[ScrmGetOffenseTeam()]) {
+        if (_StyleTracker_pState->mPlayStyleGain[ScrmGetDefenseTeam()] > 0) HudShowPlayLeader(ScrmGetDefenseTeam());
+    } else if (_StyleTracker_pState->mPlayStyleGain[ScrmGetOffenseTeam()] > 0) HudShowPlayLeader(ScrmGetOffenseTeam());
+    ScrmStatAddTeamStyleGain(0, _StyleTracker_pState->mPlayStyleGain[0]); ScrmStatAddTeamStyleGain(1, _StyleTracker_pState->mPlayStyleGain[1]);
+    ScrmStatAddTeamStylePoints(0, _StyleTracker_aiPlayStylePoints[0]); ScrmStatAddTeamStylePoints(1, _StyleTracker_aiPlayStylePoints[1]);
+    ScrmStatAddTeamPitches(0, _StyleTracker_aiPlayPitches[0]); ScrmStatAddTeamPitches(1, _StyleTracker_aiPlayPitches[1]);
+    if (_StyleTracker_abQbStopThisPlay[0]) ScrmStatAddTeamQbStopStreak(0, ++_StyleTracker_acQbStopStreak[0]); else if (ScrmGetSnapDefense() == 0) _StyleTracker_acQbStopStreak[0] = 0;
+    if (_StyleTracker_abQbStopThisPlay[1]) ScrmStatAddTeamQbStopStreak(1, ++_StyleTracker_acQbStopStreak[1]); else if (ScrmGetSnapDefense() == 1) _StyleTracker_acQbStopStreak[1] = 0;
+    if (_StyleTracker_abUserQbStopThisPlay[0]) ScrmStatAddTeamUserQbStopStreak(0, ++_StyleTracker_acUserQbStopStreak[0]); else if (ScrmGetSnapDefense() == 0) _StyleTracker_acUserQbStopStreak[0] = 0;
+    if (_StyleTracker_abUserQbStopThisPlay[1]) ScrmStatAddTeamUserQbStopStreak(1, ++_StyleTracker_acUserQbStopStreak[1]); else if (ScrmGetSnapDefense() == 1) _StyleTracker_acUserQbStopStreak[1] = 0;
+    if (_StyleTracker_abCatchThisPlay[0]) ScrmStatAddTeamCatchStreak(0, ++_StyleTracker_acCatchStreak[0]); else if (_StyleTracker_abCatchOpportunity[0] && ScrmGetSnapOffense() == 0) _StyleTracker_acCatchStreak[0] = 0;
+    if (_StyleTracker_abCatchThisPlay[1]) ScrmStatAddTeamCatchStreak(1, ++_StyleTracker_acCatchStreak[1]); else if (_StyleTracker_abCatchOpportunity[1] && ScrmGetSnapOffense() == 1) _StyleTracker_acCatchStreak[1] = 0;
+    if (_StyleTracker_abCatchThisPlay[0] && _StyleTracker_abStylePassThisPlay[0]) ScrmStatAddTeamStyleCatchStreak(0, ++_StyleTracker_acStyleCatchStreak[0]); else if (_StyleTracker_abCatchOpportunity[0] && ScrmGetSnapOffense() == 0) _StyleTracker_acStyleCatchStreak[0] = 0;
+    if (_StyleTracker_abCatchThisPlay[1] && _StyleTracker_abStylePassThisPlay[1]) ScrmStatAddTeamStyleCatchStreak(1, ++_StyleTracker_acStyleCatchStreak[1]); else if (_StyleTracker_abCatchOpportunity[1] && ScrmGetSnapOffense() == 1) _StyleTracker_acStyleCatchStreak[1] = 0;
+    ScrmStatAddTeamPitchChain(0, _StyleTracker_acLongestPitchChain[0]); ScrmStatAddTeamPitchChain(1, _StyleTracker_acLongestPitchChain[1]);
 }
 
 extern "C" void StyleTrackerAwardImmediateEvent(int a, int b) {
@@ -949,10 +949,10 @@ extern "C" void StyleTrackerFinishPendingContact(int a) {
             notify = 1;
             StyleTrackerTraceEvent(65);
             StyleTrackerFinishDefensiveMove(0);
-            StyleTrackerAwardEvent(fn_80178360(), 95, 1);
+            StyleTrackerAwardEvent(ScrmGetSnapDefense(), 95, 1);
         }
         if (notify) {
-            fn_800AE7F0(11, fn_80178360(), _StyleTracker_pState->mpContactPlayer);
+            fn_800AE7F0(11, ScrmGetSnapDefense(), _StyleTracker_pState->mpContactPlayer);
         }
         _StyleTracker_pState->mContactSeen = 0;
         _StyleTracker_pState->mContactPending = 0;
@@ -963,11 +963,11 @@ extern "C" void StyleTrackerFinishStylePass(void) {
     if (_StyleTracker_pState->mStylePassReleased) {
         _StyleTracker_pState->mStylePassReleased = 0;
         if (_StyleTracker_pState->mNinjaPass) {
-            StyleTrackerProcessEvent(11, fn_80178348(), 1);
+            StyleTrackerProcessEvent(11, ScrmGetSnapOffense(), 1);
             _StyleTracker_pState->mNinjaPass = 0;
             TutorialSetMoveDone(24, 1);
         } else {
-            StyleTrackerProcessEvent(10, fn_80178348(), 1);
+            StyleTrackerProcessEvent(10, ScrmGetSnapOffense(), 1);
         }
     }
 }
@@ -997,17 +997,17 @@ extern "C" void StyleTrackerResetRun(void) {
 extern "C" int StyleTrackerCanAwardCombo(int a) {
     int result = 0;
 
-    if (fn_80178360() == a) {
+    if (ScrmGetSnapDefense() == a) {
         if (_StyleTracker_pState->mDefensiveConversion || _StyleTracker_pState->mDefenseTouchdown) {
             result = 1;
-        } else if (fn_80177F7C() == 6) {
+        } else if (ScrmGetPlayDown() == 6) {
             if (!_StyleTracker_pState->mConversionPending) {
                 result = 1;
             }
-        } else if (fn_80178360() == fn_80178308() || _StyleTracker_pState->mPlayYardage <= 0) {
+        } else if (ScrmGetSnapDefense() == ScrmGetOffenseTeam() || _StyleTracker_pState->mPlayYardage <= 0) {
             result = 1;
         }
-    } else if (fn_80177F7C() == 6) {
+    } else if (ScrmGetPlayDown() == 6) {
         if (_StyleTracker_pState->mConversion) {
             result = 1;
         }
@@ -1043,7 +1043,7 @@ extern "C" void StyleTrackerAwardCombo(int a, int b) {
 
 extern "C" void StyleTrackerAwardTurnoverOnDowns(void) {
     if (_StyleTracker_pState->mTurnoverOnDowns) {
-        StyleTrackerAwardEvent(fn_80178360(), 99, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 99, 1);
     }
 }
 
@@ -1055,32 +1055,32 @@ extern "C" void StyleTrackerAwardTouchback(void) {
 
 extern "C" void StyleTrackerAwardDefensiveOutcome(void) {
     if (_StyleTracker_pState->mSafety && _StyleTracker_pState->mQbStop) {
-        StyleTrackerAwardEvent(fn_80178360(), 102, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 102, 1);
     } else if (_StyleTracker_pState->mSafety && (_StyleTracker_pState->mUserQbStop || _StyleTracker_pState->mUserLoss)) {
-        StyleTrackerAwardEvent(fn_80178360(), 103, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 103, 1);
     } else if (_StyleTracker_pState->mQbStop) {
-        StyleTrackerAwardEvent(fn_80178360(), 76, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 76, 1);
     } else if (_StyleTracker_pState->mUserQbStop) {
-        StyleTrackerAwardEvent(fn_80178360(), 77, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 77, 1);
     } else if (_StyleTracker_pState->mSafety) {
         StyleTrackerAwardEvent(_StyleTracker_pState->mSafetyTeam, 101, 1);
     } else if (_StyleTracker_pState->mLoss) {
-        StyleTrackerAwardEvent(fn_80178360(), 96, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 96, 1);
     } else if (_StyleTracker_pState->mUserLoss) {
-        StyleTrackerAwardEvent(fn_80178360(), 98, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 98, 1);
     } else if (_StyleTracker_pState->mTackleContestStop) {
-        StyleTrackerAwardEvent(fn_80178360(), 78, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 78, 1);
     } else if (_StyleTracker_pState->mNoControlLoss) {
-        StyleTrackerAwardEvent(fn_80178360(), 97, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 97, 1);
     }
 }
 
 extern "C" void StyleTrackerAwardFirstDown(void) {
     if (_StyleTracker_pState->mFirstDown) {
         if (_StyleTracker_pState->mStyleFirstDown) {
-            StyleTrackerAwardEvent(fn_80178348(), 71, 1);
+            StyleTrackerAwardEvent(ScrmGetSnapOffense(), 71, 1);
         } else {
-            StyleTrackerAwardEvent(fn_80178348(), 70, 1);
+            StyleTrackerAwardEvent(ScrmGetSnapOffense(), 70, 1);
         }
     }
 }
@@ -1088,7 +1088,7 @@ extern "C" void StyleTrackerAwardFirstDown(void) {
 extern "C" void StyleTrackerAwardVictory(int team, unsigned int value) {
     int limit = 0;
 
-    fn_801788D8(&limit);
+    ScrmGetScoreGoal(&limit);
     if (fn_800A8740() == 0) {
         if (fn_800A8488(0)) {
             fn_800A7A0C(0);
@@ -1114,85 +1114,85 @@ extern "C" void StyleTrackerAwardVictory(int team, unsigned int value) {
 }
 
 extern "C" void StyleTrackerAwardConversion(void) {
-    int value = fn_80179138();
+    int value = ScrmGetConversionKind();
 
     if (_StyleTracker_pState->mConversionPending) {
         if (value == 2) {
-            StyleTrackerAwardEvent(fn_80178348(), 2, 1);
+            StyleTrackerAwardEvent(ScrmGetSnapOffense(), 2, 1);
         } else {
-            StyleTrackerAwardEvent(fn_80178348(), 3, 1);
+            StyleTrackerAwardEvent(ScrmGetSnapOffense(), 3, 1);
         }
     } else if (_StyleTracker_pState->mDefensiveConversionPending) {
-        StyleTrackerAwardEvent(fn_80178360(), 4, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 4, 1);
     }
 }
 
 extern "C" void StyleTrackerAwardFailedConversion(void) {
     if (_StyleTracker_pState->mFailedConversionPending) {
-        StyleTrackerAwardEvent(fn_80178360(), 5, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 5, 1);
     }
 }
 
 extern "C" void StyleTrackerAwardTouchdown(void) {
     switch (_StyleTracker_pState->mTouchdownEvent) {
     case 67:
-        StyleTrackerAwardEvent(fn_80178348(), 67, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 67, 1);
         break;
     case 0:
-        StyleTrackerAwardEvent(fn_80178348(), 0, _StyleTracker_pState->mDistanceToGoal);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 0, _StyleTracker_pState->mDistanceToGoal);
         break;
     case 91:
-        StyleTrackerAwardEvent(fn_80178360(), 91, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 91, 1);
         break;
     case 68:
-        StyleTrackerAwardEvent(fn_80178348(), 68, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 68, 1);
         break;
     case 1:
-        StyleTrackerAwardEvent(fn_80178348(), 1, _StyleTracker_pState->mDistanceToGoal);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 1, _StyleTracker_pState->mDistanceToGoal);
         break;
     case 69:
-        StyleTrackerAwardEvent(fn_80178348(), 69, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 69, 1);
         break;
     case 92:
-        StyleTrackerAwardEvent(fn_80178360(), 92, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 92, 1);
         break;
     case 93:
-        StyleTrackerAwardEvent(fn_80178360(), 93, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapDefense(), 93, 1);
         break;
     case 94:
-        StyleTrackerAwardEvent(fn_80178348(), 94, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 94, 1);
         break;
     case 126:
-        StyleTrackerAwardEvent(fn_80178348(), 126, 1);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 126, 1);
         break;
     }
 }
 
 extern "C" void StyleTrackerAwardPassGain(void) {
-    if (_StyleTracker_pState->mValidYardage && !fn_80177C38() && !_StyleTracker_pState->mOffenseLostBall &&
+    if (_StyleTracker_pState->mValidYardage && !ScrmGetPlayTurnovers() && !_StyleTracker_pState->mOffenseLostBall &&
         _StyleTracker_pState->mPassOccurred && _StyleTracker_pState->mPlayYardage > 0) {
-        StyleTrackerAwardEvent(fn_80178348(), 26, _StyleTracker_pState->mPlayYardage);
+        StyleTrackerAwardEvent(ScrmGetSnapOffense(), 26, _StyleTracker_pState->mPlayYardage);
     }
 }
 
 extern "C" void StyleTrackerAwardRushGain(void) {
-    if (_StyleTracker_pState->mValidYardage && !fn_80177C38() && !_StyleTracker_pState->mOffenseLostBall) {
+    if (_StyleTracker_pState->mValidYardage && !ScrmGetPlayTurnovers() && !_StyleTracker_pState->mOffenseLostBall) {
         if (!_StyleTracker_pState->mPassOccurred && _StyleTracker_pState->mPlayYardage > 0) {
-            StyleTrackerAwardEvent(fn_80178348(), 25, _StyleTracker_pState->mPlayYardage);
+            StyleTrackerAwardEvent(ScrmGetSnapOffense(), 25, _StyleTracker_pState->mPlayYardage);
         }
     }
 }
 
 extern "C" void StyleTrackerOnPossessionLost(void) {
     if (_StyleTracker_pState->mRunRequested) {
-        fn_800AE7F0(0, fn_80178308(), 0);
+        fn_800AE7F0(0, ScrmGetOffenseTeam(), 0);
     }
-    if ((fn_80177C38() & 1) == 0) {
+    if ((ScrmGetPlayTurnovers() & 1) == 0) {
         _StyleTracker_pState->mOffenseLostBall = 1;
-        StyleTrackerSetComboWeight(fn_80178348(), 0);
+        StyleTrackerSetComboWeight(ScrmGetSnapOffense(), 0);
     } else {
         _StyleTracker_pState->mDefenseLostBall = 1;
-        StyleTrackerSetComboWeight(fn_80178360(), 0);
+        StyleTrackerSetComboWeight(ScrmGetSnapDefense(), 0);
     }
     if (_StyleTracker_pState->mpRunPlayer) {
         if (!_StyleTracker_pState->mSavedRunAwardPending) {
@@ -1212,7 +1212,7 @@ extern "C" void StyleTrackerOnPassReleased(void) {
     if (_StyleTracker_pState->mStylePassPending) {
         StyleTrackerTraceEvent(9);
         _StyleTracker_pState->mStylePassReleased = 1;
-        StyleTrackerProcessEvent(8, fn_80178348(), 1);
+        StyleTrackerProcessEvent(8, ScrmGetSnapOffense(), 1);
     }
 }
 
@@ -1220,12 +1220,12 @@ extern "C" void StyleTrackerOnPitchReleased(void) {
     StyleTrackerTraceEvent(17);
     if (_StyleTracker_pState->mPitchActive || _StyleTracker_pState->mStylePitch) {
         _StyleTracker_pState->mPitchReleased = 1;
-        _StyleTracker_pState->mPitchTeam = fn_80178308();
+        _StyleTracker_pState->mPitchTeam = ScrmGetOffenseTeam();
         StyleTrackerFinishOtherMoves(20);
         if (_StyleTracker_pState->mStylePitch) {
-            StyleTrackerProcessEvent(16, fn_80178308(), _StyleTracker_pState->mPitchCounts[fn_80178308()] + 1);
+            StyleTrackerProcessEvent(16, ScrmGetOffenseTeam(), _StyleTracker_pState->mPitchCounts[ScrmGetOffenseTeam()] + 1);
         } else {
-            StyleTrackerProcessEvent(13, fn_80178308(), _StyleTracker_pState->mPitchCounts[fn_80178308()] + 1);
+            StyleTrackerProcessEvent(13, ScrmGetOffenseTeam(), _StyleTracker_pState->mPitchCounts[ScrmGetOffenseTeam()] + 1);
         }
     }
 }
@@ -1250,7 +1250,7 @@ extern "C" int StyleTrackerFinishStiffArm(int a) {
                 fn_800B1508();
             }
         }
-        StyleTrackerProcessEvent(event, fn_80178308(), 1);
+        StyleTrackerProcessEvent(event, ScrmGetOffenseTeam(), 1);
         _StyleTracker_pState->mStiffArmSucceeded = 0;
         _StyleTracker_pState->mStiffArmActive = 0;
     }
@@ -1311,8 +1311,8 @@ extern "C" void StyleTrackerFinishOtherMoves(int a) {
     if (_StyleTracker_pState->mStylePassReleased && a != 27 && (a < 1 || a > 5)) {
         Object_80039F5C *p = BallGetCurrentHolder();
 
-        if (p == 0 || p->mIdBytes[2] == fn_80178360() || fn_801787A0()) {
-            StyleTrackerProcessEvent(9, fn_80178348(), 1);
+        if (p == 0 || p->mIdBytes[2] == ScrmGetSnapDefense() || ScrmIsNotReplay()) {
+            StyleTrackerProcessEvent(9, ScrmGetSnapOffense(), 1);
             _StyleTracker_pState->mStylePassReleased = 0;
         }
     }
@@ -1321,9 +1321,9 @@ extern "C" void StyleTrackerFinishOtherMoves(int a) {
 extern "C" void StyleTrackerFinishDefensiveMove(int a) {
     if (_StyleTracker_pState->mDefensiveMoveActive && a != 29) {
         if (_StyleTracker_pState->mStyleDefensiveMove) {
-            StyleTrackerProcessEvent(83, fn_80178360(), 1);
+            StyleTrackerProcessEvent(83, ScrmGetSnapDefense(), 1);
         } else {
-            StyleTrackerProcessEvent(82, fn_80178360(), 1);
+            StyleTrackerProcessEvent(82, ScrmGetSnapDefense(), 1);
         }
         _StyleTracker_pState->mDefensiveMoveActive = 0;
         _StyleTracker_pState->mStyleDefensiveMove = 0;
@@ -1332,7 +1332,7 @@ extern "C" void StyleTrackerFinishDefensiveMove(int a) {
 
 extern "C" int StyleTrackerIsCurrentActorUserControlled(void) {
     int result = 0;
-    Object_80039F5C *p = fn_8017876C();
+    Object_80039F5C *p = ScrmGetTackler();
 
     if (p) {
         result = (p->mFlags >> 14) & 1;
@@ -1341,7 +1341,7 @@ extern "C" int StyleTrackerIsCurrentActorUserControlled(void) {
 }
 
 extern "C" int StyleTrackerIsFumbleForcerUserControlled(void) {
-    Object_80039F5C *p = fn_8017876C();
+    Object_80039F5C *p = ScrmGetTackler();
     unsigned char result = 0;
     Object_80039F5C *pTarget = 0;
 
@@ -1470,11 +1470,11 @@ extern "C" void StyleTrackerSetTotal(int side, int value) {
     if (value < 0) {
         value = 0;
     }
-    if (_StyleTracker_cWinner == 2 && fn_801788D8(&limit) == 1 && value >= limit) {
+    if (_StyleTracker_cWinner == 2 && ScrmGetScoreGoal(&limit) == 1 && value >= limit) {
         _StyleTracker_cWinner = side;
         if (ChallengeIsActive() == 0) {
             AudmonEventPostArgs(94, 0, _StyleTracker_cWinner, 0, 0);
-            fn_80178370();
+            ScrmEndPlay();
         }
     }
     *(side == 0 ? &_StyleTracker_pState->mTeamZeroTotal : &_StyleTracker_pState->mTeamOneTotal) = value;
@@ -1488,7 +1488,7 @@ extern "C" void StyleTrackerOnTouchdown(void) {
     int value;
 
     StyleTrackerTraceEvent(44);
-    if (fn_80178348() == fn_80178308()) {
+    if (ScrmGetSnapOffense() == ScrmGetOffenseTeam()) {
         _StyleTracker_pState->mOffenseTouchdown = 1;
     } else {
         _StyleTracker_pState->mDefenseTouchdown = 1;
@@ -1497,7 +1497,7 @@ extern "C" void StyleTrackerOnTouchdown(void) {
     if (value == 0) {
         value = StyleTrackerUpdateRun(0, 0, 0);
     }
-    if (fn_80177C38() == 1 && _StyleTracker_pState->mDefenseLostBall == 0) {
+    if (ScrmGetPlayTurnovers() == 1 && _StyleTracker_pState->mDefenseLostBall == 0) {
         _StyleTracker_pState->mTouchdownPending = 1;
         if (_StyleTracker_pState->mIntercepted != 0) {
             _StyleTracker_pState->mTouchdownEvent = 92;
@@ -1506,8 +1506,8 @@ extern "C" void StyleTrackerOnTouchdown(void) {
         } else {
             _StyleTracker_pState->mTouchdownEvent = 91;
         }
-    } else if (fn_80177C38() == 0 && _StyleTracker_pState->mOffenseLostBall == 0) {
-        if (fn_800A84C8() != 0 && fn_800A8444(fn_80178320()) != 0) {
+    } else if (ScrmGetPlayTurnovers() == 0 && _StyleTracker_pState->mOffenseLostBall == 0) {
+        if (fn_800A84C8() != 0 && fn_800A8444(ScrmGetDefenseTeam()) != 0) {
             _StyleTracker_pState->mTouchdownPending = 1;
             _StyleTracker_pState->mTouchdownEvent = 94;
         } else if (_StyleTracker_pState->unk_0x1ECE != 0) {
@@ -1536,12 +1536,12 @@ extern "C" void StyleTrackerOnTouchdown(void) {
 
 extern "C" void StyleTrackerOnCarrierStopped(float a) {
     StyleTrackerTraceEvent(40);
-    if (fn_8017876C() != 0) {
-        fn_800B1698(BallGetHolder(BallGetCurrent()), fn_8017876C());
+    if (ScrmGetTackler() != 0) {
+        fn_800B1698(BallGetHolder(BallGetCurrent()), ScrmGetTackler());
     }
-    if (fn_80177C38() == 0) {
-        if (a < fn_80177FE0().mY && fn_80177F70() != 6) {
-            if (fn_8017876C() != 0) {
+    if (ScrmGetPlayTurnovers() == 0) {
+        if (a < ScrmGetBallSpot().mY && ScrmGetDown() != 6) {
+            if (ScrmGetTackler() != 0) {
                 StyleTrackerTraceEvent(74);
                 if (StyleTrackerIsCurrentActorUserControlled() != 0) {
                     _StyleTracker_pState->mUserLoss = 1;
@@ -1559,10 +1559,10 @@ extern "C" void StyleTrackerOnCarrierStopped(float a) {
 extern "C" void StyleTrackerOnSafety(void) {
     StyleTrackerTraceEvent(43);
     _StyleTracker_pState->mSafety = 1;
-    if ((fn_80177C38() & 1) == 0) {
-        _StyleTracker_pState->mSafetyTeam = fn_80178360();
+    if ((ScrmGetPlayTurnovers() & 1) == 0) {
+        _StyleTracker_pState->mSafetyTeam = ScrmGetSnapDefense();
     } else {
-        _StyleTracker_pState->mSafetyTeam = fn_80178348();
+        _StyleTracker_pState->mSafetyTeam = ScrmGetSnapOffense();
     }
 }
 
@@ -1570,16 +1570,16 @@ extern "C" void StyleTrackerOnTackle(Object_80039F5C *p, float a) {
     StyleTrackerTraceEvent(41);
     if (p != 0) {
         StyleTrackerFinishStiffArm(0);
-        if (fn_80177C38() == 0) {
-            if (PlayAlignHasSlots(PlayBookGetPlay(fn_80178348())) != 0 && fn_801783AC(0) == 0 &&
-                a <= fn_80177FE0().mY && (p->mFlags & 0x10000000)) {
+        if (ScrmGetPlayTurnovers() == 0) {
+            if (PlayAlignHasSlots(PlayBookGetPlay(ScrmGetSnapOffense())) != 0 && ScrmTestPlayFlag(0) == 0 &&
+                a <= ScrmGetBallSpot().mY && (p->mFlags & 0x10000000)) {
                 if (StyleTrackerIsCurrentActorUserControlled() != 0) {
                     _StyleTracker_pState->mUserQbStop = 1;
                 } else {
                     _StyleTracker_pState->mQbStop = 1;
                 }
             } else {
-                if (a < fn_80177FE0().mY && fn_80177F70() != 6) {
+                if (a < ScrmGetBallSpot().mY && ScrmGetDown() != 6) {
                     if (StyleTrackerIsCurrentActorUserControlled() != 0) {
                         _StyleTracker_pState->mUserLoss = 1;
                     } else {
@@ -1596,7 +1596,7 @@ extern "C" void StyleTrackerOnTackle(Object_80039F5C *p, float a) {
 extern "C" void StyleTrackerOnBrokenTackle(Object_80039F5C *p) {
     StyleTrackerTraceEvent(39);
     if (p != 0 && !(p->mFlags & 0x10000)) {
-        if (fn_801787A0() == 0 && p == BallGetCurrentHolder()) {
+        if (ScrmIsNotReplay() == 0 && p == BallGetCurrentHolder()) {
             StyleTrackerFinishOtherMoves(0);
             if (_StyleTracker_pState->mTackleContestAwarded == 0) {
                 StyleTrackerProcessEvent(30, p->mIdBytes[2], 1);
@@ -1611,8 +1611,8 @@ extern "C" void StyleTrackerOnTackleContest(int flag, Object_80039F5C *p) {
     if (p == BallGetCurrentHolder()) {
         if (flag != 0) {
             _StyleTracker_pState->mTackleContest = 1;
-        } else if (fn_801787A0() == 0) {
-            StyleTrackerProcessEvent(31, fn_80178308(), 1);
+        } else if (ScrmIsNotReplay() == 0) {
+            StyleTrackerProcessEvent(31, ScrmGetOffenseTeam(), 1);
             _StyleTracker_pState->mTackleContestAwarded = 1;
         }
     }
@@ -1627,10 +1627,10 @@ extern "C" void StyleTrackerOnTouchback(int flag) {
     StyleTrackerTraceEvent(42);
     if (_StyleTracker_pState->mTouchback == 0) {
         _StyleTracker_pState->mTouchback = 1;
-        if ((fn_80177C38() & 1) == 0) {
-            _StyleTracker_pState->mTouchbackTeam = fn_80178348();
+        if ((ScrmGetPlayTurnovers() & 1) == 0) {
+            _StyleTracker_pState->mTouchbackTeam = ScrmGetSnapOffense();
         } else {
-            _StyleTracker_pState->mTouchbackTeam = fn_80178360();
+            _StyleTracker_pState->mTouchbackTeam = ScrmGetSnapDefense();
         }
         if (flag != 0) {
             _StyleTracker_pState->mTouchbackTeam = _StyleTracker_pState->mTouchbackTeam == 0;
@@ -1640,7 +1640,7 @@ extern "C" void StyleTrackerOnTouchback(int flag) {
 
 extern "C" void StyleTrackerOnFirstDown(void) {
     StyleTrackerTraceEvent(36);
-    if (fn_80177C38() == 0) {
+    if (ScrmGetPlayTurnovers() == 0) {
         _StyleTracker_pState->mFirstDown = 1;
     }
 }
@@ -1648,14 +1648,14 @@ extern "C" void StyleTrackerOnFirstDown(void) {
 extern "C" void StyleTrackerOnStyleFirstDown(void) {
     StyleTrackerTraceEvent(35);
     StyleTrackerFinishOtherMoves(0);
-    fn_800AE7F0(12, fn_80178308(), BallGetCurrentHolder());
+    fn_800AE7F0(12, ScrmGetOffenseTeam(), BallGetCurrentHolder());
     _StyleTracker_pState->mStyleFirstDown = 1;
 }
 
 extern "C" void StyleTrackerOnConversion(void) {
     StyleTrackerTraceEvent(33);
     _StyleTracker_pState->mConversion = 1;
-    if (fn_80177C38() == 0 && _StyleTracker_pState->mOffenseLostBall == 0) {
+    if (ScrmGetPlayTurnovers() == 0 && _StyleTracker_pState->mOffenseLostBall == 0) {
         _StyleTracker_pState->mConversionPending = 1;
     }
 }
@@ -1675,9 +1675,9 @@ extern "C" void StyleTrackerOnFailedConversion(void) {
 
 extern "C" void StyleTrackerOnFumbleRecovery(Object_80039F5C *p) {
     StyleTrackerTraceEvent(31);
-    if (p != 0 && fn_801787A0() == 0 && fn_801BE648(p->mpUnknown792) != 234 &&
+    if (p != 0 && ScrmIsNotReplay() == 0 && fn_801BE648(p->mpUnknown792) != 234 &&
         fn_801BE648(p->mpUnknown792) != 238) {
-        if (fn_80177C38() == 0 && p->mIdBytes[2] == fn_80178360() && _StyleTracker_pState->mSavedRunAwardPending != 0 &&
+        if (ScrmGetPlayTurnovers() == 0 && p->mIdBytes[2] == ScrmGetSnapDefense() && _StyleTracker_pState->mSavedRunAwardPending != 0 &&
             _StyleTracker_pState->mSavedRunAward != 0) {
             _StyleTracker_pState->mApplySavedRunBonus = 1;
             StyleTrackerProcessEvent(90, p->mIdBytes[2], 1);
@@ -1686,22 +1686,22 @@ extern "C" void StyleTrackerOnFumbleRecovery(Object_80039F5C *p) {
             _StyleTracker_pState->mSavedRunAward = 0;
             _StyleTracker_pState->mSavedRunMeter = 0;
         } else if (p->mFlags & 0x4000) {
-            if (p->mIdBytes[2] == fn_80178308()) {
+            if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
                 StyleTrackerProcessEvent(89, p->mIdBytes[2], 1);
             } else {
                 StyleTrackerProcessEvent(87, p->mIdBytes[2], 1);
             }
-        } else if (p->mIdBytes[2] == fn_80178308()) {
+        } else if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             StyleTrackerProcessEvent(88, p->mIdBytes[2], 1);
         } else {
             StyleTrackerProcessEvent(86, p->mIdBytes[2], 1);
         }
-        if (p->mIdBytes[2] == fn_80178320()) {
+        if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
             Vector_80039F5C pos;
 
             BallGetPosition(BallGetCurrent(), &pos);
             _StyleTracker_pState->mPossessionStartY = -pos.mY;
-            _StyleTracker_pState->mPitchCounts[fn_80178308()] = 0;
+            _StyleTracker_pState->mPitchCounts[ScrmGetOffenseTeam()] = 0;
         }
     }
 }
@@ -1709,7 +1709,7 @@ extern "C" void StyleTrackerOnFumbleRecovery(Object_80039F5C *p) {
 extern "C" void StyleTrackerOnFumble(Object_80039F5C *p, int team) {
     StyleTrackerTraceEvent(30);
     if (_StyleTracker_pState->mRunRequested != 0) {
-        fn_800AE7F0(0, fn_80178308(), 0);
+        fn_800AE7F0(0, ScrmGetOffenseTeam(), 0);
     }
     if (_StyleTracker_pState->mpRunPlayer != 0) {
         if (_StyleTracker_pState->mSavedRunAwardPending == 0) {
@@ -1721,7 +1721,7 @@ extern "C" void StyleTrackerOnFumble(Object_80039F5C *p, int team) {
     }
     StyleTrackerFinishOtherMoves(0);
     StyleTrackerFinishDefensiveMove(0);
-    if (fn_80177C38() == 0) {
+    if (ScrmGetPlayTurnovers() == 0) {
         if (StyleTrackerIsFumbleForcerUserControlled() != 0) {
             StyleTrackerProcessEvent(85, team, 1);
         } else {
@@ -1735,7 +1735,7 @@ extern "C" void StyleTrackerRefreshUserPlayers(void) {
 
     _StyleTracker_pState->mUserPlayerCount = 0;
     for (team = 0; team <= 1; team++) {
-        unsigned int count = fn_80178D18(team);
+        unsigned int count = ScrmGetTeamPlayerCount(team);
         unsigned short i;
 
         for (i = 0; i < count; i++) {
@@ -1753,16 +1753,16 @@ extern "C" void StyleTrackerRefreshUserPlayers(void) {
 
 extern "C" void StyleTrackerOnPumpFake(Object_80039F5C *p) {
     StyleTrackerTraceEvent(28);
-    if (fn_801787A0() == 0) {
+    if (ScrmIsNotReplay() == 0) {
         if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(3, 1);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
-        fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+        fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
         if (_StyleTracker_pState->mRules[6].mOpponentDistance == 0.0f || !(distance > _StyleTracker_pState->mRules[6].mOpponentDistance)) {
             if (_StyleTracker_pState->mFakeout) {
                 _StyleTracker_pState->mFakeout = 0;
-                StyleTrackerProcessEvent(7, fn_80178308(), 1);
-            } else StyleTrackerProcessEvent(6, fn_80178308(), 1);
+                StyleTrackerProcessEvent(7, ScrmGetOffenseTeam(), 1);
+            } else StyleTrackerProcessEvent(6, ScrmGetOffenseTeam(), 1);
         }
     }
 }
@@ -1798,15 +1798,15 @@ extern "C" void StyleTrackerBeginStiffArm(int flag) {
         Object_80039F5C *p = BallGetCurrentHolder();
 
         _StyleTracker_pState->mStiffArmActive = 1;
-        _StyleTracker_pState->mStiffArmTeam = fn_80178308();
-        StyleTrackerProcessEvent(27, fn_80178308(), 1);
-        fn_800AE7F0(10, fn_80178308(), p);
+        _StyleTracker_pState->mStiffArmTeam = ScrmGetOffenseTeam();
+        StyleTrackerProcessEvent(27, ScrmGetOffenseTeam(), 1);
+        fn_800AE7F0(10, ScrmGetOffenseTeam(), p);
     }
 }
 
 extern "C" void StyleTrackerResolveStiffArm(Object_80039F5C *p, int flag) {
     StyleTrackerTraceEvent(6);
-    if (_StyleTracker_pState->mStiffArmActive != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (_StyleTracker_pState->mStiffArmActive != 0 && p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         if (flag != 0) {
             _StyleTracker_pState->mStiffArmSucceeded = 1;
             _StyleTracker_pState->mpStiffArmPlayer = p;
@@ -1819,11 +1819,11 @@ extern "C" void StyleTrackerResolveStiffArm(Object_80039F5C *p, int flag) {
 }
 
 extern "C" void StyleTrackerBeginJuke(Object_80039F5C *p, int kind) {
-    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         int accept = 0;
         StyleTrackerTraceEvent(1);
         StyleTrackerFinishOtherMoves(14);
-        fn_800AE7F0(7, fn_80178308(), p);
+        fn_800AE7F0(7, ScrmGetOffenseTeam(), p);
         int id = 34;
         switch (kind) {
         case 0:
@@ -1842,7 +1842,7 @@ extern "C" void StyleTrackerBeginJuke(Object_80039F5C *p, int kind) {
         } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
-            if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0 && kind != 0) {
             if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(4, 1);
@@ -1851,24 +1851,24 @@ extern "C" void StyleTrackerBeginJuke(Object_80039F5C *p, int kind) {
         }
         Vector_80039F5C position;
         BallGetPosition(BallGetCurrent(), &position);
-        float limit = fn_80177FE0().mY - 4.0f;
+        float limit = ScrmGetBallSpot().mY - 4.0f;
         if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
             _StyleTracker_pState->mJukeActive = 1;
             _StyleTracker_pState->mStyleMove = kind == 1;
             _StyleTracker_pState->mWallMove = kind == 4;
             _StyleTracker_pState->mFakeout = 0;
-            _StyleTracker_pState->mJukeTeam = fn_80178308();
-            if (_StyleTracker_pState->mWallMove) StyleTrackerProcessEvent(40, fn_80178308(), 1);
-            else if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(36, fn_80178308(), 1);
-            else StyleTrackerProcessEvent(32, fn_80178308(), 1);
+            _StyleTracker_pState->mJukeTeam = ScrmGetOffenseTeam();
+            if (_StyleTracker_pState->mWallMove) StyleTrackerProcessEvent(40, ScrmGetOffenseTeam(), 1);
+            else if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(36, ScrmGetOffenseTeam(), 1);
+            else StyleTrackerProcessEvent(32, ScrmGetOffenseTeam(), 1);
         }
     }
 }
 
 extern "C" void StyleTrackerFinishJuke(Object_80039F5C *p) {
     StyleTrackerTraceEvent(2);
-    if (_StyleTracker_pState->mJukeActive != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (_StyleTracker_pState->mJukeActive != 0 && p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         int b = 0;
         int id;
         int a;
@@ -1904,7 +1904,7 @@ extern "C" void StyleTrackerFinishJuke(Object_80039F5C *p) {
             }
             a = 0;
         }
-        StyleTrackerProcessEvent(id, fn_80178308(), 1);
+        StyleTrackerProcessEvent(id, ScrmGetOffenseTeam(), 1);
         pRecord = fn_800B15FC();
         fn_8009BD2C(p, &pRecord->mUnknown0);
         pRecord->mUnknownC = p->mMotion.mPos.mX;
@@ -1922,11 +1922,11 @@ extern "C" void StyleTrackerFinishJuke(Object_80039F5C *p) {
 }
 
 extern "C" void StyleTrackerBeginSpin(Object_80039F5C *p, int kind, unsigned char flag) {
-    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         int accept = 0;
         StyleTrackerTraceEvent(3);
         StyleTrackerFinishOtherMoves(15);
-        fn_800AE7F0(7, fn_80178308(), p);
+        fn_800AE7F0(7, ScrmGetOffenseTeam(), p);
         int id = 46;
         switch (kind) {
         case 0:
@@ -1944,7 +1944,7 @@ extern "C" void StyleTrackerBeginSpin(Object_80039F5C *p, int kind, unsigned cha
         } else {
             int team = p->mIdBytes[2] ^ 1;
             float distance;
-            if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
         }
         if (accept == 0) {
             if (PlayerMoveGetKind(p) == 0) TutorialSetMoveDone(7, 1);
@@ -1952,32 +1952,32 @@ extern "C" void StyleTrackerBeginSpin(Object_80039F5C *p, int kind, unsigned cha
         }
         Vector_80039F5C position;
         BallGetPosition(BallGetCurrent(), &position);
-        float limit = fn_80177FE0().mY - 4.0f;
+        float limit = ScrmGetBallSpot().mY - 4.0f;
         if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
         if (accept) {
             _StyleTracker_pState->mSpinActive = 1;
             _StyleTracker_pState->mStyleMove = kind != 0;
             _StyleTracker_pState->mFakeout = 0;
-            _StyleTracker_pState->mSpinTeam = fn_80178308();
-            if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(48, fn_80178308(), 1);
-            else StyleTrackerProcessEvent(44, fn_80178308(), 1);
+            _StyleTracker_pState->mSpinTeam = ScrmGetOffenseTeam();
+            if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(48, ScrmGetOffenseTeam(), 1);
+            else StyleTrackerProcessEvent(44, ScrmGetOffenseTeam(), 1);
         }
     }
 }
 
 extern "C" void StyleTrackerFinishSpin(Object_80039F5C *p) {
     StyleTrackerTraceEvent(4);
-    if (_StyleTracker_pState->mSpinActive != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (_StyleTracker_pState->mSpinActive != 0 && p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         int b = 0;
         Record_800B15FC *pRecord;
 
         if (_StyleTracker_pState->mFakeout != 0) {
             if (_StyleTracker_pState->mStyleMove != 0) {
                 b = 1;
-                StyleTrackerProcessEvent(51, fn_80178308(), 1);
+                StyleTrackerProcessEvent(51, ScrmGetOffenseTeam(), 1);
                 TutorialSetMoveDone(8, 1);
             } else {
-                StyleTrackerProcessEvent(47, fn_80178308(), 1);
+                StyleTrackerProcessEvent(47, ScrmGetOffenseTeam(), 1);
                 if (PlayerMoveGetKind(p) == 0) {
                     TutorialSetMoveDone(7, 1);
                 }
@@ -1993,15 +1993,15 @@ extern "C" void StyleTrackerFinishSpin(Object_80039F5C *p) {
         } else {
             if (_StyleTracker_pState->mStyleMove != 0) {
                 if (_StyleTracker_pState->mMoveFallback != 0) {
-                    StyleTrackerProcessEvent(111, fn_80178308(), 1);
+                    StyleTrackerProcessEvent(111, ScrmGetOffenseTeam(), 1);
                     TutorialSetMoveDone(8, 1);
                 } else {
                     b = 1;
-                    StyleTrackerProcessEvent(50, fn_80178308(), 1);
+                    StyleTrackerProcessEvent(50, ScrmGetOffenseTeam(), 1);
                     TutorialSetMoveDone(8, 1);
                 }
             } else {
-                StyleTrackerProcessEvent(46, fn_80178308(), 1);
+                StyleTrackerProcessEvent(46, ScrmGetOffenseTeam(), 1);
                 if (PlayerMoveGetKind(p) == 0) {
                     TutorialSetMoveDone(7, 1);
                 }
@@ -2032,7 +2032,7 @@ extern "C" void StyleTrackerOnMoveResult(int value) {
     } else if (value == 2) {
         _StyleTracker_pState->mFakeout = 1;
     } else if (value == 1 && _StyleTracker_pState->mPumpInteraction != 0 && _StyleTracker_pState->mPumpAwarded == 0) {
-        StyleTrackerProcessEvent(12, fn_80178308(), 1);
+        StyleTrackerProcessEvent(12, ScrmGetOffenseTeam(), 1);
         _StyleTracker_pState->mPumpAwarded = value;
     }
 }
@@ -2061,18 +2061,18 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
     int requested = active;
     int result = 0;
     if (active != 0) {
-        if (fn_801787A0() != 0) active = 0;
+        if (ScrmIsNotReplay() != 0) active = 0;
         if (active != 0) {
             TutorialSetMoveDone(15, 1);
-            if (fn_801787A0() == 0 && _StyleTracker_pState->mRunActive == 0) {
+            if (ScrmIsNotReplay() == 0 && _StyleTracker_pState->mRunActive == 0) {
                 StyleTrackerTraceEvent(53); StyleTrackerFinishOtherMoves(11);
             }
             if (active != 0) {
                 Vector_80039F5C position;
-                if (fn_80178348() == BallGetCurrentHolder()->mIdBytes[2]) {
+                if (ScrmGetSnapOffense() == BallGetCurrentHolder()->mIdBytes[2]) {
                     BallGetPosition(BallGetCurrent(), &position);
                     if (_StyleTracker_pState->mRules[64].mAllowBehindLine == 0) {
-                        if (!(position.mY >= fn_80177FE0().mY)) { active = 0; StyleTrackerCancelRun(BallGetCurrentHolder()->mIdBytes[2]); }
+                        if (!(position.mY >= ScrmGetBallSpot().mY)) { active = 0; StyleTrackerCancelRun(BallGetCurrentHolder()->mIdBytes[2]); }
                     }
                 } else {
                     BallGetPosition(BallGetCurrent(), &position);
@@ -2131,13 +2131,13 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
             StyleTrackerTraceEvent(56);
             if (value) StyleTrackerTraceEvent(57);
             if (_StyleTracker_pState->mpRunPlayer == BallGetCurrentHolder()) StyleTrackerTraceEvent(58);
-            if (fn_801787A0()) StyleTrackerTraceEvent(59);
+            if (ScrmIsNotReplay()) StyleTrackerTraceEvent(59);
             if (value) {
                 if (_StyleTracker_pState->mPlaySettled || _StyleTracker_pState->mpRunPlayer == BallGetCurrentHolder()) {
                     _StyleTracker_pState->mRunTeam = _StyleTracker_pState->mpRunPlayer->mIdBytes[2];
                     _StyleTracker_pState->mCompletedRunTime = _StyleTracker_pState->mRunTime;
                     _StyleTracker_pState->mRunCompleted = 1;
-                    if (fn_801787A0() == 0) StyleTrackerAwardCompletedRun();
+                    if (ScrmIsNotReplay() == 0) StyleTrackerAwardCompletedRun();
                     result = 1;
                 } else if (value && _StyleTracker_pState->mpRunPlayer != BallGetCurrentHolder()) {
                     if (_StyleTracker_pState->mSavedRunAwardPending == 0) {
@@ -2161,7 +2161,7 @@ extern "C" int StyleTrackerUpdateRun(int active, int a, int b) {
 
 extern "C" void StyleTrackerAwardDive(Object_80039F5C *p, int kind, unsigned char flag) {
     if (p == BallGetCurrentHolder()) { StyleTrackerTraceEvent(25); StyleTrackerFinishOtherMoves(0); }
-    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         StyleTrackerFinishOtherMoves(0);
         int id = 52;
         switch (kind) {
@@ -2173,7 +2173,7 @@ extern "C" void StyleTrackerAwardDive(Object_80039F5C *p, int kind, unsigned cha
         fn_800AE7F0(12, p->mIdBytes[2], p);
         int team = p->mIdBytes[2] ^ 1;
         float distance;
-        fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+        fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
         if (p->mpState->mId == 12 && p->mUnknown355[0] == 0) return;
         if (_StyleTracker_pState->mRules[id].mOpponentDistance != 0.0f && distance > _StyleTracker_pState->mRules[id].mOpponentDistance) return;
         StyleTrackerProcessEvent(id, p->mIdBytes[2], 1);
@@ -2189,7 +2189,7 @@ extern "C" void StyleTrackerAwardDive(Object_80039F5C *p, int kind, unsigned cha
 
 extern "C" void StyleTrackerBeginHurdle(Object_80039F5C *p, int kind, unsigned char flag) {
     int accept = 0;
-    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         StyleTrackerTraceEvent(23);
         StyleTrackerFinishOtherMoves(16);
         int id = 57;
@@ -2213,9 +2213,9 @@ extern "C" void StyleTrackerBeginHurdle(Object_80039F5C *p, int kind, unsigned c
         } else {
             float distance;
             int team = p->mIdBytes[2] ^ 1;
-            if (fn_801245DC(p, team, 0, fn_80178D18(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+            if (fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(team), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
             if (accept == 0) {
-                if (fn_801245DC(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
+                if (fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]), (int)((float)(unsigned int)_StyleTracker_pState->mRules[id].mOpponentAngle * 46603.37890625f), &distance, 0) && !(distance > _StyleTracker_pState->mRules[id].mOpponentDistance)) accept = 1;
             }
         }
     }
@@ -2225,44 +2225,44 @@ extern "C" void StyleTrackerBeginHurdle(Object_80039F5C *p, int kind, unsigned c
     }
     Vector_80039F5C position;
     BallGetPosition(BallGetCurrent(), &position);
-    float limit = fn_80177FE0().mY - 4.0f;
+    float limit = ScrmGetBallSpot().mY - 4.0f;
     if (!(position.mY >= limit) && (kind == 4 || kind == 1)) accept = 0;
     if (accept) {
         _StyleTracker_pState->mHurdleActive = 1;
         _StyleTracker_pState->mStyleMove = kind == 1;
         _StyleTracker_pState->mWallMove = kind == 4;
         _StyleTracker_pState->mFakeout = 0;
-        _StyleTracker_pState->mHurdleTeam = fn_80178308();
-        if (_StyleTracker_pState->mWallMove) StyleTrackerProcessEvent(61, fn_80178308(), 1);
-        else if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(58, fn_80178308(), 1);
-        else StyleTrackerProcessEvent(55, fn_80178308(), 1);
+        _StyleTracker_pState->mHurdleTeam = ScrmGetOffenseTeam();
+        if (_StyleTracker_pState->mWallMove) StyleTrackerProcessEvent(61, ScrmGetOffenseTeam(), 1);
+        else if (_StyleTracker_pState->mStyleMove) StyleTrackerProcessEvent(58, ScrmGetOffenseTeam(), 1);
+        else StyleTrackerProcessEvent(55, ScrmGetOffenseTeam(), 1);
     }
 }
 
 extern "C" void StyleTrackerFinishHurdle(Object_80039F5C *p) {
     StyleTrackerTraceEvent(24);
-    if (_StyleTracker_pState->mHurdleActive != 0 && p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (_StyleTracker_pState->mHurdleActive != 0 && p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         int a = 0;
         Record_800B15FC *pRecord;
 
         if (_StyleTracker_pState->mWallMove != 0) {
             if (_StyleTracker_pState->mMoveFallback != 0) {
-                StyleTrackerProcessEvent(113, fn_80178308(), 1);
+                StyleTrackerProcessEvent(113, ScrmGetOffenseTeam(), 1);
             } else {
                 a = 4;
-                StyleTrackerProcessEvent(63, fn_80178308(), 1);
+                StyleTrackerProcessEvent(63, ScrmGetOffenseTeam(), 1);
             }
             TutorialSetMoveDone(11, 1);
         } else if (_StyleTracker_pState->mStyleMove != 0) {
             if (_StyleTracker_pState->mMoveFallback != 0) {
-                StyleTrackerProcessEvent(112, fn_80178308(), 1);
+                StyleTrackerProcessEvent(112, ScrmGetOffenseTeam(), 1);
             } else {
                 a = 1;
-                StyleTrackerProcessEvent(60, fn_80178308(), 1);
+                StyleTrackerProcessEvent(60, ScrmGetOffenseTeam(), 1);
             }
             TutorialSetMoveDone(10, 1);
         } else {
-            StyleTrackerProcessEvent(57, fn_80178308(), 1);
+            StyleTrackerProcessEvent(57, ScrmGetOffenseTeam(), 1);
             if (PlayerMoveGetKind(p) == 0) {
                 TutorialSetMoveDone(9, 1);
             }
@@ -2284,7 +2284,7 @@ extern "C" void StyleTrackerFinishHurdle(Object_80039F5C *p) {
 
 extern "C" void StyleTrackerSetCatchFlags(int a, int b, unsigned char c) {
     StyleTrackerTraceEvent(18);
-    if (fn_801787A0() == 0) {
+    if (ScrmIsNotReplay() == 0) {
         _StyleTracker_pState->mCatchPending = 1;
         _StyleTracker_pState->mUserCatch = a;
         _StyleTracker_pState->mStyleCatch = b;
@@ -2296,20 +2296,20 @@ extern "C" void StyleTrackerAwardCatch(Object_80039F5C *p) {
     int id;
 
     StyleTrackerTraceEvent(19);
-    if (fn_801787A0() == 0 && _StyleTracker_pState->mCatchPending != 0) {
+    if (ScrmIsNotReplay() == 0 && _StyleTracker_pState->mCatchPending != 0) {
         if (_StyleTracker_pState->mUserCatch != 0) {
             if (_StyleTracker_pState->mStyleCatch != 0) {
                 if (_StyleTracker_pState->mNinjaPass != 0) {
                     id = 114;
-                    fn_8017CA10(p->mIdBytes[2], 1);
+                    ScrmStatAddTeamNinjaCatch(p->mIdBytes[2], 1);
                 } else {
                     id = 22;
                 }
-                fn_8017C9E4(p->mIdBytes[2], 1);
+                ScrmStatAddTeamStyleCatch(p->mIdBytes[2], 1);
                 TutorialSetMoveDone(38, 1);
             } else if (_StyleTracker_pState->mCatchVariant != 0) {
                 id = 24;
-                fn_8017C674(p->mIdBytes[2], 1);
+                ScrmStatAddTeamVariantCatch(p->mIdBytes[2], 1);
                 TutorialSetMoveDone(37, 1);
             } else {
                 id = 20;
@@ -2326,14 +2326,14 @@ extern "C" void StyleTrackerAwardCatch(Object_80039F5C *p) {
                 id = 23;
             }
         }
-        StyleTrackerAwardImmediateEvent(id, fn_80178308());
+        StyleTrackerAwardImmediateEvent(id, ScrmGetOffenseTeam());
     }
 }
 
 extern "C" void StyleTrackerOnCarrierContact(Object_80039F5C *p) {
     StyleTrackerTraceEvent(22);
     if (_StyleTracker_pState->mContactSeen == 0) {
-        if (fn_80178320() == p->mIdBytes[2]) {
+        if (ScrmGetDefenseTeam() == p->mIdBytes[2]) {
             if (_StyleTracker_pState->mContactPending == 0) {
                 StyleTrackerTraceEvent(61);
                 _StyleTracker_pState->mContactPending = 1;
@@ -2351,34 +2351,34 @@ extern "C" void StyleTrackerOnInterception(int a, Object_80039F5C *p) {
 
     StyleTrackerTraceEvent(21);
     StyleTrackerFinishOtherMoves(0);
-    StyleTrackerSetComboWeight(fn_80178348(), 0);
+    StyleTrackerSetComboWeight(ScrmGetSnapOffense(), 0);
     _StyleTracker_pState->mIntercepted = 1;
     _StyleTracker_pState->mCatchVariant = PlayerMoveGetKind(p);
     if (a != 0) {
         if (_StyleTracker_pState->mCatchVariant != 0) {
-            StyleTrackerAwardImmediateEvent(75, fn_80178360());
+            StyleTrackerAwardImmediateEvent(75, ScrmGetSnapDefense());
             TutorialSetMoveDone(22, 1);
         } else {
-            StyleTrackerAwardImmediateEvent(74, fn_80178360());
+            StyleTrackerAwardImmediateEvent(74, ScrmGetSnapDefense());
             TutorialSetMoveDone(22, 1);
         }
-        fn_8017C9B8(p->mIdBytes[2], 1);
+        ScrmStatAddTeamInterceptMove(p->mIdBytes[2], 1);
     } else if (_StyleTracker_pState->mCatchVariant != 0) {
-        StyleTrackerAwardImmediateEvent(73, fn_80178360());
+        StyleTrackerAwardImmediateEvent(73, ScrmGetSnapDefense());
         TutorialSetMoveDone(22, 1);
     } else {
-        StyleTrackerAwardImmediateEvent(72, fn_80178360());
+        StyleTrackerAwardImmediateEvent(72, ScrmGetSnapDefense());
         TutorialSetMoveDone(22, 1);
     }
-    fn_800AE7F0(11, fn_80178360(), p);
+    fn_800AE7F0(11, ScrmGetSnapDefense(), p);
     BallGetPosition(BallGetCurrent(), &pos);
     _StyleTracker_pState->mPossessionStartY = -pos.mY;
-    _StyleTracker_pState->mPitchCounts[fn_80178348()] = 0;
+    _StyleTracker_pState->mPitchCounts[ScrmGetSnapOffense()] = 0;
 }
 
 extern "C" void StyleTrackerBeginPitch(int flag, Object_80039F5C *p) {
     StyleTrackerTraceEvent(15);
-    if (p == BallGetCurrentHolder() && fn_801787A0() == 0) {
+    if (p == BallGetCurrentHolder() && ScrmIsNotReplay() == 0) {
         _StyleTracker_pState->mPitchActive = 1;
         _StyleTracker_pState->mStylePitch = flag;
         if (flag != 0) {
@@ -2386,7 +2386,7 @@ extern "C" void StyleTrackerBeginPitch(int flag, Object_80039F5C *p) {
         } else {
             StyleTrackerTraceEvent(71);
         }
-        fn_800AE7F0(8, fn_80178308(), p);
+        fn_800AE7F0(8, ScrmGetOffenseTeam(), p);
     }
 }
 
@@ -2429,8 +2429,8 @@ extern "C" void StyleTrackerFinishPitch(int team, int a, int b) {
 
 extern "C" void StyleTrackerBeginDefensiveMove(Object_80039F5C *p, int flag) {
     StyleTrackerTraceEvent(12);
-    if (p != 0 && p->mIdBytes[2] == fn_80178360() && fn_80177C38() == 0 && fn_801787A0() == 0 &&
-        _StyleTracker_pState->mOffenseLostBall == 0 && _StyleTracker_pState->mPassReleased == 0 && fn_801783AC(0) == 0 &&
+    if (p != 0 && p->mIdBytes[2] == ScrmGetSnapDefense() && ScrmGetPlayTurnovers() == 0 && ScrmIsNotReplay() == 0 &&
+        _StyleTracker_pState->mOffenseLostBall == 0 && _StyleTracker_pState->mPassReleased == 0 && ScrmTestPlayFlag(0) == 0 &&
         p->mUnknown8 != 255) {
         StyleTrackerTraceEvent(13);
         if (p->mUnknown8 == 255) {
@@ -2523,7 +2523,7 @@ extern "C" void StyleTrackerAwardHotspot(Object_80039F5C *p, unsigned int count,
 
 extern "C" void StyleTrackerAwardStrip(int team) {
     StyleTrackerProcessEvent(120, team, 1);
-    fn_8017CA68(team, 1);
+    ScrmStatAddTeamStrip(team, 1);
 }
 
 extern "C" void StyleTrackerOnActionFour(void) {
@@ -2582,7 +2582,7 @@ extern "C" void StyleTrackerHandleGameEvent(Record_800B15FC *pRecord) {
     case 56:
         StyleTrackerTraceEvent(93);
         StyleTrackerFinishDefensiveMove(0);
-        StyleTrackerProcessEvent(79, fn_80178320(), 1);
+        StyleTrackerProcessEvent(79, ScrmGetDefenseTeam(), 1);
         break;
     case 57: case 58: case 59:
         break;

@@ -18,11 +18,19 @@ typedef struct UIGCurvePoint_t {
 } UIGCurvePoint_t;
 
 /* Buffer descriptor: size and text pointer. */
-typedef struct Buffer_80222E54 {
+typedef struct UIGTextBuffer_t {
     Uint8 unk_00[0x04];
     Uint32 Size;    /* 0x04 */
     char *pText;    /* 0x08 */
-} Buffer_80222E54;
+} UIGTextBuffer_t;
+
+/* Corner data of an image or colour node: colours, texture coordinates
+   (8.8 fixed point) and positions (12.4 fixed point) of its four corners. */
+typedef struct UIGNodeQuad_t {
+    GXColor Colors[4];      /* 0x00 */
+    Uint16 Coords[4][2];    /* 0x10 */
+    Int16 Pos[4][3];        /* 0x20 */
+} UIGNodeQuad_t;
 
 /* Only the accessed members are declared; the size is not established.
    Bit 15 of Flags selects the display-list form of the +0x10 member. */
@@ -38,13 +46,12 @@ typedef struct UIGNode_t {
     union {
         UIGDispList_t List;
         struct {
-            Uint8 unk_00[0x04];
-            GXColor Colors[4];     /* 0x14 */
-            Uint16 Coords[4][2];   /* 0x24 */
+            Uint16 Scale[2];       /* 0x10 */
+            UIGNodeQuad_t Quad;    /* 0x14 */
         } v;
         struct {
             Uint16 unk_10;         /* 0x10 */
-            Uint8 unk_12[0x02];
+            Uint16 unk_12;         /* 0x12 */
             Uint8 unk_14[4];       /* 0x14 */
             Uint8 unk_18[4];       /* 0x18 */
             Float32 unk_1C[2];     /* 0x1C */
@@ -65,7 +72,7 @@ typedef struct UIGNode_t {
     } u;            /* 0x10 */
 } UIGNode_t;
 
-/* 40-byte element of the array that fn_80220D34 returns a pointer into. */
+/* 40-byte element of the array that UIGRenderGetColorState returns a pointer into. */
 typedef struct UIGMaterialColorState_t {
     Float32 unk_00[8]; /* 0x00 */
     GXColor mMaterialColor; /* 0x20 */
@@ -76,18 +83,18 @@ typedef struct UIGMaterialColorState_t {
 extern "C" {
 #endif
 
-/* src/engine/cu_8021EFD8.c */
-Int32 fn_80220B4C(Int32 a, Int32 b);
-void fn_80220BE0(void);
-void fn_80220C4C(Int32 a, Int32 b, Int32 c);
-void fn_80220CA4(Int32 a, Int32 b, Int32 c);
-void fn_80220CDC(Int32 a);
-Int32 fn_80220CE4(void);
-void fn_80220CFC(Int32 a);
-void fn_80220DA4(Float32 *pMul, Float32 *pScale);
-void *fn_80220D34(void);
-void fn_80221118(void);
-long long fn_80221154(Float32 *pV);
+/* src/engine/UIGColorStyle.c and src/engine/uigrender.c */
+Int32 UIGCSGetColorStyle(Int32 a, Int32 b);
+void UIGCSResetColorStyleCache(void);
+void UIGCSSwapPalette(Int32 a, Int32 b, Int32 c);
+void UIGCSRestorePalette(Int32 a, Int32 b, Int32 c);
+void UIGRenderSetActive(Int32 a);
+Int32 UIGRenderGetActive(void);
+void UIGRenderSetLast(Int32 a);
+void UIGRenderPushColorState(Float32 *pMul, Float32 *pScale);
+void *UIGRenderGetColorState(void);
+void UIGRenderPopColorState(void);
+long long UIGRenderIsRotated(Float32 *pV);
 
 #ifdef __cplusplus
 }

@@ -198,7 +198,7 @@ void PlyrModelAttachLod(void *a, void *b);
 void *PlaTexCacheGetArchive(void);
 ModelTexSlot_t *PlaTexCacheGetDescs(int player);
 void PlaTexCacheCloseArchive(void);
-void fn_8019723C(ParticleTrailSet_t *p);
+void ParticleTrailDraw(ParticleTrailSet_t *p);
 void PlyrModelDrawNameplate(Object_8003DEC4 *pPlayer);
 void ConGetCurrentContext(void);
 void MatSetStack(void);
@@ -1434,7 +1434,7 @@ void PlyrRenderDrawTrails(void)
             continue;
         }
         if (pPlayer->mUnknown20 & 0x10000) {
-            fn_8019723C(&pPlayer->mUnknown5188);
+            ParticleTrailDraw(&pPlayer->mUnknown5188);
         }
     }
 }

@@ -4,8 +4,8 @@
    the joint controllers a player was holding. */
 
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmPlayResult.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include <math.h>
 
 struct PlayerJointCtrlFlags_t {
@@ -17,17 +17,17 @@ struct PlayerJointCtrlFlags_t {
 
 extern "C" {
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 void fn_8009BD60(Object_80039F5C *p);
-Point_8017886C fn_80177FFC(int team);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 int fn_801BE068(void *, void *, void *, unsigned short, float, void *);
 }
 
-extern "C" int PlayerPathIsLaneClear(Object_80039F5C *p, Point_8017886C *pTarget)
+extern "C" int PlayerPathIsLaneClear(Object_80039F5C *p, FieldPoint_t *pTarget)
 {
-    int team = fn_80178320();
+    int team = ScrmGetDefenseTeam();
     int i;
-    int count = fn_80178D18(team);
+    int count = ScrmGetTeamPlayerCount(team);
 
     for (i = 0; i < count; i++) {
         Object_80039F5C *pOther = PlyrGet(team, i);
@@ -45,7 +45,7 @@ extern "C" void PlayerPathStartSideAnim(Object_80039F5C *p, int a, int b)
     fn_8009BD60(p);
     p->mUnknown1008.mUnknown0 = a;
     p->mUnknown1008.mUnknown1 = b;
-    if (p->mMotion.mPos.mX > fn_80177FFC(p->mIdBytes[2]).mX) {
+    if (p->mMotion.mPos.mX > ScrmGetTeamSetupSpot(p->mIdBytes[2]).mX) {
         p->mUnknown1008.mUnknown1 = 2;
     } else {
         p->mUnknown1008.mUnknown1 = 3;

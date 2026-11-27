@@ -1,11 +1,11 @@
 #ifndef GAME_STEP_800C4460_H
 #define GAME_STEP_800C4460_H
 
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 
 struct Pair_800A14A8 {
-    Object_8017886C *mpFirst;
-    Object_8017886C *mpSecond;
+    ScrmPlayResult_t *mpFirst;
+    ScrmPlayResult_t *mpSecond;
 };
 
 /* One of the eight 32-byte steps of Sequence_800C4460. */

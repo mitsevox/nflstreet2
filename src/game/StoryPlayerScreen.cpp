@@ -53,7 +53,7 @@ unsigned char MemCardUIGetTeamFlag(void);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
 void StoryTeamClear(void);
 int StoryTeamGetId(int a, int *p);
-void fn_8018C48C(int tag);
+void TeamTablesPurgeCreated(int tag);
 int CreateTeamHasPlayers(int a);
 int CreateTeamLoadToStats(int a, int b);
 void CreateTeamStoreFromStats(int a, int b);
@@ -130,7 +130,7 @@ void StoryPlayerScreenRevert(void)
     StoryTeamAddOneToStats(_StoryPlayerScreen_iProfile, 0, &result);
     CreateTeamAddPlayer(handle, result.mUnknown0, 1);
     CreateTeamStoreFromStats(_StoryPlayerScreen_iProfile, handle);
-    fn_8018C48C(0x54415453);
+    TeamTablesPurgeCreated(0x54415453);
     StoryPlayerScreenCopyToSlot8();
     StoryPlayerScreenLoadModel();
 }
@@ -176,7 +176,7 @@ void StoryPlayerScreenExit(void)
         PlayerSaveFree();
         FEPlyrHide();
         if (EditMenuIsStoryTeam() == 0) {
-            fn_8018C48C(0x54415453);
+            TeamTablesPurgeCreated(0x54415453);
         }
         MemCardUISetScriptFlag(_StoryPlayerScreen_bSavedFlag);
         _StoryPlayerScreen_bActive = 0;

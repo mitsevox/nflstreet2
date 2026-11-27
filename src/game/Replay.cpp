@@ -14,7 +14,7 @@
 #include "game/GameCamera.h"
 #include "game/GameVpt.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/RecordList_8002E7C0.h"
 #include "game/Ball.h"
 #include "game/cammain.h"
@@ -164,23 +164,23 @@ void ParticleTrailUpdateAll(void);
 unsigned char ParticleTrailSetEnabled(unsigned char a);
 void PassIconObjSetEnabled(int value);
 void PlyrStarSetShown(int a, int b);
-void fn_80177E6C(int a, int b);
-int fn_80177F70(void);
-int fn_80177F7C(void);
-void fn_80177F88(int a);
-Point_8017886C fn_80177FE0(void);
-void fn_801780A8(Point_8017886C pos);
-float fn_80178298(void);
-void fn_801782F4(float line);
-int fn_80178308(void);
-int fn_80178320(void);
-int fn_80178348(void);
-int fn_801784C4(void);
-int fn_801787DC(int a);
-void fn_801787FC(int which, short value);
-float fn_80178A08(void);
-float fn_80178A44(void);
-unsigned int fn_80178D18(int team);
+void ScrmMirrorField(int a, int b);
+int ScrmGetDown(void);
+int ScrmGetPlayDown(void);
+void ScrmSetDown(int a);
+FieldPoint_t ScrmGetBallSpot(void);
+void ScrmSetBallSpot(FieldPoint_t pos);
+float ScrmGetLineToGain(void);
+void ScrmSetLineToGain(float line);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+int ScrmGetSnapOffense(void);
+int ScrmIsFieldFlipped(void);
+int ScrmGetTeamScore(int a);
+void ScrmSetTeamScore(int which, short value);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
+unsigned int ScrmGetTeamPlayerCount(int team);
 void BannerClear(int a);
 void HudPost3AOn(void);
 void HudHide(void);
@@ -215,14 +215,14 @@ int fn_801D2BD0(void *p);
 void RemapCopyTable(int a, int b);
 int SysGetSystemTime(void);
 void fn_80219650(void *p, unsigned short *pA, unsigned short *pB);
-void fn_802196B4(void *p, int a, int b, int c, float *pD, unsigned char e);
-void Vec2Rotate(Point_8017886C *pOut, Point_8017886C *pIn, int angle);
+void UISProcessEvent(void *p, int a, int b, int c, float *pD, unsigned char e);
+void Vec2Rotate(FieldPoint_t *pOut, FieldPoint_t *pIn, int angle);
 float Vec3Distance(Vector_80039F5C *pPos, Vector_80039F5C *pOther);
 void Vec3Lerp(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB, float t);
 int SyncTimeGetGameTime(void);
 
 /* Animation state and animation of each player ([team][index]), filled by
-   fn_800D7708. */
+   PlyrAnimReplayRead. */
 extern unsigned short lbl_803192BC[2][7];
 extern unsigned short lbl_803192D8[2][7];
 
@@ -287,7 +287,7 @@ void ReplayCamUpdate(void *p, GameCamera_t *pCamera);
 GameCamera_t *ReplayCamCreate(ReplayCamDesc_t *pDesc);
 void ReplayCamSetBallHighlight(Object_80039F5C *p);
 void ReplayCamUpdateFocus(void);
-void ReplayCamGetMoveOffset(Point_8017886C *pOut, unsigned int input, float amount);
+void ReplayCamGetMoveOffset(FieldPoint_t *pOut, unsigned int input, float amount);
 Block_80170E64 *ReplayCamFindNearestObject(GameCamera_t *pCamera, float *pDist, unsigned char *pFound);
 void ReplayCamSetFieldMargins(void);
 void ReplayCamApplyDistance(GameCamera_t *pCamera);
@@ -447,7 +447,7 @@ extern "C" void ReplaySaveGameState(ReplayGameState_t *p)
     Object_80039F5C *pObject;
 
     for (team = 0; team <= 1; team++) {
-        count = fn_80178D18(team);
+        count = ScrmGetTeamPlayerCount(team);
         for (i = 0; i < count; i++) {
             pObject = PlyrGet(team, i);
             p->mUnknown000[team][i] = *(Block_80039F5C_B54 *)((char *)pObject + 0xB54);
@@ -455,15 +455,15 @@ extern "C" void ReplaySaveGameState(ReplayGameState_t *p)
         }
     }
     p->mUnknown690 = fn_8009D86C();
-    p->mUnknown694 = fn_80177F70();
+    p->mUnknown694 = ScrmGetDown();
     p->mUnknown6A4[0] = fn_8009D990(0);
     p->mUnknown6A4[1] = fn_8009D990(1);
     p->mUnknown6A4[2] = fn_8009D990(2);
-    p->mUnknown6B0[0] = fn_801787DC(0);
-    p->mUnknown6B0[1] = fn_801787DC(1);
+    p->mUnknown6B0[0] = ScrmGetTeamScore(0);
+    p->mUnknown6B0[1] = ScrmGetTeamScore(1);
     p->mUnknown6B4 = BallGetCurrentIndex();
-    p->mUnknown698 = fn_80177FE0();
-    p->mUnknown6A0 = fn_80178298();
+    p->mUnknown698 = ScrmGetBallSpot();
+    p->mUnknown6A0 = ScrmGetLineToGain();
     p->mUnknown6B6 = 0;
 }
 
@@ -475,7 +475,7 @@ extern "C" void ReplayRestoreGameState(ReplayGameState_t *p)
     Object_80039F5C *pObject;
 
     for (team = 0; team <= 1; team++) {
-        count = fn_80178D18(team);
+        count = ScrmGetTeamPlayerCount(team);
         for (i = 0; i < count; i++) {
             pObject = PlyrGet(team, i);
             PauseIsOpen();
@@ -484,15 +484,15 @@ extern "C" void ReplayRestoreGameState(ReplayGameState_t *p)
         }
     }
     fn_8009D818(p->mUnknown690);
-    fn_80177F88(p->mUnknown694);
+    ScrmSetDown(p->mUnknown694);
     fn_8009D964(0, p->mUnknown6A4[0]);
     fn_8009D964(1, p->mUnknown6A4[1]);
     fn_8009D964(2, p->mUnknown6A4[2]);
-    fn_801787FC(0, p->mUnknown6B0[0]);
-    fn_801787FC(1, p->mUnknown6B0[1]);
+    ScrmSetTeamScore(0, p->mUnknown6B0[0]);
+    ScrmSetTeamScore(1, p->mUnknown6B0[1]);
     BallSetCurrent(p->mUnknown6B4);
-    fn_801780A8(p->mUnknown698);
-    fn_801782F4(p->mUnknown6A0);
+    ScrmSetBallSpot(p->mUnknown698);
+    ScrmSetLineToGain(p->mUnknown6A0);
 }
 
 extern "C" int ReplayClear(Type_803EA368 *p)
@@ -512,7 +512,7 @@ extern "C" int ReplayStartRecording(Type_803EA368 *p)
         p->mUnknownD8C = -1;
         p->mUnknownD74 = p->mUnknownD70 = SyncTimeGetGameTime();
         p->mUnknownD90 = 1;
-        p->mUnknown14B4 = fn_801784C4();
+        p->mUnknown14B4 = ScrmIsFieldFlipped();
         ReplaySetBallIndex(BallGetCurrentIndex());
     }
     ReplayStartRecordingStub(p);
@@ -691,8 +691,8 @@ extern "C" int ReplayEnterPlayback(Type_803EA368 *p, ReplayCamDesc_t *pDesc)
             PauseBlock();
             ReplaySaveGameState(&p->mUnknown6B8);
             ReplayRestoreGameState(&p->mUnknown000);
-            if ((p->mUnknownD94 & 0x2000000) && fn_801784C4()) {
-                fn_80177E6C(0, 0);
+            if ((p->mUnknownD94 & 0x2000000) && ScrmIsFieldFlipped()) {
+                ScrmMirrorField(0, 0);
             }
             fn_800B50E8(0);
             fn_800B50E8(1);
@@ -743,7 +743,7 @@ extern "C" int ReplayExitPlayback(Type_803EA368 *p)
         } else {
             ReplayRestoreGameState(&p->mUnknown6B8);
             HudUnhide();
-            if ((p->mUnknownD94 & 0x2000000) && fn_801784C4()) {
+            if ((p->mUnknownD94 & 0x2000000) && ScrmIsFieldFlipped()) {
                 CamGameResumeAll();
             }
             if (!(p->mUnknownD94 & 0x10000)) {
@@ -1246,7 +1246,7 @@ extern "C" void ReplaySetHoldFlag(Type_803EA368 *p, unsigned char value) { p->mU
    0x209F0, PS2 0x1B4F30). Nothing on GameCube installs them, so the linker
    drops both; only their strings remain (0x8028A9F0-0x8028AB28). The PS2
    build reads the two animation tables through out-of-line getters of the
-   fn_800D77F0 file (0x271490, 0x2714C0) that GameCube also discards; with
+   PlyrAnimTurn.cpp file (0x271490, 0x2714C0) that GameCube also discards; with
    no GameCube address for them, the tables are read directly here, as the
    Xbox build does after inlining. State is taken from the lower table as on
    PS2 (Xbox reads the two the other way round). The window calls this slot
@@ -1516,12 +1516,12 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
         case 13:
             break;
         case 14:
-            if (fn_80177F7C() < pCond->mArg) {
+            if (ScrmGetPlayDown() < pCond->mArg) {
                 ok = 0;
             }
             break;
         case 15:
-            if (fn_80177F7C() > pCond->mArg) {
+            if (ScrmGetPlayDown() > pCond->mArg) {
                 ok = 0;
             }
             break;
@@ -1544,7 +1544,7 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
         case 22: {
             int gap = pCond->mArg;
 
-            if (ABS(fn_801787DC(0) - fn_801787DC(1)) < gap) {
+            if (ABS(ScrmGetTeamScore(0) - ScrmGetTeamScore(1)) < gap) {
                 ok = 0;
             }
             break;
@@ -1552,7 +1552,7 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
         case 23: {
             int gap = pCond->mArg;
 
-            if (ABS(fn_801787DC(0) - fn_801787DC(1)) > gap) {
+            if (ABS(ScrmGetTeamScore(0) - ScrmGetTeamScore(1)) > gap) {
                 ok = 0;
             }
             break;
@@ -1570,17 +1570,17 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             break;
         case 24:
             if (pCond->mArg) {
-                if (fn_801787DC(fn_80178308()) <= fn_801787DC(fn_80178320())) {
+                if (ScrmGetTeamScore(ScrmGetOffenseTeam()) <= ScrmGetTeamScore(ScrmGetDefenseTeam())) {
                     ok = 0;
                 }
             } else {
-                if (fn_801787DC(fn_80178308()) >= fn_801787DC(fn_80178320())) {
+                if (ScrmGetTeamScore(ScrmGetOffenseTeam()) >= ScrmGetTeamScore(ScrmGetDefenseTeam())) {
                     ok = 0;
                 }
             }
             break;
         case 31:
-            if (PlayBookGetPlay(fn_80178348())->mUnknown14 != pCond->mArg) {
+            if (PlayBookGetPlay(ScrmGetSnapOffense())->mUnknown14 != pCond->mArg) {
                 ok = 0;
             }
             break;
@@ -1623,10 +1623,10 @@ extern "C" void ReplayBuildShotList(Type_803EA368 *p, RecordList_8002E7C0 *pList
     int count = 0;
     ReplayCommand_t *pCmd;
     Vector_80039F5C origin;
-    Point_8017886C pt;
+    FieldPoint_t pt;
     float range[3];
 
-    pt = fn_80177FE0();
+    pt = ScrmGetBallSpot();
     origin.mX = pt.mX;
     origin.mY = pt.mY;
     origin.mZ = 0.0f;
@@ -2103,7 +2103,7 @@ extern "C" void ReplayCamUpdateFocus(void)
     }
 }
 
-extern "C" void ReplayCamGetMoveOffset(Point_8017886C *pOut, unsigned int dir, float speed)
+extern "C" void ReplayCamGetMoveOffset(FieldPoint_t *pOut, unsigned int dir, float speed)
 {
     pOut->mY = 0.0f;
     pOut->mX = 0.0f;
@@ -2211,19 +2211,19 @@ extern "C" void ReplayCamSetFieldMargins(void)
 extern "C" void ReplayCamComputeMaxDistance(GameCamera_t *pCamera, ReplayFocus_t *pTarget)
 {
     float dist = Vec3Distance(&pTarget->mPos, (Vector_80039F5C *)pCamera->mHeader.mUnknown04);
-    float overX = fabsf(pCamera->mHeader.mUnknown04[0]) - (fn_80178A08() + _Replay_fViewMarginX + _Replay_fCamMarginX);
-    float overY = fabsf(pCamera->mHeader.mUnknown04[1]) - (fn_80178A44() + _Replay_fViewMarginY + _Replay_fCamMarginY);
+    float overX = fabsf(pCamera->mHeader.mUnknown04[0]) - (ScrmGetSidelineX() + _Replay_fViewMarginX + _Replay_fCamMarginX);
+    float overY = fabsf(pCamera->mHeader.mUnknown04[1]) - (ScrmGetEndLineY() + _Replay_fViewMarginY + _Replay_fCamMarginY);
     float overZ = fabsf(pCamera->mHeader.mUnknown04[2]) - 9.2f;
     float limitX = 16.0f;
     float limitY = 16.0f;
     float limitZ = 16.0f;
 
     if (overX > 0.0f) {
-        limitX = dist * ((fn_80178A08() + _Replay_fViewMarginX + _Replay_fCamMarginX - fabsf(pTarget->mPos.mX))
+        limitX = dist * ((ScrmGetSidelineX() + _Replay_fViewMarginX + _Replay_fCamMarginX - fabsf(pTarget->mPos.mX))
                          / (fabsf(pCamera->mHeader.mUnknown04[0]) - fabsf(pTarget->mPos.mX)));
     }
     if (overY > 0.0f) {
-        limitY = dist * ((fn_80178A44() + _Replay_fViewMarginY + _Replay_fCamMarginY - fabsf(pTarget->mPos.mY))
+        limitY = dist * ((ScrmGetEndLineY() + _Replay_fViewMarginY + _Replay_fCamMarginY - fabsf(pTarget->mPos.mY))
                          / (fabsf(pCamera->mHeader.mUnknown04[1]) - fabsf(pTarget->mPos.mY)));
     }
     if (overZ > 0.0f) {
@@ -2256,7 +2256,7 @@ extern "C" void ReplayCamZoom(GameCamera_t *pCamera, float amount)
 
 extern "C" void ReplayCamMoveCursor(GameCamera_t *pCamera, unsigned int input, float amount)
 {
-    Point_8017886C offset;
+    FieldPoint_t offset;
 
     if ((unsigned int)(SysGetSystemTime() - _Replay_iTargetTime) > 29) {
         if (_Replay_pTarget == 0) {
@@ -2265,9 +2265,9 @@ extern "C" void ReplayCamMoveCursor(GameCamera_t *pCamera, unsigned int input, f
             Block_80170E64 *pTarget = ReplayCamFindNearestObject(pCamera, &dist, &flag);
 
             if (pTarget != 0) {
-                Point_8017886C clamped;
-                clamped.mX = CLAMP(pTarget->mUnknown4.mX, -fn_80178A08(), fn_80178A08());
-                clamped.mY = CLAMP(pTarget->mUnknown4.mY, -fn_80178A44(), fn_80178A44());
+                FieldPoint_t clamped;
+                clamped.mX = CLAMP(pTarget->mUnknown4.mX, -ScrmGetSidelineX(), ScrmGetSidelineX());
+                clamped.mY = CLAMP(pTarget->mUnknown4.mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
                 if (dist >= 0.25f || clamped.mX != pTarget->mUnknown4.mX
                     || clamped.mY != pTarget->mUnknown4.mY) {
                     ReplayCamGetMoveOffset(&offset, input, amount * 0.15f);
@@ -2281,8 +2281,8 @@ extern "C" void ReplayCamMoveCursor(GameCamera_t *pCamera, unsigned int input, f
             } else {
                 ReplayCamGetMoveOffset(&offset, input, amount * 0.15f);
                 Vec2Add(&_Replay_Focus.mPos, &_Replay_Focus.mPos, &offset);
-                _Replay_Focus.mPos.mX = CLAMP(_Replay_Focus.mPos.mX, -fn_80178A08(), fn_80178A08());
-                _Replay_Focus.mPos.mY = CLAMP(_Replay_Focus.mPos.mY, -fn_80178A44(), fn_80178A44());
+                _Replay_Focus.mPos.mX = CLAMP(_Replay_Focus.mPos.mX, -ScrmGetSidelineX(), ScrmGetSidelineX());
+                _Replay_Focus.mPos.mY = CLAMP(_Replay_Focus.mPos.mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
             }
         } else {
             float step = 0.275f;
@@ -2367,10 +2367,10 @@ extern "C" void ReplayCamProcess(GameCamera_t *pCamera)
 {
     ReplayCamProcessStub();
     if (!_Replay_bFreeCam) {
-        Point_8017886C clamped;
+        FieldPoint_t clamped;
         float y;
-        clamped.mX = CLAMP(_Replay_Focus.mPos.mX, -fn_80178A08(), fn_80178A08());
-        clamped.mY = y = CLAMP(_Replay_Focus.mPos.mY, -fn_80178A44(), fn_80178A44());
+        clamped.mX = CLAMP(_Replay_Focus.mPos.mX, -ScrmGetSidelineX(), ScrmGetSidelineX());
+        clamped.mY = y = CLAMP(_Replay_Focus.mPos.mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
         if (clamped.mX != _Replay_Focus.mPos.mX || y != _Replay_Focus.mPos.mY) {
             _Replay_Focus.mPos.mX = clamped.mX;
             _Replay_Focus.mPos.mY = y;
@@ -2395,8 +2395,8 @@ extern "C" void ReplayCamProcess(GameCamera_t *pCamera)
     CamMainProcess(pCamera, 0, 0, 0);
     _Replay_iCamYaw = pCamera->mUnknown38;
     if (!_Replay_bFreeCam) {
-        pCamera->mHeader.mUnknown04[0] = CLAMP(pCamera->mHeader.mUnknown04[0], -fn_80178A08() - _Replay_fCamMarginX, fn_80178A08() + _Replay_fCamMarginX);
-        pCamera->mHeader.mUnknown04[1] = CLAMP(pCamera->mHeader.mUnknown04[1], -fn_80178A44() - _Replay_fCamMarginY, fn_80178A44() + _Replay_fCamMarginY);
+        pCamera->mHeader.mUnknown04[0] = CLAMP(pCamera->mHeader.mUnknown04[0], -ScrmGetSidelineX() - _Replay_fCamMarginX, ScrmGetSidelineX() + _Replay_fCamMarginX);
+        pCamera->mHeader.mUnknown04[1] = CLAMP(pCamera->mHeader.mUnknown04[1], -ScrmGetEndLineY() - _Replay_fCamMarginY, ScrmGetEndLineY() + _Replay_fCamMarginY);
     }
 }
 
@@ -2509,31 +2509,31 @@ extern "C" void ReplayCamHandleMenuInput(GameCamera_t *pCamera, int player, unsi
     switch (action) {
     case 0:
         ReplayCamZoom(pCamera, -1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 1:
         ReplayCamZoom(pCamera, 1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 2:
         ReplayCamAdjustHeight(pCamera, 1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 3:
         ReplayCamAdjustHeight(pCamera, -1.0f);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 4:
         ReplayCamAdjustHeight(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 5:
         ReplayCamRotate(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     case 6:
         ReplayCamPitch(pCamera, amount);
-        fn_802196B4(gUISMainInfo, player, 20, 0, 0, 1);
+        UISProcessEvent(gUISMainInfo, player, 20, 0, 0, 1);
         break;
     }
 }

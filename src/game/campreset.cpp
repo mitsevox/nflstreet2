@@ -30,7 +30,7 @@ GameCamera_t *CamGameGetCamera(int index);
 void CamGameProcess(void);
 void CamGameSetModeAll(int a);
 void CamGameChangeType(int index, int id);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 int MathArcTan2(float y, float x);
 void Vec3RotateZYX(float *pOut, float *pIn, int a0, int a1, int a2);
 
@@ -95,7 +95,7 @@ void CamGameApplyUserCamera(void)
 int CamGameGetSideYaw(void)
 {
     CamGameGetCamera(0);
-    return fn_801784C4() ? 0x800000 : 0;
+    return ScrmIsFieldFlipped() ? 0x800000 : 0;
 }
 
 int CamGameGetHeading(int index)
@@ -161,7 +161,7 @@ void CamPresetStart(GameCamera_t *pCamera)
 
         angles.mUnknown0 = pSrc->mUnknown0;
         angles.mUnknown4 = pSrc->mUnknown4;
-        angles.mUnknown4 = fn_801784C4() ? 0x800000 : 0;
+        angles.mUnknown4 = ScrmIsFieldFlipped() ? 0x800000 : 0;
         CamMainSetOffset(pCamera, (Vector_80039F5C *)&_CamPreset_Views[0]);
         CamMainSetAngle(pCamera, (int *)&angles, _CamPreset_Views[0].mUnknownC);
         pState[0] = 0;

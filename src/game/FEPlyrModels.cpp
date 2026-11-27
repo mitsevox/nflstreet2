@@ -10,7 +10,7 @@
 #include "game/Object_8008044C.h"
 #include "game/FEPlyrLoad.h"
 #include "game/GameOptions.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/fn_801BE60C.h"
 #include <string.h>
 
@@ -536,7 +536,7 @@ void FEPlyrMoveTo(int index, float x, float y, float z, float angle, float scale
         _FEPlyr_aMoveTo[index].mUnknown20 = 0.0f;
     }
     value = 16;
-    fn_8021D7B8(gUISMainInfo, 0x8000002B, 1, &value);
+    UISProcessHint(gUISMainInfo, 0x8000002B, 1, &value);
 }
 
 static void _FEPlyrStopMove(int index)

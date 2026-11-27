@@ -28,7 +28,7 @@ int fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index);
 void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
 void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
                  unsigned char a);
 short *AnimAllocPoseChannels(int count);
@@ -326,7 +326,7 @@ void PlyrPoseSetFromModel(FEPlyrModel_t *pRecord)
     Object_8003DEC4 *pObject = pRecord->mUnknown4;
     Object_800B267C *pMotion = &pRecord->mUnknown424;
 
-    if (!fn_801784C4()) {
+    if (!ScrmIsFieldFlipped()) {
         pObject->mUnknown4[0] = pRecord->mUnknown424.mUnknown0;
         pObject->mUnknown4[1] = pMotion->mUnknown4;
         pObject->mUnknown4[2] = pMotion->mUnknown8;

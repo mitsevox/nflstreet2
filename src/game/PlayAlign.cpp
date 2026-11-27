@@ -5,9 +5,9 @@
 
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include <string.h>
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Add.h"
 #include "game/PlayBookDb.h"
@@ -37,9 +37,9 @@ void Vec2Sub(void *pOut, void *pA, void *pB);
 void PlyrMgrClearTeamFlag(int team);
 void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 Object_80039F5C *BallGetCurrentHolder(void);
-int fn_80177F70(void);
-Point_8017886C fn_80177FFC(int team);
-int fn_80178320(void);
+int ScrmGetDown(void);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
+int ScrmGetDefenseTeam(void);
 int MathAngleDiff(int a, int b);
 float SyncRandGetFloat(int stream);
 
@@ -56,12 +56,12 @@ extern "C" {
 void PlayAlignPlayer(Object_80039F5C *p, PlayBookPosition_t *pEntry, int side)
 {
     Message_800F01CC msg;
-    Point_8017886C delta;
+    FieldPoint_t delta;
 
     if (p->mpState->mId != '*') {
         p->mFlags &= ~0x40000;
         fn_800EFEF8(0, p->mpState, p);
-        delta = fn_80177FFC(p->mIdBytes[2]);
+        delta = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
         Vec2Add(&delta, side == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10, &delta);
         Vec2Sub(&delta, &p->mMotion.mPos, &delta);
         if (Vec2Magnitude(&delta) > 0.5f) {
@@ -106,12 +106,12 @@ void PlayAlignTeam(PlayBookFormation_t *pObject, int team, const char **ppNames)
     unsigned int count;
     Message_800F01CC msg;
 
-    if (team == fn_80178320()) {
+    if (team == ScrmGetDefenseTeam()) {
         PlayAlignResetSetNames();
     }
     PlayAlignTeamBegin(pObject, team);
     PlyrMgrClearTeamFlag(team);
-    count = fn_80178D70(team);
+    count = ScrmGetActivePlayerCount(team);
     for (i = 0; i < count; i++) {
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, ppNames);
         Object_80039F5C *p = PlyrGet(team, i);
@@ -140,18 +140,18 @@ void PlayRealignTeam(int team)
 {
     unsigned char i;
     unsigned int count;
-    int home = fn_80178320();
+    int home = ScrmGetDefenseTeam();
     PlayBookFormation_t *pObject = PlayBookGetFormation(team);
 
     PlayAlignTeamBegin(pObject, team);
-    count = fn_80178D70(team);
+    count = ScrmGetActivePlayerCount(team);
     for (i = 0; i < count; i++) {
         int update = 1;
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pObject, i, gPlayAlignNormSet);
         Object_80039F5C *p = PlyrGet(team, i);
 
         if (team != home) {
-            if (fn_80177F70() != 0) {
+            if (ScrmGetDown() != 0) {
                 if (p->mFlags & 0x40000) {
                     if (!(p->mFlags & 0x20000000)) {
                         update = 0;
@@ -179,7 +179,7 @@ void PlayAlignResetSetNames(void)
 void PlayAlignPostStartDelays(int team)
 {
     unsigned char i;
-    unsigned int count = fn_80178D70(team);
+    unsigned int count = ScrmGetActivePlayerCount(team);
 
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = PlyrGet(team, i);
@@ -193,7 +193,7 @@ void PlayAlignPostStartDelays(int team)
                 memset(&msg, 0, 4);
                 msg.mId = 51;
                 value = SyncRandGetFloat(0);
-                if (fn_80177F70() == 0) {
+                if (ScrmGetDown() == 0) {
                     value *= 2.0f;
                 } else {
                     value *= 0.4f;
@@ -221,16 +221,16 @@ extern unsigned char lbl_802E98E0[][4], lbl_802E98F0[][3];
 extern unsigned char lbl_803EB3BB,lbl_803EB3BF,lbl_803EB3C3,lbl_803EB3C7,lbl_803EB3CB,lbl_803EB3CF;
 extern unsigned char lbl_803EB3D3,lbl_803EB3D7,lbl_803EB3DB,lbl_803EB3DF,lbl_803EB3E3,lbl_803EB3E7;
 extern unsigned char lbl_803EB3EB,lbl_803EB3EF,lbl_803EB3F3,lbl_803EB3F7,lbl_803EB3FB,lbl_803EB3FF,lbl_803EB403,lbl_803EB407,lbl_803EB40B;
-int fn_80177F70(void);
+int ScrmGetDown(void);
 int PauseIsOpen(void);
 void Vec2Add(void *, void *, void *);
 float Vec2Distance(void *, void *);
 int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
 int fn_801C2E18(char *, const char *, ...);
 int DbTextToTag(const char *);
-int fn_80178308(void);
-unsigned int fn_80178D18(int);
-int fn_80178D70(int);
+int ScrmGetOffenseTeam(void);
+unsigned int ScrmGetTeamPlayerCount(int);
+int ScrmGetActivePlayerCount(int);
 PlayBookFormation_t *PlayBookGetFormation(int);
 Record_8011F4E0 *fn_8011F4E0(void);
 Message_800F01CC *fn_800AEE20(Object_80039F5C *);
@@ -242,14 +242,14 @@ void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
 
 unsigned char PlayAlignGetKeyPlayer(void)
 {
-    Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(fn_80178308()));
-    if (selected == PlyrGet(fn_80178308(), 0)) {
+    Object_80039F5C *selected = PlaySetGetKeyPlayer(PlayBookGetFormation(ScrmGetOffenseTeam()));
+    if (selected == PlyrGet(ScrmGetOffenseTeam(), 0)) {
         unsigned char i = 0;
-        unsigned int n = fn_80178D18(fn_80178308());
+        unsigned int n = ScrmGetTeamPlayerCount(ScrmGetOffenseTeam());
         if (i < n) do {
-            Object_80039F5C *p = PlyrGet(fn_80178308(), i);
-            PlayBookPlay_t *record = PlayBookGetPlay(fn_80178308());
-            void *queue = PlayAlignGetRoute(record, fn_80178308(), p->mIdBytes[1]);
+            Object_80039F5C *p = PlyrGet(ScrmGetOffenseTeam(), i);
+            PlayBookPlay_t *record = PlayBookGetPlay(ScrmGetOffenseTeam());
+            void *queue = PlayAlignGetRoute(record, ScrmGetOffenseTeam(), p->mIdBytes[1]);
             if (fn_800F06F4(0, queue, 18, 0xFFFF) != 0xFFFF) {selected = p; break;}
         } while (++i < n);
     }
@@ -259,7 +259,7 @@ unsigned char PlayAlignGetKeyPlayer(void)
 void PlayAlignIssueTeamRoutes(PlayBookFormation_t *object, PlayBookPlay_t *record, int team, int)
 {
     int remap = object->mUnknown8.mUnknownF == 1 && (object->mUnknown8.mUnknown14 & 1) && (record->mUnknown18 & 1);
-    int count = fn_80178D70(team);
+    int count = ScrmGetActivePlayerCount(team);
     for (int i = 0; i < count; ++i)
         PlayAlignIssuePlayerRoute(record, PlyrGet(team, (unsigned short)i), remap);
 }
@@ -267,7 +267,9 @@ void PlayAlignIssueTeamRoutes(PlayBookFormation_t *object, PlayBookPlay_t *recor
 void PlayAlignIssuePlayerRoute(PlayBookPlay_t *record, Object_80039F5C *p, int remap)
 {
     short count = 0;
-    if (fn_8011F4E0()->mUnknown6 && (unsigned int)(p->mUnknown2914 - 17) <= 1) remap = !remap;
+    Record_8011F4E0 *info = fn_8011F4E0();
+    int kind = p->mUnknown2914;
+    if (info->mUnknown6 && (unsigned int)(kind - 17) <= 1) remap = !remap;
     unsigned char index;
     if (!remap) index = p->mIdBytes[1];
     else index = PlaySetGetEntry(PlayBookGetFormation(p->mIdBytes[2]), p->mIdBytes[1], 0)->mUnknownB;
@@ -321,17 +323,18 @@ unsigned char PlayAlignGetSlotPlayer(PlayBookFormation_t *object, PlayBookPlay_t
         int mode = fn_800AD9B4();
         slots = record->mUnknown1C;
         index = slots[slot][0];
-        Object_80039F5C *p = PlyrGet(fn_80178308(), index);
+        Object_80039F5C *p = PlyrGet(ScrmGetOffenseTeam(), index);
         if (mode == 2 && !p->mUnknown2914) {index = PlayAlignGetKeyPlayer(); override = 1;}
     }
     if (out) {
         if (slots && !override) {
-            if (!remap) *out = slots[slot][1];
+            // FAKEMATCH: slot bytes addressed as base + (index << 2), not slots[index][n]
+            if (!remap) *out = *((unsigned char *)slots + (slot << 2) + 1);
             else {
                 unsigned char n = PlaySetGetEntry(object, index, 0)->mUnknownB;
                 *out = 0;
                 for (int i = 0; i <= 2; ++i) {
-                    if (slots[i][0] == n) {*out = slots[i][1]; break;}
+                    if (*((unsigned char *)slots + (i << 2)) == n) {*out = *((unsigned char *)slots + (i << 2) + 1); break;}
                 }
             }
         } else *out = 0;
@@ -346,8 +349,9 @@ void PlayAlignSetSlotValue(PlayBookFormation_t *object, PlayBookPlay_t *record, 
         unsigned char (*slots)[4] = record->mUnknown1C;
         if (remap == 1) index = PlaySetGetEntry(object, index, 0)->mUnknownB;
         for (i = 0; i <= 2; ++i) {
-            if (index == slots[i][0]) {
-                slots[i][1] = value;
+            // FAKEMATCH: slot bytes addressed as base + (i << 2), not slots[i][n]
+            if (index == *((unsigned char *)slots + (i << 2))) {
+                *((unsigned char *)slots + (i << 2) + 1) = value;
                 return;
             }
         }
@@ -380,10 +384,11 @@ void PlayAlignSwapOuterSlots(PlayArtPlay_t *record, int force)
 {
     int swap = 0;
     if (PlayAlignHasSlots((PlayBookPlay_t *)record)) {
-        PlayBookFormation_t *object = PlayBookGetFormation(fn_80178308());
+        PlayBookFormation_t *object = PlayBookGetFormation(ScrmGetOffenseTeam());
         for (unsigned char i = 0; i <= 2; ++i) {
-            unsigned char index = *record->mUnknown1C[i];
-            PlyrGet(fn_80178308(), index);
+            // FAKEMATCH: slot byte addressed as record + (i << 2) + 0x1C, not record->mUnknown1C[i][0]
+            unsigned char index = *((unsigned char *)record + (i << 2) + 0x1C);
+            PlyrGet(ScrmGetOffenseTeam(), index);
             if (object->mUnknown8.mUnknown84[0][index].mUnknownB == index && (i == 0 || i == 2)) {swap = 1; break;}
         }
         if (swap || force) {
@@ -520,7 +525,8 @@ int PlayAlignLoadRouteSteps(void *handle, PlayArtPlayer_t *records, int first, u
         int steps = record->mUnknown4Word;
         memset(record->mUnknown1C, 0, 0x1B0);
         for (int j = 0; j < steps; ++j) {
-            char ax[8], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
+            // FAKEMATCH: ax sized 5 (the formatted name and its NUL) so it is not a DImode array
+            char ax[5], ay[8], au[8], av[8], at[8], sp[8], ct[8], lt[8], ls[8];
             fn_801C2E18(ax, "ax%02d", j+1);
             fn_801C2E18(ay, "ay%02d", j+1);
             fn_801C2E18(au, "au%02d", j+1);
