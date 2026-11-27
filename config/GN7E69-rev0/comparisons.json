@@ -30158,7 +30158,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 10 functions are exact and linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -30184,11 +30184,6 @@
           "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
           "start": "0x8026BA60",
           "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-          "start": "0x8026BC9C",
-          "end": "0x8026BE48"
         },
         {
           "symbol": "SNDI_midiprocesstick__Fi",
