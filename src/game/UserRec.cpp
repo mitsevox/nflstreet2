@@ -9,7 +9,7 @@
 
 extern "C" {
 int ScrmGetWinner(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetGoalTotal(int a);
 int ScrmGetGoalCount(int a);
 int fn_800A7E40(unsigned char a);
@@ -32,7 +32,7 @@ int UserRecGetGameStat(int kind, int a, int b, int c, int d)
 {
     int result = 0;
 
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 5:
         switch (kind) {
         case 6:

@@ -50,7 +50,7 @@ void PortDbOpenSides(DbCursor *pObject);
 void PortDbCloseSides(DbCursor *pObject);
 unsigned char PortDbCountSidePlayers(int a);
 int PlayerPoolGetCount(int index);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void fn_8014F3DC(int ticks);
 int MsgGameGetSetupState(void);
 void StoryTeamLoadUserTeams(int a, int b);
@@ -58,7 +58,7 @@ void TeamTablesPurgeCreated(int handle);
 void CreateTeamLoadUserTeams(void);
 char *strchr(const char *pString, int c);
 
-extern MiniGameSettings_t lbl_8031BDD4;
+extern MiniGameSettings_t gMiniGameJumpBall;
 extern int lbl_802A11F4[];
 extern char *lbl_803EB2E8;
 
@@ -87,7 +87,7 @@ void MsgStreetEventSetupBuildOptions(StreetEventSetup_t *pState)
     MsgStreetEventSetupSetOption(&pState->mOptions[1], 0, 0, 0, 0);
     MsgStreetEventSetupSetOption(&pState->mOptions[2], 0, 0, 0, 0);
     count = 3;
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 1:
         MsgStreetEventSetupSetOption(&pState->mOptions[0], "Game Type", "Single Round|^Elimination",
                     "Play a single round or multiple rounds with Elimination.", 0);
@@ -168,26 +168,26 @@ void MsgStreetEventSetupInitPool(StreetEventSetup_t *pState)
 
 void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
 {
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 1:
     {
         unsigned char index;
 
         switch (pState->mOptions[0].mSelection) {
         case 0:
-            lbl_8031BDD4.mUnknown40 = 0;
+            gMiniGameJumpBall.mUnknown40 = 0;
             break;
         case 1:
-            lbl_8031BDD4.mUnknown40 = 1;
+            gMiniGameJumpBall.mUnknown40 = 1;
             break;
         }
         index = pState->mOptions[1].mSelection;
         if (index <= 14) {
-            lbl_8031BDD4.mUnknown32 = lbl_802A11F4[index];
-            lbl_8031BDD4.mUnknown36 = 0;
+            gMiniGameJumpBall.mUnknown32 = lbl_802A11F4[index];
+            gMiniGameJumpBall.mUnknown36 = 0;
         } else {
-            lbl_8031BDD4.mUnknown36 = lbl_802A11F4[index];
-            lbl_8031BDD4.mUnknown32 = 0;
+            gMiniGameJumpBall.mUnknown36 = lbl_802A11F4[index];
+            gMiniGameJumpBall.mUnknown32 = 0;
         }
         break;
     }
@@ -273,7 +273,7 @@ void MsgStreetEventSetupShutdown(void)
             mask |= _MsgStreetEventSetup_pState->mToggles[i].mValue;
         }
     }
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         count = 2;
     }
     mode = 0;
@@ -360,7 +360,7 @@ int MsgStreetEventSetupChangeRow(int index, int direction, MenuArg_t text)
             }
             strncpy(pText->mpText, _MsgStreetEventSetup_pState->mOptions[index - 1].mppItems[_MsgStreetEventSetup_pState->mOptions[index - 1].mSelection],
                         pText->mLength);
-            if (fn_801486A0() == 2 && index == 1) {
+            if (MiniGameGetType() == 2 && index == 1) {
                 switch (_MsgStreetEventSetup_pState->mOptions[0].mSelection) {
                 case 0:
                     _MsgStreetEventSetup_iMinPool = 4;
@@ -449,7 +449,7 @@ int MsgStreetEventSetupHasEnoughPlayers(void)
     unsigned int total;
     int count = 3;
 
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         count = 2;
     }
     total = 0;

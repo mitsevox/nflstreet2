@@ -67,7 +67,7 @@ extern void *gUISMainInfo;
 extern void *gUISSubInfo;
 extern char lbl_802EBF88[];
 int FELoopIsMainFEActive(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void SndgUpdate(int a);
 void SndgPathFadeTrack(int a, int b, unsigned int c);
 void SndgPathSetStreamValue(int a, int b);
@@ -442,7 +442,7 @@ void SndgMusicFlushSongText(void)
 {
     if (_SndgMusic_bTextPending) {
         int ready = 0;
-        if (FELoopIsMainFEActive() || !fn_801486A0() || fn_801486A0() == 1 || fn_800AD9B4() != 3) {
+        if (FELoopIsMainFEActive() || !MiniGameGetType() || MiniGameGetType() == 1 || fn_800AD9B4() != 3) {
             ready = 1;
         }
         if (ready) {

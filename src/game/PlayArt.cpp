@@ -36,7 +36,7 @@ int PlayAlignBuildSlotRects(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *
 PlayBookTeam_t *PlayBookGetTeam(int);
 void UISGameSetDrawMode(int);
 int GameModeTypeIsSpecial(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int fn_800BA6F8(void);
 void PlyrIconQueueAdd(float, float, void *, unsigned char);
 void UISViewObjSetDrawFunc(void (*)(int, float, float, float, float));
@@ -236,7 +236,7 @@ void PlayArtDraw(int code, float x, float y, float, float)
 {
     UISGameSetDrawMode(5);
     int flag = 1;
-    if ((!GameModeTypeIsSpecial() && fn_801486A0() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
+    if ((!GameModeTypeIsSpecial() && MiniGameGetType() != 3 && fn_800B65A0(0) != 0xFF && fn_800B65A0(1) != 0xFF) || fn_800BA6F8()) {
         flag = 0;
     }
     switch ((unsigned int)code) {

@@ -185,7 +185,7 @@ class MiniGameQuickStrikeGameEndC;
 class MiniGameQuickStrikeRulesC;
 class MiniGameQuickStrikeData;
 
-extern MiniGameJumpBallC lbl_8031BDD4;
+extern MiniGameJumpBallC gMiniGameJumpBall;
 
 class MiniGame2MinuteC : public MiniGameC {
 public:
@@ -557,12 +557,12 @@ public:
     virtual int GetScore(int team) { return 0; }
     virtual int IsTimed()
     {
-        if (lbl_8031BDD4.mUnknown36 != 0) {
+        if (gMiniGameJumpBall.mUnknown36 != 0) {
             return 1;
         }
         return 0;
     }
-    virtual int GetGameTime() { return lbl_8031BDD4.mUnknown36; }
+    virtual int GetGameTime() { return gMiniGameJumpBall.mUnknown36; }
     virtual void ResetGame(int team);
     virtual int AllowsAudibles() { return 0; }
     virtual void EndPlay();
@@ -769,9 +769,9 @@ extern Record_80148C4C lbl_802DEAA8[];
 
 extern "C" {
 void MemCopy(void *pDst, const void *pSrc, int size);
-extern int lbl_803EB2A8;
-extern int lbl_803EB2AC;
-extern MiniGameC *lbl_8031BDBC[];
+extern int _MiniGame_iState;
+extern int _MiniGame_iType;
+extern MiniGameC *_MiniGame_apModes[];
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
 void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB);
 void MiniGameReloadPlayer(Object_80039F5C *p);
@@ -785,14 +785,14 @@ void fn_80148D20(AutoDepthPlayer_t *pRecords, int *pValues,
                  DbCursor *pQuery);
 void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *pExcluded,
                  int *pId, int *pCategory);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int EditMenuIsStoryTeam(void);
 void *memmove(void *dst, const void *src, unsigned int n);
-extern int lbl_8031BE04[14][3];
-extern unsigned char lbl_8031BEAC[54];
-extern int lbl_803ECA24[2];
+extern int _MiniGame_aPlayerAwards[14][3];
+extern unsigned char _MiniGame_aAwardCounts[54];
+extern int _MiniGame_aTeamIds[2];
 extern unsigned char lbl_803EB2B4;
-extern TextChoices_802DDC20 lbl_802DDC20[];
+extern TextChoices_802DDC20 _MiniGame_aAwardTitles[];
 void PlyrLoadDbRecord(QueryCursor cursor, int index, void *pOut);
 void fn_800B4900(QueryCursor cursor, int index, short *pRatings, void *pOut);
 void fn_800B4798(short *pRatings, int team, unsigned char index, void *pContext);
@@ -948,7 +948,7 @@ unsigned int fn_8014F474(MiniGameC *p, Object_80039F5C *pPlayer);
 int RecordsGetValue(int a);
 float fn_800A32B4(void);
 float SyncRandGetFloatRange(int selector, float first, float last);
-extern MiniGameJumpBallC lbl_8031BDD4;
+extern MiniGameJumpBallC gMiniGameJumpBall;
 void fn_80151CCC(MiniGameJumpBallC *p, unsigned int index, unsigned char value);
 void fn_801526EC(MiniGameJumpBallC *p);
 void fn_801502B4(void *p);
@@ -1058,48 +1058,48 @@ void PlyrSwapStateData(Object_80039F5C *pA, Object_80039F5C *pB)
     MemCopy(pBytesB + 2496, block2496, sizeof(block2496));
 }
 
-void fn_801485B4(void)
+void MiniGameEnable(void)
 {
-    lbl_803EB2A8 = 1;
+    _MiniGame_iState = 1;
 }
 
-void fn_801485C0(void)
+void MiniGameDisable(void)
 {
-    lbl_803EB2A8 = 0;
-    lbl_803EB2AC = 15;
+    _MiniGame_iState = 0;
+    _MiniGame_iType = 15;
 }
 
-int fn_801485D4(void)
+int MiniGameIsEnabled(void)
 {
-    return lbl_803EB2A8 != 0;
+    return _MiniGame_iState != 0;
 }
 
-void fn_801485EC(int value)
+void MiniGameSetType(int value)
 {
-    lbl_803EB2AC = value;
+    _MiniGame_iType = value;
 }
 
-void fn_801485F4(void)
+void MiniGameStart(void)
 {
-    lbl_803EB2A8 = 2;
-    lbl_8031BDBC[lbl_803EB2AC]->vfn_01();
+    _MiniGame_iState = 2;
+    _MiniGame_apModes[_MiniGame_iType]->vfn_01();
 }
 
-void fn_80148644(void)
+void MiniGameStop(void)
 {
-    lbl_8031BDBC[lbl_803EB2AC]->vfn_02();
-    lbl_803EB2A8 = 1;
-    fn_801485C0();
+    _MiniGame_apModes[_MiniGame_iType]->vfn_02();
+    _MiniGame_iState = 1;
+    MiniGameDisable();
 }
 
-int fn_80148698(short *pRatings, Object_80039F5C *p, int value)
+int MiniGameAdjustRating(short *pRatings, Object_80039F5C *p, int value)
 {
     return value;
 }
 
-int fn_801486A0(void)
+int MiniGameGetType(void)
 {
-    return lbl_803EB2AC;
+    return _MiniGame_iType;
 }
 
 void MiniGameLineUpPlayers(void)
@@ -1195,9 +1195,9 @@ void fn_801488D4(Object_80039F5C *pA, Object_80039F5C *pB)
 
 MiniGameC *MiniGameGetCurrent(void)
 {
-    int index = fn_801486A0();
+    int index = MiniGameGetType();
     if (index != 15) {
-        return lbl_8031BDBC[index];
+        return _MiniGame_apModes[index];
     }
     return 0;
 }
@@ -1366,7 +1366,7 @@ void fn_80148DFC(AutoDepthPlayer_t *pRecords, int count, int *, int *pId, int *p
     *pId = ids[0];
     *pCategory = categories[0];
     if (!EditMenuIsStoryTeam() && *pCategory) {
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
         case 1:
         case 2: {
@@ -1409,7 +1409,7 @@ void MiniGameReloadPlayer(Object_80039F5C *p)
     fn_800B5150(p);
 }
 
-TextChoices_802DDC20 lbl_802DDC20[54] = {
+TextChoices_802DDC20 _MiniGame_aAwardTitles[54] = {
     {1, {0}, {""}},
     {3, {0}, {"Tackling Machine", "Bruiser", "Trampler"}},
     {2, {0}, {"Scoring Machine", "Scoreboard"}},
@@ -1466,8 +1466,8 @@ TextChoices_802DDC20 lbl_802DDC20[54] = {
     {1, {0}, {"Beyond Perfect Execution"}},
 };
 
-int lbl_803EB2A8 = 0;
-int lbl_803EB2AC = 15;
+int _MiniGame_iState = 0;
+int _MiniGame_iType = 15;
 char *lbl_803EB2B0 = "2 Minute Challenge\n\nUsing only passing plays, score as many times as you can in two minutes. Interceptions, fumble recoveries and safeties by the defense will cause you to lose points.";
 unsigned char lbl_803EB2B4 = 0;
 unsigned char lbl_803EB2B5 = 0;
@@ -1476,9 +1476,9 @@ unsigned char lbl_803EB2B5 = 0;
 
 void MiniGameC::AssignPlayerAwards(const int *pKinds)
 {
-    memset(lbl_8031BE04,0,168);
-    memset(lbl_8031BEAC,0,54);
-    fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
+    memset(_MiniGame_aPlayerAwards,0,168);
+    memset(_MiniGame_aAwardCounts,0,54);
+    fn_800C8704(&_MiniGame_aTeamIds[0],&_MiniGame_aTeamIds[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char i=0;i<14;i++) {
             unsigned char team=i/7;
@@ -1486,8 +1486,8 @@ void MiniGameC::AssignPlayerAwards(const int *pKinds)
             if(player->mUnknown9[2]) {
                 unsigned int count=vfn_25(team,i%7);
                 if(count<=2 && CheckAward(team,i%7,player,pKinds[k])) {
-                    lbl_8031BE04[i][count]=pKinds[k];
-                    lbl_8031BEAC[k]++;
+                    _MiniGame_aPlayerAwards[i][count]=pKinds[k];
+                    _MiniGame_aAwardCounts[k]++;
                 }
             }
         }
@@ -1496,15 +1496,15 @@ void MiniGameC::AssignPlayerAwards(const int *pKinds)
 
 void MiniGameC::vfn_17(const int *pKinds)
 {
-    memset(lbl_8031BE04,0,168);
-    memset(lbl_8031BEAC,0,54);
-    fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
+    memset(_MiniGame_aPlayerAwards,0,168);
+    memset(_MiniGame_aAwardCounts,0,54);
+    fn_800C8704(&_MiniGame_aTeamIds[0],&_MiniGame_aTeamIds[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char team=0;team<2;team++) {
             unsigned int count=vfn_25(0,team);
             if(count<=2 && vfn_32(team,pKinds[k])) {
-                lbl_8031BE04[team][count]=pKinds[k];
-                lbl_8031BEAC[k]++;
+                _MiniGame_aPlayerAwards[team][count]=pKinds[k];
+                _MiniGame_aAwardCounts[k]++;
             }
         }
     }
@@ -1513,8 +1513,8 @@ void MiniGameC::vfn_17(const int *pKinds)
 void MiniGameC::GetPlayerAwardsText(int team, unsigned char index, char *text, unsigned char capacity)
 {
     *text=0;
-    for(unsigned char i=0;i<3 && lbl_8031BE04[team*7+index][i];i++) {
-        const char *name=vfn_29(lbl_8031BE04[team*7+index][i]);
+    for(unsigned char i=0;i<3 && _MiniGame_aPlayerAwards[team*7+index][i];i++) {
+        const char *name=vfn_29(_MiniGame_aPlayerAwards[team*7+index][i]);
         unsigned char length=strlen(name);
         if(i)length+=2;
         if(capacity>length) {
@@ -1530,13 +1530,13 @@ void MiniGameC::GetPlayerAwardsText(int team, unsigned char index, char *text, u
 
 void MiniGameC::vfn_19(int team, int column, char *text, int capacity)
 {
-    snprintf(text,capacity,vfn_29(lbl_8031BE04[team][column]));
+    snprintf(text,capacity,vfn_29(_MiniGame_aPlayerAwards[team][column]));
 }
 
 unsigned char MiniGameC::vfn_25(int team, int index)
 {
     unsigned char row=index+team*7,count=0;
-    while(count<3 && lbl_8031BE04[row][count])count++;
+    while(count<3 && _MiniGame_aPlayerAwards[row][count])count++;
     return count;
 }
 
@@ -1570,20 +1570,20 @@ int MiniGameC::PlayerHasAward(int team, int index, int value)
 {
     int found=0;
     index=(unsigned char)(index+team*7);
-    for(unsigned char i=0;i<3;i++)if(lbl_8031BE04[index][i]==value)found=1;
+    for(unsigned char i=0;i<3;i++)if(_MiniGame_aPlayerAwards[index][i]==value)found=1;
     return found;
 }
 
 const char * MiniGameC::vfn_29(int kind)
 {
     unsigned char index=0;
-    if(lbl_802DDC20[kind].mCount>1)index=SyncRandGetRange(0,lbl_802DDC20[kind].mCount);
-    return lbl_802DDC20[kind].mpText[index];
+    if(_MiniGame_aAwardTitles[kind].mCount>1)index=SyncRandGetRange(0,_MiniGame_aAwardTitles[kind].mCount);
+    return _MiniGame_aAwardTitles[kind].mpText[index];
 }
 
 unsigned char MiniGameC::vfn_28(int index)
 {
-    return lbl_8031BEAC[index];
+    return _MiniGame_aAwardCounts[index];
 }
 
 int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
@@ -1601,33 +1601,33 @@ int MiniGameC::vfn_30(int kind, int team, int index, Object_80039F5C *pPlayer)
     case 3: {
         int value;
         DbMttsGetPlayerColumn(id,0x74627567,&result);
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x61737374,&value);
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x61737374,&value);
         result+=value*10;
         break;
     }
     case 4: {
         int value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68647374,&result);
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68777374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68737374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68327374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x68647374,&result);
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x68777374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x68737374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x68327374,&value);result+=value;
         break;
     }
     case 5: {
         int value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A737374,&result);
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A777374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x73737374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x73327374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x6A737374,&result);
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x6A777374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x73737374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x73327374,&value);result+=value;
         break;
     }
     case 6:DbMttsGetPlayerColumn(id,0x72666C67,&result);break;
     case 7: {
         int value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x68777374,&result);
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x6A777374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x70777374,&value);result+=value;
-        DbMttsGetTeamColumn(lbl_803ECA24[team],0x63777374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x68777374,&result);
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x6A777374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x70777374,&value);result+=value;
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team],0x63777374,&value);result+=value;
         break;
     }
     case 8: {
@@ -1659,7 +1659,7 @@ int MiniGameC::vfn_31(int kind, int team, int index, Object_80039F5C *player, in
     int best=0,result=0,found=0;
     int value=vfn_30(kind,team,index,player);
     int count;
-    switch(fn_801486A0()) {
+    switch(MiniGameGetType()) {
     case 1:count=4;break;
     case 0:count=6;break;
     case 2:count=7;break;
@@ -2951,7 +2951,7 @@ void fn_8014CCE8(MiniGameC *p, int team, Stats_8005CAE4 *pStats)
 
 void MiniGame4On4C::vfn_14()
 {
-    if (fn_801486A0() == 4) {
+    if (MiniGameGetType() == 4) {
         fn_8009D8CC(5);
         fn_8009D964(5, 5);
     }
@@ -4154,18 +4154,18 @@ int MiniGameJumpBallRulesC::GetWinner()
 void MiniGameJumpBallRulesC::AwardWin(int value)
 {
     fn_801530FC()->mUnknown125 = value;
-    int count = lbl_8031BDD4.mUnknown32;
+    int count = gMiniGameJumpBall.mUnknown32;
     if (count != 0) {
         fn_801530FC()->mEntries[0].mUnknown8 += count;
     } else {
         fn_801530FC()->mEntries[0].mUnknown8++;
         fn_8009D964(1, 0);
     }
-    if (lbl_8031BDD4.mUnknown40 == 1) {
+    if (gMiniGameJumpBall.mUnknown40 == 1) {
         unsigned int n = fn_801530FC()->mCount;
         unsigned int i;
         for (i = 1; i < n; i++) {
-            fn_80151CCC(&lbl_8031BDD4, i, 0);
+            fn_80151CCC(&gMiniGameJumpBall, i, 0);
         }
     }
     fn_801502B4(this);
@@ -4190,7 +4190,7 @@ extern "C" void fn_801502B4(void *p)
 void MiniGameJumpBallRulesC::ResetGame(int team)
 {
     ScrmRuleSet::ResetGame(2);
-    fn_801526EC(&lbl_8031BDD4);
+    fn_801526EC(&gMiniGameJumpBall);
 }
 
 void MiniGameJumpBallRulesC::EndPlay()
@@ -4327,7 +4327,7 @@ void MiniGameJumpBallPrePlayC::OnEnter(float dt)
     MiniGameLineUpPlayers();
     PreSnapPhase::OnEnter(dt);
     fn_801530FC()->mUnknown117 = 0;
-    fn_801527E0(&lbl_8031BDD4, 1);
+    fn_801527E0(&gMiniGameJumpBall, 1);
     point = ScrmGetBallSpot();
     for (i = 0; i < count; i++) {
         Object_80039F5C *pPlayer = PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0);
@@ -4339,7 +4339,7 @@ void MiniGameJumpBallPrePlayC::OnEnter(float dt)
 void MiniGameJumpBallPrePlayC::OnUpdate(float dt)
 {
     fn_800AD910(3, dt);
-    if (lbl_8031BDD4.mUnknown36 != 0) {
+    if (gMiniGameJumpBall.mUnknown36 != 0) {
         MiniGameGetCurrent()->vfn_15();
     }
 }
@@ -4386,10 +4386,10 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
                 ClockRuleSetFlags(0x800);
                 ClockRuleSnap();
             }
-            fn_80153168(&lbl_8031BDD4, i, 1);
+            fn_80153168(&gMiniGameJumpBall, i, 1);
         }
     }
-    if (lbl_8031BDD4.mUnknown36) {
+    if (gMiniGameJumpBall.mUnknown36) {
         int time = fn_8009D990(1);
         if (time != lbl_803EB2EC && (unsigned int)time <= 5) {
             lbl_803EB2EC = time;
@@ -4397,7 +4397,7 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
         }
     }
     LivePlayPhase::OnUpdate(dt);
-    if (lbl_8031BDD4.mUnknown36) {
+    if (gMiniGameJumpBall.mUnknown36) {
         MiniGameGetCurrent()->vfn_15();
     }
     unsigned int count = BallsGetCount();
@@ -4410,7 +4410,7 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
             i = BallGetIndex(pHeld);
             if (!mUnknown5[i]) {
                 mUnknown5[i] = 1;
-                fn_8015013C(lbl_8031BDD4.mpUnknown1C, pPlayer->mUnknown2908, BallGetCurrent() == pHeld);
+                fn_8015013C(gMiniGameJumpBall.mpUnknown1C, pPlayer->mUnknown2908, BallGetCurrent() == pHeld);
             }
         }
     }
@@ -4448,7 +4448,7 @@ void MiniGameJumpBallDuringPlayC::OnUpdate(float dt)
         pTarget->mZ = 2.0f;
     }
     RefreshFourPlayerScoreRows(this);
-    MiniGameJumpBallC *pRules = &lbl_8031BDD4;
+    MiniGameJumpBallC *pRules = &gMiniGameJumpBall;
     fn_80151BCC(pRules);
     if (noneFree) {
         fn_80151D9C(pRules);
@@ -4515,7 +4515,7 @@ void ResetBallsAndFieldPositions(MiniGameJumpBallDuringPlayC *p)
 
 void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
 {
-    fn_801527E0(&lbl_8031BDD4, 1);
+    fn_801527E0(&gMiniGameJumpBall, 1);
     ResetBallsAndFieldPositions(p);
     FieldPoint_t origin = ScrmGetBallSpot();
     unsigned int count = BallsGetCount();
@@ -4537,7 +4537,7 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
         Ball_t *pBall = BallGet(ball);
         BallSetVisible(pBall, 1);
         BallGiveToPlayer(pBall, pPlayer);
-        fn_80153168(&lbl_8031BDD4, ball, 0);
+        fn_80153168(&gMiniGameJumpBall, ball, 0);
         pPlayer->mMotion.mPos.mX = -((float)players * 0.5f * 2.0f) + (float)i * 2.0f;
         pPlayer->mMotion.mPos.mY = origin.mY;
         if (pPlayer->mUnknown2913 == 0) {
@@ -4594,7 +4594,7 @@ void MiniGameJumpBallStartRound(MiniGameJumpBallDuringPlayC *p)
         Ball_t *pBall = BallGet(ball);
         BallSetVisible(pBall, 0);
         BallSetPosition(pBall, &offField);
-        fn_80153168(&lbl_8031BDD4, ball, 1);
+        fn_80153168(&gMiniGameJumpBall, ball, 1);
     }
     unsigned int total = fn_801530FC()->mCount;
     for (i = 0; i < total; i++) {
@@ -4693,7 +4693,7 @@ void MiniGameJumpBallGameEndC::vfn_03(float dt)
     MiniGameGetCurrent()->AssignPlayerAwards(lbl_802DEA78);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     if (StoryEventsGetCurrentEvent()) {
-        StoryEventsSetRewardPenalty(fn_801529C0(&lbl_8031BDD4));
+        StoryEventsSetRewardPenalty(fn_801529C0(&gMiniGameJumpBall));
     }
     Class_80297B90::vfn_03(dt);
 }
@@ -5083,7 +5083,7 @@ extern "C" {
 
 Object_80039F5C *fn_8015264C(MiniGameJumpBallC *p)
 {
-    return PlyrFindById(lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
+    return PlyrFindById(gMiniGameJumpBall.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown0);
 }
 
 } /* extern "C" */
@@ -5093,7 +5093,7 @@ int MiniGameJumpBallC::IsWinnerUserTeam()
     if (GameModeTypeGet() == 7) {
         return fn_801529C0(this) <= 2;
     }
-    return lbl_8031BDD4.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown12 != 255;
+    return gMiniGameJumpBall.mpUnknown1C->mpUnknown36->mEntries[0].mUnknown12 != 255;
 }
 
 extern "C" {
@@ -5363,7 +5363,7 @@ extern "C" {
 
 Table_8015005C *fn_801530FC(void)
 {
-    return lbl_8031BDD4.mpUnknown1C->mpUnknown36;
+    return gMiniGameJumpBall.mpUnknown1C->mpUnknown36;
 }
 
 int fn_8015310C(MiniGameJumpBallC *p)
@@ -6146,7 +6146,7 @@ int MiniGameOpenFieldC::vfn_30(int kind, int team, int index, Object_80039F5C *p
     int value;
 
     if (kind == 37) {
-        DbMttsGetTeamColumn(lbl_803ECA24[team], 0x7A707374, &value);
+        DbMttsGetTeamColumn(_MiniGame_aTeamIds[team], 0x7A707374, &value);
     } else {
         value = MiniGameC::vfn_30(kind, team, index, pPlayer);
     }
@@ -6553,14 +6553,14 @@ void fn_80155D7C(MiniGameC *p)
 
 } /* extern "C" */
 
-MiniGame4On4C lbl_8031BD10;
-MiniGame2MinuteC lbl_8031BD34;
-MiniGameCrushCarrierC lbl_8031BD54;
-MiniGameQuickStrikeC lbl_8031BD74;
-MiniGameOpenFieldC lbl_8031BD94;
+MiniGame4On4C _MiniGame_4On4;
+MiniGame2MinuteC _MiniGame_2Minute;
+MiniGameCrushCarrierC _MiniGame_CrushCarrier;
+MiniGameQuickStrikeC _MiniGame_QuickStrike;
+MiniGameOpenFieldC _MiniGame_OpenField;
 // FAKEMATCH: reference casts to the base class give the target's static initializer for this table
-MiniGameC *lbl_8031BDBC[6] = {&(MiniGameC &)lbl_8031BD54, &(MiniGameC &)lbl_8031BDD4, &(MiniGameC &)lbl_8031BD94, &(MiniGameC &)lbl_8031BD34, &(MiniGameC &)lbl_8031BD10, &(MiniGameC &)lbl_8031BD74};
-MiniGameJumpBallC lbl_8031BDD4;
-int lbl_8031BE04[14][3];
-unsigned char lbl_8031BEAC[54];
-int lbl_803ECA24[2];
+MiniGameC *_MiniGame_apModes[6] = {&(MiniGameC &)_MiniGame_CrushCarrier, &(MiniGameC &)gMiniGameJumpBall, &(MiniGameC &)_MiniGame_OpenField, &(MiniGameC &)_MiniGame_2Minute, &(MiniGameC &)_MiniGame_4On4, &(MiniGameC &)_MiniGame_QuickStrike};
+MiniGameJumpBallC gMiniGameJumpBall;
+int _MiniGame_aPlayerAwards[14][3];
+unsigned char _MiniGame_aAwardCounts[54];
+int _MiniGame_aTeamIds[2];

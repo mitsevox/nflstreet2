@@ -138,8 +138,8 @@ void CamGameSetModeAll(int a);
 void CamGameResumeAll(void);
 void PassIconsHide(void);
 void PassIconsClearReplayFlag(void);
-int fn_801485D4(void);
-int fn_801486A0(void);
+int MiniGameIsEnabled(void);
+int MiniGameGetType(void);
 int TutorialIsActive(void);
 void TutorialSetMoveDone(int a, int b);
 float ScrmSpotGetLine(void);
@@ -678,7 +678,7 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
 
     BallGetVelocity(BallGetCurrent(), &velocity);
     PossCalcBallTerms(p, &a, &b, angle);
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         rating = p->mRatings[8] >= p->mRatings[3] ? p->mRatings[8] : p->mRatings[3];
     } else if ((p->mId >> 8 & 0xFF) == ScrmGetOffenseTeam()) {
         rating = p->mRatings[3];
@@ -687,7 +687,7 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
     }
     scale = rating;
     scale /= 255.0f;
-    if (offense || fn_801486A0() == 1) {
+    if (offense || MiniGameGetType() == 1) {
         chance = 0.3f + (1.05f - 0.3f) * scale;
     } else if ((ScrmTestPlayFlag(0xB) || ScrmTestPlayFlag(0xC)) && velocity.mZ < 0.0f) {
         chance = 0.25f + 0.55f * scale;
@@ -706,14 +706,14 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
                 : GamebreakerGetPickFlag(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)) {
         chance = chance < 1.0f ? 1.0f : chance;
     }
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         chance = GameSkillOffsetCatchChance(p, chance);
     } else if (offense) {
         chance = GameSkillBoostCatchChance(p->mId >> 8 & 0xFF, chance);
     } else {
         chance = GameSkillScaleCatchChance(p, chance);
     }
-    if (fn_800B65A0(p->mId >> 8 & 0xFF) != 0xFF && TutorialIsActive() && !fn_801485D4()) {
+    if (fn_800B65A0(p->mId >> 8 & 0xFF) != 0xFF && TutorialIsActive() && !MiniGameIsEnabled()) {
         chance = 1.0f;
     }
     chance = chance < 0.0f ? 0.0f : (chance > 1.0f ? 1.0f : chance);
@@ -781,7 +781,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
     int angle;
     Vector_80039F5C pos;
 
-    if (pBall == BallGetCurrent() || fn_801486A0() == 1) {
+    if (pBall == BallGetCurrent() || MiniGameGetType() == 1) {
         if ((p->mId & 0xFF) == 1) {
             float chance;
 
@@ -1009,7 +1009,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
     Block_801718E8 *pBlock = 0;
     int forced = 0;
 
-    if (fn_801486A0() == 0 && BallGetCurrentHolder() == p && !ScrmIsNotReplay()
+    if (MiniGameGetType() == 0 && BallGetCurrentHolder() == p && !ScrmIsNotReplay()
         && ((p->mFlags & 0x10000) || p->mpState->mId == 0x10) && !p->mUnknown1219) {
         forced = 1;
     }
@@ -1178,7 +1178,7 @@ void PossStartFumble(void)
     BallLaunchWithVelocity(pBall, &velocity, 1, 2.0f, 1.0f);
     CamGameSetModeAll(1);
     anim = fn_801BE648(pForcer ? pForcer->mpUnknown792 : pCarrier->mpUnknown792);
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         switch (anim) {
         case 0xEA:
             HudShowCallout("Gimme That!");
@@ -1262,7 +1262,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
         }
         if (stolen) {
             if (result == 4) {
-                if (fn_801486A0() != 1) {
+                if (MiniGameGetType() != 1) {
                     if (PlayerActionIsUserCatch(p)) {
                         HudShowAlert("User Pick");
                         StyleTrackerOnInterception(1, p);
@@ -1321,7 +1321,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             resolved = 1;
         }
     }
-    if (fn_801486A0() == 1) {
+    if (MiniGameGetType() == 1) {
         resolved = 0;
         if (fn_800F06F4(0, p->mpState, 0x5F, 0xFFFF) == 0xFFFF) {
             memset(&message, 0, 4);
@@ -1342,7 +1342,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             memset(&message, 0, 4);
             if (pMate == p) {
                 message.mId = 1;
-            } else if (fn_801486A0()) {
+            } else if (MiniGameGetType()) {
                 message.mId = 0x21;
             }
             switch (pMate->mpState->mId) {
@@ -1365,7 +1365,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall)
             }
         }
     }
-    if (!(p->mFlags & 0x400) && fn_801486A0() && fn_801486A0() != 1) {
+    if (!(p->mFlags & 0x400) && MiniGameGetType() && MiniGameGetType() != 1) {
         int port = fn_800B65A0(p->mId >> 8 & 0xFF);
         if (port != 0xFF) {
             fn_800B6714(p, port);
@@ -2012,7 +2012,7 @@ int ClockRuleCanEndPeriod(void)
     if (fn_800BA6F8() || mode == 3 || (!(unsigned char)fn_800B9A90(lbl_803EAB84) && mode != 2)) {
         allow = 0;
     }
-    if (fn_801486A0() == 3 && fn_8009D990(1) != 0) {
+    if (MiniGameGetType() == 3 && fn_8009D990(1) != 0) {
         allow = 0;
     }
     if (state == 2 || state == 4 || state == 5) {

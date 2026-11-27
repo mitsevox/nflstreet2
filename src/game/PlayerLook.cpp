@@ -166,7 +166,7 @@ void PlyrRenderInitPlayer(Object_8003DEC4 *pPlayer, PlayerObjInit_t *pInit);
 void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer);
 void PlyrRenderFreePlayer(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int ObjNewType_(int a, int b, int c, void (*pA)(Object_8003DEC4 *, PlayerObjInit_t *), void (*pB)(Object_8003DEC4 *));
 int ObjDelType(int a);
@@ -889,7 +889,7 @@ extern "C" void PlayerLookLoadForPlayer(unsigned int mode, int index, int unused
             flag = PlayerDbGetPickedFlag((Object_8008044C *)&cursor, 1) == 0;
         }
         DbCursorClose(&cursor);
-    } else if ((FELoopIsMainFEActive() && (EditMenuIsOpen() || StoryPlayerScreenIsActive())) || !fn_801486A0()) {
+    } else if ((FELoopIsMainFEActive() && (EditMenuIsOpen() || StoryPlayerScreenIsActive())) || !MiniGameGetType()) {
         flag = 1;
     } else if (GameInfoGet(2) == 0) {
         flag = mode <= 6;

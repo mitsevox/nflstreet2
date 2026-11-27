@@ -220,7 +220,7 @@ int ScrmGetTeamScore(int team);
 int ScrmGetGoalCount(int team);
 int ScrmGetWinner(void);
 void *DbUserGetCurrent(void);
-extern char lbl_8031BDD4[];
+extern char gMiniGameJumpBall[];
 extern void *gUISMainInfo;
 
 void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
@@ -231,7 +231,7 @@ int HudLookupColor(int key, unsigned char *pRed, unsigned char *pGreen, unsigned
 void GameTextQueuePlayerPortraits(void);
 void fn_800C1CA0(void);
 void PauseRequestClose(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetOffenseTeam(void);
 int ScrmGetConversionKind(void);
 int PlayBookGetDatabase(int team);
@@ -262,7 +262,7 @@ void fn_800B3C54(void);
 int GameTextGetPadPlayer(int value);
 void PlayBookToggleFlip(unsigned char team);
 int ChallengeIsActive(void);
-int fn_801485D4(void);
+int MiniGameIsEnabled(void);
 int InGameIsStopped(void);
 int PauseIsOpen(void);
 unsigned char ReplayIsShowing(void *p);
@@ -478,7 +478,7 @@ void GameStatsCheckRecords(unsigned char *anyExceeded)
                                                    (stricmp(holder, names[_InGameScreens_aRecords[i].side]) || current == other);
                     }
                 }
-                if (_InGameScreens_aRecords[i].exceeded && i <= 15 && !fn_801485D4())
+                if (_InGameScreens_aRecords[i].exceeded && i <= 15 && !MiniGameIsEnabled())
                     *anyExceeded = 1;
                 if (_InGameScreens_aRecords[i].type != 6) {
                     RecordsSeekRow(_InGameScreens_aRecords[i].type, 9);
@@ -662,7 +662,7 @@ void InGameJumpBallGetSlot(int index, char *pOut, int b, char *pText0, int size0
 {
     MiniGameSlotInfo_t info;
 
-    fn_80152940(lbl_8031BDD4, index, &info);
+    fn_80152940(gMiniGameJumpBall, index, &info);
     snprintf(pText0, size0, "%d", info.mUnknown4);
     snprintf(pText1, size1, "%d", info.mUnknown12);
     snprintf(pText2, size2, "%d", info.mUnknown16);
@@ -714,7 +714,7 @@ int InGameJumpBallMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResul
 
 int InGamePlayCallUsesProfileOrder(void)
 {
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 3:
     case 4:
         return 0;
@@ -900,7 +900,7 @@ int InGamePlayCallGetUserTeam(void)
 {
     int value = -1;
 
-    if (fn_801486A0() == 3) {
+    if (MiniGameGetType() == 3) {
         value = ScrmGetDefenseTeam();
         _InGameScreens_pPlayCall->mUnknown4F = value;
     } else if (_InGameScreens_pPlayCall->mUnknown4F != 2) {
@@ -991,7 +991,7 @@ void InGamePlayCallOpen(int *pSide, int *pTable, int *pMode, int *pFlag, int *pT
                 break;
             }
         }
-    } else if (fn_801485D4() && fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
+    } else if (MiniGameIsEnabled() && fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
         switch (MiniGameGetCurrent()->vfn_08(0)) {
         case 0:
             break;
@@ -1309,7 +1309,7 @@ void InGamePlayCallCreate(void)
     unsigned char team;
     unsigned char index;
 
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         return;
@@ -1317,7 +1317,7 @@ void InGamePlayCallCreate(void)
     _InGameScreens_pPlayCall = (State_803EA58C *)fn_801D2BB0(0x40, sizeof(State_803EA58C), 0, 0);
     memset(_InGameScreens_pPlayCall, 0, sizeof(State_803EA58C));
     if (fn_800BA6F8() == 0 &&
-        (GameModeTypeIsSpecial() != 0 || fn_800B65A0(0) == 0xFF || fn_800B65A0(1) == 0xFF || fn_801486A0() == 3)) {
+        (GameModeTypeIsSpecial() != 0 || fn_800B65A0(0) == 0xFF || fn_800B65A0(1) == 0xFF || MiniGameGetType() == 3)) {
         _InGameScreens_pPlayCall->mUnknown4E = 4;
         if (GameModeTypeIsSpecial()) {
             if (InGamePlayCallGetDefault()) {
@@ -1538,7 +1538,7 @@ void InGamePlayCallSetMode(int a, int b)
 
 int InGamePauseGetModeFlags(int *pA, int *pB)
 {
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     int active = 1;
 
     if (mode == 15) {
@@ -1562,7 +1562,7 @@ void InGamePauseGetRules(int *pCount, char *pTitle, int titleSize, char *pLine1,
                  char *pLine3, int size3, char *pLine4, int size4, char *pLine5, int size5, char *pLine6, int size6,
                  char *pLine7, int size7, char *pLine8, int size8)
 {
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 4:
         strnzcpy(pTitle, "4 on 4", titleSize);
         strnzcpy(pLine1, "- Ball starts on the 5 yard line", size1);
@@ -1984,7 +1984,7 @@ void InGameGetPadOrder(int *pList)
         int id = GameTextFindPlayerPad(i);
         if (id != -1) {
             unsigned int side = fn_800B6644(id);
-            if ((unsigned int)fn_801486A0() > 1) {
+            if ((unsigned int)MiniGameGetType() > 1) {
                 if (side == 1) {
                     pList[low++] = i;
                 } else if (side == 0) {
@@ -2164,7 +2164,7 @@ void InGameGetPadRatings(float *pValues)
         if (id != -1) {
             int team = fn_800B6644(id);
             if (team != 255) {
-                if ((unsigned int)fn_801486A0() > 1) {
+                if ((unsigned int)MiniGameGetType() > 1) {
                     if (team == 1) {pValues[lo] = fn_800C9CF0(1, lo); lo++;}
                     else if (team == 0) {pValues[hi] = fn_800C9CF0(0, 3 - hi); hi--;}
                 } else {
@@ -2185,7 +2185,7 @@ void InGameGetHudOffsets(int *pA, int *pB, int *pC, int *pD)
 void InGameFormatClock(char *pText, int *pRed, int *pGreen, int *pBlue)
 {
     int key;
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     if (mode == 2 || mode == 4) key = 5;
     else { key = 4; if (ScrmIsTimed()) key = 1; }
     unsigned int time = fn_8009D990(key);
@@ -2213,7 +2213,7 @@ void InGameGetAudibles(unsigned int team, int *pEnabled, MenuText_t **pNames, in
 {
     MenuText_t *pText = *ppText;
     for (unsigned int i = 0; i < 4; i++) {
-        int mode = fn_801486A0();
+        int mode = MiniGameGetType();
         pEnabled[i] = mode != 2 || i < 2;
         if (pEnabled[i] == 1) {
             PlayBookPlay_t *pRecord = PlayBookGetAudiblePlay((unsigned char)team, i);
@@ -2256,7 +2256,7 @@ int InGameHudMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     case 0x80000005: InGameGetHudOffsets(pArgs[0].pi,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000007:
         if (ChallengeIsActive()) *pResult = ChalGetCurrent()->mUnknown1A4;
-        else {int mode = fn_801486A0(); if (mode == 2 || mode == 4) *pResult = 1; else *pResult = ScrmIsTimed();}
+        else {int mode = MiniGameGetType(); if (mode == 2 || mode == 4) *pResult = 1; else *pResult = ScrmIsTimed();}
         break;
     case 0x80000006: InGameFormatClock(pArgs[0].pParams->mpText,0,0,0); break;
     case 0x80000009:
@@ -2276,7 +2276,7 @@ int InGameClockMsg(unsigned int id, MenuArg_t *pArgs, int unused, int *pResult)
     case 0x80000001: break;
     case 0x80000003: InGameGetPadOrder((int *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
     case 0x80000005: InGameGetPadRatings((float *)(pArgs[0].i + (*pArgs[0].pi + 1) * 4)); break;
-    case 0x80000002: {int mode=fn_801486A0(); if(mode==2||mode==4) *pResult=1; else *pResult=ScrmIsTimed();} break;
+    case 0x80000002: {int mode=MiniGameGetType(); if(mode==2||mode==4) *pResult=1; else *pResult=ScrmIsTimed();} break;
     case 0x80000004: InGameFormatClock(pArgs[0].pParams->mpText,pArgs[1].pi,pArgs[2].pi,pArgs[3].pi); break;
     case 0x80000006: {MenuText_t *pText=pArgs[4].pParams;
         InGameGetAudibles(pArgs[0].i,(int *)(pArgs[1].i+(*pArgs[1].pi+1)*4),

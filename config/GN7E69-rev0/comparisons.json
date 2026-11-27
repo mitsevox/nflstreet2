@@ -20901,42 +20901,42 @@
           "end": "0x801485B4"
         },
         {
-          "symbol": "fn_801485B4",
+          "symbol": "MiniGameEnable",
           "start": "0x801485B4",
           "end": "0x801485C0"
         },
         {
-          "symbol": "fn_801485C0",
+          "symbol": "MiniGameDisable",
           "start": "0x801485C0",
           "end": "0x801485D4"
         },
         {
-          "symbol": "fn_801485D4",
+          "symbol": "MiniGameIsEnabled",
           "start": "0x801485D4",
           "end": "0x801485EC"
         },
         {
-          "symbol": "fn_801485EC",
+          "symbol": "MiniGameSetType",
           "start": "0x801485EC",
           "end": "0x801485F4"
         },
         {
-          "symbol": "fn_801485F4",
+          "symbol": "MiniGameStart",
           "start": "0x801485F4",
           "end": "0x80148644"
         },
         {
-          "symbol": "fn_80148644",
+          "symbol": "MiniGameStop",
           "start": "0x80148644",
           "end": "0x80148698"
         },
         {
-          "symbol": "fn_80148698",
+          "symbol": "MiniGameAdjustRating",
           "start": "0x80148698",
           "end": "0x801486A0"
         },
         {
-          "symbol": "fn_801486A0",
+          "symbol": "MiniGameGetType",
           "start": "0x801486A0",
           "end": "0x801486A8"
         },

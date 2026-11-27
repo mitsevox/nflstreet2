@@ -186,8 +186,8 @@ void UnlockListClose(DbCursor *pObject);
 void UnlockListReadItem(DbCursor *pObject, UnlockItem_t *pRecord);
 void fn_800A2F3C(int a);
 int fn_800A3444(void);
-int fn_801485D4(void);
-int fn_801486A0(void);
+int MiniGameIsEnabled(void);
+int MiniGameGetType(void);
 void fn_80148AF8(MiniGameC *pObject);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
@@ -684,7 +684,7 @@ void MsgMainMenuSetResult(int value)
 void MsgPlayerSelectInit(void)
 {
     GameTextSetSetupActive(0);
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         _MsgPlayerSelect_bTwoSides = 0;
@@ -698,7 +698,7 @@ void MsgPlayerSelectInit(void)
         }
         break;
     }
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 2:
     case 3:
         _MsgPlayerSelect_uSideLimit = 2;
@@ -842,7 +842,7 @@ void MsgPlayerSelectGetLayout(int *pA, int *pB)
         *pB = 1;
         break;
     case 9:
-        if (fn_801486A0() == 2) {
+        if (MiniGameGetType() == 2) {
             *pB = 1;
         } else {
             *pB = 0;
@@ -977,7 +977,7 @@ void MsgPlayerSelectApply(void)
     UserProfileDeselect(0);
     if (GameModeTypeGet() != 6 && GameModeTypeGet() != 8 && GameModeTypeGet() != 7 && GameModeTypeGet() != 11) {
         UserProfileDeselect(1);
-        if (fn_801486A0() != 0 && fn_801486A0() != 1) {
+        if (MiniGameGetType() != 0 && MiniGameGetType() != 1) {
             for (i = 0; i <= 3; i++) {
                 if (_MsgPlayerSelect_auPadRole[i] == 1 && _MsgPlayerSelect_auProfile[i] <= 1) {
                     if (_MsgPlayerSelect_auPadSide[i] == 0) {
@@ -1029,7 +1029,7 @@ void MsgPlayerSelectUpdateOwners(void)
     unsigned char j;
     unsigned char n;
 
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         for (i = 0; i <= 3; i++) {
@@ -1093,7 +1093,7 @@ int MsgPlayerSelectGetSide(int index)
             result = 0;
             break;
         }
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
         case 1:
             if (_MsgPlayerSelect_auPadRole[index] == 1) {
@@ -2606,7 +2606,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     unsigned int i;
     unsigned int j;
 
-    mode = fn_801486A0();
+    mode = MiniGameGetType();
     if (GameModeTypeGet() == 6) {
         _MsgTeamSelect_aiSavedTeam[0] = _MsgTeamSelect_aiTeam[0];
         _MsgTeamSelect_aiSavedTeam[1] = _MsgTeamSelect_aiTeam[1];
@@ -2616,7 +2616,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
     if (pFlag) {
         *pFlag = 1;
     }
-    if (fn_801485D4()) {
+    if (MiniGameIsEnabled()) {
         fn_80148AF8(MiniGameGetCurrent());
     }
 
@@ -3175,7 +3175,7 @@ void MsgStadiumInit(int *pCount, int *pCurrent, int *pResult)
         *pCurrent = 11;
         _MsgStadium_iCurrent = 11;
     }
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
     case 2:
@@ -3192,7 +3192,7 @@ void MsgStadiumExit(int id, int unused)
     if (MsgGameGetSetupState() == 1) {
         fn_800A2F3C(id);
         FELoopStartGame();
-    } else if (fn_801486A0() != 15) {
+    } else if (MiniGameGetType() != 15) {
         MsgTeamPickFreePool();
     }
     fn_801D2BD0(_MsgStadium_pEntries);

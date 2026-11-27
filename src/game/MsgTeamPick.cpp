@@ -122,8 +122,8 @@ int TournamentGetDraftPool0(int *pList, int max);
 int TournamentGetTeamList(int *pList);
 int TournamentClose(void);
 int TournamentOpen(int index);
-int fn_801485D4(void);
-int fn_801486A0(void);
+int MiniGameIsEnabled(void);
+int MiniGameGetType(void);
 void fn_80148AF8(MiniGameC *pObject);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
@@ -211,7 +211,7 @@ void MsgTeamPickBuildAutoDepth(void)
     int side = 2;
     if (PortDbSideHasPlayers(0) == 0) side = 0;
     if (PortDbSideHasPlayers(1) == 0) side = 1;
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
     case 1:
         side = 0;
@@ -1172,7 +1172,7 @@ void MsgTeamPickInitSevenCaptains(void)
 
 void MsgTeamPickInitState(void)
 {
-    if (fn_801486A0() == 15) {
+    if (MiniGameGetType() == 15) {
         if (_MsgTeamPick_pTournamentRow) {
             MsgTeamPickInitTournamentTeams();
         } else {
@@ -1180,7 +1180,7 @@ void MsgTeamPickInitState(void)
         }
         return;
     }
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
         MsgTeamPickInitSixCaptains();
         break;
@@ -1220,7 +1220,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
         *pController = -1;
     }
 
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 0:
         *pCount = 6;
         break;
@@ -1235,7 +1235,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
         break;
     }
 
-    if (fn_801485D4()) {
+    if (MiniGameIsEnabled()) {
         fn_80148AF8(MiniGameGetCurrent());
     }
     PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
@@ -1514,7 +1514,7 @@ void MsgTeamPickStepGroup(int message, MenuArg_t text, int *pCount)
 
 void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
 {
-    if (fn_801486A0() == 0 || fn_801486A0() == 1) {
+    if (MiniGameGetType() == 0 || MiniGameGetType() == 1) {
         if (slot < _MsgTeamPick_pState->mUnknown15) {
             *pId = *_MsgTeamPick_pState->mppLists[slot];
             if (_MsgTeamPick_pState->mpUnknown08[slot] == 0xFF) {
@@ -1524,7 +1524,7 @@ void MsgTeamPickGetCaptain(int slot, int *pId, int *pController)
             }
             return;
         }
-    } else if (fn_801486A0() == 2) {
+    } else if (MiniGameGetType() == 2) {
         int team = _MsgTeamPick_pState->mUnknown19;
         if (slot < _MsgTeamPick_pState->mUnknown0C[team]) {
             unsigned int i;
@@ -1568,7 +1568,7 @@ void MsgTeamPickGetRosterEntry(int slot, int *pId, MenuArg_t name, MenuArg_t pos
     MenuText_t *pName = name.pParams;
     MenuText_t *pPosition = position.pParams;
 
-    if (fn_801486A0() == 2) {
+    if (MiniGameGetType() == 2) {
         if (slot < _MsgTeamPick_pState->mUnknown0C[team]) {
             for (unsigned int i = 0; i < _MsgTeamPick_iPoolCount; i++) {
                 if (_MsgTeamPick_pPool[i].mTeam == team && _MsgTeamPick_pPool[i].mSlot == slot) {
@@ -1597,7 +1597,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
 {
     switch (dir) {
     case -1:
-        if (fn_801486A0() == 2) {
+        if (MiniGameGetType() == 2) {
             _MsgTeamPick_pState->mUnknown1A = _MsgTeamPick_pState->mUnknown19;
         } else {
             _MsgTeamPick_pState->mUnknown1A = _MsgTeamPick_pState->mUnknown15;
@@ -1605,7 +1605,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
         break;
     case 1:
         if (_MsgTeamPick_pState->mUnknown1A == _MsgTeamPick_pState->mCount - 1 ||
-            (fn_801486A0() == 2 && _MsgTeamPick_pState->mUnknown1A == 1)) {
+            (MiniGameGetType() == 2 && _MsgTeamPick_pState->mUnknown1A == 1)) {
             _MsgTeamPick_pState->mUnknown1A = 0;
         } else {
             _MsgTeamPick_pState->mUnknown1A++;
@@ -1613,7 +1613,7 @@ void MsgTeamPickStepShownTeam(int dir, int *pResult, char *pText, int length)
         break;
     case 3:
         if (_MsgTeamPick_pState->mUnknown1A == 0) {
-            if (fn_801486A0() == 2) {
+            if (MiniGameGetType() == 2) {
                 _MsgTeamPick_pState->mUnknown1A = 1;
             } else {
                 _MsgTeamPick_pState->mUnknown1A = _MsgTeamPick_pState->mCount - 1;
@@ -1741,7 +1741,7 @@ void MsgTeamPickPickPlayer(int id, int *pSlot)
     pEntry->mUnknown15 = _MsgTeamPick_pState->mUnknown15;
 
     if (pSlot) {
-        switch (fn_801486A0()) {
+        switch (MiniGameGetType()) {
         case 0:
         case 1:
             *pSlot = _MsgTeamPick_pState->mUnknown0C[0] + _MsgTeamPick_pState->mUnknown0C[1];

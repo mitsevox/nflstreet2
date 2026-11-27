@@ -53,7 +53,7 @@ int ScrmGetDefenseTeam(void);
 int ScrmIsFieldFlipped(void);
 float ScrmGetSidelineX(void);
 float ScrmGetGoalLineY(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void MatPush(void);
 void MatPop(void);
 void MatTranslate(void *p);
@@ -314,7 +314,7 @@ void FieldLinesUpdate(void)
             if (fn_800AD9B4() != 2) {
                 enabled = 0;
             }
-            switch (fn_801486A0()) {
+            switch (MiniGameGetType()) {
             case 3:
             case 4:
                 break;

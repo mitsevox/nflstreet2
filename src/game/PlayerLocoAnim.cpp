@@ -22,7 +22,7 @@
 extern "C" {
 
 struct PlayerLocoTrimKey_t { unsigned short mUnknown0; unsigned short mUnknown2; };
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int PassIconsAreShown(void);
 int ScrmIsNotReplay(void);
 int PlayerMoveGetKind(Object_80039F5C *p);
@@ -85,7 +85,7 @@ int PlayerLocoGetSecondaryCategory(Object_80039F5C *p, Object_80039F5C *pOther, 
 {
     int result = value;
     if (p->mIdBytes[3] == 1) {
-        if (pOther == p || (fn_801486A0() == 1 && BallFindHeldBy(p))) {
+        if (pOther == p || (MiniGameGetType() == 1 && BallFindHeldBy(p))) {
             switch (p->mUnknown528.mUnknown15) {
             case 10: case 11: result = 34; goto finish;
             case 20: case 21:

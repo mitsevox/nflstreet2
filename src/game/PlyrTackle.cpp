@@ -167,7 +167,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 }
 
 extern "C" {
-int fn_801486A0(void);
+int MiniGameGetType(void);
 }
 
 extern "C" {
@@ -1843,18 +1843,18 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         return 1;
     }
     if (!ScrmIsNotReplay() && BallGetCurrentHolder() && ScrmTestPlayFlag(0) &&
-        fn_801486A0() != 0 && fn_801486A0() != 1 && fn_801486A0() != 2) {
+        MiniGameGetType() != 0 && MiniGameGetType() != 1 && MiniGameGetType() != 2) {
         memset(&message, 0, 4);
         message.mId = 33;
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if ((p->mFlags & 0x4000) && fn_801486A0()) return 1;
+    if ((p->mFlags & 0x4000) && MiniGameGetType()) return 1;
     (*pTimer)--;
     if (carrier && !((float)fn_8011E188() <= _PlyrWait_fBlockTime) && !ScrmIsNotReplay() &&
         !(p->mMotion.mUnknown28 >= 0.1f)) {
         int heading;
-        if (fn_801486A0() != 1) {
+        if (MiniGameGetType() != 1) {
             FieldPoint_t delta;
             Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
             heading = delta.Heading();
@@ -1870,7 +1870,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
     }
     if (*pTimer < 0) return 1;
 
-    if (fn_801486A0() == 0) {
+    if (MiniGameGetType() == 0) {
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
@@ -1887,7 +1887,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
 extern "C" int PlyrWaitInput(Object_80039F5C *p) {
     if (fn_800AD9B4() != 2) {
         if (ScrmGetDown() != 0) {
-            if (fn_800B5FEC(p) != 0 && fn_800C05F4() == 0 && fn_801486A0() != 0) {
+            if (fn_800B5FEC(p) != 0 && fn_800C05F4() == 0 && MiniGameGetType() != 0) {
                 fn_800B76E8(p);
             }
         } else if (p->mUnknown2914 != 19 && p->mUnknown2914 != 20 && p->mUnknown2914 != 23) {
@@ -2190,7 +2190,7 @@ extern "C" int PlayerIsFreeOfBall(Object_80039F5C *p) {
                 }
                 }
             }
-        } else if (p == BallGetCurrentHolder() && fn_801486A0() == 0) {
+        } else if (p == BallGetCurrentHolder() && MiniGameGetType() == 0) {
             result = 0;
         }
     }

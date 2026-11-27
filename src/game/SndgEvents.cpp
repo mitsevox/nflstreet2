@@ -71,7 +71,7 @@ int SndgEventGetFootstepSfx(int unused, int value);
 
 
 int ScrmGetDown(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
 PlayBookFormation_t *PlayBookGetFormation(int side);
@@ -389,7 +389,7 @@ void SndgEventProcess(AudmonEvent_t *p)
     case 20: SndgSfxPlay(61, 0); break;
     case 18: SndgSfxPlay(58, &p->mPos); break;
     case 125:
-        if (fn_801486A0()) {
+        if (MiniGameGetType()) {
             lbl_803EA6E5 = (lbl_803EA6E5 + 1) % 4;
             switch (lbl_803EA6E5) {
             case 0: SndgEventCycleCrowdBanks(); break;
@@ -399,8 +399,8 @@ void SndgEventProcess(AudmonEvent_t *p)
             }
         }
         break;
-    case 115: if (fn_801486A0()) SndgEventLoadFormationBank(); break;
-    case 112: if (fn_801486A0()) SndgEventLoadTeamBanks(); break;
+    case 115: if (MiniGameGetType()) SndgEventLoadFormationBank(); break;
+    case 112: if (MiniGameGetType()) SndgEventLoadTeamBanks(); break;
     case 113:
         SndgSfxPlay(130, 0);
         SndgAmbPostCue(2);
@@ -412,7 +412,7 @@ void SndgEventProcess(AudmonEvent_t *p)
         if (!p->mUnknown10.mValue) SndgMusicResume();
         SndgCrowdTriggerEvent(3, 0);
         break;
-    case 95: if (fn_801486A0()) SndgSfxPlay(63, 0); break;
+    case 95: if (MiniGameGetType()) SndgSfxPlay(63, 0); break;
     case 89: SndgCrowdTriggerEvent(4, (unsigned char)p->mUnknown10.mValue); break;
     case 94: SndgCrowdTriggerEvent(11, (unsigned char)p->mUnknown10.mValue); break;
     case 92: SndgCrowdTriggerEvent(9, (unsigned char)p->mUnknown10.mValue); SndgSfxPlay(134, 0); break;
@@ -455,7 +455,7 @@ void SndgEventProcess(AudmonEvent_t *p)
     case 144: SndgSfxPlay(1, &p->mPos); break;
     case 157: {
         Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
-        if (fn_801486A0() != 1) {
+        if (MiniGameGetType() != 1) {
             if (!lbl_803EA6F9) SndgMusicSetMode(9);
             else lbl_803EA6F9 = 0;
             SndgCrowdTriggerEvent(5, player->mIdBytes[2]);
@@ -468,7 +468,7 @@ void SndgEventProcess(AudmonEvent_t *p)
     }
     case 104:
         SndgSfxPlay(64, &p->mPos);
-        if (fn_801486A0()) {
+        if (MiniGameGetType()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
             if (!lbl_803EA6F9) SndgMusicSetMode(7);
             SndgCrowdTriggerEvent(6, player->mIdBytes[2]);
@@ -476,7 +476,7 @@ void SndgEventProcess(AudmonEvent_t *p)
         }
         break;
     case 105:
-        if (fn_801486A0()) {
+        if (MiniGameGetType()) {
             Object_80039F5C *player = fn_8009BCE8(&p->mUnknown0);
             // FAKEMATCH: the hold flag is cleared in both arms instead of once after the if; same stores
             if (!lbl_803EA6F9 || SndgMusicGetMode() == 7) {
@@ -561,7 +561,7 @@ void SndgEventProcessInPlay(AudmonEvent_t *p)
     case 118: SyncRandGetRange(1, 2); break;
     case 116: {
         unsigned char side = ((unsigned char *)&p->mUnknown10)[3];
-        if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
+        if (GameModeTypeGet() == 11 && MiniGameGetType() == 15) break;
         if (side != ScrmGetOffenseTeam()) break;
         if (SndgSfxIsPlaying(66) || SndgSfxIsPlaying(67)) break;
         lbl_803EA6DB = (lbl_803EA6DB + 1) % 2;
@@ -570,7 +570,7 @@ void SndgEventProcessInPlay(AudmonEvent_t *p)
         break;
     }
     case 140:
-        if (GameModeTypeGet() == 11 && fn_801486A0() == 15) break;
+        if (GameModeTypeGet() == 11 && MiniGameGetType() == 15) break;
         SndgSfxStop(66);
         SndgSfxStop(67);
         SndgSfxPlay(65, &p->mPos);
@@ -689,7 +689,7 @@ void SndgEventReloadCrowdBanks(void)
                 lbl_803EA6C4 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
                 id = lbl_803EA6C4;
             }
-            if (fn_801486A0()) {
+            if (MiniGameGetType()) {
                 while (!SndgIsBankReady(3)) {
                     if (FileHostCheckActive()) FileDebugProcess();
                     SndService();
@@ -702,7 +702,7 @@ void SndgEventReloadCrowdBanks(void)
                 lbl_803EA6C5 = SyncRandBitPoolDraw(_SndgEvent_iCrowdBankPool);
                 id = lbl_803EA6C5;
             }
-            if (fn_801486A0()) {
+            if (MiniGameGetType()) {
                 while (!SndgIsBankReady(4)) {
                     if (FileHostCheckActive()) FileDebugProcess();
                     SndService();

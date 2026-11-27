@@ -48,7 +48,7 @@ struct BallRenderObj {
 extern "C" {
 int FELoopIsMainFEActive(void);
 unsigned char CheatFlagsIsSet(int index);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void SimpShadowSetVisible(void *p, int a);
 void MatPush(void);
 void MatPop(void);
@@ -91,7 +91,7 @@ void BallRenderInit(BallRenderObj *pObject)
 
     TMTexLibLoad(&_BallRender_aTexLibs[0], ResLoad(pObject->mpUnknown18, 15, 1));
     _BallRender_abTexLibLoaded[0] = 1;
-    value = fn_801486A0();
+    value = MiniGameGetType();
     if (value == 1) {
         TMTexLibLoad(&_BallRender_aTexLibs[1], ResLoad(pObject->mpUnknown18, 16, 1));
         _BallRender_abTexLibLoaded[1] = 1;

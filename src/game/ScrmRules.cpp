@@ -146,7 +146,7 @@ void fn_80120618(void);
 void CamGameSuspendAll(void);
 void CamGameResumeAll(void);
 CollideSet_t *StatcollGetSet(void);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
 void ScrmSpotUpdate(void);
 int ScrmSpotGetFirstHit(float *pOut);
@@ -601,7 +601,7 @@ void ScrmRuleSet::EndPlay()
     if (mode == 5 && GameModeTypeIsSpecial()) {
         return;
     }
-    if (fn_801486A0() || ScrmGetPlayTurnovers() || ScrmTestPlayFlag(3)) {
+    if (MiniGameGetType() || ScrmGetPlayTurnovers() || ScrmTestPlayFlag(3)) {
         Record_800B15FC *p = fn_800B15FC();
         Object_80039F5C *pPlayer;
 
@@ -752,7 +752,7 @@ extern "C" void ScrmSetPlayTurnovers(int value)
 
 extern "C" void ScrmChangePossession(int a)
 {
-    switch (fn_801486A0()) {
+    switch (MiniGameGetType()) {
     case 3:
         _Scrm_pState->mPlayTurnovers++;
         ScrmSetOffenseTeam(_Scrm_pState->mOffenseTeam ^ 1);
@@ -2275,7 +2275,7 @@ extern "C" int ScrmStatTallyPlay(unsigned char *pOut)
     case 0x79697367:
         ScrmStatAddInterceptionReturn(id, markY, ballY);
         if (ballY > ScrmGetGoalLineY() && mode != 6) {
-            if (fn_801486A0() != 3) {
+            if (MiniGameGetType() != 3) {
                 ScrmStatAddPlayer(id, 0x74697367, 1);
                 ScrmStatAddPlayerTeam(id, 0x72697374, 1);
                 ScrmStatAddPlayerTeam(id, 0x64647374, 1);

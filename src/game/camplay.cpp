@@ -239,7 +239,7 @@ void CamGameSetModeAll(int);
 int BallsExist(void);
 void *BallGetCurrent(void);
 void BallGetPosition(void *,void *);
-int fn_801486A0(void);
+int MiniGameGetType(void);
 void CamMainSetOffset(GameCamera_t *,void *);
 int ScrmTestPlayFlag(int);
 int ScrmGetOffenseTeam(void);
@@ -414,7 +414,7 @@ void CamPlayProcess(GameCamera_t *camera)
     CamPresetSetEaseRates(camera,0);
     switch (camera->mUnknownA0) {
     case 12:
-        if (fn_801486A0() == 1) {
+        if (MiniGameGetType() == 1) {
             ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown48);
             CamMainSetOffset(camera,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown3C);
             CamMainSetAngle(camera,&offset,5);
@@ -451,13 +451,13 @@ void CamPlayProcess(GameCamera_t *camera)
         Orient3Lerp(&angles,&_CamPlay_pViews[1].mUnknownC,&_CamPlay_pViews[camera->mUnknownA0].mUnknownC,blend);
     apply:
         if (gameMode != 2) CamPlayPanWithBall(&point,&angles,&velocity,camera->mUnknown9C,camera->mUnknownA0);
-        if (fn_801486A0() == 0) {
+        if (MiniGameGetType() == 0) {
             CamPlayAngles_t unused; // FAKEMATCH: unused local (compiled-out debug filler) gives the target's frame slots
             Vec3Add(&point,&point,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown24);
             ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown30);
             Orient3Add(&angles,&angles,&offset);
         }
-        if (fn_801486A0() == 2) {
+        if (MiniGameGetType() == 2) {
             Vec3Add(&point,&point,&_CamPlay_aDefs[camera->mUnknown9C].mUnknown54);
             ANGLES_FROM_DEGREES(offset, _CamPlay_aDefs[camera->mUnknown9C].mUnknown60);
             Orient3Add(&angles,&angles,&offset);
@@ -538,7 +538,7 @@ void CamPlayStart(GameCamera_t *camera)
         break;
     case 10: case 11: case 12: break;
     }
-    int mode = fn_801486A0();
+    int mode = MiniGameGetType();
     if (mode != 15) {
         if (mode == 1 && (unsigned int)camera->mUnknownA0 <= 2) camera->mUnknownA0 = 12;
     }
