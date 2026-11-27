@@ -286,7 +286,7 @@ struct Block_80096954 {
 
 typedef Item_80097440 Item_8009A63C;
 
-/* Record passed to fn_8009D338-fn_8009D3F0. Only the accessed words are
+/* Record passed to GameClockTimerIsExpired-GameClockTimerCountUp. Only the accessed words are
    declared; the size is unknown. */
 struct Timer_8009D338 {
     unsigned char mUnknown0[4];
@@ -3712,7 +3712,7 @@ struct State_80093D20 {
 };
 
 extern "C" {
-Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
+Entry_8009C684 *PlyrTrackStart(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
                             void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *),
                             Vector_80039F5C *pVec, int c, int b, int d);
 }
@@ -5908,93 +5908,93 @@ extern "C" void CelebrationBlocksStartForPlay(int value);
 
 extern "C" void fn_8009BB50(int a, int b);
 
-extern "C" float fn_8009BB54(int index);
+extern "C" float CelebrationBlockGetTimeLeft(int index);
 
-extern "C" void fn_8009BBD8(int value);
+extern "C" void CelebrationBlocksStartReplay(int value);
 
-extern "C" void fn_8009BC30(int value);
+extern "C" void CelebrationSetReplayChannel(int value);
 
-extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock);
+extern "C" void PlyrObjectInit(Object_80039F5C *p, Block_80170E64 *pBlock);
 
 extern "C" Object_80039F5C *fn_8009BCE8(int *pRef);
 
 extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 
-extern "C" void fn_8009BD48(int *pRef, int a, int b, int c);
+extern "C" void PlyrRefSet(int *pRef, int a, int b, int c);
 
 extern "C" void fn_8009BD60(Object_80039F5C *p);
 
-extern "C" void fn_8009BD88(Object_80039F5C *p, float scale);
+extern "C" void PlyrSetScale(Object_80039F5C *p, float scale);
 
-extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
+extern "C" void PlyrBuildWorldMatrix(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 
-extern "C" void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
+extern "C" void PlyrBuildInverseMatrix(float m[4][4], Vector_80039F5C *pPos, int angle, float scale);
 
-extern "C" void fn_8009BEA8(Object_80039F5C *p);
+extern "C" void PlyrUpdateMatrices(Object_80039F5C *p);
 
-extern "C" void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles);
+extern "C" void PlyrGetJointLocal(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles);
 
 extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles);
 
-extern "C" void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot);
+extern "C" void PlyrGetBallHoldTransform(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot);
 
-extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
+extern "C" void PlyrGetJointBallTransform(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint);
 
-extern "C" void fn_8009C0B8(Object_80039F5C *p, const Object_80039F5C *pOther);
+extern "C" void PlyrCopyState(Object_80039F5C *p, const Object_80039F5C *pOther);
 
-extern "C" void fn_8009C158(Object_80039F5C *p, int reset);
+extern "C" void PlyrResetPose(Object_80039F5C *p, int reset);
 
 extern "C" int fn_8009C220(void *pA, void *pB);
 
-extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
+extern "C" int PlyrSyncCompare(Object_80039F5C *pA, Object_80039F5C *pB);
 
-extern "C" void fn_8009C370(Object_80039F5C *p);
+extern "C" void PlyrApplyPose(Object_80039F5C *p);
 
-extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
+extern "C" int PlayerAnimStateStartBest(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c);
 
-extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord, unsigned int count);
+extern "C" int PlayerAnimStateDefault(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord, unsigned int count);
 
 extern "C" signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *pValues);
 
-extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
+extern "C" int PlayerAnimTablePickBest(Table_80089904 *pTable, const unsigned char *pValues);
 
-extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, Object_80039F5C *, unsigned int), unsigned int count);
+extern "C" void PlayerAnimStateFillDefaults(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *, Object_80039F5C *, unsigned int), unsigned int count);
 
 extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
-extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
+extern "C" int PlyrTrackSetEntry(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
 extern "C" int fn_8009C7B4(Vector_80039F5C *pVec);
 
-extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock);
+extern "C" unsigned char PlyrTrackCheckHeadLimit(Object_80039F5C *p, Block_8009C6F4 *pBlock);
 
-extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock);
+extern "C" unsigned char PlyrTrackUpdate(Object_80039F5C *p, Block_8009C6F4 *pBlock);
 
-extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef);
+extern "C" void PlyrTrackTargetJoint(void *p, Vector_80039F5C *pOut, int *pRef);
 
 extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone);
 
-extern "C" void fn_8009CB0C(Object_80039F5C *p);
+extern "C" void PlyrTrackApplyHeadTurn(Object_80039F5C *p);
 
-extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut);
+extern "C" void PlyrTrackGetHeadPos(Object_80039F5C *p, Vector_80039F5C *pOut);
 
-extern "C" void fn_8009CC28(Object_80039F5C *p);
+extern "C" void PlyrTrackApplyHands(Object_80039F5C *p);
 
-extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int a, int b);
+extern "C" unsigned char *PlyrTrackStartHead(Object_80039F5C *p, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int a, int b);
 
-extern "C" void fn_8009CDEC(Object_80039F5C *p);
+extern "C" void PlyrTrackUpdateAll(Object_80039F5C *p);
 
 extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 
 extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b);
 
-extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose);
+extern "C" void PlyrTrackInit(Block_8009C6F4 *pBlock, AnimPose_t *pPose);
 
-extern "C" void fn_8009CF78(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
+extern "C" void PlyrTrackDisable(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a);
 
-extern "C" void fn_8009D00C(void *p, int *pState);
+extern "C" void PlyrTrackEnable(void *p, int *pState);
 
-extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limit);
+extern "C" int PlyrTrackIsInView(Object_80039F5C *p, Object_80039F5C *pOther, int limit);
 
 extern "C" void fn_8009D0AC(Object_80039F5C *p);
 
@@ -6004,19 +6004,19 @@ extern "C" int fn_8009D1F4(Object_80039F5C *p);
 
 extern "C" int fn_8009D284(Object_80039F5C *p, Object_80039F5C *pOther);
 
-extern "C" int fn_8009D338(Timer_8009D338 *p);
+extern "C" int GameClockTimerIsExpired(Timer_8009D338 *p);
 
-extern "C" void fn_8009D348(Timer_8009D338 *p);
+extern "C" void GameClockTimerDecrement(Timer_8009D338 *p);
 
-extern "C" void fn_8009D360(Timer_8009D338 *p, unsigned int time);
+extern "C" void GameClockTimerCountDown(Timer_8009D338 *p, unsigned int time);
 
-extern "C" void fn_8009D3D8(Timer_8009D338 *p);
+extern "C" void GameClockTimerIncrement(Timer_8009D338 *p);
 
-extern "C" void fn_8009D3F0(Timer_8009D338 *p, unsigned int time);
+extern "C" void GameClockTimerCountUp(Timer_8009D338 *p, unsigned int time);
 
 extern "C" void fn_8009D474(int a, int b);
 
-extern "C" int fn_8009D558(unsigned int time);
+extern "C" int GameClockUpdate(unsigned int time);
 
 extern "C" void fn_8009D818(int state);
 
@@ -6026,7 +6026,7 @@ extern "C" void fn_8009D888(int index, int value);
 
 extern "C" void fn_8009D8CC(int index);
 
-extern "C" void fn_8009D924(int index);
+extern "C" void GameClockPauseTimer(int index);
 
 extern "C" void fn_8009D944(int index);
 
@@ -6040,7 +6040,7 @@ extern "C" int fn_8009D9A8(int index);
 
 extern "C" int fn_8009D9C0(int index);
 
-extern "C" int fn_8009D9D8(int index);
+extern "C" int GameClockIsTimerRunning(int index);
 
 extern "C" int fn_8009D9F8(int index);
 
@@ -8233,9 +8233,9 @@ extern "C" int PlayerAnimUserOpcodeCallback(void *object,int event,unsigned int 
             case 3:record=mode?&p->mUnknown108:&p->mUnknown200;break;
             default:record=mode?&p->mUnknown108:&p->mUnknown200;break;
             }
-            if(event==0xC017) fn_8009D00C(p,record);
+            if(event==0xC017) PlyrTrackEnable(p,record);
             else {
-                fn_8009CF78(p,(Block_8009C6F4 *)record,8);
+                PlyrTrackDisable(p,(Block_8009C6F4 *)record,8);
                 fn_8009CE88(p,(Block_8009C6F4 *)&p->mUnknown16,8);
             }
             result=1;break;
@@ -9447,11 +9447,11 @@ extern "C" void fn_80092380(Character_80093BCC *pCharacter, int enable)
                     float scale = p->mUnknown768;
 
                     lbl_8030C12C[side * 7 + i] = scale;
-                    fn_8009BD88(p, scale * ratio);
+                    PlyrSetScale(p, scale * ratio);
                 }
             }
             for (i = 0; i < pActor->mUnknown4; i++) {
-                fn_8009BD88(pCharacter->mUnknown14[i], 1.03f);
+                PlyrSetScale(pCharacter->mUnknown14[i], 1.03f);
             }
             lbl_803EA8D5 = 1;
         }
@@ -9460,7 +9460,7 @@ extern "C" void fn_80092380(Character_80093BCC *pCharacter, int enable)
             unsigned int count = ScrmGetTeamPlayerCount((unsigned char)side);
 
             for (i = 0; i < count; i++) {
-                fn_8009BD88(PlyrGet((unsigned char)side, i), lbl_8030C12C[side * 7 + i]);
+                PlyrSetScale(PlyrGet((unsigned char)side, i), lbl_8030C12C[side * 7 + i]);
             }
         }
         lbl_803EA8D5 = 0;
@@ -13872,7 +13872,7 @@ static float _StrippedPositiveToCount(float x, int i)
 }
 }
 
-extern "C" float fn_8009BB54(int index)
+extern "C" float CelebrationBlockGetTimeLeft(int index)
 {
     float result = 900 - CelebrationBlockGetFrames(index);
     Block_8009B720 *pBlock = lbl_803EA984[index];
@@ -13883,24 +13883,24 @@ extern "C" float fn_8009BB54(int index)
     return result;
 }
 
-extern "C" void fn_8009BBD8(int value)
+extern "C" void CelebrationBlocksStartReplay(int value)
 {
     if (CelebrationBlocksTryStart(value, 1)) {
         lbl_803EA984[1]->mUnknown4.mUnknown127 = 1;
         if (ChallengeIsActive()) {
-            fn_8009D924(4);
+            GameClockPauseTimer(4);
         }
     } else {
         lbl_803EA984[1]->mUnknown4.mUnknown127 = 0;
     }
 }
 
-extern "C" void fn_8009BC30(int value)
+extern "C" void CelebrationSetReplayChannel(int value)
 {
     lbl_803EA990 = value;
 }
 
-extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock)
+extern "C" void PlyrObjectInit(Object_80039F5C *p, Block_80170E64 *pBlock)
 {
     memset(p, 0, 0x408);
     fn_800B267C(&p->mMotion);
@@ -13914,9 +13914,9 @@ extern "C" void fn_8009BC38(Object_80039F5C *p, Block_80170E64 *pBlock)
     p->mUnknown778 = -1;
     fn_800C89BC(p);
     fn_800AF804((Entry_800AF82C *)p->mUnknown816);
-    fn_8009CF30((Block_8009C6F4 *)&p->mUnknown16, &pBlock->mUnknown44);
-    fn_8009CF30((Block_8009C6F4 *)&p->mUnknown108, &pBlock->mUnknown44);
-    fn_8009CF30((Block_8009C6F4 *)&p->mUnknown200, &pBlock->mUnknown44);
+    PlyrTrackInit((Block_8009C6F4 *)&p->mUnknown16, &pBlock->mUnknown44);
+    PlyrTrackInit((Block_8009C6F4 *)&p->mUnknown108, &pBlock->mUnknown44);
+    PlyrTrackInit((Block_8009C6F4 *)&p->mUnknown200, &pBlock->mUnknown44);
     p->mpUnknown780 = 0;
 }
 
@@ -13942,7 +13942,7 @@ extern "C" void fn_8009BD2C(Object_80039F5C *p, int *pRef)
     }
 }
 
-extern "C" void fn_8009BD48(int *pRef, int a, int b, int c)
+extern "C" void PlyrRefSet(int *pRef, int a, int b, int c)
 {
     *pRef = a | b << 8 | c << 16;
 }
@@ -13953,7 +13953,7 @@ extern "C" void fn_8009BD60(Object_80039F5C *p)
     p->mUnknown1012[0] = p->mUnknown1012[1] = p->mUnknown1012[2] = p->mUnknown1012[3] = 0xFF;
 }
 
-extern "C" void fn_8009BD88(Object_80039F5C *p, float scale)
+extern "C" void PlyrSetScale(Object_80039F5C *p, float scale)
 {
     p->mUnknown768 = scale;
     if (p->mpUnknown4 != 0) {
@@ -13961,7 +13961,7 @@ extern "C" void fn_8009BD88(Object_80039F5C *p, float scale)
     }
 }
 
-extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
+extern "C" void PlyrBuildWorldMatrix(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
 {
     MatPushUnit();
     MatTranslate((float *)pPos);
@@ -13972,7 +13972,7 @@ extern "C" void fn_8009BDA0(float m[4][4], Vector_80039F5C *pPos, int angle, flo
     MatPop();
 }
 
-extern "C" void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
+extern "C" void PlyrBuildInverseMatrix(float m[4][4], Vector_80039F5C *pPos, int angle, float scale)
 {
     Vector_80039F5C pos;
 
@@ -13988,13 +13988,13 @@ extern "C" void fn_8009BE0C(float m[4][4], Vector_80039F5C *pPos, int angle, flo
     MatPop();
 }
 
-extern "C" void fn_8009BEA8(Object_80039F5C *p)
+extern "C" void PlyrUpdateMatrices(Object_80039F5C *p)
 {
-    fn_8009BDA0(p->mUnknown640, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
-    fn_8009BE0C(p->mUnknown704, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+    PlyrBuildWorldMatrix(p->mUnknown640, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
+    PlyrBuildInverseMatrix(p->mUnknown704, &p->mMotion.mPos, p->mMotion.mFacing, p->mUnknown768);
 }
 
-extern "C" void fn_8009BEFC(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
+extern "C" void PlyrGetJointLocal(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pAngles)
 {
     Block_80170E64 *pBlock = p->mpUnknown4;
 
@@ -14019,12 +14019,12 @@ extern "C" void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut
     MatPop();
 }
 
-extern "C" void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot)
+extern "C" void PlyrGetBallHoldTransform(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot)
 {
-    fn_8009BFF8(p, pOut, pRot, p->mpUnknown4->mUnknown44.mUnknown6);
+    PlyrGetJointBallTransform(p, pOut, pRot, p->mpUnknown4->mUnknown44.mUnknown6);
 }
 
-extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint)
+extern "C" void PlyrGetJointBallTransform(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801EB488 *pRot, int joint)
 {
     Block_80170E64 *pBlock = p->mpUnknown4;
 
@@ -14048,7 +14048,7 @@ extern "C" void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pOut, Quat_801E
     }
 }
 
-extern "C" void fn_8009C0B8(Object_80039F5C *p, const Object_80039F5C *pOther)
+extern "C" void PlyrCopyState(Object_80039F5C *p, const Object_80039F5C *pOther)
 {
     p->mId = pOther->mId;
     memcpy(&p->mUnknown8, &pOther->mUnknown8, 8);
@@ -14057,7 +14057,7 @@ extern "C" void fn_8009C0B8(Object_80039F5C *p, const Object_80039F5C *pOther)
     memcpy(p->mUnknown1012, pOther->mUnknown1012, 4);
 }
 
-extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
+extern "C" void PlyrResetPose(Object_80039F5C *p, int reset)
 {
     Block_80170E64 *pBlock;
 
@@ -14069,14 +14069,14 @@ extern "C" void fn_8009C158(Object_80039F5C *p, int reset)
         fn_800AF804((Entry_800AF82C *)p->mUnknown816);
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
-            fn_8009C370(p);
+            PlyrApplyPose(p);
             PlyrPoseSetFromModel(p);
             p->mpUnknown240 = p->mpUnknown148 = p->mpUnknown56 = &pBlock->mUnknown44;
         }
     } else {
         pBlock = p->mpUnknown4;
         if (pBlock != 0) {
-            fn_8009C370(p);
+            PlyrApplyPose(p);
             PlyrPoseSetFromModel(p);
         }
     }
@@ -14100,14 +14100,14 @@ extern "C" int fn_8009C220(void *pA, void *pB)
     return result;
 }
 
-extern "C" int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB)
+extern "C" int PlyrSyncCompare(Object_80039F5C *pA, Object_80039F5C *pB)
 {
     int result = SyncStateCompareBytes(pA, pB, 0x310);
 
     return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
 }
 
-extern "C" void fn_8009C370(Object_80039F5C *p)
+extern "C" void PlyrApplyPose(Object_80039F5C *p)
 {
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
 
@@ -14120,7 +14120,7 @@ extern "C" void fn_8009C370(Object_80039F5C *p)
     PlyrPoseUpdate(pObject);
 }
 
-extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c)
+extern "C" int PlayerAnimStateStartBest(Table_80089904 *pTable, void *a, void *b, Object_80039F5C *pRecord, unsigned short c)
 {
     int index = fn_8009C4B0(pTable, (unsigned char *)&pRecord->mUnknown1008);
 
@@ -14130,11 +14130,11 @@ extern "C" int fn_8009C3F8(Table_80089904 *pTable, void *a, void *b, Object_8003
     return 0;
 }
 
-extern "C" int fn_8009C470(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord,
+extern "C" int PlayerAnimStateDefault(Table_80089904 *pTable, unsigned short c, void *a, void *b, Object_80039F5C *pRecord,
                            unsigned int count)
 {
     if (count <= 1) {
-        fn_8009C3F8(pTable, a, b, pRecord, c);
+        PlayerAnimStateStartBest(pTable, a, b, pRecord, c);
     }
     return 0;
 }
@@ -14164,7 +14164,7 @@ extern "C" signed char fn_8009C4B0(Table_80089904 *pTable, const unsigned char *
     return result;
 }
 
-extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
+extern "C" int PlayerAnimTablePickBest(Table_80089904 *pTable, const unsigned char *pValues)
 {
     int i;
     int best = -1;
@@ -14188,14 +14188,14 @@ extern "C" int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues)
     return result;
 }
 
-extern "C" void fn_8009C604(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *,
+extern "C" void PlayerAnimStateFillDefaults(int (**pCallbacks)(Table_80089904 *, unsigned short, void *, void *,
                                                Object_80039F5C *, unsigned int),
                             unsigned int count)
 {
     unsigned int i;
 
     for (i = 0; i < count; i++) {
-        pCallbacks[i] = fn_8009C470;
+        pCallbacks[i] = PlayerAnimStateDefault;
     }
 }
 
@@ -14214,7 +14214,7 @@ extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id)
     return result;
 }
 
-extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
+extern "C" int PlyrTrackSetEntry(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
                            void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c)
 {
     memset(pEntry->mUnknown10, 0, 8);
@@ -14226,7 +14226,7 @@ extern "C" int fn_8009C684(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries,
     return 2;
 }
 
-extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
+extern "C" Entry_8009C684 *PlyrTrackStart(Entry_800AF82C *pEntries, Block_8009C6F4 *pBlock,
                                        void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *),
                                        Vector_80039F5C *pVec, int c, int b, int d)
 {
@@ -14240,7 +14240,7 @@ extern "C" Entry_8009C684 *fn_8009C6F4(Entry_800AF82C *pEntries, Block_8009C6F4 
         pEntry->mUnknown4.mX = pVec->mX;
         pEntry->mUnknown4.mY = pVec->mY;
         pEntry->mUnknown4.mZ = pVec->mZ;
-        pBlock->mUnknown0 = fn_8009C684(pEntry, pEntries, pCallback, b, c);
+        pBlock->mUnknown0 = PlyrTrackSetEntry(pEntry, pEntries, pCallback, b, c);
     }
     return pEntry;
 }
@@ -14254,7 +14254,7 @@ extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
     return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
 }
 
-extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
+extern "C" unsigned char PlyrTrackCheckHeadLimit(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 {
     Entry_8009C684 *pEntry = &pBlock->mEntries[pBlock->mUnknown4];
 
@@ -14264,7 +14264,7 @@ extern "C" unsigned char fn_8009C814(Object_80039F5C *p, Block_8009C6F4 *pBlock)
     return pBlock->mUnknown0 > 1;
 }
 
-extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
+extern "C" unsigned char PlyrTrackUpdate(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 {
     unsigned short index = pBlock->mUnknown4;
 
@@ -14298,7 +14298,7 @@ extern "C" unsigned char fn_8009C88C(Object_80039F5C *p, Block_8009C6F4 *pBlock)
     return pBlock->mUnknown0 > 1;
 }
 
-extern "C" void fn_8009C98C(void *p, Vector_80039F5C *pOut, int *pRef)
+extern "C" void PlyrTrackTargetJoint(void *p, Vector_80039F5C *pOut, int *pRef)
 {
     fn_8009BF5C(fn_8009BCE8(pRef), pRef[1], pOut, 0);
 }
@@ -14344,7 +14344,7 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
     pObject->mUnknown44.mUnknown48[bone * 3 + 2] = 0;
 }
 
-extern "C" void fn_8009CB0C(Object_80039F5C *p)
+extern "C" void PlyrTrackApplyHeadTurn(Object_80039F5C *p)
 {
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
 
@@ -14373,7 +14373,7 @@ extern "C" void fn_8009CB0C(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut)
+extern "C" void PlyrTrackGetHeadPos(Object_80039F5C *p, Vector_80039F5C *pOut)
 {
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
 
@@ -14383,11 +14383,11 @@ extern "C" void fn_8009CBD8(Object_80039F5C *p, Vector_80039F5C *pOut)
     MatPop();
 }
 
-extern "C" void fn_8009CC28(Object_80039F5C *p)
+extern "C" void PlyrTrackApplyHands(Object_80039F5C *p)
 {
 }
 
-extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
+extern "C" unsigned char *PlyrTrackStartHead(Object_80039F5C *p,
                                       void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int a,
                                       int b)
 {
@@ -14399,8 +14399,8 @@ extern "C" unsigned char *fn_8009CC2C(Object_80039F5C *p,
     if (pBlock->mUnknown0 == 3) {
         pBlock->mUnknown0 = 2;
     }
-    fn_8009CBD8(p, &pos);
-    pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, 0, b);
+    PlyrTrackGetHeadPos(p, &pos);
+    pEntry = PlyrTrackStart(pEntries, pBlock, pCallback, &pos, a, 0, b);
     if (p->mIdBytes[3] == 1) {
         fn_800AF9C0(pEntries, 0, lbl_802D7C08);
     } else {
@@ -14438,29 +14438,29 @@ extern "C" unsigned char *fn_8009CD00(Object_80039F5C *p,
     MatLoad(p->mUnknown704[0]);
     Vec3Mat34Mul(&pos, &pos);
     MatPop();
-    pEntry = fn_8009C6F4(pEntries, pBlock, pCallback, &pos, a, side, b);
+    pEntry = PlyrTrackStart(pEntries, pBlock, pCallback, &pos, a, side, b);
     if (pEntry) {
         return pEntry->mUnknown10;
     }
     return 0;
 }
 
-extern "C" void fn_8009CDEC(Object_80039F5C *p)
+extern "C" void PlyrTrackUpdateAll(Object_80039F5C *p)
 {
     Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
-    unsigned char active = fn_8009C88C(p, pBlock);
+    unsigned char active = PlyrTrackUpdate(p, pBlock);
 
     if (active) {
-        active = fn_8009C814(p, pBlock);
+        active = PlyrTrackCheckHeadLimit(p, pBlock);
     }
-    active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown108);
-    active |= fn_8009C88C(p, (Block_8009C6F4 *)&p->mUnknown200);
+    active |= PlyrTrackUpdate(p, (Block_8009C6F4 *)&p->mUnknown108);
+    active |= PlyrTrackUpdate(p, (Block_8009C6F4 *)&p->mUnknown200);
     fn_800C8AF0(p);
     if (active) {
         fn_800AF9F4((Entry_800AF82C *)p->mUnknown816);
     }
-    fn_8009CC28(p);
-    fn_8009CB0C(p);
+    PlyrTrackApplyHands(p);
+    PlyrTrackApplyHeadTurn(p);
 }
 
 extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
@@ -14475,13 +14475,13 @@ extern "C" void fn_8009CE88(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
 
 extern "C" void fn_8009CEE4(Object_80039F5C *p, int ref, int joint, int a, int b)
 {
-    int *pData = (int *)fn_8009CC2C(p, (void (*)(Object_80039F5C *, Vector_80039F5C *, void *))fn_8009C98C, a, b);
+    int *pData = (int *)PlyrTrackStartHead(p, (void (*)(Object_80039F5C *, Vector_80039F5C *, void *))PlyrTrackTargetJoint, a, b);
 
     pData[0] = ref;
     pData[1] = joint;
 }
 
-extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose)
+extern "C" void PlyrTrackInit(Block_8009C6F4 *pBlock, AnimPose_t *pPose)
 {
     int *pInts = pBlock->mUnknown1C;
     Vector_80039F5C *pVec = &pBlock->mUnknown10;
@@ -14493,7 +14493,7 @@ extern "C" void fn_8009CF30(Block_8009C6F4 *pBlock, AnimPose_t *pPose)
     pVec->mX = pVec->mY = pVec->mZ = 0.0f;
 }
 
-extern "C" void fn_8009CF78(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
+extern "C" void PlyrTrackDisable(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
 {
     switch (pBlock->mUnknown0) {
     case 0:
@@ -14515,7 +14515,7 @@ extern "C" void fn_8009CF78(Object_80039F5C *p, Block_8009C6F4 *pBlock, int a)
     }
 }
 
-extern "C" void fn_8009D00C(void *p, int *pState)
+extern "C" void PlyrTrackEnable(void *p, int *pState)
 {
     switch (*pState) {
     case 1:
@@ -14531,7 +14531,7 @@ extern "C" void fn_8009D00C(void *p, int *pState)
     }
 }
 
-extern "C" int fn_8009D04C(Object_80039F5C *p, Object_80039F5C *pOther, int limit)
+extern "C" int PlyrTrackIsInView(Object_80039F5C *p, Object_80039F5C *pOther, int limit)
 {
     FieldPoint_t delta;
 
@@ -14560,7 +14560,7 @@ extern "C" void fn_8009D0AC(Object_80039F5C *p)
 
             ref = *pRef;
             pOther = fn_8009BCE8(&ref);
-            if (pOther != p && fn_8009D04C(p, pOther, 0x155555) == 1) {
+            if (pOther != p && PlyrTrackIsInView(p, pOther, 0x155555) == 1) {
                 break;
             }
             index++;
@@ -14593,7 +14593,7 @@ extern "C" int fn_8009D1F4(Object_80039F5C *p)
 {
     if (p->mUnknown292 != 0) {
         p->mUnknown296--;
-        if (fn_8009D04C(p, fn_8009BCE8(&p->mUnknown292), 0x155555) == 0 || p->mUnknown296 < 0) {
+        if (PlyrTrackIsInView(p, fn_8009BCE8(&p->mUnknown292), 0x155555) == 0 || p->mUnknown296 < 0) {
             fn_8009D0AC(p);
         }
     } else {
@@ -14605,7 +14605,7 @@ extern "C" int fn_8009D1F4(Object_80039F5C *p)
 extern "C" int fn_8009D284(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     if (p->mUnknown292 == 0) {
-        if (fn_8009D04C(p, pOther, 0x471C72) == 1) {
+        if (PlyrTrackIsInView(p, pOther, 0x471C72) == 1) {
             int ref;
 
             fn_8009BD2C(pOther, &ref);
@@ -14613,30 +14613,30 @@ extern "C" int fn_8009D284(Object_80039F5C *p, Object_80039F5C *pOther)
             p->mUnknown296 = 300;
             p->mUnknown292 = ref;
         }
-    } else if (fn_8009D04C(p, pOther, 0x471C72) == 0) {
+    } else if (PlyrTrackIsInView(p, pOther, 0x471C72) == 0) {
         fn_8009D1AC(p);
     }
     return p->mUnknown292 == 0;
 }
 
-extern "C" int fn_8009D338(Timer_8009D338 *p)
+extern "C" int GameClockTimerIsExpired(Timer_8009D338 *p)
 {
     return p->mUnknown8 == 0;
 }
 
-extern "C" void fn_8009D348(Timer_8009D338 *p)
+extern "C" void GameClockTimerDecrement(Timer_8009D338 *p)
 {
     p->mUnknown8--;
     p->mUnknown10 = p->mUnknown4;
 }
 
-extern "C" void fn_8009D360(Timer_8009D338 *p, unsigned int time)
+extern "C" void GameClockTimerCountDown(Timer_8009D338 *p, unsigned int time)
 {
     if (!(p->mUnknown14 & 1)) {
         while (time >= p->mUnknown10) {
             if (p->mUnknown8 != 0) {
                 time -= p->mUnknown10;
-                fn_8009D348(p);
+                GameClockTimerDecrement(p);
             } else {
                 time = 0;
             }
@@ -14645,18 +14645,18 @@ extern "C" void fn_8009D360(Timer_8009D338 *p, unsigned int time)
     }
 }
 
-extern "C" void fn_8009D3D8(Timer_8009D338 *p)
+extern "C" void GameClockTimerIncrement(Timer_8009D338 *p)
 {
     p->mUnknown8++;
     p->mUnknown10 = p->mUnknown4;
 }
 
-extern "C" void fn_8009D3F0(Timer_8009D338 *p, unsigned int time)
+extern "C" void GameClockTimerCountUp(Timer_8009D338 *p, unsigned int time)
 {
     while (time >= p->mUnknown10) {
         if (p->mUnknown8 <= 86399) {
             time += p->mUnknown10;
-            fn_8009D3D8(p);
+            GameClockTimerIncrement(p);
             if (p->mUnknown8 > 86399) {
                 p->mUnknown8 = 0;
             }
@@ -14707,20 +14707,20 @@ extern "C" void fn_8009D474(int a, int b)
     SyncStateCommit(pHandle);
 }
 
-extern "C" int fn_8009D558(unsigned int time)
+extern "C" int GameClockUpdate(unsigned int time)
 {
     int flags = 0;
 
     if (lbl_803EA9A8->mEntries[1].mUnknown0 == 1) {
         int old = lbl_803EA9A8->mEntries[1].mUnknown8;
 
-        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1], time);
+        GameClockTimerCountDown((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1], time);
         if (lbl_803EA9A8->mEntries[1].mUnknown8 != old) {
             ScrmStatAddPossessionTime(1);
         }
     }
     if (ScrmIsTimed() != 0) {
-        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1]) != 0) {
+        if (GameClockTimerIsExpired((Timer_8009D338 *)&lbl_803EA9A8->mEntries[1]) != 0) {
             if (fn_800BA6F8() != 0) {
                 fn_8009D964(1, fn_8009D9A8(1));
             } else {
@@ -14731,8 +14731,8 @@ extern "C" int fn_8009D558(unsigned int time)
         flags |= 1;
     }
     if (lbl_803EA9A8->mEntries[0].mUnknown0 == 1) {
-        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0], time);
-        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0]) != 0) {
+        GameClockTimerCountDown((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0], time);
+        if (GameClockTimerIsExpired((Timer_8009D338 *)&lbl_803EA9A8->mEntries[0]) != 0) {
             if (fn_800BA6F8() != 0) {
                 fn_8009D964(0, fn_8009D9A8(0));
             } else {
@@ -14741,21 +14741,21 @@ extern "C" int fn_8009D558(unsigned int time)
         }
     }
     if (lbl_803EA9A8->mEntries[2].mUnknown0 == 1) {
-        fn_8009D3F0((Timer_8009D338 *)&lbl_803EA9A8->mEntries[2], time);
+        GameClockTimerCountUp((Timer_8009D338 *)&lbl_803EA9A8->mEntries[2], time);
     }
     if (lbl_803EA9A8->mEntries[3].mUnknown0 == 1) {
-        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[3], time);
+        GameClockTimerCountDown((Timer_8009D338 *)&lbl_803EA9A8->mEntries[3], time);
     }
     if (lbl_803EA9A8->mEntries[5].mUnknown0 == 1) {
-        fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
+        GameClockTimerCountDown((Timer_8009D338 *)&lbl_803EA9A8->mEntries[5], time);
     }
     if (ChallengeIsActive() != 0) {
         int mode = fn_800AD9B4();
 
         if (lbl_803EA9A8->mEntries[4].mUnknown0 == 1) {
-            fn_8009D360((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4], time);
+            GameClockTimerCountDown((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4], time);
         }
-        if (fn_8009D338((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4]) != 0 && fn_800AD9B4() != 1) {
+        if (GameClockTimerIsExpired((Timer_8009D338 *)&lbl_803EA9A8->mEntries[4]) != 0 && fn_800AD9B4() != 1) {
             flags |= 1;
             if (mode == 3) {
                 ScrmEndPlay();
@@ -14833,7 +14833,7 @@ extern "C" void fn_8009D8CC(int index)
     }
 }
 
-extern "C" void fn_8009D924(int index)
+extern "C" void GameClockPauseTimer(int index)
 {
     Entry_8009D964 *pEntry = &lbl_803EA9A8->mEntries[index];
 
@@ -14881,7 +14881,7 @@ extern "C" int fn_8009D9C0(int index)
     return pEntry->mUnknown4;
 }
 
-extern "C" int fn_8009D9D8(int index)
+extern "C" int GameClockIsTimerRunning(int index)
 {
     Entry_8009D964 *pEntry = &lbl_803EA9A8->mEntries[index];
 
@@ -25097,9 +25097,9 @@ void Class_80297B50::vfn_03(float dt)
 {
     lbl_803EAB28 = -1;
     fn_8009D888(3, vfn_06());
-    fn_8009D924(3);
+    GameClockPauseTimer(3);
     if (ChallengeIsActive() != 0) {
-        fn_8009D924(4);
+        GameClockPauseTimer(4);
     }
     if (fn_800B65A0(0) == 0xFF && fn_800B65A0(1) == 0xFF && fn_800BA6F8() == 0 && ScreenTransCanCapture(0x23000) != 0) {
         ScreenTransStart(1, 20, 0x808080, 0);
@@ -25159,7 +25159,7 @@ void Class_80297B50::vfn_03(float dt)
     ScrmTeamToHuddle(team);
     ScrmTeamToHuddle(other);
     AudmonEventPostArgs(111, 0, team, 0, 0);
-    lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
+    lbl_803EAB34->mUnknown40 = GameClockIsTimerRunning(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
     lbl_803EAB34->mUnknown44 = 0;
@@ -25219,7 +25219,7 @@ extern "C" void fn_800B3AF4(void)
     }
     fn_800B3074();
     AudmonEventPostArgs(111, 0, team, 0, 0);
-    lbl_803EAB34->mUnknown40 = fn_8009D9D8(1);
+    lbl_803EAB34->mUnknown40 = GameClockIsTimerRunning(1);
     lbl_803EAB34->mUnknown42 = 1;
     lbl_803EAB34->mUnknown41 = 0;
     lbl_803EAB34->mUnknown8 &= ~8;
@@ -25384,8 +25384,8 @@ extern "C" void fn_800B41BC(int team)
         lbl_803EAB34->mUnknown8 |= 2;
         lbl_803EAB34->mUnknown10 = 0;
         lbl_803EAB34->mUnknownC = 600;
-        fn_8009D924(0);
-        fn_8009D924(1);
+        GameClockPauseTimer(0);
+        GameClockPauseTimer(1);
     } else {
         lbl_803EAB34->mUnknown8 |= 4;
     }
@@ -25613,7 +25613,7 @@ extern "C" void fn_800B4A4C(void)
 
 extern "C" void fn_800B4A88(void)
 {
-    fn_8009C604(lbl_8030FB60, 248);
+    PlayerAnimStateFillDefaults(lbl_8030FB60, 248);
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[77] = PlayerLocoMoveCmdPhase;
     lbl_8030FB60[73] = PlayerActionAnimTurnPhase;
@@ -25739,7 +25739,7 @@ extern "C" void fn_800B4A88(void)
 
 extern "C" void fn_800B4D7C(void)
 {
-    fn_8009C604(lbl_8030FB60, 248);
+    PlayerAnimStateFillDefaults(lbl_8030FB60, 248);
     lbl_8030FB60[82] = PlayerActionAnimIdlePhase;
     lbl_8030FB60[74] = PlayerLocoCyclePhase;
     lbl_8030FB60[10] = (Handler_800B4D7C)fn_80093D20;
@@ -25829,7 +25829,7 @@ extern "C" void fn_800B5150(Object_80039F5C *p)
         if (scale == 0.0f) {
             scale = 1.0f;
         }
-        fn_8009BD88(p, scale);
+        PlyrSetScale(p, scale);
     }
 }
 
@@ -27409,7 +27409,7 @@ void PostPlayPhase::Finish(float dt)
     } else if (lbl_803EAB78->mUnknown150 == 0) {
         if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF) {
             lbl_803EAB78->mUnknown159[0] = fn_800B43A4();
-        } else if (fn_8009D9D8(1) == 0) {
+        } else if (GameClockIsTimerRunning(1) == 0) {
             lbl_803EAB78->mUnknown159[0] = 0;
         }
         if (lbl_803EAB78->mUnknown159[0] == 0) {
@@ -27455,10 +27455,10 @@ void PostPlayPhase::UpdateCue(float dt)
     fn_800B8C9C();
     if (ReplayIsHalted(gpReplay) != 0 && lbl_803EAB7C == 0 && lbl_803EAB7D != 0
         && lbl_803EAB78->mUnknown154 > 45) {
-        fn_8009BC30(lbl_803EAB80);
+        CelebrationSetReplayChannel(lbl_803EAB80);
         if (ReplayPickScript(0) != 0) {
             CelebrationSetReplayPrompt(0);
-            fn_8009BBD8((int)&lbl_803EAB78->mUnknown104);
+            CelebrationBlocksStartReplay((int)&lbl_803EAB78->mUnknown104);
         }
         lbl_803EAB7C = 1;
     }
@@ -30387,7 +30387,7 @@ extern "C" void PreSnapInitPickTime(void)
     short value = 0;
     int mode = lbl_803EABA8->mUnknown40;
 
-    if (fn_8009D9D8(1) == 0) {
+    if (GameClockIsTimerRunning(1) == 0) {
         mode = 0;
     }
     if (fn_8011F32C() != 0 || fn_8011F228() != 0 || fn_800B119C() == 0) {
@@ -30436,7 +30436,7 @@ extern "C" void fn_800BF174(void)
     } else {
         int mode = lbl_803EABA8->mUnknown40;
 
-        if (fn_8009D9D8(1) == 0) {
+        if (GameClockIsTimerRunning(1) == 0) {
             mode = 0;
         }
         if (ScrmGetDown() == 0) {
@@ -35692,8 +35692,8 @@ extern "C" int fn_800CAC54(Object_80039F5C *p)
         Vector_80039F5C scratch;
 
         foot = 2;
-        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, &scratch);
-        fn_8009BEFC(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, &scratch);
+        PlyrGetJointLocal(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lankle"), &left, &scratch);
+        PlyrGetJointLocal(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rankle"), &right, &scratch);
         if (!(left.mY <= right.mY)) {
             foot = 1;
         }

@@ -16,7 +16,7 @@ extern "C" int PlayerActionTakeFlag1000(Object_80039F5C *p)
 extern "C" void PlayerActionGetJointPose(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
     float rot[4];
-    fn_8009BFD0(p, pPos, rot);
+    PlyrGetBallHoldTransform(p, pPos, rot);
     QuatToEuler(pAngles, rot);
 }
 
@@ -505,7 +505,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     if (!pBlock->mUnknown2) {
         if (!(p->mFlags & 4) && !(pBlock->mUnknown0 <= time - 90.0f) &&
             !(pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
-            *fn_8009CC2C(p, PlayerActionCatchGetBallPos, 15, 2) = index;
+            *PlyrTrackStartHead(p, PlayerActionCatchGetBallPos, 15, 2) = index;
         }
         pBlock->mUnknown2 = 1;
     } else if ((p->mFlags & 4) || !(pBlock->mUnknown0 <= time)) {
@@ -600,7 +600,7 @@ extern "C" int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *p
         unsigned short i;
         Vec2Sub(&end, pTarget, &p->mMotion.mPos);
         Vec2Normalize(&end, &end);
-        Vec2Scale(&end, &end, p->mMotion.mUnknown28 * fn_8009BB54(0));
+        Vec2Scale(&end, &end, p->mMotion.mUnknown28 * CelebrationBlockGetTimeLeft(0));
         Vec2Add(&end, &end, &p->mMotion.mPos);
         end.mZ = 0.0f;
         start = p->mMotion.mPos;

@@ -119,7 +119,7 @@ struct Data_80096E74 {
     unsigned char mUnknown4;
 };
 
-/* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
+/* Record passed to PlyrTrackStart, PlyrTrackCheckHeadLimit and PlyrTrackUpdate. Only the
    accessed fields are declared; the size is unknown. */
 struct Block_8009C6F4 {
     int mUnknown0;

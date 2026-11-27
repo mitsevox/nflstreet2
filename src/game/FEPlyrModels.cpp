@@ -69,8 +69,8 @@ void fn_8008FCB4(int a);
 void fn_8008FD88(int a);
 void fn_8008FE60(void);
 void fn_8008FED4(void);
-void fn_8009BD48(int *pRef, int a, int b, int c);
-void fn_8009CDEC(FEPlyrModel_t *pRecord);
+void PlyrRefSet(int *pRef, int a, int b, int c);
+void PlyrTrackUpdateAll(FEPlyrModel_t *pRecord);
 int fn_800ADD7C(void *pObject, unsigned int a);
 int fn_800ADEFC(void *pObject, unsigned int a);
 void fn_800B267C(Object_800B267C *pObject);
@@ -156,7 +156,7 @@ static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
     fn_800B267C(&pRecord->mUnknown424);
     PlyrMoveCmdClear(pRecord->mUnknown512);
     PlyrMoveCmdClear(pRecord->mUnknown528);
-    fn_8009BD48((int *)pRecord, 3, 0, (unsigned char)index);
+    PlyrRefSet((int *)pRecord, 3, 0, (unsigned char)index);
     pRecord->mUnknown8 = 0;
     pRecord->mUnknown12 = 0;
     pRecord->mUnknown9 = 0;
@@ -252,7 +252,7 @@ static void _FEPlyrUpdateModel(int index, unsigned int step)
         pRecord->mUnknown424.mUnknown8 = pRecord->mUnknown424.mUnknown20;
     }
     PlyrPoseSetFromModel(pRecord);
-    fn_8009CDEC(pRecord);
+    PlyrTrackUpdateAll(pRecord);
     PlyrPoseUpdate(pObject);
     _FEPlyrBuildTransform(pObject);
     if (_FEPlyr_bPairMode ? index == _FEPlyr_iFrontIndex : index == 0) {

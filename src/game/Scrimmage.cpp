@@ -62,7 +62,7 @@ void PlyrMgrResetAll(void);
 void DivotRestartRecords(void);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009D888(int index, int value);
-int fn_8009D9D8(int index);
+int GameClockIsTimerRunning(int index);
 void fn_8009E0EC(void);
 void fn_800A0230(void);
 int fn_800A7FD8(void);
@@ -460,7 +460,7 @@ extern "C" void ScrmStartPlay(void)
     fn_80120618();
     fn_800C9FC0();
     fn_800CA3C4();
-    if (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && fn_8009D9D8(4) == 0) {
+    if (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && GameClockIsTimerRunning(4) == 0) {
         fn_8009D888(4, 0);
     }
     fn_800B2630();

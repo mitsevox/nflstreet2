@@ -83,7 +83,7 @@ int CatchAnimIsSpecialRecord(int handle);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
 int CatchUpAdjustFumbleChance(int team, int value);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
-void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
+void PlyrGetJointBallTransform(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
 int fn_8009D86C(void);
 void fn_8009E458(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
@@ -193,13 +193,13 @@ int BallIsClearOfHands(void *pBall);
 int ChallengeIsActive(void);
 void ChallengePostOutcome(void);
 Object_80039F5C *fn_8009BCE8(int *pRef);
-int fn_8009D558(int a);
+int GameClockUpdate(int a);
 void fn_8009D818(int state);
 void fn_8009D888(int index, int a);
 void fn_8009D8CC(int index);
 void fn_8009D964(int index, int value);
 int fn_8009D9A8(int index);
-int fn_8009D9D8(int index);
+int GameClockIsTimerRunning(int index);
 void fn_800AD910(int a, float b);
 int fn_800B232C(int a);
 int fn_800B2624(void);
@@ -729,10 +729,10 @@ int PossIsWristNearJoint(void *pUnused, Object_80039F5C *p, int right)
 
     if (right) {
         fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "rwrist"), &wrist, 0);
-        fn_8009BFF8(p, &a, &b, 0x12);
+        PlyrGetJointBallTransform(p, &a, &b, 0x12);
     } else {
         fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "lwrist"), &wrist, 0);
-        fn_8009BFF8(p, &a, &b, 0x18);
+        PlyrGetJointBallTransform(p, &a, &b, 0x18);
     }
     if (Vec3DistanceSqr(&wrist, &a) > 0.09f) {
         result = 0;
@@ -1729,7 +1729,7 @@ void ClockRuleUpdate(unsigned int a)
     int flags;
 
     if (fn_8009D86C() != 6) {
-        flags = fn_8009D558(a);
+        flags = GameClockUpdate(a);
     } else {
         flags = 0;
     }
@@ -1831,10 +1831,10 @@ void ClockRuleSnap(void)
     int allow;
 
     ClockRuleClearFlags(0x32B);
-    if (fn_8009D9D8(0) == 1) {
+    if (GameClockIsTimerRunning(0) == 1) {
         fn_8009D8CC(0);
     }
-    if (fn_8009D9D8(1) == 0) {
+    if (GameClockIsTimerRunning(1) == 0) {
         allow = 1;
         if (!ScrmIsTimed()) {
             allow = 0;
@@ -1853,7 +1853,7 @@ void ClockRuleRestartOnReady(void)
     int allow;
     int mode;
 
-    if (fn_8009D9D8(1) == 0 && !ClockRuleTestFlags(1) && ClockRuleTestFlags(2)) {
+    if (GameClockIsTimerRunning(1) == 0 && !ClockRuleTestFlags(1) && ClockRuleTestFlags(2)) {
         allow = 1;
         switch (fn_8009D86C()) {
         case 2:
@@ -1939,7 +1939,7 @@ void ClockRuleApplyPlayEvents(void)
                 case 2:
                 case 4:
                 case 5:
-                    if (fn_8009D9D8(1) && fn_8009D990(1) <= 44 && fn_800B2624()) {
+                    if (GameClockIsTimerRunning(1) && fn_8009D990(1) <= 44 && fn_800B2624()) {
                         Object_80039F5C *p = fn_8009BCE8(&pRecord->mUnknown0);
                         int score = ScrmGetTeamScore(p->mId >> 8 & 0xFF);
 

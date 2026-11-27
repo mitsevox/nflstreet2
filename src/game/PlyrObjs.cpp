@@ -164,7 +164,7 @@ int ObjDelType(int);
 void PlaTexCacheStop();
 void PlayerLookClose();
 int PlaTexCacheGetArchive();
-void fn_8009BD48(int *, int, int, int);
+void PlyrRefSet(int *, int, int, int);
 int PlyrPoseGetStreamBits(int);
 void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
@@ -993,7 +993,7 @@ Object_8003DEC4 *PlyrObjsFindNearest(Point2_t *point, float *distance) {
 AnimSkeleton_t *PlyrObjsGetBodySkeleton() { return _PlyrObjs_pBodySkel; }
 AnimSkeleton_t *PlyrObjsGetSkel19() { return _PlyrObjs_pSkel19; }
 void PlyrObjsGetPlayerRef(Block_80170E64 *object, int *reference) {
-  fn_8009BD48(reference, 0, 0, 0);
+  PlyrRefSet(reference, 0, 0, 0);
   if (object)
     for (unsigned int team = 0; team < 2; ++team)
       for (unsigned int i = 0; i < 7; ++i) {

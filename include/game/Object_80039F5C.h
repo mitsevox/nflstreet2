@@ -53,7 +53,7 @@ struct Block_80170E64 {
     Vector_80039F5C mUnknown4;
     char mUnknown16[4];
     unsigned int mUnknown20;
-    /* +24 is the scale fn_8009BD88 sets alongside player +768. */
+    /* +24 is the scale PlyrSetScale sets alongside player +768. */
     union {
         char mUnknown24[20];
         struct {

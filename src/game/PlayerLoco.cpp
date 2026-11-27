@@ -17,7 +17,7 @@
 #include "game/Vec3Magnitude.h"
 
 extern "C" {
-int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
+int PlayerAnimTablePickBest(Table_80089904 *pTable, const unsigned char *pValues);
 int fn_8009C4B0(Table_80089904 *pTable, Key_80110630 *pKey);
 int AnimChanIsMirrored(AnimChannel_t *pEntry);
 void AnimChanSetMirrored(AnimChannel_t *pEntry, int value);
@@ -57,7 +57,7 @@ extern "C" int PlayerLocoHandleMomentumState(Table_80089904 *pTable, unsigned sh
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
         unsigned char side = p == BallGetCurrentHolder() ? 1 : 2;
-        int i = fn_8009C56C(pTable, &side);
+        int i = PlayerAnimTablePickBest(pTable, &side);
         AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, pTable->mEntries[i].mUnknown2 & 0x7FFF, pTable);
         int index = fn_8009C4B0(pTable, &p->mUnknown1008);
         if (index >= 0) {
@@ -140,7 +140,7 @@ extern "C" void PlayerLocoSelectSecondaryState(Table_80089904 *pTable, Block_801
 
     memset(values, 255, sizeof(values));
     values[0] = pBlock->mUnknown3D;
-    int index = fn_8009C56C(pTable, values);
+    int index = PlayerAnimTablePickBest(pTable, values);
     unsigned short id = pTable->mEntries[index].mUnknown2 & 0x7FFF;
     PlayerLocoSetPoseElements(pTable, p, index, swap);
     AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, id, pTable);
@@ -153,7 +153,7 @@ extern "C" void PlayerLocoSelectStates(Table_80089904 *pTable, Block_801BE60C *p
 
     memset(values, 255, sizeof(values));
     values[0] = pBlock->mUnknown3C;
-    int index = fn_8009C56C(pTable, values);
+    int index = PlayerAnimTablePickBest(pTable, values);
     AnimFileGetStateAnimList(p->mpUnknown796->mUnknown2, pTable->mEntries[index].mUnknown2 & 0x7FFF, pTable);
     PlayerLocoSelectSecondaryState(pTable, pBlock, p, swap);
 }

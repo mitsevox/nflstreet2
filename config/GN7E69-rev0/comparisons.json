@@ -13052,22 +13052,22 @@
           "end": "0x8009BB54"
         },
         {
-          "symbol": "fn_8009BB54",
+          "symbol": "CelebrationBlockGetTimeLeft",
           "start": "0x8009BB54",
           "end": "0x8009BBD8"
         },
         {
-          "symbol": "fn_8009BBD8",
+          "symbol": "CelebrationBlocksStartReplay",
           "start": "0x8009BBD8",
           "end": "0x8009BC30"
         },
         {
-          "symbol": "fn_8009BC30",
+          "symbol": "CelebrationSetReplayChannel",
           "start": "0x8009BC30",
           "end": "0x8009BC38"
         },
         {
-          "symbol": "fn_8009BC38",
+          "symbol": "PlyrObjectInit",
           "start": "0x8009BC38",
           "end": "0x8009BCE8"
         },
@@ -13082,7 +13082,7 @@
           "end": "0x8009BD48"
         },
         {
-          "symbol": "fn_8009BD48",
+          "symbol": "PlyrRefSet",
           "start": "0x8009BD48",
           "end": "0x8009BD60"
         },
@@ -13092,27 +13092,27 @@
           "end": "0x8009BD88"
         },
         {
-          "symbol": "fn_8009BD88",
+          "symbol": "PlyrSetScale",
           "start": "0x8009BD88",
           "end": "0x8009BDA0"
         },
         {
-          "symbol": "fn_8009BDA0",
+          "symbol": "PlyrBuildWorldMatrix",
           "start": "0x8009BDA0",
           "end": "0x8009BE0C"
         },
         {
-          "symbol": "fn_8009BE0C",
+          "symbol": "PlyrBuildInverseMatrix",
           "start": "0x8009BE0C",
           "end": "0x8009BEA8"
         },
         {
-          "symbol": "fn_8009BEA8",
+          "symbol": "PlyrUpdateMatrices",
           "start": "0x8009BEA8",
           "end": "0x8009BEFC"
         },
         {
-          "symbol": "fn_8009BEFC",
+          "symbol": "PlyrGetJointLocal",
           "start": "0x8009BEFC",
           "end": "0x8009BF5C"
         },
@@ -13122,22 +13122,22 @@
           "end": "0x8009BFD0"
         },
         {
-          "symbol": "fn_8009BFD0",
+          "symbol": "PlyrGetBallHoldTransform",
           "start": "0x8009BFD0",
           "end": "0x8009BFF8"
         },
         {
-          "symbol": "fn_8009BFF8",
+          "symbol": "PlyrGetJointBallTransform",
           "start": "0x8009BFF8",
           "end": "0x8009C0B8"
         },
         {
-          "symbol": "fn_8009C0B8",
+          "symbol": "PlyrCopyState",
           "start": "0x8009C0B8",
           "end": "0x8009C158"
         },
         {
-          "symbol": "fn_8009C158",
+          "symbol": "PlyrResetPose",
           "start": "0x8009C158",
           "end": "0x8009C220"
         },
@@ -13147,22 +13147,22 @@
           "end": "0x8009C328"
         },
         {
-          "symbol": "fn_8009C328",
+          "symbol": "PlyrSyncCompare",
           "start": "0x8009C328",
           "end": "0x8009C370"
         },
         {
-          "symbol": "fn_8009C370",
+          "symbol": "PlyrApplyPose",
           "start": "0x8009C370",
           "end": "0x8009C3F8"
         },
         {
-          "symbol": "fn_8009C3F8",
+          "symbol": "PlayerAnimStateStartBest",
           "start": "0x8009C3F8",
           "end": "0x8009C470"
         },
         {
-          "symbol": "fn_8009C470",
+          "symbol": "PlayerAnimStateDefault",
           "start": "0x8009C470",
           "end": "0x8009C4B0"
         },
@@ -13172,12 +13172,12 @@
           "end": "0x8009C56C"
         },
         {
-          "symbol": "fn_8009C56C",
+          "symbol": "PlayerAnimTablePickBest",
           "start": "0x8009C56C",
           "end": "0x8009C604"
         },
         {
-          "symbol": "fn_8009C604",
+          "symbol": "PlayerAnimStateFillDefaults",
           "start": "0x8009C604",
           "end": "0x8009C630"
         },
@@ -13187,12 +13187,12 @@
           "end": "0x8009C684"
         },
         {
-          "symbol": "fn_8009C684",
+          "symbol": "PlyrTrackSetEntry",
           "start": "0x8009C684",
           "end": "0x8009C6F4"
         },
         {
-          "symbol": "fn_8009C6F4",
+          "symbol": "PlyrTrackStart",
           "start": "0x8009C6F4",
           "end": "0x8009C7B4"
         },
@@ -13202,17 +13202,17 @@
           "end": "0x8009C814"
         },
         {
-          "symbol": "fn_8009C814",
+          "symbol": "PlyrTrackCheckHeadLimit",
           "start": "0x8009C814",
           "end": "0x8009C88C"
         },
         {
-          "symbol": "fn_8009C88C",
+          "symbol": "PlyrTrackUpdate",
           "start": "0x8009C88C",
           "end": "0x8009C98C"
         },
         {
-          "symbol": "fn_8009C98C",
+          "symbol": "PlyrTrackTargetJoint",
           "start": "0x8009C98C",
           "end": "0x8009C9D0"
         },
@@ -13222,22 +13222,22 @@
           "end": "0x8009CB0C"
         },
         {
-          "symbol": "fn_8009CB0C",
+          "symbol": "PlyrTrackApplyHeadTurn",
           "start": "0x8009CB0C",
           "end": "0x8009CBD8"
         },
         {
-          "symbol": "fn_8009CBD8",
+          "symbol": "PlyrTrackGetHeadPos",
           "start": "0x8009CBD8",
           "end": "0x8009CC28"
         },
         {
-          "symbol": "fn_8009CC28",
+          "symbol": "PlyrTrackApplyHands",
           "start": "0x8009CC28",
           "end": "0x8009CC2C"
         },
         {
-          "symbol": "fn_8009CC2C",
+          "symbol": "PlyrTrackStartHead",
           "start": "0x8009CC2C",
           "end": "0x8009CD00"
         },
@@ -13247,7 +13247,7 @@
           "end": "0x8009CDEC"
         },
         {
-          "symbol": "fn_8009CDEC",
+          "symbol": "PlyrTrackUpdateAll",
           "start": "0x8009CDEC",
           "end": "0x8009CE88"
         },
@@ -13262,22 +13262,22 @@
           "end": "0x8009CF30"
         },
         {
-          "symbol": "fn_8009CF30",
+          "symbol": "PlyrTrackInit",
           "start": "0x8009CF30",
           "end": "0x8009CF78"
         },
         {
-          "symbol": "fn_8009CF78",
+          "symbol": "PlyrTrackDisable",
           "start": "0x8009CF78",
           "end": "0x8009D00C"
         },
         {
-          "symbol": "fn_8009D00C",
+          "symbol": "PlyrTrackEnable",
           "start": "0x8009D00C",
           "end": "0x8009D04C"
         },
         {
-          "symbol": "fn_8009D04C",
+          "symbol": "PlyrTrackIsInView",
           "start": "0x8009D04C",
           "end": "0x8009D0AC"
         },
@@ -13302,27 +13302,27 @@
           "end": "0x8009D338"
         },
         {
-          "symbol": "fn_8009D338",
+          "symbol": "GameClockTimerIsExpired",
           "start": "0x8009D338",
           "end": "0x8009D348"
         },
         {
-          "symbol": "fn_8009D348",
+          "symbol": "GameClockTimerDecrement",
           "start": "0x8009D348",
           "end": "0x8009D360"
         },
         {
-          "symbol": "fn_8009D360",
+          "symbol": "GameClockTimerCountDown",
           "start": "0x8009D360",
           "end": "0x8009D3D8"
         },
         {
-          "symbol": "fn_8009D3D8",
+          "symbol": "GameClockTimerIncrement",
           "start": "0x8009D3D8",
           "end": "0x8009D3F0"
         },
         {
-          "symbol": "fn_8009D3F0",
+          "symbol": "GameClockTimerCountUp",
           "start": "0x8009D3F0",
           "end": "0x8009D474"
         },
@@ -13332,7 +13332,7 @@
           "end": "0x8009D558"
         },
         {
-          "symbol": "fn_8009D558",
+          "symbol": "GameClockUpdate",
           "start": "0x8009D558",
           "end": "0x8009D818"
         },
@@ -13357,7 +13357,7 @@
           "end": "0x8009D924"
         },
         {
-          "symbol": "fn_8009D924",
+          "symbol": "GameClockPauseTimer",
           "start": "0x8009D924",
           "end": "0x8009D944"
         },
@@ -13392,7 +13392,7 @@
           "end": "0x8009D9D8"
         },
         {
-          "symbol": "fn_8009D9D8",
+          "symbol": "GameClockIsTimerRunning",
           "start": "0x8009D9D8",
           "end": "0x8009D9F8"
         },
