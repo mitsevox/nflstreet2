@@ -429,7 +429,7 @@ Int32 fn_8021CF38(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *
                 *pOut++ = *pArgs++;
                 break;
             case 's':
-                pString = ((Buffer_80222E54 *)*pArgs++)->pText;
+                pString = ((UIGTextBuffer_t *)*pArgs++)->pText;
                 if (pString != NULL) {
                     pOut = fn_8021CE48(pString, pOut, pEnd, Width, Precision, bLeft);
                 } else {
@@ -464,7 +464,7 @@ Int32 fn_8021CF38(char *pDst, Uint32 Size, const char *pFormat, Int32 a, Int32 *
     return pOut - pStart;
 }
 
-void fn_8021D1FC(void *p, Buffer_80222E54 *pDst, Buffer_80222E54 *pFormat, Int32 a, Int32 *pArgs)
+void fn_8021D1FC(void *p, UIGTextBuffer_t *pDst, UIGTextBuffer_t *pFormat, Int32 a, Int32 *pArgs)
 {
     if (pFormat != NULL && pDst != NULL) {
         fn_8021CF38(pDst->pText, pDst->Size, pFormat->pText, a, pArgs);
@@ -768,7 +768,7 @@ Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
     p--;
     switch (Type) {
     case 0:
-        fn_80218AF0(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->s.unk_04,
+        UISInternalLoadScreen(pInfo, pAction->s.GroupID, pAction->s.ScreenID, pAction->s.unk_04,
                     pAction->s.unk_06, Count, pArgs);
         break;
     case 1:
@@ -780,7 +780,7 @@ Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
             pScreen->bWaitingToBeUnloaded = 1;
         }
         if (fn_8021D968(Group, Screen, pInfo, p) == 0 ||
-            fn_802191F0(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
+            UISInternalUnloadScreen(pInfo, Group, Screen, pAction->s.unk_08) == 0) {
             *ppTop = fn_8021D888(pInfo, *ppTop, pAction, GroupID, ScreenID, 1, Count, pArgs);
         }
         break;
@@ -793,21 +793,21 @@ Int32 *fn_8021DAA4(UISInfoT *pInfo, Int32 *p, Int32 **ppTop)
         pInfo->Flags &= ~2;
         break;
     case 3:
-        fn_80219E18(pInfo, 1, pAction->s.GroupID, pAction->s.ScreenID);
+        UISInternalActivateScreen(pInfo, 1, pAction->s.GroupID, pAction->s.ScreenID);
         break;
     case 4:
-        fn_80219E18(pInfo, 0, pAction->s.GroupID, pAction->s.ScreenID);
+        UISInternalActivateScreen(pInfo, 0, pAction->s.GroupID, pAction->s.ScreenID);
         break;
     case 5:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
         break;
     case 6:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
@@ -838,14 +838,14 @@ Int32 *fn_8021DD50(UISInfoT *pInfo, Int32 *p)
     switch (Type) {
     case 5:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 1, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }
         break;
     case 6:
         if (pAction->c.bDone == 0) {
-            fn_80219BA0(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
+            UISInternalActivateControl(pInfo, 0, pAction->c.unk_00, pAction->Words[2], pAction->Words[1],
                         pAction->s.unk_0C, pAction->s.unk_0E);
             pAction->c.bDone = 1;
         }

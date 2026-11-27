@@ -1845,7 +1845,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8021EE54	4	_UIGLibraryFlushCache	name	UIGLibraries.c	-
 0x8021EF04	48	UIGLibrarySetMemInfo	name	UIGLibraries.c	-
 0x8021EF34	56	UIGLibraryClearMemInfo	name	UIGLibraries.c	-
-0x80220BE0	28	UIGCSResetColorStyleCache	gap	UIGLibraries.c	-
+0x80220BE0	28	UIGCSResetColorStyleCache	name	UIGLibraries.c	-
 0x80221374	132	UIGTexNodeLoad	name	UIGTextureNode.c	UIGTextureNode.c
 0x802215B0	60	LLUIGTexNodeRoundToPowerOf2	name	LLUIGTextureNode.c	-
 0x80221738	100	LLUIGTexNodeFreeImage	name	LLUIGTextureNode.c	-

@@ -83,7 +83,7 @@ void _UIGArcBuildFan(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors, 
     memcpy(&Color0, pNode->u.t.unk_14, sizeof(Color0));
     memcpy(&Color1, pNode->u.t.unk_18, sizeof(Color1));
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGArcPalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGArcPalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
         if (pPalette != 0) {
             if (Color0.r > pPalette->mCount) Color0.r = pPalette->mCount - 1;
             if (Color1.r > pPalette->mCount) Color1.r = pPalette->mCount - 1;
@@ -227,7 +227,7 @@ void _UIGArcBuildStrip(UIGNode_t *pNode, Float32 (*pCoords)[2], GXColor *pColors
     memcpy(&Color0, pNode->u.t.unk_14, sizeof(Color0));
     memcpy(&Color1, pNode->u.t.unk_18, sizeof(Color1));
     if (pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        pPalette = (UIGArcPalette_t *)fn_80220B4C(pNode->unk_0A, pNode->unk_08);
+        pPalette = (UIGArcPalette_t *)UIGCSGetColorStyle(pNode->unk_0A, pNode->unk_08);
         if (pPalette != 0) {
             if (Color0.r >= pPalette->mCount) Color0.r = pPalette->mCount - 1;
             if (Color1.r >= pPalette->mCount) Color1.r = pPalette->mCount - 1;
@@ -338,11 +338,11 @@ void _UIGArcDraw(UIGNode_t *pNode)
         Item = UIGLibraryIsItemDataAvailable(pObject, pNode->unk_06, pNode->unk_04);
     }
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220C4C(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSSwapPalette(pNode->unk_0A, pNode->unk_08, Item);
     }
     _UIGArcRender(pNode, Item);
     if (Item != 0 && (pNode->Flags & 0x100) && pNode->unk_08 != -1 && pNode->unk_0A != -1) {
-        fn_80220CA4(pNode->unk_0A, pNode->unk_08, Item);
+        UIGCSRestorePalette(pNode->unk_0A, pNode->unk_08, Item);
     }
 }
 
@@ -514,7 +514,7 @@ void _UIGArcSetClamp(UIGNode_t *pNode, Int32 a, Int32 Item)
 
 void _UIGArcSetMaterialColors(void)
 {
-    UIGMaterialColorState_t *pColor = fn_80220D34();
+    UIGMaterialColorState_t *pColor = UIGRenderGetColorState();
     GXColor MatColor = pColor->mMaterialColor;
     GXColor LightColor = pColor->mLightColor;
 
