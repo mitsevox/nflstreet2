@@ -29169,8 +29169,14 @@
     {
       "source": "src/game/GlowRender.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/GlowRender.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 8 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/GlowRender.cpp (0x8019723C-0x801981D8) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 8 functions exact, the 2 holdouts keep the original bytes.",
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8019723C",
+          "end": "0x80197680"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -29187,10 +29193,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "ParticleTrailDraw",
-            "evidence": "evidence.tsv source-form 0x8019723C-0x80197680"
-          },
-          {
             "function": "GlowRender",
             "evidence": "evidence.tsv source-form 0x80197680-0x80197D08"
           },
@@ -29199,7 +29201,7 @@
             "evidence": "evidence.tsv source-form 0x80197D08-0x80197E64"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/GlowRender.cpp holds out fn_8019723C, fn_80197680, fn_80197D08."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/game/GlowRender.cpp holds out fn_8019723C, fn_80197680, fn_80197D08 (round 5 lane 2 merge notes, 2026-11-27: ParticleTrailDraw made exact)."
       }
     },
     {
