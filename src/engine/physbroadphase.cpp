@@ -204,9 +204,11 @@ void BroadPhase::SwapEndpoints(unsigned short a, unsigned short b, int axis)
 unsigned int BroadPhase::GetOverlapIndex(unsigned short a, unsigned short b)
 {
     if (a > b) {
-        return b * mMaxObjects - ((unsigned int)((b + 1) * b) / 2 + 1) + a - b;
+        int index = b * mMaxObjects - (b + 1) * b / 2u - 1;
+        return index + a - b;
     }
-    return a * mMaxObjects - ((unsigned int)((a + 1) * a) / 2 + 1) + b - a;
+    int index = a * mMaxObjects - (a + 1) * a / 2u - 1;
+    return index + b - a;
 }
 
 float BroadPhase::GetEndpointValue(int axis, unsigned short endpoint, unsigned char *pIsMin)
@@ -352,30 +354,30 @@ void BroadPhase::InsertEndpoint(int axis, unsigned short endpoint)
         mAxisHead[axis] = endpoint;
         pEndpoint->mPrev = current;
         pEndpoint->mNext = current;
-        return;
-    }
-    for (;;) {
-        pCurrent = &mpEndpoints[current];
-        next = pCurrent->mNext;
-        currentValue = mpObjects[pCurrent->mObject].mpBox->mCorner[pCurrent->mIsMax][axis];
-        if ((isMin && value == currentValue) || value < currentValue) {
-            if (pCurrent->mPrev != BROADPHASE_NONE) {
-                mpEndpoints[pCurrent->mPrev].mNext = endpoint;
-            } else {
-                mAxisHead[axis] = endpoint;
+    } else {
+        for (;;) {
+            pCurrent = &mpEndpoints[current];
+            next = pCurrent->mNext;
+            currentValue = mpObjects[pCurrent->mObject].mpBox->mCorner[pCurrent->mIsMax][axis];
+            if ((isMin && value == currentValue) || value < currentValue) {
+                if (pCurrent->mPrev != BROADPHASE_NONE) {
+                    mpEndpoints[pCurrent->mPrev].mNext = endpoint;
+                } else {
+                    mAxisHead[axis] = endpoint;
+                }
+                pEndpoint->mNext = current;
+                pEndpoint->mPrev = pCurrent->mPrev;
+                pCurrent->mPrev = endpoint;
+                return;
             }
-            pEndpoint->mNext = current;
-            pEndpoint->mPrev = pCurrent->mPrev;
-            pCurrent->mPrev = endpoint;
-            return;
+            if (next == BROADPHASE_NONE) {
+                pEndpoint->mNext = next;
+                pEndpoint->mPrev = current;
+                mpEndpoints[current].mNext = endpoint;
+                return;
+            }
+            current = next;
         }
-        if (next == BROADPHASE_NONE) {
-            pEndpoint->mNext = next;
-            pEndpoint->mPrev = current;
-            mpEndpoints[current].mNext = endpoint;
-            return;
-        }
-        current = next;
     }
 }
 
