@@ -1929,7 +1929,7 @@
     {
       "source": "src/Common/UIStudio/UIStudio.c",
       "profile": "uistudio_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _DetermineVisibility, _ParseVisibility, PatchScrData, UISFindStaticObject keep the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
+      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 36 of 39 functions exact, the holdouts _DetermineVisibility, _ParseVisibility, PatchScrData keep the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -1947,12 +1947,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802188A0",
-          "end": "0x80219AF8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80219BA0",
           "end": "0x8021A068"
         },
         {
@@ -1987,13 +1981,9 @@
           {
             "function": "PatchScrData",
             "evidence": "evidence.tsv source-form 0x8021861C-0x802188A0"
-          },
-          {
-            "function": "UISFindStaticObject",
-            "evidence": "evidence.tsv source-form 0x80219AF8-0x80219BA0"
           }
         ],
-        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility, _ParseVisibility, PatchScrData, UISFindStaticObject."
+        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility, _ParseVisibility, PatchScrData (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27)."
       }
     },
     {

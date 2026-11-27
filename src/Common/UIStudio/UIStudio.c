@@ -46,6 +46,12 @@ int sprintf(char *s, const char *format, ...);
 Uint8 UISIsShuttingDown(UISInfoT *pInfo);
 UISControlStateT *UISFindSiblingEnableControl(UISScreenT *pScreen, UISControlStateT *pControlInfo);
 
+/* Address of a static object in the screen's data, or 0 when the entry has no offset. */
+static __inline void *_UISGetObjectAddress(UISScreenT *pScreen, UISObjectRefT *pRef)
+{
+    return pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+}
+
 /* Runs the screen's static objects that have not run yet, then every action
    function under control Control and the controls it links to. */
 static void _ParseInitialize(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, Int32 FncID)
@@ -66,7 +72,7 @@ static void _ParseInitialize(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Contro
             pRef = &pScreen->pData->pObjects[Object];
             if (pRef->State == 0) {
                 if (pRef->ID < pInfo->NumActionFncs && pInfo->ActionFncs[pRef->ID].pFnc != 0) {
-                    pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                    pObject = _UISGetObjectAddress(pScreen, pRef);
                     pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
                 }
                 pRef->State = 1;
@@ -244,7 +250,7 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
         for (Obj = 0; Obj < pScreen->pData->NumObjects; Obj++) {
             pRef = &pScreen->pData->pObjects[Obj];
             if (pRef->ID < pInfo->NumActionFncs && pInfo->ActionFncs[pRef->ID].pFnc != 0) {
-                pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                pObject = _UISGetObjectAddress(pScreen, pRef);
                 pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
             }
         }
@@ -1166,7 +1172,7 @@ void *UISFindStaticObject(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint
         for (Object = 0; Object < pScreen->pData->NumObjects; Object++) {
             pRef = &pScreen->pData->pObjects[Object];
             if (pRef->ID == ObjectID) {
-                pObject = pRef->pOffset != 0 ? (Uint8 *)pScreen->pData + *pRef->pOffset : 0;
+                pObject = _UISGetObjectAddress(pScreen, pRef);
                 break;
             }
         }
