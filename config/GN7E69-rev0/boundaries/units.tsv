@@ -61,7 +61,7 @@ start	end	sibling_file	functions	paired	sibling_functions	name_anchors	size_anch
 0x801CFFD0	0x801D0110	angle.c	2	2	2	2	0	-	-
 0x801D0110	0x801D0370	matrix.c	5	5	5	5	0	-	-
 0x801D0370	0x801D134C	llmatrix.c	39	32	33	32	0	-	-
-0x801D134C	0x801D34C4	Memory.c	39	37	45	27	10	-	-
+0x801D134C	0x801D34C4	Memory.c	39	37	45	28	9	-	-
 0x801D34C4	0x801D36E8	llmemory.c	3	3	3	3	0	-	-
 0x801D36E8	0x801D3BD0	MemExtern.c	10	10	10	1	9	-	-
 0x801D3BD0	0x801D3C68	TibNew.cpp	4	4	8	2	2	-	-
