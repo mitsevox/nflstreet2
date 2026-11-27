@@ -3,16 +3,20 @@
 
 #pragma interface
 
-/* Simulation time of the rigid-body physics: whole ticks and a fraction. */
+/* Simulation time of the rigid-body physics: whole seconds and a fraction. */
 class PhysicsTime {
 public:
     PhysicsTime();
+    PhysicsTime(float time);
     virtual ~PhysicsTime() {}
-    void fn_801E8CA0(float time);
-    void fn_801E8D14(float delta);
+    void SetSeconds(float time);
+    float GetWholeSeconds() const;
+    void AddSeconds(float delta);
 
     unsigned int mIntegral;
     float mFraction;
 };
+
+float PhysTimeElapsed(const PhysicsTime *pEnd, const PhysicsTime *pStart);
 
 #endif

@@ -20714,32 +20714,6 @@
       ]
     },
     {
-      "source": "src/game/CollideSegment.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/CollideSegment.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row. Comparison-only draft CollideSegmentClosestPoints; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80088FFC",
-          "end": "0x80089330"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80295214",
-          "end": "0x80295224"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "CollideSegmentClosestPoints",
-          "start": "0x80088FFC",
-          "end": "0x80089330"
-        }
-      ]
-    },
-    {
       "source": "src/game/cu_8015D3EC.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
