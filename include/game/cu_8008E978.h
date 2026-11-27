@@ -226,7 +226,7 @@ struct Block_800B62D8 {
     unsigned char mUnknown12[10];
 };
 
-/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
+/* Stack block whose address DefReactTryStart passes as the fourth argument of the
    callbacks of the .data table 0x802D7E20; the word at +16 is the level
    DefReactParamsBoost switches on. */
 struct Params_800A4E8C {

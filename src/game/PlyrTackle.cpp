@@ -101,7 +101,7 @@ int MathAngleDiff(int a, int b);
 }
 
 extern "C" {
-void fn_8009A5DC(int a, int b, void *pA, int *pB);
+void CatchAnimUnpackHandle(int a, int b, void *pA, int *pB);
 }
 
 extern "C" {
@@ -2762,7 +2762,7 @@ extern "C" int PlyrContactCanReact(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         if (CatchAnimGetType(handle) == 5 || CatchAnimGetType(handle) == 4)
             result = 0;
         break;
@@ -2790,7 +2790,7 @@ extern "C" int PlyrContactCanBeHit(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         if (CatchAnimGetType(handle) == 5)
             result = 0;
         if ((handle >> 29 & 3) == 1)

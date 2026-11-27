@@ -393,7 +393,7 @@ extern "C" {
 Item_800E0694 *CatchAnimGetRecord(int handle);
 void fn_80099F04(Object_80039F5C *p, int handle, int index);
 void fn_800A2190(int a);
-void fn_8009A5DC(int a, int b, void *pKind, int *pHandle);
+void CatchAnimUnpackHandle(int a, int b, void *pKind, int *pHandle);
 float CatchAnimGetTime(int handle);
 int CatchAnimGetType(int handle);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);

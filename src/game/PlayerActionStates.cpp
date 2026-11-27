@@ -438,7 +438,7 @@ extern "C" int PlayerActionCatchEnter(Object_80039F5C *p)
     int handle;
     pBlock->mUnknown0 = 0;
     pBlock->mUnknown2 = 0;
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     float time = CatchAnimGetTime(handle);
     if (fn_801BE648(p->mpUnknown792) == 224) {
         unsigned char entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 224, 0);
@@ -485,7 +485,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     Input_800B6D34 input;
     unsigned char index;
     int handle;
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     if (p->mFlags & 0x4000) {
         fn_800B6D34(p, &input);
         if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10))

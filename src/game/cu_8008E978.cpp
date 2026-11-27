@@ -5780,7 +5780,7 @@ extern "C" float CatchAnimComputeTiming(Object_80039F5C *p, int handle, Ball_t *
 
 extern "C" int CatchAnimSearch(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, float range, Block_800997F4 *pBlock, int filter, float *pZone, unsigned char loose, int kind, int side);
 
-extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side);
+extern "C" int CatchAnimSearchReach(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side);
 
 extern "C" int CatchSyncOnRestore(void *p, int value);
 
@@ -5822,7 +5822,7 @@ extern "C" int CatchAnimIsSidelineRecord(int handle);
 
 extern "C" int CatchAnimIsSpecialRecord(int handle);
 
-extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle);
+extern "C" void CatchAnimUnpackHandle(int high, int low, void *pKind, int *pHandle);
 
 extern "C" Item_8009A63C *CatchAnimGetRecord(int ref);
 
@@ -5944,7 +5944,7 @@ extern "C" void PlyrCopyState(Object_80039F5C *p, const Object_80039F5C *pOther)
 
 extern "C" void PlyrResetPose(Object_80039F5C *p, int reset);
 
-extern "C" int fn_8009C220(void *pA, void *pB);
+extern "C" int PlyrSyncComparePoseEntries(void *pA, void *pB);
 
 extern "C" int PlyrSyncCompare(Object_80039F5C *pA, Object_80039F5C *pB);
 
@@ -5964,7 +5964,7 @@ extern "C" float PlayerAnimSlotFindValue(Object_80039F5C *p, int id);
 
 extern "C" int PlyrTrackSetEntry(Entry_8009C684 *pEntry, Entry_800AF82C *pEntries, void (*pCallback)(Object_80039F5C *, Vector_80039F5C *, void *), int b, int c);
 
-extern "C" int fn_8009C7B4(Vector_80039F5C *pVec);
+extern "C" int PlyrTrackIsOutsideLimit(Vector_80039F5C *pVec);
 
 extern "C" unsigned char PlyrTrackCheckHeadLimit(Object_80039F5C *p, Block_8009C6F4 *pBlock);
 
@@ -5972,7 +5972,7 @@ extern "C" unsigned char PlyrTrackUpdate(Object_80039F5C *p, Block_8009C6F4 *pBl
 
 extern "C" void PlyrTrackTargetJoint(void *p, Vector_80039F5C *pOut, int *pRef);
 
-extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone);
+extern "C" void PlyrTrackTurnBone(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone);
 
 extern "C" void PlyrTrackApplyHeadTurn(Object_80039F5C *p);
 
@@ -5996,7 +5996,7 @@ extern "C" void PlyrTrackEnable(void *p, int *pState);
 
 extern "C" int PlyrTrackIsInView(Object_80039F5C *p, Object_80039F5C *pOther, int limit);
 
-extern "C" void fn_8009D0AC(Object_80039F5C *p);
+extern "C" void PlyrTrackPickLookTarget(Object_80039F5C *p);
 
 extern "C" void fn_8009D1AC(Object_80039F5C *p);
 
@@ -6050,7 +6050,7 @@ extern "C" void DefCoverInitReceivers(void);
 
 extern "C" void DefCoverFlipFormation(int flag);
 
-extern "C" int fn_8009DBB4(State_8011F4EC *p);
+extern "C" int DefCoverAreReceiversAhead(State_8011F4EC *p);
 
 extern "C" void DefCoverClearState(State_8011F4EC *p);
 
@@ -6128,7 +6128,7 @@ extern "C" unsigned int DefPredGetGuess(void);
 
 extern "C" void DefPredScoreGuess(void);
 
-extern "C" float fn_800A0134(int team,int unused,int index);
+extern "C" float DefPredGetRatingScale(int team,int unused,int index);
 
 extern "C" void DefPredPostAudio(void);
 
@@ -6344,7 +6344,7 @@ extern "C" unsigned short PlyrTurnAnimSelectByAngle(Table_80089904 *pTable, Obje
 
 extern "C" int PlyrTurnAnimCallback(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
 
-extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse);
+extern "C" int DefReactGetInterceptAngle(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse);
 
 extern "C" int DefReactGetFlankAngle(Object_80039F5C *p, Object_80039F5C *pTarget);
 
@@ -6356,7 +6356,7 @@ extern "C" void DefReactParamsByDistance(Object_80039F5C *p, Object_80039F5C *pO
 
 extern "C" void DefReactParamsAlways(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
-extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
+extern "C" int DefReactTryStart(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
 
 extern "C" int DefReactTestFirstInView(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
@@ -6502,7 +6502,7 @@ extern "C" void fn_800A7F6C(void);
 
 extern "C" int GamebreakerIsCutscenePlaying(void);
 
-extern "C" int fn_800A7FE0(void);
+extern "C" int GamebreakerUpdateCutscene(void);
 
 extern "C" short GamebreakerAdjustRating(int team, int unused, int index, short value);
 
@@ -6590,7 +6590,7 @@ extern "C" void GamebreakerSceneHandOffBall(void);
 
 extern "C" void GamebreakerScenePostEvent(int event, Object_80039F5C *p);
 
-extern "C" void fn_800A9D84(FieldPoint_t *pOut);
+extern "C" void GamebreakerSceneAdjustSpot(FieldPoint_t *pOut);
 
 extern "C" char *GamebreakerSceneGetBuffer(int index);
 
@@ -8790,7 +8790,7 @@ extern "C" void AnmsClearObjectsFromArea(void)
    first player's id byte +3 is 1 it is set up first: if fn_800AD9B4
    returns 1 or 7 it goes to the origin and its facing alternates between
    0 and 0x800000 on each call; otherwise character kind 1 takes
-   fn_800A9D84's spot facing 0x400000, kinds 0 and 5 keep it, and other kinds (kind 3 with sub-kind up to 7 faces 0x400000,
+   GamebreakerSceneAdjustSpot's spot facing 0x400000, kinds 0 and 5 keep it, and other kinds (kind 3 with sub-kind up to 7 faces 0x400000,
    the rest face 0x800000 for positive x) are clamped to x in [-1, 1] and
    y within ScrmGetEndLineY() - 8. AnimSeqPushPlayersFromArea then runs, and every player
    gets its frame spot and facing from AnmsGetCastSpot unless actor flag
@@ -8815,7 +8815,7 @@ extern "C" int AnmsPlaceCast(int index)
 
             if (kind != 5) {
                 if (kind == 1) {
-                    fn_800A9D84((FieldPoint_t *)&p->mMotion.mPos);
+                    GamebreakerSceneAdjustSpot((FieldPoint_t *)&p->mMotion.mPos);
                     p->mMotion.mFacing = 0x400000;
                 } else if (kind != 0) {
                     float limit;
@@ -11872,7 +11872,7 @@ extern "C" unsigned char PlyrReachIsActive(Object_80039F5C *p)
     unsigned char result;
 
     if (lbl_803EA93C != 0 && p->mpState->mId == 28) {
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         kind = CatchAnimGetSide(handle);
         switch (kind) {
         case 1:
@@ -11916,7 +11916,7 @@ extern "C" int PlyrReachSetWristTargets(Object_80039F5C *p, float duration)
     unsigned int type;
 
     if (p->mpState->mId == 28) {
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         type = CatchAnimGetSide(handle);
         switch (type) {
         case 0:
@@ -12607,7 +12607,7 @@ extern "C" int CatchAnimSearch(Object_80039F5C *p, Vector_80039F5C *pPos, int fa
 
 /* The simpler catch search fn_80099AD0 and fn_80099C80 use: same record walk and ball flight as
    CatchAnimSearch, scored on reach distance and height error only. */
-extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay,
+extern "C" int CatchAnimSearchReach(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay,
                            Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side)
 {
     float best = -15.0f;
@@ -12951,7 +12951,7 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Ball_t *pBall, int a, int mode, 
     if (e != 0) {
         flags = 2;
     }
-    if (fn_80098EAC(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) != 0x1FFFFFFF) {
+    if (CatchAnimSearchReach(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) != 0x1FFFFFFF) {
         return;
     }
     facing = p->mMotion.mFacing;
@@ -12969,7 +12969,7 @@ extern "C" void fn_80099AD0(Object_80039F5C *p, Ball_t *pBall, int a, int mode, 
         }
     }
     p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
-    if (fn_80098EAC(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) == 0x1FFFFFFF) {
+    if (CatchAnimSearchReach(p, &p->mMotion.mPos, p->mMotion.mFacing, 0, pBall, a, mode, b, d, flags, 0) == 0x1FFFFFFF) {
         p->mMotion.mFacing = facing;
         p->mpUnknown796->mUnknown8 = facing;
         fn_80099734(p, pBall, a, mode, 120.0f, 0, b, 0, d, e);
@@ -13031,7 +13031,7 @@ extern "C" int fn_80099C80(Object_80039F5C *p, Ball_t *pBall, unsigned char b, i
                 kind = 4;
                 break;
             }
-            result = fn_80098EAC(p, &end, angle, key + lbl_803EA944, pBall, kind, kind, 3, b, 1, flags);
+            result = CatchAnimSearchReach(p, &end, angle, key + lbl_803EA944, pBall, kind, kind, 3, b, 1, flags);
             if (result != 0x1FFFFFFF) {
                 break;
             }
@@ -13243,7 +13243,7 @@ extern "C" int CatchAnimIsSpecialRecord(int handle)
     return 0;
 }
 
-extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle)
+extern "C" void CatchAnimUnpackHandle(int high, int low, void *pKind, int *pHandle)
 {
     unsigned short value;
 
@@ -14085,7 +14085,7 @@ extern "C" void PlyrResetPose(Object_80039F5C *p, int reset)
     }
 }
 
-extern "C" int fn_8009C220(void *pA, void *pB)
+extern "C" int PlyrSyncComparePoseEntries(void *pA, void *pB)
 {
     PoseCompare_8009C220 *p = (PoseCompare_8009C220 *)pA;
     PoseCompare_8009C220 *pOther = (PoseCompare_8009C220 *)pB;
@@ -14107,7 +14107,7 @@ extern "C" int PlyrSyncCompare(Object_80039F5C *pA, Object_80039F5C *pB)
 {
     int result = SyncStateCompareBytes(pA, pB, 0x310);
 
-    return result | fn_8009C220(pA->mUnknown816, pB->mUnknown816);
+    return result | PlyrSyncComparePoseEntries(pA->mUnknown816, pB->mUnknown816);
 }
 
 extern "C" void PlyrApplyPose(Object_80039F5C *p)
@@ -14248,20 +14248,24 @@ extern "C" Entry_8009C684 *PlyrTrackStart(Entry_800AF82C *pEntries, Block_8009C6
     return pEntry;
 }
 
-extern "C" int fn_8009C7B4(Vector_80039F5C *pVec)
+extern "C" int PlyrTrackIsOutsideLimit(Vector_80039F5C *pVec)
 {
     FieldPoint_t point;
+    int angle;
 
     point.mX = pVec->mX;
     point.mY = pVec->mZ;
-    return abs((point.Heading() - 0x400000) << 8 >> 8) > lbl_803EA9A4;
+    angle = (point.Heading() - 0x400000) << 8 >> 8;
+
+    angle = abs(angle);
+    return angle > lbl_803EA9A4;
 }
 
 extern "C" unsigned char PlyrTrackCheckHeadLimit(Object_80039F5C *p, Block_8009C6F4 *pBlock)
 {
     Entry_8009C684 *pEntry = &pBlock->mEntries[pBlock->mUnknown4];
 
-    if (pBlock->mUnknown0 == 2 && fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+    if (pBlock->mUnknown0 == 2 && PlyrTrackIsOutsideLimit(&pEntry->mUnknown4) == 1) {
         fn_8009CE88(p, pBlock, 6);
     }
     return pBlock->mUnknown0 > 1;
@@ -14292,7 +14296,7 @@ extern "C" unsigned char PlyrTrackUpdate(Object_80039F5C *p, Block_8009C6F4 *pBl
         MatLoad((float *)p->mUnknown704);
         Vec3Mat34Mul(&pEntry->mUnknown4, &pEntry->mUnknown4);
         MatPop();
-        if (fn_8009C7B4(&pEntry->mUnknown4) == 1) {
+        if (PlyrTrackIsOutsideLimit(&pEntry->mUnknown4) == 1) {
             fn_8009CE88(p, pBlock, 6);
         }
         break;
@@ -14306,7 +14310,7 @@ extern "C" void PlyrTrackTargetJoint(void *p, Vector_80039F5C *pOut, int *pRef)
     fn_8009BF5C(fn_8009BCE8(pRef), pRef[1], pOut, 0);
 }
 
-extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone)
+extern "C" void PlyrTrackTurnBone(Object_80039F5C *p, Vector_80039F5C *pTarget, int bone)
 {
     Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
     Block_8009C6F4 *pBlock = (Block_8009C6F4 *)&p->mUnknown16;
@@ -14325,13 +14329,15 @@ extern "C" void fn_8009C9D0(Object_80039F5C *p, Vector_80039F5C *pTarget, int bo
     MatTranspose();
     Vec3Mat33Mul(&dir, &dir);
     MatPop();
-    angle = -MathArcTan2(dir.mZ, dir.mX) + 0x400000;
+    angle = -MathArcTan2(dir.mZ, dir.mX);
+    angle += 0x400000;
     if (angle > lbl_803EA9A0) {
         angle = lbl_803EA9A0;
     } else if (angle < lbl_803EA99C) {
         angle = lbl_803EA99C;
     }
-    rot = angle >> 8;
+    angle >>= 8;
+    rot = angle;
     if (pBlock->mUnknown8 != 6) {
         short prev;
 
@@ -14362,8 +14368,8 @@ extern "C" void PlyrTrackApplyHeadTurn(Object_80039F5C *p)
             if (pBlock->mUnknown8 < 6) {
                 pBlock->mUnknown8++;
             }
-            fn_8009C9D0(p, pTarget, 29);
-            fn_8009C9D0(p, pTarget, 28);
+            PlyrTrackTurnBone(p, pTarget, 29);
+            PlyrTrackTurnBone(p, pTarget, 28);
             MatPop();
         } else {
             short *pRot29 = &pObject->mUnknown44.mUnknown48[29 * 3];
@@ -14542,7 +14548,7 @@ extern "C" int PlyrTrackIsInView(Object_80039F5C *p, Object_80039F5C *pOther, in
     return MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing) < limit;
 }
 
-extern "C" void fn_8009D0AC(Object_80039F5C *p)
+extern "C" void PlyrTrackPickLookTarget(Object_80039F5C *p)
 {
     int ref = 0;
 
@@ -14597,10 +14603,10 @@ extern "C" int fn_8009D1F4(Object_80039F5C *p)
     if (p->mUnknown292 != 0) {
         p->mUnknown296--;
         if (PlyrTrackIsInView(p, fn_8009BCE8(&p->mUnknown292), 0x155555) == 0 || p->mUnknown296 < 0) {
-            fn_8009D0AC(p);
+            PlyrTrackPickLookTarget(p);
         }
     } else {
-        fn_8009D0AC(p);
+        PlyrTrackPickLookTarget(p);
     }
     return p->mUnknown292 == 0;
 }
@@ -14949,7 +14955,7 @@ static inline void GetEntryPos(PlayBookFormation_t *pTeam, PlayBookPosition_t *p
     pOut->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
 }
 
-extern "C" int fn_8009DBB4(State_8011F4EC *p)
+extern "C" int DefCoverAreReceiversAhead(State_8011F4EC *p)
 {
     int result = 0;
     int team = ScrmGetOffenseTeam();
@@ -15057,7 +15063,7 @@ extern "C" void DefCoverSetupFormation(int flag)
     if ((pObject->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
         p->mUnknown1A8 = pObject->mUnknown8.mUnknownF == 0;
-        if (fn_8009DBB4(p) != 0) {
+        if (DefCoverAreReceiversAhead(p) != 0) {
             if (p->mUnknown1A8 == 0) {
                 p->mUnknown1A8 = 1;
             }
@@ -15088,7 +15094,7 @@ extern "C" void fn_8009E01C(void)
     team = ScrmGetDefenseTeam();
     if ((PlayBookGetFormation((unsigned char)team)->mUnknown8.mUnknown14 & 1) && (PlayBookGetPlay((unsigned char)team)->mUnknown18 & 1)
         && fn_800B65A0(team) == 0xFF) {
-        if (fn_8009DBB4(p) != 0) {
+        if (DefCoverAreReceiversAhead(p) != 0) {
             if (p->mUnknown1A8 == 0) {
                 p->mUnknown1A8 = 1;
             }
@@ -15108,7 +15114,7 @@ extern "C" void DefCoverStartPlay(void)
 
     DefCoverInitReceivers();
     p->mUnknown1A2 = 0;
-    p->mUnknown1A8 = fn_8009DBB4(p);
+    p->mUnknown1A8 = DefCoverAreReceiversAhead(p);
     DefCoverBuildZones();
     DefReactResetCounts();
 }
@@ -16069,7 +16075,7 @@ extern "C" void DefPredScoreGuess(void)
     }
 }
 
-/* Per-kind rating multipliers of fn_800A0134, ten per table. */
+/* Per-kind rating multipliers of DefPredGetRatingScale, ten per table. */
 static const float lbl_80297D94[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.05f, 1.5f, 1.0f, 1.0f, 1.0f, 2.0f};
 static const float lbl_80297DBC[10] = {1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.85f, 1.0f, 1.0f, 0.5f, 0.5f};
 static const float lbl_80297DE4[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.05f, 1.25f, 1.0f, 1.0f, 1.75f, 2.0f};
@@ -16077,7 +16083,7 @@ static const float lbl_80297E0C[10] = {1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.85f, 1.0
 static const float lbl_80297E34[10] = {1.0f, 1.0f, 1.0f, 1.0f, 1.05f, 1.5f, 1.0f, 1.0f, 1.5f, 1.5f};
 static const float lbl_80297E5C[10] = {1.0f, 1.0f, 1.0f, 1.0f, 0.95f, 0.85f, 1.0f, 1.0f, 0.75f, 0.75f};
 
-extern "C" float fn_800A0134(int team,int unused,int index)
+extern "C" float DefPredGetRatingScale(int team,int unused,int index)
 {
     float result=1.0f;
     unsigned int kind=DefPredGetResult();
@@ -17895,7 +17901,7 @@ extern "C" int PlyrTurnAnimCallback(Table_80089904 *table, unsigned short key, v
     return 0;
 }
 
-extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse)
+extern "C" int DefReactGetInterceptAngle(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse)
 {
     float velocity[3];
 
@@ -18002,7 +18008,7 @@ extern "C" void DefReactParamsAlways(Object_80039F5C *p, Object_80039F5C *pOther
     pParams->mUnknownC = 5;
 }
 
-extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level)
+extern "C" int DefReactTryStart(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level)
 {
     Params_800A4E8C params;
     int result = 0;
@@ -18047,11 +18053,11 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
                                       : (p->mTarget.mUnknownC > params.mUnknown0 ? params.mUnknown0 : p->mTarget.mUnknownC);
                 }
                 p->mFlags |= 0x20000;
-                p->mTarget.mValue = p->mTarget.mUnknownC;
                 result = 1;
                 p->mTarget.mUnknown10 = 0;
                 p->mTarget.mUnknown4 = -1;
                 p->mTarget.mUnknown8 = 1.0f;
+                p->mTarget.mValue = p->mTarget.mUnknownC;
             }
         }
     }
@@ -18236,7 +18242,7 @@ extern "C" int DefReactSteerToTarget(Object_80039F5C *p, Object_80039F5C *pTarge
 
 extern "C" int DefReactSteerIntercept(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
-    int angle = fn_800A46D8(p, pTarget, 0);
+    int angle = DefReactGetInterceptAngle(p, pTarget, 0);
 
     p->mUnknown512.mUnknown14 = 1;
     p->mUnknown512.mUnknown8 = angle;
@@ -18271,7 +18277,7 @@ extern "C" int DefReactSteerInterceptOnce(Object_80039F5C *p, Object_80039F5C *p
         if (pTarget->mpState->mId != 35) {
             result = 0;
         } else {
-            *pState = fn_800A46D8(p, pTarget, 0);
+            *pState = DefReactGetInterceptAngle(p, pTarget, 0);
         }
     }
     p->mUnknown512.mUnknown14 = 1;
@@ -18394,7 +18400,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
         Object_80039F5C *p = PlyrGet(team, i);
 
         if ((p->mFlags & 0x4000) == 0 && DefReactCanReact(p, pTarget, pOther, kind)
-            && fn_800A4E8C(p, pOther, kind, level)) {
+            && DefReactTryStart(p, pOther, kind, level)) {
             AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
                 StyleTrackerOnMoveResult(4);
@@ -19405,7 +19411,7 @@ extern "C" int GamebreakerIsCutscenePlaying(void)
     return lbl_803EAA4D;
 }
 
-extern "C" int fn_800A7FE0(void)
+extern "C" int GamebreakerUpdateCutscene(void)
 {
     Character_80093BCC *pCharacter = 0;
     Object_80039F5C *p;
@@ -20261,7 +20267,7 @@ static inline void _ScrimAssert(int)
 
 #define SCRIM_ASSERT(e) _ScrimAssert(e)
 
-extern "C" void fn_800A9D84(FieldPoint_t *pOut)
+extern "C" void GamebreakerSceneAdjustSpot(FieldPoint_t *pOut)
 {
     int midRound = lbl_8030F42C.mUnknown0 >= 3 && lbl_8030F42C.mUnknown0 <= 5;
     int first = lbl_8030F42C.mUnknown4 == 0;
@@ -25570,7 +25576,7 @@ extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
         value = GameSkillAdjustRating(team, i, value);
         value = CatchUpAdjustRating(team, i, value);
         value = GamebreakerAdjustRating(team, index, i, value);
-        pRatings[i] = (short)(value * scale * fn_800A0134(team, (unsigned char)id, i));
+        pRatings[i] = (short)(value * scale * DefPredGetRatingScale(team, (unsigned char)id, i));
     }
 }
 
@@ -30662,7 +30668,7 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
 {
     int result = GamebreakerIsCutscenePlaying();
 
-    if (result != 0 && fn_800A7FE0() == 0) {
+    if (result != 0 && GamebreakerUpdateCutscene() == 0) {
         result = 0;
         if (fn_800A937C() == 0) {
             HudPost3AOn();
@@ -32711,7 +32717,7 @@ extern "C" int fn_800C4184(Object_80039F5C *p)
         int unknown;
         int handle;
 
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
         if (CatchAnimGetType(handle) == 5) {
             return 0;
         }
@@ -33417,7 +33423,7 @@ extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
     } else {
         switch (pState->mId) {
         case 28:
-            fn_8009A5DC(pState->mUnknown1, pState->mUnknown2, &pKind, &handle);
+            CatchAnimUnpackHandle(pState->mUnknown1, pState->mUnknown2, &pKind, &handle);
             if (CatchAnimGetType(handle) == 5) {
                 result = 0;
             }
@@ -33707,7 +33713,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
     case 11:
         return 0;
     case 28:
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &pA, &b);
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &pA, &b);
         if (CatchAnimGetType(b) == 5) {
             return 0;
         }
@@ -33715,7 +33721,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
     }
     switch (pOther->mpState->mId) {
     case 28:
-        fn_8009A5DC(pOther->mpState->mUnknown1, pOther->mpState->mUnknown2, &pA, &b);
+        CatchAnimUnpackHandle(pOther->mpState->mUnknown1, pOther->mpState->mUnknown2, &pA, &b);
         if (CatchAnimGetType(b) == 5) {
             return 0;
         }
