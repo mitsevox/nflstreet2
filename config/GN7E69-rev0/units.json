@@ -955,10 +955,6 @@
       "address": "0x8018EAAC",
       "evidence": "evidence.tsv function/name rows for 0x8018EAAC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
-    "CollideSegmentClosestPoints": {
-      "address": "0x80088FFC",
-      "evidence": "evidence.tsv function/name rows for 0x80088FFC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "SstlFetchEntry": {
       "address": "0x8018EB20",
       "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
@@ -10802,6 +10798,25 @@
         ],
         "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 11 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv (16 until round 3 lane 2, PR #1451, made BigObjHitStatic, DynObjChildSpawn, DynObjParseRender and PhysUpdatePlayers exact and linked them; 12 until wave p1 lane b made PhysPushPlayer exact and linked it)."
       }
+    },
+    {
+      "source": "src/game/CollideSegment.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/CollideSegment.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088FFC",
+          "end": "0x80089330"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295214",
+          "end": "0x80295224"
+        }
+      ]
     },
     {
       "source": "src/game/CollideContacts.cpp",
