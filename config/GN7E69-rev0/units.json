@@ -3225,7 +3225,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E6F48",
+          "start": "0x800E6AC8",
           "end": "0x800E7588"
         },
         {
@@ -3296,10 +3296,6 @@
           {
             "function": "PlyrEngageGetInputDir",
             "evidence": "evidence.tsv source-form 0x800E6984-0x800E6AC8"
-          },
-          {
-            "function": "PlyrEngageTryShed",
-            "evidence": "evidence.tsv source-form 0x800E6AC8-0x800E6F48"
           },
           {
             "function": "PlyrTackleStartAnim",
@@ -26265,18 +26261,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DB7A4",
-          "end": "0x800DBAF0"
+          "end": "0x800DCC14"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DBB74",
-          "end": "0x800DC6F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DD5E4",
+          "start": "0x800DD2E8",
           "end": "0x800DD994"
         },
         {
@@ -26289,12 +26279,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DF1F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DF654",
           "end": "0x800DF6EC"
         },
         {
@@ -26317,14 +26301,6 @@
             "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
           },
           {
-            "function": "PlayerActionAnimIsPitchArmed",
-            "evidence": "evidence.tsv source-form 0x800DBAF0-0x800DBB74"
-          },
-          {
-            "function": "PlayerActionAnimTurnPhase",
-            "evidence": "evidence.tsv source-form 0x800DC6F4-0x800DCC14"
-          },
-          {
             "function": "PlayerActionAnimSpeedBlendPhase",
             "evidence": "evidence.tsv source-form 0x800DCC14-0x800DCE2C"
           },
@@ -26333,20 +26309,12 @@
             "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
           },
           {
-            "function": "PlayerActionAnimReactionPhase",
-            "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
-          },
-          {
             "function": "PlayerActionAnimStartVariant",
             "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
           },
           {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimGenericPhase",
-            "evidence": "evidence.tsv source-form 0x800DF1F4-0x800DF654"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
