@@ -2739,7 +2739,7 @@ void PhysInit(void)
     _Phys_iBodyCount = 0;
     _Phys_iShapeCount = 0;
     memset(_Phys_aBodyOwners, 0, sizeof(PhysBodyOwner_t) * 142);
-    _Phys_sTime.fn_801E8CA0(0.0f);
+    _Phys_sTime.SetSeconds(0.0f);
     _Phys_pBodyGroup = new (0) PhysBodyGroup;
     Vector_80039F5C center;
     center.mX = center.mY = center.mZ = 0.0f;
@@ -2787,7 +2787,7 @@ void PhysInit(void)
     {
         PhysicsTime next;
         next = _Phys_sTime;
-        next.fn_801E8D14(1.0f / 60.0f);
+        next.AddSeconds(1.0f / 60.0f);
         _Phys_pWorld->Step(&_Phys_sTime, &next);
         _Phys_sTime = next;
     }
@@ -2985,7 +2985,7 @@ void PhysUpdate(float dt)
     PhysUpdateBall();
     if (!_Phys_bFrozen) {
         next = _Phys_sTime;
-        next.fn_801E8D14(dt * (1.0f / 60.0f));
+        next.AddSeconds(dt * (1.0f / 60.0f));
         _Phys_pWorld->Step(&_Phys_sTime, &next);
         _Phys_sTime = next;
     }
