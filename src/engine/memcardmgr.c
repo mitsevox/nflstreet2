@@ -8,38 +8,38 @@
 #include "engine/memorycard.h"
 #include <string.h>
 
-typedef struct Struct_803EBD20 {
+typedef struct MemCardFileType_t {
     int mMaxFiles;
     int mUnknown4;
     char mCode[8];
     char *mPrefix;
-} Struct_803EBD20;
+} MemCardFileType_t;
 
-typedef struct Struct_803ECF18 {
+typedef struct MemCardSlot_t {
     unsigned char mUsed;
     unsigned char mFlag;
     char mName[18];
     int mIndex;
-    Struct_801D4848 *mEntry;
-} Struct_803ECF18;
+    MemCDirEntry_t *mEntry;
+} MemCardSlot_t;
 
-typedef struct Struct_803EBD2C {
+typedef struct MemCardTypeSlots_t {
     signed char mCount;
-    Struct_803ECF18 *mSlots;
-} Struct_803EBD2C;
+    MemCardSlot_t *mSlots;
+} MemCardTypeSlots_t;
 
-typedef struct Struct_80398DE0 {
+typedef struct MemCardInfo_t {
     int mUnknown0;
     int mUnknown4;
     int mCardType[2];
     char mTypeName[12];
-} Struct_80398DE0;
+} MemCardInfo_t;
 
-typedef struct Struct_801D676C {
+typedef struct MemCardHeader_t {
     char mData[0x40];
-} Struct_801D676C;
+} MemCardHeader_t;
 
-typedef struct Struct_80398DFC {
+typedef struct MemCardOp_t {
     int mHandle;
     int mUnknown4;
     int mUnknown8;
@@ -59,44 +59,44 @@ typedef struct Struct_80398DFC {
     unsigned char mUnknownEE;
     unsigned char mUnknownEF;
     unsigned char mUnknownF0;
-} Struct_80398DFC;
+} MemCardOp_t;
 
-typedef int (*Func_803EBD30)(char *pBuffer, int size, void *pComment);
-typedef void (*Func_803EBD34)(void);
-typedef void (*Func_803EBD38)(int arg0, unsigned char **ppData, unsigned int *pSize);
-typedef void (*Func_803EBD3C)(int arg0, int arg1);
+typedef int (*MemCardGetNameFunc_t)(char *pBuffer, int size, void *pComment);
+typedef void (*MemCardSysInfoFunc_t)(void);
+typedef void (*MemCardGetIconFunc_t)(int arg0, unsigned char **ppData, unsigned int *pSize);
+typedef void (*MemCardFreeIconFunc_t)(int arg0, int arg1);
 
-static int lbl_802F7B64[] = {
+static int _MemCardMgr_aModeStates[] = {
     0x1000, 0x1001, 0x1002, 0x1004, 0x100C, 0x100E, 0x1022, 0x1027,
     0x102F, 0x1031, 0x1033, 0x1035, 0x1037, 0x1039, 0x102D,
 };
 
-static unsigned int lbl_803EBD00 = 0x103C;
-static int lbl_803EBD04 = 1;
-static signed char lbl_803EBD08 = -1;
-static int lbl_803EBD0C = 0;
-static unsigned char lbl_803EBD10 = 0;
-static int lbl_803EBD14 = 0;
-static unsigned char lbl_803EBD18 = 0;
-static unsigned char lbl_803EBD19 = 0;
-static int lbl_803EBD1C = 0;
-static Struct_803EBD20 *lbl_803EBD20 = 0;
-static int lbl_803EBD24 = 0;
-static Struct_801D4848 *lbl_803EBD28 = 0;
-static Struct_803EBD2C *lbl_803EBD2C = 0;
-static Func_803EBD30 lbl_803EBD30 = 0;
-static Func_803EBD34 lbl_803EBD34 = 0;
-static Func_803EBD38 lbl_803EBD38 = 0;
-static Func_803EBD3C lbl_803EBD3C = 0;
-static unsigned char lbl_803EBD40 = 1;
+static unsigned int _MemCardMgr_uState = 0x103C;
+static int _MemCardMgr_iIdleState = 1;
+static signed char _MemCardMgr_cPollDelay = -1;
+static int _MemCardMgr_iResult = 0;
+static unsigned char _MemCardMgr_bResultReady = 0;
+static int _MemCardMgr_iScanIndex = 0;
+static unsigned char _MemCardMgr_bScanStarted = 0;
+static unsigned char _MemCardMgr_bProbeStarted = 0;
+static int _MemCardMgr_iNumTypes = 0;
+static MemCardFileType_t *_MemCardMgr_pTypes = 0;
+static int _MemCardMgr_iMaxEntries = 0;
+static MemCDirEntry_t *_MemCardMgr_pDirEntries = 0;
+static MemCardTypeSlots_t *_MemCardMgr_pTypeSlots = 0;
+static MemCardGetNameFunc_t _MemCardMgr_pfnGetName = 0;
+static MemCardSysInfoFunc_t _MemCardMgr_pfnSysInfo = 0;
+static MemCardGetIconFunc_t _MemCardMgr_pfnGetIcon = 0;
+static MemCardFreeIconFunc_t _MemCardMgr_pfnFreeIcon = 0;
+static unsigned char _MemCardMgr_bUnusedFlag = 1;
 
-static unsigned int lbl_803ECF10;
-static int lbl_803ECF14;
-static Struct_803ECF18 **lbl_803ECF18;
+static unsigned int _MemCardMgr_uScanPort;
+static int _MemCardMgr_iPort;
+static MemCardSlot_t **_MemCardMgr_ppEntrySlots;
 
-static Struct_80398DE0 lbl_80398DE0;
-static Struct_80398DFC lbl_80398DFC;
-static char lbl_80398F00[0x200] __attribute__((aligned(32)));
+static MemCardInfo_t _MemCardMgr_CardInfo;
+static MemCardOp_t _MemCardMgr_Op;
+static char _MemCardMgr_aHeaderBuffer[0x200] __attribute__((aligned(32)));
 
 typedef struct Str3_t {
     char mText[3];
@@ -127,7 +127,7 @@ extern int MemCAsyncGetFreeSpace(int port);
 extern int MemCAsyncGetFreeEntries(int port);
 extern int MemCAsyncSeek(int handle, int offset, int whence);
 extern int MemCAsyncGetSysInfo(int port, const char *pName, int size);
-extern int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
+extern int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, MemCDirEntry_t *pEntries,
                            unsigned int maxEntries);
 
 
@@ -137,47 +137,47 @@ extern void *memset();
 extern int memcmp(const void *pA, const void *pB, unsigned int count);
 extern int sprintf(char *pBuffer, const char *pFormat, ...);
 
-void fn_801D5D30(int state);
+void MemCardMgrSetState(int state);
 int fn_801D673C(int port);
-void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused);
-void fn_801D8428(char *pBuffer, int size, const char *pName);
-void fn_801D8460(char *pBuffer, int size, const char *pName);
-int fn_801D85B0(int handle);
-int fn_801D85DC(int handle, int arg, char *pName, int size, Struct_801D4848 *pEntry, Func_803EBD30 pFunc);
-int fn_801D85E4(int handle, int type, char *pTitle, int slot, Func_803EBD34 pFunc);
-void fn_801D6294(int result);
-void fn_801D6318(void);
-void fn_801D6340(void);
-void fn_801D6368(const char *pName, const char *pExtra);
-void fn_801D63B0(void);
-void fn_801D63E8(int size);
-int fn_801D6DA8(int slot, int type);
+void MemCardMgrMakeFilePath(char *pBuffer, int size, const char *pName, const char *pUnused);
+void MemCardMgrMakeEntryPath(char *pBuffer, int size, const char *pName);
+void MemCardMgrMakeDirPattern(char *pBuffer, int size, const char *pName);
+int MemCardMgrReadHeader(int handle);
+int MemCardMgrGetNameFromHeader(int handle, int arg, char *pName, int size, MemCDirEntry_t *pEntry, MemCardGetNameFunc_t pFunc);
+int MemCardMgrWriteSysInfo(int handle, int type, char *pTitle, int slot, MemCardSysInfoFunc_t pFunc);
+void MemCardMgrFailOperation(int result);
+void MemCardMgrFlushFile(void);
+void MemCardMgrCloseFile(void);
+void MemCardMgrDeleteFile(const char *pName, const char *pExtra);
+void MemCardMgrOpenFile(void);
+void MemCardMgrCreateFile(int size);
+int MemCardMgrIsSlotCorrupt(int slot, int type);
 void MemCardMgrBuildSlotTables(int count);
 void MemCardMgrUpdateProbe(void);
-void fn_801D5D38(const char *pName, int *pIndex);
-void fn_801D5E08(const char *pName, char *pOut);
-void fn_801D8498(char *pDst, const char *pSrc);
-int fn_801D84B8(const char *pA, const char *pB);
-void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry);
-void fn_801D868C(int type, int port, char *pBuffer, int size);
+void MemCardMgrFindFileType(const char *pName, int *pIndex);
+void MemCardMgrGetFileSuffix(const char *pName, char *pOut);
+void MemCardMgrCopyGameCode(char *pDst, const char *pSrc);
+int MemCardMgrCompareGameCode(const char *pA, const char *pB);
+void MemCardMgrFormatDate(char *pBuffer, int unused, MemCDirEntry_t *pEntry);
+void MemCardMgrFormatCardType(int type, int port, char *pBuffer, int size);
 
-void fn_801D5D30(int state)
+void MemCardMgrSetState(int state)
 {
-    lbl_803EBD00 = state;
+    _MemCardMgr_uState = state;
 }
 
-void fn_801D5D38(const char *pName, int *pIndex)
+void MemCardMgrFindFileType(const char *pName, int *pIndex)
 {
     const char *pTitle;
     char *pPrefix;
     int length;
 
-    for (*pIndex = 0; *pIndex < lbl_803EBD1C; (*pIndex)++) {
+    for (*pIndex = 0; *pIndex < _MemCardMgr_iNumTypes; (*pIndex)++) {
         pTitle = pName + 7;
         if (pTitle != 0) {
-            pPrefix = lbl_803EBD20[*pIndex].mPrefix;
+            pPrefix = _MemCardMgr_pTypes[*pIndex].mPrefix;
             length = strlen(pPrefix);
-            if (fn_801D84B8(lbl_803EBD20[*pIndex].mCode, lbl_80398DFC.mCode) == 0
+            if (MemCardMgrCompareGameCode(_MemCardMgr_pTypes[*pIndex].mCode, _MemCardMgr_Op.mCode) == 0
                 && strncmp(pTitle, pPrefix, length) == 0) {
                 return;
             }
@@ -185,7 +185,7 @@ void fn_801D5D38(const char *pName, int *pIndex)
     }
 }
 
-void fn_801D5E08(const char *pName, char *pOut)
+void MemCardMgrGetFileSuffix(const char *pName, char *pOut)
 {
     const char *pTitle = pName + 7;
     char *pPrefix;
@@ -195,10 +195,10 @@ void fn_801D5E08(const char *pName, char *pOut)
     if (pTitle == 0) {
         return;
     }
-    for (i = 0; i < lbl_803EBD1C; i++) {
-        pPrefix = lbl_803EBD20[i].mPrefix;
+    for (i = 0; i < _MemCardMgr_iNumTypes; i++) {
+        pPrefix = _MemCardMgr_pTypes[i].mPrefix;
         length = strlen(pPrefix);
-        if (fn_801D84B8(lbl_803EBD20[i].mCode, lbl_80398DFC.mCode) == 0 && strncmp(pTitle, pPrefix, length) == 0) {
+        if (MemCardMgrCompareGameCode(_MemCardMgr_pTypes[i].mCode, _MemCardMgr_Op.mCode) == 0 && strncmp(pTitle, pPrefix, length) == 0) {
             strcpy(pOut, pTitle + length);
             return;
         }
@@ -211,42 +211,42 @@ void MemCardMgrBuildSlotTables(int count)
     int type;
     int n;
 
-    if (lbl_803EBD2C != 0) {
-        for (i = 0; i < lbl_803EBD1C; i++) {
-            if (lbl_803EBD2C[i].mSlots != 0) {
-                fn_801D2BD0(lbl_803EBD2C[i].mSlots);
-                lbl_803EBD2C[i].mSlots = 0;
+    if (_MemCardMgr_pTypeSlots != 0) {
+        for (i = 0; i < _MemCardMgr_iNumTypes; i++) {
+            if (_MemCardMgr_pTypeSlots[i].mSlots != 0) {
+                fn_801D2BD0(_MemCardMgr_pTypeSlots[i].mSlots);
+                _MemCardMgr_pTypeSlots[i].mSlots = 0;
             }
-            lbl_803EBD2C[i].mCount = 0;
+            _MemCardMgr_pTypeSlots[i].mCount = 0;
         }
     }
     for (i = 0; i < count; i++) {
-        fn_801D5D38(lbl_803EBD28[i].mName, &type);
-        if (type < lbl_803EBD1C && fn_801D84B8(lbl_803EBD20[type].mCode, lbl_80398DFC.mCode) == 0
-            && lbl_803EBD2C[type].mCount < lbl_803EBD20[type].mMaxFiles) {
-            lbl_803EBD2C[type].mCount++;
+        MemCardMgrFindFileType(_MemCardMgr_pDirEntries[i].mName, &type);
+        if (type < _MemCardMgr_iNumTypes && MemCardMgrCompareGameCode(_MemCardMgr_pTypes[type].mCode, _MemCardMgr_Op.mCode) == 0
+            && _MemCardMgr_pTypeSlots[type].mCount < _MemCardMgr_pTypes[type].mMaxFiles) {
+            _MemCardMgr_pTypeSlots[type].mCount++;
         }
     }
     for (i = 0; i < count; i++) {
-        fn_801D5D38(lbl_803EBD28[i].mName, &type);
-        if (type < lbl_803EBD1C) {
-            if (fn_801D84B8(lbl_803EBD20[type].mCode, lbl_80398DFC.mCode) == 0) {
-                if (lbl_803EBD2C[type].mSlots == 0) {
-                    lbl_803EBD2C[type].mSlots = fn_801D2B7C(lbl_803EBD2C[type].mCount * sizeof(Struct_803ECF18), 0, 0);
-                    lbl_803EBD2C[type].mCount = 0;
+        MemCardMgrFindFileType(_MemCardMgr_pDirEntries[i].mName, &type);
+        if (type < _MemCardMgr_iNumTypes) {
+            if (MemCardMgrCompareGameCode(_MemCardMgr_pTypes[type].mCode, _MemCardMgr_Op.mCode) == 0) {
+                if (_MemCardMgr_pTypeSlots[type].mSlots == 0) {
+                    _MemCardMgr_pTypeSlots[type].mSlots = fn_801D2B7C(_MemCardMgr_pTypeSlots[type].mCount * sizeof(MemCardSlot_t), 0, 0);
+                    _MemCardMgr_pTypeSlots[type].mCount = 0;
                 }
-                n = lbl_803EBD2C[type].mCount;
-                if (n < lbl_803EBD20[type].mMaxFiles) {
-                    lbl_803EBD2C[type].mSlots[n].mUsed = 1;
-                    lbl_803EBD2C[type].mSlots[n].mFlag = 1;
-                    lbl_803EBD2C[type].mSlots[n].mEntry = &lbl_803EBD28[i];
-                    lbl_803EBD2C[type].mSlots[n].mIndex = i;
-                    lbl_803ECF18[i] = &lbl_803EBD2C[type].mSlots[n];
-                    lbl_803EBD2C[type].mCount++;
+                n = _MemCardMgr_pTypeSlots[type].mCount;
+                if (n < _MemCardMgr_pTypes[type].mMaxFiles) {
+                    _MemCardMgr_pTypeSlots[type].mSlots[n].mUsed = 1;
+                    _MemCardMgr_pTypeSlots[type].mSlots[n].mFlag = 1;
+                    _MemCardMgr_pTypeSlots[type].mSlots[n].mEntry = &_MemCardMgr_pDirEntries[i];
+                    _MemCardMgr_pTypeSlots[type].mSlots[n].mIndex = i;
+                    _MemCardMgr_ppEntrySlots[i] = &_MemCardMgr_pTypeSlots[type].mSlots[n];
+                    _MemCardMgr_pTypeSlots[type].mCount++;
                 }
             }
         } else {
-            lbl_803ECF18[i] = 0;
+            _MemCardMgr_ppEntrySlots[i] = 0;
         }
     }
 }
@@ -255,247 +255,247 @@ void MemCardMgrUpdateProbe(void)
 {
     int result = -1;
 
-    switch (lbl_803EBD00) {
+    switch (_MemCardMgr_uState) {
     case 0x102F:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncProbe(lbl_803ECF14);
-            fn_801D5D30(0x1030);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncProbe(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x1030);
         }
         break;
     case 0x1030:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DE0.mCardType[lbl_803ECF14] = result;
+                _MemCardMgr_CardInfo.mCardType[_MemCardMgr_iPort] = result;
             } else {
-                lbl_80398DE0.mCardType[lbl_803ECF14] = 0;
+                _MemCardMgr_CardInfo.mCardType[_MemCardMgr_iPort] = 0;
             }
-            fn_801D868C(fn_801D673C(lbl_803ECF14), lbl_803ECF14, lbl_80398DE0.mTypeName, sizeof(lbl_80398DE0.mTypeName));
-            lbl_803EBD0C = result;
-            lbl_803EBD10 = 1;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            MemCardMgrFormatCardType(fn_801D673C(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
+            _MemCardMgr_iResult = result;
+            _MemCardMgr_bResultReady = 1;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     }
 }
 
-void fn_801D6294(int result)
+void MemCardMgrFailOperation(int result)
 {
     SysEnableReset(1);
     if (result == -2) {
-        lbl_803EBD0C = result;
-        lbl_803EBD10 = 1;
-        strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-        fn_801D5D30(lbl_803EBD04);
+        _MemCardMgr_iResult = result;
+        _MemCardMgr_bResultReady = 1;
+        strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+        MemCardMgrSetState(_MemCardMgr_iIdleState);
     } else {
-        lbl_803EBD0C = result;
-        lbl_803EBD10 = 1;
-        strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-        fn_801D5D30(lbl_803EBD04);
+        _MemCardMgr_iResult = result;
+        _MemCardMgr_bResultReady = 1;
+        strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+        MemCardMgrSetState(_MemCardMgr_iIdleState);
     }
 }
 
-void fn_801D6318(void)
+void MemCardMgrFlushFile(void)
 {
-    MemCAsyncFlush(lbl_80398DFC.mHandle);
+    MemCAsyncFlush(_MemCardMgr_Op.mHandle);
 }
 
-void fn_801D6340(void)
+void MemCardMgrCloseFile(void)
 {
-    MemCAsyncClose(lbl_80398DFC.mHandle);
+    MemCAsyncClose(_MemCardMgr_Op.mHandle);
 }
 
-void fn_801D6368(const char *pName, const char *pExtra)
+void MemCardMgrDeleteFile(const char *pName, const char *pExtra)
 {
-    fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), pName, pExtra);
-    MemCAsyncDelete(lbl_803ECF14, lbl_80398DFC.mFileName);
+    MemCardMgrMakeFilePath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), pName, pExtra);
+    MemCAsyncDelete(_MemCardMgr_iPort, _MemCardMgr_Op.mFileName);
 }
 
-void fn_801D63B0(void)
+void MemCardMgrOpenFile(void)
 {
-    MemCAsyncOpen(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 0, 0);
+    MemCAsyncOpen(_MemCardMgr_iPort, _MemCardMgr_Op.mFileName, 4, 0, 0);
 }
 
-void fn_801D63E8(int size)
+void MemCardMgrCreateFile(int size)
 {
-    MemCAsyncOpen(lbl_803ECF14, lbl_80398DFC.mFileName, 4, 1, size);
+    MemCAsyncOpen(_MemCardMgr_iPort, _MemCardMgr_Op.mFileName, 4, 1, size);
 }
 
-unsigned int fn_801D6420(Struct_801D4848 *pEntry)
+unsigned int MemCardMgrPackDate(MemCDirEntry_t *pEntry)
 {
     return ((pEntry->mYear - 2000) << 26) | ((pEntry->mMonth & 0xF) << 22) | ((pEntry->mDay & 0x1F) << 17)
          | ((pEntry->mHour & 0x1F) << 12) | ((pEntry->mMinute & 0x3F) << 6) | (pEntry->mSecond & 0x3F);
 }
 
-void fn_801D646C(void)
+void MemCardMgrInit(void)
 {
     int i;
 
-    memset(&lbl_80398DFC, 0, sizeof(lbl_80398DFC));
-    lbl_803EBD00 = 0x1001;
-    lbl_803EBD04 = 0;
+    memset(&_MemCardMgr_Op, 0, sizeof(_MemCardMgr_Op));
+    _MemCardMgr_uState = 0x1001;
+    _MemCardMgr_iIdleState = 0;
     MemCInit();
     for (i = 1; i >= 0; i--) {
-        lbl_80398DE0.mCardType[i] = -1;
+        _MemCardMgr_CardInfo.mCardType[i] = -1;
     }
-    lbl_803ECF14 = -1;
-    lbl_803EBD18 = 0;
-    lbl_803EBD19 = 0;
+    _MemCardMgr_iPort = -1;
+    _MemCardMgr_bScanStarted = 0;
+    _MemCardMgr_bProbeStarted = 0;
 }
 
-void fn_801D64EC(void)
+void MemCardMgrShutdown(void)
 {
     int result = 0;
 
     while (MemCAsyncPoll(&result) == 0) {
     }
-    lbl_803EBD00 = 0x103C;
+    _MemCardMgr_uState = 0x103C;
     MemCShutdown();
-    lbl_803ECF14 = -1;
-    lbl_803EBD18 = 0;
-    lbl_803EBD19 = 0;
+    _MemCardMgr_iPort = -1;
+    _MemCardMgr_bScanStarted = 0;
+    _MemCardMgr_bProbeStarted = 0;
 }
 
-void fn_801D654C(int enable)
+void MemCardMgrEnablePolling(int enable)
 {
     int result;
 
     if (enable) {
-        if (lbl_803EBD04 == 0x1000) {
-            lbl_803EBD08 = 6;
+        if (_MemCardMgr_iIdleState == 0x1000) {
+            _MemCardMgr_cPollDelay = 6;
         } else {
-            lbl_803EBD08 = 1;
+            _MemCardMgr_cPollDelay = 1;
         }
     } else {
         result = 0;
         while (MemCAsyncPoll(&result) == 0) {
         }
-        lbl_803EBD08 = -1;
+        _MemCardMgr_cPollDelay = -1;
     }
 }
 
-void fn_801D65B4(int mode)
+void MemCardMgrSetIdleMode(int mode)
 {
-    lbl_803EBD04 = lbl_802F7B64[mode];
-    if (lbl_803EBD04 == 0x1000 && lbl_803EBD00 != 0x1000) {
-        fn_801D5D30(0x1000);
+    _MemCardMgr_iIdleState = _MemCardMgr_aModeStates[mode];
+    if (_MemCardMgr_iIdleState == 0x1000 && _MemCardMgr_uState != 0x1000) {
+        MemCardMgrSetState(0x1000);
     }
-    if (lbl_803EBD04 == 0x1001 && lbl_803EBD00 != 0x1001) {
-        fn_801D5D30(0x1001);
+    if (_MemCardMgr_iIdleState == 0x1001 && _MemCardMgr_uState != 0x1001) {
+        MemCardMgrSetState(0x1001);
     }
 }
 
-int fn_801D6620(int *pResult)
+int MemCardMgrGetResult(int *pResult)
 {
-    if (lbl_803EBD10) {
-        *pResult = lbl_803EBD0C;
-        lbl_803EBD10 = 0;
+    if (_MemCardMgr_bResultReady) {
+        *pResult = _MemCardMgr_iResult;
+        _MemCardMgr_bResultReady = 0;
         return 1;
     }
     return 0;
 }
 
-void fn_801D6650(int mode)
+void MemCardMgrStartOperation(int mode)
 {
-    fn_801D5D30(lbl_802F7B64[mode]);
+    MemCardMgrSetState(_MemCardMgr_aModeStates[mode]);
 }
 
-void fn_801D6680(int port)
+void MemCardMgrUnmount(int port)
 {
     int i;
 
-    if (lbl_803EBD2C != 0) {
-        for (i = 0; i < lbl_803EBD1C; i++) {
-            if (lbl_803EBD2C[i].mSlots != 0) {
-                fn_801D2BD0(lbl_803EBD2C[i].mSlots);
-                lbl_803EBD2C[i].mSlots = 0;
+    if (_MemCardMgr_pTypeSlots != 0) {
+        for (i = 0; i < _MemCardMgr_iNumTypes; i++) {
+            if (_MemCardMgr_pTypeSlots[i].mSlots != 0) {
+                fn_801D2BD0(_MemCardMgr_pTypeSlots[i].mSlots);
+                _MemCardMgr_pTypeSlots[i].mSlots = 0;
             }
-            lbl_803EBD2C[i].mCount = 0;
+            _MemCardMgr_pTypeSlots[i].mCount = 0;
         }
     }
     MemCUnMount(port);
 }
 
-void fn_801D6714(int port)
+void MemCardMgrSetPort(int port)
 {
-    lbl_803ECF14 = port;
+    _MemCardMgr_iPort = port;
 }
 
 int fn_801D671C(void)
 {
-    return lbl_803ECF14;
+    return _MemCardMgr_iPort;
 }
 
-int fn_801D6724(void)
+int MemCardMgrGetFreeSpace(void)
 {
-    return lbl_80398DE0.mUnknown0;
+    return _MemCardMgr_CardInfo.mUnknown0;
 }
 
-int fn_801D6730(void)
+int MemCardMgrGetFreeEntries(void)
 {
-    return lbl_80398DE0.mUnknown4;
+    return _MemCardMgr_CardInfo.mUnknown4;
 }
 
 int fn_801D673C(int port)
 {
-    return lbl_80398DE0.mCardType[port];
+    return _MemCardMgr_CardInfo.mCardType[port];
 }
 
-void fn_801D6754(int value)
+void MemCardMgrSetFileType(int value)
 {
-    lbl_80398DFC.mUnknown4 = value;
+    _MemCardMgr_Op.mUnknown4 = value;
 }
 
-void fn_801D6760(int value)
+void MemCardMgrSetFileSize(int value)
 {
-    lbl_80398DFC.mUnknown8 = value;
+    _MemCardMgr_Op.mUnknown8 = value;
 }
 
-void fn_801D676C(Struct_801D676C *pInfo)
+void MemCardMgrSetFileHeader(MemCardHeader_t *pInfo)
 {
     if (pInfo != 0) {
-        *(Struct_801D676C *)lbl_80398DFC.mInfo = *pInfo;
+        *(MemCardHeader_t *)_MemCardMgr_Op.mInfo = *pInfo;
     }
 }
 
-void fn_801D67E4(const char *pTitle, const char *pDescription)
+void MemCardMgrSetFileStrings(const char *pTitle, const char *pDescription)
 {
     if (pTitle != 0) {
-        strcpy(lbl_80398DFC.mTitle, pTitle);
+        strcpy(_MemCardMgr_Op.mTitle, pTitle);
     }
     if (pDescription != 0) {
-        strcpy(lbl_80398DFC.mDescription, pDescription);
+        strcpy(_MemCardMgr_Op.mDescription, pDescription);
     }
 }
 
-void fn_801D6838(int value)
+void MemCardMgrSetSlot(int value)
 {
-    lbl_80398DFC.mUnknownC = value;
+    _MemCardMgr_Op.mUnknownC = value;
 }
 
-int fn_801D6844(void)
+int MemCardMgrGetSlot(void)
 {
-    return lbl_80398DFC.mUnknownC;
+    return _MemCardMgr_Op.mUnknownC;
 }
 
 int fn_801D6850(void)
 {
-    return lbl_80398DFC.mUnknown4;
+    return _MemCardMgr_Op.mUnknown4;
 }
 
-void fn_801D685C(const char *pCode, int flag)
+void MemCardMgrSetGameCode(const char *pCode, int flag)
 {
-    fn_801D8498(lbl_80398DFC.mCode, pCode);
-    lbl_80398DFC.mUnknownEE = flag;
+    MemCardMgrCopyGameCode(_MemCardMgr_Op.mCode, pCode);
+    _MemCardMgr_Op.mUnknownEE = flag;
 }
 
-void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type, char *pOut, int size)
+void MemCardMgrBuildFileName(const char *pSuffix, const char *pPrefix, int unused, int type, char *pOut, int size)
 {
     char name[32];
 
-    strcpy(name, lbl_803EBD20[type].mPrefix);
+    strcpy(name, _MemCardMgr_pTypes[type].mPrefix);
     sprintf(pOut, "%s%s%s", pPrefix, name, pSuffix);
     /* FAKEMATCH: the target keeps the unreferenced string "%s-%s" (0x802AFED8) right after "%s%s%s";
        this never-executed call keeps it there with no code (see the evidence.tsv source-form row) */
@@ -504,99 +504,99 @@ void fn_801D689C(const char *pSuffix, const char *pPrefix, int unused, int type,
     }
 }
 
-void fn_801D6904(int a, int b)
+void MemCardMgrSetFileOptions(int a, int b)
 {
-    lbl_80398DFC.mUnknownEF = a;
-    lbl_80398DFC.mUnknownF0 = b;
+    _MemCardMgr_Op.mUnknownEF = a;
+    _MemCardMgr_Op.mUnknownF0 = b;
 }
 
 char *fn_801D6918(void)
 {
-    return lbl_80398DFC.mLastAction;
+    return _MemCardMgr_Op.mLastAction;
 }
 
-void fn_801D6924(Func_803EBD30 a, Func_803EBD34 b, Func_803EBD38 c, Func_803EBD3C d)
+void MemCardMgrSetCallbacks(MemCardGetNameFunc_t a, MemCardSysInfoFunc_t b, MemCardGetIconFunc_t c, MemCardFreeIconFunc_t d)
 {
-    lbl_803EBD30 = a;
-    lbl_803EBD34 = b;
-    lbl_803EBD38 = c;
-    lbl_803EBD3C = d;
+    _MemCardMgr_pfnGetName = a;
+    _MemCardMgr_pfnSysInfo = b;
+    _MemCardMgr_pfnGetIcon = c;
+    _MemCardMgr_pfnFreeIcon = d;
 }
 
-void fn_801D6938(Struct_803EBD20 *pTypes, int count)
+void MemCardMgrSetFileTypes(MemCardFileType_t *pTypes, int count)
 {
     int i;
 
-    if (lbl_803EBD28 != 0) {
-        fn_801D2BD0(lbl_803EBD28);
-        lbl_803EBD28 = 0;
+    if (_MemCardMgr_pDirEntries != 0) {
+        fn_801D2BD0(_MemCardMgr_pDirEntries);
+        _MemCardMgr_pDirEntries = 0;
     }
-    if (lbl_803ECF18 != 0) {
-        fn_801D2BD0(lbl_803ECF18);
-        lbl_803ECF18 = 0;
+    if (_MemCardMgr_ppEntrySlots != 0) {
+        fn_801D2BD0(_MemCardMgr_ppEntrySlots);
+        _MemCardMgr_ppEntrySlots = 0;
     }
-    if (lbl_803EBD2C != 0) {
-        for (i = 0; i < lbl_803EBD1C; i++) {
-            if (lbl_803EBD2C[i].mSlots != 0) {
-                fn_801D2BD0(lbl_803EBD2C[i].mSlots);
-                lbl_803EBD2C[i].mSlots = 0;
+    if (_MemCardMgr_pTypeSlots != 0) {
+        for (i = 0; i < _MemCardMgr_iNumTypes; i++) {
+            if (_MemCardMgr_pTypeSlots[i].mSlots != 0) {
+                fn_801D2BD0(_MemCardMgr_pTypeSlots[i].mSlots);
+                _MemCardMgr_pTypeSlots[i].mSlots = 0;
             }
         }
-        fn_801D2BD0(lbl_803EBD2C);
-        lbl_803EBD2C = 0;
+        fn_801D2BD0(_MemCardMgr_pTypeSlots);
+        _MemCardMgr_pTypeSlots = 0;
     }
-    lbl_803EBD1C = count;
-    lbl_803EBD24 = 0;
-    lbl_803EBD20 = pTypes;
+    _MemCardMgr_iNumTypes = count;
+    _MemCardMgr_iMaxEntries = 0;
+    _MemCardMgr_pTypes = pTypes;
     for (i = 0; i < count; i++) {
-        lbl_803EBD24 += pTypes[i].mMaxFiles;
+        _MemCardMgr_iMaxEntries += pTypes[i].mMaxFiles;
     }
-    lbl_803EBD28 = fn_801D2B7C(lbl_803EBD24 * sizeof(Struct_801D4848), 0, 0);
-    lbl_803ECF18 = fn_801D2B7C(lbl_803EBD24 * sizeof(Struct_803ECF18 *), 0, 0);
-    lbl_803EBD2C = fn_801D2B7C(lbl_803EBD1C * sizeof(Struct_803EBD2C), 0, 0);
-    memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(Struct_801D4848));
-    memset(lbl_803ECF18, 0, lbl_803EBD24 * sizeof(Struct_803ECF18 *));
-    memset(lbl_803EBD2C, 0, lbl_803EBD1C * sizeof(Struct_803EBD2C));
+    _MemCardMgr_pDirEntries = fn_801D2B7C(_MemCardMgr_iMaxEntries * sizeof(MemCDirEntry_t), 0, 0);
+    _MemCardMgr_ppEntrySlots = fn_801D2B7C(_MemCardMgr_iMaxEntries * sizeof(MemCardSlot_t *), 0, 0);
+    _MemCardMgr_pTypeSlots = fn_801D2B7C(_MemCardMgr_iNumTypes * sizeof(MemCardTypeSlots_t), 0, 0);
+    memset(_MemCardMgr_pDirEntries, 0, _MemCardMgr_iMaxEntries * sizeof(MemCDirEntry_t));
+    memset(_MemCardMgr_ppEntrySlots, 0, _MemCardMgr_iMaxEntries * sizeof(MemCardSlot_t *));
+    memset(_MemCardMgr_pTypeSlots, 0, _MemCardMgr_iNumTypes * sizeof(MemCardTypeSlots_t));
 }
 
-int fn_801D6AC8(int type)
+int MemCardMgrCountFiles(int type)
 {
     int count;
     int i;
 
     if (type == -1) {
         count = 0;
-        for (i = 0; i < lbl_803EBD24; i++) {
-            count += lbl_803EBD2C[i].mCount;
+        for (i = 0; i < _MemCardMgr_iMaxEntries; i++) {
+            count += _MemCardMgr_pTypeSlots[i].mCount;
         }
         return count;
     }
-    return lbl_803EBD2C[type].mCount;
+    return _MemCardMgr_pTypeSlots[type].mCount;
 }
 
-int fn_801D6B14(int type)
+int MemCardMgrGetMaxFiles(int type)
 {
-    return lbl_803EBD20[type].mMaxFiles;
+    return _MemCardMgr_pTypes[type].mMaxFiles;
 }
 
 void fn_801D6B24(char *pDst, int size)
 {
-    strcpy(pDst, lbl_80398DFC.mTitle);
+    strcpy(pDst, _MemCardMgr_Op.mTitle);
 }
 
-void fn_801D6B4C(char *pDst, int size)
+void MemCardMgrGetFileName(char *pDst, int size)
 {
-    strcpy(pDst, lbl_80398DFC.mDescription);
+    strcpy(pDst, _MemCardMgr_Op.mDescription);
 }
 
 int MemCardMgrGetSlotInfo(int slot, int type, char *pName, int nameSize, char *pDate, int dateArg, unsigned char *pFlag)
 {
     int used = 0;
-    Struct_803ECF18 *pSlot;
+    MemCardSlot_t *pSlot;
 
-    if (slot < lbl_803EBD2C[type].mCount) {
-        if (lbl_803EBD2C[type].mSlots[slot].mUsed) {
-            pSlot = &lbl_803EBD2C[type].mSlots[slot];
+    if (slot < _MemCardMgr_pTypeSlots[type].mCount) {
+        if (_MemCardMgr_pTypeSlots[type].mSlots[slot].mUsed) {
+            pSlot = &_MemCardMgr_pTypeSlots[type].mSlots[slot];
             used = pSlot->mUsed;
             if (pName != 0) {
                 if (pSlot->mFlag) {
@@ -606,33 +606,33 @@ int MemCardMgrGetSlotInfo(int slot, int type, char *pName, int nameSize, char *p
                 }
             }
             if (pDate != 0) {
-                MemCardMgrFormatDate(pDate, dateArg, lbl_803EBD2C[type].mSlots[slot].mEntry);
+                MemCardMgrFormatDate(pDate, dateArg, _MemCardMgr_pTypeSlots[type].mSlots[slot].mEntry);
             }
             if (pFlag != 0) {
-                *pFlag = lbl_803EBD2C[type].mSlots[slot].mFlag;
+                *pFlag = _MemCardMgr_pTypeSlots[type].mSlots[slot].mFlag;
             }
         }
     }
     return used;
 }
 
-int fn_801D6C70(int slot, int type, char *pDst, int count)
+int MemCardMgrGetSlotEntryName(int slot, int type, char *pDst, int count)
 {
-    return (int)strnzcpy(pDst, lbl_803EBD2C[type].mSlots[slot].mEntry->mName, count);
+    return (int)strnzcpy(pDst, _MemCardMgr_pTypeSlots[type].mSlots[slot].mEntry->mName, count);
 }
 
-unsigned int fn_801D6CB8(int slot, int type)
+unsigned int MemCardMgrGetSlotDate(int slot, int type)
 {
-    return fn_801D6420(lbl_803EBD2C[type].mSlots[slot].mEntry);
+    return MemCardMgrPackDate(_MemCardMgr_pTypeSlots[type].mSlots[slot].mEntry);
 }
 
-int fn_801D6CF4(const char *pName, int type, unsigned char *pFlag)
+int MemCardMgrFindSlot(const char *pName, int type, unsigned char *pFlag)
 {
     signed char i;
 
-    for (i = 0; i < lbl_803EBD2C[type].mCount; i++) {
-        if (strcmp(lbl_803EBD2C[type].mSlots[i].mName, pName) == 0) {
-            *pFlag = lbl_803EBD2C[type].mSlots[i].mFlag;
+    for (i = 0; i < _MemCardMgr_pTypeSlots[type].mCount; i++) {
+        if (strcmp(_MemCardMgr_pTypeSlots[type].mSlots[i].mName, pName) == 0) {
+            *pFlag = _MemCardMgr_pTypeSlots[type].mSlots[i].mFlag;
             return i;
         }
     }
@@ -640,45 +640,45 @@ int fn_801D6CF4(const char *pName, int type, unsigned char *pFlag)
     return -1;
 }
 
-int fn_801D6DA8(int slot, int type)
+int MemCardMgrIsSlotCorrupt(int slot, int type)
 {
-    if (slot < lbl_803EBD2C[type].mCount) {
-        return lbl_803EBD2C[type].mSlots[slot].mFlag;
+    if (slot < _MemCardMgr_pTypeSlots[type].mCount) {
+        return _MemCardMgr_pTypeSlots[type].mSlots[slot].mFlag;
     }
     return 0;
 }
 
-void fn_801D6DE0(int slot, int type)
+void MemCardMgrMarkSlotCorrupt(int slot, int type)
 {
-    lbl_803EBD2C[type].mSlots[slot].mFlag = 1;
+    _MemCardMgr_pTypeSlots[type].mSlots[slot].mFlag = 1;
 }
 
-void fn_801D6E04(int value)
+void MemCardMgrSetStreamError(int value)
 {
-    lbl_80398DFC.mUnknown28 = value;
+    _MemCardMgr_Op.mUnknown28 = value;
 }
 
-void fn_801D6E10(char *pBuffer, int length)
+void MemCardMgrStreamWrite(char *pBuffer, int length)
 {
-    if (lbl_803EBD00 == 0x1011) {
-        MemCAsyncWrite(lbl_80398DFC.mHandle, pBuffer, length);
-        fn_801D5D30(0x1012);
+    if (_MemCardMgr_uState == 0x1011) {
+        MemCAsyncWrite(_MemCardMgr_Op.mHandle, pBuffer, length);
+        MemCardMgrSetState(0x1012);
     }
 }
 
-void fn_801D6E54(char *pBuffer, int length)
+void MemCardMgrStreamRead(char *pBuffer, int length)
 {
-    if (lbl_803EBD00 == 0x1006) {
-        lbl_80398DFC.mReadLength = length;
-        MemCAsyncRead(lbl_80398DFC.mHandle, pBuffer, length);
-        fn_801D5D30(0x1007);
+    if (_MemCardMgr_uState == 0x1006) {
+        _MemCardMgr_Op.mReadLength = length;
+        MemCAsyncRead(_MemCardMgr_Op.mHandle, pBuffer, length);
+        MemCardMgrSetState(0x1007);
     }
 }
 
-int fn_801D6EA0(unsigned char *pIdle)
+int MemCardMgrIsStreamReady(unsigned char *pIdle)
 {
     if (pIdle != 0) {
-        switch (lbl_803EBD00) {
+        switch (_MemCardMgr_uState) {
         case 0x1006:
         case 0x1007:
         case 0x1008:
@@ -694,24 +694,24 @@ int fn_801D6EA0(unsigned char *pIdle)
             break;
         }
     }
-    return lbl_803EBD00 == 0x1011 || lbl_803EBD00 == 0x1006;
+    return _MemCardMgr_uState == 0x1011 || _MemCardMgr_uState == 0x1006;
 }
 
-void fn_801D6EFC(void)
+void MemCardMgrEndStream(void)
 {
-    if (lbl_803EBD00 == 0x1011) {
-        MemCAsyncFlush(lbl_80398DFC.mHandle);
-        fn_801D5D30(0x1015);
-    } else if (lbl_803EBD00 == 0x1006) {
-        MemCAsyncFlush(lbl_80398DFC.mHandle);
-        fn_801D5D30(0x100A);
+    if (_MemCardMgr_uState == 0x1011) {
+        MemCAsyncFlush(_MemCardMgr_Op.mHandle);
+        MemCardMgrSetState(0x1015);
+    } else if (_MemCardMgr_uState == 0x1006) {
+        MemCAsyncFlush(_MemCardMgr_Op.mHandle);
+        MemCardMgrSetState(0x100A);
     }
 }
 
 void MemCardMgrUpdate(void)
 {
     int error;
-    Struct_803ECF18 *pSlot;
+    MemCardSlot_t *pSlot;
     char name[65];
     int poll = -1;
     int result = -1;
@@ -721,114 +721,114 @@ void MemCardMgrUpdate(void)
     int type;
 
     SysCheckReset();
-    switch (lbl_803EBD00) {
+    switch (_MemCardMgr_uState) {
     case 0x1000:
-        if (lbl_803EBD08 == 0) {
+        if (_MemCardMgr_cPollDelay == 0) {
             poll = MemCAsyncPoll(&result);
-            if (!lbl_803EBD19 && poll == 1) {
+            if (!_MemCardMgr_bProbeStarted && poll == 1) {
                 poll = -1;
             }
             if (poll == 1) {
-                if (lbl_803ECF14 >= 0 && lbl_803ECF14 <= 1) {
-                    lbl_803EBD19 = poll;
-                    MemCAsyncProbe(lbl_803ECF14);
+                if (_MemCardMgr_iPort >= 0 && _MemCardMgr_iPort <= 1) {
+                    _MemCardMgr_bProbeStarted = poll;
+                    MemCAsyncProbe(_MemCardMgr_iPort);
                 }
             } else if (poll == -1) {
-                if (lbl_803ECF14 >= 0 && lbl_803ECF14 <= 1) {
-                    lbl_803EBD19 = 1;
-                    MemCAsyncProbe(lbl_803ECF14);
+                if (_MemCardMgr_iPort >= 0 && _MemCardMgr_iPort <= 1) {
+                    _MemCardMgr_bProbeStarted = 1;
+                    MemCAsyncProbe(_MemCardMgr_iPort);
                 }
             }
-            lbl_803EBD08 = 6;
-        } else if (lbl_803EBD08 > 0) {
-            lbl_803EBD08--;
+            _MemCardMgr_cPollDelay = 6;
+        } else if (_MemCardMgr_cPollDelay > 0) {
+            _MemCardMgr_cPollDelay--;
         }
         break;
     case 0x1001:
-        *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-        if (lbl_803EBD08 == 0) {
+        *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+        if (_MemCardMgr_cPollDelay == 0) {
             poll = MemCAsyncPoll(&result);
-            if (!lbl_803EBD18 && poll == 1) {
+            if (!_MemCardMgr_bScanStarted && poll == 1) {
                 poll = -1;
             }
             if (poll == 1) {
                 if (result >= 0) {
-                    lbl_80398DE0.mCardType[lbl_803ECF10] = result;
-                    if (lbl_803ECF14 == -1) {
-                        lbl_803ECF14 = lbl_803ECF10;
+                    _MemCardMgr_CardInfo.mCardType[_MemCardMgr_uScanPort] = result;
+                    if (_MemCardMgr_iPort == -1) {
+                        _MemCardMgr_iPort = _MemCardMgr_uScanPort;
                     }
                 } else {
-                    lbl_80398DE0.mCardType[lbl_803ECF10] = 0;
+                    _MemCardMgr_CardInfo.mCardType[_MemCardMgr_uScanPort] = 0;
                 }
-                lbl_803ECF10++;
-                if (lbl_803ECF10 > 1) {
-                    lbl_803ECF10 = 0;
+                _MemCardMgr_uScanPort++;
+                if (_MemCardMgr_uScanPort > 1) {
+                    _MemCardMgr_uScanPort = 0;
                 }
-                lbl_803EBD18 = 1;
-                MemCAsyncProbe(lbl_803ECF10);
+                _MemCardMgr_bScanStarted = 1;
+                MemCAsyncProbe(_MemCardMgr_uScanPort);
             } else if (poll == -1) {
-                lbl_803ECF10 = 0;
-                lbl_803EBD18 = 1;
+                _MemCardMgr_uScanPort = 0;
+                _MemCardMgr_bScanStarted = 1;
                 MemCAsyncProbe(0);
             }
-            lbl_803EBD08 = 1;
-        } else if (lbl_803EBD08 > 0) {
-            lbl_803EBD08--;
+            _MemCardMgr_cPollDelay = 1;
+        } else if (_MemCardMgr_cPollDelay > 0) {
+            _MemCardMgr_cPollDelay--;
         }
         break;
     case 0x1002:
         if (MemCAsyncPoll(&result)) {
-            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)"Format";
-            lbl_803EBD0C = 0;
-            MemCAsyncFormat(lbl_803ECF14);
-            fn_801D5D30(0x1003);
+            *(Str7_t *)_MemCardMgr_Op.mAction = *(const Str7_t *)"Format";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncFormat(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x1003);
         }
         break;
     case 0x1003:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
             if (result >= 0) {
-                lbl_803EBD10 = 1;
-                lbl_803EBD0C = 1;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = 1;
+                _MemCardMgr_iResult = 1;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x1004:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Load";
-            lbl_803EBD0C = 0;
-            fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
-                        lbl_80398DFC.mDescription);
-            fn_801D63B0();
-            fn_801D5D30(0x1005);
+            *(Str5_t *)_MemCardMgr_Op.mAction = *(const Str5_t *)"Load";
+            _MemCardMgr_iResult = 0;
+            MemCardMgrMakeFilePath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_Op.mDescription,
+                        _MemCardMgr_Op.mDescription);
+            MemCardMgrOpenFile();
+            MemCardMgrSetState(0x1005);
         }
         break;
     case 0x1005:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DFC.mHandle = result;
-                lbl_80398DFC.mUnknown28 = 0;
+                _MemCardMgr_Op.mHandle = result;
+                _MemCardMgr_Op.mUnknown28 = 0;
                 size = 0;
-                if (lbl_80398DFC.mUnknownF0) {
-                    lbl_803EBD38(lbl_80398DFC.mUnknown4, 0, &size);
+                if (_MemCardMgr_Op.mUnknownF0) {
+                    _MemCardMgr_pfnGetIcon(_MemCardMgr_Op.mUnknown4, 0, &size);
                 }
-                if (lbl_80398DFC.mUnknownEF) {
+                if (_MemCardMgr_Op.mUnknownEF) {
                     size += 0x40;
                 }
                 if ((int)size > 0) {
-                    lbl_80398DFC.mSeekWhence = 0;
-                    lbl_80398DFC.mSeekOffset = size;
-                    fn_801D6318();
-                    fn_801D5D30(0x1008);
+                    _MemCardMgr_Op.mSeekWhence = 0;
+                    _MemCardMgr_Op.mSeekOffset = size;
+                    MemCardMgrFlushFile();
+                    MemCardMgrSetState(0x1008);
                 } else {
-                    fn_801D5D30(0x1006);
+                    MemCardMgrSetState(0x1006);
                 }
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
@@ -838,129 +838,129 @@ void MemCardMgrUpdate(void)
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
             if (result >= 0) {
-                if (result == lbl_80398DFC.mReadLength) {
-                    fn_801D5D30(0x1006);
+                if (result == _MemCardMgr_Op.mReadLength) {
+                    MemCardMgrSetState(0x1006);
                     break;
                 }
-                lbl_803EBD2C[lbl_80398DFC.mUnknown4].mSlots[lbl_80398DFC.mUnknownC].mFlag = poll;
-                fn_801D6318();
-                fn_801D5D30(0x100A);
+                _MemCardMgr_pTypeSlots[_MemCardMgr_Op.mUnknown4].mSlots[_MemCardMgr_Op.mUnknownC].mFlag = poll;
+                MemCardMgrFlushFile();
+                MemCardMgrSetState(0x100A);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x100B);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x100B);
             }
         }
         break;
     case 0x1008:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                MemCAsyncSeek(lbl_80398DFC.mHandle, lbl_80398DFC.mSeekOffset, lbl_80398DFC.mSeekWhence);
-                fn_801D5D30(0x1009);
+                MemCAsyncSeek(_MemCardMgr_Op.mHandle, _MemCardMgr_Op.mSeekOffset, _MemCardMgr_Op.mSeekWhence);
+                MemCardMgrSetState(0x1009);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x100B);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x100B);
             }
         }
         break;
     case 0x1009:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D5D30(0x1006);
+                MemCardMgrSetState(0x1006);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x100B);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x100B);
             }
         }
         break;
     case 0x100A:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0) {
-                lbl_803EBD0C = result;
+                _MemCardMgr_iResult = result;
             }
-            fn_801D6340();
-            fn_801D5D30(0x100B);
+            MemCardMgrCloseFile();
+            MemCardMgrSetState(0x100B);
         }
         break;
     case 0x100B:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                     break;
                 }
-                if (lbl_80398DFC.mUnknown28 != 0) {
-                    fn_801D6294(lbl_80398DFC.mUnknown28);
+                if (_MemCardMgr_Op.mUnknown28 != 0) {
+                    MemCardMgrFailOperation(_MemCardMgr_Op.mUnknown28);
                     break;
                 }
-                if (fn_801D6DA8(lbl_80398DFC.mUnknownC, lbl_80398DFC.mUnknown4) == 0) {
-                    lbl_803EBD0C = error;
+                if (MemCardMgrIsSlotCorrupt(_MemCardMgr_Op.mUnknownC, _MemCardMgr_Op.mUnknown4) == 0) {
+                    _MemCardMgr_iResult = error;
                 } else {
-                    lbl_803EBD0C = -100;
+                    _MemCardMgr_iResult = -100;
                 }
-                lbl_803EBD10 = 1;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = 1;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                 } else {
-                    fn_801D6294(result);
+                    MemCardMgrFailOperation(result);
                 }
             }
         }
         break;
     case 0x100C:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Save";
-            lbl_803EBD0C = 0;
+            *(Str5_t *)_MemCardMgr_Op.mAction = *(const Str5_t *)"Save";
+            _MemCardMgr_iResult = 0;
             SysEnableReset(0);
-            fn_801D6368(lbl_80398DFC.mDescription, "");
-            fn_801D5D30(0x100D);
+            MemCardMgrDeleteFile(_MemCardMgr_Op.mDescription, "");
+            MemCardMgrSetState(0x100D);
         }
         break;
     case 0x100D:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
-                            lbl_80398DFC.mDescription);
-                fn_801D63E8(lbl_80398DFC.mUnknown8);
-                fn_801D5D30(0x1010);
+                MemCardMgrMakeFilePath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_Op.mDescription,
+                            _MemCardMgr_Op.mDescription);
+                MemCardMgrCreateFile(_MemCardMgr_Op.mUnknown8);
+                MemCardMgrSetState(0x1010);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x100E:
         if (MemCAsyncPoll(&result)) {
-            *(Str5_t *)lbl_80398DFC.mAction = *(const Str5_t *)"Save";
-            lbl_803EBD0C = 0;
+            *(Str5_t *)_MemCardMgr_Op.mAction = *(const Str5_t *)"Save";
+            _MemCardMgr_iResult = 0;
             SysEnableReset(0);
-            fn_801D5D30(0x100F);
+            MemCardMgrSetState(0x100F);
         }
         break;
     case 0x100F:
         result = 0;
-        fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
-                    lbl_80398DFC.mDescription);
-        fn_801D63E8(lbl_80398DFC.mUnknown8);
-        fn_801D5D30(0x1010);
+        MemCardMgrMakeFilePath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_Op.mDescription,
+                    _MemCardMgr_Op.mDescription);
+        MemCardMgrCreateFile(_MemCardMgr_Op.mUnknown8);
+        MemCardMgrSetState(0x1010);
         break;
     case 0x1010:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DFC.mHandle = result;
-                lbl_80398DFC.mUnknown28 = 0;
-                if (lbl_80398DFC.mUnknownEF) {
-                    MemCAsyncWrite(lbl_80398DFC.mHandle, lbl_80398DFC.mInfo, sizeof(lbl_80398DFC.mInfo));
-                    fn_801D5D30(0x101B);
+                _MemCardMgr_Op.mHandle = result;
+                _MemCardMgr_Op.mUnknown28 = 0;
+                if (_MemCardMgr_Op.mUnknownEF) {
+                    MemCAsyncWrite(_MemCardMgr_Op.mHandle, _MemCardMgr_Op.mInfo, sizeof(_MemCardMgr_Op.mInfo));
+                    MemCardMgrSetState(0x101B);
                 } else {
-                    fn_801D5D30(0x1011);
+                    MemCardMgrSetState(0x1011);
                 }
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
@@ -969,47 +969,47 @@ void MemCardMgrUpdate(void)
     case 0x1012:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D5D30(0x1011);
+                MemCardMgrSetState(0x1011);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x1016);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x1016);
             }
         }
         break;
     case 0x1013:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                MemCAsyncSeek(lbl_80398DFC.mHandle, lbl_80398DFC.mSeekOffset, lbl_80398DFC.mSeekWhence);
-                fn_801D5D30(0x1014);
+                MemCAsyncSeek(_MemCardMgr_Op.mHandle, _MemCardMgr_Op.mSeekOffset, _MemCardMgr_Op.mSeekWhence);
+                MemCardMgrSetState(0x1014);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x1016);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x1016);
             }
         }
         break;
     case 0x1014:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D5D30(0x1011);
+                MemCardMgrSetState(0x1011);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x1016);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x1016);
             }
         }
         break;
     case 0x1015:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D85E4(lbl_80398DFC.mHandle, lbl_80398DFC.mUnknown4, lbl_80398DFC.mTitle, lbl_80398DFC.mUnknownC,
-                            lbl_803EBD34);
-                fn_801D5D30(0x101F);
+                MemCardMgrWriteSysInfo(_MemCardMgr_Op.mHandle, _MemCardMgr_Op.mUnknown4, _MemCardMgr_Op.mTitle, _MemCardMgr_Op.mUnknownC,
+                            _MemCardMgr_pfnSysInfo);
+                MemCardMgrSetState(0x101F);
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x1016);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x1016);
             }
         }
         break;
@@ -1017,24 +1017,24 @@ void MemCardMgrUpdate(void)
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
             if (result >= 0) {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                     break;
                 }
-                if (lbl_80398DFC.mUnknown28 != 0) {
-                    fn_801D6294(lbl_80398DFC.mUnknown28);
+                if (_MemCardMgr_Op.mUnknown28 != 0) {
+                    MemCardMgrFailOperation(_MemCardMgr_Op.mUnknown28);
                     break;
                 }
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                 } else {
-                    fn_801D6294(result);
+                    MemCardMgrFailOperation(result);
                 }
             }
         }
@@ -1042,35 +1042,35 @@ void MemCardMgrUpdate(void)
     case 0x1017:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DFC.mHandle = result;
-                lbl_803EBD38(lbl_80398DFC.mUnknown4, &lbl_80398DFC.mpData, &writeSize);
-                MemCAsyncWrite(lbl_80398DFC.mHandle, (char *)lbl_80398DFC.mpData, writeSize);
-                fn_801D5D30(0x1018);
+                _MemCardMgr_Op.mHandle = result;
+                _MemCardMgr_pfnGetIcon(_MemCardMgr_Op.mUnknown4, &_MemCardMgr_Op.mpData, &writeSize);
+                MemCAsyncWrite(_MemCardMgr_Op.mHandle, (char *)_MemCardMgr_Op.mpData, writeSize);
+                MemCardMgrSetState(0x1018);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x1018:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                if (lbl_80398DFC.mUnknownF0) {
-                    lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
-                    lbl_80398DFC.mpData = 0;
-                    fn_801D5D30(0x1011);
+                if (_MemCardMgr_Op.mUnknownF0) {
+                    _MemCardMgr_pfnFreeIcon(_MemCardMgr_Op.mUnknown4, (int)_MemCardMgr_Op.mpData);
+                    _MemCardMgr_Op.mpData = 0;
+                    MemCardMgrSetState(0x1011);
                 } else {
-                    fn_801D6318();
-                    fn_801D5D30(0x1019);
+                    MemCardMgrFlushFile();
+                    MemCardMgrSetState(0x1019);
                 }
             } else {
-                lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
-                lbl_80398DFC.mpData = 0;
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                if (lbl_80398DFC.mUnknownF0) {
-                    fn_801D5D30(0x1016);
+                _MemCardMgr_pfnFreeIcon(_MemCardMgr_Op.mUnknown4, (int)_MemCardMgr_Op.mpData);
+                _MemCardMgr_Op.mpData = 0;
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                if (_MemCardMgr_Op.mUnknownF0) {
+                    MemCardMgrSetState(0x1016);
                 } else {
-                    fn_801D5D30(0x101A);
+                    MemCardMgrSetState(0x101A);
                 }
             }
         }
@@ -1078,152 +1078,152 @@ void MemCardMgrUpdate(void)
     case 0x1019:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0) {
-                lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
-                lbl_80398DFC.mpData = 0;
-                lbl_803EBD0C = result;
+                _MemCardMgr_pfnFreeIcon(_MemCardMgr_Op.mUnknown4, (int)_MemCardMgr_Op.mpData);
+                _MemCardMgr_Op.mpData = 0;
+                _MemCardMgr_iResult = result;
             }
-            fn_801D6340();
-            fn_801D5D30(0x101A);
+            MemCardMgrCloseFile();
+            MemCardMgrSetState(0x101A);
         }
         break;
     case 0x101A:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
             if (result >= 0) {
-                error = lbl_803EBD0C;
+                error = _MemCardMgr_iResult;
                 if (error == 0) {
-                    lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
-                    lbl_80398DFC.mpData = (unsigned char *)error;
+                    _MemCardMgr_pfnFreeIcon(_MemCardMgr_Op.mUnknown4, (int)_MemCardMgr_Op.mpData);
+                    _MemCardMgr_Op.mpData = (unsigned char *)error;
                     SysEnableReset(1);
-                    lbl_803EBD10 = poll;
-                    lbl_803EBD0C = poll;
-                    strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                    fn_801D5D30(lbl_803EBD04);
+                    _MemCardMgr_bResultReady = poll;
+                    _MemCardMgr_iResult = poll;
+                    strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                    MemCardMgrSetState(_MemCardMgr_iIdleState);
                     break;
                 }
             }
-            lbl_803EBD3C(lbl_80398DFC.mUnknown4, (int)lbl_80398DFC.mpData);
-            lbl_80398DFC.mpData = 0;
-            if (lbl_803EBD0C != 0) {
-                fn_801D6294(lbl_803EBD0C);
+            _MemCardMgr_pfnFreeIcon(_MemCardMgr_Op.mUnknown4, (int)_MemCardMgr_Op.mpData);
+            _MemCardMgr_Op.mpData = 0;
+            if (_MemCardMgr_iResult != 0) {
+                MemCardMgrFailOperation(_MemCardMgr_iResult);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x101C:
-        fn_801D83F0(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription,
-                    lbl_80398DFC.mDescription);
-        MemCAsyncGetSysInfo(lbl_803ECF14, lbl_80398DFC.mFileName, 11);
-        fn_801D5D30(0x101D);
+        MemCardMgrMakeFilePath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_Op.mDescription,
+                    _MemCardMgr_Op.mDescription);
+        MemCAsyncGetSysInfo(_MemCardMgr_iPort, _MemCardMgr_Op.mFileName, 11);
+        MemCardMgrSetState(0x101D);
         break;
     case 0x101D:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                fn_801D8428(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_80398DFC.mDescription);
-                fn_801D63E8(0);
-                fn_801D5D30(0x101E);
+                MemCardMgrMakeEntryPath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_Op.mDescription);
+                MemCardMgrCreateFile(0);
+                MemCardMgrSetState(0x101E);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x101E:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DFC.mHandle = result;
-                fn_801D85E4(lbl_80398DFC.mHandle, lbl_80398DFC.mUnknown4, lbl_80398DFC.mTitle, lbl_80398DFC.mUnknownC,
-                            lbl_803EBD34);
-                fn_801D5D30(0x101F);
+                _MemCardMgr_Op.mHandle = result;
+                MemCardMgrWriteSysInfo(_MemCardMgr_Op.mHandle, _MemCardMgr_Op.mUnknown4, _MemCardMgr_Op.mTitle, _MemCardMgr_Op.mUnknownC,
+                            _MemCardMgr_pfnSysInfo);
+                MemCardMgrSetState(0x101F);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x101F:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0) {
-                lbl_803EBD0C = result;
+                _MemCardMgr_iResult = result;
             }
-            fn_801D6340();
-            fn_801D5D30(0x1016);
+            MemCardMgrCloseFile();
+            MemCardMgrSetState(0x1016);
         }
         break;
     case 0x101B:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                if (lbl_80398DFC.mUnknownF0) {
-                    lbl_803EBD38(lbl_80398DFC.mUnknown4, &lbl_80398DFC.mpData, &headerSize);
-                    MemCAsyncWrite(lbl_80398DFC.mHandle, (char *)lbl_80398DFC.mpData, headerSize);
-                    fn_801D5D30(0x1018);
+                if (_MemCardMgr_Op.mUnknownF0) {
+                    _MemCardMgr_pfnGetIcon(_MemCardMgr_Op.mUnknown4, &_MemCardMgr_Op.mpData, &headerSize);
+                    MemCAsyncWrite(_MemCardMgr_Op.mHandle, (char *)_MemCardMgr_Op.mpData, headerSize);
+                    MemCardMgrSetState(0x1018);
                 } else {
-                    fn_801D5D30(0x1011);
+                    MemCardMgrSetState(0x1011);
                 }
             } else {
-                lbl_803EBD0C = result;
-                fn_801D6340();
-                fn_801D5D30(0x1016);
+                _MemCardMgr_iResult = result;
+                MemCardMgrCloseFile();
+                MemCardMgrSetState(0x1016);
             }
         }
         break;
     case 0x1020:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0) {
-                lbl_803EBD0C = result;
+                _MemCardMgr_iResult = result;
             }
-            fn_801D6340();
-            fn_801D5D30(0x1021);
+            MemCardMgrCloseFile();
+            MemCardMgrSetState(0x1021);
         }
         break;
     case 0x1021:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
             if (result >= 0) {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                     break;
                 }
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                if ((error = lbl_803EBD0C) != 0) {
-                    fn_801D6294(error);
+                if ((error = _MemCardMgr_iResult) != 0) {
+                    MemCardMgrFailOperation(error);
                 } else {
-                    fn_801D6294(result);
+                    MemCardMgrFailOperation(result);
                 }
             }
         }
         break;
     case 0x1022:
         if (MemCAsyncPoll(&result)) {
-            *(Str7_t *)lbl_80398DFC.mAction = *(const Str7_t *)"Delete";
-            lbl_803EBD0C = 0;
+            *(Str7_t *)_MemCardMgr_Op.mAction = *(const Str7_t *)"Delete";
+            _MemCardMgr_iResult = 0;
             SysEnableReset(0);
-            fn_801D6368(lbl_80398DFC.mDescription, lbl_80398DFC.mDescription);
-            fn_801D5D30(0x1025);
+            MemCardMgrDeleteFile(_MemCardMgr_Op.mDescription, _MemCardMgr_Op.mDescription);
+            MemCardMgrSetState(0x1025);
         }
         break;
     case 0x1023:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0 && result != -3) {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
                 break;
             }
-            fn_801D6368(lbl_80398DFC.mDescription, "");
-            fn_801D5D30(0x1024);
+            MemCardMgrDeleteFile(_MemCardMgr_Op.mDescription, "");
+            MemCardMgrSetState(0x1024);
         }
         break;
     case 0x1024:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0 && result != -3) {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
                 break;
             }
-            fn_801D6368(lbl_80398DFC.mDescription, lbl_80398DFC.mDescription);
-            fn_801D5D30(0x1025);
+            MemCardMgrDeleteFile(_MemCardMgr_Op.mDescription, _MemCardMgr_Op.mDescription);
+            MemCardMgrSetState(0x1025);
         }
         break;
     case 0x1025:
@@ -1231,18 +1231,18 @@ void MemCardMgrUpdate(void)
         if (poll == 1) {
             if (result >= 0) {
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else if (result == -3) {
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
@@ -1251,36 +1251,36 @@ void MemCardMgrUpdate(void)
         if (poll == 1) {
             if (result >= 0) {
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else if (result == -3) {
                 SysEnableReset(1);
-                lbl_803EBD10 = poll;
-                lbl_803EBD0C = poll;
-                strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-                fn_801D5D30(lbl_803EBD04);
+                _MemCardMgr_bResultReady = poll;
+                _MemCardMgr_iResult = poll;
+                strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+                MemCardMgrSetState(_MemCardMgr_iIdleState);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x1027:
     case 0x102D:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            memset(lbl_803EBD28, 0, lbl_803EBD24 * sizeof(Struct_801D4848));
-            fn_801D8460(name, sizeof(name), lbl_80398DFC.mCode);
-            if (lbl_803EBD00 == 0x1027) {
-                MemCAsyncGetDir(lbl_803ECF14, name, name, lbl_803EBD28, lbl_803EBD24);
-                fn_801D5D30(0x1028);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            memset(_MemCardMgr_pDirEntries, 0, _MemCardMgr_iMaxEntries * sizeof(MemCDirEntry_t));
+            MemCardMgrMakeDirPattern(name, sizeof(name), _MemCardMgr_Op.mCode);
+            if (_MemCardMgr_uState == 0x1027) {
+                MemCAsyncGetDir(_MemCardMgr_iPort, name, name, _MemCardMgr_pDirEntries, _MemCardMgr_iMaxEntries);
+                MemCardMgrSetState(0x1028);
             } else {
                 char pattern[1] = "*";
 
-                MemCAsyncGetDir(lbl_803ECF14, name, pattern, lbl_803EBD28, lbl_803EBD24);
-                fn_801D5D30(0x102E);
+                MemCAsyncGetDir(_MemCardMgr_iPort, name, pattern, _MemCardMgr_pDirEntries, _MemCardMgr_iMaxEntries);
+                MemCardMgrSetState(0x102E);
             }
         }
         break;
@@ -1288,81 +1288,81 @@ void MemCardMgrUpdate(void)
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
                 MemCardMgrBuildSlotTables(result);
-                lbl_803EBD10 = 0;
-                lbl_803EBD0C = result;
-                lbl_803EBD14 = 0;
-                fn_801D5D30(0x1029);
+                _MemCardMgr_bResultReady = 0;
+                _MemCardMgr_iResult = result;
+                _MemCardMgr_iScanIndex = 0;
+                MemCardMgrSetState(0x1029);
             } else {
-                fn_801D6294(result);
+                MemCardMgrFailOperation(result);
             }
         }
         break;
     case 0x1029:
-        if (lbl_803EBD14 < lbl_803EBD0C) {
-            pSlot = lbl_803ECF18[lbl_803EBD14];
+        if (_MemCardMgr_iScanIndex < _MemCardMgr_iResult) {
+            pSlot = _MemCardMgr_ppEntrySlots[_MemCardMgr_iScanIndex];
             if (pSlot != 0) {
                 pSlot->mFlag = 1;
-                fn_801D5E08(lbl_803EBD28[lbl_803EBD14].mName, pSlot->mName);
-                fn_801D8428(lbl_80398DFC.mFileName, sizeof(lbl_80398DFC.mFileName), lbl_803EBD28[lbl_803EBD14].mName);
-                fn_801D63B0();
-                fn_801D5D30(0x102A);
+                MemCardMgrGetFileSuffix(_MemCardMgr_pDirEntries[_MemCardMgr_iScanIndex].mName, pSlot->mName);
+                MemCardMgrMakeEntryPath(_MemCardMgr_Op.mFileName, sizeof(_MemCardMgr_Op.mFileName), _MemCardMgr_pDirEntries[_MemCardMgr_iScanIndex].mName);
+                MemCardMgrOpenFile();
+                MemCardMgrSetState(0x102A);
             } else {
-                lbl_803EBD14++;
-                fn_801D5D30(0x1029);
+                _MemCardMgr_iScanIndex++;
+                MemCardMgrSetState(0x1029);
             }
         } else {
-            lbl_803EBD10 = 1;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_bResultReady = 1;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x102A:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
-                lbl_80398DFC.mHandle = result;
-                fn_801D85B0(result);
-                fn_801D5D30(0x102B);
+                _MemCardMgr_Op.mHandle = result;
+                MemCardMgrReadHeader(result);
+                MemCardMgrSetState(0x102B);
                 break;
             }
             if (result == -2) {
-                fn_801D6294(-2);
+                MemCardMgrFailOperation(-2);
                 break;
             }
-            lbl_803EBD14++;
-            fn_801D5D30(0x1029);
+            _MemCardMgr_iScanIndex++;
+            MemCardMgrSetState(0x1029);
         }
         break;
     case 0x102B:
         if (MemCAsyncPoll(&result) == 1) {
             if (result >= 0) {
                 type = 0;
-                pSlot = lbl_803ECF18[lbl_803EBD14];
-                fn_801D5D38(pSlot->mEntry->mName, &type);
-                pSlot->mFlag = fn_801D85DC(result, lbl_803EBD20[type].mUnknown4, pSlot->mName, 17, pSlot->mEntry,
-                                           lbl_803EBD30);
+                pSlot = _MemCardMgr_ppEntrySlots[_MemCardMgr_iScanIndex];
+                MemCardMgrFindFileType(pSlot->mEntry->mName, &type);
+                pSlot->mFlag = MemCardMgrGetNameFromHeader(result, _MemCardMgr_pTypes[type].mUnknown4, pSlot->mName, 17, pSlot->mEntry,
+                                           _MemCardMgr_pfnGetName);
             }
-            fn_801D6340();
-            fn_801D5D30(0x102C);
+            MemCardMgrCloseFile();
+            MemCardMgrSetState(0x102C);
         }
         break;
     case 0x102C:
         if (MemCAsyncPoll(&result) == 1) {
             if (result < 0) {
                 if (result == -2) {
-                    fn_801D6294(-2);
+                    MemCardMgrFailOperation(-2);
                     break;
                 }
             }
-            lbl_803EBD14++;
-            fn_801D5D30(0x1029);
+            _MemCardMgr_iScanIndex++;
+            MemCardMgrSetState(0x1029);
         }
         break;
     case 0x102E:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
-            lbl_803EBD0C = result;
-            lbl_803EBD10 = poll;
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_iResult = result;
+            _MemCardMgr_bResultReady = poll;
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x102F:
@@ -1371,96 +1371,96 @@ void MemCardMgrUpdate(void)
         break;
     case 0x1031:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncMount(lbl_803ECF14);
-            fn_801D5D30(0x1032);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncMount(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x1032);
         }
         break;
     case 0x1032:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
-            fn_801D868C(fn_801D673C(lbl_803ECF14), lbl_803ECF14, lbl_80398DE0.mTypeName, sizeof(lbl_80398DE0.mTypeName));
-            lbl_803EBD10 = poll;
-            lbl_803EBD0C = result;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            MemCardMgrFormatCardType(fn_801D673C(_MemCardMgr_iPort), _MemCardMgr_iPort, _MemCardMgr_CardInfo.mTypeName, sizeof(_MemCardMgr_CardInfo.mTypeName));
+            _MemCardMgr_bResultReady = poll;
+            _MemCardMgr_iResult = result;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x1033:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncMountAlt(lbl_803ECF14, lbl_80398DFC.mCode);
-            fn_801D5D30(0x1034);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncMountAlt(_MemCardMgr_iPort, _MemCardMgr_Op.mCode);
+            MemCardMgrSetState(0x1034);
         }
         break;
     case 0x1034:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
-            lbl_803EBD10 = poll;
-            lbl_803EBD0C = result;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_bResultReady = poll;
+            _MemCardMgr_iResult = result;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x1035:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncCheck(lbl_803ECF14);
-            fn_801D5D30(0x1036);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncCheck(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x1036);
         }
         break;
     case 0x1036:
         poll = MemCAsyncPoll(&result);
         if (poll == 1) {
-            lbl_803EBD10 = poll;
-            lbl_803EBD0C = result;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_bResultReady = poll;
+            _MemCardMgr_iResult = result;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x1037:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncGetFreeSpace(lbl_803ECF14);
-            fn_801D5D30(0x1038);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncGetFreeSpace(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x1038);
         }
         break;
     case 0x1038:
         if (MemCAsyncPoll(&result) == 1) {
-            lbl_803EBD0C = result;
+            _MemCardMgr_iResult = result;
             if (result >= 0) {
-                lbl_80398DE0.mUnknown0 = result;
+                _MemCardMgr_CardInfo.mUnknown0 = result;
             } else {
-                lbl_80398DE0.mUnknown0 = 0;
+                _MemCardMgr_CardInfo.mUnknown0 = 0;
             }
-            lbl_803EBD10 = 1;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_bResultReady = 1;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     case 0x1039:
         if (MemCAsyncPoll(&result)) {
-            *(Str6_t *)lbl_80398DFC.mAction = *(const Str6_t *)"Check";
-            lbl_803EBD0C = 0;
-            MemCAsyncGetFreeEntries(lbl_803ECF14);
-            fn_801D5D30(0x103A);
+            *(Str6_t *)_MemCardMgr_Op.mAction = *(const Str6_t *)"Check";
+            _MemCardMgr_iResult = 0;
+            MemCAsyncGetFreeEntries(_MemCardMgr_iPort);
+            MemCardMgrSetState(0x103A);
         }
         break;
     case 0x103A:
         if (MemCAsyncPoll(&result) == 1) {
-            lbl_803EBD0C = result;
+            _MemCardMgr_iResult = result;
             if (result >= 0) {
-                lbl_80398DE0.mUnknown4 = result;
+                _MemCardMgr_CardInfo.mUnknown4 = result;
             } else {
-                lbl_80398DE0.mUnknown4 = 0;
+                _MemCardMgr_CardInfo.mUnknown4 = 0;
             }
-            lbl_803EBD10 = 1;
-            strcpy(lbl_80398DFC.mLastAction, lbl_80398DFC.mAction);
-            fn_801D5D30(lbl_803EBD04);
+            _MemCardMgr_bResultReady = 1;
+            strcpy(_MemCardMgr_Op.mLastAction, _MemCardMgr_Op.mAction);
+            MemCardMgrSetState(_MemCardMgr_iIdleState);
         }
         break;
     }
@@ -1471,32 +1471,32 @@ void MemCardMgrUpdate(void)
    keeps two empty strings in this file's .rodata) */
 #define MCM_CARD_ROOT "\0"
 
-void fn_801D83F0(char *pBuffer, int size, const char *pName, const char *pUnused)
+void MemCardMgrMakeFilePath(char *pBuffer, int size, const char *pName, const char *pUnused)
 {
     sprintf(pBuffer, "%s%s", MCM_CARD_ROOT, pName);
 }
 
-void fn_801D8428(char *pBuffer, int size, const char *pName)
+void MemCardMgrMakeEntryPath(char *pBuffer, int size, const char *pName)
 {
     sprintf(pBuffer, "%s%s", MCM_CARD_ROOT, pName);
 }
 
-void fn_801D8460(char *pBuffer, int size, const char *pName)
+void MemCardMgrMakeDirPattern(char *pBuffer, int size, const char *pName)
 {
     sprintf(pBuffer, "%s%s*", MCM_CARD_ROOT, pName);
 }
 
-void fn_801D8498(char *pDst, const char *pSrc)
+void MemCardMgrCopyGameCode(char *pDst, const char *pSrc)
 {
     strcpy(pDst, pSrc);
 }
 
-int fn_801D84B8(const char *pA, const char *pB)
+int MemCardMgrCompareGameCode(const char *pA, const char *pB)
 {
     return memcmp(pA, pB, 8);
 }
 
-void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry)
+void MemCardMgrFormatDate(char *pBuffer, int unused, MemCDirEntry_t *pEntry)
 {
     Str3_t suffix;
     unsigned short hour = pEntry->mHour;
@@ -1521,22 +1521,22 @@ void MemCardMgrFormatDate(char *pBuffer, int unused, Struct_801D4848 *pEntry)
     sprintf(pBuffer, "%d/%d/%d  %d:%02d %s", month, day, year, hour, minute, suffix.mText);
 }
 
-int fn_801D85A8(int unused)
+int MemCardMgrGetEntriesPerFile(int unused)
 {
     return 1;
 }
 
-int fn_801D85B0(int handle)
+int MemCardMgrReadHeader(int handle)
 {
-    return MemCAsyncRead(handle, lbl_80398F00, sizeof(lbl_80398F00));
+    return MemCAsyncRead(handle, _MemCardMgr_aHeaderBuffer, sizeof(_MemCardMgr_aHeaderBuffer));
 }
 
-int fn_801D85DC(int handle, int arg, char *pName, int size, Struct_801D4848 *pEntry, Func_803EBD30 pFunc)
+int MemCardMgrGetNameFromHeader(int handle, int arg, char *pName, int size, MemCDirEntry_t *pEntry, MemCardGetNameFunc_t pFunc)
 {
     return 0;
 }
 
-int fn_801D85E4(int handle, int type, char *pTitle, int slot, Func_803EBD34 pFunc)
+int MemCardMgrWriteSysInfo(int handle, int type, char *pTitle, int slot, MemCardSysInfoFunc_t pFunc)
 {
     unsigned int info[2];
 
@@ -1545,7 +1545,7 @@ int fn_801D85E4(int handle, int type, char *pTitle, int slot, Func_803EBD34 pFun
     return MemCAsyncSetSysInfo(handle, info);
 }
 
-int fn_801D8618(int unused, int dataSize, int headerSize)
+int MemCardMgrGetFileSize(int unused, int dataSize, int headerSize)
 {
     int size = dataSize + headerSize + 0x40;
     int total;
@@ -1558,12 +1558,12 @@ int fn_801D8618(int unused, int dataSize, int headerSize)
     return total;
 }
 
-int fn_801D8658(int unused, int dataSize, int headerSize)
+int MemCardMgrGetFileCapacity(int unused, int dataSize, int headerSize)
 {
-    return fn_801D8618(unused, dataSize, headerSize) - (0x40 + headerSize);
+    return MemCardMgrGetFileSize(unused, dataSize, headerSize) - (0x40 + headerSize);
 }
 
-void fn_801D868C(int type, int port, char *pBuffer, int size)
+void MemCardMgrFormatCardType(int type, int port, char *pBuffer, int size)
 {
     MemCFormatCardType(type, pBuffer, size);
 }

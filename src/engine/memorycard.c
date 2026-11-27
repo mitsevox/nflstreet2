@@ -135,7 +135,7 @@ static int _MemCExprMatch(const char *pPattern, const char *pName)
     return match;
 }
 
-static void _MemCConvertFileTime(Struct_801D4848 *pEntry, unsigned int seconds)
+static void _MemCConvertFileTime(MemCDirEntry_t *pEntry, unsigned int seconds)
 {
     unsigned char daysInMonth[13] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     unsigned int days;
@@ -433,7 +433,7 @@ int MemCAsyncGetFreeEntries(int port)
     return 0;
 }
 
-int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, Struct_801D4848 *pEntries,
+int MemCAsyncGetDir(int port, const char *pGameCode, const char *pPattern, MemCDirEntry_t *pEntries,
                 unsigned int maxEntries)
 {
     CARDStat stat;

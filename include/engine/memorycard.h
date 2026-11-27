@@ -2,7 +2,7 @@
 #define ENGINE_MEMORYCARD_H
 
 /* Directory entry filled by the memory-card directory scan (0x801D4848). */
-typedef struct Struct_801D4848 {
+typedef struct MemCDirEntry_t {
     unsigned char mUnknown0;
     unsigned char mSecond;
     unsigned char mMinute;
@@ -13,7 +13,7 @@ typedef struct Struct_801D4848 {
     char mName[32];
     unsigned int mIconAddr;
     unsigned int mLength;
-} Struct_801D4848;
+} MemCDirEntry_t;
 
 void MemCInit(void);
 void MemCShutdown(void);

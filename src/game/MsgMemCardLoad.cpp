@@ -48,19 +48,19 @@ static MemCardListCallbacks_t _MsgMemCardLoad_Callbacks = {
 extern "C" void MsgMemCardLoadOpen()
 {
     MsgGameSetMemCardActive(1);
-    fn_801D685C("GN7E-69", 0);
-    fn_801D65B4(0);
-    fn_801D654C(1);
-    fn_801D6714(0);
+    MemCardMgrSetGameCode("GN7E-69", 0);
+    MemCardMgrSetIdleMode(0);
+    MemCardMgrEnablePolling(1);
+    MemCardMgrSetPort(0);
     MsgMemCardLoadRegisterCallbacks();
 }
 
 extern "C" void MsgMemCardLoadClose()
 {
     MsgGameSetMemCardActive(0);
-    fn_801D685C("GN7E-69", 0);
-    fn_801D6714(-1);
-    fn_801D654C(0);
+    MemCardMgrSetGameCode("GN7E-69", 0);
+    MemCardMgrSetPort(-1);
+    MemCardMgrEnablePolling(0);
     MemCardUIClearCallbacks();
 }
 
@@ -100,9 +100,9 @@ extern "C" void MsgMemCardLoadSelectEntry(int key, int value)
     char first[32];
     char second[32];
     MemCardMgrGetSlotInfo((signed char)value, key, first, 32, 0, -1, 0);
-    fn_801D6C70((signed char)value, key, second, 32);
-    fn_801D67E4(first, second);
-    fn_801D6838(value);
+    MemCardMgrGetSlotEntryName((signed char)value, key, second, 32);
+    MemCardMgrSetFileStrings(first, second);
+    MemCardMgrSetSlot(value);
 }
 
 extern "C" int MsgMemCardLoadGetEntryName(int key, int value, TextRecord_t *p)
@@ -111,7 +111,7 @@ extern "C" int MsgMemCardLoadGetEntryName(int key, int value, TextRecord_t *p)
         char text[32];
         MemCardMgrGetSlotInfo((signed char)value, key, text, 32, 0, -1, 0);
         strcpy(p->mUnknown8, text);
-    } else if (fn_801D6DA8(0, 1)) {
+    } else if (MemCardMgrIsSlotCorrupt(0, 1)) {
         strcpy(p->mUnknown8, "???");
     } else {
         strcpy(p->mUnknown8, "Options");
