@@ -567,14 +567,6 @@
       "address": "0x802FB458",
       "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
     },
-    "gPlayerLooks": {
-      "address": "0x803078E8",
-      "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
-    "gPlayerLookBonuses": {
-      "address": "0x80308368",
-      "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -1301,7 +1293,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes. Its .bss _SndgEvent_DelayedPos 0x8030AA7C-0x8030AA88 and .sbss (nine pool handles 0x803EC820-0x803EC844) are linked from the compiled object (data rows).",
       "sections": [
         {
           "section": ".text",
@@ -1320,6 +1312,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "holdouts": {
@@ -1671,7 +1675,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and fn_801D2130 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and fn_801D2130 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -1696,6 +1700,12 @@
           "placement": ".text",
           "start": "0x801D2478",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384BC0",
+          "end": "0x80384CC0"
         }
       ],
       "holdouts": {
@@ -1718,7 +1728,14 @@
           }
         ],
         "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 (fn_801D2478, MemCustomHeap, exact since #1492)."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_Mem_Crit",
+          "start": "0x803E92AC",
+          "end": "0x803E92CC"
+        }
+      ]
     },
     {
       "source": "src/engine/TibNew.cpp",
@@ -4154,7 +4171,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes. Its .bss gPlyrAnimReplayStates/gPlyrAnimReplayAnims 0x803192BC-0x803192F4 is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -4167,6 +4184,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "holdouts": {
@@ -10546,7 +10569,7 @@
     {
       "source": "src/game/PlayerLook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. The record arrays gPlayerLooks 0x803078E8 and gPlayerLookBonuses 0x80308368 stay original bytes: they lie outside the file's linked .bss 0x80307720-0x80307778.",
+      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. Its four .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the two cursors 0x80307720-0x80307778 lie before the .bss of src/game/Divot.cpp and src/game/FieldLines.cpp (0x80307778-0x803078E8) and the record arrays 0x803078E8-0x803084B8 after it; exact data rows of all four extents.",
       "sections": [
         {
           "section": ".text",
@@ -10559,12 +10582,6 @@
           "placement": ".data3",
           "start": "0x8028D73C",
           "end": "0x8028D79C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80307720",
-          "end": "0x80307778"
         },
         {
           "section": ".ctors",
@@ -10583,6 +10600,28 @@
           "placement": ".data4",
           "start": "0x802CF370",
           "end": "0x802CFBCC"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerLook_sPlayerCursor",
+          "start": "0x80307720",
+          "end": "0x8030774C"
+        },
+        {
+          "symbol": "_PlayerLook_sGearCursor",
+          "start": "0x8030774C",
+          "end": "0x80307778"
+        },
+        {
+          "symbol": "_PlayerLook_aLooks",
+          "start": "0x803078E8",
+          "end": "0x80308368"
+        },
+        {
+          "symbol": "_PlayerLook_aBonuses",
+          "start": "0x80308368",
+          "end": "0x803084B8"
         }
       ]
     },
@@ -27878,7 +27917,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change). Its three .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the constructed gear-colour cursor 0x8030BC2C-0x8030BC58 lies before src/game/PlayerQuery.cpp's cursors 0x8030BC58-0x8030BC88 and the two name cursors 0x8030BC88-0x8030BCA8 after them; exact data rows of all three extents.",
       "sections": [
         {
           "section": ".text",
@@ -27909,12 +27948,6 @@
           "placement": ".data5",
           "start": "0x803EA7D8",
           "end": "0x803EA7E4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8030BC2C",
-          "end": "0x8030BC58"
         },
         {
           "section": ".ctors",
@@ -27948,7 +27981,24 @@
           }
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
+        }
+      ]
     },
     {
       "source": "src/engine/ef_pow.c",
@@ -28889,7 +28939,7 @@
     {
       "source": "src/engine/uigarc.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes. Its two COMMON vertex tables UIGArcVertexCoords 0x803A0400-0x803A1400 and UIGArcVertexColors 0x803A1400-0x803A1C00 are placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -28934,7 +28984,19 @@
           }
         ],
         "evidence": "e2e merge notes (swarm e2 tracking, PR #1471): src/engine/uigarc.c holds out fn_80223FF4 and fn_8022482C."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "UIGArcVertexCoords",
+          "start": "0x803A0400",
+          "end": "0x803A1400"
+        },
+        {
+          "symbol": "UIGArcVertexColors",
+          "start": "0x803A1400",
+          "end": "0x803A1C00"
+        }
+      ]
     },
     {
       "source": "src/engine/dbuslp.c",
@@ -29193,7 +29255,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes. Its .bss (_AnimSt_pStatAnimList 0x8037EC7C-0x8037F860) and .sbss (_AnimSt_NumObjTypes 0x803ECEBC-0x803ECEC0) are linked from the compiled object (their data rows).",
       "sections": [
         {
           "section": ".text",
@@ -29218,6 +29280,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "holdouts": {
@@ -29432,7 +29506,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes. The COMMON GX light LLUIGTexLightObj 0x803E9880-0x803E98C0, shared with uigcurverender.c and uigarc.c, is placed by its storage map (data row; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -29481,7 +29555,14 @@
           }
         ],
         "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "LLUIGTexLightObj",
+          "start": "0x803E9880",
+          "end": "0x803E98C0"
+        }
+      ]
     },
     {
       "source": "src/engine/UIGColorStyle.c",
@@ -29925,7 +30006,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes. Its .bss (the two colour vectors 0x8039F858-0x8039F878) is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -29950,6 +30031,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "holdouts": {

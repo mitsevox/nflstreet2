@@ -9712,7 +9712,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials. Its three .bss file statics are placed by the storage map (data rows 0x8030BC2C, 0x8030BC88, 0x8030BC98).",
       "sections": [
         {
           "section": ".text",
@@ -9736,7 +9736,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030BC2C",
-          "end": "0x8030BC58"
+          "end": "0x8030BCA8"
         },
         {
           "section": ".ctors",
@@ -9946,6 +9946,23 @@
           "symbol": "_GLOBAL_.D.PlayerGearColorsOpen",
           "start": "0x800834A0",
           "end": "0x800834CC"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
         }
       ]
     },
@@ -10570,7 +10587,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim. Data rows 0x8030AA7C-0x8030AA88 (.bss) and 0x803EC820-0x803EC844 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -10583,6 +10600,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "functions": [
@@ -20567,7 +20596,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows). Data row 0x803192BC-0x803192F4 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -20580,6 +20609,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "functions": [
@@ -23979,7 +24014,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes. Data rows 0x8037EC7C-0x8037F860 (.bss) and 0x803ECEBC-0x803ECEC0 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -23992,6 +24027,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "functions": [
@@ -24362,7 +24409,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -24375,6 +24422,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "functions": [
@@ -25152,13 +25205,19 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the four holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the four holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted. Data row 0x80384BC0-0x80384CC0 (.bss _Mem_pAddrToHeap).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D134C",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384BC0",
+          "end": "0x80384CC0"
         }
       ],
       "functions": [

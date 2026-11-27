@@ -30,7 +30,7 @@
 
 GXColor _UIGCurve_cMaterialColor = {0x12, 0x34, 0x56, 0x78};
 GXColor _UIGCurve_cLightColor = {0x12, 0x34, 0x56, 0x78};
-extern GXLightObj lbl_803E9880;
+extern GXLightObj LLUIGTexLightObj;
 
 
 void _UIGCurveSetupRender(Uint32 Flags);
@@ -79,8 +79,8 @@ void _UIGCurveSetMaterialColors(void)
     GXColor LightColor = pColor->mLightColor;
 
     GXSetChanMatColor(GX_COLOR0A0, MatColor);
-    GXInitLightColor(&lbl_803E9880, LightColor);
-    GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
+    GXInitLightColor(&LLUIGTexLightObj, LightColor);
+    GXLoadLightObjImm(&LLUIGTexLightObj, GX_LIGHT7);
     _UIGCurve_cMaterialColor = MatColor;
     _UIGCurve_cLightColor = LightColor;
 }
