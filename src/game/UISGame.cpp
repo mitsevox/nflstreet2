@@ -124,11 +124,11 @@ void UIGLibraryShutdown(void *p);
 void *UIGLibraryGetGlobal(int index);
 void UIGLibraryProcess(void *p);
 void UIGLibrarySetLoadFlagsFunc(void (*pCallback)());
-void fn_8021EFD8(void);
-void fn_80220CDC(int a);
-void fn_80220CFC(int a);
-void fn_80220D04(void);
-void fn_802212C8(void);
+void UIGImageNodeObjAction(void);
+void UIGRenderSetActive(int a);
+void UIGRenderSetLast(int a);
+void UIGRenderReset(void);
+void UIGRenderTransformNodeAction(void);
 void UIGLibTextObjAction(void);
 void fn_80225654(void);
 void LLLightAttachViewport(Viewport_t *pObject);
@@ -188,11 +188,11 @@ void UISGameFreeTable(void)
 void UISGameSetCallbacks(void *p)
 {
     fn_80218AB0(p, UISGameLoadItem, UISGameFreeItem);
-    fn_80218AC4(p, fn_802212C8);
+    fn_80218AC4(p, UIGRenderTransformNodeAction);
     fn_80218AA8(p, ScreenMsgDispatch);
     fn_80218ABC(p, UISGameDrawDone);
     fn_80218ACC(p, UISGameRepeatResetCB);
-    fn_80218AD4(p, 0, fn_8021EFD8);
+    fn_80218AD4(p, 0, UIGImageNodeObjAction);
     fn_80218AD4(p, 1, UISSoundObjAction);
     fn_80218AD4(p, 2, (void (*)(void))UIGCurveObjAction);
     fn_80218AD4(p, 3, UISViewObjAction);
@@ -647,7 +647,7 @@ void UISGameInit(void)
         InGameStateReset();
         GameEventFlagsInit();
     }
-    fn_80220D04();
+    UIGRenderReset();
     {
         unsigned char record;
         unsigned char index;
@@ -906,8 +906,8 @@ void UISGameSetInputFlag(unsigned char value)
 
 void UISGameSetDrawMode(int a)
 {
-    fn_80220CDC(a);
-    fn_80220CFC(a);
+    UIGRenderSetActive(a);
+    UIGRenderSetLast(a);
     GlibRenderSelectBin(GlibRenderGetBin(14));
 }
 }

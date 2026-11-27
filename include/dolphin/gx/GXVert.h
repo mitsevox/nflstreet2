@@ -76,6 +76,12 @@ static inline void GXTexCoord2f32(f32 s, f32 t)
     GXWGFifo.f32 = t;
 }
 
+static inline void GXTexCoord2s16(s16 s, s16 t)
+{
+    GXWGFifo.s16 = s;
+    GXWGFifo.s16 = t;
+}
+
 #ifdef __cplusplus
 }
 #endif
