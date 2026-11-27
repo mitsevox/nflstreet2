@@ -335,7 +335,7 @@ int _LZHEncodeInput(void)
         head = lbl_803ED448[hash];
         best = 0;
         search = 0;
-        while (lbl_803ED44C[head] == hash) {
+        while (lbl_803ED44C[head] == hash && search <= 15) {
             length = 0;
             scan = head;
             if (lbl_803ED440[head] == lbl_803ED440[pos & 0x7FFF] &&
@@ -356,11 +356,8 @@ int _LZHEncodeInput(void)
             }
             head = lbl_803ED450[head];
             search++;
-            if (search > 15) {
-                break;
-            }
         }
-        bestPos = (pos - bestPos) & 0x7FFF;
+        bestPos = (pos - bestPos - 0x8000) & 0x7FFF;
         if (best > 3 || (best == 3 && bestPos <= 4096)) {
             lbl_803ED454[lbl_803ED45C] = best;
             lbl_803ED458[lbl_803ED45C++] = bestPos;
