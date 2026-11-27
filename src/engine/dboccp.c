@@ -88,6 +88,7 @@ static inline void _DbOccpSetColCol(TDbExpr_t *pExpr, int op, unsigned long long
 /* column op integer */
 static inline void _DbOccpSetColInt(TDbExpr_t *pExpr, int op, unsigned long long col, int value)
 {
+    /* FAKEMATCH: store order found by a permutation search for DbOccpQueryKicking's schedule; the same five fields are set. */
     pExpr->mOp = op;
     pExpr->mRight.mValue.i = value;
     pExpr->mLeft.mValue.l = col;
@@ -116,6 +117,7 @@ static inline void _DbOccpSetSubFloat(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub,
     DbOccpFloatBits v;
 
     v.f = value;
+    /* FAKEMATCH: value stored first, an order found by a permutation search for the float queries' schedule; the same five fields are set. */
     pExpr->mRight.mValue.u = v.u;
     pExpr->mLeft.mType = TDB_TYPE_EXPR_FLOAT;
     pExpr->mLeft.mValue.p = pSub;
