@@ -17,7 +17,7 @@ struct MsgBoxText_t {
 
 extern "C" {
 LevelSurface_t *LevelMeshFindArea(float *pPos, int value);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 void *fn_801D2BB0(int a, int size, int c, int d);
 int MathArcTan2(float y, float x);
 unsigned int strlen(const char *pText);
@@ -77,7 +77,7 @@ void LevelGetWallBase(LevelWall_t *pRecord, void *pFirst, void *pSecond)
             }
         }
     }
-    if (foundA && foundB && fn_801784C4()) {
+    if (foundA && foundB && ScrmIsFieldFlipped()) {
         pA[0] = -pA[0];
         pA[1] = -pA[1];
         pB[0] = -pB[0];

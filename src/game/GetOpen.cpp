@@ -9,7 +9,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/AnimMomentumActor.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Plan_80121264.h"
 #include "game/Table_80089904.h"
 #include "game/AudmonEvent.h"
@@ -17,8 +17,8 @@
 #include "game/Ball.h"
 #include "game/fn_800AD9B4.h"
 #include "game/GameOptions.h"
-#include "game/fn_80177FE0.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetBallSpot.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include <string.h>
 #include "game/Vec2Add.h"
 #include "game/Vec3Magnitude.h"
@@ -34,22 +34,22 @@
 extern "C" {
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
-int fn_80178320(void);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
+int ScrmGetDefenseTeam(void);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void Vec2Sub(void *pOut, void *pA, void *pB);
-int fn_80177F70(void);
-float fn_80178298(void);
-float fn_80178A08(void);
-float fn_80178A2C(void);
-float fn_80178A44(void);
+int ScrmGetDown(void);
+float ScrmGetLineToGain(void);
+float ScrmGetSidelineX(void);
+float ScrmGetGoalLineY(void);
+float ScrmGetEndLineY(void);
 float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
-void Vec2FromAngle(Point_8017886C *pOut, int angle, float length);
+void Vec2FromAngle(FieldPoint_t *pOut, int angle, float length);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
-int fn_80178308(void);
-int fn_801783AC(int a);
+int ScrmGetOffenseTeam(void);
+int ScrmTestPlayFlag(int a);
 extern float gPlyrMoveFwdSpeed;
 void fn_8009A8D4(void *p);
 int fn_80103D6C(Object_80039F5C *p);
@@ -59,9 +59,9 @@ void PlayerCutPostTurn(Object_80039F5C *p, int angle);
 
 int GetOpenShouldRunOn(Object_80039F5C *p);
 int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b);
-int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, float lower, float upper);
+int GetOpenFindOpenSpot(FieldPoint_t *out, Object_80039F5C *p, float lower, float upper);
 void GetOpenRunOn(Object_80039F5C *p, float distance);
-void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut);
+void GetOpenGetRunOnPoint(Object_80039F5C *p, FieldPoint_t *pOut);
 int GetOpenEnter(Object_80039F5C *p);
 int GetOpenUpdate(Object_80039F5C *p);
 void GetOpenGetDepthRange(float *pA, float *pB);
@@ -93,9 +93,9 @@ extern "C" int GetOpenShouldRunOn(Object_80039F5C *p)
         result = 1;
     }
     if (result) {
-        if ((!(fn_80178A08() - p->mMotion.mPos.mX >= 4.0f)
+        if ((!(ScrmGetSidelineX() - p->mMotion.mPos.mX >= 4.0f)
              && MathAngleDiff(facing, 0) <= 0x1FFFFF)
-            || (!(-fn_80178A08() - p->mMotion.mPos.mX <= -4.0f)
+            || (!(-ScrmGetSidelineX() - p->mMotion.mPos.mX <= -4.0f)
                 && MathAngleDiff(facing, 0x800000) <= 0x1FFFFF)) {
             result = 0;
         }
@@ -119,11 +119,11 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
     int tracking = 0;
     int result = 1;
     int angle = 0;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     GetOpenState_t *state = (GetOpenState_t *)&p->mUnknown336;
     Object_80039F5C *carrier;
     unsigned char i;
-    Point_8017886C offset;
+    FieldPoint_t offset;
 
     delta.mX = delta.mY = 0.0f;
     carrier = BallGetCurrentHolder();
@@ -132,11 +132,11 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
     }
     if (carrier && p->mMotion.mPos.mY > a && p->mMotion.mPos.mY < b
         && (float)(int)state->mUnknown36 < state->mUnknown20
-        && fabsf(delta.mX) < fn_80178A08()
-        && fabsf(p->mMotion.mPos.mX) < fn_80178A08() - 1.0f) {
-        unsigned int total = fn_80178D18(fn_80178320());
+        && fabsf(delta.mX) < ScrmGetSidelineX()
+        && fabsf(p->mMotion.mPos.mX) < ScrmGetSidelineX() - 1.0f) {
+        unsigned int total = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
         for (i = 0; i < total; ++i) {
-            Object_80039F5C *other = PlyrGet(fn_80178320(), i);
+            Object_80039F5C *other = PlyrGet(ScrmGetDefenseTeam(), i);
             Vec2Sub(&offset, &other->mMotion.mPos, &p->mMotion.mPos);
             int otherAngle = MathArcTan2(offset.mY, offset.mX);
             angle = MathArcTan2(delta.mY, delta.mX);
@@ -152,11 +152,11 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
         if (count || tracking) {
             result = 0;
         } else {
-            unsigned int others = fn_80178D18(fn_80178308());
+            unsigned int others = ScrmGetTeamPlayerCount(ScrmGetOffenseTeam());
             for (i = 0; i < others; ++i) {
-                Object_80039F5C *other = PlyrGet(fn_80178308(), i);
+                Object_80039F5C *other = PlyrGet(ScrmGetOffenseTeam(), i);
                 if (other != p) {
-                    Point_8017886C toOther;
+                    FieldPoint_t toOther;
                     Vec2Sub(&toOther, &other->mMotion.mPos, &p->mMotion.mPos);
                     int otherAngle = MathArcTan2(toOther.mY, toOther.mX);
                     if (MathAngleDiff(otherAngle, angle) <= 0x555554 && Vec2Magnitude(&toOther) < 5.0f) {
@@ -175,11 +175,11 @@ extern "C" int GetOpenIsOpenToCarrier(Object_80039F5C *p, float a, float b)
     return result;
 }
 
-extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, float lower, float upper)
+extern "C" int GetOpenFindOpenSpot(FieldPoint_t *out, Object_80039F5C *p, float lower, float upper)
 {
     int grid[9][12];
     Object_80039F5C *other;
-    Point_8017886C point;
+    FieldPoint_t point;
     int x, y;
 
     memset(grid, 0, sizeof(grid));
@@ -192,8 +192,8 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
         upper = top;
         lower = top - 10.5f;
     }
-    int team = fn_80178320();
-    unsigned int total = fn_80178D70(team);
+    int team = ScrmGetDefenseTeam();
+    unsigned int total = ScrmGetActivePlayerCount(team);
     for (unsigned char i = 0; i < total; ++i) {
         other = PlyrGet(team, i);
         switch (other->mpState->mId) {
@@ -206,8 +206,8 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
         case 22:
             if (fn_8009BCE8((int *)&other->mUnknown336)) {
                 if (other->mpState->mId == 19) {
-                    point.mX = ((Point_8017886C *)&other->mUnknown336)->mX;
-                    point.mY = ((Point_8017886C *)&other->mUnknown336)->mY;
+                    point.mX = ((FieldPoint_t *)&other->mUnknown336)->mX;
+                    point.mY = ((FieldPoint_t *)&other->mUnknown336)->mY;
                 } else {
                     point.mX = other->mMotion.mPos.mX;
                     point.mY = other->mMotion.mPos.mY;
@@ -230,7 +230,7 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
             grid[x][y] += 4;
         }
     }
-    team = fn_80178308();
+    team = ScrmGetOffenseTeam();
     for (unsigned char i = 0; i <= 2; ++i) {
         unsigned char valid;
         int index = PlayBookGetReceiver(team, i, &valid);
@@ -238,8 +238,8 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
             other = PlyrGet(team, index);
             if (other != p) {
                 if (other->mpState->mId == 19) {
-                    point.mX = ((Point_8017886C *)&other->mUnknown336)->mX;
-                    point.mY = ((Point_8017886C *)&other->mUnknown336)->mY;
+                    point.mX = ((FieldPoint_t *)&other->mUnknown336)->mX;
+                    point.mY = ((FieldPoint_t *)&other->mUnknown336)->mY;
                 } else {
                     point.mX = other->mMotion.mPos.mX;
                     point.mY = other->mMotion.mPos.mY;
@@ -254,18 +254,18 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
     }
     Object_80039F5C *carrier = BallGetCurrentHolder();
     if (carrier) {
-        float width = fn_80178A08();
+        float width = ScrmGetSidelineX();
         width += width;
         float cx = carrier->mMotion.mPos.mX;
         float minimum, maximum;
         if (!(cx >= 0.0f)) {
-            if (!(-fn_80178A08() >= cx - width * (1.0f / 3.0f))) minimum = cx - width * (1.0f / 3.0f);
-            else minimum = -fn_80178A08();
+            if (!(-ScrmGetSidelineX() >= cx - width * (1.0f / 3.0f))) minimum = cx - width * (1.0f / 3.0f);
+            else minimum = -ScrmGetSidelineX();
             maximum = width * (1.0f / 3.0f) + cx;
             if (!(maximum <= 0.0f)) maximum = 0.0f;
         } else {
-            if (!(fn_80178A08() <= width * (1.0f / 3.0f) + cx)) maximum = width * (1.0f / 3.0f) + cx;
-            else maximum = fn_80178A08();
+            if (!(ScrmGetSidelineX() <= width * (1.0f / 3.0f) + cx)) maximum = width * (1.0f / 3.0f) + cx;
+            else maximum = ScrmGetSidelineX();
             minimum = cx - width * (1.0f / 3.0f);
             if (!(minimum >= 0.0f)) minimum = 0.0f;
         }
@@ -280,10 +280,10 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
     }
     int best = 200;
     int bestX = 255, bestY = 255;
-    Point_8017886C cell;
+    FieldPoint_t cell;
     for (unsigned char i = 0; i <= 8; ++i) {
         cell.mX = (float)(int)i * 6.0f - 27.0f + p->mMotion.mPos.mX;
-        if (!(cell.mX <= 4.0f - fn_80178A08()) && !(cell.mX >= fn_80178A08() - 4.0f)) {
+        if (!(cell.mX <= 4.0f - ScrmGetSidelineX()) && !(cell.mX >= ScrmGetSidelineX() - 4.0f)) {
             for (unsigned char j = 0; j <= 11; ++j) {
                 cell.mY = (float)(int)j * 7.0f - 42.0f + p->mMotion.mPos.mY;
                 if (!(cell.mY <= lower) && !(cell.mY >= upper)) {
@@ -303,8 +303,8 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
         out->mX = (float)bestX * 6.0f - 27.0f + p->mMotion.mPos.mX;
         out->mY = (float)bestY * 7.0f - 42.0f + p->mMotion.mPos.mY;
         GetOpenGetDepthRange(&upper, &lower);
-        out->mX = !(out->mX >= 4.0f - fn_80178A08()) ? 4.0f - fn_80178A08()
-                  : (out->mX <= fn_80178A08() - 4.0f ? out->mX : fn_80178A08() - 4.0f);
+        out->mX = !(out->mX >= 4.0f - ScrmGetSidelineX()) ? 4.0f - ScrmGetSidelineX()
+                  : (out->mX <= ScrmGetSidelineX() - 4.0f ? out->mX : ScrmGetSidelineX() - 4.0f);
         out->mY = out->mY < lower ? lower : (out->mY <= upper ? out->mY : upper);
         return 1;
     }
@@ -314,7 +314,7 @@ extern "C" int GetOpenFindOpenSpot(Point_8017886C *out, Object_80039F5C *p, floa
 extern "C" void GetOpenRunOn(Object_80039F5C *p, float distance)
 {
     Message_800F01CC message;
-    Point_8017886C point;
+    FieldPoint_t point;
 
     GetOpenGetRunOnPoint(p, &point);
     memset(&message, 0, 4);
@@ -324,7 +324,7 @@ extern "C" void GetOpenRunOn(Object_80039F5C *p, float distance)
     fn_800F00D4(0, p->mpState, &message, p);
 }
 
-extern "C" void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut)
+extern "C" void GetOpenGetRunOnPoint(Object_80039F5C *p, FieldPoint_t *pOut)
 {
     float a, b;
 
@@ -332,9 +332,9 @@ extern "C" void GetOpenGetRunOnPoint(Object_80039F5C *p, Point_8017886C *pOut)
     Vec2FromAngle(pOut, p->mMotion.mUnknown32, 5.0f);
     pOut->mX += p->mMotion.mPos.mX;
     pOut->mY += p->mMotion.mPos.mY;
-    fn_80177FE0();
-    pOut->mX = pOut->mX > fn_80178A08() - 4.0f ? fn_80178A08() - 4.0f : pOut->mX;
-    pOut->mX = pOut->mX < 4.0f - fn_80178A08() ? 4.0f - fn_80178A08() : pOut->mX;
+    ScrmGetBallSpot();
+    pOut->mX = pOut->mX > ScrmGetSidelineX() - 4.0f ? ScrmGetSidelineX() - 4.0f : pOut->mX;
+    pOut->mX = pOut->mX < 4.0f - ScrmGetSidelineX() ? 4.0f - ScrmGetSidelineX() : pOut->mX;
     pOut->mY = pOut->mY < b ? b : (pOut->mY <= a ? pOut->mY : a);
 }
 
@@ -359,7 +359,7 @@ extern "C" int GetOpenEnter(Object_80039F5C *p)
     if (GetOpenShouldRunOn(p)) {
         int near = 0;
         int ahead = 0;
-        if (!(p->mMotion.mPos.mY >= fn_80177FE0().mY + 5.0f)) {
+        if (!(p->mMotion.mPos.mY >= ScrmGetBallSpot().mY + 5.0f)) {
             ahead = MathAngleDiff(p->mMotion.mUnknown32, 0x400000) <= 0x3FFFFF;
         }
         if (ahead) {
@@ -369,7 +369,7 @@ extern "C" int GetOpenEnter(Object_80039F5C *p)
             if (!fn_80103D6C(p)) {
                 unsigned char a, b;
                 if (fn_800C13A0(p, &a, &b) > 1 && BallGetCurrentHolder()) {
-                    if (!(fabsf(fn_80178A08() - p->mMotion.mPos.mX) >= 9.0f)) {
+                    if (!(fabsf(ScrmGetSidelineX() - p->mMotion.mPos.mX) >= 9.0f)) {
                         state->mUnknown28 = 0;
                     }
                     return 0;
@@ -377,7 +377,7 @@ extern "C" int GetOpenEnter(Object_80039F5C *p)
             }
         }
         GetOpenRunOn(p, 5.0f);
-    } else if (!(fabsf(fn_80178A08() - p->mMotion.mPos.mX) >= 9.0f)) {
+    } else if (!(fabsf(ScrmGetSidelineX() - p->mMotion.mPos.mX) >= 9.0f)) {
         state->mUnknown28 = 0;
     }
     return 0;
@@ -390,7 +390,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
     GetOpenState_t *state = (GetOpenState_t *)&p->mUnknown336;
     p->mFlags |= 0x80000000;
     BallGetCurrent();
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
         if (--state->mUnknown28 < 0) {
             state->mUnknown28 = (int)((float)(int)((1.0f - (float)p->mRatings[3] * (1.0f / 255.0f)) * 5.0f) + 2.0f);
@@ -399,7 +399,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             }
         }
         Message_800F01CC message;
-        if (BallGetCurrentHolder() && fn_801783AC(0)) {
+        if (BallGetCurrentHolder() && ScrmTestPlayFlag(0)) {
             memset(&message, 0, 4);
             message.mId = 33;
             fn_800F053C(0, p->mpState, &message, p);
@@ -407,7 +407,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
         }
         float a, b;
         state->mUnknown24 -= 2;
-        if (state->mUnknown24 < 0 || !(fabsf(p->mMotion.mPos.mX) <= fn_80178A08() - 4.0f)) {
+        if (state->mUnknown24 < 0 || !(fabsf(p->mMotion.mPos.mX) <= ScrmGetSidelineX() - 4.0f)) {
             int available = 0;
             if (BallGetCurrentHolder() && fn_80103D6C(p)) {
                 unsigned char first, second;
@@ -451,7 +451,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             if (state->mUnknown36) {
                 return 0;
             }
-            Point_8017886C point, delta;
+            FieldPoint_t point, delta;
             if (GetOpenFindOpenSpot(&point, p, b, a)) {
                 Vec2Sub(&delta, &point, &p->mMotion.mPos);
                 PlayerCutPostTurn(p, MathArcTan2(delta.mY, delta.mX));
@@ -494,20 +494,20 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
 
 extern "C" void GetOpenGetDepthRange(float *pA, float *pB)
 {
-    switch (fn_80177F70()) {
+    switch (ScrmGetDown()) {
     case 6:
-        *pB = fn_80178A2C();
+        *pB = ScrmGetGoalLineY();
         break;
     case 3:
     case 4:
     case 5:
-        *pB = fn_80178298() + 1.0f;
+        *pB = ScrmGetLineToGain() + 1.0f;
         break;
     default:
-        if (!(fn_80177FE0().mY <= fn_80178A2C() - 12.0f)) {
-            *pB = fn_80178A2C() + 1.0f;
+        if (!(ScrmGetBallSpot().mY <= ScrmGetGoalLineY() - 12.0f)) {
+            *pB = ScrmGetGoalLineY() + 1.0f;
         } else {
-            *pB = fn_80177FE0().mY + 3.0f;
+            *pB = ScrmGetBallSpot().mY + 3.0f;
         }
         break;
     }
@@ -516,12 +516,12 @@ extern "C" void GetOpenGetDepthRange(float *pA, float *pB)
     if (pOther) {
         *pA = pOther->mMotion.mPos.mY + 30.0f;
     } else {
-        *pA = fn_80177FE0().mY + 30.0f;
+        *pA = ScrmGetBallSpot().mY + 30.0f;
     }
     if (!(*pA >= *pB + 10.5f)) {
         *pA = *pB + 10.5f;
     }
-    if (!(*pA <= fn_80178A44() - 2.0f)) {
-        *pA = fn_80178A44() - 2.0f;
+    if (!(*pA <= ScrmGetEndLineY() - 2.0f)) {
+        *pA = ScrmGetEndLineY() - 2.0f;
     }
 }

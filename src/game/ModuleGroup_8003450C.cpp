@@ -12,7 +12,7 @@
 #include "game/BigObjInst.h"
 #include "game/PauseMenu.h"
 #include "game/Ball.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/TDbCompilePerformOp.h"
 
 extern "C" {
@@ -102,7 +102,7 @@ int fn_800C8704(int *pA, int *pB);
 void fn_800C9D6C(unsigned char a, unsigned char b);
 void fn_800C9E40(void);
 void fn_800C9E4C(unsigned char a, unsigned char b);
-void fn_800D77F0(void);
+void PlyrAnimReplayRegister(void);
 void fn_800EFD70(int a);
 void fn_800EFDD8(void);
 void fn_800F164C(int a);
@@ -158,8 +158,8 @@ void PlayBookReopen(int a, int b, int c, int d, int e, int f, int g);
 void PlayBookCloseDatabases(int a);
 void PlayTrackInit(void);
 void PlayTrackShutdown(void);
-void fn_80178B5C(void);
-int fn_80178C60(void);
+void ScrmLoadFieldDimensions(void);
+int ScrmGetGameTime(void);
 void SubDepthInit(void);
 void SubDepthShutdown(void);
 void BannerAlloc(void);
@@ -485,7 +485,7 @@ const char *Clock::GetName() { return "Clock"; }
 
 int Clock::Init()
 {
-    fn_8009D474(fn_80178C60(), 60);
+    fn_8009D474(ScrmGetGameTime(), 60);
     return 1;
 }
 
@@ -555,7 +555,7 @@ int Env::Init()
     DivotInit();
     fn_800C47EC(gLevelData);
     PlyrNameTagReadTextColor();
-    fn_80178B5C();
+    ScrmLoadFieldDimensions();
     return 1;
 }
 
@@ -1128,7 +1128,7 @@ int ReplayFrame::Init()
     SndgReplayRegister();
     ParticleSysReplayRegister();
     fn_800B4A4C();
-    fn_800D77F0();
+    PlyrAnimReplayRegister();
     ReplayBufferInit();
     return 1;
 }
@@ -1335,11 +1335,11 @@ static void fn_80035DA0(unsigned char *pA, unsigned char *pB)
     switch (fn_801486A0()) {
     case 0:
     case 1:
-        a = fn_80178D70(0);
-        b = fn_80178D70(1);
+        a = ScrmGetActivePlayerCount(0);
+        b = ScrmGetActivePlayerCount(1);
         break;
     case 2:
-        a = b = fn_80178D70(0);
+        a = b = ScrmGetActivePlayerCount(0);
         break;
     default:
         b = PortDbCountSidePlayers(0) > PortDbCountSidePlayers(1) ? PortDbCountSidePlayers(0) : PortDbCountSidePlayers(1);

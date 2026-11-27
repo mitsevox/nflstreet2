@@ -7,7 +7,7 @@
 #include "game/Ball.h"
 #include "game/BigObj.h"
 #include "game/BigObjInst.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Record_800B15FC.h"
 #include "game/AudmonEvent.h"
 #include "game/fn_800AD9B4.h"
@@ -35,7 +35,7 @@ int fn_800A33DC(void);
 void fn_800B1508(void);
 unsigned char fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
-void fn_800D782C(Object_80039F5C *p);
+void PlyrBallHandUpdate(Object_80039F5C *p);
 void LooseBallBroadcast(int index);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_8009BF5C(Object_80039F5C *p, int joint, Vector_80039F5C *pOut, void *pA);
@@ -48,10 +48,10 @@ void PossGrabBall(Object_80039F5C *p);
 void PossResetMissedCatch(void);
 void PossUpdateMissedCatch(Ball_t *pBall);
 void ClockRuleRestartOnReady(void);
-int fn_80178308(void);
-int fn_801783AC(int bit);
-void fn_801783D0(int bit, int on);
-int fn_801787A0(void);
+int ScrmGetOffenseTeam(void);
+int ScrmTestPlayFlag(int bit);
+void ScrmSetPlayFlag(int bit, int on);
+int ScrmIsNotReplay(void);
 int fn_801486A0(void);
 int MathAngleDiff(int a, int b);
 void MatPushUnit(void);
@@ -69,7 +69,7 @@ unsigned int SyncTimeGetGameTime(void);
 void BallStateChange(Ball_t *pBall, int state, int arg);
 int BallStateGet(Ball_t *pBall, int *pArg);
 int fn_800A3444(void);
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 float SyncRandGetFloat(int stream);
 int MathArcTan2(float y, float x);
 void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
@@ -127,7 +127,7 @@ int BallIsOverField(Ball_t *pBall)
         pos.mX = pBall->mState.mPos.mX;
         pos.mY = pBall->mState.mPos.mY;
         pos.mZ = pBall->mState.mPos.mZ;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             pos.mX = -pos.mX;
             pos.mY = -pos.mY;
         }
@@ -138,7 +138,7 @@ int BallIsOverField(Ball_t *pBall)
         pos.mX = pBall->mState.mPos.mX;
         pos.mY = pBall->mState.mPos.mY;
         pos.mZ = pBall->mState.mPos.mZ;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             pos.mX = -pos.mX;
             pos.mY = -pos.mY;
         }
@@ -497,7 +497,7 @@ void BallRecordBounce(Ball_t *pBall)
     int flip;
 
     if (Vec3Magnitude(&pBall->mState.mUnknown54) > 0.3f && pBlock->mUnknown152 == 0) {
-        flip = fn_801784C4();
+        flip = ScrmIsFieldFlipped();
         BallFlipPosition(&pBlock->mUnknown124, &pBall->mState.mPos, flip);
         BallFlipRotation(&pBlock->mUnknown136, &pBall->mState.mUnknown18, flip);
         pBlock->mUnknown152 = 1;
@@ -507,7 +507,7 @@ void BallRecordBounce(Ball_t *pBall)
 void BallSyncModel(Ball_t *pBall)
 {
     Block_80170E64 *pBlock = pBall->mpUnknown00;
-    int flip = fn_801784C4();
+    int flip = ScrmIsFieldFlipped();
 
     BallFlipPosition(&pBlock->mUnknown4, &pBall->mState.mPos, flip);
     BallFlipRotation(&pBlock->mUnknown108, &pBall->mState.mUnknown18, flip);
@@ -700,7 +700,7 @@ void BallClearPassFlag(Ball_t *pBall)
 
 void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_80039F5C *pLanding)
 {
-    Point_8017886C pos;
+    FieldPoint_t pos;
     float vz = pBall->mState.mUnknown54.mZ;
     float t = (pBall->mState.mPos.mZ - height) * 0.005962963f + vz * vz;
 
@@ -836,7 +836,7 @@ int BallPlayerHandsFree(Object_80039F5C *p)
 
 int BallCanPlayerTouch(Ball_t *pBall, Object_80039F5C *p, unsigned int type, int facing)
 {
-    Point_8017886C delta;
+    FieldPoint_t delta;
     unsigned short state = BallStateGet(pBall, 0);
     int result = 0;
 
@@ -963,7 +963,7 @@ void BallStateHeldExit(Ball_t *pBall)
 void BallStatePassHitGround(Ball_t *pBall, float dt)
 {
     if (fn_800AD9B4() == 3 && (BallGetCurrent() == pBall || fn_801486A0() == 1)) {
-        if (!fn_801783AC(1)) {
+        if (!ScrmTestPlayFlag(1)) {
             BallStateChange(pBall, 5, 0);
             PossEndIncompletePass();
         } else {
@@ -981,8 +981,8 @@ void BallStateLooseHitGround(Ball_t *pBall, float dt)
 void BallStatePitchHitGround(Ball_t *pBall, float dt)
 {
     BallSetTarget(pBall, 0);
-    if (BallGetCurrent() == pBall && !fn_801787A0()) {
-        if (fn_801783AC(1) || !fn_801486A0()) {
+    if (BallGetCurrent() == pBall && !ScrmIsNotReplay()) {
+        if (ScrmTestPlayFlag(1) || !fn_801486A0()) {
             PossStartFumble();
         } else {
             PossEndIncompletePass();
@@ -1008,7 +1008,7 @@ int BallStateHandoffTouch(Ball_t *pBall, void *pData, unsigned int type)
             mode = fn_800AD9B4();
             BallSetTarget(pBall, 0);
             BallGiveToPlayer(pBall, p);
-            fn_800D782C(p);
+            PlyrBallHandUpdate(p);
             BallSetTransferKind(pBall, 0);
             if (mode == 3) {
                 pRecord = fn_800B15FC();
@@ -1057,14 +1057,14 @@ int BallStatePassTouch(Ball_t *pBall, void *pData, unsigned int type)
 
     if (BallCanPlayerTouch(pBall, p, type, 0)) {
         BallGetVelocity(pBall, &vel);
-        if (p->mIdBytes[2] == fn_80178308() && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
+        if (p->mIdBytes[2] == ScrmGetOffenseTeam() && pBall->mState.mUnknownC0 + 5 >= SyncTimeGetGameTime()) {
             result = 1;
         } else {
             result = PossTryCatch(pBall, p, type);
         }
     }
     if (!result) {
-        fn_801783D0(0xB, 1);
+        ScrmSetPlayFlag(0xB, 1);
         BallSetSpinMode(pBall, 3);
     }
     return result;
@@ -1116,7 +1116,7 @@ void BallStatePlacedUpdate(Ball_t *pBall, float dt)
     MatGetPos(&pBall->mState.mPos.mX);
     QuatFromMat(&pBall->mState.mUnknown18);
     MatPop();
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         pBall->mState.mPos.mX = -pBall->mState.mPos.mX;
         pBall->mState.mPos.mY = -pBall->mState.mPos.mY;
         QuatFromEuler(&turn, 0x800000, 0, 0);

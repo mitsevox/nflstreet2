@@ -1,7 +1,7 @@
 /* Per-frame player movement update: latches the movement request, clamps its speed by move type,
    sets forward, side and backpedal speed and turn rate from the player's ratings, and runs the movement mode handler. */
 #include "game/fn_800AD9B4.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include <string.h>
 #include "game/Object_80039F5C.h"
 
@@ -30,7 +30,7 @@ void PlyrMoveTurnWithAnim(Object_80039F5C *p);
 int PlyrMoveInCappedState(Object_80039F5C *p);
 void PlyrMoveModeStop(Object_80039F5C *p);
 void PlyrMoveModeSpin(Object_80039F5C *p);
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 float MathSin(int angle);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -145,8 +145,8 @@ void PlyrMovePickSideType(Object_80039F5C *p)
     float distance;
 
     if (MathAngleDiff(0x400000, p->mMotion.mFacing) < 0x355555 && p == BallGetCurrentHolder()) {
-        int team = fn_80178308();
-        Object_80039F5C *pOther = fn_801245DC(p, team, 0, fn_80178D18(fn_80178308()), 0x355555, &distance, 0);
+        int team = ScrmGetOffenseTeam();
+        Object_80039F5C *pOther = fn_801245DC(p, team, 0, ScrmGetTeamPlayerCount(ScrmGetOffenseTeam()), 0x355555, &distance, 0);
 
         if (pOther && distance < 2.0f && !(pOther->mFlags & 0x800) && fn_8011E9B4(pOther)) {
             int angle;

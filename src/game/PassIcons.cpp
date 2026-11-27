@@ -11,8 +11,8 @@ void *PassIconStateGetFlags(int value);
 int fn_8011E9D8(State_80039F5C *pState);
 int fn_8011F1F4(void);
 int PlayBookGetReceiver(int team, int index, unsigned char *pOut);
-int fn_80178308(void);
-int fn_801784C4(void);
+int ScrmGetOffenseTeam(void);
+int ScrmIsFieldFlipped(void);
 int fn_800C47C4(void);
 }
 
@@ -45,8 +45,8 @@ static int _PassIconIsEligible(Object_80039F5C *pPlayer)
             for (i = 0; i < 7 && result; i++) {
                 Object_80039F5C *pOther = PlyrGet(1, i);
                 if (pOther != 0) {
-                    PlayBookPlay_t *pRecord = PlayBookGetPlay(fn_80178308());
-                    void *pResult = PlayAlignGetRoute(pRecord, fn_80178308(), i);
+                    PlayBookPlay_t *pRecord = PlayBookGetPlay(ScrmGetOffenseTeam());
+                    void *pResult = PlayAlignGetRoute(pRecord, ScrmGetOffenseTeam(), i);
                     if (fn_800F06F4(0, pResult, 0x12, 0xFFFF) != 0xFFFF && pPlayer == pOther
                         && pPlayer->mUnknown2914 == 0) {
                         result = 0;
@@ -113,11 +113,11 @@ int PassIconGetSlot(int index, int force)
 {
     Object_80039F5C *pPlayer = 0;
     unsigned char *pFlags = (unsigned char *)PassIconStateGetFlags(0);
-    int team = fn_80178308();
+    int team = ScrmGetOffenseTeam();
     unsigned char found;
     int slot = PlayBookGetReceiver(team, index, &found);
 
-    fn_80178308();
+    ScrmGetOffenseTeam();
     if (slot != 0xFF) {
         pPlayer = PlyrGet(team, slot);
     }
@@ -146,11 +146,11 @@ int PassIconGetPosition(int index, Vector_80039F5C *pOut)
     int slot = PassIconGetSlot(index, 0);
 
     if (slot != 0xFF) {
-        Object_80039F5C *pPlayer = PlyrGet(fn_80178308(), slot);
+        Object_80039F5C *pPlayer = PlyrGet(ScrmGetOffenseTeam(), slot);
         pOut->mX = pPlayer->mMotion.mPos.mX;
         pOut->mY = pPlayer->mMotion.mPos.mY;
         pOut->mZ = pPlayer->mMotion.mPos.mZ;
-        if (fn_801784C4() != 0) {
+        if (ScrmIsFieldFlipped() != 0) {
             pOut->mX = -pOut->mX;
             pOut->mY = -pOut->mY;
         }

@@ -795,7 +795,7 @@ int SelectLTESAndTSBPByOrder(int tag, int *pResult, int index, int key)
                        tag, &pResult[1], &pResult[0], index + 1, key);
 }
 
-void SelectTSBPPoints(int tag, int key, Point_8017886C *pPoints)
+void SelectTSBPPoints(int tag, int key, FieldPoint_t *pPoints)
 {
     char x[8];
     char y[8];

@@ -2,7 +2,7 @@
 #define GAME_REPLAY_H
 
 #include "game/GameCamera.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Object_80039F5C.h"
 
 /* 100-byte block of the player object at +0xB54, copied whole by the
@@ -24,7 +24,7 @@ struct ReplayGameState_t {
     Block_80039F5C_BB8 mUnknown578[2][7];
     int mUnknown690;
     int mUnknown694;
-    Point_8017886C mUnknown698;
+    FieldPoint_t mUnknown698;
     float mUnknown6A0;
     int mUnknown6A4[3];
     short mUnknown6B0[2];

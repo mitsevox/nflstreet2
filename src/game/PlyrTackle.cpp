@@ -12,7 +12,7 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/Object_800EA284.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Query_800CE770.h"
 #include "game/Record_800B15FC.h"
 #include "game/Record_800DB60C.h"
@@ -24,7 +24,7 @@
 #include "game/PlayBookDb.h"
 #include "game/PlaySet.h"
 #include "game/PlayBookGetPlay.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Distance.h"
 #include "game/Vec2Add.h"
@@ -40,7 +40,7 @@
 #include "game/PreSnapPhase.h"
 #include "game/State_803EB098.h"
 #include "game/State_800D7A4C.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 
 /* Player block at +336 as used by the functions of the state entry at
    0x802DB370. */
@@ -159,7 +159,7 @@ int fn_8011E9D8(State_80039F5C *pState);
 }
 
 extern "C" {
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 }
 
 extern "C" {
@@ -175,15 +175,15 @@ void PlyrCollideRemoveExempt(Object_80039F5C *p, Object_80039F5C *pOther);
 }
 
 extern "C" {
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 }
 
 extern "C" {
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 }
 
 extern "C" {
-int fn_801787A0(void);
+int ScrmIsNotReplay(void);
 }
 
 extern "C" {
@@ -195,15 +195,15 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
 }
 
 extern "C" {
-float fn_80178A08(void);
+float ScrmGetSidelineX(void);
 }
 
 extern "C" {
-float fn_80178A44(void);
+float ScrmGetEndLineY(void);
 }
 
 extern "C" {
-int fn_80178348(void);
+int ScrmGetSnapOffense(void);
 }
 
 extern "C" {
@@ -219,11 +219,11 @@ void fn_800A3B58(Object_80039F5C *p, int a, int b);
 }
 
 extern "C" {
-Point_8017886C fn_80177FFC(int team);
+FieldPoint_t ScrmGetTeamSetupSpot(int team);
 }
 
 extern "C" {
-Object_80039F5C *fn_8017876C(void);
+Object_80039F5C *ScrmGetTackler(void);
 }
 
 extern "C" {
@@ -271,7 +271,7 @@ void HudClearMashPlayers(int a, int b);
 }
 
 extern "C" {
-void fn_80178718(Object_80039F5C *p);
+void ScrmSetTackler(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -279,7 +279,7 @@ void TurnToPlayStartAnim(Object_80039F5C *p, int a, int b);
 }
 
 extern "C" {
-void HuddleGetSpot(Point_8017886C *pOut, int *pFacing, Object_80039F5C *p, int value);
+void HuddleGetSpot(FieldPoint_t *pOut, int *pFacing, Object_80039F5C *p, int value);
 }
 
 extern "C" {
@@ -347,19 +347,19 @@ PlayBookFormation_t *PlayBookGetFormation(int team);
 }
 
 extern "C" {
-Point_8017886C fn_80177FE0(void);
+FieldPoint_t ScrmGetBallSpot(void);
 }
 
 extern "C" {
-int fn_80177F70(void);
+int ScrmGetDown(void);
 }
 
 extern "C" {
-int fn_801783AC(int bit);
+int ScrmTestPlayFlag(int bit);
 }
 
 extern "C" {
-void PlayerActionGetAlignSpot(Object_80039F5C *p, Point_8017886C *pOut, int *pAngle);
+void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut, int *pAngle);
 }
 
 #define CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : ((v) > (hi) ? (hi) : (v)))
@@ -425,7 +425,7 @@ struct State_800E513C {
 };
 
 extern "C" {
-int fn_801784C4(void);
+int ScrmIsFieldFlipped(void);
 }
 
 extern "C" {
@@ -516,11 +516,11 @@ int fn_800ACD04(Object_80039F5C *p);
 }
 
 extern "C" {
-float fn_80178298(void);
+float ScrmGetLineToGain(void);
 }
 
 extern "C" {
-float fn_80178A2C(void);
+float ScrmGetGoalLineY(void);
 }
 
 extern "C" {
@@ -639,20 +639,20 @@ void PlyrAlignCheckSpot(Object_80039F5C *p)
 {
     State_800E4494 *state = (State_800E4494 *)&p->mUnknown336;
     Object_80039F5C *pOther = state->mpUnknown36;
-    Point_8017886C origin;
-    origin = fn_80177FFC(p->mIdBytes[2]);
+    FieldPoint_t origin;
+    origin = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
     if (pOther->mpState->mId == 7) {
-        PlayBookFormation_t *pTeam = PlayBookGetFormation(fn_80178308());
+        PlayBookFormation_t *pTeam = PlayBookGetFormation(ScrmGetOffenseTeam());
         PlayBookPosition_t *pEntry = PlaySetGetEntry(pTeam, pOther->mIdBytes[1], 0);
-        Point_8017886C point;
+        FieldPoint_t point;
         point.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
         // FAKEMATCH: the pointer taken between the two stores gives the target's late addi of &point (0x800E3D3C) and its use for the y store and the Vec2Add arguments.
-        Point_8017886C *pPoint = &point;
+        FieldPoint_t *pPoint = &point;
         pPoint->mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
 
         Vec2Add(pPoint, pPoint, &origin);
     }
-    Point_8017886C target;
+    FieldPoint_t target;
     int angle;
     PlayerActionGetAlignSpot(p, &target, &angle);
     if (!(Vec2Distance(&target, &p->mMotion.mPos) <= 2.0f)) {
@@ -662,17 +662,17 @@ void PlyrAlignCheckSpot(Object_80039F5C *p)
 }
 }
 
-extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut)
+extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, FieldPoint_t *pOut)
 {
-    Point_8017886C target;
-    Point_8017886C goal;
+    FieldPoint_t target;
+    FieldPoint_t goal;
     Message_800F01CC *pMessage;
 
     target.mX = target.mY = 0.0f;
     pMessage = fn_800AEE20(p);
     if (pMessage) {
         if (pMessage->mId == 40) {
-            goal = fn_80177FFC(p->mIdBytes[2]);
+            goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
             switch (pMessage->mUnknown1[0]) {
             case 0:
             case 4:
@@ -696,11 +696,11 @@ extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut)
                 target.mY = goal.mY + 8.0f;
                 break;
             }
-            target.mX = CLAMP(target.mX, 1.0f - fn_80178A08(), fn_80178A08() - 1.0f);
-            target.mY = CLAMP(target.mY, 1.0f - fn_80178A44(), fn_80178A44() - 1.0f);
+            target.mX = CLAMP(target.mX, 1.0f - ScrmGetSidelineX(), ScrmGetSidelineX() - 1.0f);
+            target.mY = CLAMP(target.mY, 1.0f - ScrmGetEndLineY(), ScrmGetEndLineY() - 1.0f);
             *pOut = target;
         } else if (pMessage->mId == 92) {
-            goal = fn_80177FFC(p->mIdBytes[2]);
+            goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
             switch (pMessage->mUnknown1[0]) {
             case 0:
                 target.mX = goal.mX;
@@ -715,8 +715,8 @@ extern "C" void PlyrAlignGetCallTarget(Object_80039F5C *p, Point_8017886C *pOut)
                 target.mY = goal.mY + 3.0f;
                 break;
             }
-            target.mX = CLAMP(target.mX, 1.0f - fn_80178A08(), fn_80178A08() - 1.0f);
-            target.mY = CLAMP(target.mY, 1.0f - fn_80178A44(), fn_80178A44() - 1.0f);
+            target.mX = CLAMP(target.mX, 1.0f - ScrmGetSidelineX(), ScrmGetSidelineX() - 1.0f);
+            target.mY = CLAMP(target.mY, 1.0f - ScrmGetEndLineY(), ScrmGetEndLineY() - 1.0f);
             *pOut = target;
         }
     }
@@ -731,7 +731,7 @@ extern "C" void PlyrAlignStartShuffle(Object_80039F5C *p, State_800E4120 *pState
     } else {
         p->mUnknown1008.mUnknown0 = 3;
     }
-    if (p->mMotion.mPos.mX > fn_80177FFC(p->mIdBytes[2]).mX) {
+    if (p->mMotion.mPos.mX > ScrmGetTeamSetupSpot(p->mIdBytes[2]).mX) {
         p->mUnknown1008.mUnknown1 = 5;
     } else {
         p->mUnknown1008.mUnknown1 = 6;
@@ -816,7 +816,7 @@ extern "C" int PlyrAlignEnter(Object_80039F5C *p) {
     state->mUnknown55 = 0;
     state->mUnknown32 = 0;
     state->mUnknown33 = 0;
-    PlayBookFormation_t *pObject = PlayBookGetFormation(fn_80178308());
+    PlayBookFormation_t *pObject = PlayBookGetFormation(ScrmGetOffenseTeam());
     switch (p->mUnknown2914) {
     case 17:
     case 18:
@@ -842,7 +842,7 @@ extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
 extern "C" int fn_8009F780(void);
 extern "C" int PlyrAlignIsFree(Object_80039F5C *p);
-extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, Point_8017886C *target, int angle);
+extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int angle);
 extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
 extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p);
 extern "C" void PlayerReleaseFlaggedJointCtrls(Object_80039F5C *p);
@@ -854,7 +854,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
 {
     Record_8011F4E0 *pRecord = fn_8011F4E0();
     State_800E4494 *pState = (State_800E4494 *)&p->mUnknown336;
-    Point_8017886C target;
+    FieldPoint_t target;
     int heading;
     if (p->mFlags & 0x4000) {
         pState->mUnknown76 = 0;
@@ -896,7 +896,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
         pState->mUnknown1 = 1;
     }
     if (pState->mUnknown0 && p->mUnknown8 == 255) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
         Vec2Sub(&delta, &target, &p->mMotion.mPos);
         if (Vec2Magnitude(&delta) > 0.5f && !pState->mUnknown36) {
             if (PlyrAlignIsFree(p)) {
@@ -909,7 +909,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
             p->mUnknown512.mUnknown0 = 0.0f;
         }
     }
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     if (!(p->mFlags & 0x4000)) {
         if (pState->mUnknown36) {
             if (pRecord && pRecord->mUnknown16[p->mIdBytes[1]] == 255) {
@@ -922,7 +922,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
             float spot[2];
             Object_80039F5C *pOther = fn_80124C28(p, spot, 0xE38E3, 2.75f, 0.1f, p->mMotion.mFacing);
             if (pOther) {
-                Point_8017886C delta;
+                FieldPoint_t delta;
                 Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
                 int angle = delta.Heading();
                 p->mUnknown512.mUnknown14 = 1;
@@ -972,7 +972,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
                 }
             } else if (pState->mUnknown3) {
                 pState->mUnknown1 = 0;
-                float limit = fn_80177FFC(p->mIdBytes[2]).mY + 0.15625f + 1.0f;
+                float limit = ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 0.15625f + 1.0f;
                 if (p->mMotion.mPos.mY < limit) {
                     p->mMotion.mPos.mY = limit;
                 }
@@ -995,8 +995,8 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
                 int anim = fn_801BE648(p->mpUnknown792);
                 if (anim == 74 || anim == 203 || anim == 100) {
                     if (MathAngleDiff(p->mMotion.mFacing, heading) <= 0xAAAAA) {
-                        int inside = p->mMotion.mPos.mY < fn_80177FFC(p->mIdBytes[2]).mY + 2.0f &&
-                                     p->mMotion.mPos.mY > fn_80177FFC(p->mIdBytes[2]).mY + 1.0f &&
+                        int inside = p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.0f &&
+                                     p->mMotion.mPos.mY > ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 1.0f &&
                                      fabsf(p->mMotion.mPos.mX) < 8.0f &&
                                      (unsigned int)(p->mUnknown2914 - 4) <= 8;
                         if (inside) {
@@ -1007,7 +1007,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
                                 fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 86, 1.0f, p);
                             }
                         } else {
-                            int near = p->mMotion.mPos.mY < fn_80177FFC(p->mIdBytes[2]).mY + 2.5f &&
+                            int near = p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f &&
                                        fabsf(p->mMotion.mPos.mX) < 8.0f;
                             if (near) {
                                 pState->mUnknown30 = 1;
@@ -1062,8 +1062,8 @@ extern "C" int PlyrAlignExit(Object_80039F5C *p)
         (Record_800E4EE4 *)PlayAlignGetRoute(PlayBookGetPlay(p->mIdBytes[2]), p->mId >> 8 & 0xFF, p->mId >> 16 & 0xFF);
 
     if ((pRecord->mUnknown0 & ~0x80) == 48 && fn_800AD9B4() == 3 && (pRecord->mUnknown4 & ~0x80) == 30) {
-        Point_8017886C delta;
-        Vec2Sub(&delta, (Point_8017886C *)&p->mMotion.mPos, (Point_8017886C *)&p->mUnknown403[1]);
+        FieldPoint_t delta;
+        Vec2Sub(&delta, (FieldPoint_t *)&p->mMotion.mPos, (FieldPoint_t *)&p->mUnknown403[1]);
         float yards = pRecord->mUnknown5 >> 3;
         yards += (pRecord->mUnknown5 & 7) * (1.0f / 7.0f);
         int angle = (pRecord->mUnknown6 << 17 & 0xFE0000) - 0xC00000;
@@ -1095,7 +1095,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
 {
     State_800E513C *pState = (State_800E513C *)&p->mUnknown336;
     Input_800B6D34 input;
-    Point_8017886C dir;
+    FieldPoint_t dir;
     float limit;
     float speed;
     int near;
@@ -1106,7 +1106,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     if (fn_800AD9B4() == 8) {
         return 0;
     }
-    if (lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == fn_80178320() &&
+    if (lbl_803EABA4->fn_800C043C(p->mIdBytes[2]) && p->mIdBytes[2] == ScrmGetDefenseTeam() &&
         p == fn_800B6544(fn_800B65A0(p->mIdBytes[2]))) {
         return 0;
     }
@@ -1135,8 +1135,8 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
         limit = _PlyrAlign_fLineLimit;
     }
     near = 0;
-    if (p->mIdBytes[2] == fn_80178320() &&
-        !(fabsf(p->mMotion.mPos.mY - fn_80177FFC(p->mIdBytes[2]).mY) > limit)) {
+    if (p->mIdBytes[2] == ScrmGetDefenseTeam() &&
+        !(fabsf(p->mMotion.mPos.mY - ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY) > limit)) {
         near = dir.mY < 0.0f;
     }
     if (near) {
@@ -1146,7 +1146,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     if (dir.mY != 0.0f || dir.mX != 0.0f) {
         p->mFlags = (p->mFlags | 0x400) & ~0x10;
         int heading = MathArcTan2(dir.mY, dir.mX) - input.mUnknown20;
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             heading -= 0x800000;
         }
         heading &= 0xFFFFFF;
@@ -1154,7 +1154,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
         if (turn > 0x56C16B && speed > 0.6f) {
             speed = 0.6f;
         }
-        int facing = p->mIdBytes[2] == fn_80178308() ? 0x400000 : 0xC00000;
+        int facing = p->mIdBytes[2] == ScrmGetOffenseTeam() ? 0x400000 : 0xC00000;
         p->mUnknown512.mUnknown14 = 3;
         p->mUnknown512.mUnknown8 = facing;
         p->mUnknown512.mUnknown0 = speed;
@@ -1183,7 +1183,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
             pState->mUnknown3 = 0;
         } else {
             int close = 0;
-            if (p->mMotion.mPos.mY < fn_80177FFC(p->mIdBytes[2]).mY + 2.5f) {
+            if (p->mMotion.mPos.mY < ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY + 2.5f) {
                 close = fabsf(p->mMotion.mPos.mX) < 8.0f;
             }
             if (close) {
@@ -1274,33 +1274,33 @@ extern "C" {
 void PlyrAlignAvoidTeammates(Object_80039F5C *p, float *pX)
 {
     float best = 0.0f;
-    int team = fn_80178320();
+    int team = ScrmGetDefenseTeam();
     signed char found = -1;
-    unsigned char count = fn_80178D18(team);
+    unsigned char count = ScrmGetTeamPlayerCount(team);
 
     for (unsigned char i = 0; i < count; i++) {
         Object_80039F5C *pOther = PlyrGet(team, i);
         if (pOther->mMotion.mPos.mY < p->mMotion.mPos.mY) {
             if (*pX > 0.0f) {
-                int inside = pOther->mMotion.mPos.mX > fn_80177FE0().mX &&
-                             pOther->mMotion.mPos.mX < fn_80177FE0().mX + 4.0f;
-                if (inside && pOther->mMotion.mPos.mX + fn_80177FE0().mX > best) {
+                int inside = pOther->mMotion.mPos.mX > ScrmGetBallSpot().mX &&
+                             pOther->mMotion.mPos.mX < ScrmGetBallSpot().mX + 4.0f;
+                if (inside && pOther->mMotion.mPos.mX + ScrmGetBallSpot().mX > best) {
                     found = i;
-                    best = pOther->mMotion.mPos.mX + fn_80177FE0().mX;
+                    best = pOther->mMotion.mPos.mX + ScrmGetBallSpot().mX;
                 }
             } else {
-                int inside = pOther->mMotion.mPos.mX < fn_80177FE0().mX &&
-                             pOther->mMotion.mPos.mX > fn_80177FE0().mX + -4.0f;
-                if (inside && fabsf(pOther->mMotion.mPos.mX - fn_80177FE0().mX) > best) {
+                int inside = pOther->mMotion.mPos.mX < ScrmGetBallSpot().mX &&
+                             pOther->mMotion.mPos.mX > ScrmGetBallSpot().mX + -4.0f;
+                if (inside && fabsf(pOther->mMotion.mPos.mX - ScrmGetBallSpot().mX) > best) {
                     found = i;
-                    best = fabsf(pOther->mMotion.mPos.mX + fn_80177FE0().mX);
+                    best = fabsf(pOther->mMotion.mPos.mX + ScrmGetBallSpot().mX);
                 }
             }
         }
     }
     if (found > -1 && best > 0.0f) {
         Object_80039F5C *pOther = PlyrGet(team, found);
-        if (*pX > fn_80177FE0().mX) {
+        if (*pX > ScrmGetBallSpot().mX) {
             if (*pX > pOther->mMotion.mPos.mX && *pX < pOther->mMotion.mPos.mX + 1.75f) {
                 *pX = pOther->mMotion.mPos.mX + 1.75f;
             }
@@ -1378,13 +1378,13 @@ int PlyrEngageGetBallSide(Object_80039F5C *p, int value)
         if (p->mMotion.mPos.mX >= 0.0f) {
             result = 15;
             if (fabsf(p->mMotion.mPos.mX) + fabsf(ball.mX) > 10.0f ||
-                fn_80178A08() - fabsf(p->mMotion.mPos.mX) < 2.0f) {
+                ScrmGetSidelineX() - fabsf(p->mMotion.mPos.mX) < 2.0f) {
                 result = 7;
             }
         } else {
             result = 7;
             if (fabsf(p->mMotion.mPos.mX) + fabsf(ball.mX) > 10.0f ||
-                fn_80178A08() - fabsf(p->mMotion.mPos.mX) < 2.0f) {
+                ScrmGetSidelineX() - fabsf(p->mMotion.mPos.mX) < 2.0f) {
                 result = 15;
             }
         }
@@ -1450,10 +1450,10 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
         offense = (int)(offense * 0.8f);
     }
     if (facing && pBall) {
-        Point_8017886C delta;
-        Vec2Sub(&delta, (Point_8017886C *)&pOther->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
+        FieldPoint_t delta;
+        Vec2Sub(&delta, (FieldPoint_t *)&pOther->mMotion.mPos, (FieldPoint_t *)&p->mMotion.mPos);
         int angle = MathArcTan2(delta.mY, delta.mX);
-        Vec2Sub(&delta, (Point_8017886C *)&pBall->mMotion.mPos, (Point_8017886C *)&p->mMotion.mPos);
+        Vec2Sub(&delta, (FieldPoint_t *)&pBall->mMotion.mPos, (FieldPoint_t *)&p->mMotion.mPos);
         int turn = MathAngleDiff(angle, MathArcTan2(delta.mY, delta.mX));
         if (turn <= 0x3FFFFF) {
             defense -= (int)(defense * (MathSin(turn) * 0.5f));
@@ -1501,7 +1501,7 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
         kind = pBlock->mUnknown0;
     }
     if (kind == 4 || kind == 6) {
-        if (fn_8011F1CC() && !fn_801783AC(0)) {
+        if (fn_8011F1CC() && !ScrmTestPlayFlag(0)) {
             if (pCarrier && (pCarrier->mFlags & 0x8000)) {
                 result = SyncRandGetRange(0, 5);
             } else {
@@ -1551,14 +1551,14 @@ extern "C" int PlyrEngagePickMove(Object_80039F5C *p, Object_80039F5C *pOther, B
     }
     if (result == 8) {
         if (pCarrier) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             int angle = delta.Heading();
             int diff;
             if (pCarrier->mpState->mId == 26) {
-                Point_8017886C goal;
+                FieldPoint_t goal;
                 goal.mX = fn_8011F4D4();
-                goal.mY = fn_80177FE0().mY;
+                goal.mY = ScrmGetBallSpot().mY;
                 int target = goal.Heading();
                 if (SyncRandGetFloat(0) > 0.5f) {
                     diff = (target - angle) & 0xFFFFFF;
@@ -1621,7 +1621,7 @@ extern "C" int PlyrEngageCanShed(Object_80039F5C *p, Object_80039F5C *pOther) {
             break;
         }
     default:
-        if (p->mIdBytes[2] != fn_80178320()) {
+        if (p->mIdBytes[2] != ScrmGetDefenseTeam()) {
             result = 0;
         }
         if (fn_800AD9B4() != 3) {
@@ -1639,9 +1639,9 @@ extern "C" int *PlyrEngageGetMoveList(int flag, unsigned int index) {
     int *pList;
 
     if (index <= 6) {
-        if (fn_800A8444(fn_80178320()) != 0) {
+        if (fn_800A8444(ScrmGetDefenseTeam()) != 0) {
             pList = _PlyrEngage_aRushMoveLists[index][0];
-        } else if (fn_8011F1A4() != 0 || fn_801783AC(0) != 0) {
+        } else if (fn_8011F1A4() != 0 || ScrmTestPlayFlag(0) != 0) {
             if (flag) {
                 pList = _PlyrEngage_aRunMoveLists[index][0];
             } else {
@@ -1708,7 +1708,7 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
     fn_800B6D34(p, &input);
     if (human == 1 && (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f || (input.mUnknown0 & 0xF))) {
 
-        Point_8017886C dir;
+        FieldPoint_t dir;
         if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
             dir.mX = input.mUnknown4;
             dir.mY = input.mUnknown8;
@@ -1729,10 +1729,10 @@ extern "C" int PlyrEngageTryShed(Object_80039F5C *p, int mode)
         Vec2Add(&target, &p->mMotion.mPos, &dir);
     } else if (fn_8011E188() > 30) {
         if (pCarrier) {
-            Point_8017886C lead;
+            FieldPoint_t lead;
             if (pCarrier->mpState->mId == 26) {
                 int index = pCarrier->mpState->mUnknown1;
-                Object_80039F5C *pTarget = PlyrGet(fn_80178308(), index);
+                Object_80039F5C *pTarget = PlyrGet(ScrmGetOffenseTeam(), index);
                 Vec2FromAngle(&lead, pTarget->mMotion.mUnknown32, pTarget->mMotion.mUnknown28 * 60.0f);
                 Vec2Add(&target, &pTarget->mMotion.mPos, &lead);
             } else {
@@ -1831,7 +1831,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         fn_800F053C(0, p->mpState, &message, p);
         return 1;
     }
-    if (!fn_801787A0() && BallGetCurrentHolder() && fn_801783AC(0) &&
+    if (!ScrmIsNotReplay() && BallGetCurrentHolder() && ScrmTestPlayFlag(0) &&
         fn_801486A0() != 0 && fn_801486A0() != 1 && fn_801486A0() != 2) {
         memset(&message, 0, 4);
         message.mId = 33;
@@ -1840,11 +1840,11 @@ int PlyrWaitUpdate(Object_80039F5C *p)
     }
     if ((p->mFlags & 0x4000) && fn_801486A0()) return 1;
     (*pTimer)--;
-    if (carrier && !((float)fn_8011E188() <= _PlyrWait_fBlockTime) && !fn_801787A0() &&
+    if (carrier && !((float)fn_8011E188() <= _PlyrWait_fBlockTime) && !ScrmIsNotReplay() &&
         !(p->mMotion.mUnknown28 >= 0.1f)) {
         int heading;
         if (fn_801486A0() != 1) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
             heading = delta.Heading();
         } else {
@@ -1864,7 +1864,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
         p->mUnknown512.mUnknown0 = 0.0f;
-        unsigned short count = fn_80178D70(0);
+        unsigned short count = ScrmGetActivePlayerCount(0);
         for (unsigned short i = 0; i < count; i++) {
             if (PlyrGet(0, i)->mpState->mId == 97) return 1;
         }
@@ -1875,7 +1875,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
 
 extern "C" int PlyrWaitInput(Object_80039F5C *p) {
     if (fn_800AD9B4() != 2) {
-        if (fn_80177F70() != 0) {
+        if (ScrmGetDown() != 0) {
             if (fn_800B5FEC(p) != 0 && fn_800C05F4() == 0 && fn_801486A0() != 0) {
                 fn_800B76E8(p);
             }
@@ -1903,11 +1903,11 @@ extern "C" int PlyrTackleCanReach(Object_80039F5C *p)
     int result = 1;
     Object_80039F5C *pCarrier = BallGetCurrentHolder();
     if (pCarrier) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
         Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
         float distance = Vec2Magnitude(&delta);
         int difference = MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing);
-        if (fn_8011F1CC() && pCarrier->mMotion.mPos.mY < fn_80177FE0().mY) {
+        if (fn_8011F1CC() && pCarrier->mMotion.mPos.mY < ScrmGetBallSpot().mY) {
             int id = fn_800F06F4(0, pCarrier->mpState, 18, 0xFFFF);
             if (id != 0xFFFF || fn_800F06F4(0, pCarrier->mpState, 15, 0xFFFF) != id) {
                 if (difference > (int)(_PlyrTackle_fReachAngle * 46603.3789f) || distance > _PlyrTackle_fReachDistance) {
@@ -1959,7 +1959,7 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
         p->mUnknown1008.mUnknown1 = 2;
         p->mUnknown1011 = 1;
         p->mUnknown1008.mUnknown2 = 2;
-        if (x > fn_80178A08() - 3.0f && p->mMotion.mPos.mY > fn_80178A2C() - 7.0f && !PlayerMoveGetKind(p)) {
+        if (x > ScrmGetSidelineX() - 3.0f && p->mMotion.mPos.mY > ScrmGetGoalLineY() - 7.0f && !PlayerMoveGetKind(p)) {
             if (p->mMotion.mPos.mX < 0.0f) {
                 if ((unsigned int)(p->mMotion.mFacing - 0x400000 - 1) <= 0x3FFFFE) {
                     if (p->mUnknown776 == 2) {
@@ -1977,15 +1977,15 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
             }
         }
         if (p->mUnknown1008.mUnknown2 == 2) {
-            unsigned int count = fn_80178D18(fn_80178320());
+            unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
             int left = 1;
             int right = 1;
             int ahead = 1;
             for (unsigned int i = 0; i < count && (left || right); i++) {
-                Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
+                Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
                 if (pOther) {
                     if (pOther->mMotion.mPos.mY > p->mMotion.mPos.mY) {
-                        Point_8017886C delta;
+                        FieldPoint_t delta;
                         Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
                         int angle = (delta.Heading() - 0x800000) & 0xFFFFFF;
                         int facing = p->mMotion.mFacing;
@@ -2009,7 +2009,7 @@ extern "C" void PlyrTackleStartAnim(Object_80039F5C *p, Block_800E7588 *pBlock)
                     ahead = 1;
                 }
             }
-            float edge = MIN(p->mMotion.mPos.mX - 4.0f, -fn_80178A08());
+            float edge = MIN(p->mMotion.mPos.mX - 4.0f, -ScrmGetSidelineX());
             if (PlayerMoveGetKind(p)) {
                 p->mUnknown1011 = p->mpState->mUnknown3[0];
             }
@@ -2105,7 +2105,7 @@ extern "C" int PlyrTackleCanStart(Object_80039F5C *p) {
 
     switch (p->mpState->mId) {
     case 32:
-        if (fn_801BE648(p->mpUnknown792) != 242 || p->mIdBytes[2] != fn_80178320()) {
+        if (fn_801BE648(p->mpUnknown792) != 242 || p->mIdBytes[2] != ScrmGetDefenseTeam()) {
             result = 0;
         }
         break;
@@ -2113,7 +2113,7 @@ extern "C" int PlyrTackleCanStart(Object_80039F5C *p) {
         break;
     default:
         result = p->mUnknown1032 != 4;
-        if (fn_801787A0() != 0) {
+        if (ScrmIsNotReplay() != 0) {
             result = 0;
         }
         break;
@@ -2149,8 +2149,8 @@ extern "C" int PlayerIsFreeOfBall(Object_80039F5C *p) {
 
             BallGetPosition(pBall, &pos);
             ok = 0;
-            if (pos.mY <= fn_80177FE0().mY) {
-                ok = !fn_801783AC(11);
+            if (pos.mY <= ScrmGetBallSpot().mY) {
+                ok = !ScrmTestPlayFlag(11);
             }
             if (ok && p->mIdBytes[3] == 1) {
                 switch (p->mUnknown2914) {
@@ -2163,7 +2163,7 @@ extern "C" int PlayerIsFreeOfBall(Object_80039F5C *p) {
                 case 16:
                 case 17:
                 case 18: {
-                    Point_8017886C delta;
+                    FieldPoint_t delta;
 
                     Vec2Sub(&delta, &p->mMotion, &pos);
                     Vec2Magnitude(&delta);
@@ -2194,11 +2194,11 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
         point.mX += carrier->mMotion.mUnknown40 * scale;
         point.mY += carrier->mMotion.mUnknown44 * scale;
     } else BallGetPosition(BallGetCurrent(), &point);
-    Point_8017886C delta;
+    FieldPoint_t delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
     int heading = delta.Heading() & 0xFFFFFF;
     int limit = fn_800ACD04(p);
-    if (!(point.mY >= fn_80177FE0().mY) && !fn_801783AC(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
+    if (!(point.mY >= ScrmGetBallSpot().mY) && !ScrmTestPlayFlag(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
     int step;
     if (MathAngleDiff(heading, p->mMotion.mFacing) <= limit)
@@ -2211,7 +2211,7 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     p->mUnknown512.mUnknown8 = step;
     p->mUnknown512.mUnknown4 = step;
     state->mUnknown9 = _PlyrTackle_aAimOctants[((heading + 0x100000) >> 21) & 7];
-    if (p->mIdBytes[2] == fn_80178320()) {
+    if (p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         switch (state->mUnknown9) {
         case 7:
             state->mUnknown9 = 6;
@@ -2230,7 +2230,7 @@ extern "C" int PlyrTackleAiTry(Object_80039F5C *p, void *pArg)
     if (PlyrTackleCanStart(p) == 1) {
         Object_80039F5C *pCarrier = BallGetCurrentHolder();
         if (pCarrier && pCarrier->mpState->mId == 1) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &pCarrier->mMotion.mPos, &p->mMotion.mPos);
             if (MathAngleDiff(MathArcTan2(delta.mY, delta.mX), p->mMotion.mFacing) <= 0x3FFFFF &&
                 Vec2Magnitude(&delta) < 10.0f) {
@@ -2255,23 +2255,23 @@ int PlyrTackleStart(Object_80039F5C *p, int unused, int mode)
     Vector_80039F5C point;
     Vector_80039F5C spot;
     float range;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     if (p == carrier) {
-        float distance = fn_80178298() - p->mMotion.mPos.mY;
+        float distance = ScrmGetLineToGain() - p->mMotion.mPos.mY;
         choice = 2;
         kind = 1;
         if (distance <= 0.0f || !(distance < 4.0f)) {
             // FAKEMATCH: the unused clamp stands in for the target's dead test of this distance against 0.0f (fcmpu at 0x800E8208), which keeps 0.0f in f31 across the call; the function stays a holdout.
-            distance = fn_80178A2C() - p->mMotion.mPos.mY;
+            distance = ScrmGetGoalLineY() - p->mMotion.mPos.mY;
             if (distance < 0.0f) distance = 0.0f;
         }
         if (kind == 1) {
-            int team = fn_80178320();
-            unsigned char count = fn_80178D18(fn_80178320());
+            int team = ScrmGetDefenseTeam();
+            unsigned char count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
             Object_80039F5C *other = fn_801245DC(p, team, 0, count, 0x18E38E, &range, 0);
             if (other && !(range >= 3.0f) && (other->mFlags & 0x800)) kind = 2;
         }
-    } else if (carrier && p->mIdBytes[2] == fn_80178320()) {
+    } else if (carrier && p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         Vec2Sub(&delta, &carrier->mMotion.mPos, &p->mMotion.mPos);
         kind = 3;
         choice = 1;
@@ -2354,7 +2354,7 @@ extern "C" int PlyrTackleUpdate(Object_80039F5C *p)
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
             if (pOther) {
                 if (!(p->mFlags & 0x10000)) {
-                    fn_80178718(pOther);
+                    ScrmSetTackler(pOther);
                     p->mFlags |= 0x10000;
                     p->mFlags &= ~0x80000;
                 }
@@ -2396,7 +2396,7 @@ extern "C" int PlyrTackleUpdate(Object_80039F5C *p)
 }
 
 extern "C" int PlyrTackleExit(Object_80039F5C *p) {
-    if (p->mUnknown354 == 0 && p->mIdBytes[2] == fn_80178320()) {
+    if (p->mUnknown354 == 0 && p->mIdBytes[2] == ScrmGetDefenseTeam()) {
         p->mFlags &= ~8;
         return 1;
     }
@@ -2493,7 +2493,7 @@ extern "C" int PlyrTackleContest(Object_80039F5C *p, Object_80039F5C **ppLast) {
                         short limit = (short)(rating * _PlyrTackle_fRatingScale + rollBase * _PlyrTackle_fRollScale);
                         short roll = SyncRandGetRange(0, limit);
                         short otherRoll = SyncRandGetRange(0, otherLimit);
-                        if (pOther->mMotion.mPos.mY < fn_80177FE0().mY)
+                        if (pOther->mMotion.mPos.mY < ScrmGetBallSpot().mY)
                             roll = (short)(roll * _PlyrTackle_fRollDamp);
                         if (roll > otherRoll) {
                             if (roll * _PlyrTackle_fWinMargin > otherRoll) {
@@ -2524,7 +2524,7 @@ extern "C" int PlyrTurnEnter(Object_80039F5C *p) {
     float limit;
     int far;
     state->mUnknown0 = p->mpState->mUnknown1 << 16;
-    if (p->mIdBytes[2] == fn_80178308())
+    if (p->mIdBytes[2] == ScrmGetOffenseTeam())
         limit = 3.0f;
     else
         limit = 2.0f;
@@ -2533,9 +2533,9 @@ extern "C" int PlyrTurnEnter(Object_80039F5C *p) {
         state->mUnknown4 = 1.0f;
     else
         state->mUnknown4 = scale * 0.1f;
-    far = !(p->mpState->mUnknown2 != 0 && fn_80177F70() != 0 &&
-            fabsf(fn_80177FFC(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) <= limit &&
-            fabsf(fn_80177FFC(p->mIdBytes[2]).mX - p->mMotion.mPos.mX) <= 6.0f);
+    far = !(p->mpState->mUnknown2 != 0 && ScrmGetDown() != 0 &&
+            fabsf(ScrmGetTeamSetupSpot(p->mIdBytes[2]).mY - p->mMotion.mPos.mY) <= limit &&
+            fabsf(ScrmGetTeamSetupSpot(p->mIdBytes[2]).mX - p->mMotion.mPos.mX) <= 6.0f);
     if (far)
         state->mUnknown9 = 1;
     else
@@ -2680,7 +2680,7 @@ extern "C" void PlyrContactSendHit(Object_80039F5C *p, int id) {
         message.mUnknown1[1] = 8;
         Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown560.mUnknown40);
         if (pOther) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             int angle = MathArcTan2(delta.mY, delta.mX);
             difference = MathAngleDiff(p->mMotion.mFacing, angle);
@@ -2878,7 +2878,7 @@ extern "C" void PlyrContactSendHitFrom(Object_80039F5C *p, int id, int *pAngle, 
 extern "C" int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther) {
     if (PlyrContactCanReact(p)) {
         Message_800F01CC message;
-        Point_8017886C delta;
+        FieldPoint_t delta;
         Object_800B26B0 *pOtherMotion = &pOther->mMotion;
         Object_800B26B0 *pMotion = &p->mMotion;
         Vec2Sub(&delta, &pOtherMotion->mPos, &pMotion->mPos);
@@ -2914,7 +2914,7 @@ extern "C" int PlyrContactSendPush(Object_80039F5C *p, Object_80039F5C *pOther) 
 
 extern "C" int PlyrContactSendBump(Object_80039F5C *p, Object_80039F5C *pOther) {
     Message_800F01CC message;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     Object_800B26B0 *pMotion = &p->mMotion;
     Vec2Sub(&delta, &pOther->mMotion.mPos, &pMotion->mPos);
     int angle = MathArcTan2(delta.mY, delta.mX);
@@ -2933,7 +2933,7 @@ extern "C" int PlyrContactSendBump(Object_80039F5C *p, Object_80039F5C *pOther) 
 }
 
 extern "C" void PlyrContactSendStumble(Object_80039F5C *p, int kind) {
-    if (PlyrContactCanReact(p) && !fn_801787A0()) {
+    if (PlyrContactCanReact(p) && !ScrmIsNotReplay()) {
         Message_800F01CC message;
         Object_800B26B0 *pMotion = &p->mMotion;
         float angle;
@@ -2969,7 +2969,7 @@ extern "C" void PlyrContactSendStumble(Object_80039F5C *p, int kind) {
 }
 
 extern "C" int PlyrContactSendCarrierAction(Object_80039F5C *p, int kind) {
-    if (PlyrContactCanReact(p) && !fn_801787A0()) {
+    if (PlyrContactCanReact(p) && !ScrmIsNotReplay()) {
         Message_800F01CC message;
         Object_800B26B0 *pMotion = &p->mMotion;
         float angle;
@@ -3010,7 +3010,7 @@ extern "C" int PlyrContactSendCarrierAction(Object_80039F5C *p, int kind) {
 }
 
 extern "C" void PlyrContactCollide(Object_80039F5C *p, Object_80039F5C *pOther) {
-    Point_8017886C delta;
+    FieldPoint_t delta;
     Vec2Sub(&delta, &p->mMotion.mPos, &pOther->mMotion.mPos);
     int direction = MathArcTan2(delta.mY, delta.mX);
     PlyrContactResolve(p, (direction + 0x800000) & 0xFFFFFF, direction);
@@ -3023,7 +3023,7 @@ extern "C" int CarrierMomentumEnter(Object_80039F5C *p) {
     state->mUnknown4 = p->mUnknown560.mUnknown28;
     state->mUnknown12 = BallFindHeldBy(p) != 0;
     state->mUnknown16 = 0;
-    PlayerActionAnimPitchInit(state->mUnknown20, p, fn_8017876C(), state->mUnknown4);
+    PlayerActionAnimPitchInit(state->mUnknown20, p, ScrmGetTackler(), state->mUnknown4);
     fn_8009BD60(p);
     State_80039F5C *pState = p->mpState;
     if ((pState->mUnknown3[0] >> 4) > 1) {
@@ -3042,7 +3042,7 @@ extern "C" int CarrierMomentumEnter(Object_80039F5C *p) {
     p->mUnknown512.mUnknown14 = 0;
     if (p->mIdBytes[3] == 1) {
         fn_8011E3EC(p, 0);
-        if (p->mIdBytes[2] == fn_80178308()) {
+        if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             fn_8011E240(p);
         } else {
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
@@ -3062,7 +3062,7 @@ extern "C" int CarrierMomentumExit(Object_80039F5C *p) {
 
 extern "C" int CarrierMomentumUpdate(Object_80039F5C *p) {
     int result;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     State_800E9E18 *state = (State_800E9E18 *)&p->mUnknown336;
     PlayerActionAnimTossUpdate(state->mUnknown20, p);
     PlayerActionAnimPitchUpdate(state->mUnknown20, p);
@@ -3096,7 +3096,7 @@ extern "C" int CarrierMomentumUpdate(Object_80039F5C *p) {
         }
         result = 1;
     } else if (p->mFlags & 4) {
-        if (!fn_801787A0() && state->mUnknown20[1]) {
+        if (!ScrmIsNotReplay() && state->mUnknown20[1]) {
             unsigned int now = SyncTimeGetGameTime();
             if (state->mUnknown40 > now) {
                 now = SyncTimeGetGameTime();
@@ -3129,7 +3129,7 @@ extern "C" int CarrierMomentumInput(Object_80039F5C *p) {
         PlayerActionAnimPitchTryStart((Record_800DB60C *)((State_800E9E18 *)&p->mUnknown336)->mUnknown20, p);
     } else {
         int mode = fn_800AD9B4();
-        if (p->mIdBytes[2] == fn_80178320() || mode == 3
+        if (p->mIdBytes[2] == ScrmGetDefenseTeam() || mode == 3
             || (mode == 2 && index != 255 && fn_800B6544(index) != p))
             return fn_800B7FE8(p);
     }
@@ -3198,7 +3198,7 @@ extern "C" int PlyrContactResolve(Object_80039F5C *p, int angle, int direction) 
             }
             PlyrContactSendHitFrom(p, 10, &direction, 1, &angle);
             if (pOther && p == BallGetCurrentHolder() && !(p->mFlags & 0x10000)) {
-                fn_80178718(pOther);
+                ScrmSetTackler(pOther);
                 p->mFlags = (p->mFlags | 0x10000) & ~0x80000;
             }
         } else {
@@ -3215,7 +3215,7 @@ extern "C" int PlyrContactResolve(Object_80039F5C *p, int angle, int direction) 
         if (!busy && Vec2Distance(&p->mMotion.mPos, &pOther->mMotion.mPos) > _PlyrContact_fBreakDistance)
             facing = 0;
         if (facing) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
             blocked = 0;
             otherDirection = MathArcTan2(delta.mY, delta.mX);
@@ -3231,7 +3231,7 @@ extern "C" int PlyrContactResolve(Object_80039F5C *p, int angle, int direction) 
                 result = 1;
                 PlyrContactSendHitFrom(pOther, 10, &otherAngle, 1, &otherDirection);
                 if (pOther == BallGetCurrentHolder() && !(pOther->mFlags & 0x10000)) {
-                    fn_80178718(p);
+                    ScrmSetTackler(p);
                     pOther->mFlags = (pOther->mFlags | 0x10000) & ~0x80000;
                 }
             } else {
@@ -3255,9 +3255,9 @@ extern "C" void PlyrContactHitWall(Object_80039F5C *p) {
     if (!fn_800C4184(p))
         return;
     if (LevelGetData()->mUnknown136) {
-        if (fabsf(p->mMotion.mPos.mX) > fn_80178A08() - _PlyrContact_fEdgeMargin)
+        if (fabsf(p->mMotion.mPos.mX) > ScrmGetSidelineX() - _PlyrContact_fEdgeMargin)
             nearX = 1;
-        else if (fabsf(p->mMotion.mPos.mY) > fn_80178A44() - _PlyrContact_fEdgeMargin)
+        else if (fabsf(p->mMotion.mPos.mY) > ScrmGetEndLineY() - _PlyrContact_fEdgeMargin)
             nearY = 1;
     }
     if (!nearX && !nearY)

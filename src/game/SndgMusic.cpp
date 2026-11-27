@@ -9,7 +9,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/fn_801D2B7C.h"
 #include <string.h>
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_800AD9B4.h"
 
@@ -433,7 +433,7 @@ void SndgMusicPublishSongText(void)
         args.records[2]->mUnknown4 = strlen(_SndgMusic_pState->mUnknownBE);
         if (gUISSubInfo) {
             _SndgMusic_bTextPending = 0;
-            fn_8021D7B8(gUISSubInfo, 0x80000004, 4, &args);
+            UISProcessHint(gUISSubInfo, 0x80000004, 4, &args);
         }
     }
 }
@@ -603,7 +603,7 @@ void SndgMusicFadeOut(unsigned int delay, int wait)
             SndgPathFadeTrack(0x11000001, 0, delay);
         }
         if (FELoopIsMainFEActive() && gUISSubInfo) {
-            fn_8021D7B8(gUISSubInfo, 0x80000003, 0, 0);
+            UISProcessHint(gUISSubInfo, 0x80000003, 0, 0);
         }
         if (wait) {
             while (_SndgMusic_pState->mUnknown8) {
@@ -704,7 +704,7 @@ void SndgMusicStop(void)
             _SndgMusic_pState->mUnknown124 = 0;
             _SndgMusic_pState->mUnknown123 = 0;
             if (FELoopIsMainFEActive() && gUISSubInfo) {
-                fn_8021D7B8(gUISSubInfo, 0x80000003, 0, 0);
+                UISProcessHint(gUISSubInfo, 0x80000003, 0, 0);
             }
         }
         _SndgMusic_pState->mUnknown125 = 0;

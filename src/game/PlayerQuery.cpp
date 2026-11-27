@@ -5,7 +5,7 @@
 
 #include "game/DbCursor.h"
 #include "game/Object_8008044C.h"
-#include "game/Record_80082B18.h"
+#include "game/PlayerCreateRecord.h"
 #include "game/DbQuery.h"
 #include "game/TDbCompilePerformOp.h"
 
@@ -20,12 +20,12 @@ int DbFileTblLoad(int, int);
 int DbFileTblDestroy(int, int);
 int DbUserGetId(int);
 int DbUserGetDb(int);
-void PlayerRecordSetDefaults(Record_80082B18 *);
-void fn_80082C64(Record_80082B18 *);
-void fn_80082D30(Record_80082B18 *);
-void fn_80082E48(Record_80082B18 *);
-void fn_80083070(Record_80082B18 *);
-void fn_8008318C(int, Record_80082B18 *, int, int);
+void PlayerRecordSetDefaults(PlayerCreateRecord_t *);
+void PlayerRecordRandomName(PlayerCreateRecord_t *);
+void PlayerRecordRandomFace(PlayerCreateRecord_t *);
+void PlayerRecordRandomAttributes(PlayerCreateRecord_t *);
+void PlayerRecordFixup(PlayerCreateRecord_t *);
+void PlayerRecordInsert(int, PlayerCreateRecord_t *, int, int);
 void SndgMusicPumpFrame(int);
 }
 
@@ -94,7 +94,7 @@ extern "C" int PlayerRecordFindFreeIds(int db, int table, int *out, unsigned sho
 extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
 {
     char first[16], last[16], other[16];
-    Record_80082B18 record;
+    PlayerCreateRecord_t record;
     first[0] = 0;
     last[0] = 0;
     PlayerRecordSetDefaults(&record);
@@ -105,13 +105,13 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
     PlayerRecordFindFreeIds(0x54415453, 0x59414C50, &record.mUnknown00, &count, start);
     record.mUnknown10 = value;
     record.mUnknown14 = value;
-    fn_80082C64(&record);
+    PlayerRecordRandomName(&record);
     SndgMusicPumpFrame(0);
-    fn_80082D30(&record);
+    PlayerRecordRandomFace(&record);
     SndgMusicPumpFrame(0);
-    fn_80082E48(&record);
+    PlayerRecordRandomAttributes(&record);
     SndgMusicPumpFrame(0);
-    fn_80083070(&record);
+    PlayerRecordFixup(&record);
     SndgMusicPumpFrame(0);
     if (reset) {
         // FAKEMATCH: store order; mUnknown18 is cleared last (the first scheduling pass then puts it fourth, as in the target)
@@ -149,7 +149,7 @@ extern "C" int PlayerRecordCreate(int source, int value, int reset, int start)
         record.mUnknown18 = 0;
     }
     SndgMusicPumpFrame(0);
-    fn_8008318C(0x59414C50, &record, source, 0x1AD);
+    PlayerRecordInsert(0x59414C50, &record, source, 0x1AD);
     SndgMusicPumpFrame(0);
     return record.mUnknown00;
 }

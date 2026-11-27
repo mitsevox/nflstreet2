@@ -9,7 +9,7 @@ extern "C" {
 int fn_800C4B6C(Object_80039F5C *p);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 int MathAngleDiff(int a, int b);
 }
 
@@ -35,11 +35,11 @@ extern "C" int PlayerMoveAnimWantsReverse(Object_80039F5C *p, int key)
         int diff = MathAngleDiff(pMotion->mUnknown32, pNext->mUnknown4);
         unsigned char team = p->mIdBytes[2];
 
-        if (diff > 0x755555 && team == fn_80178320() && pMotion->mUnknown28 >= 0.05f
+        if (diff > 0x755555 && team == ScrmGetDefenseTeam() && pMotion->mUnknown28 >= 0.05f
             && fn_800C4B6C(p)) {
             result = 1;
         }
-        if (diff <= 0xAAAA9 && team == fn_80178320() && fn_800C4B6C(p)) {
+        if (diff <= 0xAAAA9 && team == ScrmGetDefenseTeam() && fn_800C4B6C(p)) {
             result = 1;
         }
     }
@@ -111,7 +111,7 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
     if (BallGetCurrentHolder() != p && diff > 0x2E38E2 && pCur->mUnknown0 > 0.0f) {
         if (diff <= 0x56C16B) {
             if (flag || p->mUnknown492 <= gPlyrMoveSideSpeed) {
-                if (p->mIdBytes[2] == fn_80178320() || flag) {
+                if (p->mIdBytes[2] == ScrmGetDefenseTeam() || flag) {
                     key = 160;
                     pNext->mUnknown0 = MAX(pCur->mUnknown0, gPlyrMoveSideSpeed * 0.18f / gPlyrMoveSideSpeed);
                 } else {
@@ -123,7 +123,7 @@ extern "C" int PlayerMoveAnimSelectTurn(Object_80039F5C *p, int flag)
                 pNext->mUnknown8 = pCur->mUnknown8;
                 pNext->mUnknown4 = pCur->mUnknown4;
             }
-        } else if (diff <= 0x71C71B && p->mIdBytes[2] == fn_80178320()) {
+        } else if (diff <= 0x71C71B && p->mIdBytes[2] == ScrmGetDefenseTeam()) {
             if (flag || p->mUnknown492 <= gPlyrMoveBackSpeed) {
                 int offset;
                 fn_800C89F0(p, pCur->mUnknown8, 2, 0, 1.0f);

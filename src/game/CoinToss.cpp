@@ -80,17 +80,17 @@ void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps);
 void CamInterpUpdateSine(CamInterp_t *pInterp, int steps);
 void CamShotPlay(CoinTossCamEntry_t *pEntries);
 void CamShotRequestStop(void);
-void fn_80177E6C(int a, int b);
-int fn_80178308(void);
-int fn_80178320(void);
-void fn_8017833C(int value);
-int fn_801784C4(void);
+void ScrmMirrorField(int a, int b);
+int ScrmGetOffenseTeam(void);
+int ScrmGetDefenseTeam(void);
+void ScrmSetOffenseTeam(int value);
+int ScrmIsFieldFlipped(void);
 void BannerClear(int a);
 void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
 int MathArcTan2(float y, float x);
 void Vec2Sub(void *pOut, void *pA, void *pB);
-int fn_8022DDB4(int tag, void *data);
+int DbFnigWriteBlock(int tag, void *data);
 float SyncRandGetFloat(int stream);
 void *SyncStateGetData(void *pHandle);
 
@@ -313,7 +313,7 @@ int CoinTossDecide(int mode)
             _CoinToss_pState->mUnknown43 = SyncRandGetRange(0, 2);
             break;
         }
-        if (fn_800B65A0(fn_80178308()) != 0xFF || fn_800B65A0(fn_80178320()) != 0xFF) {
+        if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF || fn_800B65A0(ScrmGetDefenseTeam()) != 0xFF) {
             CamShotRequestStop();
         }
         _CoinToss_pState->mState = 10;
@@ -474,16 +474,16 @@ void CoinTossApplyResult(void)
 {
     int team = CoinTossGetOffenseTeam();
 
-    fn_8017833C(team);
+    ScrmSetOffenseTeam(team);
     if (CoinTossGetTeamSide(team) == 0) {
-        if (fn_801784C4() != 0) {
-            fn_80177E6C(1, 1);
+        if (ScrmIsFieldFlipped() != 0) {
+            ScrmMirrorField(1, 1);
         }
-    } else if (fn_801784C4() == 0) {
-        fn_80177E6C(1, 1);
+    } else if (ScrmIsFieldFlipped() == 0) {
+        ScrmMirrorField(1, 1);
     }
     if (FELoopIsMainFEActive() == 0) {
-        fn_8022DDB4(0x53544347, &_CoinToss_pState->mUnknown40);
+        DbFnigWriteBlock(0x53544347, &_CoinToss_pState->mUnknown40);
     }
 }
 
@@ -491,13 +491,13 @@ void CoinTossApplyResultSwapped(void)
 {
     int team = CoinTossGetOffenseTeam() == 0;
 
-    fn_8017833C(team);
+    ScrmSetOffenseTeam(team);
     if (CoinTossGetTeamSide(team) == 0) {
-        if (fn_801784C4() != 0) {
-            fn_80177E6C(1, 1);
+        if (ScrmIsFieldFlipped() != 0) {
+            ScrmMirrorField(1, 1);
         }
-    } else if (fn_801784C4() == 0) {
-        fn_80177E6C(1, 1);
+    } else if (ScrmIsFieldFlipped() == 0) {
+        ScrmMirrorField(1, 1);
     }
 }
 

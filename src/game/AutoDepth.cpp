@@ -9,12 +9,12 @@
 
 extern "C" {
 int fn_801486A0(void);
-unsigned int fn_80178DC8(void);
+unsigned int ScrmGetRosterPlayerCount(void);
 void TstrDbOpen(DbCursor *pObject);
 void TstrDbClose(DbCursor *pObject);
 int TstrDbSeek(DbCursor *pObject, int value, int *pResult);
 int TstrDbGetPositionValue(DbCursor *pObject, int category);
-unsigned int fn_80081ECC(int category, int *pValues);
+unsigned int PlayerRatingsScore(int category, int *pValues);
 void SndService(void);
 }
 
@@ -117,7 +117,7 @@ void AutoDepthRatePlayer(AutoDepthPlayer_t *record, int *values, DbCursor *query
 {
     for (int i = 0; i < 14; i++) {
         int adjustment = TstrDbGetPositionValue(query, i);
-        unsigned int value = fn_80081ECC(i, values) * (adjustment + 100) / 200;
+        unsigned int value = PlayerRatingsScore(i, values) * (adjustment + 100) / 200;
         if (record->category == i) value = value * 1.1f;
         record->values[i] = value;
     }
@@ -202,7 +202,7 @@ void AutoDepthFillChart(int value, int *list, int *ids)
     unsigned int score;
     int category;
     AutoDepthBuild(value, list, 0);
-    for (i = 0; i < fn_80178DC8(); i++) {
+    for (i = 0; i < ScrmGetRosterPlayerCount(); i++) {
         switch (fn_801486A0()) {
         case 3: category = _AutoDepth_aOffenseOrder3[i]; break;
         case 4: category = _AutoDepth_aOffenseOrder4[i]; break;
@@ -213,7 +213,7 @@ void AutoDepthFillChart(int value, int *list, int *ids)
         AutoDepthSetExcluded(id, 1);
     }
     AutoDepthSetAllExcluded(0);
-    for (i = 0; i < fn_80178DC8(); i++) {
+    for (i = 0; i < ScrmGetRosterPlayerCount(); i++) {
         switch (fn_801486A0()) {
         case 3: category = _AutoDepth_aDefenseOrder3[i]+7; break;
         case 4: category = _AutoDepth_aDefenseOrder4[i]+7; break;

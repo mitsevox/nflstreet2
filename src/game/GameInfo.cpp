@@ -5,8 +5,8 @@
 #include "game/GameInfo.h"
 
 extern "C" {
-int fn_8022DBF4(int value);
-int fn_8022DC38(int value);
+int DbFnigSetHomeTeam(int value);
+int DbFnigSetAwayTeam(int value);
 int fn_8022E558(void);
 int fn_8022E560(void);
 }
@@ -55,9 +55,9 @@ unsigned char GameInfoIsInitialized(void)
 void GameInfoSet(int index, int value)
 {
     if (index == 0) {
-        fn_8022DBF4(value);
+        DbFnigSetHomeTeam(value);
     } else if (index == 1) {
-        fn_8022DC38(value);
+        DbFnigSetAwayTeam(value);
     } else {
         DbCursorSetValue(&_GameInfo_sCursor, _GameInfo_aColumnTags[index], value);
         _GameInfo_aRecord[index].mValue = value;

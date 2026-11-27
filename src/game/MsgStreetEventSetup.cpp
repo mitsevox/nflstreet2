@@ -49,12 +49,12 @@ void MsgTeamPickRequestTeamSave(void);
 void PortDbOpenSides(DbCursor *pObject);
 void PortDbCloseSides(DbCursor *pObject);
 unsigned char PortDbCountSidePlayers(int a);
-int fn_80082414(int index);
+int PlayerPoolGetCount(int index);
 int fn_801486A0(void);
 void fn_8014F3DC(int ticks);
 int MsgGameGetSetupState(void);
 void StoryTeamLoadUserTeams(int a, int b);
-void fn_8018C48C(int handle);
+void TeamTablesPurgeCreated(int handle);
 void CreateTeamLoadUserTeams(void);
 char *strchr(const char *pString, int c);
 
@@ -73,10 +73,10 @@ static int _MsgStreetEventSetup_iMinPool = 14;
 extern "C" {
 void MsgStreetEventSetupCountPool(void)
 {
-    _MsgStreetEventSetup_pState->mToggles[0].mUnknown8 = fn_80082414(0);
-    _MsgStreetEventSetup_pState->mToggles[1].mUnknown8 = fn_80082414(1);
-    _MsgStreetEventSetup_pState->mToggles[2].mUnknown8 = fn_80082414(3);
-    _MsgStreetEventSetup_pState->mToggles[3].mUnknown8 = fn_80082414(2);
+    _MsgStreetEventSetup_pState->mToggles[0].mUnknown8 = PlayerPoolGetCount(0);
+    _MsgStreetEventSetup_pState->mToggles[1].mUnknown8 = PlayerPoolGetCount(1);
+    _MsgStreetEventSetup_pState->mToggles[2].mUnknown8 = PlayerPoolGetCount(3);
+    _MsgStreetEventSetup_pState->mToggles[3].mUnknown8 = PlayerPoolGetCount(2);
 }
 
 void MsgStreetEventSetupBuildOptions(StreetEventSetup_t *pState)
@@ -285,7 +285,7 @@ void MsgStreetEventSetupShutdown(void)
     MsgTeamPickRequestTeamSave();
     MsgStreetEventSetupApplyOptions(_MsgStreetEventSetup_pState);
     if (MsgGameGetSetupState() == 0) {
-        fn_8018C48C(0x54415453);
+        TeamTablesPurgeCreated(0x54415453);
     }
     fn_801D2BD0(_MsgStreetEventSetup_pState);
     _MsgStreetEventSetup_pState = 0;

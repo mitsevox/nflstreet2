@@ -40,7 +40,7 @@ void ChalCloseCursors();
 void MsgMainMenuSetActivePad(int a);
 void ChalGameStartTournament(int, int);
 int ChalGetTournamentWon();
-int fn_801787DC(int a);
+int ScrmGetTeamScore(int a);
 }
 
 static BracketGame_t *_TournBracket_pGames = 0;
@@ -338,11 +338,11 @@ extern "C" void TournBracketRecordResult()
 {
     short score[2];
     if (_TournBracket_iUserSide == 1) {
-        score[1] = fn_801787DC(1);
-        score[0] = fn_801787DC(0);
+        score[1] = ScrmGetTeamScore(1);
+        score[0] = ScrmGetTeamScore(0);
     } else {
-        score[0] = fn_801787DC(1);
-        score[1] = fn_801787DC(0);
+        score[0] = ScrmGetTeamScore(1);
+        score[1] = ScrmGetTeamScore(0);
     }
     ChalSetTournamentScore(_TournBracket_iCurGame, score[1], score[0]);
     TournBracketCreate();

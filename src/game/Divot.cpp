@@ -129,9 +129,9 @@ void *fn_800A336C(void);
 int fn_800A33A4(void);
 int fn_800C4E18(Object_80039F5C *pPlayer);
 Object_80039F5C *BallGetCurrentHolder(void);
-int fn_801784C4(void);
-float fn_80178A08(void);
-float fn_80178A44(void);
+int ScrmIsFieldFlipped(void);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 void ArrowDraw(void *p);
 void DivotRenderLoadAll(void);
 void DivotRenderFreeAll(void);
@@ -439,8 +439,8 @@ int DivotCheckPlacement(Divot *p)
     if (p->mType != DIVOT_TYPE_0) {
         float margin = _Divot_afRadius[p->mType] + 1.0f;
 
-        if (p->mPos.mX - margin < -fn_80178A08() || p->mPos.mX + margin > fn_80178A08() ||
-            p->mPos.mY - margin < -fn_80178A44() || p->mPos.mY + margin > fn_80178A44()) {
+        if (p->mPos.mX - margin < -ScrmGetSidelineX() || p->mPos.mX + margin > ScrmGetSidelineX() ||
+            p->mPos.mY - margin < -ScrmGetEndLineY() || p->mPos.mY + margin > ScrmGetEndLineY()) {
             ok = 0;
         }
     }
@@ -589,8 +589,8 @@ void DivotShutdown(void)
 void DivotScatterRandom(void)
 {
     for (int type = 0; type < DIVOT_NUM_TYPES; type++) {
-        float width = fn_80178A08() - _Divot_afRadius[type] - 1.0f;
-        float length = fn_80178A44() - _Divot_afRadius[type] - 1.0f;
+        float width = ScrmGetSidelineX() - _Divot_afRadius[type] - 1.0f;
+        float length = ScrmGetEndLineY() - _Divot_afRadius[type] - 1.0f;
 
         for (int i = 0; i < _Divot_aiRandomCount[type]; i++) {
             Vector_80039F5C pos;
@@ -846,7 +846,7 @@ Divot *DivotAlloc(int type)
 
 unsigned char DivotPlace(Divot *p)
 {
-    if (p->mType != DIVOT_TYPE_0 && fn_801784C4()) {
+    if (p->mType != DIVOT_TYPE_0 && ScrmIsFieldFlipped()) {
         p->mPos.mX = -p->mPos.mX;
         p->mPos.mY = -p->mPos.mY;
         p->mAngle = (p->mAngle + 0x800000) & 0xFFFFFF;

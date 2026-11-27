@@ -8,12 +8,12 @@
 #include "engine/animchan.h"
 #include "game/Queue_800EFE0C.h"
 #include "game/Directions_8012430C.h"
-#include "game/fn_80177FE0.h"
+#include "game/ScrmGetBallSpot.h"
 #include "game/Object_80039F5C.h"
 #include "game/Message_800F01CC.h"
 #include "game/PlayBookTeam.h"
 #include <string.h>
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/fn_800B65A0.h"
 #include "game/Record_800B15FC.h"
@@ -85,11 +85,11 @@ Queue_800EFE0C _PlyrStates_qAlternate = {2, 10, (Handlers_800EFC68 *)_PlyrStates
 
 extern "C" {
 Object_80039F5C *BallGetCurrentHolder(void);
-int fn_80178320(void);
+int ScrmGetDefenseTeam(void);
 
-int fn_8010A2DC(Object_80039F5C *, int, short);
+int PlyrTryQueueMsg62(Object_80039F5C *, int, short);
 
-int fn_80178308(void);
+int ScrmGetOffenseTeam(void);
 void fn_8011E3EC(Object_80039F5C *, int);
 void fn_8011E240(Object_80039F5C *);
 void fn_8009BD2C(Object_80039F5C *, int *);
@@ -113,7 +113,7 @@ void PlyrEngageShortenMessages(Object_80039F5C *, unsigned int);
 void PlyrEngageReleaseControl(Object_80039F5C *p)
 {
     fn_8011E3EC(p, 0);
-    if (p->mIdBytes[2] == fn_80178308())
+    if (p->mIdBytes[2] == ScrmGetOffenseTeam())
         fn_8011E240(p);
     else {
         Object_80039F5C *other = fn_8009BCE8(&p->mUnknown1036);
@@ -196,7 +196,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
     if (p->mFlags & 0x800) {
         s->mUnknown8Bytes[0] = 0;
         PlyrEngageReleaseControl(p);
-        if (!s->mUnknown8Bytes[1] && p->mIdBytes[2] == fn_80178308() && fn_801BE648(p->mpUnknown792) == 56) {
+        if (!s->mUnknown8Bytes[1] && p->mIdBytes[2] == ScrmGetOffenseTeam() && fn_801BE648(p->mpUnknown792) == 56) {
             Record_800B15FC *record = fn_800B15FC();
             fn_8009BD2C(p, &record->mUnknown0);
             record->mUnknownC = p->mMotion.mPos.mX;
@@ -205,7 +205,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
             fn_800B1508();
             s->mUnknown8Bytes[1] = 1;
         }
-        if (!s->mUnknown8Bytes[2] && p->mIdBytes[2] == fn_80178308() && fn_801BE648(p->mpUnknown792) != 56)
+        if (!s->mUnknown8Bytes[2] && p->mIdBytes[2] == ScrmGetOffenseTeam() && fn_801BE648(p->mpUnknown792) != 56)
             s->mUnknown8Bytes[2] = 1;
     }
     if (other && other->mpState->mId == 32 && fn_8009BCE8(&other->mUnknown336) == p) {
@@ -224,7 +224,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         fn_800F05E4(0, p->mpState, &m, p);
     }
     if ((unsigned int)s->mUnknown10 % 5 == 0 && (unsigned int)s->mUnknown10 > 4 &&
-        p->mIdBytes[2] == fn_80178320() && !(p->mFlags & 0x400) && !s->mUnknownCByte &&
+        p->mIdBytes[2] == ScrmGetDefenseTeam() && !(p->mFlags & 0x400) && !s->mUnknownCByte &&
         (fn_801BE648(p->mpUnknown792) == 55 || fn_801BE648(p->mpUnknown792) == 49 ||
          fn_801BE648(p->mpUnknown792) == 52 || fn_801BE648(p->mpUnknown792) == 150 ||
          fn_801BE648(p->mpUnknown792) == 147) && (p->mUnknown1032 == 4 || p->mUnknown1032 == 6)) {
@@ -261,7 +261,7 @@ int PlyrEngageUpdate(Object_80039F5C *p)
         }
     }
     if (p->mFlags & 4) {
-        if (fn_801BE648(p->mpUnknown792) == 242 && p->mIdBytes[2] == fn_80178320()) {
+        if (fn_801BE648(p->mpUnknown792) == 242 && p->mIdBytes[2] == ScrmGetDefenseTeam()) {
             p->mUnknown772 = 1.0f;
             PlyrEngageReleaseControl(p);
             PlyrCollideRemoveExempt(p, other);
@@ -316,7 +316,7 @@ int PlyrEngageInput(Object_80039F5C *p)
     dir.mY = 0.0f;
     dir.mX = 0.0f;
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
-    if (p->mIdBytes[2] == fn_80178320() &&
+    if (p->mIdBytes[2] == ScrmGetDefenseTeam() &&
         (fn_801BE648(p->mpUnknown792) == 55 || fn_801BE648(p->mpUnknown792) == 49 || fn_801BE648(p->mpUnknown792) == 52)) {
         fn_800B6D34(p, &input);
         if (input.mUnknown4 != 0.0f || input.mUnknown8 != 0.0f) {
@@ -341,7 +341,7 @@ int PlyrEngageInput(Object_80039F5C *p)
 
 int PlyrStateUpdateDefault(Object_80039F5C *p)
 {
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     return 0;
 }
 
@@ -550,7 +550,7 @@ void fn_8011380C(void);
 void fn_80113AAC(void);
 void fn_80113B28(void);
 void fn_80113C20(void);
-void fn_80113E74(void);
+void PlyrHitImpactUpdate(void);
 void fn_801147D4(void);
 void fn_80114838(void);
 void fn_80116B98(void);
@@ -599,7 +599,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)HuddleMoveEnter, (void *)fn_800F0900, (void *)HuddleMoveUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)HuddleMoveAltEnter, (void *)fn_800F0900, (void *)HuddleMoveAltUpdate, (void *)fn_800F08F8, (void *)fn_800FF538, 0}},
     {{(void *)fn_80101CB4, (void *)fn_80102470, (void *)fn_801021C0, (void *)fn_80102664, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80113C20, (void *)fn_801147D4, (void *)fn_80113E74, (void *)fn_80114838, (void *)fn_800F0908, 0}},
+    {{(void *)fn_80113C20, (void *)fn_801147D4, (void *)PlyrHitImpactUpdate, (void *)fn_80114838, (void *)fn_800F0908, 0}},
     {{(void *)fn_80113680, (void *)fn_80113AAC, (void *)fn_8011380C, (void *)fn_80113B28, (void *)fn_800F0908, 0}},
     {{(void *)QbPassEnter, (void *)fn_800F0900, (void *)QbPassUpdate, (void *)fn_8010279C, (void *)fn_800F0908, 0}},
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},

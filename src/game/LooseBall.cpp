@@ -11,11 +11,11 @@
 #include "game/Input_800B6D34.h"
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/Ball.h"
 #include "game/fn_800F06F4.h"
 #include <string.h>
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/Vec2Distance.h"
 #include "game/Vec2Add.h"
@@ -84,18 +84,18 @@ void Vec3ScaleAcc(void *pOut, void *pV, float scale);
 int fn_8009F0B8(Object_80039F5C *p, int angle);
 void PlyrFindNearest(void *pPos, float *pExtra, int team);
 void PlyrSetPendingMsg(Object_80039F5C *p, Message_800F01CC *pMessage, int value);
-int fn_80178360(void);
+int ScrmGetSnapDefense(void);
 void fn_8011E240(Object_80039F5C *p);
 void fn_8011E3EC(Object_80039F5C *p, int a);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
-int fn_80178308(void);
-int fn_801787A0(void);
+int ScrmGetOffenseTeam(void);
+int ScrmIsNotReplay(void);
 int fn_801BE068(void *a, void *b, void *c, unsigned short d, float f, void *e);
-float fn_80178A08(void);
-float fn_80178A44(void);
-float fn_80178A68(Point_8017886C *pPos);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
+float ScrmGetDistanceToBounds(FieldPoint_t *pPos);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
 int fn_8011EAC0(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_8011E8A4(Object_80039F5C *p);
@@ -108,17 +108,17 @@ int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *pState, Ball_t *pBal
 extern "C" int LooseBallTryEngage(Object_80039F5C *p, Ball_t *pBall) {
     int result = 0;
     Vector_80039F5C pos;
-    Point_8017886C delta;
+    FieldPoint_t delta;
     float distance;
     BallGetPosition(pBall, &pos);
     Vec2Sub(&delta, &pos, &p->mMotion.mPos);
     if (Vec2Magnitude(&delta) > _LooseBall_fEngageMinDist) {
-        Object_80039F5C *pOther = fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1),
+        Object_80039F5C *pOther = fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1),
                                               (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
         if (pOther && distance < _LooseBall_fEngageRange)
             result = fn_8011EAC0(p, pOther);
         if (!fn_801486A0() && !result) {
-            pOther = fn_801245DC(p, p->mIdBytes[2], 0, fn_80178D18(p->mIdBytes[2]),
+            pOther = fn_801245DC(p, p->mIdBytes[2], 0, ScrmGetTeamPlayerCount(p->mIdBytes[2]),
                                  (int)(_LooseBall_fEngageAngle * 46603.37890625f), &distance, 1);
             if (pOther && distance < _LooseBall_fEngageRange)
                 result = fn_8011EAC0(p, pOther);
@@ -168,13 +168,13 @@ extern "C" int LooseBallGetEdge(Ball_t *pBall) {
     int result = 5;
     Vector_80039F5C pos;
     BallGetPosition(pBall, &pos);
-    if (pos.mX > fn_80178A08() - 3.0f)
+    if (pos.mX > ScrmGetSidelineX() - 3.0f)
         result = 0;
-    else if (pos.mX < 3.0f - fn_80178A08())
+    else if (pos.mX < 3.0f - ScrmGetSidelineX())
         result = 1;
-    else if (pos.mY > fn_80178A44() - 3.0f)
+    else if (pos.mY > ScrmGetEndLineY() - 3.0f)
         result = 2;
-    else if (pos.mY < 3.0f - fn_80178A44())
+    else if (pos.mY < 3.0f - ScrmGetEndLineY())
         result = 3;
     return result;
 }
@@ -259,7 +259,7 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
     float dist = 0.0f;
     float best = 1000.0f;
     state->mUnknown44 = -1;
-    if (!fn_801787A0() && (force || ballPos.mZ < 0.5f)) {
+    if (!ScrmIsNotReplay() && (force || ballPos.mZ < 0.5f)) {
         BallGetVelocity(pCurrent, &velocity);
         if (!force && (Vec3Magnitude(&velocity) >= 100.0f || !LooseBallCanReach(p, pCurrent)))
             goto done;
@@ -274,8 +274,8 @@ extern "C" int LooseBallFindAnim(Object_80039F5C *p, LooseBallBlock_t *state, Ba
             if (type == 5) {
                 if (LooseBallGetEdgeFacing(pCurrent, p) != pInfo->mUnknown6)
                     continue;
-                float lane = fn_80178A68((Point_8017886C *)&target);
-                float own = fn_80178A68((Point_8017886C *)&p->mMotion.mPos);
+                float lane = ScrmGetDistanceToBounds((FieldPoint_t *)&target);
+                float own = ScrmGetDistanceToBounds((FieldPoint_t *)&p->mMotion.mPos);
                 int level = fabsf(lane - own) < 0.5f;
                 switch (pInfo->mValue) {
                 case 0:
@@ -337,15 +337,15 @@ extern "C" int LooseBallCanChase(Object_80039F5C *p, LooseBallBlock_t *state) {
     int result = 1;
     int value;
     BallStateGet(BallGet(state->mUnknown43), &value);
-    if (p->mIdBytes[2] != fn_80178308() && !LooseBallCanReach(p, BallGet(state->mUnknown43)))
+    if (p->mIdBytes[2] != ScrmGetOffenseTeam() && !LooseBallCanReach(p, BallGet(state->mUnknown43)))
         result = 0;
     return result;
 }
 
 extern "C" void LooseBallSteer(Object_80039F5C *p, LooseBallBlock_t *state, Vector_80039F5C *pTarget) {
     Vector_80039F5C delta;
-    delta.mX = CLAMP(pTarget->mX, -fn_80178A08(), fn_80178A08());
-    delta.mY = CLAMP(pTarget->mY, -fn_80178A44(), fn_80178A44());
+    delta.mX = CLAMP(pTarget->mX, -ScrmGetSidelineX(), ScrmGetSidelineX());
+    delta.mY = CLAMP(pTarget->mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
     delta.mZ = pTarget->mZ;
     Vec3Sub(&delta, &delta, &p->mMotion.mPos);
     float dist = Vec3Magnitude(&delta);
@@ -378,15 +378,15 @@ extern "C" void LooseBallBroadcast(int id) {
     Vector_80039F5C delta;
     int owner;
     Object_80039F5C *pOther;
-    if (fn_801787A0())
+    if (ScrmIsNotReplay())
         return;
     Ball_t *pBall = BallGet(id);
     BallStateGet(pBall, &owner);
     if (BallGetLandingPoint(pBall, &pos))
-        PlyrFindNearest(&pos, 0, fn_80178360());
+        PlyrFindNearest(&pos, 0, ScrmGetSnapDefense());
     StyleTrackerRefreshUserPlayers();
     for (unsigned char team = 0; team <= 1; team++) {
-        int count = fn_80178D70(team);
+        int count = ScrmGetActivePlayerCount(team);
         for (int i = 0; i < count; i++) {
             pOther = PlyrGet(team, (unsigned char)i);
             Vec3Sub(&delta, &pos, &pOther->mMotion.mPos);
@@ -428,7 +428,7 @@ extern "C" int LooseBallEnter(Object_80039F5C *p) {
     state->mUnknown43 = p->mpState->mUnknown1;
     if (p->mIdBytes[3] == 1) {
         fn_8011E3EC(p, 0);
-        if (p->mIdBytes[2] == fn_80178308()) {
+        if (p->mIdBytes[2] == ScrmGetOffenseTeam()) {
             fn_8011E240(p);
         } else {
             Object_80039F5C *pOther = fn_8009BCE8(&p->mUnknown1036);
@@ -465,7 +465,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     float distance;
     int result = 0;
     int found = 0;
-    fn_8010A2DC(p, 0, -1);
+    PlyrTryQueueMsg62(p, 0, -1);
     Ball_t *pBall = BallGet(state->mUnknown43);
     int kind = BallStateGet(pBall, &owner);
     BallGetPosition(pBall, &ballPos);
@@ -500,7 +500,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 }
                 state->mUnknown0.mZ = 0.0f;
                 Vec3Add(&p->mMotion.mPos, &p->mMotion.mPos, &state->mUnknown0);
-            } else if (!fn_801787A0()) {
+            } else if (!ScrmIsNotReplay()) {
                 fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "LFOOTBALL"), &left, 0);
                 fn_8009BF5C(p, CharSkelGetJointByName(p->mpUnknown4->mpUnknown100, "RFOOTBALL"), &right, 0);
                 float reach = (p->mFlags & 0x400) ? 0.4f : 0.15f;
@@ -530,7 +530,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
         case 8:
             break;
         }
-        if (fn_801787A0() && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
+        if (ScrmIsNotReplay() && p->mIdBytes[3] == 1 && (p->mFlags & 0x1000)) {
             p->mFlags &= ~0x1000;
             Ball_t *pHeld = BallFindHeldBy(p);
             if (pHeld)
@@ -550,7 +550,7 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
     }
     if (state->mUnknown42 == 0) {
         if (kind == 4 || kind == 5) {
-            if (!fn_801787A0() && velocity.mZ < 0.0f) {
+            if (!ScrmIsNotReplay() && velocity.mZ < 0.0f) {
                 int handle = fn_80099734(p, pBall, 0, 3, state->mUnknown48, 1, 0, 0, PlyrRollContestedCatch(p), 120.0f);
                 if (handle != 0x1FFFFFFF && fn_80099F04(p, handle, BallGetIndex(pBall)) == 1) {
                     result = 0;
@@ -563,9 +563,9 @@ extern "C" int LooseBallUpdate(Object_80039F5C *p) {
                 if (LooseBallGetEdge(pBall) != 5)
                     type = 5;
                 int team = p->mIdBytes[2] ^ 1;
-                Object_80039F5C *pOther = fn_801244F0(p, team, 0, fn_80178D18(team), &distance, 0);
+                Object_80039F5C *pOther = fn_801244F0(p, team, 0, ScrmGetTeamPlayerCount(team), &distance, 0);
                 if (pOther) {
-                    Point_8017886C offset;
+                    FieldPoint_t offset;
                     Vec2Sub(&offset, &ballPos, &pOther->mMotion.mPos);
                     int angle = MathArcTan2(offset.mY, offset.mX);
                     if (pOther->mMotion.mUnknown28 != 0.0f && distance < _LooseBall_fThreatRange &&

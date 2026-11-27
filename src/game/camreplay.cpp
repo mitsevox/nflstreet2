@@ -91,8 +91,8 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void *BallGetCurrent(void);
 CamReplayBallModel_t *BallGetModel(void *p);
 void CamMainSetMode(CamReplayCamera_t *pCamera, int mode, int a, int b);
-int fn_801784C4(void);
-int fn_801784E8(void);
+int ScrmIsFieldFlipped(void);
+int ScrmHasFieldFlippedInPlay(void);
 void BannerClear(int a);
 void CamSetDefaultAspect(float aspect);
 int CamRLerp(int *pValue, int *pVel, int target, int a, int b);
@@ -386,7 +386,7 @@ extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
             dir0[0] = pFrom[0];
             dir0[1] = pFrom[1];
             dir0[2] = pFrom[2];
-            if (fn_801784C4()) {
+            if (ScrmIsFieldFlipped()) {
                 dir0[0] = -dir0[0];
                 dir0[1] = -dir0[1];
             }
@@ -421,7 +421,7 @@ extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
         dir4[0] = pPoint[0];
         dir4[1] = pPoint[1];
         dir4[2] = pPoint[2];
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             dir4[0] = -dir4[0];
             dir4[1] = -dir4[1];
         }
@@ -445,7 +445,7 @@ extern "C" void CamReplayUpdate(CamReplayCamera_t *pCamera)
         pos[0] = out[0];
         pos[1] = out[1];
         pos[2] = out[2];
-        if (fn_801784C4()) {
+        if (ScrmIsFieldFlipped()) {
             pos[0] -= pView->mUnknown00[0];
             pos[1] -= pView->mUnknown00[1];
         } else {
@@ -556,7 +556,7 @@ extern "C" void CamReplayOrbitPos(Record_8002E7C0 *pRecord, float *pOrigin, floa
     to[0] = pRecord->mUnknown1C.mUnknown28[0];
     to[1] = pRecord->mUnknown1C.mUnknown28[1];
     to[2] = pRecord->mUnknown1C.mUnknown28[2];
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         from[0] = -from[0];
         from[1] = -from[1];
         to[0] = -to[0];
@@ -742,11 +742,11 @@ extern "C" float CamReplayCalcAngles(float *pFrom, float *pTo, int *pAngles)
 
 extern "C" void CamReplayClampPos(float *pPos)
 {
-    if (fn_801784C4()) {
+    if (ScrmIsFieldFlipped()) {
         pPos[0] = -pPos[0];
         pPos[1] = -pPos[1];
     }
-    if (fn_801784E8()) {
+    if (ScrmHasFieldFlippedInPlay()) {
         pPos[0] = -pPos[0];
         pPos[1] = -pPos[1];
     }

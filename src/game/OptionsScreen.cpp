@@ -6,7 +6,7 @@
 #include "game/OptionsScreenMsg.h"
 #include "game/OptionsScreen.h"
 #include "game/FELoop.h"
-#include "game/fn_8021D7B8.h"
+#include "game/UISProcessHint.h"
 #include "game/GameModeType.h"
 #include "engine/viewporttypes.h"
 
@@ -43,7 +43,7 @@ void OptionsScreenExit(void)
         } else {
             value = 1;
         }
-        fn_8021D7B8(gUISMainInfo, 0x8000000F, 1, &value);
+        UISProcessHint(gUISMainInfo, 0x8000000F, 1, &value);
         if (GameOptionsGet(6) == 1) {
             UISGameSetAspect(UISGameGetMainViewport(), 0);
         } else {

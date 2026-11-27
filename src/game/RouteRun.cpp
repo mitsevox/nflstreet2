@@ -6,12 +6,12 @@
 #include "game/Message_800F01CC.h"
 #include "game/Object_80039F5C.h"
 #include "game/LevelData.h"
-#include "game/Object_8017886C.h"
+#include "game/ScrmPlayResult.h"
 #include "game/AudmonEvent.h"
 #include "game/Ball.h"
 #include <string.h>
 #include "game/fn_800F06F4.h"
-#include "game/fn_80178D18.h"
+#include "game/ScrmGetTeamPlayerCount.h"
 #include "game/Vec3Magnitude.h"
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
@@ -46,14 +46,14 @@ int fn_8009F0B8(Object_80039F5C *p, int angle);
 void fn_800F0BF8(Object_80039F5C *p, int a, int angle);
 int fn_800FD2AC(Object_80039F5C *p);
 int fn_800FD41C(Object_80039F5C *p);
-int fn_8010A2DC(Object_80039F5C *p, int a, short b);
+int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 int fn_80112928(Object_80039F5C *p);
 Object_80039F5C *fn_801244F0(Object_80039F5C *p, int team, unsigned char a, unsigned char count, float *pOut, int b);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char count, int angle, float *pOut, int b);
-int fn_80178320(void);
-int fn_801783AC(int bit);
-float fn_80178A08(void);
-float fn_80178A44(void);
+int ScrmGetDefenseTeam(void);
+int ScrmTestPlayFlag(int bit);
+float ScrmGetSidelineX(void);
+float ScrmGetEndLineY(void);
 int CharSkelGetJointByName(void *p, const char *pName);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
@@ -76,11 +76,11 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
     int angle = pBlock->mUnknown16;
     int found = 0;
     unsigned char i;
-    unsigned int count = fn_80178D18(fn_80178320());
+    unsigned int count = ScrmGetTeamPlayerCount(ScrmGetDefenseTeam());
 
     for (i = 0; i < count; i++) {
         int check = 0;
-        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
 
         switch (pOther->mpState->mId) {
         case 10:
@@ -98,7 +98,7 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
             check = 1;
         }
         if (check && !(Vec2Distance(&p->mMotion.mPos, &pOther->mMotion.mPos) > _RouteRun_fAvoidRadius)) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             int dir;
 
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -128,8 +128,8 @@ extern "C" int RouteRunAvoidDefenders(Object_80039F5C *p, RouteRunBlock_t *pBloc
         }
     }
     if (found
-        && ((p->mMotion.mPos.mX > fn_80178A08() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
-            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - fn_80178A08() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF))) {
+        && ((p->mMotion.mPos.mX > ScrmGetSidelineX() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
+            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - ScrmGetSidelineX() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF))) {
         found = 0;
     }
     if (found) {
@@ -150,13 +150,13 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
     unsigned char i;
 
     for (i = 0; i < count; i++) {
-        Object_80039F5C *pOther = PlyrGet(fn_80178320(), i);
+        Object_80039F5C *pOther = PlyrGet(ScrmGetDefenseTeam(), i);
 
         switch (pOther->mUnknown2914) {
         case 10:
         case 11:
         case 12: {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             int diff;
 
             Vec2Sub(&delta, &pOther->mMotion.mPos, &p->mMotion.mPos);
@@ -185,8 +185,8 @@ extern "C" int RouteRunSidestepDefender(Object_80039F5C *p, RouteRunBlock_t *pBl
             }
             found = 1;
         }
-        if ((p->mMotion.mPos.mX > fn_80178A08() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
-            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - fn_80178A08() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)) {
+        if ((p->mMotion.mPos.mX > ScrmGetSidelineX() - _RouteRun_fEdgeMargin && MathAngleDiff(angle, 0) <= 0x3FFFFF)
+            || (p->mMotion.mPos.mX < _RouteRun_fEdgeMargin - ScrmGetSidelineX() && MathAngleDiff(angle, 0x800000) <= 0x3FFFFF)) {
             found = 0;
         }
         if (found) {
@@ -218,7 +218,7 @@ extern "C" int RouteRunAvoidWalls(Object_80039F5C *p, RouteRunBlock_t *pBlock)
         a.mZ = 0.0f;
         Vec3ClosestPointOnSegment(&a, &b, &p->mMotion.mPos, &nearest, &dist, &t);
         if (dist < _RouteRun_fEdgeMargin * _RouteRun_fEdgeMargin) {
-            Point_8017886C delta;
+            FieldPoint_t delta;
             int dir;
 
             Vec2Sub(&delta, &nearest, &p->mMotion.mPos);
@@ -252,10 +252,10 @@ extern "C" int RouteRunIsOpen(Object_80039F5C *p)
 {
     float dist;
 
-    if (fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), 0x11C71C, &dist, 1) && dist < 5.0f) {
+    if (fn_801245DC(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), 0x11C71C, &dist, 1) && dist < 5.0f) {
         return 0;
     }
-    if (fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, fn_80178D18(p->mIdBytes[2] ^ 1), &dist, 0) && dist < 2.5f) {
+    if (fn_801244F0(p, p->mIdBytes[2] ^ 1, 0, ScrmGetTeamPlayerCount(p->mIdBytes[2] ^ 1), &dist, 0) && dist < 2.5f) {
         return 0;
     }
     return 1;
@@ -271,7 +271,7 @@ extern "C" int RouteRunCanSprint(Object_80039F5C *p, RouteRunBlock_t *pBlock)
         ok = 0;
     }
     if (ok && p->mpState[1].mId == 19) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
 
         delta.mX = pBlock->mUnknown0 - p->mMotion.mPos.mX;
         delta.mY = pBlock->mUnknown4 - p->mMotion.mPos.mY;
@@ -294,9 +294,9 @@ extern "C" int RouteRunEnter(Object_80039F5C *p)
     result = fn_800FD2AC(p);
     pBlock->mUnknown12 = MIN(pBlock->mUnknown12, 1.0f);
     moved = 0;
-    if (fabs(pBlock->mUnknown0) > fn_80178A08() - 3.0f) {
-        pBlock->mUnknown0 = MIN(pBlock->mUnknown0, fn_80178A08() - 3.0f);
-        pBlock->mUnknown0 = MAX(pBlock->mUnknown0, 3.0f - fn_80178A08());
+    if (fabs(pBlock->mUnknown0) > ScrmGetSidelineX() - 3.0f) {
+        pBlock->mUnknown0 = MIN(pBlock->mUnknown0, ScrmGetSidelineX() - 3.0f);
+        pBlock->mUnknown0 = MAX(pBlock->mUnknown0, 3.0f - ScrmGetSidelineX());
         moved = 1;
     }
     unsigned char *pInfo = &p->mpState[1].mId;
@@ -306,12 +306,12 @@ extern "C" int RouteRunEnter(Object_80039F5C *p)
     } else {
         margin = 3.0f;
     }
-    if (pBlock->mUnknown4 > fn_80178A44() - margin) {
-        pBlock->mUnknown4 = MIN(pBlock->mUnknown4, fn_80178A44() - margin);
+    if (pBlock->mUnknown4 > ScrmGetEndLineY() - margin) {
+        pBlock->mUnknown4 = MIN(pBlock->mUnknown4, ScrmGetEndLineY() - margin);
         moved = 1;
     }
     if (moved == 1) {
-        Point_8017886C delta;
+        FieldPoint_t delta;
 
         delta.mX = pBlock->mUnknown0;
         delta.mY = pBlock->mUnknown4;
@@ -338,13 +338,13 @@ extern "C" int RouteRunUpdate(Object_80039F5C *p)
     int result;
 
     BallGetCurrent();
-    if (fn_8010A2DC(p, 0, -1) == 1) {
+    if (PlyrTryQueueMsg62(p, 0, -1) == 1) {
         pBlock->mUnknown61 = 1;
         pBlock->mUnknown60 = 0;
         p->mUnknown512.mUnknown15 = 0;
     }
     pBlock->mUnknown24++;
-    if (!(p->mFlags & 0x4000) && BallGetCurrentHolder() && fn_801783AC(0)) {
+    if (!(p->mFlags & 0x4000) && BallGetCurrentHolder() && ScrmTestPlayFlag(0)) {
         Message_800F01CC message;
 
         memset(&message, 0, 4);
