@@ -89,10 +89,10 @@ static inline void _DbOccpSetColCol(TDbExpr_t *pExpr, int op, unsigned long long
 static inline void _DbOccpSetColInt(TDbExpr_t *pExpr, int op, unsigned long long col, int value)
 {
     pExpr->mOp = op;
-    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
+    pExpr->mRight.mValue.i = value;
     pExpr->mLeft.mValue.l = col;
     pExpr->mRight.mType = TDB_TYPE_INT;
-    pExpr->mRight.mValue.i = value;
+    pExpr->mLeft.mType = TDB_TYPE_COLUMN;
 }
 
 /* sub-expression op column */
