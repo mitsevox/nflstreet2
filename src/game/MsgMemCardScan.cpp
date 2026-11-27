@@ -160,7 +160,7 @@ extern "C" int MsgMemCardScanConsiderFile(int key, int value)
         if (!_MsgMemCardScan_aBest[0].mUnknown16 || score > _MsgMemCardScan_aBest[0].mUnknown12) {
             _MsgMemCardScan_aBest[0].mUnknown16 = 1;
             _MsgMemCardScan_aBest[0].mUnknown12 = score;
-            _MsgMemCardScan_aBest[0].mUnknown0 = fn_801D671C();
+            _MsgMemCardScan_aBest[0].mUnknown0 = MemCardMgrGetPort();
             _MsgMemCardScan_aBest[0].mUnknown4 = key;
             _MsgMemCardScan_aBest[0].mUnknown8 = value;
         }
@@ -178,7 +178,7 @@ extern "C" int MsgMemCardScanConsiderFile(int key, int value)
             if (insert) {
                 _MsgMemCardScan_aBest[i].mUnknown16 = 1;
                 _MsgMemCardScan_aBest[i].mUnknown12 = score;
-                _MsgMemCardScan_aBest[i].mUnknown0 = fn_801D671C();
+                _MsgMemCardScan_aBest[i].mUnknown0 = MemCardMgrGetPort();
                 _MsgMemCardScan_aBest[i].mUnknown4 = key;
                 _MsgMemCardScan_aBest[i].mUnknown8 = value;
                 break;

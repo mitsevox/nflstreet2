@@ -28,7 +28,7 @@ int DbUserPostLoad(int a);
 int DbUserGetCurrent(void);
 int DbUserFindIndex(int a);
 void MemCardFilesSetLoadTarget(int a, int b);
-void fn_801D6B24(char *p, int size);
+void MemCardMgrGetFileTitle(char *p, int size);
 void MemCardFilesAddSlot(int a, int b, unsigned int c, char *d);
 int DbUserGetDb(int a);
 void DbCheckVersion(int handle);
@@ -197,7 +197,7 @@ void MemCardFinishLoad(int a, int *b)
         case 0:
             slot = DbUserFindIndex(DbUserGetCurrent());
             MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(date, 17);
+            MemCardMgrGetFileTitle(date, 17);
             MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
             MemCardFilesStoreChecksum(type, slot);
             break;
@@ -226,7 +226,7 @@ void MemCardFinishLoad(int a, int *b)
             int handle = DbUserGetCurrent();
             slot = DbUserFindIndex(handle);
             MemCardFilesSetLoadTarget(type, slot);
-            fn_801D6B24(date, 17);
+            MemCardMgrGetFileTitle(date, 17);
             MemCardFilesAddSlot(type, slot, _MemCard_StreamTarget.mChecksum, date);
             DbCheckVersion(DbUserGetDb(handle));
             MemCardFilesStoreChecksum(type, slot);
@@ -264,7 +264,7 @@ void MemCardFinishLoad(int a, int *b)
             GameOptionsShutdown();
         }
         if (a == 0) {
-            fn_801D6B24(date, 17);
+            MemCardMgrGetFileTitle(date, 17);
             MemCardFilesAddSlot(type, slot, MemCardFilesComputeChecksum(type, slot), date);
         }
         break;

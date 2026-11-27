@@ -69,10 +69,10 @@ int MemCardMgrGetFileCapacity(int, unsigned int, int);
 void DbUserSave(SaveRequest_t *, SaveStreamOps_t *);
 int MemCardMgrGetSlot(void);
 void MemCardMgrGetFileName(char *, int);
-int fn_801D673C(int);
+int MemCardMgrGetCardType(int);
 void MemCardMgrFormatCardType(int, int, char *, int);
 void UserProfileTouch(signed char);
-int fn_801D6850(void);
+int MemCardMgrGetFileType(void);
 int MemCardUpdateSaveLoad(int, int *, int *);
 int MemCardMgrGetResult(int *);
 void MemCardMgrSetFileType(int);
@@ -232,12 +232,12 @@ void MemCardFilesUpdateSlot(int type, int index, int value)
     SaveSlot *slot = &_MemCardFiles_aTypes[type].mpSlots[index];
 
     if (slot->mInUse) {
-        slot->mUnknown0 = fn_801D671C();
+        slot->mUnknown0 = MemCardMgrGetPort();
         slot->mUnknown4 = MemCardMgrGetSlot();
         slot->mUnknown8 = value;
-        fn_801D6B24(slot->mUnknown10, 0x11);
+        MemCardMgrGetFileTitle(slot->mUnknown10, 0x11);
         MemCardMgrGetFileName(slot->mUnknown21, 0x20);
-        MemCardMgrFormatCardType(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
+        MemCardMgrFormatCardType(MemCardMgrGetCardType(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
         if (_MemCardFiles_bUseSlotState) {
             slot->mUnknownF = 0;
         }
@@ -258,10 +258,10 @@ void MemCardFilesAddSlot(int type, int index, int value, const char *name)
     if (type == 2 || type == 3) {
         UserProfileTouch(index);
     }
-    slot->mUnknown0 = fn_801D671C();
+    slot->mUnknown0 = MemCardMgrGetPort();
     slot->mUnknown4 = MemCardMgrGetSlot();
     MemCardMgrGetSlotInfo((signed char)slot->mUnknown4, type, slot->mUnknown21, 0x20, 0, 0, 0);
-    MemCardMgrFormatCardType(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
+    MemCardMgrFormatCardType(MemCardMgrGetCardType(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
     slot->mUnknown8 = value;
     if (_MemCardFiles_bUseSlotState) {
         slot->mUnknownF = 0;
@@ -274,7 +274,7 @@ int MemCardFilesPollOperation(int *arg)
 {
     int done;
 
-    switch (fn_801D6850()) {
+    switch (MemCardMgrGetFileType()) {
     case 1:
     case 2:
     case 3:
@@ -549,7 +549,7 @@ void MemCardFilesStartSave(int flag)
     char name[0x80];
 
     MemCardFilesGetTypeName(_MemCardFiles_iSaveType, name, 0x80);
-    fn_801D6B24(date, 0x11);
+    MemCardMgrGetFileTitle(date, 0x11);
     memset(&comment, 0, sizeof(comment));
     strcpy(comment.mTitle, "NFL STREET 2");
     sprintf(comment.mComment, "%s-%s", name, date);
