@@ -100,7 +100,7 @@ extern const signed char SNDSTRMIspeakerchannel[6][6];
 int SNDSTRM_setvol(int stream, int speaker, float vol);
 int SNDSTRM_autovol(int stream, int time, int vol);
 
-int SNDSTRMI_create(void *opts, int a, int b, void *data, int c, int d, int tap);
+int SNDSTRMI_create(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared);
 
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);

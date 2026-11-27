@@ -2,7 +2,7 @@
    and play-option setters. Each clamps a module output and passes it to the stream function of
    the same parameter; the table lists them in the order of the bank and option tables. */
 
-void *SNDSTRMI_getstreamptr(int index);
+struct SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
 
 extern "C" {
 int SNDSTRM_setazimuth(int handle, float azimuth, int time);
