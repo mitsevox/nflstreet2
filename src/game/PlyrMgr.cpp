@@ -110,7 +110,7 @@ static unsigned char _PlyrMgr_aCapsuleBonePairs[11][2] = {
 extern "C" {
 
 FieldPoint_t ScrmGetTeamSetupSpot(int team);
-int fn_800A7FD8(void);
+int GamebreakerIsCutscenePlaying(void);
 int fn_801486A0(void);
 int ScrmGetDefenseTeam(void);
 int ScrmIsFieldFlipped(void);
@@ -142,10 +142,10 @@ unsigned short fn_801BE648(void *p);
 
 void PlyrPoseBlendRawEntries(void *pBlock, int a, unsigned int index);
 void PlyrPoseSetBlend(void *pBlock, int a);
-int fn_800ADD7C(void *pElements, unsigned int index);
-int fn_800ADEFC(void *pElements, unsigned int index);
+int PlyrHandUpdateBlend(void *pElements, unsigned int index);
+int PlyrHandGetBlend(void *pElements, unsigned int index);
 void fn_800B2BC0(Object_800B26B0 *pMotion);
-void fn_8009BEA8(Object_80039F5C *p);
+void PlyrUpdateMatrices(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
 void AnimInitHeader(void *p, int a, int b, int c);
@@ -160,11 +160,11 @@ void PlyrClearPendingMsg(Object_80039F5C *p, int a);
 CollideSet_t *PlyrMgrGetCollideSet(void);
 void PlyrPoseSetFromModel(Object_80039F5C *p);
 void PlyrPoseUpdate(void *p);
-void fn_8008E978(Object_80039F5C *p);
-void fn_8009C370(Object_80039F5C *p);
-void fn_8009CDEC(Object_80039F5C *p);
+void PlayerMoveAnimUpdateState(Object_80039F5C *p);
+void PlyrApplyPose(Object_80039F5C *p);
+void PlyrTrackUpdateAll(Object_80039F5C *p);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
-void fn_8009D00C(void *p, int *pRecord);
+void PlyrTrackEnable(void *p, int *pRecord);
 int fn_8011E8A4(void);
 void fn_8011E8D8(Object_80039F5C *p);
 CollideSet_t *StatcollGetSet(void);
@@ -172,15 +172,15 @@ CollideSet_t *StatcollGetSet(void);
 
 extern "C" {
 int CharSkelGetJointByName(void *p, const char *pName);
-void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
+void PlyrHandSetPoseFor(Object_80039F5C *p, int a, int b, int c);
 void ParticlesAddPlayerEvent(int type, int a, int b, int c);
 void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsigned char index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
-void fn_8009C158(Object_80039F5C *p, int a);
+void PlyrResetPose(Object_80039F5C *p, int a);
 void PlyrInitAnimChannels(Object_80039F5C *p);
 int ScrmGetOffenseTeam(void);
 Object_8003DEC4 *PlyrObjsFindByKey(int value);
-void fn_8009CF30(void *pDst, AnimPose_t *pPose);
+void PlyrTrackInit(void *pDst, AnimPose_t *pPose);
 void PlyrCollideResetBlock(Block_80170374 *pBlock);
 void MatPush(void);
 void MatLoad(void *p);
@@ -195,12 +195,12 @@ void PlyrCollideContacts(Object_80039F5C *pA, CollideObject_t *pRecordA, Object_
                  CollideContactList_t *pContacts);
 void RumbleStart(int channel, int level, int duration);
 int PlyrObjsGetPerTeam(void);
-void fn_8009BC38(Object_80039F5C *p, Object_8003DEC4 *pObject);
-void fn_8009BD48(int *pRef, int a, int b, int c);
+void PlyrObjectInit(Object_80039F5C *p, Object_8003DEC4 *pObject);
+void PlyrRefSet(int *pRef, int a, int b, int c);
 void PlyrMoveCmdClear(PlyrMoveCmd_t *pObject);
 void fn_800AF804(void *p);
 void SortListAdd(Object_8003DEC4 *pObject, short a, unsigned short b, int index);
-int fn_8009C328(Object_80039F5C *pA, Object_80039F5C *pB);
+int PlyrSyncCompare(Object_80039F5C *pA, Object_80039F5C *pB);
 int SyncStateCompareBytes(const void *pA, const void *pB, unsigned int size);
 int Crc32Update(const void *p, int size, int seed);
 int fn_800ABDA4(int team);
@@ -209,7 +209,7 @@ int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB);
 int PlyrMgrSaveSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer);
 void AnimChanCopyChannel(void *pDest, void *pSrc);
-void fn_8009C0B8(void *pDest, void *pSrc);
+void PlyrCopyState(void *pDest, void *pSrc);
 int PlyrStarGetRingsShown(void);
 Object_80039F5C *PlyrStarGetBallPlayer(void);
 int PassIconsAreShown(void);
@@ -226,7 +226,7 @@ void fn_800C7794(Object_80039F5C *p);
 void PlyrContactHitWall(Object_80039F5C *p);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
-void fn_800A5E68(Object_80039F5C *p);
+void DefReactValidate(Object_80039F5C *p);
 void PlyrUpdateControlFlag(Object_80039F5C *p, int flag);
 void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
@@ -252,8 +252,8 @@ extern "C" void PlyrFixWristBones(Object_80039F5C *p)
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
         bone = CharSkelGetJointByName(pObject->mUnknown100, "lforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
-        fn_800ADB90(p, 0, 8, 1);
-        fn_800ADB90(p, 0, 8, 0);
+        PlyrHandSetPoseFor(p, 0, 8, 1);
+        PlyrHandSetPoseFor(p, 0, 8, 0);
     }
 }
 
@@ -312,7 +312,7 @@ extern "C" int PlyrMgrRefreshAll(PlyrMgr_t *pManager, int flags)
         Object_80039F5C *p = &pPlayer->mObject;
 
         if (flags & 1) {
-            fn_8009C158(p, 1);
+            PlyrResetPose(p, 1);
         } else {
             Object_8003DEC4 *pObject = (Object_8003DEC4 *)p->mpUnknown4;
 
@@ -324,10 +324,10 @@ extern "C" int PlyrMgrRefreshAll(PlyrMgr_t *pManager, int flags)
                         PlyrPoseBlendRawEntries(pObject, AnimMotCreateWeightList(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
                                                          pPlayer->mUnknown4528[j]), j);
                     } else {
-                        PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
+                        PlyrPoseBlendRawEntries(pObject, PlyrHandGetBlend(pObject->mUnknown116, j), j);
                     }
                 }
-                fn_8009C370(p);
+                PlyrApplyPose(p);
                 PlyrPoseSetFromModel(p);
                 LightTrackerSnap(&((Object_8003DEC4 *)p->mpUnknown4)->mUnknown4960,
                             (LightSource_t *)pObject->mUnknown972);
@@ -352,7 +352,7 @@ extern "C" int PlyrMgrCompareSnapshot(PlyrMgr_t *pA, PlyrMgr_t *pB)
             a = (Object_80039F5C *)((char *)&pA->mpPlayers[i] + ((char *)pA - (char *)_PlyrMgr_pManager));
             b = (Object_80039F5C *)((char *)&pB->mpPlayers[i] + ((char *)pB - (char *)_PlyrMgr_pManager));
 
-            result |= fn_8009C328(a, b);
+            result |= PlyrSyncCompare(a, b);
             result |= CollideCompareObjects((CollideObject_t *)((char *)a->mpUnknown3092 + ((char *)pA - (char *)_PlyrMgr_pManager)),
                                   (CollideObject_t *)((char *)b->mpUnknown3092 + ((char *)pB - (char *)_PlyrMgr_pManager)),
                                   (CollideObject_t *)a->mpUnknown3092);
@@ -431,7 +431,7 @@ extern "C" int PlyrMgrLoadSnapshot(PlyrMgr_t *pManager, char *pBuffer)
         }
         pDst->mUnknown1032 = pSrc->mUnknown1032;
         pDst->mUnknown2900 = pSrc->mUnknown2900;
-        fn_8009C0B8(pDst, pSrc);
+        PlyrCopyState(pDst, pSrc);
         pDst++;
         pSrc++;
     }
@@ -458,10 +458,10 @@ extern "C" void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char 
     Object_8003DEC4 *pObject = PlyrObjsGetBySide(team, index);
     Object_800CE674 *pReset = &pPlayer->mObject.mUnknown1240;
 
-    fn_8009BC38(p, pObject);
+    PlyrObjectInit(p, pObject);
     PlyrMoveCmdClear(&p->mUnknown512);
     PlyrMoveCmdClear(&p->mUnknown528);
-    fn_8009BD48(&p->mId, 1, team, index);
+    PlyrRefSet(&p->mId, 1, team, index);
     p->mUnknown9[0] = 1;
     p->mUnknown8 = 0xFF;
     p->mFlags = 16;
@@ -567,8 +567,8 @@ extern "C" void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock,
             fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
             AnimChanProcess(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
             PlyrPoseBlendRawEntries(pBlock, AnimMotCreateWeightList(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
-        } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
-            PlyrPoseBlendRawEntries(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
+        } else if (PlyrHandUpdateBlend(pBlock->mUnknown116, i) != 0) {
+            PlyrPoseBlendRawEntries(pBlock, PlyrHandGetBlend(pBlock->mUnknown116, i), i);
         }
     }
 }
@@ -579,7 +579,7 @@ extern "C" void PlyrAnimPostUpdate(Object_80039F5C *p, PlyrModelView_t *pBlock)
 
 extern "C" void PlyrClampBehindLine(Object_80039F5C *p)
 {
-    if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && fn_800A7FD8() == 0) {
+    if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && GamebreakerIsCutscenePlaying() == 0) {
         int team = ScrmGetDefenseTeam();
         if (team == p->mIdBytes[2]) {
             float limit = ScrmGetTeamSetupSpot(team).mY + 0.15625f + 1.1f;
@@ -595,7 +595,7 @@ extern "C" void PlyrKeepInBounds(Object_80039F5C *p)
     int mode = fn_800AD9B4();
 
     if (p->mUnknown9[2] != 0
-        && ((mode == 3 && fn_800A7FD8() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
+        && ((mode == 3 && GamebreakerIsCutscenePlaying() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
         && ScrmClassifyPosition(&p->mMotion.mPos, 0, 0) > 2) {
         if (++p->mUnknown3090 > 299) {
             if (p->mMotion.mPos.mX >= ScrmGetSidelineX()) {
@@ -723,7 +723,7 @@ extern "C" void PlyrMgrUpdate(void)
         }
         fn_800C89BC(p);
         fn_800EFFA0(0, &p->mQueue[0], p, active);
-        fn_800A5E68(p);
+        DefReactValidate(p);
         PlyrUpdatePendingMsg(p);
         PlyrUpdateControlFlag(p, active);
     }
@@ -748,7 +748,7 @@ extern "C" void PlyrMgrUpdateSkeletons(void)
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         void *pBlock = p->mpUnknown4;
-        fn_8009CDEC(p);
+        PlyrTrackUpdateAll(p);
         PlyrFixWristBones(p);
         PlyrPoseUpdate(pBlock);
     }
@@ -791,7 +791,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
         p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         Vector_80039F5C pos;
 
-        fn_8009BEA8(p);
+        PlyrUpdateMatrices(p);
         if (ScrmIsFieldFlipped()) {
             pos.mX = -p->mMotion.mPos.mX;
             pos.mY = -p->mMotion.mPos.mY;
@@ -816,7 +816,7 @@ extern "C" void PlyrMgrRunBrains(void)
     int count = _PlyrMgr_pManager->mCount;
 
     for (i = 0; i < count; i++) {
-        fn_8008E978(&_PlyrMgr_pManager->mpPlayers[i].mObject);
+        PlayerMoveAnimUpdateState(&_PlyrMgr_pManager->mpPlayers[i].mObject);
     }
 }
 
@@ -946,7 +946,7 @@ extern "C" void PlyrMgrReverseAll(void)
         fn_800F0770(0, p->mQueue, 4, 1, p);
         PlyrMoveCmdReverse(&p->mUnknown528);
         PlyrMoveCmdReverse(&p->mUnknown512);
-        fn_8009BEA8(p);
+        PlyrUpdateMatrices(p);
     }
 }
 
@@ -1051,9 +1051,9 @@ extern "C" void PlyrMgrClearStates(void)
 
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
-        fn_8009D00C(p, &p->mUnknown108);
-        fn_8009D00C(p, &p->mUnknown200);
-        fn_8009D00C(p, &p->mUnknown16);
+        PlyrTrackEnable(p, &p->mUnknown108);
+        PlyrTrackEnable(p, &p->mUnknown200);
+        PlyrTrackEnable(p, &p->mUnknown16);
         p->mFlags &= ~0x04000000;
         p->mFlags &= ~0x00800000;
         p->mFlags &= ~0x00200000;
@@ -1076,9 +1076,9 @@ extern "C" void PlyrMgrResetAll(void)
         p->mFlags &= ~0x00080000;
         p->mFlags &= ~0x0003F800;
         p->mFlags &= ~0x0000001C;
-        fn_8009D00C(p, &p->mUnknown108);
-        fn_8009D00C(p, &p->mUnknown200);
-        fn_8009D00C(p, &p->mUnknown16);
+        PlyrTrackEnable(p, &p->mUnknown108);
+        PlyrTrackEnable(p, &p->mUnknown200);
+        PlyrTrackEnable(p, &p->mUnknown16);
         PlyrCollideClearExempt(p);
         fn_800CE674(&p->mUnknown1240);
         fn_800CE684(&p->mUnknown1240);
@@ -1314,7 +1314,7 @@ extern "C" void PlyrMgrRefreshModels(void)
     for (i = 0; i < count; i++) {
         Object_80039F5C *p = &_PlyrMgr_pManager->mpPlayers[i].mObject;
         PlyrModelView_t *pBlock = (PlyrModelView_t *)p->mpUnknown4;
-        fn_8009C370(p);
+        PlyrApplyPose(p);
         PlyrPoseSetFromModel(p);
         pBlock->mFlags |= 1;
     }
@@ -1393,7 +1393,7 @@ extern "C" void PlyrAttachModel(Object_80039F5C *p)
         pObject = PlyrObjsGet((p->mId >> 8 & 0xFF) * 7 + (p->mId >> 16 & 0xFF));
     }
     p->mpUnknown4 = (Block_80170E64 *)pObject;
-    fn_8009CF30(&p->mUnknown16, &pObject->mUnknown44);
-    fn_8009CF30(&p->mUnknown108, &pObject->mUnknown44);
-    fn_8009CF30(&p->mUnknown200, &pObject->mUnknown44);
+    PlyrTrackInit(&p->mUnknown16, &pObject->mUnknown44);
+    PlyrTrackInit(&p->mUnknown108, &pObject->mUnknown44);
+    PlyrTrackInit(&p->mUnknown200, &pObject->mUnknown44);
 }

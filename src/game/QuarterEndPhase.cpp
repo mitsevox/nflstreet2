@@ -8,7 +8,7 @@
 #include "game/SyncRandGetRange.h"
 #include "game/SyncStateRegister.h"
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80096A58.h"
+#include "game/AnimPlayback.h"
 #include <string.h>
 #include "game/fn_80218FC4.h"
 #include "game/fn_800B65A0.h"
@@ -55,12 +55,12 @@ void PlayerObjSetDrawReady(int a);
 void PauseOpenScreen(int a, int b, int c);
 void PauseBlock(void);
 int PauseIsOpen(void);
-int fn_80092784(unsigned char index);
-int fn_80092830(int handle);
-void fn_80092F98(int handle);
-void fn_80093348(int handle);
-void fn_80093410(int handle);
-void fn_800940F0(int handle);
+int AnmsIsScenePlaying(unsigned char index);
+int AnmsUpdateScene(int handle);
+void AnmsCastStartedScene(int handle);
+void AnmsReleaseCastStates(int handle);
+void AnmsEndScene(int handle);
+void AnmsStopCastAnims(int handle);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 void fn_800AD910(int a, float b);
@@ -111,7 +111,7 @@ int QuarterEndIsClipPlaying(void)
 {
     int result = 0;
 
-    if (_QuarterEnd_pState->mUnknown20 != -1 && fn_80092830(_QuarterEnd_pState->mUnknown20)) {
+    if (_QuarterEnd_pState->mUnknown20 != -1 && AnmsUpdateScene(_QuarterEnd_pState->mUnknown20)) {
         result = 1;
     }
     return result;
@@ -135,17 +135,17 @@ void QuarterEndStopClips(void)
 {
     ResSync(0);
     if (_QuarterEnd_pState->mUnknown28 != -1) {
-        fn_800940F0(_QuarterEnd_pState->mUnknown28);
-        fn_80093410(_QuarterEnd_pState->mUnknown28);
+        AnmsStopCastAnims(_QuarterEnd_pState->mUnknown28);
+        AnmsEndScene(_QuarterEnd_pState->mUnknown28);
         _QuarterEnd_pState->mUnknown28 = -1;
     }
     if (_QuarterEnd_pState->mUnknown20 != -1) {
-        fn_800940F0(_QuarterEnd_pState->mUnknown20);
-        fn_80093410(_QuarterEnd_pState->mUnknown20);
+        AnmsStopCastAnims(_QuarterEnd_pState->mUnknown20);
+        AnmsEndScene(_QuarterEnd_pState->mUnknown20);
         _QuarterEnd_pState->mUnknown20 = -1;
     }
     if (_QuarterEnd_pState->mUnknown24 != -1) {
-        fn_80093410(_QuarterEnd_pState->mUnknown24);
+        AnmsEndScene(_QuarterEnd_pState->mUnknown24);
         _QuarterEnd_pState->mUnknown24 = -1;
     }
     QuarterEndCleanupStub();
@@ -174,26 +174,26 @@ void QuarterEndLoadClip(int a, void *pBuffer, int size)
     params.mUnknownE0.mUnknown0 = 1;
     params.mUnknownE0.mUnknown4.mWord = _QuarterEnd_aClipVariants[index].mUnknown0;
     params.mUnknownE0.mUnknown8.mWord = _QuarterEnd_aClipVariants[index].mUnknown4;
-    _QuarterEnd_pState->mUnknown24 = fn_80092E54(&params, pBuffer, size);
+    _QuarterEnd_pState->mUnknown24 = AnmsStartScene(&params, pBuffer, size);
 }
 
 void QuarterEndStartLoadedClip(void)
 {
-    fn_80092F98(_QuarterEnd_pState->mUnknown24);
+    AnmsCastStartedScene(_QuarterEnd_pState->mUnknown24);
     _QuarterEnd_pState->mUnknown28 = _QuarterEnd_pState->mUnknown20;
     _QuarterEnd_pState->mUnknown20 = _QuarterEnd_pState->mUnknown24;
 }
 
 void QuarterEndSwitchClip(void)
 {
-    fn_800940F0(_QuarterEnd_pState->mUnknown20);
-    fn_80093348(_QuarterEnd_pState->mUnknown20);
-    fn_80093410(_QuarterEnd_pState->mUnknown28);
-    fn_80092F98(_QuarterEnd_pState->mUnknown24);
+    AnmsStopCastAnims(_QuarterEnd_pState->mUnknown20);
+    AnmsReleaseCastStates(_QuarterEnd_pState->mUnknown20);
+    AnmsEndScene(_QuarterEnd_pState->mUnknown28);
+    AnmsCastStartedScene(_QuarterEnd_pState->mUnknown24);
     _QuarterEnd_pState->mUnknown28 = _QuarterEnd_pState->mUnknown20;
     _QuarterEnd_pState->mUnknown20 = _QuarterEnd_pState->mUnknown24;
     _QuarterEnd_pState->mUnknown24 = -1;
-    fn_80092830(_QuarterEnd_pState->mUnknown20);
+    AnmsUpdateScene(_QuarterEnd_pState->mUnknown20);
 }
 
 void QuarterEndPreloadClip(QuarterEndClip_t *pEntries, int index)
@@ -244,7 +244,7 @@ void QuarterEndEndWait(void)
 {
     _QuarterEnd_pState->mUnknown10 = 0;
     if (_QuarterEnd_pState->mUnknown12 != -1) {
-        fn_80096D14(_QuarterEnd_pState->mUnknown12);
+        AnimPlaybackStop(_QuarterEnd_pState->mUnknown12);
         _QuarterEnd_pState->mUnknown12 = -1;
     }
     if (_QuarterEnd_pState->mUnknown36) {
@@ -336,7 +336,7 @@ void QuarterEndStartVenueEffect(void)
     params.mUnknown20 = 2;
     params.mUnknown24 = 0;
     params.mUnknown12 |= 0x10;
-    _QuarterEnd_pState->mUnknown12 = fn_80096A58(&params);
+    _QuarterEnd_pState->mUnknown12 = AnimPlaybackStart(&params);
 }
 
 void QuarterEndPeriodTwoStub(void) {}
@@ -423,7 +423,7 @@ void QuarterEndPhase::OnUpdate(float f)
         break;
     case 1:
         _QuarterEnd_pState->mUnknown8++;
-        fn_80096B1C(_QuarterEnd_pState->mUnknown12);
+        AnimPlaybackUpdate(_QuarterEnd_pState->mUnknown12);
         if (_QuarterEnd_bElementShown == 0 && _QuarterEnd_pState->mUnknown8 > 59) {
             fn_80218FC4(gUISMainInfo, 3, 5, 0, 0);
             _QuarterEnd_bElementShown = 1;
@@ -437,7 +437,7 @@ void QuarterEndPhase::OnUpdate(float f)
     case 2:
         _QuarterEnd_pState->mUnknown32++;
         if (QuarterEndIsClipPlaying()) {
-            if (fn_80092784(_QuarterEnd_pState->mUnknown20)) {
+            if (AnmsIsScenePlaying(_QuarterEnd_pState->mUnknown20)) {
                 PlayerObjSetDrawReady(0);
                 BallsSetVisible(0);
             }

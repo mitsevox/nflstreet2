@@ -6,14 +6,14 @@
 
 struct Ball_t;
 
-/* Views of the records returned by fn_80093BAC, fn_80093BCC and
-   fn_80096DA8. Their original identities and the contents of the opaque
+/* Views of the records returned by AnmsGetScript, fn_80093BCC and
+   AnimPlaybackGet. Their original identities and the contents of the opaque
    spans remain unknown. */
 struct Frame_80141210 { unsigned char mUnknown0[0x14]; int mUnknown14; float mUnknown18, mUnknown1C, mUnknown20, mUnknown24; unsigned char mUnknown28[2]; unsigned short mUnknown2A; unsigned char mUnknown2C[4]; float mUnknown30, mUnknown34, mUnknown38, mUnknown3C; };
 struct Frame_800DF7CC;
 
 /* One of the mUnknown6 48-byte entries at +32 of an Actor_801C009C;
-   fn_80091644 looks for the id 'JMA'. */
+   AnmsPlaceBallObjects looks for the id 'JMA'. */
 struct Entry_80091644 {
     int mId;
     unsigned char mUnknown4[44];
@@ -35,7 +35,7 @@ struct Actor_801C009C {
     Entry_80091644 *mpUnknown20;
 };
 
-/* One of the four 912-byte records at +128 of the block fn_800925F0
+/* One of the four 912-byte records at +128 of the block AnmsInit
    allocates. */
 struct Character_80093BCC : Params_80092E54 {
     unsigned char mUnknownEC[0x2A0];
@@ -44,8 +44,8 @@ struct Character_80093BCC : Params_80092E54 {
 
 struct CondTable_t;
 
-/* Data whose word +4 fn_80094374 returns and whose words from +8
-   fn_80093BAC indexes; the bound of that array is not established. */
+/* Data whose word +4 AnmsGetBankScriptCount returns and whose words from +8
+   AnmsGetScript indexes; the bound of that array is not established. */
 struct Table_80093BAC {
     unsigned char mUnknown0[4];
     int mUnknown4;
@@ -61,8 +61,8 @@ struct Entry_80094238 {
     int mUnknown10;
 };
 
-/* The 3664 bytes at +128 of Block_800925F0 that fn_800920EC copies and
-   fn_80092168 compares. */
+/* The 3664 bytes at +128 of Block_800925F0 that AnmsSyncRestore copies and
+   AnmsSyncCompare compares. */
 struct Block_800920EC {
     Character_80093BCC mCharacters[4];
     short mUnknownE40[7];
@@ -70,7 +70,7 @@ struct Block_800920EC {
     unsigned char mUnknownE4F[1];
 };
 
-/* Allocated through SyncStateRegister under the id 'anms' (fn_800925F0). */
+/* Allocated through SyncStateRegister under the id 'anms' (AnmsInit). */
 struct Block_800925F0 {
     CondTable_t *mpUnknown0;
     Entry_80094238 mEntries[6];
@@ -78,7 +78,7 @@ struct Block_800925F0 {
     Block_800920EC mUnknown80;
 };
 
-/* 16-byte records of the two-entry table cleared by fn_8009418C. */
+/* 16-byte records of the two-entry table cleared by AnimSeqDynSlotsReset. */
 struct Slot_8009418C {
     int mUnknown0;
     int mUnknown4;
@@ -143,7 +143,7 @@ struct Entry_800AA80C {
 
 typedef void (*Callback_800AAE20)(Entry_800AA80C *pEntries, int index);
 
-/* The .data table whose address fn_800AA80C stores at +0 of
+/* The .data table whose address GameEndSetupStoryScene stores at +0 of
    Block_800AACD4: three callbacks, then the records. */
 struct Table_800AA80C {
     Callback_800AAE20 mpCallback0;
@@ -167,10 +167,10 @@ struct Block_800AACD4 {
 };
 
 extern "C" {
-Actor_801C009C *fn_80093BAC(int,int);
+Actor_801C009C *AnmsGetScript(int,int);
 Character_80093BCC *fn_80093BCC(unsigned int);
-Playback_80096DA8 *fn_80096DA8(unsigned int);
-Actor_801C009C *fn_80096DCC(unsigned int,int);
+Playback_80096DA8 *AnimPlaybackGet(unsigned int);
+Actor_801C009C *AnimPlaybackGetScript(unsigned int,int);
 }
 
 /* Partial view of the object whose word +40 fn_800C6640 decodes as a
@@ -226,9 +226,9 @@ struct Block_800B62D8 {
     unsigned char mUnknown12[10];
 };
 
-/* Stack block whose address fn_800A4E8C passes as the fourth argument of the
+/* Stack block whose address DefReactTryStart passes as the fourth argument of the
    callbacks of the .data table 0x802D7E20; the word at +16 is the level
-   fn_800A481C switches on. */
+   DefReactParamsBoost switches on. */
 struct Params_800A4E8C {
     int mUnknown0;
     int mUnknown4;

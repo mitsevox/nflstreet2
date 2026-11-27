@@ -29,7 +29,7 @@ extern unsigned char lbl_803EAD19;
 int PlayerLocoGetLowerAnkle(Object_80039F5C *p);
 int PlayerLocoFindTableEntry(Table_80089904 *pTable, int value, int a, unsigned char b);
 float fn_8012506C(Object_80039F5C *p, int value);
-int fn_800ACFA8(Object_80039F5C *p);
+int GameSkillGetPitchThreshold(Object_80039F5C *p);
 Object_80039F5C *fn_80105384(Object_80039F5C *p, int value, FieldPoint_t *pOut);
 int OptionRunCanPitchTo(Object_80039F5C *p, FieldPoint_t *pPoint, Object_80039F5C *pOther);
 int fn_801066D0(Object_80039F5C *p, Object_80039F5C *pOther, int value);
@@ -86,8 +86,8 @@ extern "C" {
 extern float gPlyrMoveFwdSpeed;
 
 void fn_8009BD60(Object_80039F5C *p);
-int fn_800A7EF4(unsigned char a);
-void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
+int GamebreakerGetSpeedFlag(unsigned char a);
+void PlyrHandSetPoseFor(Object_80039F5C *p, int a, int b, int c);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
 void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
@@ -131,7 +131,7 @@ int MathAngleDiff(int a, int b);
 #include "game/SyncRandGetRange.h"
 #include "game/fn_801BE60C.h"
 #include "engine/llquat.h"
-#include "game/fn_80094488.h"
+#include "game/AnmsOutline.h"
 #include <math.h>
 
 struct Record_800DC584 {
@@ -243,11 +243,11 @@ void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, un
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
-void fn_8009A260(Object_80039F5C *p);
-int fn_8009B9A8(int a);
-float fn_8009BB54(int a);
+void CatchResetHeightBoost(Object_80039F5C *p);
+int CelebrationBlockIsActive(int a);
+float CelebrationBlockGetTimeLeft(int a);
 void fn_8009BD60(Object_80039F5C *p);
-void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, float *pRot);
+void PlyrGetBallHoldTransform(Object_80039F5C *p, Vector_80039F5C *pPos, float *pRot);
 void fn_8009CE88(Object_80039F5C *p, int *pRecord, int a);
 void fn_8009D1AC(Object_80039F5C *p);
 int fn_8009D1F4(Object_80039F5C *p);
@@ -295,7 +295,7 @@ int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
 void fn_801BE67C(void *pA, void *pB, void *pC, Object_80039F5C *p);
 void BallLaunchWithVelocity(Ball_t *pBall, Vector_80039F5C *pVelocity, int mode, float spin, float rate);
 Object_80039F5C *fn_80124C28(Object_80039F5C *p, float *pOut, int angle, float a, float b, int facing);
-void fn_800ACDE4(Object_80039F5C *p, float *pChance, float *pAngle);
+void GameSkillAdjustDiveChance(Object_80039F5C *p, float *pChance, float *pAngle);
 int ScrmGetSnapOffense(void);
 float SyncRandGetFloat(int a);
 int PlayerActionCharAnimLoad(Object_80039F5C *p, float *pValue);
@@ -390,17 +390,17 @@ struct Block_800E0850 {
     unsigned char mUnknown28, mUnknown29;
 };
 extern "C" {
-Item_800E0694 *fn_8009A63C(int handle);
+Item_800E0694 *CatchAnimGetRecord(int handle);
 void fn_80099F04(Object_80039F5C *p, int handle, int index);
 void fn_800A2190(int a);
-void fn_8009A5DC(int a, int b, void *pKind, int *pHandle);
-float fn_8009A270(int handle);
-int fn_8009A578(int handle);
+void CatchAnimUnpackHandle(int a, int b, void *pKind, int *pHandle);
+float CatchAnimGetTime(int handle);
+int CatchAnimGetType(int handle);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
-int fn_8009A68C(Object_80039F5C *p);
-unsigned char *fn_8009CC2C(Object_80039F5C *p, void (*callback)(int, Vector_80039F5C *, unsigned char *), int a, int b);
+int CatchIsInCatchAnim(Object_80039F5C *p);
+unsigned char *PlyrTrackStartHead(Object_80039F5C *p, void (*callback)(int, Vector_80039F5C *, unsigned char *), int a, int b);
 void PlyrPoseDelayBlink(Block_80170E64 *p);
 int fn_800C4B6C(Object_80039F5C *p);
 }
@@ -436,7 +436,7 @@ int fn_8009FE24(Object_80039F5C *p);
 int fn_800B0F98(void);
 int fn_800B146C(void);
 void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut);
-int fn_8009F780(void);
+int DefCoverIsAlignHeld(void);
 int ScrmOffenseAnyPlaced(void);
 void PlyrAlignGetCallTarget(Object_80039F5C *p, FieldPoint_t *pOut);
 void Vec2FromAngle(FieldPoint_t *pOut, int angle, float magnitude);
@@ -455,9 +455,9 @@ struct Character_800DF7CC {
 };
 extern "C" {
 float AnimSequencerGetTicksPerSecond(Object_80039F5C *);
-Attachment_800DF7CC *fn_80093C08(unsigned short);
-int fn_800943B0(unsigned short);
-void fn_8009134C(unsigned short);
+Attachment_800DF7CC *AnmsGetSceneAttachments(unsigned short);
+int AnmsIsScenePaused(unsigned short);
+void AnmsStopCamShot(unsigned short);
 int AnimFileGetSlotFromFileNum(int objectType, int fileNum);
 void *AnimFileGetPtrFromSlot(unsigned int);
 AnimScript_t *AnimFileGetAnimation(void *, int);
@@ -469,7 +469,7 @@ unsigned int AnimFileGetSiblingSlot(unsigned int, int);
 int AnimFileGetStateQueryIndex(int state, unsigned int slot);
 }
 extern "C" int BallStateGet(Ball_t *, int);
-extern "C" void fn_800ADBC0(Object_80039F5C *, int, int, int);
+extern "C" void PlyrHandSetPoseByKey(Object_80039F5C *, int, int, int);
 extern "C" void ScrmPlayerToHuddle(Object_80039F5C *);
 extern float gFrameTimeScale;
 

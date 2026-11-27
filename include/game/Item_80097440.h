@@ -5,7 +5,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/cu_8008E978.h"
 
-/* 60-byte records that fn_80097440 copies into the buffer at +3048 of
+/* 60-byte records that CatchAnimBuildMirrorTable copies into the buffer at +3048 of
    Record_80097518. */
 struct Item_80097440 {
     unsigned char mUnknown0[4];
@@ -42,7 +42,7 @@ struct Record_80097518 {
     unsigned short mUnknownBFA[7];
 };
 
-/* Block at player +336 passed to fn_80099734, fn_800997F4 and fn_8009817C.
+/* Block at player +336 passed to fn_80099734, fn_800997F4 and CatchAnimSearch.
    Only the accessed fields are declared. */
 struct Block_800997F4 {
     int mUnknown0;
@@ -52,7 +52,7 @@ struct Block_800997F4 {
     float mUnknown16;
 };
 
-/* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
+/* 60-byte payload fn_801BE60C returns for the state CatchAnimStateUpdate runs; phase
    0 initialises it from the template at +4 of Block_80099630. */
 struct Block_8009A344 {
     int mUnknown0;
@@ -79,7 +79,7 @@ struct Block_8009AB34 {
     unsigned char mUnknown8;
 };
 
-/* 16-byte callback records copied into Block_8009B5E8 by fn_8009B87C. */
+/* 16-byte callback records copied into Block_8009B5E8 by CelebrationBlocksSetEntry. */
 struct Entry_8009B87C {
     int (*mpCallback0)(int value, int *pData);
     int (*mpCallback4)(int *pData);
@@ -87,8 +87,8 @@ struct Entry_8009B87C {
     float (*mpCallbackC)(int *pData);
 };
 
-/* The 300 bytes at +4 of Block_8009B720 that fn_8009B698 copies and
-   fn_8009B5E8 checks. */
+/* The 300 bytes at +4 of Block_8009B720 that CelebrationBlockLoad copies and
+   CelebrationBlockCompare checks. */
 struct Block_8009B5E8 {
     int mUnknown0;
     Entry_8009B87C mEntries[2];
@@ -113,13 +113,13 @@ struct Entry_8009C684 {
 };
 
 /* The 8 bytes at +16 of Entry_8009C684 that fn_8009CD00 returns for the
-   fn_80096E74 callback. */
+   PlyrReachTrackWrist callback. */
 struct Data_80096E74 {
     unsigned int mUnknown0;
     unsigned char mUnknown4;
 };
 
-/* Record passed to fn_8009C6F4, fn_8009C814 and fn_8009C88C. Only the
+/* Record passed to PlyrTrackStart, PlyrTrackCheckHeadLimit and PlyrTrackUpdate. Only the
    accessed fields are declared; the size is unknown. */
 struct Block_8009C6F4 {
     int mUnknown0;
@@ -151,7 +151,7 @@ struct Block_8009D474 {
     int mUnknown98;
 };
 
-/* One of the 24 four-float boxes fn_8009E674 lays out at +0x18 of
+/* One of the 24 four-float boxes DefCoverBuildZones lays out at +0x18 of
    State_8011F4EC. */
 struct Box_8009E674 {
     float mUnknown0;

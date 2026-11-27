@@ -546,7 +546,7 @@ int BigObjAnimOnSequence(BigObjAnimVariantTable_t *pTable, unsigned short c, voi
         unsigned char b1 = pExtra->mUnknown1705;
         unsigned char b2 = pExtra->mUnknown1706;
         unsigned char b3 = pExtra->mUnknown1707;
-        AnimSeqncrStatic_t *pFrame = AnimSeqncrGetStaticPtr(fn_80093BAC(b0, b1), b2);
+        AnimSeqncrStatic_t *pFrame = AnimSeqncrGetStaticPtr(AnmsGetScript(b0, b1), b2);
 
         AnimChanStartAnim(a, b, AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14), b3, c, pObject, 1.0f);
     }

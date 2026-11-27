@@ -51,10 +51,10 @@ void GlowTextureUnload(void *);
 void GlowDraw(void *, void *);
 void EffectBlendBegin(void *, int);
 void EffectBlendEnd(void *, int);
-int fn_800A33B0(void);
-int fn_800A33B8(void);
-int fn_800A3420(void);
-Vector_80039F5C *fn_800A3438(void);
+int StadiumIsWindEnabled(void);
+int StadiumGetWeatherMode(void);
+int StadiumGetSkyState(void);
+Vector_80039F5C *StadiumGetSunPos(void);
 void MatSetStack(int);
 void MatPush(void);
 void MatMakeUnit(void);
@@ -197,13 +197,13 @@ void GlowInit(void *owner)
     for (unsigned int i = 0; i < 40; ++i) _Glow_apLevelGlows[i] = 0;
     GlowInitGroup(0, gLevelData->mUnknown80 + 17);
     _Glow_iNextElement = 0; _Glow_iNextGlow = 0; GlowRenderInit(); _Glow_nFlickers = 0;
-    if (fn_800A33B0()) {
-        if (fn_800A3420() == 1) { if (fn_800A33B8() == 0) _GlowCreateEnvFlare(); }
-        else if (fn_800A3420() == 2) { if (fn_800A33B8() == 0) _GlowCreateEnvFlare(); }
+    if (StadiumIsWindEnabled()) {
+        if (StadiumGetSkyState() == 1) { if (StadiumGetWeatherMode() == 0) _GlowCreateEnvFlare(); }
+        else if (StadiumGetSkyState() == 2) { if (StadiumGetWeatherMode() == 0) _GlowCreateEnvFlare(); }
         if (_Glow_pEnvFlare) {
-            _Glow_pEnvFlare->mUnknown18.mX = fn_800A3438()->mX;
-            _Glow_pEnvFlare->mUnknown18.mY = fn_800A3438()->mY;
-            _Glow_pEnvFlare->mUnknown18.mZ = fn_800A3438()->mZ;
+            _Glow_pEnvFlare->mUnknown18.mX = StadiumGetSunPos()->mX;
+            _Glow_pEnvFlare->mUnknown18.mY = StadiumGetSunPos()->mY;
+            _Glow_pEnvFlare->mUnknown18.mZ = StadiumGetSunPos()->mZ;
         }
     }
     if (gLevelData->mUnknown80 != 0) {
@@ -341,7 +341,7 @@ extern "C" {
 int PlyrObjsGetCount(void);
 void TeamDbOpenQuery(DbCursor *pObject, int a);
 void TeamDbGetColors(DbCursor *pObject, void *pBuffer);
-int fn_800A7EF4(unsigned char a);
+int GamebreakerGetSpeedFlag(unsigned char a);
 int fn_800C8744(int team);
 int GameTextGetPadPlayer(int a);
 void MatCopyMatrix(void *p, float (*m)[4]);
@@ -486,7 +486,7 @@ void ParticleTrailUpdate(Object_8003DEC4 *pObject)
         }
     }
 
-    if (fn_800A7EF4(pObject->mUnknown4968) == 0) {
+    if (GamebreakerGetSpeedFlag(pObject->mUnknown4968) == 0) {
         pData->mUnknown240 = _ParticleTrail_aColors[9];
     } else if (pData->mUnknown238 == -1) {
         pData->mUnknown240 = _ParticleTrail_aColors[8];

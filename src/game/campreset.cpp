@@ -25,7 +25,7 @@ struct CamPresetEase_t {
 };
 
 extern "C" {
-int fn_800A34E0(void);
+int StadiumGetCameraPreset(void);
 GameCamera_t *CamGameGetCamera(int index);
 void CamGameProcess(void);
 void CamGameSetModeAll(int a);
@@ -83,7 +83,7 @@ void CamGameApplyUserCamera(void)
         b = pCamera->mUnknownA0;
         id = pCamera->mUnknown9C;
     }
-    next = fn_800A34E0();
+    next = StadiumGetCameraPreset();
     if (next <= 18 && next != id) {
         CamGameChangeType(0, next);
         CamGameSetModeAll(b);

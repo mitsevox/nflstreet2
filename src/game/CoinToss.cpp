@@ -72,10 +72,10 @@ struct CoinTossCamEntry_t {
 extern "C" {
 void fn_800CC560(int a);
 void fn_800FF6D8(Object_80039F5C *p);
-void fn_800A3B5C(Object_80039F5C *p);
+void PlyrOverlayAnimStopAll(Object_80039F5C *p);
 void InGameSetInputPaused(int unknown);
 int FELoopIsMainFEActive(void);
-void fn_8009BD48(int *pRef, int a, int b, int c);
+void PlyrRefSet(int *pRef, int a, int b, int c);
 void CamInterpUpdateEaseInOut(CamInterp_t *pInterp, int steps);
 void CamInterpUpdateSine(CamInterp_t *pInterp, int steps);
 void CamShotPlay(CoinTossCamEntry_t *pEntries);
@@ -332,7 +332,7 @@ void CoinTossLockPlayer(Object_80039F5C *p)
 void CoinTossUnlockPlayer(Object_80039F5C *p)
 {
     if (p != 0) {
-        fn_800A3B5C(p);
+        PlyrOverlayAnimStopAll(p);
     }
 }
 
@@ -375,12 +375,12 @@ void CoinTossStart(void)
     _CoinToss_pState->mUnknown43 = -1;
     _CoinToss_pState->mUnknown45 = 0;
     _CoinToss_pState->mTimer = -1;
-    fn_8009BD48(&_CoinToss_pState->mRefs0[0], 1, 0, 0);
-    fn_8009BD48(&_CoinToss_pState->mRefs1[0], 1, 1, 0);
-    fn_8009BD48(&_CoinToss_pState->mRefs0[1], 1, 0, 6);
-    fn_8009BD48(&_CoinToss_pState->mRefs0[2], 1, 0, 7);
-    fn_8009BD48(&_CoinToss_pState->mRefs1[1], 1, 1, 6);
-    fn_8009BD48(&_CoinToss_pState->mRefs1[2], 1, 1, 7);
+    PlyrRefSet(&_CoinToss_pState->mRefs0[0], 1, 0, 0);
+    PlyrRefSet(&_CoinToss_pState->mRefs1[0], 1, 1, 0);
+    PlyrRefSet(&_CoinToss_pState->mRefs0[1], 1, 0, 6);
+    PlyrRefSet(&_CoinToss_pState->mRefs0[2], 1, 0, 7);
+    PlyrRefSet(&_CoinToss_pState->mRefs1[1], 1, 1, 6);
+    PlyrRefSet(&_CoinToss_pState->mRefs1[2], 1, 1, 7);
     CoinTossHoldPlayer(fn_8009BCE8(&_CoinToss_pState->mRefs0[0]));
     CoinTossHoldPlayer(fn_8009BCE8(&_CoinToss_pState->mRefs0[1]));
     CoinTossHoldPlayer(fn_8009BCE8(&_CoinToss_pState->mRefs0[2]));

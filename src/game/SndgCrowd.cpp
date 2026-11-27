@@ -13,7 +13,7 @@ extern char lbl_802EC018[];
 
 void *memset(void *pDest, int value, unsigned int size);
 int SndEnabled(void);
-int fn_800A350C(void);
+int StadiumHasCrowd(void);
 }
 
 static ModuleDependency sDependencies[] = { &gSndgPathfinder, 0 };
@@ -75,7 +75,7 @@ int SndgCrowdTriggerEvent(int index, int unknown)
     } else {
         flag = 1;
     }
-    if (fn_800A350C()) {
+    if (StadiumHasCrowd()) {
         result = SndgPathPostEvent(0x14000001, sIds[flag ? 0 : 1][index]);
     }
     return result;

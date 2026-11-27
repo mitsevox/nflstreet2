@@ -41,7 +41,7 @@ void SndgMusicInit(void);
 void SndgMusicShutdown(void);
 void PortraitSystemInit(void);
 void PortraitSystemShutdown(void);
-void fn_8008FAA8(void);
+void PlayerAnimPreloadAlloc(void);
 void fn_8015E548(void);
 void fn_8015E65C(void);
 void fn_8015E684(void);
@@ -442,7 +442,7 @@ const char *SysPreLoad::GetName() { return "SysPreLoad"; }
 
 int SysPreLoad::Init()
 {
-    fn_8008FAA8();
+    PlayerAnimPreloadAlloc();
     return 1;
 }
 

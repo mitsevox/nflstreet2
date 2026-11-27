@@ -82,10 +82,10 @@ void fn_80190F18(BitStream_t *, int);
 void fn_800B4D7C();
 void fn_800B4A88();
 void fn_801BE030(int, void **);
-void fn_800A3D70();
-void fn_800A3C14();
-void fn_800AE10C();
-void fn_800ADE6C();
+void PlyrOverlayAnimRegisterCallbacks();
+void PlyrOverlayAnimLoad();
+void PlyrHandInitCallbacks();
+void PlyrHandLoadFrames();
 AnimSkeleton_t *ResLoad(void *, int, int);
 void CharRelocateSkeleton(AnimSkeleton_t *);
 void CharSkelMirrorRest(AnimSkeleton_t *, AnimSkeleton_t *);
@@ -147,7 +147,7 @@ void PlaTexCacheSetCapFace(int, int, int, int, int);
 void PlyrObjsSetHeadSkeletons();
 
 void PlaTexCacheLoadAllNow();
-int fn_800A3420();
+int StadiumGetSkyState();
 void PlayerLookHideSwitch28();
 void PlaTexCacheDiscardRequests();
 int FELoopIsMainFEActive();
@@ -164,7 +164,7 @@ int ObjDelType(int);
 void PlaTexCacheStop();
 void PlayerLookClose();
 int PlaTexCacheGetArchive();
-void fn_8009BD48(int *, int, int, int);
+void PlyrRefSet(int *, int, int, int);
 int PlyrPoseGetStreamBits(int);
 void ReplayRegisterChannel(void (*)(BitStream_t *),
                  void (*)(BitStream_t *, BitStream_t *, BitStream_t *,
@@ -645,12 +645,12 @@ void PlyrObjsInitStateTables(int mode) {
   else
     fn_800B4A88();
   fn_801BE030(1, &lbl_803EAB3C);
-  fn_800A3D70();
+  PlyrOverlayAnimRegisterCallbacks();
   fn_801BE030(3, &lbl_803EA9FC);
-  fn_800A3C14();
-  fn_800AE10C();
+  PlyrOverlayAnimLoad();
+  PlyrHandInitCallbacks();
   fn_801BE030(4, &lbl_803EAAE0);
-  fn_800ADE6C();
+  PlyrHandLoadFrames();
 }
 static inline void ZeroRoot(AnimSkeleton_t *skeleton) {
   float *root = (float *)((char *)skeleton + 16);
@@ -887,7 +887,7 @@ int PlyrObjsCreate(int count, int owner, int mode) {
   int result = PlyrObjsCreatePlayers(owner, mode);
   if (!mode) {
     PlaTexCacheLoadAllNow();
-    if (fn_800A3420() == 3)
+    if (StadiumGetSkyState() == 3)
       PlayerLookHideSwitch28();
   } else
     PlaTexCacheDiscardRequests();
@@ -993,7 +993,7 @@ Object_8003DEC4 *PlyrObjsFindNearest(Point2_t *point, float *distance) {
 AnimSkeleton_t *PlyrObjsGetBodySkeleton() { return _PlyrObjs_pBodySkel; }
 AnimSkeleton_t *PlyrObjsGetSkel19() { return _PlyrObjs_pSkel19; }
 void PlyrObjsGetPlayerRef(Block_80170E64 *object, int *reference) {
-  fn_8009BD48(reference, 0, 0, 0);
+  PlyrRefSet(reference, 0, 0, 0);
   if (object)
     for (unsigned int team = 0; team < 2; ++team)
       for (unsigned int i = 0; i < 7; ++i) {

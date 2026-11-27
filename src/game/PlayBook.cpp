@@ -766,7 +766,7 @@ void fn_800B0DA4(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
-void fn_800A6F04(int team);
+void GamebreakerBoostRatings(int team);
 int ScrmGetScoreGoal(int *p);
 int ScrmGetTeamScore(int team);
 int ScrmGetDown(void);
@@ -811,7 +811,7 @@ void PlayCallApplyPlay(int team, int value)
                 fn_800B49EC(p->mRatings, p->mUnknown3020);
                 fn_800B4798(p->mRatings, (unsigned char)t, i, &p->mUnknown2900);
             }
-            fn_800A6F04((unsigned char)t);
+            GamebreakerBoostRatings((unsigned char)t);
         }
     }
 }
@@ -1291,8 +1291,8 @@ int PlayCallScriptRunDefense(int mode)
 
 extern "C" {
 int ChallengeIsActive(void);
-int fn_800A82FC(int team);
-int fn_800A8430(int team);
+int GamebreakerUpdateAiTrigger(int team);
+int GamebreakerGetPlayMode(int team);
 int fn_800C8744(int team);
 int fn_801485D4(void);
 int PlayBookGetDatabase(int team);
@@ -1622,7 +1622,7 @@ void PlayTrackWeightOffense(int team, PlayCandidate_t *pList, unsigned int count
         if (scale < 0.0f)
             scale = 0.0f;
 
-        if (fn_800A82FC(ScrmGetOffenseTeam())) {
+        if (GamebreakerUpdateAiTrigger(ScrmGetOffenseTeam())) {
             if (ScrmGetDown() != 6) {
                 if (group == 2)
                     pList[i].mUnknown4 = 0;
@@ -1686,7 +1686,7 @@ void PlayTrackWeightDefense(int team, PlayCandidate_t *pList, unsigned int count
 
 void PlayTrackFilterByMode(int team, PlayCandidate_t *pList, unsigned int count)
 {
-    int mode = fn_800A8430(team);
+    int mode = GamebreakerGetPlayMode(team);
 
     if (mode == 0)
         return;
@@ -1885,7 +1885,7 @@ void PlayTrackWeightCandidates(int team, PlayCandidate_t *pList, unsigned int co
     else
         PlayTrackWeightDefense(team, pList, count);
 
-    if (fn_800A82FC(team) && ScrmGetDown() != 6)
+    if (GamebreakerUpdateAiTrigger(team) && ScrmGetDown() != 6)
         PlayTrackFilterByMode(team, pList, count);
 
     if (ChallengeIsActive() && team == ScrmGetOffenseTeam() && fn_800B65A0(team) == 0xFF) {

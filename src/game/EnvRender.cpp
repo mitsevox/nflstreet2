@@ -38,10 +38,10 @@ unsigned char ScreenTintIsActive(int index);
 void FieldMarkerDrawBeams(void);
 void EnvApplyFog(void);
 void FieldMarkerDrawArrows(void);
-int fn_800A262C(void);
-int fn_800A26C4(void);
-int fn_800A34B0(void);
-int fn_800A34BC(void);
+int StadiumCheckCamPastNearEnd(void);
+int StadiumCheckCamPastFarEnd(void);
+int StadiumShowsMarkerBeams(void);
+int StadiumShowsMarkerArrows(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int a);
 void MatPush(void);
@@ -182,9 +182,9 @@ EnvFogSettings *EnvGetFogSettings(int index)
 
 void EnvApplyFog(void)
 {
-    EnvFogSettings *pEntry = fn_800A34EC();
-    unsigned int color = fn_800A3410() & 0xFFFFFF;
-    float density = fn_800A3400();
+    EnvFogSettings *pEntry = StadiumGetFogSettings();
+    unsigned int color = StadiumGetFogColor() & 0xFFFFFF;
+    float density = StadiumGetFogDensity();
 
     if (density > 0.0f) {
         LLFogSetType(pEntry->mUnknown8);
@@ -320,13 +320,13 @@ int EnvDrawOverlay(EnvObjOverlay *pOwner)
         ModelObjStoreMatrix(&pObject->mUnknown24[8], handle);
         ModelObjDraw(&pObject->mUnknown24[8], handle);
     }
-    if (fn_800A262C()) {
+    if (StadiumCheckCamPastNearEnd()) {
         ModelObjSetAmbientColor(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, alpha);
         ModelObjSetAmbientColor(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, alpha);
         ModelObjStoreMatrix(&pObject->mUnknown24[6], handle);
         ModelObjDraw(&pObject->mUnknown24[6], handle);
     }
-    if (fn_800A26C4()) {
+    if (StadiumCheckCamPastFarEnd()) {
         ModelObjSetAmbientColor(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, alpha);
         ModelObjSetAmbientColor(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, alpha);
         ModelObjStoreMatrix(&pObject->mUnknown24[5], handle);
@@ -355,13 +355,13 @@ int EnvDraw(EnvObj *pObject)
     ModelObjSetDepthOffset(&pObject->mUnknown24[3], _EnvRender_fLayer3Value);
     ModelObjStoreMatrix(&pObject->mUnknown24[3], handle);
     ModelObjDraw(&pObject->mUnknown24[3], handle);
-    if (!fn_800A262C()) {
+    if (!StadiumCheckCamPastNearEnd()) {
         ModelObjSetAmbientColor(&pObject->mUnknown24[6], 0, 1.0f, 1.0f, 1.0f, 0.51f);
         ModelObjSetAmbientColor(&pObject->mUnknown24[6], 1, 1.0f, 1.0f, 1.0f, 0.51f);
         ModelObjStoreMatrix(&pObject->mUnknown24[6], handle);
         ModelObjDraw(&pObject->mUnknown24[6], handle);
     }
-    if (!fn_800A26C4()) {
+    if (!StadiumCheckCamPastFarEnd()) {
         ModelObjSetAmbientColor(&pObject->mUnknown24[5], 0, 1.0f, 1.0f, 1.0f, 0.51f);
         ModelObjSetAmbientColor(&pObject->mUnknown24[5], 1, 1.0f, 1.0f, 1.0f, 0.51f);
         ModelObjStoreMatrix(&pObject->mUnknown24[5], handle);
@@ -379,10 +379,10 @@ int EnvDraw(EnvObj *pObject)
     }
     MatSetStack(VptGetMatrixStack());
     MatPop();
-    if (fn_800A34B0()) {
+    if (StadiumShowsMarkerBeams()) {
         FieldMarkerDrawBeams();
     }
-    if (fn_800A34BC()) {
+    if (StadiumShowsMarkerArrows()) {
         FieldMarkerDrawArrows();
     }
     return 0;

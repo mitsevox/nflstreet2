@@ -125,8 +125,8 @@ void ArrowSetPointBuffer(void *p, void *pData, int a);
 void ArrowReset(void *p);
 int PauseIsOpen(void);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-void *fn_800A336C(void);
-int fn_800A33A4(void);
+void *StadiumGetResDevice(void);
+int StadiumGetDivotResIndex(void);
 int fn_800C4E18(Object_80039F5C *pPlayer);
 Object_80039F5C *BallGetCurrentHolder(void);
 int ScrmIsFieldFlipped(void);
@@ -494,7 +494,7 @@ void DivotLoadVariants(void)
     for (int i = 0; i < DIVOT_NUM_TYPES; i++) {
         counts[i] = 0;
     }
-    for (pSurface = XmlFindPath(ResLoad(fn_800A336C(), fn_800A33A4(), 1), "surface"); pSurface;
+    for (pSurface = XmlFindPath(ResLoad(StadiumGetResDevice(), StadiumGetDivotResIndex(), 1), "surface"); pSurface;
          pSurface = XmlFindNext(pSurface)) {
         int surface = XmlGetAttrInt(pSurface, "surfType", DIVOT_SURFACE_NONE);
 
@@ -511,7 +511,7 @@ void DivotLoadVariants(void)
             }
         }
     }
-    ResUnLoad(fn_800A336C(), fn_800A33A4());
+    ResUnLoad(StadiumGetResDevice(), StadiumGetDivotResIndex());
 }
 
 void DivotInit(void)
@@ -784,7 +784,7 @@ int DivotGetVariantCount(int type)
 
 int DivotGetLevelResource(void)
 {
-    return (int)fn_800A336C();
+    return (int)StadiumGetResDevice();
 }
 
 int DivotGetTextureRef(int type, int i)

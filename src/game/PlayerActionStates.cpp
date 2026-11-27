@@ -16,7 +16,7 @@ extern "C" int PlayerActionTakeFlag1000(Object_80039F5C *p)
 extern "C" void PlayerActionGetJointPose(Object_80039F5C *p, int joint, Vector_80039F5C *pPos, QuatEulerAngles_t *pAngles)
 {
     float rot[4];
-    fn_8009BFD0(p, pPos, rot);
+    PlyrGetBallHoldTransform(p, pPos, rot);
     QuatToEuler(pAngles, rot);
 }
 
@@ -36,7 +36,7 @@ extern "C" void PlayerActionCharAnimUpdateAttachments(Object_80039F5C *p, Charac
 {
     float time = (float)frame / AnimSequencerGetTicksPerSecond(p);
     Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
-    fn_80093BAC(pView->mUnknown0, pView->mUnknown4);
+    AnmsGetScript(pView->mUnknown0, pView->mUnknown4);
     Vector_80039F5C position;
     QuatEulerAngles_t angles;
     Ball_t *pBall;
@@ -96,7 +96,7 @@ extern "C" int PlayerActionCharAnimLoad(Object_80039F5C *p, float *pValue)
     Character_80093BCC *pCharacter = fn_80093BCC(pBlock->mUnknown8);
     if (pCharacter) {
         Character_800DF7CC *pView = (Character_800DF7CC *)pCharacter;
-        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4), pBlock->mUnknown9);
+        Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(AnmsGetScript(pCharacter->mUnknown0, pCharacter->mUnknown4), pBlock->mUnknown9);
         p->mpUnknown4->mUnknown20 |= 0x1000;
         unsigned int handle = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
         void *pData = AnimFileGetPtrFromSlot(handle);
@@ -166,7 +166,7 @@ extern "C" void PlayerActionCharAnimEnter(Object_80039F5C *p)
 extern "C" int PlayerActionCharAnimExit(Object_80039F5C *p)
 {
     Character_80093BCC *pCharacter = fn_80093BCC(p->mUnknown344);
-    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    Actor_801C009C *pActor = AnmsGetScript(pCharacter->mUnknown0, pCharacter->mUnknown4);
     PlyrObjsSetDrawFlag(1);
     p->mpUnknown4->mUnknown20 &= ~0x80;
     if (!FELoopIsMainFEActive() && fn_800AD9B4() == 7) {
@@ -200,21 +200,21 @@ extern "C" int PlayerActionCharAnimUpdate(Object_80039F5C *p)
     int result = 0;
     Block_800DFCEC *pBlock = (Block_800DFCEC *)&p->mUnknown336;
     Character_80093BCC *pCharacter = fn_80093BCC(pBlock->mUnknown8);
-    Attachment_800DF7CC *pAttachments = fn_80093C08(pBlock->mUnknown8);
+    Attachment_800DF7CC *pAttachments = AnmsGetSceneAttachments(pBlock->mUnknown8);
     if (!pCharacter || !pAttachments) {
-        fn_800ADBC0(p, 1, 8, 0);
-        fn_800ADBC0(p, 1, 8, 1);
+        PlyrHandSetPoseByKey(p, 1, 8, 0);
+        PlyrHandSetPoseByKey(p, 1, 8, 1);
         return 1;
     }
-    Actor_801C009C *pActor = fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
+    Actor_801C009C *pActor = AnmsGetScript(pCharacter->mUnknown0, pCharacter->mUnknown4);
     Frame_800DF7CC *pFrame = AnimSeqncrGetPlayerPtr(pActor, pBlock->mUnknown9);
     PlayerActionCharAnimNotify(p, pCharacter, (unsigned int)pBlock->mUnknown0);
     PlayerActionCharAnimUpdateAttachments(p, pCharacter, pAttachments, pFrame, pBlock->mUnknown9, (unsigned int)pBlock->mUnknown0);
-    if (!fn_800943B0(pBlock->mUnknown8)) {
+    if (!AnmsIsScenePaused(pBlock->mUnknown8)) {
     float scale = gFrameTimeScale;
     pBlock->mUnknown0 += scale;
     if (!(pBlock->mUnknown0 <= pBlock->mUnknown4) && !pBlock->mUnknown13) {
-        fn_8009134C(pBlock->mUnknown8);
+        AnmsStopCamShot(pBlock->mUnknown8);
         p->mpUnknown4->mUnknown20 &= ~0x1000;
         p->mpUnknown4->mUnknown20 &= ~0x80;
         if (!(pActor->mUnknown8 & 64)) {
@@ -238,8 +238,8 @@ extern "C" int PlayerActionCharAnimUpdate(Object_80039F5C *p)
             }
             }
         }
-        fn_800ADBC0(p, 1, 8, 0);
-        fn_800ADBC0(p, 1, 8, 1);
+        PlyrHandSetPoseByKey(p, 1, 8, 0);
+        PlyrHandSetPoseByKey(p, 1, 8, 1);
         result = 1;
     }
     }
@@ -411,7 +411,7 @@ extern "C" void PlayerActionCatchResolve(Object_80039F5C *p, int handle, int ind
     if (p->mRatings[0] < lbl_803EAD34) {
         unsigned int threshold = p->mRatings[0] * lbl_803EAD2C;
         if ((unsigned int)SyncRandGetRange(0, lbl_803EAD28) > threshold) {
-            p->mUnknown1008.mUnknown0 = fn_8009A63C(handle)->mUnknown4;
+            p->mUnknown1008.mUnknown0 = CatchAnimGetRecord(handle)->mUnknown4;
             if (!(SyncRandGetFloat(0) >= lbl_803EAD30)) p->mUnknown1008.mUnknown1 = 1; else p->mUnknown1008.mUnknown1 = 2;
             p->mUnknown1008.mUnknown2 = handle < 0 ? 2 : 1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 226, 1.0f, p);
@@ -438,8 +438,8 @@ extern "C" int PlayerActionCatchEnter(Object_80039F5C *p)
     int handle;
     pBlock->mUnknown0 = 0;
     pBlock->mUnknown2 = 0;
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
-    float time = fn_8009A270(handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
+    float time = CatchAnimGetTime(handle);
     if (fn_801BE648(p->mpUnknown792) == 224) {
         unsigned char entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 224, 0);
         time += AnimSeqGetLife(p->mpUnknown800[entry].mUnknown4C.mpUnknown0);
@@ -456,7 +456,7 @@ extern "C" int PlayerActionCatchEnter(Object_80039F5C *p)
     pBlock->mUnknown20 = (int)(p->mpState->mUnknown3[0] << 16);
     if (pBlock->mUnknown20 > 0x800000) pBlock->mUnknown20 -= 0x1000000;
     if (pBlock->mUnknown24) pBlock->mUnknown20 /= pBlock->mUnknown24;
-    if (fn_8009A578(handle) == 5) {
+    if (CatchAnimGetType(handle) == 5) {
         pos = p->mMotion.mPos;
         pos.mZ = (float)p->mMotion.mUnknown32;
     }
@@ -481,11 +481,11 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     Block_800E0850 *pBlock = (Block_800E0850 *)&p->mUnknown336;
     ++pBlock->mUnknown0;
     fn_800B8344(p);
-    if (!fn_8009A68C(p)) return 1;
+    if (!CatchIsInCatchAnim(p)) return 1;
     Input_800B6D34 input;
     unsigned char index;
     int handle;
-    fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
+    CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
     if (p->mFlags & 0x4000) {
         fn_800B6D34(p, &input);
         if ((input.mUnknown96 & 1) || (input.mUnknown96 & 0x10))
@@ -493,7 +493,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
         else
             pBlock->mUnknown29 = 0;
     }
-    float time = fn_8009A270(handle);
+    float time = CatchAnimGetTime(handle);
     if (--pBlock->mUnknown24 >= 0) {
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown20) & 0xFFFFFF;
         p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
@@ -505,7 +505,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     if (!pBlock->mUnknown2) {
         if (!(p->mFlags & 4) && !(pBlock->mUnknown0 <= time - 90.0f) &&
             !(pBlock->mUnknown0 >= time) && p->mUnknown16 != 0 && p->mUnknown16 != 4) {
-            *fn_8009CC2C(p, PlayerActionCatchGetBallPos, 15, 2) = index;
+            *PlyrTrackStartHead(p, PlayerActionCatchGetBallPos, 15, 2) = index;
         }
         pBlock->mUnknown2 = 1;
     } else if ((p->mFlags & 4) || !(pBlock->mUnknown0 <= time)) {
@@ -514,7 +514,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     if (!(pBlock->mUnknown0 <= time - 30.0f)) PlyrPoseDelayBlink(p->mpUnknown4);
     Ball_t *pBall = BallGet(index);
     unsigned short key = fn_801BE648(p->mpUnknown792);
-    if (BallGetHolder(pBall) && p != BallGetHolder(pBall) && !fn_8009A68C(p) && key != 70) return 1;
+    if (BallGetHolder(pBall) && p != BallGetHolder(pBall) && !CatchIsInCatchAnim(p) && key != 70) return 1;
     if (p->mFlags & 1) {
         p->mFlags &= ~1;
         if (fn_800C4B6C(p)) return 1;
@@ -527,7 +527,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F00D4(0, p->mpState, &message, p);
-            fn_8009A260(p);
+            CatchResetHeightBoost(p);
             return 1;
         }
         if (fn_801BE648(p->mpUnknown792) == 224) {
@@ -539,7 +539,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
-            fn_8009A260(p);
+            CatchResetHeightBoost(p);
             return 1;
         }
     }
@@ -553,7 +553,7 @@ extern "C" int PlayerActionCatchExit(Object_80039F5C *p)
         fn_8009CE88(p, &p->mUnknown16, 8);
         pBlock->mUnknown2 = 0;
     }
-    fn_8009A260(p);
+    CatchResetHeightBoost(p);
     p->mFlags &= ~8;
     return 1;
 }
@@ -594,21 +594,21 @@ extern "C" int PlayerActionSegmentsCross(Vector_80039F5C *p, Vector_80039F5C *pA
 extern "C" int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget)
 {
     int result = 0;
-    if (fn_8009B9A8(0) && fn_80094488() > 1) {
+    if (CelebrationBlockIsActive(0) && AnmsGetOutlineCount() > 1) {
         Vector_80039F5C end;
         Vector_80039F5C start;
         unsigned short i;
         Vec2Sub(&end, pTarget, &p->mMotion.mPos);
         Vec2Normalize(&end, &end);
-        Vec2Scale(&end, &end, p->mMotion.mUnknown28 * fn_8009BB54(0));
+        Vec2Scale(&end, &end, p->mMotion.mUnknown28 * CelebrationBlockGetTimeLeft(0));
         Vec2Add(&end, &end, &p->mMotion.mPos);
         end.mZ = 0.0f;
         start = p->mMotion.mPos;
         start.mZ = 0.0f;
-        for (i = 0; i < fn_80094488() - 1; i++) {
-            if (PlayerActionSegmentsCross(&p->mMotion.mPos, &end, fn_80094490(i), fn_80094490(i + 1)) ||
-                Vec3DistanceSqrToSegment(&start, &end, fn_80094490(i)) < 4.0f ||
-                Vec3DistanceSqrToSegment(&start, &end, fn_80094490(i + 1)) < 4.0f) {
+        for (i = 0; i < AnmsGetOutlineCount() - 1; i++) {
+            if (PlayerActionSegmentsCross(&p->mMotion.mPos, &end, AnmsGetOutlinePoint(i), AnmsGetOutlinePoint(i + 1)) ||
+                Vec3DistanceSqrToSegment(&start, &end, AnmsGetOutlinePoint(i)) < 4.0f ||
+                Vec3DistanceSqrToSegment(&start, &end, AnmsGetOutlinePoint(i + 1)) < 4.0f) {
                 result = 1;
                 break;
             }
@@ -744,7 +744,7 @@ extern "C" int PlayerActionAiConsiderDive(Object_80039F5C *p)
     int result = 0;
     Object_80039F5C *pOther = BallGetCurrentHolder();
     if (pOther && MathAngleDiff(pOther->mMotion.mUnknown32, 0x400000) <= 0x38E38E && p && !(p->mFlags & 0x4000)) {
-        fn_800ACDE4(p, &chance, &angle);
+        GameSkillAdjustDiveChance(p, &chance, &angle);
         int special = ScrmGetOffenseTeam() == ScrmGetSnapOffense() && !(p->mMotion.mPos.mY >= ScrmGetBallSpot().mY) &&
             (pOther->mpState->mId == 1 || pOther->mpState->mId == 18);
         if (special) {
@@ -845,7 +845,7 @@ extern "C" void PlayerActionAlignDefender(Object_80039F5C *p)
     own.mX = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mX;
     own.mY = (pTeam->mUnknown8.mUnknownF == 1 ? &pEntry->mUnknown18 : &pEntry->mUnknown10)->mY;
     Vec2Add(&own, &own, &goal);
-    if (fn_8009F780() && fn_801BE648(p->mpUnknown792) != 86) {
+    if (DefCoverIsAlignHeld() && fn_801BE648(p->mpUnknown792) != 86) {
     pBlock->mUnknown49 = 0;
     if (pTactics->mUnknown4) {
         unsigned char slot = pTactics->mUnknown32[p->mIdBytes[1]];
@@ -1073,7 +1073,7 @@ extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut,
                 fn_800FE03C(p, pOut);
             }
         }
-    } else if (pBlock->mUnknown49 && fn_8009F780() && ScrmOffenseAnyPlaced()) {
+    } else if (pBlock->mUnknown49 && DefCoverIsAlignHeld() && ScrmOffenseAnyPlaced()) {
         pOut->mX = pBlock->mUnknown40.mX;
         pOut->mY = pBlock->mUnknown40.mY;
     } else {

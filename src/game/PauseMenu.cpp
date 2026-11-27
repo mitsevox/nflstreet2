@@ -10,7 +10,7 @@
 #include "game/fn_800AD9B4.h"
 #include <string.h>
 #include "game/fn_801D2B7C.h"
-#include "game/fn_80096A58.h"
+#include "game/AnimPlayback.h"
 #include "game/fn_80218FC4.h"
 #include "game/SyncRandGetRange.h"
 #include "game/InGame.h"
@@ -68,14 +68,14 @@ void SndgEventSetSfx34Volume(void);
 void SpchIGPauseChannel(int index);
 void SpchIGResumeChannel(int index);
 void SpchIGSetEnabled(unsigned char value);
-void fn_80094DF0(void);
+void AnmsQueueFlush(void);
 void fn_8009B924(void);
-void fn_8009BA10(int a);
-unsigned char fn_8009BA94(void);
+void CelebrationSetReplayPrompt(int a);
+unsigned char CelebrationGetReplayPrompt(void);
 int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800A8488(int a);
-void fn_800ABD80(void);
+void GameSkillRefresh(void);
 void fn_800AD910(int a, float b);
 void fn_800B22E0(void);
 void fn_800B43C8(void);
@@ -249,7 +249,7 @@ void PauseCameraStart(void)
     }
     params.mUnknown12 |= 0x10;
     params.mUnknown32 = 60.0f;
-    _Pause_State.mUnknown136 = fn_80096A58(&params);
+    _Pause_State.mUnknown136 = AnimPlaybackStart(&params);
 }
 
 int PauseCameraUpdate(void)
@@ -257,7 +257,7 @@ int PauseCameraUpdate(void)
     int result;
 
     if (_Pause_State.mUnknown136 != -1 && fn_800AD9B4() != 1) {
-        result = fn_80096B1C(_Pause_State.mUnknown136);
+        result = AnimPlaybackUpdate(_Pause_State.mUnknown136);
         if (result) {
             CamGameProcess();
         }
@@ -272,7 +272,7 @@ int PauseCameraRestore(void)
     if (!InGameIsStopped() && fn_800AD9B4() != 1) {
         if ((fn_800C1E40() && fn_800AD9B4() == 7) || fn_800AD9B4() != 7) {
             if (_Pause_State.mUnknown136 != -1) {
-                fn_80096D14(_Pause_State.mUnknown136);
+                AnimPlaybackStop(_Pause_State.mUnknown136);
                 _Pause_State.mUnknown136 = -1;
             }
             PlyrStarSetShown(_Pause_bSavedViewFlag, _Pause_bSavedViewFlag);
@@ -427,9 +427,9 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
             HudHidePressPrompt(1);
         }
     }
-    _Pause_bResumeHook = fn_8009BA94();
+    _Pause_bResumeHook = CelebrationGetReplayPrompt();
     if (_Pause_bResumeHook == 1) {
-        fn_8009BA10(0);
+        CelebrationSetReplayPrompt(0);
     }
     HudHideMashPrompts();
     ReplayHandleCommand(gpReplay, 4, 0);
@@ -496,7 +496,7 @@ void PauseClose(void)
     RumbleInit();
     RumbleEnable(_Pause_bSavedRumble);
     CoinTossOnShotStart();
-    fn_800ABD80();
+    GameSkillRefresh();
     fn_800B22E0();
     GameTextSetPauseState(0);
     if (PauseIsAudioPaused()) {
@@ -541,13 +541,13 @@ void PauseClose(void)
         _Pause_bCallOnClose = 0;
     }
     if (_Pause_bResumeHook == 1) {
-        fn_8009BA10(1);
+        CelebrationSetReplayPrompt(1);
     }
     if (_Pause_bQuit) {
         ReplayHandleCommand(gpReplay, 3, 0);
         if (ReplayIsHalted(gpReplay) && !ReplayIsShowing(gpReplay)) {
             fn_8009B924();
-            fn_80094DF0();
+            AnmsQueueFlush();
             ReplayHandleControl(gpReplay, 10, PauseGetValue());
             ReplayHandleControl(gpReplay, 11, 0);
             ReplayHandleControl(gpReplay, 7, 0);

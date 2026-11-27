@@ -22,9 +22,9 @@ struct PlyrPoseQuant_t {
 extern "C" {
 void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale);
 void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
-void fn_800ADDFC(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a);
-int fn_800ADD7C(PlyrPosePart_t *pElements, unsigned int index);
-int fn_800ADEFC(PlyrPosePart_t *pElements, unsigned int index);
+void PlyrHandInitPose(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a);
+int PlyrHandUpdateBlend(PlyrPosePart_t *pElements, unsigned int index);
+int PlyrHandGetBlend(PlyrPosePart_t *pElements, unsigned int index);
 void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
 void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
 void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
@@ -214,8 +214,8 @@ void PlyrPoseLerpPart(Object_8003DEC4 *pObject, BitStream_t *pStreamA, BitStream
     pObject->mUnknown116[index].mUnknown5 = to.mUnknown5;
     pObject->mUnknown116[index].mUnknown6 = to.mUnknown6;
     pObject->mUnknown116[index].mUnknown0 = to.mUnknown0;
-    if (fn_800ADD7C(pObject->mUnknown116, index)) {
-        PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, index), index);
+    if (PlyrHandUpdateBlend(pObject->mUnknown116, index)) {
+        PlyrPoseBlendRawEntries(pObject, PlyrHandGetBlend(pObject->mUnknown116, index), index);
     }
 }
 
@@ -457,7 +457,7 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
     }
     for (i = 0; i < 2; i++) {
         if (ppExtra && ppExtra[i]) {
-            fn_800ADDFC(pObject, &pObject->mUnknown116[i], 1);
+            PlyrHandInitPose(pObject, &pObject->mUnknown116[i], 1);
             pObject->mUnknown116[i].mUnknown68 = ppExtra[i];
             count = ppExtra[i]->mUnknown6;
             pObject->mUnknown116[i].mUnknown12.mUnknown0 = 0x100;
@@ -467,7 +467,7 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
             pObject->mUnknown116[i].mUnknown12.mUnknown52 = 0;
             PlyrPoseInitFromSkeleton(&pObject->mUnknown116[i].mUnknown12, pObject->mUnknown116[i].mUnknown68);
         } else {
-            fn_800ADDFC(pObject, &pObject->mUnknown116[i], 0);
+            PlyrHandInitPose(pObject, &pObject->mUnknown116[i], 0);
             pObject->mUnknown116[i].mUnknown12.mUnknown48 = 0;
             pObject->mUnknown116[i].mUnknown12.mUnknown52 = 0;
         }

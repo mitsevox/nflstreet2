@@ -101,11 +101,11 @@ int MathAngleDiff(int a, int b);
 }
 
 extern "C" {
-void fn_8009A5DC(int a, int b, void *pA, int *pB);
+void CatchAnimUnpackHandle(int a, int b, void *pA, int *pB);
 }
 
 extern "C" {
-int fn_8009A578(int handle);
+int CatchAnimGetType(int handle);
 }
 
 extern "C" {
@@ -478,11 +478,11 @@ extern float gFrameTimeScale;
 }
 
 extern "C" {
-int fn_800A7F58(int team);
+int GamebreakerGetShedFlag(int team);
 }
 
 extern "C" {
-int fn_800AC074(int team, int value);
+int GameSkillScaleEngageOffense(int team, int value);
 }
 
 extern "C" {
@@ -512,7 +512,7 @@ int fn_8011F1CC(void);
 extern "C" float Vec2Distance(void *pA, void *pB);
 
 extern "C" {
-int fn_800ACD04(Object_80039F5C *p);
+int GameSkillGetTackleTurnLimit(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -840,7 +840,7 @@ extern "C" int PlyrAlignEnter(Object_80039F5C *p) {
 
 extern "C" int PlayerActionAnimIsReactionAlt(Object_80039F5C *p);
 extern "C" void PlayerActionAlignDefender(Object_80039F5C *p);
-extern "C" int fn_8009F780(void);
+extern "C" int DefCoverIsAlignHeld(void);
 extern "C" int PlyrAlignIsFree(Object_80039F5C *p);
 extern "C" void PlyrAlignMoveToTarget(Object_80039F5C *player, FieldPoint_t *target, int angle);
 extern "C" void PlyrAlignUpdateLane(Object_80039F5C *player);
@@ -892,7 +892,7 @@ extern "C" int PlyrAlignUpdate(Object_80039F5C *p)
     PlayerActionGetAlignSpot(p, &target, &heading);
     if ((fabsf(p->mMotion.mPos.mX - target.mX) > 1.0f || fabsf(p->mMotion.mPos.mY - target.mY) > 1.0f) &&
         !(pState->mUnknown24 && pState->mUnknown30) && !pState->mUnknown36 && !PlayerActionAnimIsReactionAlt(p) &&
-        !(pState->mUnknown49 && fn_8009F780()) && !pState->mUnknown0) {
+        !(pState->mUnknown49 && DefCoverIsAlignHeld()) && !pState->mUnknown0) {
         pState->mUnknown1 = 1;
     }
     if (pState->mUnknown0 && p->mUnknown8 == 255) {
@@ -1432,10 +1432,10 @@ extern "C" {
 int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA, Record_800E5EA4 *pB,
                 unsigned int kind)
 {
-    if (fn_800A7F58(p->mIdBytes[2]) == 2) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 2) {
         return 1;
     }
-    if (fn_800A7F58(p->mIdBytes[2]) == 0) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 0) {
         return 0;
     }
     short *pOtherRatings = pOther->mRatings;
@@ -1471,7 +1471,7 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
             defense += (int)(defense * scale);
         }
     }
-    offense = fn_800AC074(p->mIdBytes[2], offense);
+    offense = GameSkillScaleEngageOffense(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
         float scale = PlayTrackGetPlayIdRate() * 0.5f;
         offense += (int)(offense * scale);
@@ -2216,7 +2216,7 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     FieldPoint_t delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
     int heading = delta.Heading() & 0xFFFFFF;
-    int limit = fn_800ACD04(p);
+    int limit = GameSkillGetTackleTurnLimit(p);
     if (!(point.mY >= ScrmGetBallSpot().mY) && !ScrmTestPlayFlag(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
     int step;
@@ -2778,8 +2778,8 @@ extern "C" int PlyrContactCanReact(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5 || fn_8009A578(handle) == 4)
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        if (CatchAnimGetType(handle) == 5 || CatchAnimGetType(handle) == 4)
             result = 0;
         break;
     }
@@ -2806,8 +2806,8 @@ extern "C" int PlyrContactCanBeHit(Object_80039F5C *p) {
     case 28: {
         int unknown;
         int handle;
-        fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5)
+        CatchAnimUnpackHandle(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
+        if (CatchAnimGetType(handle) == 5)
             result = 0;
         if ((handle >> 29 & 3) == 1)
             result = 0;

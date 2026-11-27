@@ -5,10 +5,10 @@
 #include "game/ResLoad.h"
 
 extern "C" {
-void *fn_800A336C(void);
-int fn_800A3380(void);
+void *StadiumGetResDevice(void);
+int StadiumGetLevelResIndex(void);
 void LevelMeshRelocate(LevelData_t *pLevel);
-Vector_80039F5C *fn_800A3438(void);
+Vector_80039F5C *StadiumGetSunPos(void);
 void Vec3Scale(Vector_80039F5C *pOut, Vector_80039F5C *pV, float scale);
 void LevelMeshPostLoad(LevelData_t *pLevel);
 void LevelBuildWallInfo(void);
@@ -19,9 +19,9 @@ extern LevelData_t *gLevelData;
 
 void LevelLoad(void)
 {
-    gLevelData = _LevelLoad_pLevel = (LevelData_t *)ResLoad(fn_800A336C(), fn_800A3380(), 1);
+    gLevelData = _LevelLoad_pLevel = (LevelData_t *)ResLoad(StadiumGetResDevice(), StadiumGetLevelResIndex(), 1);
     LevelMeshRelocate(gLevelData);
-    Vec3Scale(fn_800A3438(), &gLevelData->mUnknown4, 10.0f);
+    Vec3Scale(StadiumGetSunPos(), &gLevelData->mUnknown4, 10.0f);
     LevelMeshPostLoad(gLevelData);
     LevelBuildWallInfo();
 }
@@ -29,7 +29,7 @@ void LevelLoad(void)
 void LevelUnload(void)
 {
     LevelFreeWallInfo();
-    ResUnLoad(fn_800A336C(), fn_800A3380());
+    ResUnLoad(StadiumGetResDevice(), StadiumGetLevelResIndex());
     gLevelData = 0;
     _LevelLoad_pLevel = 0;
 }

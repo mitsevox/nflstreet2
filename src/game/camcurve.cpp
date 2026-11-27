@@ -49,7 +49,7 @@ int ScrmIsFieldFlipped(void);
 GameCamera_t *CamGameGetCamera(int);
 void CamFreeSetPos(GameCamera_t *,float,float,float);
 void CamFreeSetAngle(GameCamera_t *,int,int,int);
-float fn_800BD190(void *); float fn_800AB9EC(void *);
+float fn_800BD190(void *); float GameEndGetNearClip(void *);
 void CamCurveSetProjection(GameCamera_t *);
 }
 
@@ -170,7 +170,7 @@ extern "C" void CamCurveApplyPlaybackCurves(GameCamera_t *camera, Actor_801C009C
     CamCurveAngles_t resultAngles, angles, rotation;
     float matrix[4][4];
     float qx[4], qy[4], qz[4];
-    Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
+    Playback_80096DA8 *playback = AnimPlaybackGet(camera->mUnknown108);
     float t = time / AnimSequencerGetTicksPerSecond();
     AnimSeqCamSample_t *sample = AnimSeqCamFindCamera(actor, playback->mUnknown14.mParts[1], playback->mUnknown18.mParts[1], playback->mUnknown1C.mParts[1]);
     if (!sample) return;
@@ -230,7 +230,7 @@ extern "C" void CamCurveProcess(GameCamera_t *camera)
         CamCurveActorEntry_t *entry = CamCurveGetActorEntry(camera);
         if (entry) {
             Character_80093BCC *character = fn_80093BCC(entry->mUnknown8);
-            actor = fn_80093BAC(character->mUnknown0, character->mUnknown4);
+            actor = AnmsGetScript(character->mUnknown0, character->mUnknown4);
             CamCurveActorSettings_t *settings = fn_800963EC(character);
             if (actor->mUnknown8 & 0x200) camera->mUnknownF4 = 1.0f;
             else camera->mUnknownF4 = settings->mUnknown300;
@@ -239,11 +239,11 @@ extern "C" void CamCurveProcess(GameCamera_t *camera)
         break;
     }
     case 11: {
-        Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
+        Playback_80096DA8 *playback = AnimPlaybackGet(camera->mUnknown108);
         int mirror = 0;
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
             if ((playback->mUnknownC & 0x10) && ScrmIsFieldFlipped() != 0) mirror = 1;
-            actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
+            actor = AnimPlaybackGetScript(playback->mUnknown0, playback->mUnknown4);
             CamCurveApplyPlaybackCurves(camera, actor, playback->mUnknown24, mirror);
         }
         break;
@@ -267,7 +267,7 @@ extern "C" void CamCurveStart(GameCamera_t *camera)
         CamCurveActorEntry_t *entry = CamCurveGetActorEntry(camera);
         if (entry) {
             Character_80093BCC *character = fn_80093BCC(entry->mUnknown8);
-            Actor_801C009C *actor = fn_80093BAC(character->mUnknown0, character->mUnknown4);
+            Actor_801C009C *actor = AnmsGetScript(character->mUnknown0, character->mUnknown4);
             if (actor->mUnknown8 & 0x400) camera->mUnknown10C = character->mUnknown14[0]->mMotion.mFacing;
             else camera->mUnknown10C = character->mUnknown14[0]->mMotion.mFacing;
             CamCurveApplyActorCurves(camera, actor, &character->mUnknownE0, entry->mUnknown0);
@@ -275,11 +275,11 @@ extern "C" void CamCurveStart(GameCamera_t *camera)
         break;
     }
     case 11: {
-        Playback_80096DA8 *playback = fn_80096DA8(camera->mUnknown108);
+        Playback_80096DA8 *playback = AnimPlaybackGet(camera->mUnknown108);
         int mirror = 0;
         if (playback->mUnknown0 != -1 && playback->mUnknown10 == 2) {
             if ((playback->mUnknownC & 0x10) && ScrmIsFieldFlipped() != 0) mirror = 1;
-            Actor_801C009C *actor = fn_80096DCC(playback->mUnknown0, playback->mUnknown4);
+            Actor_801C009C *actor = AnimPlaybackGetScript(playback->mUnknown0, playback->mUnknown4);
             CamCurveApplyPlaybackCurves(camera, actor, playback->mUnknown24, mirror);
         }
         break;
@@ -323,7 +323,7 @@ extern "C" void CamCurveSetProjection(GameCamera_t *camera)
     float value=0.08f;
     if (camera->mUnknownA0!=11) {
         if (fn_800AD9B4()==1) value=fn_800BD190(lbl_803EAB90);
-        else if (fn_800AD9B4()==7) value=fn_800AB9EC(lbl_803EAA8C);
+        else if (fn_800AD9B4()==7) value=GameEndGetNearClip(lbl_803EAA8C);
     }
     if (camera->mUnknown28)
         VptSetPerspective(static_cast<Viewport_t *>(camera->mUnknown28),camera->mHeader.mUnknown20,camera->mHeader.mUnknown24,value,750.0f);

@@ -176,9 +176,9 @@ int PlayerLookShowsHair(int index);
 unsigned char PlayerLookHidesHead(int index);
 unsigned char PlayerObjIsDrawReady(void);
 unsigned char CheatFlagsIsSet(int index);
-int fn_800A2624(void);
+int StadiumIsCamPastEndLine(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-int fn_800ADDD8(PlyrPosePart_t *pElements, int index);
+int PlyrHandGetPartIndex(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
 void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
 void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
@@ -986,7 +986,7 @@ void PlyrRenderBindParts(Object_8003DEC4 *pPlayer, PlyrRenderSlot_t *pSlot)
             fn_80234A94(&pPlayer->mUnknown1164[part], pSlot->mpUnknown12);
             fn_80234CA4(&pPlayer->mUnknown1164[part], &pPlayer->mUnknown4064[0]);
             if (pSlot->mUnknown8 <= 1) {
-                fn_80233CBC(&pPlayer->mUnknown1164[part].mUnknown20, key, fn_800ADDD8(pPlayer->mUnknown116, i));
+                fn_80233CBC(&pPlayer->mUnknown1164[part].mUnknown20, key, PlyrHandGetPartIndex(pPlayer->mUnknown116, i));
             } else {
                 fn_80233CBC(&pPlayer->mUnknown1164[part].mUnknown20, key, 0);
             }
@@ -1208,7 +1208,7 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
     } else if (pPlayer->mUnknown20 & 0x400) {
         lod = 0;
     }
-    if (!(pPlayer->mUnknown20 & 8) && fn_800A2624()) {
+    if (!(pPlayer->mUnknown20 & 8) && StadiumIsCamPastEndLine()) {
         lod = 1;
     }
     if (pPlayer->mUnknown4216.mUnknown12 > _PlyrRender_fFarDistance) {

@@ -47,7 +47,7 @@ struct Table_80089904 {
 };
 
 extern "C" {
-int fn_8009C56C(Table_80089904 *pTable, const unsigned char *pValues);
+int PlayerAnimTablePickBest(Table_80089904 *pTable, const unsigned char *pValues);
 void AnimFileGetStateAnimList(int objectType, int state, Table_80089904 *pTable);
 }
 

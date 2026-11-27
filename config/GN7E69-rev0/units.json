@@ -13410,12 +13410,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8008E978",
-          "end": "0x8008E9B0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8008EB18",
           "end": "0x8008FF44"
         },
         {
@@ -13476,18 +13470,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8009C328",
-          "end": "0x8009C7B4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8009C814",
-          "end": "0x8009C9D0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8009CB0C",
           "end": "0x8009CEE4"
         },
         {
@@ -13518,12 +13500,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800A4790",
-          "end": "0x800A4E8C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800A506C",
           "end": "0x800A5A8C"
         },
         {
@@ -13734,43 +13710,39 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8008E9B0",
-            "evidence": "evidence.tsv source-form 0x8008E9B0-0x8008EB18"
-          },
-          {
-            "function": "fn_8008FF44",
+            "function": "PlayResultSeqStart",
             "evidence": "evidence.tsv source-form 0x8008FF44-0x80090244"
           },
           {
-            "function": "fn_80090558",
+            "function": "AnimSeqPushPlayersFromArea",
             "evidence": "evidence.tsv source-form 0x80090558-0x80090BDC"
           },
           {
-            "function": "fn_800919F0",
+            "function": "AnimSeqReleaseTaggedBalls",
             "evidence": "evidence.tsv source-form 0x800919F0-0x80091AD0"
           },
           {
-            "function": "fn_80094C4C",
+            "function": "AnimSeqQueueEntryStart",
             "evidence": "evidence.tsv source-form 0x80094C4C-0x80094D94"
           },
           {
-            "function": "fn_800955D8",
+            "function": "AnimSeqListRoleCandidates",
             "evidence": "evidence.tsv source-form 0x800955D8-0x80095FD8"
           },
           {
-            "function": "fn_800975EC",
+            "function": "StateAnimListSetState",
             "evidence": "evidence.tsv source-form 0x800975EC-0x8009780C"
           },
           {
-            "function": "fn_80097A88",
+            "function": "CatchAnimComputeTiming",
             "evidence": "evidence.tsv source-form 0x80097A88-0x8009817C"
           },
           {
-            "function": "fn_8009817C",
+            "function": "CatchAnimSearch",
             "evidence": "evidence.tsv source-form 0x8009817C-0x80098EAC"
           },
           {
-            "function": "fn_80098EAC",
+            "function": "CatchAnimSearchReach",
             "evidence": "evidence.tsv source-form 0x80098EAC-0x800994E0"
           },
           {
@@ -13782,51 +13754,39 @@
             "evidence": "evidence.tsv source-form 0x80099F04-0x8009A1A8"
           },
           {
-            "function": "fn_8009A5DC",
+            "function": "CatchAnimUnpackHandle",
             "evidence": "evidence.tsv source-form 0x8009A5DC-0x8009A63C"
           },
           {
-            "function": "fn_8009C220",
+            "function": "PlyrSyncComparePoseEntries",
             "evidence": "evidence.tsv source-form 0x8009C220-0x8009C328"
-          },
-          {
-            "function": "fn_8009C7B4",
-            "evidence": "evidence.tsv source-form 0x8009C7B4-0x8009C814"
-          },
-          {
-            "function": "fn_8009C9D0",
-            "evidence": "evidence.tsv source-form 0x8009C9D0-0x8009CB0C"
           },
           {
             "function": "fn_8009CEE4",
             "evidence": "evidence.tsv source-form 0x8009CEE4-0x8009CF30"
           },
           {
-            "function": "fn_8009D0AC",
+            "function": "PlyrTrackPickLookTarget",
             "evidence": "evidence.tsv source-form 0x8009D0AC-0x8009D1AC"
           },
           {
-            "function": "fn_8009DBB4",
+            "function": "DefCoverComputeStrongSide",
             "evidence": "evidence.tsv source-form 0x8009DBB4-0x8009DD10"
           },
           {
-            "function": "fn_800A0134",
+            "function": "DefPredGetRatingScale",
             "evidence": "evidence.tsv source-form 0x800A0134-0x800A0230"
           },
           {
-            "function": "fn_800A46D8",
+            "function": "DefReactGetInterceptAngle",
             "evidence": "evidence.tsv source-form 0x800A46D8-0x800A4790"
-          },
-          {
-            "function": "fn_800A4E8C",
-            "evidence": "evidence.tsv source-form 0x800A4E8C-0x800A506C"
           },
           {
             "function": "fn_800A5A8C",
             "evidence": "evidence.tsv source-form 0x800A5A8C-0x800A5C04"
           },
           {
-            "function": "fn_800A7FE0",
+            "function": "GamebreakerUpdateCutscene",
             "evidence": "evidence.tsv source-form 0x800A7FE0-0x800A8224"
           },
           {
@@ -13834,7 +13794,7 @@
             "evidence": "evidence.tsv source-form 0x800A8954-0x800A8EA4"
           },
           {
-            "function": "fn_800A9D84",
+            "function": "GamebreakerSceneAdjustSpot",
             "evidence": "evidence.tsv source-form 0x800A9D84-0x800A9F4C"
           },
           {
@@ -13938,7 +13898,7 @@
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 51 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 47 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
