@@ -46,7 +46,7 @@ public:
     virtual int GetPathStatus(void *p) = 0;
     virtual int ReadyForNewRequest() = 0;
     virtual int TimeRemaining(int index) = 0;
-    virtual void TimeBuffered() = 0;
+    virtual int TimeBuffered() = 0;
     virtual int Play(int node, int offset, int beats, int a, unsigned int length) = 0;
     virtual int GetVolume();
     virtual void SetVolume(int value) = 0;
