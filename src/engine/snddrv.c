@@ -675,15 +675,16 @@ int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, 
             loopEnd = header->m58 - 1;
         }
         if (record->m22 == 18) {
-            size = (header->m58 + 13) / 14 * 14;
+            u32 samples = (header->m58 + 13) / 14 * 14;
+
             addr.format = 0;
             adpcm.gain = 0;
             adpcm.yn1 = 0;
             adpcm.yn2 = 0;
-            loopEnd = loopEnd * 8 / 7;
-            loopStart = loopStart * 8 / 7;
-            size = size * 8 / 7;
+            size = samples * 8 / 7;
             offset = *header->m64 << 1;
+            loopStart = loopStart * 8 / 7;
+            loopEnd = loopEnd * 8 / 7;
         } else if (record->m22 == 7) {
             addr.format = 10;
             adpcm.gain = 2048;
@@ -719,7 +720,8 @@ int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, 
             if (header->m60 > 0) {
                 loopAddress = start + loopStart;
             }
-            endAddress = start + loopEnd - 2;
+            endAddress = start + loopEnd;
+            endAddress -= 2;
             if (record->m22 == 18) {
                 start += 2;
                 if ((loopAddress & 15) == 0) {
@@ -736,9 +738,9 @@ int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, 
             AXSetVoiceSrcType(snddrv.m0[record->m4[i]].m3C, 1);
             AXSetVoiceAdpcm(snddrv.m0[record->m4[i]].m3C, &adpcm);
             AXSetVoiceAdpcmLoop(snddrv.m0[record->m4[i]].m3C, &loop);
+            addr.endAddressHi = endAddress >> 16;
             addr.currentAddressHi = start >> 16;
             addr.loopAddressHi = loopAddress >> 16;
-            addr.endAddressHi = endAddress >> 16;
             addr.endAddressLo = endAddress;
             addr.currentAddressLo = start;
             addr.loopAddressLo = loopAddress;
@@ -825,11 +827,12 @@ int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream)
 int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, SndPacketFormat_t *info, SndPacketAttr_t *p)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     int i;
 
     record->m20 = info->m0;
     record->m14 = 0;
-    snddrv.m0[index].m1C = stream;
+    channel->m1C = stream;
     record->m23 = info->m2;
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {

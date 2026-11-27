@@ -147,6 +147,7 @@ void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
     int last;
     int bank;
     int patch;
+    int pan;
     int i;
 
     i = ++lastnote;
@@ -160,9 +161,10 @@ void SNDI_midiparsenoteon(int seq, SndMidiChan_t *chan, int channel, int key)
     }
     if (found) {
         SNDplaysetdef(&opts);
+        pan = s->m20;
         opts.m0 = chan->mVolume * (short)(s->mVolume >> 16) >> 7;
         opts.m3 = *s->mpData;
-        opts.m8 = (chan->mAzimuth << 6) + s->m20;
+        opts.m8 = (chan->mAzimuth << 6) + pan;
         opts.mC = s->m22;
         opts.m1 = chan->mBend;
         if (channel == 9 && s->m2E >= 0) {
@@ -269,7 +271,7 @@ void SNDI_midiprocesstick(int seq)
     int status;
     int data;
 
-    s->mpData++;
+    delta = *s->mpData++;
     s->mDelta--;
     status = *s->mpData++;
     data = *s->mpData++;
@@ -284,15 +286,18 @@ void SNDI_midiprocesstick(int seq)
         return;
     }
     do {
+        int status;
+        int event;
         int channel;
         SndMidiChan_t *chan;
 
         delta = *s->mpData++;
         status = *s->mpData++;
         data = *s->mpData++;
+        event = status & 0xF0;
         channel = status & 0xF;
         chan = &s->mChans[channel];
-        switch (status & 0xF0) {
+        switch (event) {
         case 0x90:
             SNDI_midiparsenoteon(seq, chan, channel, data);
             break;

@@ -37,7 +37,7 @@ int SNDSTRM_setvol(int stream, int speaker, float vol)
     int changed;
     int i = 0;
 
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

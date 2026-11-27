@@ -19,7 +19,7 @@ void SNDplaysetdef(void *pConfig);
 int SNDSTRM_overheadtap(int a, int b);
 int SNDSTRM_createtap(void *pStream, void *pConfig, int a, int b, void *pBuffer, int size);
 int SNDSTRM_queuerequestid(int voice, int a, int b);
-void fn_8026E2A8(int voice);
+void SNDSTRM_destroy(int voice);
 void SNDSYS_entercritical(void);
 void SNDSTRM_requeststatus(int handle, void *pStatus);
 void SNDSYS_leavecritical(void);
@@ -212,7 +212,7 @@ void MovieRcmpShutdownAudio(MovieRcmpInfo_t *pInfo)
     MovieRcmpAudioInfo_t *pAudio = pInfo->mpAudio;
 
     if (pAudio->mHandle >= 0) {
-        fn_8026E2A8(pAudio->mVoice);
+        SNDSTRM_destroy(pAudio->mVoice);
     }
     if (pAudio->mpBuffer != 0) {
         fn_801D2BD0(pAudio->mpBuffer);
