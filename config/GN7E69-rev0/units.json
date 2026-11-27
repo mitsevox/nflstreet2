@@ -1564,12 +1564,12 @@
     {
       "source": "src/game/TeamTables.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/TeamTables.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; the .rodata linked whole.",
+      "evidence": "evidence.tsv unit row 0x8018C344-0x8018C688 (src/game/TeamTables.cpp), its function rows and the query-pool row 0x802AA1FC-0x802AA334; linked with holdouts (owner ruling of 2026-11-20), the one holdout TeamTablesPurgeCreated keeping its original bytes (two before round 5 lane 1, 2026-11-27); the .rodata linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8018C3EC",
+          "start": "0x8018C344",
           "end": "0x8018C48C"
         },
         {
@@ -1581,10 +1581,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "TeamTablesCopy",
-            "evidence": "evidence.tsv source-form 0x8018C344-0x8018C3EC"
-          },
           {
             "function": "TeamTablesPurgeCreated",
             "evidence": "evidence.tsv source-form 0x8018C48C-0x8018C688"
@@ -26600,7 +26596,7 @@
     {
       "source": "src/game/TeamDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its exact function extents and its .rodata/.data/.sdata/.sbss data rows; linked with holdouts (owner ruling of 2026-11-20), the three holdouts keeping their original bytes.",
+      "evidence": "evidence.tsv unit row 0x800834CC-0x800850E8 (src/game/TeamDb.cpp), its exact function extents and its .rodata/.data/.sdata/.sbss data rows; linked with holdouts (owner ruling of 2026-11-20), the one holdout TeamDbOpenByTmur keeping its original bytes (three before round 5 lane 1, 2026-11-27).",
       "sections": [
         {
           "section": ".text",
@@ -26612,12 +26608,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80083DE4",
-          "end": "0x8008463C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80084808",
           "end": "0x800850E8"
         },
         {
@@ -26650,14 +26640,6 @@
           {
             "function": "TeamDbOpenByTmur",
             "evidence": "evidence.tsv source-form 0x80083C98-0x80083DE4"
-          },
-          {
-            "function": "TeamDbGetRandomLogoColors",
-            "evidence": "evidence.tsv source-form 0x8008463C-0x800846F4"
-          },
-          {
-            "function": "TeamDbGetRandomName",
-            "evidence": "evidence.tsv source-form 0x800846F4-0x80084808"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"

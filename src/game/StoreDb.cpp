@@ -355,10 +355,12 @@ int StoreTeamCreate(void)
     int team;
     DbFindUnusedTeamIds(0x54415453, 0x4D414554, &team, &count);
     for (int i = 0; i < 13; i++) {
-        columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i], _StoreDb_aTeamDefaults[i]);
+        columns[i].Set(0x4D414554, _StoreDb_aTeamColumns[i]);
+        columns[i].mValue = _StoreDb_aTeamDefaults[i];
     }
     for (int i = 0; i < 3; i++) {
-        columns[i + 13].Set(0x4D414554, _StoreDb_aTeamColumns[i + 13], (int)_StoreDb_apszTeamNames[i]);
+        const char *pName = _StoreDb_apszTeamNames[i];
+        columns[i + 13].Set(0x4D414554, _StoreDb_aTeamColumns[i + 13], (int)pName);
     }
     columns[0].mValue = team;
     columns[16].SetEnd();
