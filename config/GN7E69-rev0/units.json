@@ -1172,20 +1172,14 @@
       }
     },
     {
-      "source": "src/game/cu_8015D3EC.cpp",
+      "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the five holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8015D4E0",
-          "end": "0x8015D550"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015D68C",
+          "start": "0x8015D3EC",
           "end": "0x8015DA80"
         },
         {
@@ -1198,12 +1192,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015E1F0",
-          "end": "0x8015F484"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015F5BC",
           "end": "0x8015FFA8"
         },
         {
@@ -1240,24 +1228,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8015D3EC",
-            "evidence": "evidence.tsv source-form 0x8015D3EC-0x8015D4E0"
-          },
-          {
-            "function": "fn_8015D550",
-            "evidence": "evidence.tsv source-form 0x8015D550-0x8015D68C"
-          },
-          {
-            "function": "fn_8015DA80",
+            "function": "PlaModelLoadHair",
             "evidence": "evidence.tsv source-form 0x8015DA80-0x8015DD3C"
           },
           {
-            "function": "fn_8015E0B8",
+            "function": "PlaModelQueuePart",
             "evidence": "evidence.tsv source-form 0x8015E0B8-0x8015E1F0"
-          },
-          {
-            "function": "fn_8015F484",
-            "evidence": "evidence.tsv source-form 0x8015F484-0x8015F5BC"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
@@ -1266,7 +1242,7 @@
         "discarded": [
           "_PlayerHeadFindCapModel"
         ],
-        "evidence": "evidence.tsv linker row cu_8015D3EC discarded cap head model lookup"
+        "evidence": "evidence.tsv linker row PlaModel discarded cap head model lookup"
       }
     },
     {
@@ -29152,14 +29128,14 @@
     },
     {
       "source": "src/engine/pathvol.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 9 functions exact, the 3 holdouts keep the original bytes.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; every function exact (the three PATHI_set*fadevolume tick functions since lane X1, 2026-11-27) and linked as a whole file.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B45D0",
-          "end": "0x801B4A24"
+          "end": "0x801B51AC"
         },
         {
           "section": ".rodata",
@@ -29167,24 +29143,7 @@
           "start": "0x802AEB90",
           "end": "0x802AEC08"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_setfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4A24-0x801B4CE4"
-          },
-          {
-            "function": "PATHI_setsfxfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4CE4-0x801B4F50"
-          },
-          {
-            "function": "PATHI_setdrylevelfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4F50-0x801B51AC"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
-      }
+      ]
     },
     {
       "source": "src/engine/uigimagenode.c",
@@ -29542,12 +29501,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801B845C",
-          "end": "0x801B864C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B89B0",
           "end": "0x801B8C18"
         },
         {
@@ -29569,10 +29522,6 @@
           {
             "function": "PATHI_serviceaction",
             "evidence": "evidence.tsv source-form 0x801B7880-0x801B845C"
-          },
-          {
-            "function": "PATHI_getvalue",
-            "evidence": "evidence.tsv source-form 0x801B864C-0x801B89B0"
           }
         ],
         "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."

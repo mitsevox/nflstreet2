@@ -12,13 +12,13 @@ void FESndInit(void);
 void FESndShutdown(void);
 void PlaDynClutLoad(void);
 void fn_8008FBA0(void);
-void fn_8015E654(int);
-void fn_8015E6C4(void);
-void fn_8015E6C8(void);
-void fn_8015E950(int, int);
-void fn_8015E994(void);
-void fn_8015F35C(void);
-void fn_8015F388(void);
+void PlaModelSetLodMode(int);
+void PlaModelInitPlayerModels(void);
+void PlaModelResetPlayerModels(void);
+void PlaModelInitMorphHead(int, int);
+void PlaModelFreeMorphHead(void);
+void PlaModelBeginFaceCache(void);
+void PlaModelEndFaceCache(void);
 void PlaTexCacheInit(int);
 void PlaTexCacheLoadDefaults(void);
 void PlaTexCacheShutdown(void);
@@ -63,9 +63,9 @@ int FEPlyr::Init()
     static unsigned char sFirstInit = 1;
 
     ResTrackLabel("PlyrModel-FEStart");
-    fn_8015E654(0);
-    fn_8015E6C4();
-    fn_8015E950(1, 0);
+    PlaModelSetLodMode(0);
+    PlaModelInitPlayerModels();
+    PlaModelInitMorphHead(1, 0);
     ResTrackLabel("PlyrModel-FEFinish");
     ResTrackLabel("PlyrTex-FEStart");
     PlaTexCacheInit(2);
@@ -73,9 +73,9 @@ int FEPlyr::Init()
     ResTrackLabel("PlyrTex-FEFinish");
     if (sFirstInit) {
         sFirstInit = 0;
-        fn_8015F35C();
+        PlaModelBeginFaceCache();
         FEPlyrInit(2);
-        fn_8015F388();
+        PlaModelEndFaceCache();
     } else {
         FEPlyrInit(2);
     }
@@ -85,8 +85,8 @@ int FEPlyr::Init()
 int FEPlyr::Shutdown()
 {
     FEPlyrShutdown();
-    fn_8015E994();
-    fn_8015E6C8();
+    PlaModelFreeMorphHead();
+    PlaModelResetPlayerModels();
     PlaTexCacheShutdown();
     return 1;
 }
