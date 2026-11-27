@@ -7,8 +7,8 @@
 #include "game/fn_801D2B7C.h"
 
 extern AnimStStateDefs_t **lbl_803EBB98;
-extern int lbl_803ECEBC;
-extern AnimStateAnimList_t lbl_8037EC7C;
+static AnimStateAnimList_t _AnimSt_pStatAnimList;
+static int _AnimSt_NumObjTypes;
 
 int _AnimStCallSelectAnimFunc(unsigned short type, unsigned short key, void *pOwner, int event, AnimHeader_t *pObject,
                 AnimChannel_t *pRecords)
@@ -16,8 +16,8 @@ int _AnimStCallSelectAnimFunc(unsigned short type, unsigned short key, void *pOw
     if (key & 0x8000) {
         return 0;
     }
-    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
-    return lbl_803EBB98[type]->mpUnknown4[key](&lbl_8037EC7C, key, pObject, pRecords, pOwner, event);
+    AnimFileGetStateAnimList(type, key, &_AnimSt_pStatAnimList);
+    return lbl_803EBB98[type]->mpUnknown4[key](&_AnimSt_pStatAnimList, key, pObject, pRecords, pOwner, event);
 }
 
 void _AnimStOrganizeInfo(AnimStInfo_t *p)
@@ -163,7 +163,7 @@ int fn_801BDF90(int count)
 
     lbl_803EBB98 = fn_801D2B7C(count * 4, 0, 0);
     result = SysGetLastError();
-    lbl_803ECEBC = count;
+    _AnimSt_NumObjTypes = count;
     if (lbl_803EBB98 != 0) {
         memset(lbl_803EBB98, 0, count * 4);
     }
@@ -367,8 +367,8 @@ void fn_801BE67C(AnimStInfo_t *p, AnimHeader_t *pObject, AnimChannel_t *pRecords
 
 void *fn_801BE72C(unsigned short type, unsigned short key)
 {
-    AnimFileGetStateAnimList(type, key, &lbl_8037EC7C);
-    return &lbl_8037EC7C;
+    AnimFileGetStateAnimList(type, key, &_AnimSt_pStatAnimList);
+    return &_AnimSt_pStatAnimList;
 }
 
 void fn_801BE760(AnimStInfo_t *p, unsigned short key, unsigned short flags)

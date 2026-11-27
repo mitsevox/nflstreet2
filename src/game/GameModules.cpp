@@ -29,8 +29,8 @@ void ScrmSetTeamScore(int which, short value);
 void ScrmClearDriveBallPlaced(void);
 void UISGameInit(void);
 void UISGameShutdown(void);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 char *strncpy(char *pDest, const char *pSource, int count);
 void ResTrackLabel(const char *pText);
 int ResQuickloadOpenDevice(const char *pName, int unknown);
@@ -160,14 +160,14 @@ int Qkl::Init()
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
         ResTrackLabel("FELoopEnterStart");
     } else {
-        fn_801C2E18(text, "GameLoopEnterStart%d", fn_800A3444());
+        sprintf(text, "GameLoopEnterStart%d", fn_800A3444());
         ResTrackLabel(text);
     }
 
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
         strncpy(mFileName.mText, lbl_803EB6F0, sizeof(mFileName.mText));
     } else {
-        fn_801C2D88(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
+        snprintf(mFileName.mText, sizeof(mFileName.mText), "%s%d.qkl", lbl_803EB6F8, fn_800A3444());
     }
     ResQuickloadOpenDevice(mFileName.mText, 44);
     return 1;
@@ -183,7 +183,7 @@ int Qkl::Shutdown()
     if (MainFEGroupIsStarted(&gMainFEGroup)) {
         ResTrackLabel("FELoopEnterFinish");
     } else {
-        fn_801C2E18(text, "GameLoopEnterFinish%d", fn_800A3444());
+        sprintf(text, "GameLoopEnterFinish%d", fn_800A3444());
         ResTrackLabel(text);
     }
     return 1;

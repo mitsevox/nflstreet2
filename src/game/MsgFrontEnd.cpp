@@ -223,8 +223,8 @@ void CreateTeamLoadUserTeams(void);
 int GauntletGetCurrentTeam(int a);
 int GauntletSetCurrentTeam(int a, int b);
 int GauntletGetTeamsLeft(int a);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
 int PerPollSingleDevice(int a);
 unsigned int PerGetNumDevices(void);
@@ -1772,8 +1772,8 @@ void MsgTeamSelectBrowsePlayer(int side, int direction, int *pId, char *pName, i
         }
         unsigned int height = PlayerDbGetHeight(pObject);
         int weight = PlayerDbGetWeight(pObject);
-        fn_801C2D88(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
-        fn_801C2D88(pWeight, weightSize, "%d lbs", weight);
+        snprintf(pHeight, heightSize, "%d ft %d in", height / 12, height % 12);
+        snprintf(pWeight, weightSize, "%d lbs", weight);
         if (_MsgTeamSelect_aRoster[side].mEntries[found].mSlot >= 0) {
             *pFlag = 1;
         } else {
@@ -2018,8 +2018,8 @@ void MsgTeamSelectGetRowInfo(int team, int row, char *pName, int nameLength, cha
             pValues[9] = values[9];
         }
     } else {
-        fn_801C2E18(pName, " ");
-        fn_801C2E18(pRole, " ");
+        sprintf(pName, " ");
+        sprintf(pRole, " ");
         if (pValues) {
             unsigned char i;
 
@@ -3415,12 +3415,12 @@ void MsgUserStatsGet(int control, MenuText_t *pName, int *pUnknown34, int *pUnkn
         if (streak == 1) {
             strnzcpy(pStreak->mpText, "1 Win", pStreak->mLength);
         } else {
-            fn_801C2E18(pStreak->mpText, "%d Wins", streak);
+            sprintf(pStreak->mpText, "%d Wins", streak);
         }
     } else if (streak == -1) {
         strnzcpy(pStreak->mpText, "1 Loss", pStreak->mLength);
     } else {
-        fn_801C2E18(pStreak->mpText, "%d Losses", -streak);
+        sprintf(pStreak->mpText, "%d Losses", -streak);
     }
     unsigned char i;
     for (i = 0; i <= 12; i++) {
@@ -3664,7 +3664,7 @@ void MsgUnlocksExit(void)
 void MsgUnlocksCycleUser(int control, char *pText, int *pResult)
 {
     if (_MsgUnlocks_iProfile == -1) {
-        fn_801C2E18(pText, "None");
+        sprintf(pText, "None");
         *pResult = 0;
         return;
     }
@@ -3692,7 +3692,7 @@ void MsgUnlocksGetItem(int index, char *pText, int *pUnknown94, int *pFlag)
     UnlockItem_t record;
     DbCursorSeek(_MsgUnlocks_pList, index);
     UnlockListReadItem(_MsgUnlocks_pList, &record);
-    fn_801C2E18(pText, record.mName);
+    sprintf(pText, record.mName);
     char *pDot = strchr(pText, '.');
     if (pDot) {
         pDot[1] = 0;

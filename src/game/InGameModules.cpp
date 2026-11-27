@@ -19,9 +19,9 @@
 #include "game/Ball.h"
 #include "game/ScrmGetTeamPlayerCount.h"
 #include "game/TDbCompilePerformOp.h"
+#include "game/DefPred.h"
 
 extern "C" {
-extern char lbl_8030C070[];
 extern void *gpReplay;
 extern void *gLevelData;
 
@@ -608,7 +608,7 @@ int GameIntf::Shutdown()
     return 1;
 }
 
-static ModuleDependency sGamePlayDependencies[] = { &gGameState, &gGameObjList, &gIGMisc, &gUIS, &gCamScript, &gPenalty, &gScrmRule, &gJoyMsg, &gGRand, &gStatics, &gClock, &gGameBrk, &gPlyr, &gBall, &gPlyrCtrl, &gSndgIG, &gPursuit, &gPlayInfo, &gAudmon, &gAnimintf, &gAss, &gVptMgr, lbl_8030C070, 0 };
+static ModuleDependency sGamePlayDependencies[] = { &gGameState, &gGameObjList, &gIGMisc, &gUIS, &gCamScript, &gPenalty, &gScrmRule, &gJoyMsg, &gGRand, &gStatics, &gClock, &gGameBrk, &gPlyr, &gBall, &gPlyrCtrl, &gSndgIG, &gPursuit, &gPlayInfo, &gAudmon, &gAnimintf, &gAss, &gVptMgr, &gDefPred, 0 };
 GamePlay gGamePlay;
 
 ModuleDependency *GamePlay::GetDependencies() { return sGamePlayDependencies; }

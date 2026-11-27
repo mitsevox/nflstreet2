@@ -26,7 +26,7 @@ struct CtrlSelArgs_t {
 extern "C" {
 int SndgSfxPlay(int index, Vector_80039F5C *pPos);
 int MsgGameFindActivePort(void);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int ConGetChannelInfo(int a, int b);
 int PerGetDeviceStatus(int a);
 }
@@ -56,7 +56,7 @@ void CtrlSelIdle(int a)
 
 void CtrlSelFormatNumber(int index, char *pText)
 {
-    fn_801C2E18(pText, "%d", index + 1);
+    sprintf(pText, "%d", index + 1);
 }
 
 void CtrlSelFormatPort(int a, char *pText)

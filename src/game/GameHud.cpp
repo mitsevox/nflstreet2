@@ -25,7 +25,7 @@ int ScrmGetDown(void);
 int ScrmGetOffenseTeam(void);
 int ScrmGetConversionKind(void);
 int GameTextFindPlayerPad(int index);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 void fn_8021956C(void *p, int a, int b, int c);
 
 unsigned char HudGetPadSlot(int id);
@@ -253,7 +253,7 @@ void HudSetScore(int a, int b)
         break;
     default:
         args[0] = a != 0;
-        fn_801C2E18(_Hud_szScore, "%d", b);
+        sprintf(_Hud_szScore, "%d", b);
         _Hud_ScoreText.mpText = _Hud_szScore;
         args[1] = (int)&_Hud_ScoreText;
         _Hud_ScoreText.mLength = strlen(_Hud_ScoreText.mpText);

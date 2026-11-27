@@ -36,8 +36,8 @@ void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void fn_800AE7F0(int index, int team, Object_80039F5C *p);
 int ScrmGetDefenseTeam(void);
 
-extern unsigned short lbl_803192BC[2][7];
-extern unsigned short lbl_803192D8[2][7];
+unsigned short gPlyrAnimReplayStates[2][7];
+unsigned short gPlyrAnimReplayAnims[2][7];
 extern signed char lbl_802DA87C[];
 extern float lbl_803EAD00;
 extern float lbl_803EAD04;
@@ -94,8 +94,8 @@ extern "C" void PlyrAnimReplayRead(BitStream_t *pStream0, BitStream_t *pStream1,
         for (unsigned char i = 0; i <= 6; i++) {
             unsigned short id = ReadBitStream(pStream1, 16);
             unsigned short anim = ReadBitStream(pStream1, 16);
-            lbl_803192BC[team][i] = id;
-            lbl_803192D8[team][i] = anim;
+            gPlyrAnimReplayStates[team][i] = id;
+            gPlyrAnimReplayAnims[team][i] = anim;
             if (pStream2) {
                 ReadBitStream(pStream2, 32);
             }

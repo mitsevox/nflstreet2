@@ -9712,7 +9712,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials. Its three .bss file statics are placed by the storage map (data rows 0x8030BC2C, 0x8030BC88, 0x8030BC98).",
       "sections": [
         {
           "section": ".text",
@@ -9736,7 +9736,7 @@
           "section": ".bss",
           "placement": ".bss",
           "start": "0x8030BC2C",
-          "end": "0x8030BC58"
+          "end": "0x8030BCA8"
         },
         {
           "section": ".ctors",
@@ -9946,6 +9946,23 @@
           "symbol": "_GLOBAL_.D.PlayerGearColorsOpen",
           "start": "0x800834A0",
           "end": "0x800834CC"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
         }
       ]
     },
@@ -10570,7 +10587,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim.",
+      "evidence": "evidence.tsv retained open/provisional37-function grouping. All37 complete bodies compared; ordinary float literals replace external aggregate constant views and the temporary two-float difference reuses Point_8017886C. Full native rodata is measured against referenced target context0x80290B58-0x80290B9C; extra native bytes remain mismatches, without absorbing the following original table. Canonical player, ball, event and Block_800C9D6C contracts retained. Original assembly/storage stays linked; no completed-file or storage allocation claim. Data rows 0x8030AA7C-0x8030AA88 (.bss) and 0x803EC820-0x803EC844 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -10583,6 +10600,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "functions": [
@@ -19302,14 +19331,34 @@
           "end": "0x8022B414"
         },
         {
-          "symbol": "fn_8022B414",
+          "symbol": "DbMttsGetPlayerColumn",
           "start": "0x8022B414",
           "end": "0x8022B580"
         },
         {
-          "symbol": "fn_8022B7A4",
+          "symbol": "DbMttsUpdatePlayerColumn",
+          "start": "0x8022B580",
+          "end": "0x8022B7A4"
+        },
+        {
+          "symbol": "DbMttsGetTeamColumn",
           "start": "0x8022B7A4",
           "end": "0x8022B8C8"
+        },
+        {
+          "symbol": "DbMttsUpdateTeamColumn",
+          "start": "0x8022B8C8",
+          "end": "0x8022BAB4"
+        },
+        {
+          "symbol": "fn_8022BAB4",
+          "start": "0x8022BAB4",
+          "end": "0x8022BD30"
+        },
+        {
+          "symbol": "fn_8022BD30",
+          "start": "0x8022BD30",
+          "end": "0x8022BF60"
         },
         {
           "symbol": "fn_8022BF60",
@@ -19805,7 +19854,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
-          "end": "0x802355E4"
+          "end": "0x80235010"
         },
         {
           "section": ".rodata",
@@ -20001,7 +20050,7 @@
           "end": "0x80234908"
         },
         {
-          "symbol": "fn_80234908",
+          "symbol": "ModelPassShadersClear",
           "start": "0x80234908",
           "end": "0x8023491C"
         },
@@ -20134,51 +20183,6 @@
           "symbol": "fn_80234F74",
           "start": "0x80234F74",
           "end": "0x80235010"
-        },
-        {
-          "symbol": "fn_80235328",
-          "start": "0x80235328",
-          "end": "0x802353CC"
-        },
-        {
-          "symbol": "fn_802353CC",
-          "start": "0x802353CC",
-          "end": "0x802353D0"
-        },
-        {
-          "symbol": "fn_802353D0",
-          "start": "0x802353D0",
-          "end": "0x802353D4"
-        },
-        {
-          "symbol": "fn_802353D4",
-          "start": "0x802353D4",
-          "end": "0x802353D8"
-        },
-        {
-          "symbol": "fn_802353D8",
-          "start": "0x802353D8",
-          "end": "0x802353E8"
-        },
-        {
-          "symbol": "fn_802353E8",
-          "start": "0x802353E8",
-          "end": "0x802353F8"
-        },
-        {
-          "symbol": "fn_802353F8",
-          "start": "0x802353F8",
-          "end": "0x80235510"
-        },
-        {
-          "symbol": "fn_80235510",
-          "start": "0x80235510",
-          "end": "0x80235588"
-        },
-        {
-          "symbol": "fn_80235588",
-          "start": "0x80235588",
-          "end": "0x802355E4"
         },
         {
           "symbol": "fn_802338D4",
@@ -20357,135 +20361,6 @@
       ]
     },
     {
-      "source": "src/engine/cu_8025E148.c",
-      "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv provisional unit row 0x8025E148-0x8025FBD4 (src/engine/cu_8025E148.c), its compiler, source-form, function and name rows and the exact data rows 0x802B7268-0x802B72B0 (.rodata), 0x802FF4A8-0x802FF4B0 (.data) and 0x803A6A08-0x803A6A28 (.bss). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025E148",
-          "end": "0x8025FBD4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B7268",
-          "end": "0x802B72B0"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FF4A8",
-          "end": "0x802FF4B0"
-        },
-        {
-          "section": ".sdata2",
-          "placement": ".data6",
-          "start": "0x803ED9C4",
-          "end": "0x803EDDC4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6A08",
-          "end": "0x803A6A28"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "fn_8025E148",
-          "start": "0x8025E148",
-          "end": "0x8025E1D8"
-        },
-        {
-          "symbol": "__main",
-          "start": "0x8025E1D8",
-          "end": "0x8025E210"
-        },
-        {
-          "symbol": "__ashldi3",
-          "start": "0x8025E210",
-          "end": "0x8025E250"
-        },
-        {
-          "symbol": "__ashrdi3",
-          "start": "0x8025E250",
-          "end": "0x8025E290"
-        },
-        {
-          "symbol": "__divdi3",
-          "start": "0x8025E290",
-          "end": "0x8025E80C"
-        },
-        {
-          "symbol": "__fixunssfdi",
-          "start": "0x8025E850",
-          "end": "0x8025EA08"
-        },
-        {
-          "symbol": "__floatdidf",
-          "start": "0x8025EA08",
-          "end": "0x8025EA64"
-        },
-        {
-          "symbol": "__floatdisf",
-          "start": "0x8025EA64",
-          "end": "0x8025EB14"
-        },
-        {
-          "symbol": "__lshrdi3",
-          "start": "0x8025EB14",
-          "end": "0x8025EB54"
-        },
-        {
-          "symbol": "__moddi3",
-          "start": "0x8025EB54",
-          "end": "0x8025F088"
-        },
-        {
-          "symbol": "__pure_virtual",
-          "start": "0x8025F088",
-          "end": "0x8025F0A8"
-        },
-        {
-          "symbol": "__udivdi3",
-          "start": "0x8025F0A8",
-          "end": "0x8025F58C"
-        },
-        {
-          "symbol": "__umoddi3",
-          "start": "0x8025F58C",
-          "end": "0x8025FA24"
-        },
-        {
-          "symbol": "__cmpdi2",
-          "start": "0x8025FABC",
-          "end": "0x8025FAF8"
-        },
-        {
-          "symbol": "fn_8025FAF8",
-          "start": "0x8025FAF8",
-          "end": "0x8025FB08"
-        },
-        {
-          "symbol": "fn_8025FB08",
-          "start": "0x8025FB08",
-          "end": "0x8025FB34"
-        },
-        {
-          "symbol": "fn_8025FB34",
-          "start": "0x8025FB34",
-          "end": "0x8025FB68"
-        },
-        {
-          "symbol": "fn_8025FB68",
-          "start": "0x8025FB68",
-          "end": "0x8025FBD4"
-        }
-      ]
-    },
-    {
       "source": "src/engine/vfprintf.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional whole-file unit row 0x8026247C-0x802645AC, complete function rows, unchanged engine_c compiler profile and full readonly constant pool. Every original body is measured at its full extent.",
@@ -20567,7 +20442,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows).",
+      "evidence": "evidence.tsv inferred open/provisional grouping row 0x800D760C-0x800D8140, the function rows of its eleven bodies and the .rodata row 0x8029D678-0x8029D7B8. The four file-static functions SN's linker discarded (_StrippedFramesToTime, _StrippedPrintBlankName, _StrippedCheckDownOpcodes, _StrippedGetHoldWeight) supply the unreferenced pool and strings 0x8029D678-0x8029D6BC, the strings 0x8029D6C8-0x8029D758 and the float table 0x8029D75C-0x8029D77C (evidence.tsv linker rows). Data row 0x803192BC-0x803192F4 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -20580,6 +20455,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "functions": [
@@ -23816,7 +23697,7 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; the first four and native state link, the two allocator loops remain registered partials.",
+      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; five and the native state link, the SNDARAM_alloc loop remains a registered partial.",
       "sections": [
         {
           "section": ".text",
@@ -23836,11 +23717,6 @@
           "symbol": "SNDARAM_alloc",
           "start": "0x80279960",
           "end": "0x80279B24"
-        },
-        {
-          "symbol": "SNDARAM_free",
-          "start": "0x80279B24",
-          "end": "0x80279BC0"
         }
       ]
     },
@@ -23984,7 +23860,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes. Data rows 0x8037EC7C-0x8037F860 (.bss) and 0x803ECEBC-0x803ECEC0 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -23997,6 +23873,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "functions": [
@@ -24367,7 +24255,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -24380,6 +24268,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "functions": [
@@ -25157,13 +25051,19 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the five holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the four holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted. Data row 0x80384BC0-0x80384CC0 (.bss _Mem_pAddrToHeap).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D134C",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384BC0",
+          "end": "0x80384CC0"
         }
       ],
       "functions": [
@@ -29878,7 +29778,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 10 functions are exact and linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29904,11 +29804,6 @@
           "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
           "start": "0x8026BA60",
           "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-          "start": "0x8026BC9C",
-          "end": "0x8026BE48"
         },
         {
           "symbol": "SNDI_midiprocesstick__Fi",
