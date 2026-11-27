@@ -126,7 +126,7 @@ void PlyrKeepInBounds(Object_80039F5C *p);
 void PlyrPoseBlendEntries(void *pBlock, int a);
 void PlyrPoseBlendRootAngles(void *pBlock, void *a, unsigned short b, void *c);
 void MotionClampToGround(Object_800B26B0 *pMotion);
-void fn_800C3404(Object_80039F5C *p);
+void PlyrCheckSidelineNeighbor(Object_80039F5C *p);
 void fn_800C8270(Object_80039F5C *p);
 void fn_800C82C0(Object_80039F5C *p);
 void fn_800CE674(Object_800CE674 *p);
@@ -218,7 +218,7 @@ int PassIconGetSlot(int index, int force);
 unsigned char fn_800B65A0(int team);
 int ScrmIsNotReplay(void);
 void fn_800F1700(void);
-void fn_800C11B8(void);
+void PassLaneUpdateReceivers(void);
 void fn_800C845C(void);
 void PlayerMoveTickAll(void);
 void fn_800C8330(Object_80039F5C *p);
@@ -695,7 +695,7 @@ extern "C" void PlyrMgrUpdate(void)
     int i;
 
     fn_800F1700();
-    fn_800C11B8();
+    PassLaneUpdateReceivers();
     fn_800C845C();
     PlayerMoveTickAll();
     for (i = 0; i < count; i++) {
@@ -782,7 +782,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
         PlyrClampBehindLine(p);
         PlyrKeepInBounds(p);
         MotionClampToGround(&p->mMotion);
-        fn_800C3404(p);
+        PlyrCheckSidelineNeighbor(p);
         PlyrBallHandUpdate(p);
     }
     for (i = 0; i < count; i++) {

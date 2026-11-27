@@ -13928,31 +13928,31 @@
             "evidence": "evidence.tsv source-form 0x800BCF7C-0x800BD184"
           },
           {
-            "function": "fn_800BE808",
+            "function": "PreSnapEnterLookMode",
             "evidence": "evidence.tsv source-form 0x800BE808-0x800BE8E4"
           },
           {
-            "function": "fn_800C0910",
+            "function": "PassLaneRateReceiver",
             "evidence": "evidence.tsv source-form 0x800C0910-0x800C1180"
           },
           {
-            "function": "fn_800C146C",
+            "function": "PassLaneSolveTarget",
             "evidence": "evidence.tsv source-form 0x800C146C-0x800C1C34"
           },
           {
-            "function": "fn_800C2150",
+            "function": "PlyrSwing9Update",
             "evidence": "evidence.tsv source-form 0x800C2150-0x800C2788"
           },
           {
-            "function": "fn_800C2884",
+            "function": "PlyrSwing5Update",
             "evidence": "evidence.tsv source-form 0x800C2884-0x800C2EC0"
           },
           {
-            "function": "fn_800C3404",
+            "function": "PlyrCheckSidelineNeighbor",
             "evidence": "evidence.tsv source-form 0x800C3404-0x800C34B0"
           },
           {
-            "function": "fn_800C34B0",
+            "function": "GameStartSetupClock",
             "evidence": "evidence.tsv source-form 0x800C34B0-0x800C3610"
           },
           {
@@ -13960,11 +13960,11 @@
             "evidence": "evidence.tsv source-form 0x800C3BEC-0x800C4184"
           },
           {
-            "function": "fn_800C5DE4",
+            "function": "PlyrContactCanHit",
             "evidence": "evidence.tsv source-form 0x800C5DE4-0x800C5F80"
           },
           {
-            "function": "fn_800C68BC",
+            "function": "PlyrContactIsCompatible",
             "evidence": "evidence.tsv source-form 0x800C68BC-0x800C6A3C"
           },
           {

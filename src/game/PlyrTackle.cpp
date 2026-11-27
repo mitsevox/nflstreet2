@@ -239,7 +239,7 @@ int SyncTimeGetGameTime(void);
 }
 
 extern "C" {
-int fn_800C4184(Object_80039F5C *p);
+int PlyrIsIdleForCpu(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -303,7 +303,7 @@ int fn_800B83A0(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800C05F4(void);
+int PreSnapIsPredictCooling(void);
 }
 
 extern "C" {
@@ -1100,7 +1100,7 @@ extern "C" int PlyrAlignInput(Object_80039F5C *p)
     float speed;
     int near;
 
-    if (fn_800C05F4() != 0) {
+    if (PreSnapIsPredictCooling() != 0) {
         return 0;
     }
     if (fn_800AD9B4() == 8) {
@@ -1882,7 +1882,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
 extern "C" int PlyrWaitInput(Object_80039F5C *p) {
     if (fn_800AD9B4() != 2) {
         if (ScrmGetDown() != 0) {
-            if (PlyrCtrlIsStateFree(p) != 0 && fn_800C05F4() == 0 && fn_801486A0() != 0) {
+            if (PlyrCtrlIsStateFree(p) != 0 && PreSnapIsPredictCooling() == 0 && fn_801486A0() != 0) {
                 fn_800B76E8(p);
             }
         } else if (p->mUnknown2914 != 19 && p->mUnknown2914 != 20 && p->mUnknown2914 != 23) {
@@ -3258,7 +3258,7 @@ extern "C" void PlyrContactHitWall(Object_80039F5C *p) {
     int nearX = 0;
     int nearY = 0;
     int index = 0;
-    if (!fn_800C4184(p))
+    if (!PlyrIsIdleForCpu(p))
         return;
     if (LevelGetData()->mUnknown136) {
         if (fabsf(p->mMotion.mPos.mX) > ScrmGetSidelineX() - _PlyrContact_fEdgeMargin)

@@ -45,7 +45,7 @@ struct FieldLineBounds_t {
 extern "C" {
 unsigned char ReplayIsShowing(Type_803EA368 *p);
 int fn_800BA6F8(void);
-void *fn_800C47C4(void);
+void *StadiumGetArchive(void);
 int ScrmGetDown(void);
 FieldPoint_t ScrmGetTeamSetupSpot(int team);
 float ScrmGetLineToGain(void);
@@ -232,7 +232,7 @@ void FieldLinesCreate(int handle)
         p->mUnknownEC = 0.0f;
         p->mUnknownF0 = 0.0f;
         _FieldLines_abForceOn[i] = 0;
-        TMTexLibLoad(p->mUnknownF8, ResLoad(fn_800C47C4(), 17, 1));
+        TMTexLibLoad(p->mUnknownF8, ResLoad(StadiumGetArchive(), 17, 1));
         p->mUnknown120 = TMTexLibGetTexture(p->mUnknownF8, 0xFF000000);
         p->mUnknown124 = TMTexLibGetClut(p->mUnknownF8, 0xFF000000, 0);
         ObjSetPriority(handle, p, 3);

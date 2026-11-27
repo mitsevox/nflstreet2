@@ -12,8 +12,8 @@ void MotionResetDecay(Object_800B26B0 *pObject);
 void MotionIntegrate(Object_800B26B0 *pObject);
 void MotionApplyInput(Object_800B26B0 *pObject, unsigned char *a);
 void MotionAlignToFacing(Object_800B26B0 *pObject);
-float fn_800C4914(Object_80039F5C *p, float value);
-float fn_800C495C(Object_80039F5C *p, float value);
+float PlyrSurfaceScaleTurn(Object_80039F5C *p, float value);
+float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
@@ -129,8 +129,8 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
             break;
         }
     }
-    pMotion->mUnknown36 = fn_800C495C(p, pMotion->mUnknown36);
-    pMotion->mUnknown52 = fn_800C4914(p, pMotion->mUnknown52);
+    pMotion->mUnknown36 = PlyrSurfaceScaleSpeed(p, pMotion->mUnknown36);
+    pMotion->mUnknown52 = PlyrSurfaceScaleTurn(p, pMotion->mUnknown52);
     if (PlyrMoveInCappedState(p)) {
         float cap = gPlyrMoveFwdSpeed * pInput->mUnknown0;
 

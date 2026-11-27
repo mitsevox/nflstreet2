@@ -84,8 +84,8 @@ int fn_800B81A4(void);
 void PracticeApplyOptions(void);
 void fn_800BF658(int a);
 void fn_800BF6CC(int a);
-int fn_800BF718(int a);
-void fn_800C0330(void *p);
+int PreSnapIsSlotLooking(int a);
+void PreSnapCloseMenus(void *p);
 void fn_800C1CA0(void);
 int fn_800C1E40(void);
 int CamMainGetMode(GameCamera_t *pCamera);
@@ -396,7 +396,7 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
     _Pause_bAltAction = 0;
     UISGameSetLastPad(c);
     UISGameLockPad(c);
-    fn_800C0330(lbl_803EABA4);
+    PreSnapCloseMenus(lbl_803EABA4);
     _Pause_bSavedSwap1 = GameEventFlagsSetFlag1(0);
     _Pause_bSavedSwap0 = GameEventFlagsSetFlag0(2);
     _Pause_State.mUnknown0 = fn_800AD9B4();
@@ -522,7 +522,7 @@ void PauseClose(void)
     GameEventFlagsSetFlag1(_Pause_bSavedSwap1);
     GameEventFlagsSetFlag0(_Pause_bSavedSwap0);
     PauseCloseHook();
-    if (fn_800BF718(1)) {
+    if (PreSnapIsSlotLooking(1)) {
         int busy = InGameIsStopped() || _Pause_bQuit || _Pause_bAltAction || _Pause_bCallOnClose;
 
         if (busy) {

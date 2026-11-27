@@ -33,7 +33,7 @@ struct PlyrPosePart_t {
     AnimSkeleton_t *mUnknown68;
 };
 
-/* Block at +280, passed to fn_800C2788. */
+/* Block at +280, passed to PlyrSwing9Init. */
 struct Block_800C2788 {
     char mUnknown0[1];
     unsigned char mUnknown1;
@@ -48,7 +48,7 @@ struct Block_800C2788 {
     AnimSkeleton_t *mUnknown312;
 };
 
-/* Block at +596, passed to fn_800C2EC0. */
+/* Block at +596, passed to PlyrSwing5Init. */
 struct Block_800C2EC0 {
     char mUnknown0[1];
     unsigned char mUnknown1;

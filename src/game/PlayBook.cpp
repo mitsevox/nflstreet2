@@ -54,9 +54,9 @@ unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column);
 unsigned char PlaybookSideGetLoaded(int index);
 void PlyrAttachTeamModels(unsigned char index);
 int fn_800BA6F8(void);
-QueryCursor fn_800C0750(int index, unsigned short *pValues);
-void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
+QueryCursor PlyrDbOpenDepthQuery(int index, unsigned short *pValues);
+void PlyrDbCloseQuery(QueryCursor cursor);
+void PlyrDbLoadTeamRecords(QueryCursor cursor, int index, unsigned short *pValues);
 int PlayAlignGetSlotPlayer(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 int PlayAlignSetSlotValue(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void PlayArtSetFlip(signed char team, int a, int b);
@@ -661,9 +661,9 @@ void PlayBookSetupTeams(void)
         QueryCursor cursor;
 
         PlayBookSetupTeam(team, 1);
-        cursor = fn_800C0750((unsigned char)team, values);
-        fn_800C07F0(cursor, (unsigned char)team, values);
-        fn_800C07C4(cursor);
+        cursor = PlyrDbOpenDepthQuery((unsigned char)team, values);
+        PlyrDbLoadTeamRecords(cursor, (unsigned char)team, values);
+        PlyrDbCloseQuery(cursor);
         PlyrAttachTeamModels(team);
     }
 }

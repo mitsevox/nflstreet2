@@ -586,7 +586,7 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
                  + (p->mMotion.mFacing - pBlock->mUnknown4Word)) & 0xFFFFFF;
             pBlock->mUnknown4Word = p->mMotion.mFacing;
         }
-        AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(fn_800C495C(p, 1.0f)));
+        AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(PlyrSurfaceScaleSpeed(p, 1.0f)));
         if (fn_800A7EF4(p->mIdBytes[2]) == 2) {
             AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(2.0f));
         } else if (fn_800A7EF4(p->mIdBytes[2]) == 0) {

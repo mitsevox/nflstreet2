@@ -88,7 +88,7 @@ extern float gPlyrMoveFwdSpeed;
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800A7EF4(unsigned char a);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
-float fn_800C495C(Object_80039F5C *p, float value);
+float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
 void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);

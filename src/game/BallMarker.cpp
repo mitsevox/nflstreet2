@@ -38,7 +38,7 @@ static BallMarkerTable_t _BallMarker_Table = {0};
 extern "C" {
 int fn_800BA6F8(void);
 int PracticeGetMenuRequest(void);
-int fn_800C47C4(void);
+int StadiumGetArchive(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
 int ScrmIsFieldFlipped(void);
@@ -126,7 +126,7 @@ void BallMarkerUnregister(void)
 
 void BallMarkerCreate(int handle)
 {
-    int data = fn_800C47C4();
+    int data = StadiumGetArchive();
     int desc;
 
     BallMarkerRegister(handle);

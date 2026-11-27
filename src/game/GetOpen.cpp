@@ -53,7 +53,7 @@ int ScrmTestPlayFlag(int a);
 extern float gPlyrMoveFwdSpeed;
 void fn_8009A8D4(void *p);
 int fn_80103D6C(Object_80039F5C *p);
-int fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
+int PassLaneGetReceiverRating(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
 int PlayBookGetReceiver(int team, int a, unsigned char *pOut);
 void PlayerCutPostTurn(Object_80039F5C *p, int angle);
 
@@ -368,7 +368,7 @@ extern "C" int GetOpenEnter(Object_80039F5C *p)
         if (!near) {
             if (!fn_80103D6C(p)) {
                 unsigned char a, b;
-                if (fn_800C13A0(p, &a, &b) > 1 && BallGetCurrentHolder()) {
+                if (PassLaneGetReceiverRating(p, &a, &b) > 1 && BallGetCurrentHolder()) {
                     if (!(fabsf(ScrmGetSidelineX() - p->mMotion.mPos.mX) >= 9.0f)) {
                         state->mUnknown28 = 0;
                     }
@@ -411,7 +411,7 @@ extern "C" int GetOpenUpdate(Object_80039F5C *p)
             int available = 0;
             if (BallGetCurrentHolder() && fn_80103D6C(p)) {
                 unsigned char first, second;
-                available = fn_800C13A0(p, &first, &second) <= 1;
+                available = PassLaneGetReceiverRating(p, &first, &second) <= 1;
             }
             if (!state->mUnknown39 && available && GetOpenShouldRunOn(p)) {
                 GetOpenRunOn(p, 5.0f);
