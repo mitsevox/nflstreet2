@@ -13,7 +13,7 @@ int FormationLineupRemapBase(int formation, int team, int *pKeys, int *pValues);
 int FormationCountForPlaybook(int a);
 int FormationGetByIndex(int index, int a);
 int *FormationLineupFetchUser(int formation, int team);
-int fn_8022D8F8(int a, int *pValues, int tag);
+int DbThcdSetLineup(int a, int *pValues, int tag);
 int FormationLineupCommitTeam(int team);
 
 int FormationLineupDeleteUser(int formation, int team)
@@ -74,7 +74,7 @@ int FormationLineupSwapAllUser(int a, int team, int first, int second)
 int FormationLineupApplyUser(int formation, int team)
 {
     int *pValues = FormationLineupFetchUser(formation, team);
-    if (pValues) fn_8022D8F8(team, pValues, 0x41474344);
+    if (pValues) DbThcdSetLineup(team, pValues, 0x41474344);
     return 1;
 }
 
