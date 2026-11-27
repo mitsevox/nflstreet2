@@ -6,18 +6,18 @@
 #include "engine/llquat.h"
 #include "game/Vec3Magnitude.h"
 
-typedef struct Limit_801C3EFC {
+typedef struct CharIKLimit_t {
     int mRange[3][2];
-} Limit_801C3EFC;
+} CharIKLimit_t;
 
-typedef struct ChainLink_801C3EFC {
+typedef struct CharIKLink_t {
     signed char mChild;
     unsigned char mBone;
     unsigned char mActive;
     unsigned char mUnk3;
-} ChainLink_801C3EFC;
+} CharIKLink_t;
 
-typedef struct Chain_801C3EFC {
+typedef struct CharIKChain_t {
     Skel_t *mpSkel;
     unsigned char mType;
     unsigned char mCount;
@@ -25,15 +25,15 @@ typedef struct Chain_801C3EFC {
     unsigned char mEnd;
     unsigned char mSolved;
     unsigned char mUnk9[3];
-    ChainLink_801C3EFC *mpLinks;
-} Chain_801C3EFC;
+    CharIKLink_t *mpLinks;
+} CharIKChain_t;
 
-typedef struct ChainResult_801C3EFC {
+typedef struct CharIKResult_t {
     short x;
     short y;
     short z;
     short mBone;
-} ChainResult_801C3EFC;
+} CharIKResult_t;
 
 extern unsigned char lbl_803EBBD8;
 extern unsigned char lbl_803EBBD9;
@@ -54,7 +54,7 @@ float Vec3CosAngle(float *pA, float *pB);
 void Vec3CrossProduct(float *pOut, float *pA, float *pB);
 void Vec3Mat33Mul(float *pOut, float *p);
 
-int fn_801C3EFC(int *pLimits, int rest, int *pAngle)
+int CharIKClampAngle(int *pLimits, int rest, int *pAngle)
 {
     int clamped = 0;
     int angle = *pAngle - (rest << 12);
@@ -70,7 +70,7 @@ int fn_801C3EFC(int *pLimits, int rest, int *pAngle)
     return clamped;
 }
 
-void fn_801C3F48(Chain_801C3EFC *pChain, int first, int last, int (*pAngles)[3], float (*pOut)[16])
+void CharIKBuildChainMatrices(CharIKChain_t *pChain, int first, int last, int (*pAngles)[3], float (*pOut)[16])
 {
     Skel_t *pSkel = pChain->mpSkel;
     SkelNode_t *pNode = pSkel->mpJoints[pChain->mpLinks[first].mBone].mpNode;
@@ -86,27 +86,27 @@ void fn_801C3F48(Chain_801C3EFC *pChain, int first, int last, int (*pAngles)[3],
     }
 }
 
-static inline void fn_801C3EFC_Rot(int x, int y, int z)
+static inline void _CharIKRotate(int x, int y, int z)
 {
     MatRotZYX(z << 8, y << 8, x << 8);
 }
 
-static inline void _ChainGetMatrixPos(float *pPos, float *pMatrix)
+static inline void _CharIKGetMatrixPos(float *pPos, float *pMatrix)
 {
     pPos[0] = pMatrix[3];
     pPos[1] = pMatrix[7];
     pPos[2] = pMatrix[11];
 }
 
-static inline void _ChainSetAngles(int *pDst, int *pSrc)
+static inline void _CharIKSetAngles(int *pDst, int *pSrc)
 {
     pDst[0] = pSrc[0];
     pDst[1] = pSrc[1];
     pDst[2] = pSrc[2];
 }
 
-void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst,
-                 Limit_801C3EFC *pLimits, float *pTarget, unsigned int iterations)
+void CharIKSolveCCD(CharIKChain_t *pChain, CharIKResult_t *pResult, SkelPose_t *pInst,
+                 CharIKLimit_t *pLimits, float *pTarget, unsigned int iterations)
 {
     float toEnd[3];
     float toTarget[3];
@@ -121,7 +121,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     QuatEulerAngles_t euler;
     Skel_t *pSkel;
     SkelEuler_t *pRest;
-    Limit_801C3EFC *pLimit;
+    CharIKLimit_t *pLimit;
     float c;
     int bone;
     int count;
@@ -136,15 +136,15 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     }
     MatMakeUnit();
     MatTranslate(pInst->mPos);
-    fn_801C3F48(pChain, 0, pChain->mStart - 1, angles, mats);
+    CharIKBuildChainMatrices(pChain, 0, pChain->mStart - 1, angles, mats);
     while (iterations-- > 0) {
         i = pChain->mEnd - 1;
         MatLoad(mats[pChain->mStart - 1]);
-        fn_801C3F48(pChain, pChain->mStart, pChain->mEnd, angles, mats);
-        _ChainGetMatrixPos(endPos, mats[pChain->mEnd]);
+        CharIKBuildChainMatrices(pChain, pChain->mStart, pChain->mEnd, angles, mats);
+        _CharIKGetMatrixPos(endPos, mats[pChain->mEnd]);
         for (; i >= pChain->mStart; i--) {
             bone = pChain->mpLinks[i].mBone;
-            _ChainGetMatrixPos(jointPos, mats[i]);
+            _CharIKGetMatrixPos(jointPos, mats[i]);
             Vec3Sub(toEnd, endPos, jointPos);
             Vec3Sub(toTarget, pTarget, jointPos);
             MatLoad(mats[i]);
@@ -166,12 +166,12 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
                 pRest = &pSkel->mRest[bone];
                 pLimit = &pLimits[bone];
                 if (lbl_803EBBD9) {
-                    fn_801C3EFC(pLimit->mRange[0], pRest->x, &rot[0]);
-                    fn_801C3EFC(pLimit->mRange[1], pRest->y, &rot[1]);
-                    fn_801C3EFC(pLimit->mRange[2], pRest->z, &rot[2]);
+                    CharIKClampAngle(pLimit->mRange[0], pRest->x, &rot[0]);
+                    CharIKClampAngle(pLimit->mRange[1], pRest->y, &rot[1]);
+                    CharIKClampAngle(pLimit->mRange[2], pRest->z, &rot[2]);
                 }
                 if (lbl_803EBBD8) {
-                    _ChainSetAngles(angles[bone], rot);
+                    _CharIKSetAngles(angles[bone], rot);
                 }
                 MatLoad(mats[i - 1]);
                 MatTranslate(pSkel->mPos[bone]);
@@ -194,7 +194,7 @@ void fn_801C4010(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     pChain->mSolved = count;
 }
 
-void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_t *pInst, SkelEuler_t *pAngles, int stop)
+void CharIKTransformToJoint(CharIKChain_t *pChain, SkelPose_t *pInst, SkelEuler_t *pAngles, int stop)
 {
     Skel_t *pSkel = pChain->mpSkel;
     SkelNode_t *pNode;
@@ -210,12 +210,12 @@ void fn_801C447C(Chain_801C3EFC *pChain, SkelPose_t *pInst, SkelEuler_t *pAngles
         if (bone == stop) {
             break;
         }
-        fn_801C3EFC_Rot(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
+        _CharIKRotate(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
         pNode = pNode->mpChildren[pChain->mpLinks[i].mChild];
     }
 }
 
-void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose_t *pInst, int unused,
+void CharIKSolveLookAt(CharIKChain_t *pChain, CharIKResult_t *pResult, SkelPose_t *pInst, int unused,
                  float *pTarget, int *pYaw)
 {
     int angles[3];
@@ -232,14 +232,14 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     float d;
 
     MatPushUnit();
-    fn_801C447C(pChain, pInst, pAngles, bone);
+    CharIKTransformToJoint(pChain, pInst, pAngles, bone);
     MatStore(base);
     pos[0] = base[3];
     pos[1] = base[7];
     pos[2] = base[11];
     Vec3Sub(dir, pTarget, pos);
     MatPush();
-    fn_801C3EFC_Rot(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
+    _CharIKRotate(pAngles[bone].x, pAngles[bone].y, pAngles[bone].z);
     MatStore(joint);
     Vec3Mat33Mul(up, lbl_802F48A8);
     MatPop();
@@ -278,13 +278,13 @@ void fn_801C4550(Chain_801C3EFC *pChain, ChainResult_801C3EFC *pResult, SkelPose
     MatPop();
 }
 
-Chain_801C3EFC *fn_801C47EC(Skel_t *pSkel, int start, int end, int type)
+CharIKChain_t *CharIKCreateChain(Skel_t *pSkel, int start, int end, int type)
 {
     SkelNode_t *pRoot = pSkel->mpJoints[0].mpNode;
     SkelNode_t *pLast = pSkel->mpJoints[end].mpNode;
     SkelNode_t *pNode;
     SkelNode_t *pParent;
-    Chain_801C3EFC *pChain;
+    CharIKChain_t *pChain;
     unsigned int child;
     int count = 0;
     int i;
@@ -292,9 +292,9 @@ Chain_801C3EFC *fn_801C47EC(Skel_t *pSkel, int start, int end, int type)
     for (pNode = pLast; pNode != pRoot && pNode->mJoint != 0; pNode = pNode->mpParent) {
         count++;
     }
-    pChain = fn_801D2BB0(1, sizeof(Chain_801C3EFC) + ++count * sizeof(ChainLink_801C3EFC) + pSkel->mNumJoints * 8,
+    pChain = fn_801D2BB0(1, sizeof(CharIKChain_t) + ++count * sizeof(CharIKLink_t) + pSkel->mNumJoints * 8,
                          0, 0);
-    pChain->mpLinks = (ChainLink_801C3EFC *)(pChain + 1);
+    pChain->mpLinks = (CharIKLink_t *)(pChain + 1);
     pNode = pLast;
     i = count - 1;
     child = 0;
@@ -324,7 +324,7 @@ Chain_801C3EFC *fn_801C47EC(Skel_t *pSkel, int start, int end, int type)
     return pChain;
 }
 
-void fn_801C4958(unsigned char enable)
+void CharIKEnableLimits(unsigned char enable)
 {
     lbl_803EBBD9 = enable;
 }

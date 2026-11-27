@@ -2503,7 +2503,7 @@ int CharSkelGetJointByName(void *p, const char *pName);
 }
 
 extern "C" {
-void *fn_801C47EC(void *p, int a, int b, int c);
+void *CharIKCreateChain(void *p, int a, int b, int c);
 }
 
 extern "C" {
@@ -2511,7 +2511,7 @@ void Orient3Lerp(unsigned int *pOut, unsigned int *pA, unsigned int *pB, float t
 }
 
 extern "C" {
-void fn_801C4958(unsigned char enable);
+void CharIKEnableLimits(unsigned char enable);
 }
 
 extern "C" {
@@ -4480,12 +4480,12 @@ int fn_800AE9F8(unsigned char (*pEntries)[4]);
 }
 
 extern "C" {
-void fn_801C4010(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
+void CharIKSolveCCD(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
                  float *pTarget, int count);
 }
 
 extern "C" {
-void fn_801C4550(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
+void CharIKSolveLookAt(Chain_800AF404 *pChain, void *pResult, AnimPose_t *pPose, Item_800AF82C *pLimits,
                  float *pTarget, int *pValue);
 }
 
@@ -23067,10 +23067,10 @@ extern "C" void fn_800AF404(Entry_800AF82C *p, void *pResult, float *pTarget)
     pChain->mUnknown8 = 0;
     switch (pChain->mType) {
     case 0:
-        fn_801C4550(pChain, pResult, p->mpUnknown0, p->mpUnknown4, pTarget, p->mUnknown30);
+        CharIKSolveLookAt(pChain, pResult, p->mpUnknown0, p->mpUnknown4, pTarget, p->mUnknown30);
         break;
     case 1:
-        fn_801C4010(pChain, pResult, p->mpUnknown0, p->mpUnknown4, pTarget, (int)(float)lbl_803EAB08);
+        CharIKSolveCCD(pChain, pResult, p->mpUnknown0, p->mpUnknown4, pTarget, (int)(float)lbl_803EAB08);
         break;
     }
 }
@@ -23126,7 +23126,7 @@ extern "C" void fn_800AF630(void *pRes, unsigned int index, unsigned int count)
         memcpy(pItems, lbl_802D840C, lbl_803EC980 * sizeof(Item_800AF82C));
         pItems += lbl_803EC980;
     }
-    fn_801C4958(1);
+    CharIKEnableLimits(1);
 }
 
 extern "C" void fn_800AF71C(void)
@@ -23147,7 +23147,7 @@ extern "C" void fn_800AF790(int index, void *p, const char *pNameA, const char *
     int a = CharSkelGetJointByName(p, pNameA);
     int b = CharSkelGetJointByName(p, pNameB);
 
-    lbl_803EC978->mpUnknown4[index] = fn_801C47EC(p, a, b, value);
+    lbl_803EC978->mpUnknown4[index] = CharIKCreateChain(p, a, b, value);
 }
 
 extern "C" void fn_800AF804(Entry_800AF82C *p)

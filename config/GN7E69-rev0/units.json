@@ -29451,9 +29451,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3EFC.c",
+      "source": "src/engine/charik.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801C3EFC.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/charik.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29477,11 +29477,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801C4010",
+            "function": "CharIKSolveCCD",
             "evidence": "evidence.tsv source-form 0x801C4010-0x801C447C"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_801C3EFC.c holds out fn_801C4010."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/charik.c holds out CharIKSolveCCD."
       }
     },
     {

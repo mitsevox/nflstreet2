@@ -26832,9 +26832,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3EFC.c",
+      "source": "src/engine/charik.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/cu_801C3EFC.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/charik.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -26851,37 +26851,37 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801C3EFC",
+          "symbol": "CharIKClampAngle",
           "start": "0x801C3EFC",
           "end": "0x801C3F48"
         },
         {
-          "symbol": "fn_801C3F48",
+          "symbol": "CharIKBuildChainMatrices",
           "start": "0x801C3F48",
           "end": "0x801C4010"
         },
         {
-          "symbol": "fn_801C4010",
+          "symbol": "CharIKSolveCCD",
           "start": "0x801C4010",
           "end": "0x801C447C"
         },
         {
-          "symbol": "fn_801C447C",
+          "symbol": "CharIKTransformToJoint",
           "start": "0x801C447C",
           "end": "0x801C4550"
         },
         {
-          "symbol": "fn_801C4550",
+          "symbol": "CharIKSolveLookAt",
           "start": "0x801C4550",
           "end": "0x801C47EC"
         },
         {
-          "symbol": "fn_801C47EC",
+          "symbol": "CharIKCreateChain",
           "start": "0x801C47EC",
           "end": "0x801C4958"
         },
         {
-          "symbol": "fn_801C4958",
+          "symbol": "CharIKEnableLimits",
           "start": "0x801C4958",
           "end": "0x801C4960"
         }
