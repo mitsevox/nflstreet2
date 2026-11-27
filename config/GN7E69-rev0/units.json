@@ -26042,12 +26042,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800577DC",
-          "end": "0x80057C58"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80057F20",
           "end": "0x8005B610"
         },
         {
@@ -26104,10 +26098,6 @@
           {
             "function": "InGamePlayCallClose",
             "evidence": "evidence.tsv source-form 0x8005740C-0x800577DC"
-          },
-          {
-            "function": "InGamePlayCallLoadList",
-            "evidence": "evidence.tsv source-form 0x80057C58-0x80057F20"
           },
           {
             "function": "InGameRewardFormatLogo",

@@ -1285,6 +1285,7 @@ void InGamePlayCallLoadList(unsigned char team, int index, int flag)
         if (cursor.mUnknown0) {
             TDbSQLDestroyCursor(&cursor);
         }
+        if (i) i += 0; // FAKEMATCH: a no-op branch on the placed-play count; its block boundary lengthens pList's life so greg ranks the play-book tag above it (r27/r26)
     } else {
         for (i = 0; i < count; i++) {
             pList[i] = i;
