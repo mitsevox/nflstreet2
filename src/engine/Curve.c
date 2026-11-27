@@ -2,6 +2,7 @@
 
 #include "engine/SysSetLastErrorFunc.h"
 
+static char _Curve_ModuleID[] = "CURVE.LIB";
 static unsigned char _Curve_ModuleActive = 0;
 
 int CurveInit(void)

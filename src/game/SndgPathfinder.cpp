@@ -34,18 +34,6 @@ struct Vec2 {
     float y;
 };
 
-extern "C" {
-extern Csis::InterfaceId lbl_803EB878;
-extern Csis::InterfaceId lbl_803EB888;
-extern Csis::InterfaceId lbl_803EB890;
-extern Csis::InterfaceId lbl_803EB898;
-extern Csis::InterfaceId lbl_803EB8A0;
-extern Csis::InterfaceId lbl_803EB8A8;
-extern Csis::InterfaceId lbl_803EB8B0;
-extern Csis::InterfaceId lbl_803EB8B8;
-extern Csis::InterfaceId lbl_803EB8C0;
-}
-
 static inline int AddSound(Csis::ClassHandle *list, Csis::InterfaceId *desc, void *params, Csis::Class **handle)
 {
     int err = Csis::Class::CreateInstance(list, params, handle);
@@ -109,7 +97,7 @@ struct Sound0 : SoundObject {
         mUnknownC = 0;
         mUnknown10 = 0;
         SetPan(pan);
-        AddSound(&gSndgBallThrow, &lbl_803EB878, &mUnknown4, &mHandle);
+        AddSound(&gSndgBallThrow, &gSndgBallThrowId, &mUnknown4, &mHandle);
     }
 
     ~Sound0()
@@ -273,7 +261,7 @@ struct Sound3 : SoundObject {
         SetVolume(volume);
         SetPan(pan);
         SetMode(mode);
-        AddSound(&gSndgFan, &lbl_803EB888, &mVolume, &mHandle);
+        AddSound(&gSndgFan, &gSndgFanId, &mVolume, &mHandle);
     }
 
     ~Sound3()
@@ -1398,7 +1386,7 @@ extern "C" void SndgAmbType5Create(int index, Vector_80039F5C *pPos, void *pObje
         unsigned int volume = SoundVolume(5);
         float f = SndgAmbCameraDistance(pPos);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound1[index] = new SoundVFP(&gSndgIdleVehicle, &lbl_803EB8C0, volume, (int)f, pan);
+        _SndgAmb_pState->mSound1[index] = new SoundVFP(&gSndgIdleVehicle, &gSndgIdleVehicleId, volume, (int)f, pan);
         _SndgAmb_pState->mSound1[index]->Commit();
     }
 }
@@ -1410,7 +1398,7 @@ extern "C" void SndgAmbType6Create(int index, Vector_80039F5C *pPos, void *pObje
         short unk = 0;
         unsigned int volume = SoundVolume(6);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound2[index] = new SoundVP(&gSndgIdleIdleTruck, &lbl_803EB8B8, volume, pan);
+        _SndgAmb_pState->mSound2[index] = new SoundVP(&gSndgIdleIdleTruck, &gSndgIdleIdleTruckId, volume, pan);
         _SndgAmb_pState->mSound2[index]->Commit();
     }
 }
@@ -1436,7 +1424,7 @@ extern "C" void SndgAmbType8Create(int index, Vector_80039F5C *pPos, void *pObje
         unsigned int volume = SoundVolume(8);
         float f = SndgAmbCameraDistance(pPos);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound4[index] = new SoundVFP(&gSndgIdleBus, &lbl_803EB890, volume, (int)f, pan);
+        _SndgAmb_pState->mSound4[index] = new SoundVFP(&gSndgIdleBus, &gSndgIdleBusId, volume, (int)f, pan);
         _SndgAmb_pState->mSound4[index]->Commit();
     }
 }
@@ -1449,7 +1437,7 @@ extern "C" void SndgAmbType9Create(int index, Vector_80039F5C *pPos, void *pObje
         unsigned int volume = SoundVolume(9);
         float f = SndgAmbCameraDistance(pPos);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound5[index] = new SoundVFP(&gSndgIdlePolice, &lbl_803EB8A8, volume, (int)f, pan);
+        _SndgAmb_pState->mSound5[index] = new SoundVFP(&gSndgIdlePolice, &gSndgIdlePoliceId, volume, (int)f, pan);
         _SndgAmb_pState->mSound5[index]->Commit();
     }
 }
@@ -1462,7 +1450,7 @@ extern "C" void SndgAmbType10Create(int index, Vector_80039F5C *pPos, void *pObj
         unsigned int volume = SoundVolume(10);
         float f = SndgAmbCameraDistance(pPos);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound6[index] = new SoundVFP(&gSndgIdleGolfCart, &lbl_803EB8B0, volume, (int)f, pan);
+        _SndgAmb_pState->mSound6[index] = new SoundVFP(&gSndgIdleGolfCart, &gSndgIdleGolfCartId, volume, (int)f, pan);
         _SndgAmb_pState->mSound6[index]->Commit();
     }
 }
@@ -1475,7 +1463,7 @@ extern "C" void SndgAmbType11Create(int index, Vector_80039F5C *pPos, void *pObj
         unsigned int volume = SoundVolume(11);
         float f = SndgAmbCameraDistance(pPos);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound7[index] = new SoundVFP(&gSndgIdleTruck, &lbl_803EB8A0, volume, (int)f, pan);
+        _SndgAmb_pState->mSound7[index] = new SoundVFP(&gSndgIdleTruck, &gSndgIdleTruckId, volume, (int)f, pan);
         _SndgAmb_pState->mSound7[index]->Commit();
     }
 }
@@ -1487,7 +1475,7 @@ extern "C" void SndgAmbType12Create(int index, Vector_80039F5C *pPos, void *pObj
         short unk = 0;
         unsigned int volume = SoundVolume(12);
         SndgAmbCalcPan(pPos, &pan, &unk);
-        _SndgAmb_pState->mSound8[index] = new SoundVP(&gSndgIdleTrain, &lbl_803EB898, volume, pan);
+        _SndgAmb_pState->mSound8[index] = new SoundVP(&gSndgIdleTrain, &gSndgIdleTrainId, volume, pan);
         _SndgAmb_pState->mSound8[index]->Commit();
     }
 }

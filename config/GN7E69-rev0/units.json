@@ -3238,6 +3238,12 @@
           "placement": ".text",
           "start": "0x8019A9A0",
           "end": "0x8019AD24"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EE488",
+          "end": "0x802EE948"
         }
       ]
     },
@@ -4073,6 +4079,18 @@
           "placement": ".data2",
           "start": "0x80289B18",
           "end": "0x80289B1C"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AE978",
+          "end": "0x802AE9F4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EB878",
+          "end": "0x803EB8C8"
         }
       ]
     },
@@ -7228,7 +7246,7 @@
     {
       "source": "src/engine/vram.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/vram.c) and its data rows.",
+      "evidence": "evidence.tsv unit row 0x80228E44-0x80228F78 (src/engine/vram.c) and its data rows; its COMMON _Vram_pHeaps 0x803A1C00-0x803A1C40 is placed by the storage map (its data row; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -7241,6 +7259,39 @@
           "placement": ".data5",
           "start": "0x803EBFA8",
           "end": "0x803EBFB8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA020",
+          "end": "0x802FA02C"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Vram_pHeaps",
+          "start": "0x803A1C00",
+          "end": "0x803A1C40"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/llvram.c",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv unit row 0x802FA02C-0x802FA180 (src/engine/llvram.c) and its data and name rows: the code-less file of the VRAM library layout tables, its .data _Vram_Map_PSMT4.._Vram_Map_PSMCT32 and _Vram_pGSVramMapping, and its COMMON _Vram_GSTexFlush 0x803A1C40-0x803A1C60 placed by the storage map (its data row; COMMON ruling (a) of #1329).",
+      "sections": [
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FA02C",
+          "end": "0x802FA180"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_Vram_GSTexFlush",
+          "start": "0x803A1C40",
+          "end": "0x803A1C60"
         }
       ]
     },
@@ -15351,6 +15402,12 @@
           "placement": ".data5",
           "start": "0x803EBBE8",
           "end": "0x803EBBEC"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F4A00",
+          "end": "0x802F4A0C"
         }
       ]
     },
@@ -16984,6 +17041,12 @@
           "placement": ".data5",
           "start": "0x803EBD50",
           "end": "0x803EBD54"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F94A0",
+          "end": "0x802F94AC"
         }
       ],
       "storage": [
@@ -17272,7 +17335,7 @@
           "section": ".data",
           "placement": ".data4",
           "start": "0x802F48C0",
-          "end": "0x802F4980"
+          "end": "0x802F4A00"
         }
       ]
     },
@@ -18920,7 +18983,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A8340",
-          "end": "0x802A8400"
+          "end": "0x802A8738"
         },
         {
           "section": ".sdata",
@@ -18933,6 +18996,12 @@
           "placement": ".bss",
           "start": "0x80362F84",
           "end": "0x80363180"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802EACD4",
+          "end": "0x802EAD64"
         }
       ]
     },

@@ -911,3 +911,48 @@ void UISGameSetDrawMode(int a)
     GlibRenderSelectBin(GlibRenderGetBin(14));
 }
 }
+
+/* The 15 UI Studio group files, one per slot of the game's resource bank (UISGameInit
+   creates it with 15 slots); no retained code reads this list. */
+static char *_UISGame_apszGroupFiles[15] = {
+    "uis_grp_MAIN.dat",
+    "uis_grp_POPUPS.dat",
+    "uis_grp_DEBUG.dat",
+    "uis_grp_INGAME.dat",
+    "uis_grp_IVIEW.dat",
+    "uis_grp_OPTIONS.dat",
+    "uis_grp_MEMORYCARDS.dat",
+    "uis_grp_TUTORIALS.dat",
+    "uis_grp_NFLCHALLENGE.dat",
+    "uis_grp_ONLINE.dat",
+    "uis_grp_INGAME_ONLINE.dat",
+    "uis_grp_GAUNTLET.dat",
+    "uis_grp_STORYMODE.dat",
+    "uis_grp_MINIGAMES.dat",
+    "uis_grp_GLOBALSCRIPT.dat",
+};
+
+/* The 21 UI Studio library files of the model library bank (UISModelRegister). */
+char *gUISGameLibFiles[21] = {
+    "uis_lib_sounds.dat",
+    "uis_lib_common.dat",
+    "uis_lib_fonts.dat",
+    "uis_lib_buttons.dat",
+    "uis_lib_teamlogos.dat",
+    "uis_lib_colorstyles.dat",
+    "uis_lib_controllers.dat",
+    "uis_lib_frontend.dat",
+    "uis_lib_field_select.dat",
+    "uis_lib_playermodel.dat",
+    "uis_lib_portraits.dat",
+    "uis_lib_ingame.dat",
+    "uis_lib_createateam.dat",
+    "uis_lib_fesounds.dat",
+    "uis_lib_challenge.dat",
+    "uis_lib_onlinereport.dat",
+    "uis_lib_movies.dat",
+    "uis_lib_minigamepics.dat",
+    "uis_lib_videos.dat",
+    "uis_lib_citymap.dat",
+    "uis_lib_posters.dat",
+};

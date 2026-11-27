@@ -9,7 +9,7 @@
 
 extern "C" {
 ResBank_t *_UISModel_pLibCache = 0;
-extern char *lbl_802EAD10[];
+extern char *gUISGameLibFiles[];
 int FELoopIsMainFEActive(void);
 int ConGetCurrentContext(void);
 void MatSetStack(int);
@@ -184,7 +184,7 @@ int UISModelRegister(void *pHandle, int count)
         ResBankDesc_t desc;
         desc.mUnknown0 = 1;
         desc.mUnknown4 = 21;
-        desc.mUnknown12 = lbl_802EAD10;
+        desc.mUnknown12 = gUISGameLibFiles;
         desc.mUnknown8 = 0;
         _UISModel_pLibCache = ResBankCreate(&desc);
         result = (int)_UISModel_pLibCache;
