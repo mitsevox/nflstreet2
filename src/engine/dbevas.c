@@ -6,6 +6,7 @@
 #include "engine/tdbext.h"
 #include "engine/TDbCreate.h"
 #include "engine/TDbLoad.h"
+#include "game/TDbCompilePerformOp.h"
 #include <string.h>
 
 struct CardStreamTarget;
@@ -64,4 +65,16 @@ int DbEvasSaveStream(void *pTarget, struct SaveStreamOps_t *pOps)
 int DbEvasUnload(void)
 {
     return TDbDestroy(0x45564153);
+}
+
+// FAKEMATCH: discarded stand-in (static inline, so ProDG emits its literals without its code);
+// its literals are the unreferenced 0x802B5C1C-0x802B5C8C queries of the target .rodata
+static inline int _DbEvasCopyStats(const char *pDbName)
+{
+    int status = TDbCompilePerformOp(0, "use 'EVAS' insert into \x8c.'TPOS' * select * from 'TPOS'\n", pDbName);
+
+    if (status == 0) {
+        status = TDbCompilePerformOp(0, "use 'EVAS' insert into \x8c.'TPOG' * select * from 'TPOG'\n", pDbName);
+    }
+    return status;
 }

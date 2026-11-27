@@ -52,3 +52,15 @@ void GameModeTypeInvalidate(void)
     _GameModeType_iCached = 99;
 }
 }
+
+// FAKEMATCH: discarded stand-in (static inline, so ProDG emits its literal without its code);
+// its query is the unreferenced 0x802A5880-0x802A58A2 string of the target .rodata
+static inline int _GameModeTypeGetSca(void)
+{
+    int value = 0;
+
+    if (TDbCompilePerformOp(0, "select 'ASCM' into \x82 from 'NIOM'\n", &value) != 0) {
+        value = 0;
+    }
+    return value;
+}

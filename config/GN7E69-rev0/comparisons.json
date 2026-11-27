@@ -23639,6 +23639,12 @@
           "placement": ".bss",
           "start": "0x803B53EC",
           "end": "0x803B53FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C20B0",
+          "end": "0x802C217C"
         }
       ],
       "functions": [

@@ -119,4 +119,27 @@ unsigned int SNDARAM_free(void *address)
     return start;
 }
 
+int printf(const char *pFormat, ...);
+
+// FAKEMATCH: discarded stand-in for the A-RAM heap dump (static inline, so ProDG emits its
+// literals without its code); the target keeps only the literals in this file's .rodata
+static inline void _SNDARAM_dumpheap(void)
+{
+    unsigned int next = _SndAram_sState.mLower;
+
+    printf("--------------- A-RAM heap map --------------\n");
+    printf("SNDmemlimits(%i, %i).\n", _SndAram_sState.mLower << 5, _SndAram_sState.mUpper << 5);
+    printf("\n");
+    printf("Block     Addr     Size Type\n");
+    printf("---------------------------------------------\n");
+    for (int index = 0; index < _SndAram_sState.mCount; index++) {
+        SndAramAllocation_t *pAlloc = _SndAram_sState.mpAllocations + index;
+        if (pAlloc->mStart > next) {
+            printf(" FREE %8d %8d [FREE SPACE]\n", next << 5, (pAlloc->mStart - next) << 5);
+        }
+        printf("%5d %8d %8d [DATA]\n", index, pAlloc->mStart << 5, pAlloc->mLength << 5);
+        next = pAlloc->mStart + pAlloc->mLength;
+    }
+}
+
 }

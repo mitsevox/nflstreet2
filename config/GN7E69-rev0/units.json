@@ -4275,6 +4275,12 @@
           "placement": ".data5",
           "start": "0x803EC0A0",
           "end": "0x803EC0AC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B5C1C",
+          "end": "0x802B5C8C"
         }
       ]
     },
@@ -6961,7 +6967,7 @@
           "section": ".rodata",
           "placement": ".data3",
           "start": "0x802A585C",
-          "end": "0x802A5880"
+          "end": "0x802A58A4"
         },
         {
           "section": ".sdata",
@@ -28075,6 +28081,12 @@
           "placement": ".bss",
           "start": "0x803B53EC",
           "end": "0x803B53FC"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802C20B0",
+          "end": "0x802C217C"
         }
       ],
       "holdouts": {
