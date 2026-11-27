@@ -136,8 +136,8 @@ void PlyrCollideClearExempt(Object_80039F5C *p);
 void RouteArrowHighlight(void *p);
 void PlyrMoveUpdate(Object_80039F5C *p, float f);
 void ScrmSpotCheckRetreat(void);
-int fn_801BCA74(void *a, void *b, int c, void *d, int e, int f);
-int fn_801BCCAC(void *a, void *b, int c, void *d, int e, int f);
+int AnimMotBlendRootAngle(void *a, void *b, int c, void *d, int e, int f);
+int AnimMotBlendRootOffset(void *a, void *b, int c, void *d, int e, int f);
 unsigned short fn_801BE648(void *p);
 
 void PlyrPoseBlendRawEntries(void *pBlock, int a, unsigned int index);
@@ -152,7 +152,7 @@ void AnimInitHeader(void *p, int a, int b, int c);
 void AnimChanInitChannels(void *p, void *q);
 void AnimChanProcess(void *a, void *b, float f, Object_80039F5C *p);
 int AnimMotCreateWeightList(void *a, void *b, void *c);
-void fn_801BCEEC(void *a, void *b);
+void AnimMotRotateHalfTurn(void *a, void *b);
 void AnimStInitStructure(void *p);
 void fn_801BE420(void *a, void *b, void *c, Object_80039F5C *p, float f);
 
@@ -855,9 +855,9 @@ extern "C" void PlyrMgrUpdatePoses(float dt)
         pBlock->mUnknown32 = p->mUnknown776;
         texture = AnimMotCreateWeightList(p->mUnknown1244, p->mUnknown1244 + 12, p->mUnknown1244 + 1252);
         PlyrPoseBlendEntries(pBlock, texture);
-        p->mUnknown544 = fn_801BCA74(p->mUnknown1244, p->mUnknown1244 + 12, texture, &p->mUnknown548,
+        p->mUnknown544 = AnimMotBlendRootAngle(p->mUnknown1244, p->mUnknown1244 + 12, texture, &p->mUnknown548,
                                      fn_801BE648(p->mpUnknown792), (p->mFlags & 0x200) == 0);
-        p->mUnknown545 = fn_801BCCAC(p->mUnknown1244, p->mUnknown1244 + 12, texture, p->mUnknown552,
+        p->mUnknown545 = AnimMotBlendRootOffset(p->mUnknown1244, p->mUnknown1244 + 12, texture, p->mUnknown552,
                                      fn_801BE648(p->mpUnknown792), (p->mFlags & 0x200) == 0);
         PlyrPoseBlendRootAngles(pBlock, p->mUnknown1244 + 12, *(unsigned short *)(p->mUnknown1244 + 4), p->mUnknown1244 + 1252);
         PlyrAnimPostUpdate(p, pBlock);
@@ -942,7 +942,7 @@ extern "C" void PlyrMgrReverseAll(void)
         PlyrSlot_t *pPlayer = &_PlyrMgr_pManager->mpPlayers[i];
         Object_80039F5C *p = &pPlayer->mObject;
         fn_800B2BC0(&p->mMotion);
-        fn_801BCEEC(p->mUnknown1244, p->mUnknown1244 + 12);
+        AnimMotRotateHalfTurn(p->mUnknown1244, p->mUnknown1244 + 12);
         fn_800F0770(0, p->mQueue, 4, 1, p);
         PlyrMoveCmdReverse(&p->mUnknown528);
         PlyrMoveCmdReverse(&p->mUnknown512);

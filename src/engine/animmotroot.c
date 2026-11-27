@@ -1,3 +1,6 @@
+/* Animation motion root blending: mixes the root turn and root movement of a player's
+   animation channels into one heading change and one 2D offset, and turns a pose around. */
+
 #include "engine/animchan.h"
 
 typedef struct Entry_801BCA74 {
@@ -19,7 +22,7 @@ typedef struct Anim_801BCA74 {
 
 void OrientLerpAngle(int *pOut, int a, int b, float t);
 
-int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, int *pOut, int key, int all)
+int AnimMotBlendRootAngle(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, int *pOut, int key, int all)
 {
     float total = 0.0f;
     int found = 0;
@@ -33,7 +36,11 @@ int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
 
         if (i + 1 < pAnim->mUnknown0 && pAnim->mUnknown4[i + 1].mUnknown9 == index) {
             if (!(pRecords[index].mUnknown4C.mUnknown1E & 0x10)) {
-                target = pAnim->mUnknown4[i + 1].mUnknownC;
+                Triple_801BCA74 *pNext = &pAnim->mUnknown4[i + 1].mUnknownC;
+
+                target.mUnknown0 = pNext->mUnknown0;
+                target.mUnknown4 = pNext->mUnknown4;
+                target.mUnknown8 = pNext->mUnknown8;
             } else {
                 target.mUnknown8 = 0;
                 target.mUnknown4 = 0;
@@ -42,34 +49,37 @@ int fn_801BCA74(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
             _AnimMotBlendOrient(&pRecords[index].mUnknown10, &pEntry->mUnknownC, &target, pRecords[index].mUnknown4C.mUnknown14);
             i++;
         } else {
-            pRecords[index].mUnknown10 = pEntry->mUnknownC;
+            Triple_801BCA74 *pDst = &pRecords[index].mUnknown10;
+
+            pDst->mUnknown0 = pEntry->mUnknownC.mUnknown0;
+            pDst->mUnknown4 = pEntry->mUnknownC.mUnknown4;
+            pDst->mUnknown8 = pEntry->mUnknownC.mUnknown8;
         }
         if (pEntry->mUnknown8 & 2) {
-            AnimChannel_t *pRecord = &pRecords[index];
             int angle;
             int delta;
             int blend;
             float weight;
 
-            if (pRecord->mUnknown4C.mUnknown1E & 8) {
-                pRecord->mUnknown1C = 0;
-                pRecord->mUnknownC = pObject->mUnknown8;
-                pRecord->mUnknown4C.mUnknown1E = (pRecord->mUnknown4C.mUnknown1E & ~8) | 0x10;
+            if (pRecords[index].mUnknown4C.mUnknown1E & 8) {
+                pRecords[index].mUnknownC = pObject->mUnknown8;
+                pRecords[index].mUnknown1C = 0;
+                pRecords[index].mUnknown4C.mUnknown1E = (pRecords[index].mUnknown4C.mUnknown1E & ~8) | 0x10;
             }
-            if (pRecord->mUnknown4C.mUnknown1E & 0x20) {
-                pRecord->mUnknown4C.mUnknown1E &= ~0x38;
+            if (pRecords[index].mUnknown4C.mUnknown1E & 0x20) {
+                pRecords[index].mUnknown4C.mUnknown1E &= ~0x38;
             }
-            angle = pRecord->mUnknown10.mUnknown4 << 8 >> 8;
-            pRecord->mUnknown10.mUnknown4 = 0;
-            delta = angle - pRecord->mUnknown1C;
-            pRecord->mUnknown1C = angle;
-            blend = (int)(((long long)pRecord->mUnknown20 * delta) >> 24);
+            angle = pRecords[index].mUnknown10.mUnknown4 << 8 >> 8;
+            pRecords[index].mUnknown10.mUnknown4 = 0;
+            delta = angle - pRecords[index].mUnknown1C;
+            pRecords[index].mUnknown1C = angle;
+            blend = (int)(((long long)pRecords[index].mUnknown20 * delta) >> 24);
             total += pEntry->mUnknown0;
             weight = total != 0.0f ? pEntry->mUnknown0 / total : 0.0f;
             {
                 int apply = all;
 
-                if (pRecord->mUnknown8 == key || pRecord->mUnknown8 == 0xFFFF || key == 0xFFFF) {
+                if (pRecords[index].mUnknown8 == key || pRecords[index].mUnknown8 == 0xFFFF || key == 0xFFFF) {
                     found = 1;
                     apply = 1;
                 }
@@ -91,7 +101,7 @@ void Vec2Add(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void Vec2Sub(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB);
 void Vec2Lerp(Pair_802270A4 *pOut, Pair_802270A4 *pA, Pair_802270A4 *pB, float t);
 
-int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
+int AnimMotBlendRootOffset(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *pAnim, Pair_802270A4 *pOut, int key, int all)
 {
     Pair_802270A4 sum;
     Pair_802270A4 offset;
@@ -115,34 +125,29 @@ int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
                 apply = 1;
             }
             if (apply == 1) {
-                AnimChannel_t *pRecord = &pRecords[index];
-                Pair_802270A4 *pOffset;
-
-                if (pRecord->mUnknown4C.mUnknown1E & 1) {
-                    pRecord->mUnknown24.mUnknown0 = 0.0f;
-                    pRecord->mUnknown4C.mUnknown1E = (pRecord->mUnknown4C.mUnknown1E & ~1) | 2;
-                    pRecord->mUnknown24.mUnknown4 = 0.0f;
+                if (pRecords[index].mUnknown4C.mUnknown1E & 1) {
+                    pRecords[index].mUnknown24.mUnknown0 = 0.0f;
+                    pRecords[index].mUnknown4C.mUnknown1E = (pRecords[index].mUnknown4C.mUnknown1E & ~1) | 2;
+                    pRecords[index].mUnknown24.mUnknown4 = 0.0f;
                 }
-                if (pRecord->mUnknown4C.mUnknown1E & 4) {
-                    pRecord->mUnknown4C.mUnknown1E &= ~7;
+                if (pRecords[index].mUnknown4C.mUnknown1E & 4) {
+                    pRecords[index].mUnknown4C.mUnknown1E &= ~7;
                 }
                 if (i + 1 < pAnim->mUnknown0 && pAnim->mUnknown4[i + 1].mUnknown9 == index) {
-                    if (!(pRecord->mUnknown4C.mUnknown1E & 2)) {
-                        Vec2Lerp(&offset, &pEntry->mUnknown18, &pAnim->mUnknown4[i + 1].mUnknown18, pRecord->mUnknown4C.mUnknown14);
+                    if (!(pRecords[index].mUnknown4C.mUnknown1E & 2)) {
+                        Vec2Lerp(&offset, &pEntry->mUnknown18, &pAnim->mUnknown4[i + 1].mUnknown18, pRecords[index].mUnknown4C.mUnknown14);
                     } else {
-                        Vec2Scale(&offset, &pEntry->mUnknown18, pRecord->mUnknown4C.mUnknown14);
+                        Vec2Scale(&offset, &pEntry->mUnknown18, pRecords[index].mUnknown4C.mUnknown14);
                     }
-                    pOffset = &offset;
                     i++;
                 } else {
                     offset.mUnknown0 = pEntry->mUnknown18.mUnknown0;
                     offset.mUnknown4 = pEntry->mUnknown18.mUnknown4;
-                    pOffset = &offset;
                 }
-                Vec2Sub(&delta, pOffset, &pRecord->mUnknown24);
-                Vec2Add(&pRecord->mUnknown24, &pRecord->mUnknown24, &delta);
-                Vec2Scale(&delta, &delta, pRecord->mUnknown2C);
-                Vec2Rotate(&delta, &delta, pRecord->mUnknownC);
+                Vec2Sub(&delta, &offset, &pRecords[index].mUnknown24);
+                Vec2Add(&pRecords[index].mUnknown24, &pRecords[index].mUnknown24, &delta);
+                Vec2Scale(&delta, &delta, pRecords[index].mUnknown2C);
+                Vec2Rotate(&delta, &delta, pRecords[index].mUnknownC);
                 total += pEntry->mUnknown0;
                 Vec2Lerp(&sum, &delta, &sum, total != 0.0f ? pEntry->mUnknown0 / total : 0.0f);
             }
@@ -155,7 +160,7 @@ int fn_801BCCAC(AnimHeader_t *pObject, AnimChannel_t *pRecords, Anim_801BCA74 *p
     return found;
 }
 
-void fn_801BCEEC(AnimHeader_t *p, AnimChannel_t *pRecords)
+void AnimMotRotateHalfTurn(AnimHeader_t *p, AnimChannel_t *pRecords)
 {
     int i;
 

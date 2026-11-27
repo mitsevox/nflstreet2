@@ -937,9 +937,9 @@ address	size	sibling_name	how	sibling_file	unit
 0x801DAD20	824	MAD_decodemacroblock__FPCUcN20PUcN23i	name	maddec.cpp	maddec.cpp
 0x801DB058	88	discardbits__Fi	size	maddeca.cpp	maddeca.cpp
 0x801DB0B0	364	madvlcdecode	name	maddeca.cpp	maddeca.cpp
-0x801DB21C	628	IdctColumn	size	madidct.cpp	-
-0x801DB490	480	IdctRow	size	madidct.cpp	-
-0x801DB670	356	idctcompute	size	madidct.cpp	-
+0x801DB21C	628	IdctColumn	name	madidct.cpp	madidct.cpp
+0x801DB490	480	IdctRow	name	madidct.cpp	madidct.cpp
+0x801DB670	356	idctcompute	name	madidct.cpp	madidct.cpp
 0x801DB7D4	4	yuvrenderrestore	name	render.c	render.c
 0x801DB7D8	96	yuvrenderinit	name	render.c	render.c
 0x801DB838	100	yuvrenderDoubleYLines	name	render.c	render.c
