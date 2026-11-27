@@ -19035,7 +19035,7 @@
           "end": "0x80219044"
         },
         {
-          "symbol": "fn_80219044",
+          "symbol": "UISLoadModalScreen",
           "start": "0x80219044",
           "end": "0x80219070"
         },
@@ -19055,7 +19055,7 @@
           "end": "0x802196B4"
         },
         {
-          "symbol": "fn_80219854",
+          "symbol": "UISInternalProcessEvent",
           "start": "0x80219854",
           "end": "0x8021992C"
         },
@@ -19167,82 +19167,6 @@
       ]
     },
     {
-      "source": "src/engine/dbyalp.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The drafts compile only their float pools into .rodata (the query strings are referenced through neutral external labels), placed over the file's native .rodata (data row 0x802B2430). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802297D8",
-          "end": "0x80229E88"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B2430",
-          "end": "0x802B2CA0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbYalpLoadWeightTable",
-          "start": "0x802297D8",
-          "end": "0x802299FC"
-        },
-        {
-          "symbol": "DbYalpModuleInit",
-          "start": "0x802299FC",
-          "end": "0x80229A70"
-        },
-        {
-          "symbol": "DbYalpModuleShutdown",
-          "start": "0x80229A70",
-          "end": "0x80229AA4"
-        },
-        {
-          "symbol": "DbFindUnusedPlayerIds",
-          "start": "0x80229AA4",
-          "end": "0x80229C98"
-        },
-        {
-          "symbol": "DbYalpGetLowRating",
-          "start": "0x80229C98",
-          "end": "0x80229CB0"
-        },
-        {
-          "symbol": "DbYalpGetHighRating",
-          "start": "0x80229CB0",
-          "end": "0x80229CC4"
-        },
-        {
-          "symbol": "DbYalpGetRatingWeight",
-          "start": "0x80229CC4",
-          "end": "0x80229CE4"
-        },
-        {
-          "symbol": "DbYalpGetWeightSum",
-          "start": "0x80229CE4",
-          "end": "0x80229CFC"
-        },
-        {
-          "symbol": "DbYalpGetOverallRating",
-          "start": "0x80229CFC",
-          "end": "0x80229E78"
-        },
-        {
-          "symbol": "DbYalpBeginGame",
-          "start": "0x80229E78",
-          "end": "0x80229E80"
-        },
-        {
-          "symbol": "DbYalpResumeGame",
-          "start": "0x80229E80",
-          "end": "0x80229E88"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbmtts.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022A428-0x8022C0E0 (src/engine/dbmtts.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -19281,7 +19205,12 @@
           "end": "0x8022A624"
         },
         {
-          "symbol": "fn_8022AB6C",
+          "symbol": "fn_8022A624",
+          "start": "0x8022A624",
+          "end": "0x8022AB6C"
+        },
+        {
+          "symbol": "DbMttsReadSlots",
           "start": "0x8022AB6C",
           "end": "0x8022AC80"
         },
@@ -19291,7 +19220,7 @@
           "end": "0x8022ACEC"
         },
         {
-          "symbol": "fn_8022ACEC",
+          "symbol": "DbMttsInsertTeamRow",
           "start": "0x8022ACEC",
           "end": "0x8022AD64"
         },
@@ -19311,7 +19240,7 @@
           "end": "0x8022AF5C"
         },
         {
-          "symbol": "fn_8022AF5C",
+          "symbol": "DbMttsInsertPlayerRow",
           "start": "0x8022AF5C",
           "end": "0x8022B02C"
         },
@@ -19326,7 +19255,7 @@
           "end": "0x8022B2CC"
         },
         {
-          "symbol": "fn_8022B2CC",
+          "symbol": "DbMttsSetPlayerColumn",
           "start": "0x8022B2CC",
           "end": "0x8022B414"
         },
@@ -19351,12 +19280,12 @@
           "end": "0x8022BAB4"
         },
         {
-          "symbol": "fn_8022BAB4",
+          "symbol": "DbMttsAddTeamPassStat",
           "start": "0x8022BAB4",
           "end": "0x8022BD30"
         },
         {
-          "symbol": "fn_8022BD30",
+          "symbol": "DbMttsAddTeamRushStat",
           "start": "0x8022BD30",
           "end": "0x8022BF60"
         },
@@ -24219,7 +24148,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -26771,7 +26700,7 @@
     {
       "source": "src/engine/t3db_table.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (86.0%: register allocation and frame); the rest of the file is linked through units.json.",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (88.00%: register allocation); the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -28566,7 +28495,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its holdout UIGImageNodeRender (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
@@ -28715,78 +28644,6 @@
           "symbol": "UIGCSRestorePalette",
           "start": "0x80220CA4",
           "end": "0x80220CDC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/uigtext.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/uigtext.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout UIGTextLayout 0x80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221BF0",
-          "end": "0x80222EC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1FA0",
-          "end": "0x802B1FC0"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039F9B8",
-          "end": "0x8039FDB8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "UIGTextGetCursorPos",
-          "start": "0x80221BF0",
-          "end": "0x80221D30"
-        },
-        {
-          "symbol": "UIGTextGetLine",
-          "start": "0x80221D30",
-          "end": "0x80221D5C"
-        },
-        {
-          "symbol": "UIGTextFreeLines",
-          "start": "0x80221D5C",
-          "end": "0x80221DB0"
-        },
-        {
-          "symbol": "UIGTextLayout",
-          "start": "0x80221DB0",
-          "end": "0x80222220"
-        },
-        {
-          "symbol": "UIGLibTextLoad",
-          "start": "0x80222764",
-          "end": "0x802227B0"
-        },
-        {
-          "symbol": "UIGLibTextUnLoad",
-          "start": "0x80222E0C",
-          "end": "0x80222E54"
-        },
-        {
-          "symbol": "UIGTextCopyBuffer",
-          "start": "0x80222E54",
-          "end": "0x80222EC4"
-        },
-        {
-          "symbol": "UIGLibTextObjAction",
-          "start": "0x80222220",
-          "end": "0x80222764"
-        },
-        {
-          "symbol": "UIGLibTextDraw",
-          "start": "0x802227B0",
-          "end": "0x80222E0C"
         }
       ]
     },

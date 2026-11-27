@@ -1,3 +1,9 @@
+/* UI text objects on library fonts: the text node of UI Studio screens. Lays
+   a string out into lines (newline split, word or character wrap, trimming),
+   answers cursor-position queries, handles the node's load/unload/draw and
+   property messages, and draws each line with the font renderer in the node's
+   colours. */
+
 #include <dolphin/gx/GXBump.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXDispList.h>
@@ -18,12 +24,6 @@
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-
-/* UI text objects on library fonts: the text node of UI Studio screens. Lays
-   a string out into lines (newline split, word or character wrap, trimming),
-   answers cursor-position queries, handles the node's load/unload/draw and
-   property messages, and draws each line with the font renderer in the node's
-   colours. */
 
 extern void *memcpy();
 
@@ -156,6 +156,7 @@ void UIGTextFreeLines(UIGText_t *pText)
     }
 }
 
+/* Splits a text object's string into lines, wrapping or trimming them to its width, and sets its line count and height. */
 void UIGTextLayout(UIGText_t *pText)
 {
     Font_t **ppFont;
@@ -167,6 +168,7 @@ void UIGTextLayout(UIGText_t *pText)
     Int16 NumLines;
     Int16 Line;
     Int32 i;
+    Int32 j;
     Int32 LastSpace;
     Int32 Width;
     Int32 TextWidth;
@@ -258,23 +260,23 @@ void UIGTextLayout(UIGText_t *pText)
                         _UIGText_aLines[NumLines].unk_00 = i;
                         _UIGText_aLines[NumLines].unk_02 = Pos;
                     } else if (pText->Flags & 1) {
-                        LastSpace = LineStart;
-                        for (i = Pos - 1; LastSpace < i && Width > pText->unk_14;) {
+                        j = LineStart;
+                        for (i = Pos - 1; j < i && Width > pText->unk_14;) {
                             Width -= FontGetCharWidth(*ppFont, pString[i]);
                             i--;
-                            if (LastSpace < i && Width > pText->unk_14) {
-                                Width -= FontGetCharWidth(*ppFont, pString[LastSpace]);
-                                LastSpace++;
+                            if (j < i && Width > pText->unk_14) {
+                                Width -= FontGetCharWidth(*ppFont, pString[j]);
+                                j++;
                             }
                         }
-                        _UIGText_aLines[NumLines].unk_00 = LastSpace;
+                        _UIGText_aLines[NumLines].unk_00 = j;
                         _UIGText_aLines[NumLines].unk_02 = i + 1;
                     } else {
-                        for (i = Pos - 1; Width > pText->unk_14 && i > 1; i--) {
-                            Width -= FontGetCharWidth(*ppFont, pString[i]);
+                        for (j = Pos - 1; Width > pText->unk_14 && j > 1; j--) {
+                            Width -= FontGetCharWidth(*ppFont, pString[j]);
                         }
                         _UIGText_aLines[NumLines].unk_00 = LineStart;
-                        _UIGText_aLines[NumLines].unk_02 = i + 1;
+                        _UIGText_aLines[NumLines].unk_02 = j + 1;
                     }
                 } else {
                     _UIGText_aLines[NumLines].unk_00 = LineStart;
