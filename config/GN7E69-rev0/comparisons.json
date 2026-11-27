@@ -27075,7 +27075,7 @@
     {
       "source": "src/engine/xmlread.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Ten functions and both data sections link through units.json. The two non-exact functions retain original bytes, with the HOLDOUT records at 0x802166F0 and 0x80216BFC.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Eleven functions and both data sections link through units.json. The non-exact function _XmlSkipElement retains original bytes, with the HOLDOUT record at 0x802166F0.",
       "sections": [
         {
           "section": ".text",
