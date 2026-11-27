@@ -135,16 +135,16 @@ int _LZHCoStart(void)
     lbl_803ED458 = fn_801D2BB0(1, 0x8000, 0, 0);
     lbl_803ED464 = fn_801D2BB0(1, 0x474, 0, 0);
     _LZHHuffGenCodeConvertTables();
-    lbl_803ED45C = 0;
-    lbl_803ED47E = 0;
-    lbl_803ED498 = 1;
-    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
     lbl_803ED444 = 0;
+    lbl_803ED45C = 0;
     lbl_803ED480 = 0;
     lbl_803ED47C = 0;
     lbl_803ED486 = 0;
+    lbl_803ED47E = 0;
+    lbl_803ED498 = 1;
+    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     return 0;
 }
 
@@ -168,7 +168,6 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
         return _LZHMemDecStart(a, b);
     }
     SysEnterCriticalSectionFunc(&lbl_803B53FC);
-    lbl_803ED47E = 0;
     lbl_803ED424 = 2;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
@@ -177,6 +176,7 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
     lbl_803ED480 = 0;
     lbl_803ED47C = 0;
     lbl_803ED486 = 0;
+    lbl_803ED47E = 0;
     if (b->mUnknown18 != 0) {
         lbl_803ED422 = 1;
     } else {
@@ -418,7 +418,8 @@ void _LZHEncodeCodeBufferStart(void)
         d = lbl_803ED458[j];
         n = lbl_803ED454[j];
         if (d != 0) {
-            a[lbl_803B7678[n] + 257].mUnknown00++;
+            n = lbl_803B7678[n];
+            a[n + 257].mUnknown00++;
             d--;
             if (d <= 255) {
                 d = lbl_803B775C[d];
