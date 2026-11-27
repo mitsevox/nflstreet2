@@ -23909,7 +23909,7 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; the first four and native state link, the two allocator loops remain registered partials.",
+      "evidence": "evidence.tsv saramman.c unit, state data/types and the SNDARAM_alloc/free HOLDOUT rows. All six bodies are reconstructed; five and the native state link, the SNDARAM_alloc loop remains a registered partial.",
       "sections": [
         {
           "section": ".text",
@@ -23929,11 +23929,6 @@
           "symbol": "SNDARAM_alloc",
           "start": "0x80279960",
           "end": "0x80279B24"
-        },
-        {
-          "symbol": "SNDARAM_free",
-          "start": "0x80279B24",
-          "end": "0x80279BC0"
         }
       ]
     },
