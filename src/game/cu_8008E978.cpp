@@ -25517,16 +25517,16 @@ extern "C" void fn_800B44D4(BitStream_t *pStream)
     for (unsigned char team = 0; team <= 1; team++) {
         for (unsigned char index = 0; index <= 6; index++) {
             short *pRatings = PlyrGet(team, index)->mRatings;
-            fn_80191068(pStream, pRatings[0], 16);
-            fn_80191068(pStream, pRatings[1], 16);
-            fn_80191068(pStream, pRatings[2], 16);
-            fn_80191068(pStream, pRatings[3], 16);
-            fn_80191068(pStream, pRatings[4], 16);
-            fn_80191068(pStream, pRatings[5], 16);
-            fn_80191068(pStream, pRatings[6], 16);
-            fn_80191068(pStream, pRatings[7], 16);
-            fn_80191068(pStream, pRatings[8], 16);
-            fn_80191068(pStream, pRatings[9], 16);
+            WriteBitStream(pStream, pRatings[0], 16);
+            WriteBitStream(pStream, pRatings[1], 16);
+            WriteBitStream(pStream, pRatings[2], 16);
+            WriteBitStream(pStream, pRatings[3], 16);
+            WriteBitStream(pStream, pRatings[4], 16);
+            WriteBitStream(pStream, pRatings[5], 16);
+            WriteBitStream(pStream, pRatings[6], 16);
+            WriteBitStream(pStream, pRatings[7], 16);
+            WriteBitStream(pStream, pRatings[8], 16);
+            WriteBitStream(pStream, pRatings[9], 16);
         }
     }
 }

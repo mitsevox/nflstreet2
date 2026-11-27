@@ -323,22 +323,22 @@ extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStre
     int index = BallFindByModel(pBlock);
     Object_80039F5C *pObject = BallGetHolder(BallGet(index));
     int changed = index == ReplayGetBallIndex();
-    fn_80191068(pStream, changed, 1);
+    WriteBitStream(pStream, changed, 1);
     if (changed == 1 && pObject != 0) {
         Object_8003DEC4 *pPose = (Object_8003DEC4 *)pObject->mpUnknown4;
         int reference;
         fn_8009BD2C(pObject, &reference);
-        fn_80191068(pStream, (unsigned int)reference, 32);
-        fn_80191068(pStream, (unsigned int)pPose->mUnknown44.mUnknown6, 7);
+        WriteBitStream(pStream, (unsigned int)reference, 32);
+        WriteBitStream(pStream, (unsigned int)pPose->mUnknown44.mUnknown6, 7);
         ReplayWritePacked3(pStream, pPose->mUnknown44.mUnknown20, 13, 1024.0f);
-        fn_80191068(pStream, pPose->mUnknown44.mUnknown36[0] >> 12, 12);
-        fn_80191068(pStream, pPose->mUnknown44.mUnknown36[1] >> 12, 12);
-        fn_80191068(pStream, pPose->mUnknown44.mUnknown36[2] >> 12, 12);
+        WriteBitStream(pStream, pPose->mUnknown44.mUnknown36[0] >> 12, 12);
+        WriteBitStream(pStream, pPose->mUnknown44.mUnknown36[1] >> 12, 12);
+        WriteBitStream(pStream, pPose->mUnknown44.mUnknown36[2] >> 12, 12);
     } else {
-        fn_80191068(pStream, 0, 32);
-        fn_80191068(pStream, -1, 7);
-        fn_80191068(pStream, 0, 39);
-        fn_80191068(pStream, 0, 36);
+        WriteBitStream(pStream, 0, 32);
+        WriteBitStream(pStream, -1, 7);
+        WriteBitStream(pStream, 0, 39);
+        WriteBitStream(pStream, 0, 36);
     }
     if (pBlock->mUnknown152 == 1) {
         pBlock->mUnknown152 = 0;
@@ -349,9 +349,9 @@ extern "C" void BallModelReplayRecord(Block_80170E64 *pBlock, BitStream_t *pStre
         ReplayWritePacked4(pStream, &pBlock->mUnknown108.mX, 12, 1024.0f);
     }
     if (pBlock->mUnknown20 & 2) {
-        fn_80191068(pStream, 1, 1);
+        WriteBitStream(pStream, 1, 1);
     } else {
-        fn_80191068(pStream, 0, 1);
+        WriteBitStream(pStream, 0, 1);
     }
 }
 

@@ -239,7 +239,7 @@ void DivotReplayWriteOne(Divot *p, BitStream_t *pStream)
 {
     if (p->mType != DIVOT_TYPE_0) {
         ReplayWritePacked3(pStream, p->mScale, 6, 10.0f);
-        fn_80191068(pStream, (unsigned int)(int)(p->mAlpha * 15.0f), 4);
+        WriteBitStream(pStream, (unsigned int)(int)(p->mAlpha * 15.0f), 4);
     }
 }
 
@@ -283,7 +283,7 @@ void DivotReplayWrite(BitStream_t *pStream)
             p++;
         }
     }
-    fn_80191068(pStream, _Divot_iRecordCount, 31);
+    WriteBitStream(pStream, _Divot_iRecordCount, 31);
 }
 
 void DivotReplayRead(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2, BitStream_t *pStream3, float t)

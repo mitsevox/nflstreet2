@@ -1,3 +1,5 @@
+/* Bit streams over 64-bit words: the packer the replay recorder uses to
+   write and read fields of any width (open, close, read and write). */
 #include "game/bitstream.h"
 
 void OpenBitStream(BitStream_t *pStream, void *pBuffer, BitStreamMode_t mode)
@@ -51,7 +53,7 @@ long long ReadBitStream(BitStream_t *pStream, unsigned int bits)
     return result;
 }
 
-void fn_80191068(BitStream_t *pStream, unsigned long long value, unsigned int bits)
+void WriteBitStream(BitStream_t *pStream, unsigned long long value, unsigned int bits)
 {
     unsigned long long current;
     int word;
@@ -70,15 +72,15 @@ void fn_80191068(BitStream_t *pStream, unsigned long long value, unsigned int bi
     value &= (((unsigned long long)((bits >> 6) ^ 1)) << bits) - 1;
     count = pStream->mBit + 1;
     if (count < bits) {
+        unsigned int rest = bits - count;
         unsigned long long low;
 
-        bits -= count;
-        low = value << (64 - bits);
-        value >>= bits;
+        low = value << (64 - rest);
+        value >>= rest;
         current |= value;
         pBuffer[word] = current;
         pStream->mpBuffer[pStream->mWord + 1] = low;
-        pStream->mBit = 63 - bits;
+        pStream->mBit = 63 - rest;
         pStream->mWord++;
     } else {
         unsigned int shift = bits - 1;

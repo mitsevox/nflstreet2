@@ -39,7 +39,7 @@ public:
     virtual int IsWinnerUserTeam();
     virtual void vfn_14() {}
     virtual void vfn_15();
-    virtual void vfn_16(const int *pKinds);
+    virtual void AssignPlayerAwards(const int *pKinds);
     virtual void vfn_17(const int *pKinds);
     virtual void GetPlayerAwardsText(int a, unsigned char index, char *pText, unsigned char length);
     virtual void vfn_19(int team, int column, char *pText, int length);

@@ -26,6 +26,7 @@
 #include <string.h>
 #include "engine/dslist.h"
 #include "game/Vec2Add.h"
+#include "game/bitstream.h"
 
 #define ABS(x) ((x) < 0 ? -(x) : (x))
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : ((x) > (hi) ? (hi) : (x)))
@@ -82,21 +83,12 @@ struct ReplayFocus_t {
     int mUnknown10;
 };
 
-/* 16-byte bit stream opened on a frame buffer by fn_80190ED4 (buffer, mode,
-   bit position, 0x3F) and closed by fn_80190EF0. */
-struct Type_80190ED4 {
-    char *mpBuffer;
-    int mMode;
-    int mUnknown08;
-    int mUnknown0C;
-};
-
 /* 12-byte replay channel record of the _Replay_pChannels pool, registered by
    ReplayRegisterChannel: write and read callbacks and the record size in bits. */
 struct ReplayChannel_t {
-    void (*mpWrite)(Type_80190ED4 *pStream);
-    void (*mpRead)(Type_80190ED4 *pStream0, Type_80190ED4 *pStream1, Type_80190ED4 *pStream2,
-                   Type_80190ED4 *pStream3, float t);
+    void (*mpWrite)(BitStream_t *pStream);
+    void (*mpRead)(BitStream_t *pStream0, BitStream_t *pStream1, BitStream_t *pStream2,
+                   BitStream_t *pStream3, float t);
     unsigned int mSize;
 };
 
@@ -192,10 +184,6 @@ void DebugWindowClose(void);
 unsigned char GameEventFlagsSetFlag0(unsigned char value);
 unsigned char GameEventFlagsSetFlag1(unsigned char value);
 void UISGameHandleInput(int a, unsigned int id, float value);
-void fn_80190ED4(Type_80190ED4 *pStream, char *pBuffer, int mode);
-int fn_80190EF0(Type_80190ED4 *pStream);
-unsigned long long fn_80190F18(void *pStream, int bits);
-void fn_80191068(void *pStream, unsigned long long value, int bits);
 int ScreenTransCanCapture(int id);
 void ReplayAuxRamStoreFrame(char *pSrc, int index, int size);
 char *ReplayAuxRamGetScratch(int index, int size);
@@ -2572,15 +2560,15 @@ extern "C" void ReplayBufferWriteFrame(int index)
     char *pBuffer = ReplayAuxRamGetScratch(index, _Replay_uFrameSize);
 
     if (pBuffer != 0) {
-        Type_80190ED4 stream;
+        BitStream_t stream;
         ReplayChannel_t *pEntry;
 
-        fn_80190ED4(&stream, pBuffer, 1);
+        OpenBitStream(&stream, pBuffer, kBitStreamWrite);
         for (pEntry = (ReplayChannel_t *)DSGetListNode(_Replay_pChannels, 0); pEntry != 0;
              pEntry = (ReplayChannel_t *)DSNextListNode(_Replay_pChannels, pEntry)) {
             pEntry->mpWrite(&stream);
         }
-        fn_80190EF0(&stream);
+        CloseBitStream(&stream);
         ReplayAuxRamStoreFrame(pBuffer, index, _Replay_uFrameSize);
     }
 }
@@ -2649,9 +2637,9 @@ extern "C" void ReplayBufferGetFrames(Type_803EA368 *pGame, char **ppCur, char *
 
 extern "C" void ReplayReadFrameStub(void) {}
 
-extern "C" void ReplayReadPacked2(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked2(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
-    long long value = fn_80190F18(pStream, bits * 2);
+    long long value = ReadBitStream(pStream, bits * 2);
     float x = (int)((value << (64 - bits * 2)) >> (64 - bits));
     float y = (int)((value << (64 - bits)) >> (64 - bits));
 
@@ -2660,9 +2648,9 @@ extern "C" void ReplayReadPacked2(void *pStream, float *pValues, int bits, float
     pValues[1] = y * scale;
 }
 
-extern "C" void ReplayReadPacked3(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked3(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
-    long long value = fn_80190F18(pStream, bits * 3);
+    long long value = ReadBitStream(pStream, bits * 3);
     float x = (int)((value << (64 - bits * 3)) >> (64 - bits));
     float y = (int)((value << (64 - bits * 2)) >> (64 - bits));
     float z = (int)((value << (64 - bits)) >> (64 - bits));
@@ -2673,9 +2661,9 @@ extern "C" void ReplayReadPacked3(void *pStream, float *pValues, int bits, float
     pValues[2] = z * scale;
 }
 
-extern "C" void ReplayReadPacked4(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayReadPacked4(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
-    long long value = fn_80190F18(pStream, bits * 4);
+    long long value = ReadBitStream(pStream, bits * 4);
     float x = (int)((value << (64 - bits * 4)) >> (64 - bits));
     float y = (int)((value << (64 - bits * 3)) >> (64 - bits));
     float z = (int)((value << (64 - bits * 2)) >> (64 - bits));
@@ -2688,26 +2676,26 @@ extern "C" void ReplayReadPacked4(void *pStream, float *pValues, int bits, float
     pValues[3] = w * scale;
 }
 
-extern "C" void ReplayWritePacked2(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked2(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits;
     unsigned long long y = (long long)(int)(pValues[1] * scale) & mask;
 
-    fn_80191068(pStream, x | y, bits * 2);
+    WriteBitStream(pStream, x | y, bits * 2);
 }
 
-extern "C" void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked3(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits * 2;
     unsigned long long y = ((long long)(int)(pValues[1] * scale) & mask) << bits;
     unsigned long long z = (long long)(int)(pValues[2] * scale) & mask;
 
-    fn_80191068(pStream, x | y | z, bits * 3);
+    WriteBitStream(pStream, x | y | z, bits * 3);
 }
 
-extern "C" void ReplayWritePacked4(void *pStream, float *pValues, int bits, float scale)
+extern "C" void ReplayWritePacked4(BitStream_t *pStream, float *pValues, int bits, float scale)
 {
     unsigned long long mask = (1ULL << bits) - 1;
     unsigned long long x = ((long long)(int)(pValues[0] * scale) & mask) << bits * 3;
@@ -2715,7 +2703,7 @@ extern "C" void ReplayWritePacked4(void *pStream, float *pValues, int bits, floa
     unsigned long long z = ((long long)(int)(pValues[2] * scale) & mask) << bits;
     unsigned long long w = (long long)(int)(pValues[3] * scale) & mask;
 
-    fn_80191068(pStream, x | y | z | w, bits * 4);
+    WriteBitStream(pStream, x | y | z | w, bits * 4);
 }
 
 extern "C" void ReplayBufferReset(void)
@@ -2778,17 +2766,17 @@ extern "C" void ReplayReadFrame(Type_803EA368 *pGame)
     char *pNext;
     char *pPrev;
     char *pNext2;
-    Type_80190ED4 streams[4];
+    BitStream_t streams[4];
     ReplayChannel_t *pRecord;
 
     ReplayBufferGetFrames(pGame, &pCur, &pNext, &pPrev, &pNext2, &_Replay_fFrameBlend);
-    fn_80190ED4(&streams[0], pCur, 0);
-    fn_80190ED4(&streams[1], pNext, 0);
+    OpenBitStream(&streams[0], pCur, kBitStreamRead);
+    OpenBitStream(&streams[1], pNext, kBitStreamRead);
     if (pPrev) {
-        fn_80190ED4(&streams[2], pPrev, 0);
+        OpenBitStream(&streams[2], pPrev, kBitStreamRead);
     }
     if (pNext2) {
-        fn_80190ED4(&streams[3], pNext2, 0);
+        OpenBitStream(&streams[3], pNext2, kBitStreamRead);
     }
     for (pRecord = (ReplayChannel_t *)DSGetListNode(_Replay_pChannels, 0); pRecord;
          pRecord = (ReplayChannel_t *)DSNextListNode(_Replay_pChannels, pRecord)) {
@@ -2804,19 +2792,19 @@ extern "C" void ReplayReadFrame(Type_803EA368 *pGame)
             pRecord->mpRead(&streams[1], &streams[0], &streams[2], &streams[3], _Replay_fFrameBlend);
         }
     }
-    fn_80190EF0(&streams[0]);
-    fn_80190EF0(&streams[1]);
+    CloseBitStream(&streams[0]);
+    CloseBitStream(&streams[1]);
     if (pPrev) {
-        fn_80190EF0(&streams[2]);
+        CloseBitStream(&streams[2]);
     }
     if (pNext2) {
-        fn_80190EF0(&streams[3]);
+        CloseBitStream(&streams[3]);
     }
     ReplayReadFrameStub();
 }
 
-extern "C" void ReplayRegisterChannel(void (*pWrite)(Type_80190ED4 *),
-                            void (*pRead)(Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, Type_80190ED4 *, float),
+extern "C" void ReplayRegisterChannel(void (*pWrite)(BitStream_t *),
+                            void (*pRead)(BitStream_t *, BitStream_t *, BitStream_t *, BitStream_t *, float),
                             unsigned int size, const char *pName)
 {
     ReplayChannel_t *pRecord = (ReplayChannel_t *)DSNewListNode(_Replay_pChannels);
