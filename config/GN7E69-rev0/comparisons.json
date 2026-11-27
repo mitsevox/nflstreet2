@@ -23397,7 +23397,7 @@
       ],
       "functions": [
         {
-          "symbol": "fn_80166110",
+          "symbol": "PlayArtBuildArrowQuad",
           "start": "0x80166110",
           "end": "0x801662A8"
         },
@@ -23407,12 +23407,12 @@
           "end": "0x8016631C"
         },
         {
-          "symbol": "fn_8016631C",
+          "symbol": "PlayArtBuildRoute",
           "start": "0x8016631C",
           "end": "0x80166BE8"
         },
         {
-          "symbol": "fn_80166BE8",
+          "symbol": "PlayArtSetPlayerColors",
           "start": "0x80166BE8",
           "end": "0x80167094"
         }

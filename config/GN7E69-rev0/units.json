@@ -522,6 +522,10 @@
     }
   },
   "externals": {
+    "PlayArtBuildRoute": {
+      "address": "0x8016631C",
+      "evidence": "evidence.tsv function and name rows at 0x8016631C. PlayArtBuild in the linked PlayArt.cpp range calls the original-byte PlayArtBuildRoute (a PlayArt.cpp holdout registered in comparisons.json)."
+    },
     "YUV_convert": {
       "address": "0x801DB900",
       "evidence": "evidence.tsv function and related name rows at 0x801DB900. render.c calls the original-byte YUV_convert provider (yuvconv.c is a registered comparison)."
@@ -1557,12 +1561,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015A248",
-          "end": "0x8015A818"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015AB84",
           "end": "0x8015B344"
         },
         {
@@ -1599,10 +1597,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "RouteArrowAddBlockPath",
-            "evidence": "evidence.tsv source-form 0x8015A818-0x8015AB84"
-          },
-          {
             "function": "RouteArrowAddCommand",
             "evidence": "evidence.tsv source-form 0x8015B344-0x8015B834"
           },
@@ -1611,7 +1605,7 @@
             "evidence": "evidence.tsv source-form 0x8015BCAC-0x8015BED4"
           }
         ],
-        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/RouteArrow.cpp holds out fn_8015A818, fn_8015B344, fn_8015BCAC."
+        "evidence": "x1f/x2d merge notes (swarm x1/x2 tracking tables): src/game/RouteArrow.cpp holds out RouteArrowAddCommand (0x8015B344) and RouteArrowBuild (0x8015BCAC); RouteArrowAddBlockPath (0x8015A818) is linked since wave p1 lane f."
       }
     },
     {
@@ -14346,7 +14340,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the six holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and data rows 0x802A4610-0x802A4624, 0x802A4624-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -14358,30 +14352,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80164E30",
-          "end": "0x80164ED8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80165098",
-          "end": "0x80165110"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801651E0",
           "end": "0x80165464"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80165770",
-          "end": "0x80165890"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80165C50",
           "end": "0x80166110"
         },
         {
@@ -14410,24 +14386,8 @@
             "evidence": "evidence.tsv source-form 0x80164CE4-0x80164E30"
           },
           {
-            "function": "PlayAlignGetSlotPlayer",
-            "evidence": "evidence.tsv source-form 0x80164ED8-0x80165000"
-          },
-          {
-            "function": "PlayAlignSetSlotValue",
-            "evidence": "evidence.tsv source-form 0x80165000-0x80165098"
-          },
-          {
-            "function": "PlayAlignSwapOuterSlots",
-            "evidence": "evidence.tsv source-form 0x80165110-0x801651E0"
-          },
-          {
             "function": "PlayAlignLoadPlayRoutes",
             "evidence": "evidence.tsv source-form 0x80165464-0x80165770"
-          },
-          {
-            "function": "PlayAlignLoadRouteSteps",
-            "evidence": "evidence.tsv source-form 0x80165890-0x80165C50"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
@@ -14633,7 +14593,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80167094",
+          "start": "0x80166BE8",
           "end": "0x80167910"
         },
         {
