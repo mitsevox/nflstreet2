@@ -11264,7 +11264,7 @@
     {
       "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds, PlayerRecordWriteById and PlayerQueryOpen stay registered here as its partials (their HOLDOUT source-form rows).",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds and PlayerRecordWriteById stay registered here as its partials (their HOLDOUT source-form rows).",
       "sections": [
         {
           "section": ".text",
