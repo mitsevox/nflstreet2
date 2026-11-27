@@ -35,10 +35,6 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                   UISControlStateT *pControlState)
 {
     UISThreadActionT Action;
-    Uint16 CurGroupID;
-    Uint16 CurScreenID;
-    Int32 Index;
-    Int32 Param;
     Uint8 **ppCode;
     Int32 **ppTop;
     Int32 *pTop;
@@ -51,9 +47,6 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         Op = *pState->pCode;
         pState->pCode++;
         switch (Op) {
-        case 1:
-        case 106:
-            break;
         case 2:
         case 113: {
             Uint8 NumArgs;
@@ -154,6 +147,9 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                               pAcelFnc, MSDur, TargValue, AnimType);
             break;
         }
+        case 1:
+        case 106:
+            break;
         case 6: {
             UISControlInfoT *pControlInfo;
             Uint32 MSRate;
@@ -305,10 +301,16 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
         case 26:
             pTop[-1] = pTop[pTop[-1] - 1];
             break;
-        case 27:
-            pTop[pTop[-1] - 1] = pTop[-2];
+        case 27: {
+            Int32 Offset;
+            Int32 *pValue;
+
+            Offset = pTop[-1] - 1;
+            pValue = &pTop[Offset];
+            *pValue = pTop[-2];
             *ppTop -= 2;
             break;
+        }
         case 28: {
             Int32 Value;
             Int32 Value2;
@@ -393,10 +395,6 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             break;
         case 40:
             pTop[-2] = pTop[-2] / pTop[-1];
-            (*ppTop)--;
-            break;
-        case 90:
-            pTop[-2] = pTop[-2] % pTop[-1];
             (*ppTop)--;
             break;
         case 41: {
@@ -575,6 +573,7 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             Int32 *pOffset;
             Int32 *pList;
             void *pObject;
+            Int32 Index;
 
             Value = *--pState->pTop;
             pOffset = (Int32 *)*--pState->pTop;
@@ -665,15 +664,22 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             }
             break;
         }
-        case 120:
+        case 120: {
+            Uint16 CurGroupID;
+            Uint16 CurScreenID;
+
             fn_80219650(pInfo, &CurGroupID, &CurScreenID);
             (*ppTop)[-1] = (CurScreenID << 16) | CurGroupID;
             break;
-        case 77:
+        }
+        case 77: {
+            Int32 Param;
+
             Param = *--*ppTop;
             Action.Words[0] = *--*ppTop;
             UISAddThreadAction(pScreen->GroupID, pScreen->ScreenID, pInfo, 2, &Action, 1, &Param);
             break;
+        }
         case 78:
             *ppCode += 4;
             break;
@@ -815,6 +821,10 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             pState->pTop++;
             break;
         }
+        case 90:
+            pTop[-2] = pTop[-2] % pTop[-1];
+            (*ppTop)--;
+            break;
         case 91:
         case 93:
         case 95:
