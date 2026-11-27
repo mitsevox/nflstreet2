@@ -248,15 +248,17 @@ static int _ShortenBlock(MemBlock_t *pBlock, int size)
         size = 16;
     }
     size = (size + 15) & ~15;
-    pTail = pBlock->mpTail;
+    rem = (unsigned int)pBlock->mpTail;
     need = size + 4;
-    n = (char *)pTail - (char *)*pTail - need;
+    n = rem - (unsigned int)*(void **)rem - need;
+    pTail = (void **)rem;
     if (n < 32) {
         return -1;
     }
     pNext = (char *)pBlock + size + 0x10;
     n = pBlock->mpHeap->mDebugSize;
-    rem = (unsigned int)(pNext + n + 12) & 15;
+    rem = (unsigned int)(pNext + n + 12);
+    rem &= 15;
     if (rem) {
         rem = 16 - rem;
         if (n == 0 && rem < 2) {
@@ -327,7 +329,11 @@ static MemBlock_t *_SplitBlock(MemBlock_t *pBlock, int align, int offset, int si
     }
     pHeap = pBlock->mpHeap;
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = ((unsigned int)(pStart + n + 12) + offset) % (unsigned int)align;
+    /* FAKEMATCH: the padding variable holds the candidate data address first, which gives the
+       target's (start + n + 12) + offset sum order and its remainder register. */
+    extra = (unsigned int)(pStart + n + 12);
+    extra += offset;
+    rem = extra % (unsigned int)align;
     if (rem) {
         extra = align - rem;
         if (n == 0 && extra < 2) {
@@ -436,7 +442,6 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
     unsigned int used;
     MemHeap_t *pHeap;
     unsigned int rem;
-    unsigned int extra;
     unsigned int end;
     int hdr;
     char *pNewStart;
@@ -488,13 +493,16 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
         return 0;
     }
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = (unsigned int)(pStart + n + 12) & 15;
+    /* FAKEMATCH: the dead end-address variable is reused for the rest block's header address and
+       its padding, which gives the target's remainder and used-size registers. */
+    end = (unsigned int)(pStart + n + 12);
+    rem = end & 15;
     if (rem) {
-        extra = 16 - rem;
-        if (n == 0 && extra < 2) {
-            extra += 16;
+        end = 16 - rem;
+        if (n == 0 && end < 2) {
+            end += 16;
         }
-        n += extra;
+        n += end;
     }
     restSize = total - used;
     pRestBlock = (MemBlock_t *)(pStart + n);
