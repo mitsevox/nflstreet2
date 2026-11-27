@@ -888,7 +888,11 @@ static inline void _DbMttsSetColInt(TDbExpr_t *pExpr, int op, unsigned long long
     pExpr->mLeft.mType = TDB_TYPE_COLUMN;
     pExpr->mLeft.mValue.l = col;
     pExpr->mRight.mType = TDB_TYPE_INT;
-    pExpr->mRight.mValue.i = value;
+    /* FAKEMATCH: the integer stored through a pointer to the value field, for the target's frame-based store address in 0x8022BD30; the same field is set. */
+    {
+        int *pValue = &pExpr->mRight.mValue.i;
+        *pValue = value;
+    }
 }
 
 /* sub-expression op sub-expression */
