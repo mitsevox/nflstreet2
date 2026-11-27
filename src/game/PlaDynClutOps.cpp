@@ -73,11 +73,12 @@ static inline int BlendChannel(int a, int b, int weightA, int weightB, int total
 
 static inline int ScaleChannel(int value, int scale)
 {
-    value = scale * 2 * value / 255;
-    if (value > 255) {
-        value = 255;
+    int result = scale * 2 * value / 255;
+
+    if (result > 255) {
+        result = 255;
     }
-    return value;
+    return result;
 }
 
 extern "C" {
