@@ -1556,6 +1556,7 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
     AemsInstance_t *inst;
     DestroyState_t *destroy;
     unsigned char *data;
+    unsigned char *cursor;
     int i;
 
     SNDSYS_entercritical();
@@ -1566,20 +1567,25 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
     SNDI_memcpy(inst, c->mpTemplate, c->mInstanceSize);
     destroy = (DestroyState_t *)((char *)inst + c->mDestroyOffset);
     destroy->mpClass = c;
-    destroy->mpObject = object;
     destroy->mpInstance = inst;
-    inst->mpPrev = 0;
+    destroy->mpObject = object;
     inst->mpNext = c->mpInstances;
+    inst->mpPrev = 0;
     if (c->mpInstances != 0)
         c->mpInstances->mpPrev = inst;
     c->mpInstances = inst;
     inst->mTimer.mpCallback = c->mpUpdate;
     inst->mTimer.mpContext = inst->mData;
-    inst->mTimer.mpNext = sndaems.mpTimerClients;
-    inst->mTimer.mpPrev = 0;
-    if (sndaems.mpTimerClients != 0)
-        sndaems.mpTimerClients->mpPrev = &inst->mTimer;
-    sndaems.mpTimerClients = &inst->mTimer;
+    {
+        SndAemsTimerClient_t **head = &sndaems.mpTimerClients;
+        SndAemsTimerClient_t *linked = &inst->mTimer;
+
+        linked->mpNext = *head;
+        linked->mpPrev = 0;
+        if (*head != 0)
+            (*head)->mpPrev = linked;
+        *head = linked;
+    }
     data = inst->mData;
     if (c->mHasDestructor) {
         AemsDestructorClient_t *client = (AemsDestructorClient_t *)data;
@@ -1589,29 +1595,30 @@ void SNDAEMSI_CreateModuleInstance(Csis::Class *object, Csis::Parameter *params,
         object->SubscribeDestructorFast(&client->mClient);
         data = inst->mData + sizeof(AemsDestructorClient_t);
     }
+    cursor = data;
     for (i = 0; i < c->mNumGlobals; i++) {
-        AemsVariableClient_t *client = (AemsVariableClient_t *)data;
+        AemsVariableClient_t *client = (AemsVariableClient_t *)cursor;
 
         client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetGlobalVariable;
         client->mClient.mContext = client;
         Csis::GlobalVariable::SubscribeFast(&client->mHandle, &client->mClient);
-        data += sizeof(AemsVariableClient_t);
+        cursor += sizeof(AemsVariableClient_t);
     }
     if (c->mHasMemberData) {
-        AemsMemberDataClient_t *client = (AemsMemberDataClient_t *)data;
+        AemsMemberDataClient_t *client = (AemsMemberDataClient_t *)cursor;
 
         client->mClient.mContext = client;
         client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))SNDAEMSI_SetClassData;
         object->SubscribeMemberDataFast(&client->mClient);
-        data += client->mNumParams * 4 + 20;
+        cursor += client->mNumParams * 4 + 20;
     }
     for (i = 0; i < c->mNumFunctions; i++) {
-        AemsFunctionClient_t *client = (AemsFunctionClient_t *)data;
+        AemsFunctionClient_t *client = (AemsFunctionClient_t *)cursor;
 
         client->mClient.mCallback = (void (*)(Csis::Parameter *, void *))CsisFunctionCallback;
         client->mClient.mContext = client;
         Csis::Function::SubscribeFast(&client->mHandle, &client->mClient);
-        data += client->mNumParams * 4 + 28;
+        cursor += client->mNumParams * 4 + 28;
     }
     c->mNumInstances++;
     SNDSYS_leavecritical();

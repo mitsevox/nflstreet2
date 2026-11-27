@@ -25768,12 +25768,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80268DA8",
-          "end": "0x80269084"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80269260",
           "end": "0x802692B8"
         },
         {
@@ -25804,10 +25798,6 @@
           {
             "function": "SNDAEMSI_updateoscillator",
             "evidence": "evidence.tsv source-form 0x80268B88-0x80268DA8"
-          },
-          {
-            "function": "SNDAEMSI_CreateModuleInstance",
-            "evidence": "evidence.tsv source-form 0x80269084-0x80269260"
           },
           {
             "function": "SNDAEMS_removemodulebank",

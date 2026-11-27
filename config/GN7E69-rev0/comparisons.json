@@ -28789,11 +28789,6 @@
           "end": "0x80268DA8"
         },
         {
-          "symbol": "SNDAEMSI_CreateModuleInstance",
-          "start": "0x80269084",
-          "end": "0x80269260"
-        },
-        {
           "symbol": "SNDAEMS_removemodulebank",
           "start": "0x802692B8",
           "end": "0x80269484"
