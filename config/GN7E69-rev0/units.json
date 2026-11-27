@@ -1333,7 +1333,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes. Its .bss _SndgEvent_DelayedPos 0x8030AA7C-0x8030AA88 and .sbss (nine pool handles 0x803EC820-0x803EC844) are linked from the compiled object (data rows).",
       "sections": [
         {
           "section": ".text",
@@ -1352,6 +1352,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "holdouts": {
@@ -4227,7 +4239,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes. Its .bss gPlyrAnimReplayStates/gPlyrAnimReplayAnims 0x803192BC-0x803192F4 is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -4240,6 +4252,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "holdouts": {
@@ -28143,7 +28161,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change). Its three .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the constructed gear-colour cursor 0x8030BC2C-0x8030BC58 lies before src/game/PlayerQuery.cpp's cursors 0x8030BC58-0x8030BC88 and the two name cursors 0x8030BC88-0x8030BCA8 after them; exact data rows of all three extents.",
       "sections": [
         {
           "section": ".text",
@@ -28174,12 +28192,6 @@
           "placement": ".data5",
           "start": "0x803EA7D8",
           "end": "0x803EA7E4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8030BC2C",
-          "end": "0x8030BC58"
         },
         {
           "section": ".ctors",
@@ -28213,7 +28225,24 @@
           }
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
+        }
+      ]
     },
     {
       "source": "src/engine/ef_pow.c",
@@ -30356,7 +30385,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes. Its .bss (the two colour vectors 0x8039F858-0x8039F878) is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -30381,6 +30410,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "holdouts": {

@@ -223,8 +223,8 @@ int SyncTimeGetGameTime(void);
 
 /* Animation state and animation of each player ([team][index]), filled by
    PlyrAnimReplayRead. */
-extern unsigned short lbl_803192BC[2][7];
-extern unsigned short lbl_803192D8[2][7];
+extern unsigned short gPlyrAnimReplayStates[2][7];
+extern unsigned short gPlyrAnimReplayAnims[2][7];
 
 /* File-static: nothing on GameCube calls these, and the linker drops them. */
 extern "C" {
@@ -1280,8 +1280,8 @@ static void PrintPlayerDebugLine(int line, char *pBuf, int)
             break;
         case 5:
             sprintf(pBuf, "State: 0x%04X    Anim: %d",
-                    lbl_803192BC[(p->mId >> 8) & 0xFF][(p->mId >> 16) & 0xFF],
-                    lbl_803192D8[(p->mId >> 8) & 0xFF][(p->mId >> 16) & 0xFF]);
+                    gPlyrAnimReplayStates[(p->mId >> 8) & 0xFF][(p->mId >> 16) & 0xFF],
+                    gPlyrAnimReplayAnims[(p->mId >> 8) & 0xFF][(p->mId >> 16) & 0xFF]);
             break;
         default:
             pBuf[0] = 0;
