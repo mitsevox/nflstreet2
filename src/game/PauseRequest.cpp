@@ -19,7 +19,7 @@ extern void *gpReplay;
 
 extern "C" {
 int ReplayIsShowing(void *p);
-int fn_8009B9A8(int a);
+int CelebrationBlockIsActive(int a);
 int fn_8009D86C(void);
 int fn_800A7FD8(void);
 int fn_800B6644(int a);
@@ -94,7 +94,7 @@ void PauseRequestHandleInput(int a, int b, float c)
     if (b != 0 && b != 0x46) {
         return;
     }
-    if (!PauseRequestIsAllowed(a) || ReplayIsShowing(gpReplay) || fn_8009B9A8(0)) {
+    if (!PauseRequestIsAllowed(a) || ReplayIsShowing(gpReplay) || CelebrationBlockIsActive(0)) {
         return;
     }
     if (mode == 2 && fn_800A7FD8()) {

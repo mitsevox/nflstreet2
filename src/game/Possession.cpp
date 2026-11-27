@@ -76,12 +76,12 @@ void SndgEventPostBallValue(Object_80039F5C *p, void *pBall);
 void fn_80093C3C(int a, short b, Object_80039F5C *p);
 void fn_80097028(Object_80039F5C *p);
 int fn_8009704C(Object_80039F5C *p);
-int fn_8009A298(int handle);
-int fn_8009A2EC(int handle);
-int fn_8009A578(int handle);
-int fn_8009A5D4(int handle);
+int CatchAnimGetSide(int handle);
+int CatchAnimGetAngle(int handle);
+int CatchAnimGetType(int handle);
+int CatchAnimIsSpecialRecord(int handle);
 void fn_8009A5DC(int a, int b, void *pA, int *pB);
-int fn_8009AD38(int team, int value);
+int CatchUpAdjustFumbleChance(int team, int value);
 void fn_8009BD2C(Object_80039F5C *p, int *pOut);
 void fn_8009BFF8(Object_80039F5C *p, Vector_80039F5C *pA, Vector_80039F5C *pB, int a);
 int fn_8009D86C(void);
@@ -187,7 +187,7 @@ void PossGiveBall(Object_80039F5C *p, void *pBall);
 void PossLogBallResult(Object_80039F5C *p);
 int PossCheckDownedBall(Object_80039F5C *p);
 int ScrmCarrierInEndZone(Object_80039F5C *p, Vector_80039F5C *pPos);
-int fn_8009A5A0(int handle);
+int CatchAnimIsSidelineRecord(int handle);
 float ScrmGetEndLineY(void);
 int BallIsClearOfHands(void *pBall);
 int ChallengeIsActive(void);
@@ -272,7 +272,7 @@ void PossCalcBallSpot(Object_80039F5C *p, void *pBall, Point2_t *pOut, int a)
         } else {
             limit = 10.0f;
         }
-        if (p->mpState->mId == 0x1C && fn_8009A5A0(handle) == 1) {
+        if (p->mpState->mId == 0x1C && CatchAnimIsSidelineRecord(handle) == 1) {
             limit += 0.03f;
         }
         if (!(left.mZ > limit)) {
@@ -492,7 +492,7 @@ float PossCalcHitFactor(Object_80039F5C *p)
     fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
     slot = handle;
     if (p->mpState->mId == 0x1C) {
-        fn_8009A298(slot);
+        CatchAnimGetSide(slot);
     }
     if (p->mUnknown560.mFlags.mBytes[0]) {
         switch (pBlock->mUnknown54) {
@@ -537,12 +537,12 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
     case 0xE1:
     case 0xE3:
         if (p->mpState->mId == 0x1C) {
-            int kind = fn_8009A578(handle);
+            int kind = CatchAnimGetType(handle);
 
             if (kind != 6 && kind != 7) {
-                if (fn_8009A298(handle) != 2
-                    && ((fn_8009A298(handle) == 0 && (move == 9 || move == 4 || move == 3))
-                        || (fn_8009A298(handle) == 1 && (move == 10 || move == 2 || move == 1)))) {
+                if (CatchAnimGetSide(handle) != 2
+                    && ((CatchAnimGetSide(handle) == 0 && (move == 9 || move == 4 || move == 3))
+                        || (CatchAnimGetSide(handle) == 1 && (move == 10 || move == 2 || move == 1)))) {
                     *pFlags = 0x100;
                 } else {
                     *pFlags = 0;
@@ -557,7 +557,7 @@ void PossClassifyCatch(Object_80039F5C *p, int *pFlags, int *pAngle, int move, i
             int backAngle = p->mMotion.mFacing - 0x800000;
 
             *pAngle = ballAngle - backAngle;
-            *pAngle += fn_8009A2EC(handle);
+            *pAngle += CatchAnimGetAngle(handle);
             *pAngle = MathAngleDiff(*pAngle, 0);
         } else {
             *pFlags = 0x100;
@@ -839,7 +839,7 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
         SndgEventPostBallContact(p, pBall);
         PossGiveBall(p, pBall);
         BallSetTarget(pBall, 0);
-        if (handle == 0xFFFF || !fn_8009A5D4(handle)) {
+        if (handle == 0xFFFF || !CatchAnimIsSpecialRecord(handle)) {
             BallGetPosition(pBall, &pos);
         }
         CamGameSetModeAll(1);
@@ -1100,7 +1100,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
                     }
                 }
             }
-            chance = fn_8009AD38(p->mId >> 8 & 0xFF, chance);
+            chance = CatchUpAdjustFumbleChance(p->mId >> 8 & 0xFF, chance);
             fn_800ACE90(p, &chance);
             chance = chance > 95 ? 95 : chance;
         }
@@ -1412,7 +1412,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 ReplayEventAdd(gpReplay, 3, p, &target, &p->mMotion.mFacing);
                 pRecord->mUnknown14 = 6;
                 if (p->mpState->mId == 0x1C) {
-                    pRecord->mUnknown4 = fn_8009A578(handle);
+                    pRecord->mUnknown4 = CatchAnimGetType(handle);
                 } else {
                     pRecord->mUnknown4 = 2;
                 }
@@ -1426,7 +1426,7 @@ void PossLogBallResult(Object_80039F5C *p)
                 ScrmSetPlayFlag(0x13, 1);
                 pRecord->mUnknown14 = 0x14;
                 if (p->mpState->mId == 0x1C) {
-                    pRecord->mUnknown4 = fn_8009A578(handle);
+                    pRecord->mUnknown4 = CatchAnimGetType(handle);
                 } else {
                     pRecord->mUnknown4 = 2;
                 }
@@ -1451,7 +1451,7 @@ void PossLogBallResult(Object_80039F5C *p)
         }
         {
             unsigned short kind = pRecord->mUnknown14;
-            if (kind == 0x14 && handle != 0xFFFF && fn_8009A5D4(handle)) {
+            if (kind == 0x14 && handle != 0xFFFF && CatchAnimIsSpecialRecord(handle)) {
                 ScrmGetBallSpot();
                 pRecord = fn_800B15FC();
                 fn_8009BD2C(p, &pRecord->mUnknown0);

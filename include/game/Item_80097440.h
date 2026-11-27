@@ -5,7 +5,7 @@
 #include "game/Block_801BE60C.h"
 #include "game/cu_8008E978.h"
 
-/* 60-byte records that fn_80097440 copies into the buffer at +3048 of
+/* 60-byte records that CatchAnimBuildMirrorTable copies into the buffer at +3048 of
    Record_80097518. */
 struct Item_80097440 {
     unsigned char mUnknown0[4];
@@ -52,7 +52,7 @@ struct Block_800997F4 {
     float mUnknown16;
 };
 
-/* 60-byte payload fn_801BE60C returns for the state fn_8009A344 runs; phase
+/* 60-byte payload fn_801BE60C returns for the state CatchAnimStateUpdate runs; phase
    0 initialises it from the template at +4 of Block_80099630. */
 struct Block_8009A344 {
     int mUnknown0;
@@ -79,7 +79,7 @@ struct Block_8009AB34 {
     unsigned char mUnknown8;
 };
 
-/* 16-byte callback records copied into Block_8009B5E8 by fn_8009B87C. */
+/* 16-byte callback records copied into Block_8009B5E8 by CelebrationBlocksSetEntry. */
 struct Entry_8009B87C {
     int (*mpCallback0)(int value, int *pData);
     int (*mpCallback4)(int *pData);
@@ -87,8 +87,8 @@ struct Entry_8009B87C {
     float (*mpCallbackC)(int *pData);
 };
 
-/* The 300 bytes at +4 of Block_8009B720 that fn_8009B698 copies and
-   fn_8009B5E8 checks. */
+/* The 300 bytes at +4 of Block_8009B720 that CelebrationBlockLoad copies and
+   CelebrationBlockCompare checks. */
 struct Block_8009B5E8 {
     int mUnknown0;
     Entry_8009B87C mEntries[2];

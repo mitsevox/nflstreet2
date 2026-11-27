@@ -70,8 +70,8 @@ void SpchIGResumeChannel(int index);
 void SpchIGSetEnabled(unsigned char value);
 void fn_80094DF0(void);
 void fn_8009B924(void);
-void fn_8009BA10(int a);
-unsigned char fn_8009BA94(void);
+void CelebrationSetReplayPrompt(int a);
+unsigned char CelebrationGetReplayPrompt(void);
 int fn_800A3444(void);
 int fn_800A8444(int a);
 int fn_800A8488(int a);
@@ -427,9 +427,9 @@ void PauseOpenScreenArgs(unsigned short a, unsigned short b, int c, unsigned int
             HudHidePressPrompt(1);
         }
     }
-    _Pause_bResumeHook = fn_8009BA94();
+    _Pause_bResumeHook = CelebrationGetReplayPrompt();
     if (_Pause_bResumeHook == 1) {
-        fn_8009BA10(0);
+        CelebrationSetReplayPrompt(0);
     }
     HudHideMashPrompts();
     ReplayHandleCommand(gpReplay, 4, 0);
@@ -541,7 +541,7 @@ void PauseClose(void)
         _Pause_bCallOnClose = 0;
     }
     if (_Pause_bResumeHook == 1) {
-        fn_8009BA10(1);
+        CelebrationSetReplayPrompt(1);
     }
     if (_Pause_bQuit) {
         ReplayHandleCommand(gpReplay, 3, 0);

@@ -40,7 +40,7 @@ void fn_800B8344(Object_80039F5C *p);
 void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
 int PlayerMoveTryStartRun(Object_80039F5C *p);
-int fn_8009AD30(Object_80039F5C *p, int value);
+int CatchUpAdjustMoveTimer(Object_80039F5C *p, int value);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800FD68C(Message_800F01CC *, void *, void *);
 int PlyrTryQueueMsg62(Object_80039F5C *p, int a, short b);
@@ -1077,7 +1077,7 @@ extern "C" void CarrierRunTryMoves(Object_80039F5C *p, OptionRunControl_t *contr
     if (block->mUnknown0 > 0) return;
     block->mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
     block->mUnknown0 = fn_800ACC80(p, block->mUnknown0);
-    block->mUnknown0 = fn_8009AD30(p, block->mUnknown0);
+    block->mUnknown0 = CatchUpAdjustMoveTimer(p, block->mUnknown0);
     if (control) control->mUnknown51[0] = 7;
     float distance;
     int team = ScrmGetDefenseTeam();
@@ -1380,7 +1380,7 @@ extern "C" int CarrierRunNotify(Object_80039F5C *p)
     pControl->mUnknown49 = 0;
     pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
     pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
-    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = CatchUpAdjustMoveTimer(p, pControl->mUnknown56.mUnknown0);
     return 0;
 }
 
@@ -1396,7 +1396,7 @@ extern "C" void CarrierRunResetControl(Object_80039F5C *p, OptionRunControl_t *p
     pControl->mUnknown49 = 0;
     pControl->mUnknown56.mUnknown0 = (signed char)(16 - (p->mRatings[2] + p->mRatings[0]) / 32);
     pControl->mUnknown56.mUnknown0 = fn_800ACC80(p, pControl->mUnknown56.mUnknown0);
-    pControl->mUnknown56.mUnknown0 = fn_8009AD30(p, pControl->mUnknown56.mUnknown0);
+    pControl->mUnknown56.mUnknown0 = CatchUpAdjustMoveTimer(p, pControl->mUnknown56.mUnknown0);
     pControl->mUnknown52 = 1;
     pControl->mUnknown40 = 1.0f;
     pControl->mUnknown0 = 0;

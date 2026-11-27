@@ -243,8 +243,8 @@ void PlayerActionAnimStartVariant(Table_80089904 *pTable, Object_80039F5C *p, un
                  Object_80039F5C *pOther, Record_800DDCE4 *pRecord, int mask);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, void *pA, Object_801BBD5C *pObject, int b, float value);
-void fn_8009A260(Object_80039F5C *p);
-int fn_8009B9A8(int a);
+void CatchResetHeightBoost(Object_80039F5C *p);
+int CelebrationBlockIsActive(int a);
 float fn_8009BB54(int a);
 void fn_8009BD60(Object_80039F5C *p);
 void fn_8009BFD0(Object_80039F5C *p, Vector_80039F5C *pPos, float *pRot);
@@ -390,16 +390,16 @@ struct Block_800E0850 {
     unsigned char mUnknown28, mUnknown29;
 };
 extern "C" {
-Item_800E0694 *fn_8009A63C(int handle);
+Item_800E0694 *CatchAnimGetRecord(int handle);
 void fn_80099F04(Object_80039F5C *p, int handle, int index);
 void fn_800A2190(int a);
 void fn_8009A5DC(int a, int b, void *pKind, int *pHandle);
-float fn_8009A270(int handle);
-int fn_8009A578(int handle);
+float CatchAnimGetTime(int handle);
+int CatchAnimGetType(int handle);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 void PlayerMoveBegin(Object_80039F5C *p, int a, int b);
 void fn_800B8344(Object_80039F5C *p);
-int fn_8009A68C(Object_80039F5C *p);
+int CatchIsInCatchAnim(Object_80039F5C *p);
 unsigned char *fn_8009CC2C(Object_80039F5C *p, void (*callback)(int, Vector_80039F5C *, unsigned char *), int a, int b);
 void PlyrPoseDelayBlink(Block_80170E64 *p);
 int fn_800C4B6C(Object_80039F5C *p);

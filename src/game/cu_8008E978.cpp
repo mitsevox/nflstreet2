@@ -5754,27 +5754,27 @@ extern "C" unsigned char fn_8009704C(Object_80039F5C *p);
 
 extern "C" int fn_80097160(Object_80039F5C *p, float duration);
 
-extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
+extern "C" void CatchAnimMirrorVector(Vector_80039F5C *pOut, Vector_80039F5C *pIn);
 
-extern "C" int fn_8009740C(int value);
+extern "C" int CatchAnimMirrorSide(int value);
 
-extern "C" int fn_80097430(int angle);
+extern "C" int CatchAnimMirrorAngle(int angle);
 
-extern "C" void fn_80097440(unsigned short count, int index);
+extern "C" void CatchAnimBuildMirrorTable(unsigned short count, int index);
 
-extern "C" void fn_80097518(int index);
+extern "C" void CatchAnimFreeMirrorTable(int index);
 
-extern "C" void fn_80097564(void);
+extern "C" void CatchAnimFreeAllMirrorTables(void);
 
-extern "C" void fn_800975A4(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow);
+extern "C" void CatchAnimPackHandle(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow);
 
 extern "C" void fn_800975EC(unsigned short id, int flag, int index);
 
-extern "C" int fn_8009780C(Object_80039F5C *p, Ball_t *pBall);
+extern "C" int CatchIsBallNotFreeFlight(Object_80039F5C *p, Ball_t *pBall);
 
-extern "C" int fn_80097864(Object_80039F5C *p);
+extern "C" int CatchIsNearSidelineFacingOut(Object_80039F5C *p);
 
-extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos, float time, int *pTurn, Ball_t *pBall);
+extern "C" void CatchAnimSetupSlide(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos, float time, int *pTurn, Ball_t *pBall);
 
 extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, float *pScale, int *pTurn);
 
@@ -5782,9 +5782,9 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
 
 extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing, unsigned char delay, Ball_t *pBall, int first, int last, int filter, unsigned char loose, int kind, int side);
 
-extern "C" int fn_800994E0(void *p, int value);
+extern "C" int CatchSyncOnRestore(void *p, int value);
 
-extern "C" int fn_80099510(Object_80039F5C *p);
+extern "C" int CatchIsPlayerEligible(Object_80039F5C *p);
 
 extern "C" void fn_80099568(int kind);
 
@@ -5792,7 +5792,7 @@ extern "C" void fn_80099630(void);
 
 extern "C" void fn_800996D4(void);
 
-extern "C" void fn_800996FC(int value);
+extern "C" void CatchLoadAnimsForPlayType(int value);
 
 extern "C" int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, float range, Block_800997F4 *pBlock, int b, float *c, unsigned char d, unsigned char e);
 
@@ -5806,29 +5806,29 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind);
 
 extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kind);
 
-extern "C" void fn_8009A260(Object_80039F5C *p);
+extern "C" void CatchResetHeightBoost(Object_80039F5C *p);
 
-extern "C" float fn_8009A270(int handle);
+extern "C" float CatchAnimGetTime(int handle);
 
-extern "C" int fn_8009A298(int handle);
+extern "C" int CatchAnimGetSide(int handle);
 
-extern "C" int fn_8009A2EC(int handle);
+extern "C" int CatchAnimGetAngle(int handle);
 
-extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
+extern "C" int CatchAnimStateUpdate(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries, Object_80039F5C *p, unsigned int phase);
 
-extern "C" int fn_8009A578(int handle);
+extern "C" int CatchAnimGetType(int handle);
 
-extern "C" int fn_8009A5A0(int handle);
+extern "C" int CatchAnimIsSidelineRecord(int handle);
 
-extern "C" int fn_8009A5D4(int handle);
+extern "C" int CatchAnimIsSpecialRecord(int handle);
 
 extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle);
 
-extern "C" Item_8009A63C *fn_8009A63C(int ref);
+extern "C" Item_8009A63C *CatchAnimGetRecord(int ref);
 
-extern "C" int fn_8009A68C(Object_80039F5C *p);
+extern "C" int CatchIsInCatchAnim(Object_80039F5C *p);
 
-extern "C" void fn_8009A6D8(void);
+extern "C" void CatchToggleParity(void);
 
 extern "C" int fn_8009A6EC(Object_80039F5C *p);
 
@@ -5836,75 +5836,75 @@ extern "C" int PlyrRollContestedCatch(Object_80039F5C *p);
 
 extern "C" void fn_8009A8D4(void *p);
 
-extern "C" void fn_8009A8F0(void);
+extern "C" void CatchUpComputeHandicap(void);
 
 extern "C" void fn_8009AB34(void);
 
 extern "C" void fn_8009ABC0(void);
 
-extern "C" void fn_8009ABC4(void);
+extern "C" void CatchUpRefresh(void);
 
-extern "C" short fn_8009AC18(int team, int index, short value);
+extern "C" short CatchUpAdjustRating(int team, int index, short value);
 
-extern "C" int fn_8009AD30(Object_80039F5C *p, int value);
+extern "C" int CatchUpAdjustMoveTimer(Object_80039F5C *p, int value);
 
-extern "C" int fn_8009AD38(int team, int value);
+extern "C" int CatchUpAdjustFumbleChance(int team, int value);
 
-extern "C" int fn_8009AE1C(int team, int value);
+extern "C" int CatchUpAdjustDefendBallChance(int team, int value);
 
 extern "C" signed char fn_8009AF00(int team, signed char value);
 
-extern "C" int fn_8009AFE8(int team, int value);
+extern "C" int CatchUpAdjustTargetRoll(int team, int value);
 
-extern "C" int fn_8009B0CC(int team, int value);
+extern "C" int CatchUpAdjustContactChance(int team, int value);
 
-extern "C" void fn_8009B1B0(Block_8009B720 *p);
+extern "C" void CelebrationBlockReset(Block_8009B720 *p);
 
-extern "C" int fn_8009B1C4(int value, int *pState);
+extern "C" int CelebrationReplayStart(int value, int *pState);
 
-extern "C" int fn_8009B288(unsigned int *pState);
+extern "C" int CelebrationReplayUpdate(unsigned int *pState);
 
-extern "C" void fn_8009B3A4(int *pState);
+extern "C" void CelebrationReplayStop(int *pState);
 
-extern "C" void fn_8009B3E0(Block_8009B720 *p);
+extern "C" void CelebrationBlocksInstallReplay(Block_8009B720 *p);
 
-extern "C" void fn_8009B420(Block_8009B720 *p);
+extern "C" void CelebrationBlocksRemoveReplay(Block_8009B720 *p);
 
-extern "C" int fn_8009B448(int value, int index);
+extern "C" int CelebrationBlocksTryStart(int value, int index);
 
-extern "C" int fn_8009B4C8(int);
+extern "C" int CelebrationBlocksUpdate(int);
 
-extern "C" int fn_8009B5E8(void *p, void *q);
+extern "C" int CelebrationBlockCompare(void *p, void *q);
 
-extern "C" int fn_8009B628(void *p, void *pBuffer);
+extern "C" int CelebrationBlockSave(void *p, void *pBuffer);
 
-extern "C" int fn_8009B698(void *p, void *pBuffer);
+extern "C" int CelebrationBlockLoad(void *p, void *pBuffer);
 
-extern "C" int fn_8009B718(void *p);
+extern "C" int CelebrationBlockGetSaveSize(void *p);
 
 extern "C" void CelebrationBlocksInit(void *pData);
 
 extern "C" void fn_8009B7E0(void);
 
-extern "C" void fn_8009B87C(int index, Entry_8009B87C *pEntry);
+extern "C" void CelebrationBlocksSetEntry(int index, Entry_8009B87C *pEntry);
 
-extern "C" void fn_8009B8C4(int index);
+extern "C" void CelebrationBlocksClearEntry(int index);
 
-extern "C" unsigned int fn_8009B910(int index);
+extern "C" unsigned int CelebrationBlockGetFrames(int index);
 
 extern "C" void fn_8009B924(void);
 
-extern "C" int fn_8009B9A8(int index);
+extern "C" int CelebrationBlockIsActive(int index);
 
-extern "C" int fn_8009B9BC(void);
+extern "C" int CelebrationBlocksIsReplayRunning(void);
 
-extern "C" int fn_8009B9F0(int index);
+extern "C" int CelebrationBlockExists(int index);
 
-extern "C" void fn_8009BA10(int value);
+extern "C" void CelebrationSetReplayPrompt(int value);
 
-extern "C" unsigned char fn_8009BA94(void);
+extern "C" unsigned char CelebrationGetReplayPrompt(void);
 
-extern "C" void fn_8009BA9C(int value);
+extern "C" void CelebrationBlocksStartForPlay(int value);
 
 extern "C" void fn_8009BB50(int a, int b);
 
@@ -9635,7 +9635,7 @@ extern "C" int fn_80092830(int index)
         if (ready == 0 || (mode == 4 && lbl_803EA8D0 <= 120)) {
             break;
         }
-        fn_8009BA10(0);
+        CelebrationSetReplayPrompt(0);
         if (pCharacter->mUnknownE0.mUnknown0 != 0 &&
             AnimSeqCamFindCamera(pActor, 1, pCharacter->mUnknownE0.mUnknown4.mParts[1], pCharacter->mUnknownE0.mUnknown8.mParts[1]) == 0) {
             AnimSeqCamSample_t *pSample = AnimSeqCamFindFirstCamera(pActor);
@@ -9971,8 +9971,8 @@ extern "C" void fn_80093684(void *p)
 
     fn_80094B78((Header_80094B78 *)pBlock->mUnknown80.mUnknownE40);
     pBlock->mUnknown80.mUnknownE4E = 0;
-    if (fn_8009B9F0(0)) {
-        fn_8009B87C(0, &lbl_802D72C8);
+    if (CelebrationBlockExists(0)) {
+        CelebrationBlocksSetEntry(0, &lbl_802D72C8);
     }
     pBlock->mpUnknown7C = p;
     for (i = 0; i < 4; i++) {
@@ -9997,8 +9997,8 @@ extern "C" void fn_80093684(void *p)
 
 extern "C" void fn_800937CC(void)
 {
-    if (fn_8009B9F0(0)) {
-        fn_8009B8C4(0);
+    if (CelebrationBlockExists(0)) {
+        CelebrationBlocksClearEntry(0);
     }
     ResUnLoad(lbl_803EC924->mpUnknown7C, 2);
     fn_800925A4();
@@ -11465,7 +11465,7 @@ extern "C" int fn_8009637C(int index)
 
     fn_80093BAC(pCharacter->mUnknown0, pCharacter->mUnknown4);
     if (pCharacter->mUnknownE0.mUnknown0 == 0 && FELoopIsMainFEActive() == 0 && fn_800AD9B4() == 4) {
-        result = fn_8009B9BC() == 0;
+        result = CelebrationBlocksIsReplayRunning() == 0;
     }
     return result;
 }
@@ -11870,7 +11870,7 @@ extern "C" unsigned char fn_8009704C(Object_80039F5C *p)
 
     if (lbl_803EA93C != 0 && p->mpState->mId == 28) {
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        kind = fn_8009A298(handle);
+        kind = CatchAnimGetSide(handle);
         switch (kind) {
         case 1:
             pFirst = &p->mUnknown200;
@@ -11914,7 +11914,7 @@ extern "C" int fn_80097160(Object_80039F5C *p, float duration)
 
     if (p->mpState->mId == 28) {
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        type = fn_8009A298(handle);
+        type = CatchAnimGetSide(handle);
         switch (type) {
         case 0:
             pFirst = &p->mUnknown108;
@@ -11957,7 +11957,7 @@ extern "C" int fn_80097160(Object_80039F5C *p, float duration)
 
 /* Converts a vector between the two horizontal angle conventions (the angle
    is negated, the length and height are kept). */
-extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
+extern "C" void CatchAnimMirrorVector(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
 {
     int angle = MathArcTan2(pIn->mY, pIn->mX);
     float length = Vec2Magnitude(pIn);
@@ -11966,7 +11966,7 @@ extern "C" void fn_800973AC(Vector_80039F5C *pOut, Vector_80039F5C *pIn)
     pOut->mZ = pIn->mZ;
 }
 
-extern "C" int fn_8009740C(int value)
+extern "C" int CatchAnimMirrorSide(int value)
 {
     int result;
 
@@ -11980,12 +11980,12 @@ extern "C" int fn_8009740C(int value)
     return result;
 }
 
-extern "C" int fn_80097430(int angle)
+extern "C" int CatchAnimMirrorAngle(int angle)
 {
     return (0x1000000 - angle) & 0xFFFFFF;
 }
 
-extern "C" void fn_80097440(unsigned short count, int index)
+extern "C" void CatchAnimBuildMirrorTable(unsigned short count, int index)
 {
     unsigned short i;
 
@@ -11996,15 +11996,15 @@ extern "C" void fn_80097440(unsigned short count, int index)
         // FAKEMATCH: a cast keeps this an ordinary call instead of the inline builtin copy
         ((void (*)(void *, void *, unsigned int))memcpy)(p, lbl_8030C2B8[index].mUnknown8[i].mpUnknown4,
                                                          sizeof(Item_80097440));
-        fn_800973AC(&p->mUnknown8, &p->mUnknown8);
-        fn_800973AC(&p->mUnknown14, &p->mUnknown14);
-        p->mUnknown28 = fn_80097430(p->mUnknown28);
-        p->mUnknown38 = fn_80097430(p->mUnknown38);
-        p->mUnknown24 = fn_8009740C(p->mUnknown24);
+        CatchAnimMirrorVector(&p->mUnknown8, &p->mUnknown8);
+        CatchAnimMirrorVector(&p->mUnknown14, &p->mUnknown14);
+        p->mUnknown28 = CatchAnimMirrorAngle(p->mUnknown28);
+        p->mUnknown38 = CatchAnimMirrorAngle(p->mUnknown38);
+        p->mUnknown24 = CatchAnimMirrorSide(p->mUnknown24);
     }
 }
 
-extern "C" void fn_80097518(int index)
+extern "C" void CatchAnimFreeMirrorTable(int index)
 {
     if (lbl_8030C2B8[index].mpUnknownBE8 != 0) {
         fn_801D2BD0(lbl_8030C2B8[index].mpUnknownBE8);
@@ -12012,16 +12012,16 @@ extern "C" void fn_80097518(int index)
     }
 }
 
-extern "C" void fn_80097564(void)
+extern "C" void CatchAnimFreeAllMirrorTables(void)
 {
     unsigned char i;
 
     for (i = 0; i <= 2; i++) {
-        fn_80097518(i);
+        CatchAnimFreeMirrorTable(i);
     }
 }
 
-extern "C" void fn_800975A4(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow)
+extern "C" void CatchAnimPackHandle(unsigned char kind, int handle, unsigned char *pHigh, unsigned char *pLow)
 {
     unsigned int value;
 
@@ -12078,12 +12078,12 @@ extern "C" void fn_800975EC(unsigned short id, int flag, int index)
                 }
             }
         }
-        fn_80097518(index);
-        fn_80097440(lbl_8030C2B8[index].mUnknown4, index);
+        CatchAnimFreeMirrorTable(index);
+        CatchAnimBuildMirrorTable(lbl_8030C2B8[index].mUnknown4, index);
     }
 }
 
-extern "C" int fn_8009780C(Object_80039F5C *p, Ball_t *pBall)
+extern "C" int CatchIsBallNotFreeFlight(Object_80039F5C *p, Ball_t *pBall)
 {
     Vector_80039F5C velocity;
 
@@ -12094,7 +12094,7 @@ extern "C" int fn_8009780C(Object_80039F5C *p, Ball_t *pBall)
     return __builtin_fabsf(velocity.mZ / rate + 0.0029814816f) > 1e-07f;
 }
 
-extern "C" int fn_80097864(Object_80039F5C *p)
+extern "C" int CatchIsNearSidelineFacingOut(Object_80039F5C *p)
 {
     if (__builtin_fabsf(p->mMotion.mPos.mX) > ScrmGetSidelineX() - 4.0f) {
         FieldPoint_t direction;
@@ -12108,7 +12108,7 @@ extern "C" int fn_80097864(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_800978F8(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos,
+extern "C" void CatchAnimSetupSlide(Object_80039F5C *p, Item_80097440 *pItem, Vec2_t *pTarget, Vector_80039F5C *pPos,
                             float time, int *pTurn, Ball_t *pBall)
 {
     Vector_80039F5C ballPos;
@@ -12183,7 +12183,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     }
     skill = (speed - (float)(rating - low) / (float)(high - low)) * 0.65f;
     skill = speed - SyncRandGetFloat(0) * skill;
-    pItem = fn_8009A63C(handle);
+    pItem = CatchAnimGetRecord(handle);
     reach.mX = pItem->mUnknown8.mX;
     reach.mY = pItem->mUnknown8.mY;
     reach.mZ = pItem->mUnknown8.mZ;
@@ -12246,7 +12246,7 @@ extern "C" float fn_80097A88(Object_80039F5C *p, int handle, Ball_t *pBall, floa
     angle = ((MathArcTan2(toReach.mY, toReach.mX) + 0x800000) - MathArcTan2(pItem->mUnknown14.mY, pItem->mUnknown14.mX)) &
             0xFFFFFF;
     if (pItem->mUnknown6[0] == 1) {
-        fn_800978F8(p, pItem, (Vec2_t *)&landing, &reach, time, &turn, pBall);
+        CatchAnimSetupSlide(p, pItem, (Vec2_t *)&landing, &reach, time, &turn, pBall);
         speed = 1.0f;
     } else {
         int bend;
@@ -12348,7 +12348,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
     team = ScrmGetDefenseTeam();
     range *= gFrameTimeScale;
     heading = (MathArcTan2(velocity.mY, velocity.mX) + 0x800000) & 0xFFFFFF;
-    if (fn_8009780C(p, pBall) == 0) {
+    if (CatchIsBallNotFreeFlight(p, pBall) == 0) {
         turning = MathAngleDiff(p->mMotion.mFacing, p->mMotion.mUnknown32) > 0x2AAAAA;
         skill = p->mRatings[1] * (1.0f / 255.0f);
         start = lbl_8030C2B8[kind].mUnknownBEC[first];
@@ -12358,7 +12358,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
         }
         heightScale = 1.1f - skill * 1.1f;
         heightLimit = 1.159353f;
-        sideline = fn_80097864(p);
+        sideline = CatchIsNearSidelineFacingOut(p);
         edge = ScrmGetBallSpot().mY + 1.0f;
         if (kind == 1) {
             heightLimit += 0.75f;
@@ -12391,7 +12391,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     continue;
                 }
                 handle = (mirror << 31) | (kind << 29) | i;
-                pItem = fn_8009A63C(handle);
+                pItem = CatchAnimGetRecord(handle);
                 if (ScrmTestPlayFlag(20) && pItem->mUnknown6[0] == 1) {
                     ok = 0;
                 }
@@ -12580,7 +12580,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     (kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0) = bestHandle;
                     (kind == 1 ? pBlock->mUnknown16 : pBlock->mUnknown4) = best;
                 }
-                pItem = fn_8009A63C(kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0);
+                pItem = CatchAnimGetRecord(kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0);
                 if (((kind == 1 ? pBlock->mUnknown16 : pBlock->mUnknown4) > 0.5f && pItem->mUnknown4 == 4) ||
                     ((kind == 1 ? pBlock->mUnknown16 : pBlock->mUnknown4) > 0.5f && pItem->mUnknown6[0] == 1) ||
                     ((kind == 1 ? pBlock->mUnknown16 : pBlock->mUnknown4) > 0.5f &&
@@ -12589,7 +12589,7 @@ extern "C" int fn_8009817C(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     found = 1;
                 }
             } else if ((kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0) != bestHandle) {
-                pItem = fn_8009A63C(kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0);
+                pItem = CatchAnimGetRecord(kind == 1 ? pBlock->mUnknown8 : pBlock->mUnknown0);
                 found = 1;
             }
             if (found == 1) {
@@ -12632,7 +12632,7 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
     if (filter != 3) {
         loose = 0;
     }
-    if (fn_8009780C(p, pBall) == 0) {
+    if (CatchIsBallNotFreeFlight(p, pBall) == 0) {
         skill = p->mRatings[1] * (1.0f / 255.0f);
         end = lbl_8030C2B8[kind].mUnknownBEC[last] + lbl_8030C2B8[kind].mUnknownBFA[last];
         start = lbl_8030C2B8[kind].mUnknownBEC[first];
@@ -12641,7 +12641,7 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
         }
         heightScale = 1.1f - skill * 1.1f;
         heightLimit = 1.159353f;
-        sideline = fn_80097864(p);
+        sideline = CatchIsNearSidelineFacingOut(p);
         if (kind == 1) {
             heightLimit += 0.75f;
         }
@@ -12671,7 +12671,7 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
                     continue;
                 }
                 handle = (mirror << 31) | (kind << 29) | i;
-                pItem = fn_8009A63C(handle);
+                pItem = CatchAnimGetRecord(handle);
                 if (BallStateGet(pBall, 0) == 4 && pItem->mUnknown6[1] == 1) {
                     continue;
                 }
@@ -12756,15 +12756,15 @@ extern "C" int fn_80098EAC(Object_80039F5C *p, Vector_80039F5C *pPos, int facing
     return bestHandle;
 }
 
-extern "C" int fn_800994E0(void *p, int value)
+extern "C" int CatchSyncOnRestore(void *p, int value)
 {
     if (value & 1) {
-        fn_800996FC(((Block_80099630 *)p)->mUnknown0);
+        CatchLoadAnimsForPlayType(((Block_80099630 *)p)->mUnknown0);
     }
     return 0;
 }
 
-extern "C" int fn_80099510(Object_80039F5C *p)
+extern "C" int CatchIsPlayerEligible(Object_80039F5C *p)
 {
     bool even;
 
@@ -12807,7 +12807,7 @@ extern "C" void fn_80099630(void)
     void *pHandle = SyncStateRegister(0, (void **)&lbl_803EC92C, sizeof(Block_80099630), 0, 0x63746368);
     unsigned char i;
 
-    SyncStateSetCallbacks(pHandle, 0, 0, fn_800994E0, 0);
+    SyncStateSetCallbacks(pHandle, 0, 0, CatchSyncOnRestore, 0);
     SyncStateGetData(pHandle);
     for (i = 0; i <= 2; i++) {
         lbl_8030C2B8[i].mpUnknownBE8 = 0;
@@ -12820,10 +12820,10 @@ extern "C" void fn_80099630(void)
 extern "C" void fn_800996D4(void)
 {
     lbl_803EC92C = 0;
-    fn_80097564();
+    CatchAnimFreeAllMirrorTables();
 }
 
-extern "C" void fn_800996FC(int value)
+extern "C" void CatchLoadAnimsForPlayType(int value)
 {
     if (value == 21) {
         fn_80099568(0);
@@ -12838,7 +12838,7 @@ extern "C" int fn_80099734(Object_80039F5C *p, Ball_t *pBall, int a, int mode, f
     int result = 0x1FFFFFFF;
     int flags = 0;
 
-    if (fn_80099510(p) != 0) {
+    if (CatchIsPlayerEligible(p) != 0) {
         if (e != 0) {
             flags = 2;
         }
@@ -12863,7 +12863,7 @@ extern "C" int fn_800997F4(Object_80039F5C *p, Ball_t *pBall, float range, Block
     unsigned char i;
     unsigned char j;
 
-    if (fn_80099510(p) != 0) {
+    if (CatchIsPlayerEligible(p) != 0) {
         *pOutA = value;
         if (__builtin_fabsf(p->mMotion.mPos.mY) < ScrmGetGoalLineY() - 5.0f) {
             order[0] = 2;
@@ -13104,7 +13104,7 @@ extern "C" int fn_80099F04(Object_80039F5C *p, int handle, int kind)
         p->mpUnknown800[entry].mUnknownC = lbl_803EC92C->mUnknown4.mUnknown0;
         memset(&message, 0, sizeof(Message_800F01CC));
         message.mId = 28;
-        fn_800975A4(kind, handle, &high, &low);
+        CatchAnimPackHandle(kind, handle, &high, &low);
         message.mUnknown1[0] = high;
         message.mUnknown1[1] = low;
         message.mUnknown1[2] = value;
@@ -13135,7 +13135,7 @@ extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kin
         fn_800C39E0(p, 224, b, c, handle < 0);
         memset(&message, 0, sizeof(Message_800F01CC));
         message.mId = 28;
-        fn_800975A4(kind, handle, &high, &low);
+        CatchAnimPackHandle(kind, handle, &high, &low);
         message.mUnknown1[0] = high;
         message.mUnknown1[1] = low;
         message.mUnknown1[2] = 0;
@@ -13145,40 +13145,40 @@ extern "C" int fn_8009A1A8(Object_80039F5C *p, int handle, int b, int c, int kin
     return result;
 }
 
-extern "C" void fn_8009A260(Object_80039F5C *p)
+extern "C" void CatchResetHeightBoost(Object_80039F5C *p)
 {
     p->mUnknown772 = 1.0f;
 }
 
-extern "C" float fn_8009A270(int handle)
+extern "C" float CatchAnimGetTime(int handle)
 {
     return lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown20;
 }
 
-extern "C" int fn_8009A298(int handle)
+extern "C" int CatchAnimGetSide(int handle)
 {
     Item_80097440 *p = lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4;
     int result;
 
     if (handle < 0) {
-        result = fn_8009740C(p->mUnknown24);
+        result = CatchAnimMirrorSide(p->mUnknown24);
     } else {
         result = p->mUnknown24;
     }
     return result;
 }
 
-extern "C" int fn_8009A2EC(int handle)
+extern "C" int CatchAnimGetAngle(int handle)
 {
     Item_80097440 *p = lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4;
 
     if (handle < 0) {
-        fn_80097430(p->mUnknown38);
+        CatchAnimMirrorAngle(p->mUnknown38);
     }
     return p->mUnknown38;
 }
 
-extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
+extern "C" int CatchAnimStateUpdate(Table_80089904 *pTable, unsigned short key, void *pRecord, AnimChannel_t *pEntries,
                            Object_80039F5C *p, unsigned int phase)
 {
     Block_8009A344 *pBlock = (Block_8009A344 *)fn_801BE60C(p->mpUnknown792, key);
@@ -13225,17 +13225,17 @@ extern "C" int fn_8009A344(Table_80089904 *pTable, unsigned short key, void *pRe
     return 0;
 }
 
-extern "C" int fn_8009A578(int handle)
+extern "C" int CatchAnimGetType(int handle)
 {
     return lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown4;
 }
 
-extern "C" int fn_8009A5A0(int handle)
+extern "C" int CatchAnimIsSidelineRecord(int handle)
 {
     return lbl_8030C2B8[(handle >> 29) & 3].mUnknown8[handle & 0x1FFFFFFF].mpUnknown4->mUnknown5 == 1;
 }
 
-extern "C" int fn_8009A5D4(int handle)
+extern "C" int CatchAnimIsSpecialRecord(int handle)
 {
     return 0;
 }
@@ -13258,7 +13258,7 @@ extern "C" void fn_8009A5DC(int high, int low, void *pKind, int *pHandle)
     *pHandle |= ((value >> 11) & 3) << 29;
 }
 
-extern "C" Item_8009A63C *fn_8009A63C(int ref)
+extern "C" Item_8009A63C *CatchAnimGetRecord(int ref)
 {
     Item_8009A63C *p;
     int index = ref & 0x1FFFFFFF;
@@ -13272,7 +13272,7 @@ extern "C" Item_8009A63C *fn_8009A63C(int ref)
     return p;
 }
 
-extern "C" int fn_8009A68C(Object_80039F5C *p)
+extern "C" int CatchIsInCatchAnim(Object_80039F5C *p)
 {
     switch (fn_801BE648(p->mpUnknown792)) {
     case 67:
@@ -13285,7 +13285,7 @@ extern "C" int fn_8009A68C(Object_80039F5C *p)
     return 0;
 }
 
-extern "C" void fn_8009A6D8(void)
+extern "C" void CatchToggleParity(void)
 {
     lbl_803EA930 = !lbl_803EA930;
 }
@@ -13342,7 +13342,7 @@ extern "C" void fn_8009A8D4(void *p)
     }
 }
 
-extern "C" void fn_8009A8F0(void)
+extern "C" void CatchUpComputeHandicap(void)
 {
     float handicap = 0.0f;
     unsigned int high = 0;
@@ -13418,17 +13418,17 @@ extern "C" void fn_8009ABC0(void)
 {
 }
 
-extern "C" void fn_8009ABC4(void)
+extern "C" void CatchUpRefresh(void)
 {
     if (GameOptionsGet(8) != 0 && fn_800BA6F8() == 0) {
         lbl_803EA948->mUnknown8 = 1;
     } else {
         lbl_803EA948->mUnknown8 = 0;
     }
-    fn_8009A8F0();
+    CatchUpComputeHandicap();
 }
 
-extern "C" short fn_8009AC18(int team, int index, short value)
+extern "C" short CatchUpAdjustRating(int team, int index, short value)
 {
     int other = 1;
     float result;
@@ -13452,7 +13452,7 @@ extern "C" short fn_8009AC18(int team, int index, short value)
     return value;
 }
 
-extern "C" int fn_8009AD30(Object_80039F5C *p, int value)
+extern "C" int CatchUpAdjustMoveTimer(Object_80039F5C *p, int value)
 {
     return value;
 }
@@ -13465,7 +13465,7 @@ static float _StrippedClampNegativeToOne(float x)
 }
 }
 
-extern "C" int fn_8009AD38(int team, int value)
+extern "C" int CatchUpAdjustFumbleChance(int team, int value)
 {
     int other = 1;
 
@@ -13480,7 +13480,7 @@ extern "C" int fn_8009AD38(int team, int value)
     return value;
 }
 
-extern "C" int fn_8009AE1C(int team, int value)
+extern "C" int CatchUpAdjustDefendBallChance(int team, int value)
 {
     int other = 1;
 
@@ -13510,7 +13510,7 @@ extern "C" signed char fn_8009AF00(int team, signed char value)
     return value;
 }
 
-extern "C" int fn_8009AFE8(int team, int value)
+extern "C" int CatchUpAdjustTargetRoll(int team, int value)
 {
     int other = 1;
 
@@ -13525,7 +13525,7 @@ extern "C" int fn_8009AFE8(int team, int value)
     return value;
 }
 
-extern "C" int fn_8009B0CC(int team, int value)
+extern "C" int CatchUpAdjustContactChance(int team, int value)
 {
     int other = 1;
 
@@ -13540,13 +13540,13 @@ extern "C" int fn_8009B0CC(int team, int value)
     return value;
 }
 
-extern "C" void fn_8009B1B0(Block_8009B720 *p)
+extern "C" void CelebrationBlockReset(Block_8009B720 *p)
 {
     p->mUnknown4.mUnknown127 = 0;
     p->mUnknown4.mUnknown0 = -1;
 }
 
-extern "C" int fn_8009B1C4(int value, int *pState)
+extern "C" int CelebrationReplayStart(int value, int *pState)
 {
     int result = fn_800AE978() == 0;
 
@@ -13570,7 +13570,7 @@ extern "C" int fn_8009B1C4(int value, int *pState)
     return result;
 }
 
-extern "C" int fn_8009B288(unsigned int *pState)
+extern "C" int CelebrationReplayUpdate(unsigned int *pState)
 {
     int result = 1;
 
@@ -13619,26 +13619,26 @@ extern "C" int fn_8009B288(unsigned int *pState)
     return result;
 }
 
-extern "C" void fn_8009B3A4(int *pState)
+extern "C" void CelebrationReplayStop(int *pState)
 {
     if (ReplayIsShowing(gpReplay)) {
         ReplayHandleControl(gpReplay, 9, 0);
     }
 }
 
-extern "C" void fn_8009B3E0(Block_8009B720 *p)
+extern "C" void CelebrationBlocksInstallReplay(Block_8009B720 *p)
 {
-    fn_8009B87C(1, &lbl_802D7BF8);
+    CelebrationBlocksSetEntry(1, &lbl_802D7BF8);
     fn_80093684(p->mpUnknown0);
 }
 
-extern "C" void fn_8009B420(Block_8009B720 *p)
+extern "C" void CelebrationBlocksRemoveReplay(Block_8009B720 *p)
 {
-    fn_8009B8C4(1);
+    CelebrationBlocksClearEntry(1);
     fn_800937CC();
 }
 
-extern "C" int fn_8009B448(int value, int index)
+extern "C" int CelebrationBlocksTryStart(int value, int index)
 {
     int result = 0;
     int *pData = lbl_803EA984[index]->mUnknown4.mUnknown28;
@@ -13652,7 +13652,7 @@ extern "C" int fn_8009B448(int value, int index)
     return result;
 }
 
-extern "C" int fn_8009B4C8(int)
+extern "C" int CelebrationBlocksUpdate(int)
 {
     int result = 0;
     unsigned int i;
@@ -13660,10 +13660,10 @@ extern "C" int fn_8009B4C8(int)
     for (i = 0; i <= 1; i++) {
         int *pData = lbl_803EA984[i]->mUnknown4.mUnknown28;
 
-        if (fn_8009B9A8(i)) {
+        if (CelebrationBlockIsActive(i)) {
             int index = lbl_803EA984[i]->mUnknown4.mUnknown0;
 
-            if (fn_8009B910(i) < 900) {
+            if (CelebrationBlockGetFrames(i) < 900) {
                 lbl_803EA984[i]->mUnknown4.mUnknown24++;
                 if (lbl_803EA984[i]->mUnknown4.mEntries[index].mpCallback4(pData)) {
                     result = 1;
@@ -13676,7 +13676,7 @@ extern "C" int fn_8009B4C8(int)
                 result = 0;
             }
             if (result == 0) {
-                fn_8009B1B0(lbl_803EA984[i]);
+                CelebrationBlockReset(lbl_803EA984[i]);
             }
         }
     }
@@ -13686,7 +13686,7 @@ extern "C" int fn_8009B4C8(int)
     return result;
 }
 
-extern "C" int fn_8009B5E8(void *p, void *q)
+extern "C" int CelebrationBlockCompare(void *p, void *q)
 {
     int result;
 
@@ -13698,13 +13698,13 @@ extern "C" int fn_8009B5E8(void *p, void *q)
     return result;
 }
 
-extern "C" int fn_8009B628(void *p, void *pBuffer)
+extern "C" int CelebrationBlockSave(void *p, void *pBuffer)
 {
     *(Block_8009B720 *)pBuffer = *(Block_8009B720 *)p;
     return 1;
 }
 
-extern "C" int fn_8009B698(void *p, void *pBuffer)
+extern "C" int CelebrationBlockLoad(void *p, void *pBuffer)
 {
     unsigned int i;
 
@@ -13714,7 +13714,7 @@ extern "C" int fn_8009B698(void *p, void *pBuffer)
     return 1;
 }
 
-extern "C" int fn_8009B718(void *p)
+extern "C" int CelebrationBlockGetSaveSize(void *p)
 {
     return sizeof(Block_8009B720);
 }
@@ -13728,14 +13728,14 @@ extern "C" void CelebrationBlocksInit(void *pData)
     for (i = 0; i <= 1; i++) {
         void *pHandle = SyncStateRegister(0, (void **)&lbl_803EA984[i], sizeof(Block_8009B720), 0, 0x63656C62);
 
-        SyncStateSetCallbacks(pHandle, 0, 0, 0, fn_8009B5E8);
-        SyncStateSetSaveCallbacks(pHandle, fn_8009B628, fn_8009B718, fn_8009B698);
+        SyncStateSetCallbacks(pHandle, 0, 0, 0, CelebrationBlockCompare);
+        SyncStateSetSaveCallbacks(pHandle, CelebrationBlockSave, CelebrationBlockGetSaveSize, CelebrationBlockLoad);
         pBlock = (Block_8009B720 *)SyncStateGetData(pHandle);
         pBlock->mpUnknown0 = pData;
-        fn_8009B1B0(pBlock);
+        CelebrationBlockReset(pBlock);
         SyncStateCommit(pHandle);
     }
-    fn_8009B3E0(pBlock);
+    CelebrationBlocksInstallReplay(pBlock);
 }
 
 extern "C" void fn_8009B7E0(void)
@@ -13745,16 +13745,16 @@ extern "C" void fn_8009B7E0(void)
     for (i = 0; i <= 1; i++) {
         int *pData = lbl_803EA984[i]->mUnknown4.mUnknown28;
 
-        if (fn_8009B9A8(i)) {
+        if (CelebrationBlockIsActive(i)) {
             lbl_803EA984[i]->mUnknown4.mEntries[lbl_803EA984[i]->mUnknown4.mUnknown0].mpCallback8(pData);
             lbl_803EA984[i]->mUnknown4.mUnknown127 = 0;
-            fn_8009B1B0(lbl_803EA984[i]);
+            CelebrationBlockReset(lbl_803EA984[i]);
         }
     }
-    fn_8009B420(lbl_803EA984[i]);
+    CelebrationBlocksRemoveReplay(lbl_803EA984[i]);
 }
 
-extern "C" void fn_8009B87C(int index, Entry_8009B87C *pEntry)
+extern "C" void CelebrationBlocksSetEntry(int index, Entry_8009B87C *pEntry)
 {
     unsigned int i;
 
@@ -13763,7 +13763,7 @@ extern "C" void fn_8009B87C(int index, Entry_8009B87C *pEntry)
     }
 }
 
-extern "C" void fn_8009B8C4(int index)
+extern "C" void CelebrationBlocksClearEntry(int index)
 {
     unsigned int i;
 
@@ -13774,7 +13774,7 @@ extern "C" void fn_8009B8C4(int index)
     }
 }
 
-extern "C" unsigned int fn_8009B910(int index)
+extern "C" unsigned int CelebrationBlockGetFrames(int index)
 {
     return lbl_803EA984[index]->mUnknown4.mUnknown24;
 }
@@ -13786,19 +13786,19 @@ extern "C" void fn_8009B924(void)
     for (i = 0; i <= 1; i++) {
         int *pData = lbl_803EA984[i]->mUnknown4.mUnknown28;
 
-        if (fn_8009B9A8(i)) {
+        if (CelebrationBlockIsActive(i)) {
             lbl_803EA984[i]->mUnknown4.mEntries[lbl_803EA984[i]->mUnknown4.mUnknown0].mpCallback8(pData);
             lbl_803EA984[i]->mUnknown4.mUnknown127 = 0;
         }
     }
 }
 
-extern "C" int fn_8009B9A8(int index)
+extern "C" int CelebrationBlockIsActive(int index)
 {
     return lbl_803EA984[index]->mUnknown4.mUnknown127;
 }
 
-extern "C" int fn_8009B9BC(void)
+extern "C" int CelebrationBlocksIsReplayRunning(void)
 {
     unsigned int i;
 
@@ -13810,12 +13810,12 @@ extern "C" int fn_8009B9BC(void)
     return 0;
 }
 
-extern "C" int fn_8009B9F0(int index)
+extern "C" int CelebrationBlockExists(int index)
 {
     return lbl_803EA984[index] != 0;
 }
 
-extern "C" void fn_8009BA10(int value)
+extern "C" void CelebrationSetReplayPrompt(int value)
 {
     int args[4];
 
@@ -13831,12 +13831,12 @@ extern "C" void fn_8009BA10(int value)
     lbl_803EA99B = value;
 }
 
-extern "C" unsigned char fn_8009BA94(void)
+extern "C" unsigned char CelebrationGetReplayPrompt(void)
 {
     return lbl_803EA99B;
 }
 
-extern "C" void fn_8009BA9C(int value)
+extern "C" void CelebrationBlocksStartForPlay(int value)
 {
     RecordList_8002E7C0 list;
     unsigned int i;
@@ -13846,14 +13846,14 @@ extern "C" void fn_8009BA9C(int value)
         lbl_803EA984[i]->mUnknown4.mUnknown128 = value;
     }
     ReplayShotListClear(&list);
-    if (fn_8009B448(value, 0)) {
+    if (CelebrationBlocksTryStart(value, 0)) {
         lbl_803EA984[0]->mUnknown4.mUnknown127 = 1;
     }
     ReplayHandleCommand(gpReplay, 3, 0);
     ReplayUpdate(gpReplay);
     for (i = 0; i <= 1; i++) {
         if (lbl_803EA984[i]->mUnknown4.mUnknown127 == 0) {
-            fn_8009B1B0(lbl_803EA984[i]);
+            CelebrationBlockReset(lbl_803EA984[i]);
         }
     }
 }
@@ -13874,7 +13874,7 @@ static float _StrippedPositiveToCount(float x, int i)
 
 extern "C" float fn_8009BB54(int index)
 {
-    float result = 900 - fn_8009B910(index);
+    float result = 900 - CelebrationBlockGetFrames(index);
     Block_8009B720 *pBlock = lbl_803EA984[index];
 
     if (pBlock->mUnknown4.mEntries[index].mpCallbackC != 0) {
@@ -13885,7 +13885,7 @@ extern "C" float fn_8009BB54(int index)
 
 extern "C" void fn_8009BBD8(int value)
 {
-    if (fn_8009B448(value, 1)) {
+    if (CelebrationBlocksTryStart(value, 1)) {
         lbl_803EA984[1]->mUnknown4.mUnknown127 = 1;
         if (ChallengeIsActive()) {
             fn_8009D924(4);
@@ -15594,7 +15594,7 @@ extern "C" float fn_8009F168(Vector_80039F5C *p, Pair_802270A4 *pVelocity,
    p not on the target's mark gets 1700 when facing the ball. In states 40
    and 92 the chance is 350 when facing, twice the landing time capped at 35
    while the ball descends, otherwise 2400. The chance is adjusted by
-   fn_8009F5A4, fn_8009AE1C and fn_800ACAF8 and scaled by lbl_803EA9C0 under
+   fn_8009F5A4, CatchUpAdjustDefendBallChance and fn_800ACAF8 and scaled by lbl_803EA9C0 under
    the fn_8011E188 threshold, then rolled against rating 8. With no current
    target it returns 1. */
 extern "C" int fn_8009F258(Object_80039F5C *p)
@@ -15658,7 +15658,7 @@ extern "C" int fn_8009F258(Object_80039F5C *p)
         }
         if (!result && chance != 0) {
             fn_8009F5A4(&chance);
-            chance = fn_8009AE1C(ScrmGetDefenseTeam(), chance);
+            chance = CatchUpAdjustDefendBallChance(ScrmGetDefenseTeam(), chance);
             fn_800ACAF8(ScrmGetDefenseTeam(), &chance);
             if (fn_800B65A0(ScrmGetOffenseTeam()) != 0xFF && (float)fn_8011E188() < lbl_803EA9BC) {
                 chance = (unsigned int)(chance * lbl_803EA9C0);
@@ -16162,7 +16162,7 @@ void LivePlayPhase::OnEnter(float dt)
     fn_800B8608();
     RumbleEnable(1);
     fn_800CC448();
-    fn_800996FC(PlayBookGetPlay(ScrmGetOffenseTeam())->mUnknown14);
+    CatchLoadAnimsForPlayType(PlayBookGetPlay(ScrmGetOffenseTeam())->mUnknown14);
     PadInputSaveHandlers(lbl_803EA9E8);
     ConSetChannelInfo(-1, 3, lbl_802EC880);
     SndgSpchClearPlayFlags(127);
@@ -16189,7 +16189,7 @@ void LivePlayPhase::OnUpdate(float dt)
         else if(!fn_800A96D0())fn_800A9478(0);
     } else {
         HudCycleMashPrompt();
-        fn_8009A6D8();
+        CatchToggleParity();
         fn_80120720((unsigned int)dt);
         fn_800FB314();
         fn_800FB768();
@@ -16702,7 +16702,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
         ScrmQuarterEnd();PlayTrackRegister();
         if(HotspotPollCaptured())PauseOpenScreen(3,22,-1);
         fn_800AE380();
-        if(result->mUnknown18&0x2000 || fn_800B2314()&1)fn_8009BA9C((int)result);
+        if(result->mUnknown18&0x2000 || fn_800B2314()&1)CelebrationBlocksStartForPlay((int)result);
         else ReplayHandleCommand(gpReplay,3,0);
         HudSetDown();
         if(fn_801486A0()!=15)MiniGameGetCurrent()->vfn_14();
@@ -18014,7 +18014,7 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
             lbl_802D7E20[kind](p, pOther, kind, &params);
         }
         params.mUnknown8 = fn_800AC87C(p, params.mUnknown8);
-        params.mUnknown8 = fn_8009AFE8(p->mIdBytes[2], params.mUnknown8);
+        params.mUnknown8 = CatchUpAdjustTargetRoll(p->mIdBytes[2], params.mUnknown8);
         if (fn_800A7ECC(p->mIdBytes[2]) != 2) {
             int skill;
             int rating8 = p->mRatings[8];
@@ -25186,7 +25186,7 @@ void Class_80297B50::vfn_03(float dt)
         BallResetToSpot();
     }
     BallsSetVisible(1);
-    fn_8009ABC4();
+    CatchUpRefresh();
     CamGameResumeAll();
 }
 
@@ -25565,7 +25565,7 @@ extern "C" void fn_800B4798(short *pRatings, int team, int index, float *pOut)
         value = TutorialScaleCpuRating(team, i, value);
         value = fn_80148698(team, i, value);
         value = fn_800ABE10(team, i, value);
-        value = fn_8009AC18(team, i, value);
+        value = CatchUpAdjustRating(team, i, value);
         value = fn_800A8224(team, index, i, value);
         pRatings[i] = (short)(value * scale * fn_800A0134(team, (unsigned char)id, i));
     }
@@ -25634,8 +25634,8 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[165] = PlayerLocoHandleMomentumState;
     lbl_8030FB60[160] = PlayerActionAnimSpeedBlendPhase;
     lbl_8030FB60[159] = PlayerActionAnimSpeedBlendPhase;
-    lbl_8030FB60[67] = fn_8009A344;
-    lbl_8030FB60[227] = fn_8009A344;
+    lbl_8030FB60[67] = CatchAnimStateUpdate;
+    lbl_8030FB60[227] = CatchAnimStateUpdate;
     lbl_8030FB60[69] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[178] = PlayerPassAnimFacingCallback;
     lbl_8030FB60[85] = PlayerActionAnimReactionPhase;
@@ -25682,7 +25682,7 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[135] = PlayerActionAnimDirectionPhase;
     lbl_8030FB60[191] = PlayerActionAnimDirectionPhase;
     lbl_8030FB60[196] = fn_800C3A4C;
-    lbl_8030FB60[225] = fn_8009A344;
+    lbl_8030FB60[225] = CatchAnimStateUpdate;
     lbl_8030FB60[235] = fn_800C3A4C;
     lbl_8030FB60[210] = fn_800C3A4C;
     lbl_8030FB60[197] = fn_800C3A4C;
@@ -27301,17 +27301,17 @@ extern "C" void fn_800B876C(int index, unsigned int event, float value)
     case 8:
     case 14:
     case 15:
-        if (fn_8009B9A8(0) != 0 && value == 1.0f) {
+        if (CelebrationBlockIsActive(0) != 0 && value == 1.0f) {
             fn_800B86A4(index);
         }
         break;
     case 9:
-        if (lbl_803EAB78->mUnknown151 != 0 && fn_8009B9BC() == 0 && ReplayIsShowing(gpReplay) == 0
+        if (lbl_803EAB78->mUnknown151 != 0 && CelebrationBlocksIsReplayRunning() == 0 && ReplayIsShowing(gpReplay) == 0
             && InGameIsDemo() == 0 && InGameIsPaused() == 0 && TeamPromptIsActive() == 0 && PauseRequestIsPending() == 0
             && PauseIsUnblocked() == 1 && (fn_800B6644(index) == 0 || fn_800B6644(index) == 1)) {
             ReplayHandleCommand(gpReplay, 3, 0);
             if (ReplayIsHalted(gpReplay) != 0) {
-                fn_8009BA10(0);
+                CelebrationSetReplayPrompt(0);
                 fn_8009B924();
                 fn_80094DF0();
                 ReplaySetHoldFlag(gpReplay, 1);
@@ -27379,7 +27379,7 @@ int PostPlayPhase::IsFinished(int busy)
         && ReplayIsShowing(gpReplay) == 0) {
         if (ChallengeIsActive() == 0 || lbl_803EAB78->mUnknown148 == 0) {
             result = 1;
-            if (fn_800AE978() != 0 || fn_800AE980() != 0 || fn_8009B9A8(1) != 0 || fn_8009B9A8(0) != 0
+            if (fn_800AE978() != 0 || fn_800AE980() != 0 || CelebrationBlockIsActive(1) != 0 || CelebrationBlockIsActive(0) != 0
                 || CamGameGetCurrentSlot() == 3) {
                 result = 0;
             }
@@ -27440,11 +27440,11 @@ extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
         if (gpReplay->mUnknownD90 != 0) {
-            if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || fn_8009B9A8(0) != 0
+            if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || CelebrationBlockIsActive(0) != 0
                 || ReplayPickScript(0) == 0) {
                 return;
             }
-            fn_8009BA10(1);
+            CelebrationSetReplayPrompt(1);
         }
         lbl_803EAB7E = 1;
     }
@@ -27457,7 +27457,7 @@ void PostPlayPhase::UpdateCue(float dt)
         && lbl_803EAB78->mUnknown154 > 45) {
         fn_8009BC30(lbl_803EAB80);
         if (ReplayPickScript(0) != 0) {
-            fn_8009BA10(0);
+            CelebrationSetReplayPrompt(0);
             fn_8009BBD8((int)&lbl_803EAB78->mUnknown104);
         }
         lbl_803EAB7C = 1;
@@ -27474,7 +27474,7 @@ int PostPlayPhase::IsHeld(float dt)
 
 int PostPlayPhase::GetBusy(float dt)
 {
-    return fn_8009B4C8(0);
+    return CelebrationBlocksUpdate(0);
 }
 
 int PostPlayPhase::GetResultText(char *pText)
@@ -27729,7 +27729,7 @@ void PostPlayPhase::OnExit()
 {
     SpchIGFlushPlayResult();
     fn_800B14E4();
-    fn_8009BA10(0);
+    CelebrationSetReplayPrompt(0);
     fn_800B8028();
     fn_8009B924();
     fn_80094DF0();
@@ -27786,7 +27786,7 @@ extern "C" void fn_800B9A9C(PostPlayPhase *)
 
 extern "C" int fn_800B9B18(void *p)
 {
-    if (fn_8009B9A8(0) != 0 || lbl_803EAB78->mUnknown144 > 120) {
+    if (CelebrationBlockIsActive(0) != 0 || lbl_803EAB78->mUnknown144 > 120) {
         return lbl_803EAB78->mUnknown14C;
     }
     return 0;
@@ -32709,7 +32709,7 @@ extern "C" int fn_800C4184(Object_80039F5C *p)
         int handle;
 
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5) {
+        if (CatchAnimGetType(handle) == 5) {
             return 0;
         }
         if (((handle >> 29) & 3) == 1) {
@@ -33125,7 +33125,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
         if (fn_801BE648(pOther->mpUnknown792) == 225) {
             result = 0;
         }
-        if (fn_801BE648(pOther->mpUnknown792) == 67 && fn_8009A63C(pOther->mpState->mUnknown2)->mUnknown4 == 4) {
+        if (fn_801BE648(pOther->mpUnknown792) == 67 && CatchAnimGetRecord(pOther->mpState->mUnknown2)->mUnknown4 == 4) {
             result = 0;
         }
     }
@@ -33415,7 +33415,7 @@ extern "C" int PlyrContactIsKnockable(Object_80039F5C *p, int value)
         switch (pState->mId) {
         case 28:
             fn_8009A5DC(pState->mUnknown1, pState->mUnknown2, &pKind, &handle);
-            if (fn_8009A578(handle) == 5) {
+            if (CatchAnimGetType(handle) == 5) {
                 result = 0;
             }
             fn_8009BF5C(p, 0, &pos, 0);
@@ -33629,7 +33629,7 @@ extern "C" int fn_800C6048(Object_80039F5C *p, Object_800C6640 *pSource, Object_
                         partnerRating = pPartner->mRatings[5] / 255.0f;
                         chance += (int)(partnerRating * 40.0f);
                     }
-                    chance = fn_8009B0CC(p->mIdBytes[2], chance);
+                    chance = CatchUpAdjustContactChance(p->mIdBytes[2], chance);
                     if (p->mpState->mId == 28 && (ScrmTestPlayFlag(11) == 1 || ScrmTestPlayFlag(12) == 1)) {
                         chance += chance / 2;
                     }
@@ -33705,7 +33705,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
         return 0;
     case 28:
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &pA, &b);
-        if (fn_8009A578(b) == 5) {
+        if (CatchAnimGetType(b) == 5) {
             return 0;
         }
         break;
@@ -33713,7 +33713,7 @@ extern "C" int fn_800C6738(Object_80039F5C *p, Object_80039F5C *pOther)
     switch (pOther->mpState->mId) {
     case 28:
         fn_8009A5DC(pOther->mpState->mUnknown1, pOther->mpState->mUnknown2, &pA, &b);
-        if (fn_8009A578(b) == 5) {
+        if (CatchAnimGetType(b) == 5) {
             return 0;
         }
         break;
@@ -38086,7 +38086,7 @@ int lbl_802D7B8C[4] = {13, 14, 15, -1};
 int lbl_802D7B9C[3] = {16, 17, -1};
 float lbl_802D7BA8[10] = {0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f, 0.25f};
 float lbl_802D7BD0[10] = {0.2f, 0.2f, 0.2f, 0.2f, 0.1f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f};
-Entry_8009B87C lbl_802D7BF8 = {fn_8009B1C4, (int (*)(int *))fn_8009B288, fn_8009B3A4, 0};
+Entry_8009B87C lbl_802D7BF8 = {CelebrationReplayStart, (int (*)(int *))CelebrationReplayUpdate, CelebrationReplayStop, 0};
 int lbl_802D7C08[3] = {2318413, 0, 0};
 int lbl_802D7C14[3] = {2097152, 0, 0};
 Vector_80039F5C lbl_802D7C20 = {0.0f, 0.0f, 2.0f};

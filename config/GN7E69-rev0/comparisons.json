@@ -12667,37 +12667,37 @@
           "end": "0x800973AC"
         },
         {
-          "symbol": "fn_800973AC",
+          "symbol": "CatchAnimMirrorVector",
           "start": "0x800973AC",
           "end": "0x8009740C"
         },
         {
-          "symbol": "fn_8009740C",
+          "symbol": "CatchAnimMirrorSide",
           "start": "0x8009740C",
           "end": "0x80097430"
         },
         {
-          "symbol": "fn_80097430",
+          "symbol": "CatchAnimMirrorAngle",
           "start": "0x80097430",
           "end": "0x80097440"
         },
         {
-          "symbol": "fn_80097440",
+          "symbol": "CatchAnimBuildMirrorTable",
           "start": "0x80097440",
           "end": "0x80097518"
         },
         {
-          "symbol": "fn_80097518",
+          "symbol": "CatchAnimFreeMirrorTable",
           "start": "0x80097518",
           "end": "0x80097564"
         },
         {
-          "symbol": "fn_80097564",
+          "symbol": "CatchAnimFreeAllMirrorTables",
           "start": "0x80097564",
           "end": "0x800975A4"
         },
         {
-          "symbol": "fn_800975A4",
+          "symbol": "CatchAnimPackHandle",
           "start": "0x800975A4",
           "end": "0x800975EC"
         },
@@ -12707,17 +12707,17 @@
           "end": "0x8009780C"
         },
         {
-          "symbol": "fn_8009780C",
+          "symbol": "CatchIsBallNotFreeFlight",
           "start": "0x8009780C",
           "end": "0x80097864"
         },
         {
-          "symbol": "fn_80097864",
+          "symbol": "CatchIsNearSidelineFacingOut",
           "start": "0x80097864",
           "end": "0x800978F8"
         },
         {
-          "symbol": "fn_800978F8",
+          "symbol": "CatchAnimSetupSlide",
           "start": "0x800978F8",
           "end": "0x80097A88"
         },
@@ -12737,12 +12737,12 @@
           "end": "0x800994E0"
         },
         {
-          "symbol": "fn_800994E0",
+          "symbol": "CatchSyncOnRestore",
           "start": "0x800994E0",
           "end": "0x80099510"
         },
         {
-          "symbol": "fn_80099510",
+          "symbol": "CatchIsPlayerEligible",
           "start": "0x80099510",
           "end": "0x80099568"
         },
@@ -12762,7 +12762,7 @@
           "end": "0x800996FC"
         },
         {
-          "symbol": "fn_800996FC",
+          "symbol": "CatchLoadAnimsForPlayType",
           "start": "0x800996FC",
           "end": "0x80099734"
         },
@@ -12797,42 +12797,42 @@
           "end": "0x8009A260"
         },
         {
-          "symbol": "fn_8009A260",
+          "symbol": "CatchResetHeightBoost",
           "start": "0x8009A260",
           "end": "0x8009A270"
         },
         {
-          "symbol": "fn_8009A270",
+          "symbol": "CatchAnimGetTime",
           "start": "0x8009A270",
           "end": "0x8009A298"
         },
         {
-          "symbol": "fn_8009A298",
+          "symbol": "CatchAnimGetSide",
           "start": "0x8009A298",
           "end": "0x8009A2EC"
         },
         {
-          "symbol": "fn_8009A2EC",
+          "symbol": "CatchAnimGetAngle",
           "start": "0x8009A2EC",
           "end": "0x8009A344"
         },
         {
-          "symbol": "fn_8009A344",
+          "symbol": "CatchAnimStateUpdate",
           "start": "0x8009A344",
           "end": "0x8009A578"
         },
         {
-          "symbol": "fn_8009A578",
+          "symbol": "CatchAnimGetType",
           "start": "0x8009A578",
           "end": "0x8009A5A0"
         },
         {
-          "symbol": "fn_8009A5A0",
+          "symbol": "CatchAnimIsSidelineRecord",
           "start": "0x8009A5A0",
           "end": "0x8009A5D4"
         },
         {
-          "symbol": "fn_8009A5D4",
+          "symbol": "CatchAnimIsSpecialRecord",
           "start": "0x8009A5D4",
           "end": "0x8009A5DC"
         },
@@ -12842,17 +12842,17 @@
           "end": "0x8009A63C"
         },
         {
-          "symbol": "fn_8009A63C",
+          "symbol": "CatchAnimGetRecord",
           "start": "0x8009A63C",
           "end": "0x8009A68C"
         },
         {
-          "symbol": "fn_8009A68C",
+          "symbol": "CatchIsInCatchAnim",
           "start": "0x8009A68C",
           "end": "0x8009A6D8"
         },
         {
-          "symbol": "fn_8009A6D8",
+          "symbol": "CatchToggleParity",
           "start": "0x8009A6D8",
           "end": "0x8009A6EC"
         },
@@ -12872,7 +12872,7 @@
           "end": "0x8009A8F0"
         },
         {
-          "symbol": "fn_8009A8F0",
+          "symbol": "CatchUpComputeHandicap",
           "start": "0x8009A8F0",
           "end": "0x8009AB34"
         },
@@ -12887,27 +12887,27 @@
           "end": "0x8009ABC4"
         },
         {
-          "symbol": "fn_8009ABC4",
+          "symbol": "CatchUpRefresh",
           "start": "0x8009ABC4",
           "end": "0x8009AC18"
         },
         {
-          "symbol": "fn_8009AC18",
+          "symbol": "CatchUpAdjustRating",
           "start": "0x8009AC18",
           "end": "0x8009AD30"
         },
         {
-          "symbol": "fn_8009AD30",
+          "symbol": "CatchUpAdjustMoveTimer",
           "start": "0x8009AD30",
           "end": "0x8009AD38"
         },
         {
-          "symbol": "fn_8009AD38",
+          "symbol": "CatchUpAdjustFumbleChance",
           "start": "0x8009AD38",
           "end": "0x8009AE1C"
         },
         {
-          "symbol": "fn_8009AE1C",
+          "symbol": "CatchUpAdjustDefendBallChance",
           "start": "0x8009AE1C",
           "end": "0x8009AF00"
         },
@@ -12917,72 +12917,72 @@
           "end": "0x8009AFE8"
         },
         {
-          "symbol": "fn_8009AFE8",
+          "symbol": "CatchUpAdjustTargetRoll",
           "start": "0x8009AFE8",
           "end": "0x8009B0CC"
         },
         {
-          "symbol": "fn_8009B0CC",
+          "symbol": "CatchUpAdjustContactChance",
           "start": "0x8009B0CC",
           "end": "0x8009B1B0"
         },
         {
-          "symbol": "fn_8009B1B0",
+          "symbol": "CelebrationBlockReset",
           "start": "0x8009B1B0",
           "end": "0x8009B1C4"
         },
         {
-          "symbol": "fn_8009B1C4",
+          "symbol": "CelebrationReplayStart",
           "start": "0x8009B1C4",
           "end": "0x8009B288"
         },
         {
-          "symbol": "fn_8009B288",
+          "symbol": "CelebrationReplayUpdate",
           "start": "0x8009B288",
           "end": "0x8009B3A4"
         },
         {
-          "symbol": "fn_8009B3A4",
+          "symbol": "CelebrationReplayStop",
           "start": "0x8009B3A4",
           "end": "0x8009B3E0"
         },
         {
-          "symbol": "fn_8009B3E0",
+          "symbol": "CelebrationBlocksInstallReplay",
           "start": "0x8009B3E0",
           "end": "0x8009B420"
         },
         {
-          "symbol": "fn_8009B420",
+          "symbol": "CelebrationBlocksRemoveReplay",
           "start": "0x8009B420",
           "end": "0x8009B448"
         },
         {
-          "symbol": "fn_8009B448",
+          "symbol": "CelebrationBlocksTryStart",
           "start": "0x8009B448",
           "end": "0x8009B4C8"
         },
         {
-          "symbol": "fn_8009B4C8",
+          "symbol": "CelebrationBlocksUpdate",
           "start": "0x8009B4C8",
           "end": "0x8009B5E8"
         },
         {
-          "symbol": "fn_8009B5E8",
+          "symbol": "CelebrationBlockCompare",
           "start": "0x8009B5E8",
           "end": "0x8009B628"
         },
         {
-          "symbol": "fn_8009B628",
+          "symbol": "CelebrationBlockSave",
           "start": "0x8009B628",
           "end": "0x8009B698"
         },
         {
-          "symbol": "fn_8009B698",
+          "symbol": "CelebrationBlockLoad",
           "start": "0x8009B698",
           "end": "0x8009B718"
         },
         {
-          "symbol": "fn_8009B718",
+          "symbol": "CelebrationBlockGetSaveSize",
           "start": "0x8009B718",
           "end": "0x8009B720"
         },
@@ -12997,17 +12997,17 @@
           "end": "0x8009B87C"
         },
         {
-          "symbol": "fn_8009B87C",
+          "symbol": "CelebrationBlocksSetEntry",
           "start": "0x8009B87C",
           "end": "0x8009B8C4"
         },
         {
-          "symbol": "fn_8009B8C4",
+          "symbol": "CelebrationBlocksClearEntry",
           "start": "0x8009B8C4",
           "end": "0x8009B910"
         },
         {
-          "symbol": "fn_8009B910",
+          "symbol": "CelebrationBlockGetFrames",
           "start": "0x8009B910",
           "end": "0x8009B924"
         },
@@ -13017,32 +13017,32 @@
           "end": "0x8009B9A8"
         },
         {
-          "symbol": "fn_8009B9A8",
+          "symbol": "CelebrationBlockIsActive",
           "start": "0x8009B9A8",
           "end": "0x8009B9BC"
         },
         {
-          "symbol": "fn_8009B9BC",
+          "symbol": "CelebrationBlocksIsReplayRunning",
           "start": "0x8009B9BC",
           "end": "0x8009B9F0"
         },
         {
-          "symbol": "fn_8009B9F0",
+          "symbol": "CelebrationBlockExists",
           "start": "0x8009B9F0",
           "end": "0x8009BA10"
         },
         {
-          "symbol": "fn_8009BA10",
+          "symbol": "CelebrationSetReplayPrompt",
           "start": "0x8009BA10",
           "end": "0x8009BA94"
         },
         {
-          "symbol": "fn_8009BA94",
+          "symbol": "CelebrationGetReplayPrompt",
           "start": "0x8009BA94",
           "end": "0x8009BA9C"
         },
         {
-          "symbol": "fn_8009BA9C",
+          "symbol": "CelebrationBlocksStartForPlay",
           "start": "0x8009BA9C",
           "end": "0x8009BB50"
         },

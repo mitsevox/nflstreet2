@@ -411,7 +411,7 @@ extern "C" void PlayerActionCatchResolve(Object_80039F5C *p, int handle, int ind
     if (p->mRatings[0] < lbl_803EAD34) {
         unsigned int threshold = p->mRatings[0] * lbl_803EAD2C;
         if ((unsigned int)SyncRandGetRange(0, lbl_803EAD28) > threshold) {
-            p->mUnknown1008.mUnknown0 = fn_8009A63C(handle)->mUnknown4;
+            p->mUnknown1008.mUnknown0 = CatchAnimGetRecord(handle)->mUnknown4;
             if (!(SyncRandGetFloat(0) >= lbl_803EAD30)) p->mUnknown1008.mUnknown1 = 1; else p->mUnknown1008.mUnknown1 = 2;
             p->mUnknown1008.mUnknown2 = handle < 0 ? 2 : 1;
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 226, 1.0f, p);
@@ -439,7 +439,7 @@ extern "C" int PlayerActionCatchEnter(Object_80039F5C *p)
     pBlock->mUnknown0 = 0;
     pBlock->mUnknown2 = 0;
     fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &index, &handle);
-    float time = fn_8009A270(handle);
+    float time = CatchAnimGetTime(handle);
     if (fn_801BE648(p->mpUnknown792) == 224) {
         unsigned char entry = AnimChanGetStateChannelByIndex(p->mpUnknown796, p->mpUnknown800, 224, 0);
         time += AnimSeqGetLife(p->mpUnknown800[entry].mUnknown4C.mpUnknown0);
@@ -456,7 +456,7 @@ extern "C" int PlayerActionCatchEnter(Object_80039F5C *p)
     pBlock->mUnknown20 = (int)(p->mpState->mUnknown3[0] << 16);
     if (pBlock->mUnknown20 > 0x800000) pBlock->mUnknown20 -= 0x1000000;
     if (pBlock->mUnknown24) pBlock->mUnknown20 /= pBlock->mUnknown24;
-    if (fn_8009A578(handle) == 5) {
+    if (CatchAnimGetType(handle) == 5) {
         pos = p->mMotion.mPos;
         pos.mZ = (float)p->mMotion.mUnknown32;
     }
@@ -481,7 +481,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     Block_800E0850 *pBlock = (Block_800E0850 *)&p->mUnknown336;
     ++pBlock->mUnknown0;
     fn_800B8344(p);
-    if (!fn_8009A68C(p)) return 1;
+    if (!CatchIsInCatchAnim(p)) return 1;
     Input_800B6D34 input;
     unsigned char index;
     int handle;
@@ -493,7 +493,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
         else
             pBlock->mUnknown29 = 0;
     }
-    float time = fn_8009A270(handle);
+    float time = CatchAnimGetTime(handle);
     if (--pBlock->mUnknown24 >= 0) {
         p->mMotion.mFacing = (p->mMotion.mFacing + pBlock->mUnknown20) & 0xFFFFFF;
         p->mpUnknown796->mUnknown8 = p->mMotion.mFacing;
@@ -514,7 +514,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
     if (!(pBlock->mUnknown0 <= time - 30.0f)) PlyrPoseDelayBlink(p->mpUnknown4);
     Ball_t *pBall = BallGet(index);
     unsigned short key = fn_801BE648(p->mpUnknown792);
-    if (BallGetHolder(pBall) && p != BallGetHolder(pBall) && !fn_8009A68C(p) && key != 70) return 1;
+    if (BallGetHolder(pBall) && p != BallGetHolder(pBall) && !CatchIsInCatchAnim(p) && key != 70) return 1;
     if (p->mFlags & 1) {
         p->mFlags &= ~1;
         if (fn_800C4B6C(p)) return 1;
@@ -527,7 +527,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
             message.mId = 11;
             message.mUnknown1[0] = p->mUnknown9[0];
             fn_800F00D4(0, p->mpState, &message, p);
-            fn_8009A260(p);
+            CatchResetHeightBoost(p);
             return 1;
         }
         if (fn_801BE648(p->mpUnknown792) == 224) {
@@ -539,7 +539,7 @@ extern "C" int PlayerActionCatchUpdate(Object_80039F5C *p)
             p->mUnknown512.mUnknown8 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown4 = p->mMotion.mFacing;
             p->mUnknown512.mUnknown0 = p->mMotion.mUnknown28 / gPlyrMoveFwdSpeed;
-            fn_8009A260(p);
+            CatchResetHeightBoost(p);
             return 1;
         }
     }
@@ -553,7 +553,7 @@ extern "C" int PlayerActionCatchExit(Object_80039F5C *p)
         fn_8009CE88(p, &p->mUnknown16, 8);
         pBlock->mUnknown2 = 0;
     }
-    fn_8009A260(p);
+    CatchResetHeightBoost(p);
     p->mFlags &= ~8;
     return 1;
 }
@@ -594,7 +594,7 @@ extern "C" int PlayerActionSegmentsCross(Vector_80039F5C *p, Vector_80039F5C *pA
 extern "C" int PlayerActionRunCrossesLine(Object_80039F5C *p, Vector_80039F5C *pTarget)
 {
     int result = 0;
-    if (fn_8009B9A8(0) && fn_80094488() > 1) {
+    if (CelebrationBlockIsActive(0) && fn_80094488() > 1) {
         Vector_80039F5C end;
         Vector_80039F5C start;
         unsigned short i;

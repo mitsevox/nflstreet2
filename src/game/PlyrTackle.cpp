@@ -105,7 +105,7 @@ void fn_8009A5DC(int a, int b, void *pA, int *pB);
 }
 
 extern "C" {
-int fn_8009A578(int handle);
+int CatchAnimGetType(int handle);
 }
 
 extern "C" {
@@ -2763,7 +2763,7 @@ extern "C" int PlyrContactCanReact(Object_80039F5C *p) {
         int unknown;
         int handle;
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5 || fn_8009A578(handle) == 4)
+        if (CatchAnimGetType(handle) == 5 || CatchAnimGetType(handle) == 4)
             result = 0;
         break;
     }
@@ -2791,7 +2791,7 @@ extern "C" int PlyrContactCanBeHit(Object_80039F5C *p) {
         int unknown;
         int handle;
         fn_8009A5DC(p->mpState->mUnknown1, p->mpState->mUnknown2, &unknown, &handle);
-        if (fn_8009A578(handle) == 5)
+        if (CatchAnimGetType(handle) == 5)
             result = 0;
         if ((handle >> 29 & 3) == 1)
             result = 0;
