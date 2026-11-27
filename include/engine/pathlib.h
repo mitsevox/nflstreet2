@@ -360,7 +360,7 @@ void PATHI_updatemastertrack(void);
 int PATHI_countprojecttracks(unsigned int flags);
 void PATHI_selectprojecttrack(PathTrack_t *p, int state);
 void PATHI_dispatchtrackstate(int state);
-void fn_801B4824(PathTrack_t *p, int value);
+void PATHI_volume(PathTrack_t *p, int value);
 void PATHI_customsfxfade(PathTrack_t *p, int a, int b, int c);
 void PATHI_customdrylevelfade(PathTrack_t *p, int a, int b, int c);
 int PATHI_unloadbank(PathTrack_t *p, int index);

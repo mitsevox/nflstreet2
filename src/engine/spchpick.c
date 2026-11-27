@@ -181,7 +181,8 @@ int VoxEvent_GetSentenceParmMask(VoxEvent_t *p, int i)
 {
     char *result = iSPCHPick_GetContextDataAddr(p);
     result += (iSPCHPick_VoxEvent_GetNumContexts(p) * 3 + 3) & ~3;
-    return ((unsigned short *)(result + 4))[i];
+    unsigned short *masks = (unsigned short *)(result + 4);
+    return masks[i];
 }
 
 // Read the event's parameter-type mask.
@@ -265,11 +266,11 @@ done:
 // Resolve a phrase's bank handle, slot and optional sub-bank.
 int iSPCH_GetPhraseBank(SpchEventKey_t *key, SpchEventParm_t *event, SpchPhraseBankView_t *out)
 {
-    int value = -1;
     int id = key->mId;
     int mode = key->mUnknown3;
     int index = key->mUnknown2;
     out->mBankIndex = -1;
+    int value = -1;
     out->mSubBank = -1;
     out->mHandle = -1;
     switch (mode) {
@@ -328,11 +329,8 @@ int iSPCH_SampleExists(SpchPhraseBankView_t *result, VoxBankHdr_t *p, int i)
     int found = 1;
     if (i > p->mUnknown5) {
         found = 0;
-    } else {
-        if (result->mSubBank != -1) {
-            found = iSPCH_CheckTemplateSample(result, p, i);
-        }
-        if (found && (p->mUnknown4 & 128)) {
+    } else if (result->mSubBank == -1 || (found = iSPCH_CheckTemplateSample(result, p, i)) != 0) {
+        if (p->mUnknown4 & 128) {
             found = iSPCH_TestBit((unsigned char *)iSPCHPick_BANKHDR_GetCycleBitsAddr(p) + 1, i);
         }
     }
@@ -424,15 +422,16 @@ int iSPCH_ConvertTime(int value)
 int iSPCH_SentenceLength(unsigned char *p, SpchSentencePick_t *work)
 {
     int total = 0;
+    int i = 0;
     int count = iSPCHPick_VoxSentence_GetNumPhrases(p);
-    for (int i = 0; i < count; i++) {
+    if (count > 0) do {
         int index = work->mEntries[i].mBankIndex;
         VoxBankHdr_t *record = gVoxBanks[index].mUnknown4;
         int a, b;
         if (iSPCH_GetSampleSizeData(record, work->mValues[work->mEntries[i].mCurrent], &a, &b)) {
             total += b;
         }
-    }
+    } while (++i < count);
     return iSPCH_ConvertTime(total);
 }
 
@@ -495,7 +494,11 @@ int iSPCH_ShortRuleStatus(unsigned char *p, int mode)
 {
     int result = 0;
     int value = VoxSentence_GetShortRule(p);
-    if ((value == 1 && mode == 2) || (value == 2 && mode != 2) || value == 0) {
+    if (value == 1 && mode == 2) {
+        result = 1;
+    } else if (value == 2 && mode != 2) {
+        result = 1;
+    } else if (value == 0) {
         result = 1;
     }
     return result;
@@ -561,9 +564,9 @@ int iSPCH_TestMatchParms(SpchSentencePick_t *work, unsigned char *sentence)
                         if (iSPCHPick_GetPhraseParmInfo(phrase, j)->mEventParm == 255) {
                             int mask = parameters[flags];
                             if (!mask) {
-                                pick->mReady = 0;
+                                work->mEntries[i].mReady = 0;
                                 done = 0;
-                            } else if (!((mask >> values[j]) & 1)) {
+                            } else if (((mask >> values[j]) & 1) == 0) {
                                 result = 0;
                                 goto done;
                             }
@@ -623,9 +626,9 @@ void iSPCH_RandomizeSentencePicks(unsigned char *p, SpchSentencePick_t *work)
         unsigned char *values = work->mValues + work->mEntries[i].mFirst;
         while (n > 1) {
             int j = iSPCH_Rand(n, -1);
-            unsigned char value = values[j];
-            values[j] = values[n - 1];
-            values[n - 1] = value;
+            unsigned char value = values[n - 1];
+            values[n - 1] = values[j];
+            values[j] = value;
             n--;
         }
     }
@@ -638,7 +641,8 @@ int iSPCH_IterateChoice(unsigned char *p, SpchSentencePick_t *work)
     int index = iSPCHPick_VoxSentence_GetNumPhrases(p) - 1;
     int done = 0;
     SpchPhrasePick_t *entry = &work->mEntries[index];
-    int end = entry->mCount + entry->mFirst;
+    int count = entry->mCount;
+    int end = entry->mFirst + count;
     do {
         entry->mCurrent++;
         if (entry->mCurrent < end) {
@@ -650,7 +654,8 @@ int iSPCH_IterateChoice(unsigned char *p, SpchSentencePick_t *work)
                 result = 1;
             }
             entry = &work->mEntries[index];
-            end = entry->mCount + entry->mFirst;
+            count = entry->mCount;
+            end = entry->mFirst + count;
         }
     } while (!done);
     return result;
@@ -747,7 +752,10 @@ void iSPCH_ConstantRuleSet(SpchEventKey_t *key, VoxEvent_t *event, unsigned char
                     int id = iSPCH_GetRuleID(event, rule);
                     VoxBankHdr_t *bank = gVoxBanks[gEventChoice[channel].mEntries[i].mBankIndex].mUnknown4;
                     unsigned char *values = (unsigned char *)iSPCH_GetSampleParmAddr(bank, gEventChoice[channel].mEntries[i].mSample);
-                    if (values) gCallbacks.mUnknown8(key, id, 1 << values[j], game);
+                    if (values) {
+                        int mask = 1 << values[j];
+                        gCallbacks.mUnknown8(key, id, mask, game);
+                    }
                 }
             }
         }
@@ -772,7 +780,7 @@ int iSPCH_MakeSampleRequests(VoxEvent_t *event, unsigned char *sentence, SpchEve
             if (gVoxBanks[pick->mBankIndex].mUnknown0 != handle) {
                 int index = iSPCH_FindBankIndexFromHandle(handle);
                 pick->mBankIndex = index;
-                if (index & 0x8000) { result = 0; goto done; }
+                if (index & 0x8000) goto done;
             }
         }
         for (i = 0; i < count; i++) {
@@ -783,15 +791,16 @@ int iSPCH_MakeSampleRequests(VoxEvent_t *event, unsigned char *sentence, SpchEve
             if ((bank->mUnknown4 & 128) && gClearCycle) iSPCH_ClearCycleBit(bank, sample);
             int start, size;
             if (iSPCH_GetSampleSizeData(bank, sample, &start, &size)) {
+                int offset = start;
                 int stride = bank->mUnknown8 * ((bank->mUnknown7 + 1) << 8);
-                if (pick->mSubBank != -1) start += pick->mSubBank * stride;
+                if (pick->mSubBank != -1) offset += pick->mSubBank * stride;
                 request.mBank = handle;
-                request.mStart = start;
+                request.mStart = offset;
                 request.mSize = size;
                 total += size;
                 request.mKey = *key;
-                request.mChannel = channel;
                 request.mGame = game;
+                request.mChannel = channel;
                 request.mUnknown14 = bank->mUnknown2;
                 request.mInterrupt = i == 0 ? iSPCHPick_VoxEvent_GetInterruptFlag(event) : 0;
                 ((void (*)(SpchSampleRequest_t *))gCallbacks.mUnknown0)(&request);

@@ -19334,73 +19334,6 @@
       ]
     },
     {
-      "source": "src/engine/dbsrpt.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c). The whole native unit includes its .sdata and .bss and compares the holdout, whose original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022C0E0",
-          "end": "0x8022C894"
-        },
-        {
-          "section": ".sdata",
-          "placement": ".data5",
-          "start": "0x803EC030",
-          "end": "0x803EC03C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A2390",
-          "end": "0x803A23E8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbSrptDeleteCursorTeams",
-          "start": "0x8022C0E0",
-          "end": "0x8022C214"
-        },
-        {
-          "symbol": "DbSrptModuleInit",
-          "start": "0x8022C214",
-          "end": "0x8022C3C8"
-        },
-        {
-          "symbol": "DbSrptModuleShutdown",
-          "start": "0x8022C3C8",
-          "end": "0x8022C410"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTeams",
-          "start": "0x8022C410",
-          "end": "0x8022C518"
-        },
-        {
-          "symbol": "DbSrptDeleteUnflaggedTypedTeams",
-          "start": "0x8022C518",
-          "end": "0x8022C628"
-        },
-        {
-          "symbol": "DbFindUnusedTeamIds",
-          "start": "0x8022C628",
-          "end": "0x8022C81C"
-        },
-        {
-          "symbol": "DbSrptBeginGame",
-          "start": "0x8022C81C",
-          "end": "0x8022C858"
-        },
-        {
-          "symbol": "DbSrptResumeGame",
-          "start": "0x8022C858",
-          "end": "0x8022C894"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbtatscopy.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022EBF0-0x8022EF14 (src/engine/dbtatscopy.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_80229270.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -20711,32 +20644,6 @@
         "_StrippedPrintBlankName",
         "_StrippedCheckDownOpcodes",
         "_StrippedGetHoldWeight"
-      ]
-    },
-    {
-      "source": "src/game/CollideSegment.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/CollideSegment.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row. Comparison-only draft CollideSegmentClosestPoints; original bytes stay linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80088FFC",
-          "end": "0x80089330"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x80295214",
-          "end": "0x80295224"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "CollideSegmentClosestPoints",
-          "start": "0x80088FFC",
-          "end": "0x80089330"
-        }
       ]
     },
     {
@@ -24249,7 +24156,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Twelve full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Four full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -24272,54 +24179,14 @@
       ],
       "functions": [
         {
-          "symbol": "VoxEvent_GetSentenceParmMask",
-          "start": "0x801AFA14",
-          "end": "0x801AFA70"
-        },
-        {
           "symbol": "iSPCH_GetPhraseBank",
           "start": "0x801AFD04",
           "end": "0x801AFDFC"
         },
         {
-          "symbol": "iSPCH_SampleExists",
-          "start": "0x801AFEE8",
-          "end": "0x801AFF74"
-        },
-        {
           "symbol": "iSPCH_ChooseSamples",
           "start": "0x801B0050",
           "end": "0x801B01E8"
-        },
-        {
-          "symbol": "iSPCH_SentenceLength",
-          "start": "0x801B0208",
-          "end": "0x801B029C"
-        },
-        {
-          "symbol": "iSPCH_ShortRuleStatus",
-          "start": "0x801B0474",
-          "end": "0x801B04D4"
-        },
-        {
-          "symbol": "iSPCH_TestMatchParms",
-          "start": "0x801B05E4",
-          "end": "0x801B07A0"
-        },
-        {
-          "symbol": "iSPCH_RandomizeSentencePicks",
-          "start": "0x801B08DC",
-          "end": "0x801B0974"
-        },
-        {
-          "symbol": "iSPCH_IterateChoice",
-          "start": "0x801B0974",
-          "end": "0x801B0A18"
-        },
-        {
-          "symbol": "iSPCH_ConstantRuleSet",
-          "start": "0x801B0D5C",
-          "end": "0x801B0EA4"
         },
         {
           "symbol": "iSPCH_MakeSampleRequests",
@@ -25728,7 +25595,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with fn_801D654C, MemCardMgrFormatDate and fn_801D8618.",
+      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with MemCardMgrEnablePolling, MemCardMgrFormatDate and MemCardMgrGetFileSize.",
       "sections": [
         {
           "section": ".text",
@@ -25769,17 +25636,17 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801D5D30",
+          "symbol": "MemCardMgrSetState",
           "start": "0x801D5D30",
           "end": "0x801D5D38"
         },
         {
-          "symbol": "fn_801D5D38",
+          "symbol": "MemCardMgrFindFileType",
           "start": "0x801D5D38",
           "end": "0x801D5E08"
         },
         {
-          "symbol": "fn_801D5E08",
+          "symbol": "MemCardMgrGetFileSuffix",
           "start": "0x801D5E08",
           "end": "0x801D5EC0"
         },
@@ -25794,77 +25661,77 @@
           "end": "0x801D6294"
         },
         {
-          "symbol": "fn_801D6294",
+          "symbol": "MemCardMgrFailOperation",
           "start": "0x801D6294",
           "end": "0x801D6318"
         },
         {
-          "symbol": "fn_801D6318",
+          "symbol": "MemCardMgrFlushFile",
           "start": "0x801D6318",
           "end": "0x801D6340"
         },
         {
-          "symbol": "fn_801D6340",
+          "symbol": "MemCardMgrCloseFile",
           "start": "0x801D6340",
           "end": "0x801D6368"
         },
         {
-          "symbol": "fn_801D6368",
+          "symbol": "MemCardMgrDeleteFile",
           "start": "0x801D6368",
           "end": "0x801D63B0"
         },
         {
-          "symbol": "fn_801D63B0",
+          "symbol": "MemCardMgrOpenFile",
           "start": "0x801D63B0",
           "end": "0x801D63E8"
         },
         {
-          "symbol": "fn_801D63E8",
+          "symbol": "MemCardMgrCreateFile",
           "start": "0x801D63E8",
           "end": "0x801D6420"
         },
         {
-          "symbol": "fn_801D6420",
+          "symbol": "MemCardMgrPackDate",
           "start": "0x801D6420",
           "end": "0x801D646C"
         },
         {
-          "symbol": "fn_801D646C",
+          "symbol": "MemCardMgrInit",
           "start": "0x801D646C",
           "end": "0x801D64EC"
         },
         {
-          "symbol": "fn_801D64EC",
+          "symbol": "MemCardMgrShutdown",
           "start": "0x801D64EC",
           "end": "0x801D654C"
         },
         {
-          "symbol": "fn_801D654C",
+          "symbol": "MemCardMgrEnablePolling",
           "start": "0x801D654C",
           "end": "0x801D65B4"
         },
         {
-          "symbol": "fn_801D65B4",
+          "symbol": "MemCardMgrSetIdleMode",
           "start": "0x801D65B4",
           "end": "0x801D6620"
         },
         {
-          "symbol": "fn_801D6620",
+          "symbol": "MemCardMgrGetResult",
           "start": "0x801D6620",
           "end": "0x801D6650"
         },
         {
-          "symbol": "fn_801D6650",
+          "symbol": "MemCardMgrStartOperation",
           "start": "0x801D6650",
           "end": "0x801D6680"
         },
         {
-          "symbol": "fn_801D6680",
+          "symbol": "MemCardMgrUnmount",
           "start": "0x801D6680",
           "end": "0x801D6714"
         },
         {
-          "symbol": "fn_801D6714",
+          "symbol": "MemCardMgrSetPort",
           "start": "0x801D6714",
           "end": "0x801D671C"
         },
@@ -25874,12 +25741,12 @@
           "end": "0x801D6724"
         },
         {
-          "symbol": "fn_801D6724",
+          "symbol": "MemCardMgrGetFreeSpace",
           "start": "0x801D6724",
           "end": "0x801D6730"
         },
         {
-          "symbol": "fn_801D6730",
+          "symbol": "MemCardMgrGetFreeEntries",
           "start": "0x801D6730",
           "end": "0x801D673C"
         },
@@ -25889,32 +25756,32 @@
           "end": "0x801D6754"
         },
         {
-          "symbol": "fn_801D6754",
+          "symbol": "MemCardMgrSetFileType",
           "start": "0x801D6754",
           "end": "0x801D6760"
         },
         {
-          "symbol": "fn_801D6760",
+          "symbol": "MemCardMgrSetFileSize",
           "start": "0x801D6760",
           "end": "0x801D676C"
         },
         {
-          "symbol": "fn_801D676C",
+          "symbol": "MemCardMgrSetFileHeader",
           "start": "0x801D676C",
           "end": "0x801D67E4"
         },
         {
-          "symbol": "fn_801D67E4",
+          "symbol": "MemCardMgrSetFileStrings",
           "start": "0x801D67E4",
           "end": "0x801D6838"
         },
         {
-          "symbol": "fn_801D6838",
+          "symbol": "MemCardMgrSetSlot",
           "start": "0x801D6838",
           "end": "0x801D6844"
         },
         {
-          "symbol": "fn_801D6844",
+          "symbol": "MemCardMgrGetSlot",
           "start": "0x801D6844",
           "end": "0x801D6850"
         },
@@ -25924,17 +25791,17 @@
           "end": "0x801D685C"
         },
         {
-          "symbol": "fn_801D685C",
+          "symbol": "MemCardMgrSetGameCode",
           "start": "0x801D685C",
           "end": "0x801D689C"
         },
         {
-          "symbol": "fn_801D689C",
+          "symbol": "MemCardMgrBuildFileName",
           "start": "0x801D689C",
           "end": "0x801D6904"
         },
         {
-          "symbol": "fn_801D6904",
+          "symbol": "MemCardMgrSetFileOptions",
           "start": "0x801D6904",
           "end": "0x801D6918"
         },
@@ -25944,22 +25811,22 @@
           "end": "0x801D6924"
         },
         {
-          "symbol": "fn_801D6924",
+          "symbol": "MemCardMgrSetCallbacks",
           "start": "0x801D6924",
           "end": "0x801D6938"
         },
         {
-          "symbol": "fn_801D6938",
+          "symbol": "MemCardMgrSetFileTypes",
           "start": "0x801D6938",
           "end": "0x801D6AC8"
         },
         {
-          "symbol": "fn_801D6AC8",
+          "symbol": "MemCardMgrCountFiles",
           "start": "0x801D6AC8",
           "end": "0x801D6B14"
         },
         {
-          "symbol": "fn_801D6B14",
+          "symbol": "MemCardMgrGetMaxFiles",
           "start": "0x801D6B14",
           "end": "0x801D6B24"
         },
@@ -25969,7 +25836,7 @@
           "end": "0x801D6B4C"
         },
         {
-          "symbol": "fn_801D6B4C",
+          "symbol": "MemCardMgrGetFileName",
           "start": "0x801D6B4C",
           "end": "0x801D6B74"
         },
@@ -25979,52 +25846,52 @@
           "end": "0x801D6C70"
         },
         {
-          "symbol": "fn_801D6C70",
+          "symbol": "MemCardMgrGetSlotEntryName",
           "start": "0x801D6C70",
           "end": "0x801D6CB8"
         },
         {
-          "symbol": "fn_801D6CB8",
+          "symbol": "MemCardMgrGetSlotDate",
           "start": "0x801D6CB8",
           "end": "0x801D6CF4"
         },
         {
-          "symbol": "fn_801D6CF4",
+          "symbol": "MemCardMgrFindSlot",
           "start": "0x801D6CF4",
           "end": "0x801D6DA8"
         },
         {
-          "symbol": "fn_801D6DA8",
+          "symbol": "MemCardMgrIsSlotCorrupt",
           "start": "0x801D6DA8",
           "end": "0x801D6DE0"
         },
         {
-          "symbol": "fn_801D6DE0",
+          "symbol": "MemCardMgrMarkSlotCorrupt",
           "start": "0x801D6DE0",
           "end": "0x801D6E04"
         },
         {
-          "symbol": "fn_801D6E04",
+          "symbol": "MemCardMgrSetStreamError",
           "start": "0x801D6E04",
           "end": "0x801D6E10"
         },
         {
-          "symbol": "fn_801D6E10",
+          "symbol": "MemCardMgrStreamWrite",
           "start": "0x801D6E10",
           "end": "0x801D6E54"
         },
         {
-          "symbol": "fn_801D6E54",
+          "symbol": "MemCardMgrStreamRead",
           "start": "0x801D6E54",
           "end": "0x801D6EA0"
         },
         {
-          "symbol": "fn_801D6EA0",
+          "symbol": "MemCardMgrIsStreamReady",
           "start": "0x801D6EA0",
           "end": "0x801D6EFC"
         },
         {
-          "symbol": "fn_801D6EFC",
+          "symbol": "MemCardMgrEndStream",
           "start": "0x801D6EFC",
           "end": "0x801D6F58"
         },
@@ -26034,27 +25901,27 @@
           "end": "0x801D83F0"
         },
         {
-          "symbol": "fn_801D83F0",
+          "symbol": "MemCardMgrMakeFilePath",
           "start": "0x801D83F0",
           "end": "0x801D8428"
         },
         {
-          "symbol": "fn_801D8428",
+          "symbol": "MemCardMgrMakeEntryPath",
           "start": "0x801D8428",
           "end": "0x801D8460"
         },
         {
-          "symbol": "fn_801D8460",
+          "symbol": "MemCardMgrMakeDirPattern",
           "start": "0x801D8460",
           "end": "0x801D8498"
         },
         {
-          "symbol": "fn_801D8498",
+          "symbol": "MemCardMgrCopyGameCode",
           "start": "0x801D8498",
           "end": "0x801D84B8"
         },
         {
-          "symbol": "fn_801D84B8",
+          "symbol": "MemCardMgrCompareGameCode",
           "start": "0x801D84B8",
           "end": "0x801D84DC"
         },
@@ -26064,37 +25931,37 @@
           "end": "0x801D85A8"
         },
         {
-          "symbol": "fn_801D85A8",
+          "symbol": "MemCardMgrGetEntriesPerFile",
           "start": "0x801D85A8",
           "end": "0x801D85B0"
         },
         {
-          "symbol": "fn_801D85B0",
+          "symbol": "MemCardMgrReadHeader",
           "start": "0x801D85B0",
           "end": "0x801D85DC"
         },
         {
-          "symbol": "fn_801D85DC",
+          "symbol": "MemCardMgrGetNameFromHeader",
           "start": "0x801D85DC",
           "end": "0x801D85E4"
         },
         {
-          "symbol": "fn_801D85E4",
+          "symbol": "MemCardMgrWriteSysInfo",
           "start": "0x801D85E4",
           "end": "0x801D8618"
         },
         {
-          "symbol": "fn_801D8618",
+          "symbol": "MemCardMgrGetFileSize",
           "start": "0x801D8618",
           "end": "0x801D8658"
         },
         {
-          "symbol": "fn_801D8658",
+          "symbol": "MemCardMgrGetFileCapacity",
           "start": "0x801D8658",
           "end": "0x801D868C"
         },
         {
-          "symbol": "fn_801D868C",
+          "symbol": "MemCardMgrFormatCardType",
           "start": "0x801D868C",
           "end": "0x801D86B4"
         }
@@ -26832,9 +26699,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3EFC.c",
+      "source": "src/engine/charik.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/cu_801C3EFC.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x801C3EFC-0x801C4960 (src/engine/charik.c), its compiler and type rows, exact function rows and the exact data row for its .rodata 0x802AF0F0-0x802AF100. Draft comparisons only; the solver switches 0x803EBBD8/0x803EBBD9, the .sdata tuning floats 0x803EBBDC-0x803EBBE4, the axis vectors 0x802F489C/0x802F48A8 and the matrix, vector and quaternion helpers stay external; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
@@ -26851,37 +26718,37 @@
       ],
       "functions": [
         {
-          "symbol": "fn_801C3EFC",
+          "symbol": "CharIKClampAngle",
           "start": "0x801C3EFC",
           "end": "0x801C3F48"
         },
         {
-          "symbol": "fn_801C3F48",
+          "symbol": "CharIKBuildChainMatrices",
           "start": "0x801C3F48",
           "end": "0x801C4010"
         },
         {
-          "symbol": "fn_801C4010",
+          "symbol": "CharIKSolveCCD",
           "start": "0x801C4010",
           "end": "0x801C447C"
         },
         {
-          "symbol": "fn_801C447C",
+          "symbol": "CharIKTransformToJoint",
           "start": "0x801C447C",
           "end": "0x801C4550"
         },
         {
-          "symbol": "fn_801C4550",
+          "symbol": "CharIKSolveLookAt",
           "start": "0x801C4550",
           "end": "0x801C47EC"
         },
         {
-          "symbol": "fn_801C47EC",
+          "symbol": "CharIKCreateChain",
           "start": "0x801C47EC",
           "end": "0x801C4958"
         },
         {
-          "symbol": "fn_801C4958",
+          "symbol": "CharIKEnableLimits",
           "start": "0x801C4958",
           "end": "0x801C4960"
         }
@@ -27075,7 +26942,7 @@
     {
       "source": "src/engine/xmlread.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Ten functions and both data sections link through units.json. The two non-exact functions retain original bytes, with the HOLDOUT records at 0x802166F0 and 0x80216BFC.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 and native data rows. Eleven functions and both data sections link through units.json. The non-exact function _XmlSkipElement retains original bytes, with the HOLDOUT record at 0x802166F0.",
       "sections": [
         {
           "section": ".text",
@@ -27215,11 +27082,6 @@
           "end": "0x801B4824"
         },
         {
-          "symbol": "fn_801B4824",
-          "start": "0x801B4824",
-          "end": "0x801B4898"
-        },
-        {
           "symbol": "PATHI_fade",
           "start": "0x801B4898",
           "end": "0x801B4960"
@@ -27271,29 +27133,14 @@
       ],
       "functions": [
         {
-          "symbol": "PATHI_sampleoffset",
-          "start": "0x801B6780",
-          "end": "0x801B67F8"
-        },
-        {
           "symbol": "PATHI_choosesynchtime",
           "start": "0x801B6A18",
           "end": "0x801B6CB4"
         },
         {
-          "symbol": "PATHI_timeremaining",
-          "start": "0x801B6CB4",
-          "end": "0x801B6D20"
-        },
-        {
           "symbol": "PATHI_enternode",
           "start": "0x801B6ED0",
           "end": "0x801B7178"
-        },
-        {
-          "symbol": "PATHI_queuenode",
-          "start": "0x801B7460",
-          "end": "0x801B7778"
         }
       ]
     },

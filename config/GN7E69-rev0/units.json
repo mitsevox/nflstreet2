@@ -923,14 +923,6 @@
       "address": "0x80307470",
       "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
     },
-    "__11PhysicsTime": {
-      "address": "0x801E8C78",
-      "evidence": "Target constructor initializes u32+0/f32+4 and vptr+8; inferred class contract."
-    },
-    "fn_801E8D14__11PhysicsTimef": {
-      "address": "0x801E8D14",
-      "evidence": "Target member increments u32+0/f32+4 with f1 delta; inferred member contract."
-    },
     "_ctors": {
       "address": "0x802CC668",
       "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
@@ -954,10 +946,6 @@
     "StevQueryDiveCount": {
       "address": "0x8018EAAC",
       "evidence": "evidence.tsv function/name rows for 0x8018EAAC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "CollideSegmentClosestPoints": {
-      "address": "0x80088FFC",
-      "evidence": "evidence.tsv function/name rows for 0x80088FFC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
     "SstlFetchEntry": {
       "address": "0x8018EB20",
@@ -1083,10 +1071,6 @@
       "address": "0x8022ED50",
       "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
     },
-    "XmlFindInElement": {
-      "address": "0x80216BFC",
-      "evidence": "evidence.tsv function and name rows for 0x80216BFC (XmlFindInElement, a registered holdout of src/engine/xmlread.c, original bytes linked); called by name from src/game/Divot.cpp, src/game/PlaDynClutOps.cpp, src/game/DynObj.cpp (n1e naming wave)."
-    },
     "ModelLodBalance": {
       "address": "0x80234424",
       "evidence": "evidence.tsv function/name rows for 0x80234424 (target extent, inferred name); called from other files while its own file is unlinked."
@@ -1098,10 +1082,6 @@
     "ScaleBlockReset": {
       "address": "0x802349CC",
       "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "fn_801E8CA0__11PhysicsTimef": {
-      "address": "0x801E8CA0",
-      "evidence": "Target member stores the f1 time as whole ticks u32+0 (fctiwz) and the remaining fraction f32+4; called by 0x800504EC on the time object 0x803084B8; inferred member contract."
     },
     "FEPlyrPoseTransitionCallback": {
       "address": "0x80089E70",
@@ -1162,10 +1142,6 @@
     "DbMttsResumeGame": {
       "address": "0x8022C098",
       "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/dbmtts.c is a registered comparison)."
-    },
-    "DbFindUnusedTeamIds": {
-      "address": "0x8022C628",
-      "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
     }
   },
   "units": [
@@ -3214,18 +3190,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E4120",
-          "end": "0x800E513C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E55B8",
           "end": "0x800E6984"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E6F48",
+          "start": "0x800E6AC8",
           "end": "0x800E7588"
         },
         {
@@ -3290,16 +3260,8 @@
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
           },
           {
-            "function": "PlyrAlignInput",
-            "evidence": "evidence.tsv source-form 0x800E513C-0x800E55B8"
-          },
-          {
             "function": "PlyrEngageGetInputDir",
             "evidence": "evidence.tsv source-form 0x800E6984-0x800E6AC8"
-          },
-          {
-            "function": "PlyrEngageTryShed",
-            "evidence": "evidence.tsv source-form 0x800E6AC8-0x800E6F48"
           },
           {
             "function": "PlyrTackleStartAnim",
@@ -4565,19 +4527,13 @@
     },
     {
       "source": "src/engine/dbsrpt.c",
-      "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes. The file's .sdata 0x803EC030-0x803EC03C and .bss 0x803A2390-0x803A23E8 link from this file; its query strings keep their original bytes.",
+      "profile": "engine_c",
+      "evidence": "evidence.tsv provisional unit row 0x8022C0E0-0x8022C894 (src/engine/dbsrpt.c), its function, name and data rows and the engine_c compiler row of the range it was split from (src/engine/cu_802297D8.c); every function exact (its former holdout DbFindUnusedTeamIds 0x8022C628 matched in lane 7), complete .text linked. The file's .sdata 0x803EC030-0x803EC03C and .bss 0x803A2390-0x803A23E8 link from this file; its query strings keep their original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8022C0E0",
-          "end": "0x8022C628"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8022C81C",
           "end": "0x8022C894"
         },
         {
@@ -4592,16 +4548,7 @@
           "start": "0x803A2390",
           "end": "0x803A23E8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "DbFindUnusedTeamIds",
-            "evidence": "evidence.tsv source-form 0x8022C628-0x8022C81C"
-          }
-        ],
-        "evidence": "w2d merge notes (PR #1490 holdouts table): src/engine/dbsrpt.c holds out DbFindUnusedTeamIds (0x8022C628)."
-      }
+      ]
     },
     {
       "source": "src/engine/dbevas.c",
@@ -4741,13 +4688,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802311C8",
-          "end": "0x8023133C"
+          "end": "0x80231570"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80231A84",
-          "end": "0x80231A8C"
+          "end": "0x80231B04"
         },
         {
           "section": ".text",
@@ -4777,20 +4724,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "DbOccpQueryPassing",
-            "evidence": "evidence.tsv source-form 0x8023133C-0x80231570"
-          },
-          {
             "function": "DbOccpQueryRushing",
             "evidence": "evidence.tsv source-form 0x80231570-0x80231798"
           },
           {
             "function": "DbOccpQueryReceiving",
             "evidence": "evidence.tsv source-form 0x80231798-0x80231A84"
-          },
-          {
-            "function": "DbOccpQueryBlocking",
-            "evidence": "evidence.tsv source-form 0x80231A8C-0x80231B04"
           },
           {
             "function": "DbOccpQueryDefense",
@@ -4809,7 +4748,7 @@
             "evidence": "evidence.tsv source-form 0x80232340-0x80232628"
           }
         ],
-        "evidence": "w2b merge notes (PR #1488 holdouts table): src/engine/dboccp.c holds out DbOccpQueryPassing, DbOccpQueryRushing, DbOccpQueryReceiving, DbOccpQueryBlocking, DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns."
+        "evidence": "w2b merge notes (PR #1488 holdouts table): src/engine/dboccp.c holds out DbOccpQueryRushing, DbOccpQueryReceiving, DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns (lane 7, 2026-11-27: DbOccpQueryPassing and DbOccpQueryBlocking exact and linked)."
       },
       "link_roots": {
         "discarded": [
@@ -10804,6 +10743,25 @@
       }
     },
     {
+      "source": "src/game/CollideSegment.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x80088FFC-0x80089330 (src/game/CollideSegment.cpp), the function row 0x80088FFC-0x80089330, the exact .rodata row 0x80295214-0x80295224 and the source-form row.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80088FFC",
+          "end": "0x80089330"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x80295214",
+          "end": "0x80295224"
+        }
+      ]
+    },
+    {
       "source": "src/game/CollideContacts.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x80089330-0x800895EC (src/game/CollideContacts.cpp) and its data, type, compiler and source-form rows.",
@@ -16020,7 +15978,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts MemCardMgrEnablePolling, MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -16086,7 +16044,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801D654C",
+            "function": "MemCardMgrEnablePolling",
             "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
           },
           {
@@ -16098,11 +16056,11 @@
             "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
           },
           {
-            "function": "fn_801D8618",
+            "function": "MemCardMgrGetFileSize",
             "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
           }
         ],
-        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618."
+        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618)."
       }
     },
     {
@@ -17933,6 +17891,45 @@
           "end": "0x802B15F8"
         }
       ]
+    },
+    {
+      "source": "src/engine/phystime.cpp",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv unit row 0x801E8C78-0x801E8E04 (src/engine/phystime.cpp) and data row 0x802B15F8-0x802B1660.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801E8C78",
+          "end": "0x801E8E04"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B15F8",
+          "end": "0x802B1660"
+        }
+      ],
+      "link_roots": {
+        "symbols": [
+          "__11PhysicsTime",
+          "SetSeconds__11PhysicsTimef",
+          "AddSeconds__11PhysicsTimef",
+          "PhysTimeElapsed__FPC11PhysicsTimeT0"
+        ],
+        "discarded": [
+          "__11PhysicsTimef",
+          "GetWholeSeconds__C11PhysicsTime"
+        ],
+        "evidence": "evidence.tsv linker row phystime.cpp discarded functions and global folds."
+      },
+      "folded": {
+        "symbols": {
+          "_._11PhysicsTime": "0x80051D60",
+          "_vt.11PhysicsTime": "0x8028DD58"
+        },
+        "evidence": "evidence.tsv linker row phystime.cpp discarded functions and global folds."
+      }
     },
     {
       "source": "src/engine/polynomial.c",
@@ -26225,36 +26222,18 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DB7A4",
-          "end": "0x800DBAF0"
+          "end": "0x800DCC14"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DBB74",
-          "end": "0x800DC6F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DD5E4",
-          "end": "0x800DD994"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DDCE4",
+          "start": "0x800DD2E8",
           "end": "0x800DDF34"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DF1F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DF654",
           "end": "0x800DF6EC"
         },
         {
@@ -26277,14 +26256,6 @@
             "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
           },
           {
-            "function": "PlayerActionAnimIsPitchArmed",
-            "evidence": "evidence.tsv source-form 0x800DBAF0-0x800DBB74"
-          },
-          {
-            "function": "PlayerActionAnimTurnPhase",
-            "evidence": "evidence.tsv source-form 0x800DC6F4-0x800DCC14"
-          },
-          {
             "function": "PlayerActionAnimSpeedBlendPhase",
             "evidence": "evidence.tsv source-form 0x800DCC14-0x800DCE2C"
           },
@@ -26293,20 +26264,8 @@
             "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
           },
           {
-            "function": "PlayerActionAnimReactionPhase",
-            "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
-          },
-          {
-            "function": "PlayerActionAnimStartVariant",
-            "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
-          },
-          {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimGenericPhase",
-            "evidence": "evidence.tsv source-form 0x800DF1F4-0x800DF654"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
@@ -26501,7 +26460,7 @@
     {
       "source": "src/engine/xmlread.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/xmlread.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 2 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8021625C-0x802176E8 (src/engine/xmlread.c), its compiler rows and the data rows of its data sections; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the non-exact function _XmlSkipElement keeps the original bytes and stays a registered partial in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -26513,12 +26472,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80216860",
-          "end": "0x80216BFC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80216E34",
           "end": "0x802176E8"
         },
         {
@@ -26539,10 +26492,6 @@
           {
             "function": "_XmlSkipElement",
             "evidence": "evidence.tsv source-form 0x802166F0-0x80216860"
-          },
-          {
-            "function": "XmlFindInElement",
-            "evidence": "evidence.tsv source-form 0x80216BFC-0x80216E34"
           }
         ],
         "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
@@ -29411,9 +29360,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3EFC.c",
+      "source": "src/engine/charik.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801C3EFC.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/charik.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29437,11 +29386,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801C4010",
+            "function": "CharIKSolveCCD",
             "evidence": "evidence.tsv source-form 0x801C4010-0x801C447C"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_801C3EFC.c holds out fn_801C4010."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/charik.c holds out CharIKSolveCCD."
       }
     },
     {
@@ -29493,18 +29442,12 @@
     {
       "source": "src/engine/pathvol.c",
       "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 5 of 9 functions exact, the 4 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 9 functions exact, the 3 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B45D0",
-          "end": "0x801B4824"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B4898",
           "end": "0x801B4A24"
         },
         {
@@ -29516,10 +29459,6 @@
       ],
       "holdouts": {
         "functions": [
-          {
-            "function": "fn_801B4824",
-            "evidence": "evidence.tsv source-form 0x801B4824-0x801B4898"
-          },
           {
             "function": "PATHI_setfadevolume",
             "evidence": "evidence.tsv source-form 0x801B4A24-0x801B4CE4"
@@ -29533,7 +29472,7 @@
             "evidence": "evidence.tsv source-form 0x801B4F50-0x801B51AC"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out fn_801B4824, PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
       }
     },
     {
@@ -29822,61 +29761,25 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx_holdouts",
-      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Twelve documented holdouts retain original code; all other code links through the existing owner-approved named profile.",
+      "evidence": "evidence.tsv provisional spchpick.c unit 0x801AF75C-0x801B1A3C; all67 functions and all32 initialized/1280 BSS bytes reconstructed. Four documented holdouts (iSPCH_GetPhraseBank, iSPCH_ChooseSamples, iSPCH_MakeSampleRequests, iSPCH_EACrandom) retain original code; all other code links through the existing owner-approved named profile.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AF75C",
-          "end": "0x801AFA14"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AFA70",
           "end": "0x801AFD04"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801AFDFC",
-          "end": "0x801AFEE8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801AFF74",
           "end": "0x801B0050"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B01E8",
-          "end": "0x801B0208"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B029C",
-          "end": "0x801B0474"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B04D4",
-          "end": "0x801B05E4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B07A0",
-          "end": "0x801B08DC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B0A18",
-          "end": "0x801B0D5C"
+          "end": "0x801B0EA4"
         },
         {
           "section": ".text",
@@ -29900,44 +29803,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "VoxEvent_GetSentenceParmMask",
-            "evidence": "evidence.tsv source-form 0x801AFA14-0x801AFA70"
-          },
-          {
             "function": "iSPCH_GetPhraseBank",
             "evidence": "evidence.tsv source-form 0x801AFD04-0x801AFDFC"
           },
           {
-            "function": "iSPCH_SampleExists",
-            "evidence": "evidence.tsv source-form 0x801AFEE8-0x801AFF74"
-          },
-          {
             "function": "iSPCH_ChooseSamples",
             "evidence": "evidence.tsv source-form 0x801B0050-0x801B01E8"
-          },
-          {
-            "function": "iSPCH_SentenceLength",
-            "evidence": "evidence.tsv source-form 0x801B0208-0x801B029C"
-          },
-          {
-            "function": "iSPCH_ShortRuleStatus",
-            "evidence": "evidence.tsv source-form 0x801B0474-0x801B04D4"
-          },
-          {
-            "function": "iSPCH_TestMatchParms",
-            "evidence": "evidence.tsv source-form 0x801B05E4-0x801B07A0"
-          },
-          {
-            "function": "iSPCH_RandomizeSentencePicks",
-            "evidence": "evidence.tsv source-form 0x801B08DC-0x801B0974"
-          },
-          {
-            "function": "iSPCH_IterateChoice",
-            "evidence": "evidence.tsv source-form 0x801B0974-0x801B0A18"
-          },
-          {
-            "function": "iSPCH_ConstantRuleSet",
-            "evidence": "evidence.tsv source-form 0x801B0D5C-0x801B0EA4"
           },
           {
             "function": "iSPCH_MakeSampleRequests",
@@ -29992,20 +29863,20 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B67F8",
+          "start": "0x801B6780",
           "end": "0x801B6A18"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B6D20",
+          "start": "0x801B6CB4",
           "end": "0x801B6ED0"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B7178",
-          "end": "0x801B7460"
+          "end": "0x801B7778"
         },
         {
           "section": ".rodata",
@@ -30018,24 +29889,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "PATHI_sampleoffset",
-            "evidence": "evidence.tsv source-form 0x801B6780-0x801B67F8"
-          },
-          {
             "function": "PATHI_choosesynchtime",
             "evidence": "evidence.tsv source-form 0x801B6A18-0x801B6CB4"
           },
           {
-            "function": "PATHI_timeremaining",
-            "evidence": "evidence.tsv source-form 0x801B6CB4-0x801B6D20"
-          },
-          {
             "function": "PATHI_enternode",
             "evidence": "evidence.tsv source-form 0x801B6ED0-0x801B7178"
-          },
-          {
-            "function": "PATHI_queuenode",
-            "evidence": "evidence.tsv source-form 0x801B7460-0x801B7778"
           }
         ],
         "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."

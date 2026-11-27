@@ -6,10 +6,10 @@ void *memset(void *pDest, int value, unsigned int size);
 void ChecksumCRC32Begin(void);
 void ChecksumCRC32Update(void *pData, unsigned int size);
 void ChecksumCRC32End(unsigned int *pResult);
-void fn_801D6E04(int error);
-void fn_801D6E10(void *pData, unsigned int size);
-void fn_801D6E54(void *pData, unsigned int size);
-int fn_801D6EA0(unsigned char *pFailed);
+void MemCardMgrSetStreamError(int error);
+void MemCardMgrStreamWrite(void *pData, unsigned int size);
+void MemCardMgrStreamRead(void *pData, unsigned int size);
+int MemCardMgrIsStreamReady(unsigned char *pFailed);
 void MemCardMgrUpdate(void);
 }
 
@@ -91,12 +91,12 @@ static int _CardStreamFillToEnd(CardStream *pStream)
             count = sizeof(buffer);
         }
         if (pStream->mReading) {
-            fn_801D6E54(buffer, count);
+            MemCardMgrStreamRead(buffer, count);
         } else {
-            fn_801D6E10(buffer, count);
+            MemCardMgrStreamWrite(buffer, count);
         }
         _CardStream_uPollCount = 0;
-        while (!fn_801D6EA0(&failed)) {
+        while (!MemCardMgrIsStreamReady(&failed)) {
             if (failed) {
                 result = 0x24;
                 break;
@@ -111,7 +111,7 @@ static int _CardStreamFillToEnd(CardStream *pStream)
     }
     if (*pStream->mpPosition != pStream->mSize) {
         if (!failed) {
-            fn_801D6E04(-99);
+            MemCardMgrSetStreamError(-99);
         }
         result = 0x24;
     }
@@ -124,7 +124,7 @@ static int CardStreamClose(CardStream *pStream)
     int result = 0;
     unsigned char failed;
 
-    fn_801D6EA0(&failed);
+    MemCardMgrIsStreamReady(&failed);
     if (failed) {
         ChecksumCRC32End(&pStream->mpTarget->mChecksum);
     } else {
@@ -142,12 +142,12 @@ static int CardStreamWrite(CardStream *pStream, void *pData, unsigned int size, 
     unsigned char failed;
 
     if (pStream->mSize < *pStream->mpPosition + size) {
-        fn_801D6E04(-99);
+        MemCardMgrSetStreamError(-99);
         return 3;
     }
-    fn_801D6E10(pData, size);
+    MemCardMgrStreamWrite(pData, size);
     _CardStream_uPollCount = 0;
-    while (!fn_801D6EA0(&failed)) {
+    while (!MemCardMgrIsStreamReady(&failed)) {
         if (failed) {
             result = 0x24;
             break;
@@ -169,12 +169,12 @@ static int CardStreamRead(CardStream *pStream, void *pData, unsigned int size, u
     unsigned char failed;
 
     if (pStream->mSize < *pStream->mpPosition + size) {
-        fn_801D6E04(-99);
+        MemCardMgrSetStreamError(-99);
         return 3;
     }
-    fn_801D6E54(pData, size);
+    MemCardMgrStreamRead(pData, size);
     _CardStream_uPollCount = 0;
-    while (!fn_801D6EA0(&failed)) {
+    while (!MemCardMgrIsStreamReady(&failed)) {
         if (failed) {
             result = 0x24;
             break;
