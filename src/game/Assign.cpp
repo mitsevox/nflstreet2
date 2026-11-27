@@ -3580,7 +3580,7 @@ extern "C" void fn_801061E8(Object_80039F5C *p, Ball_t *pBall);
 extern "C" int fn_80106618(Object_80039F5C *p);
 extern "C" void fn_80106678(Record_8011F518 *pRecord, Object_80039F5C *p, int a, int b);
 extern "C" void fn_80106A60(Object_80039F5C *p);
-extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock);
+extern "C" void AssignBlockUpdatePassCoverage(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock);
 extern "C" void fn_801074B4(Object_80039F5C *p, Points_800F3A6C *pInfo);
 extern "C" void fn_80107680(Points_800F3A6C *pInfo, int index);
 extern "C" void fn_801076F0(Object_80039F5C *pA, Object_80039F5C *pB, Result_801076F0 *pOut, Input_801076F0 *pIn);
@@ -4720,7 +4720,7 @@ extern "C" void fn_800F181C(int index, int which) {
     lbl_803EAE18->mpEntries[index].mpUnknown4 = lbl_802EE938[which];
 }
 
-extern "C" void fn_800F1858(Object_80039F5C *p) {
+extern "C" void AssignBlockEngageBegin(Object_80039F5C *p) {
     short *pRatings = p->mRatings;
     Block_800F0C6C *pBlock = (Block_800F0C6C *)&p->mUnknown336;
     int index = 0xFFFF;
@@ -4731,18 +4731,18 @@ extern "C" void fn_800F1858(Object_80039F5C *p) {
 
     fn_800A8954(1, p->mIdBytes[2], p);
     fn_8009BD60(p);
-    side = 6;
     a = 0.4f;
     b = 0.05f;
     switch (p->mpState->mUnknown2) {
-    case 0:
-        side = 6;
-        break;
     case 1:
         side = 6;
         break;
     case 2:
         side = 3;
+        break;
+    case 0:
+    default:
+        side = 6;
         break;
     }
     if (p->mUnknown776 == 1) {
@@ -4884,7 +4884,7 @@ extern "C" void fn_800F1C68(Object_80039F5C *p) {
         p->mFlags |= 8;
     } else {
         PlayerMoveBegin(p, 1, 34);
-        fn_800F1858(p);
+        AssignBlockEngageBegin(p);
     }
 }
 
@@ -5090,7 +5090,7 @@ extern "C" int fn_800F24D8(Object_80039F5C *p) {
         if (PlayerMoveGetKind(p) == 4) {
             fn_800F1C68(p);
         } else {
-            fn_800F1858(p);
+            AssignBlockEngageBegin(p);
         }
         p->mUnknown512.mUnknown14 = 0;
         pBlock->mUnknown6 = 2;
@@ -13394,7 +13394,7 @@ extern "C" void fn_80106A60(Object_80039F5C *p) {
     }
 }
 
-extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock) {
+extern "C" void AssignBlockUpdatePassCoverage(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock) {
     Ball_t *pBall = BallGet(pBlock->mUnknown64);
     Object_80039F5C *pOther = BallGetTarget(pBall);
     int result = pBlock->mUnknown49;
@@ -13551,14 +13551,19 @@ extern "C" void fn_80106C24(Object_80039F5C *p, Block_800F4A74_80104C9C *pBlock)
             case 2:
             case 3:
                 if (ballTime > time - 5.0f || distance < 5.0f) {
-                    result = 3;
                     if (pBlock->mUnknown24 == pBlock->mUnknown20) {
                         if (pBlock->mUnknown54 == 0) {
                             result = 2;
+                            break;
                         }
-                    } else if (time < otherTime) {
-                        result = 2;
+                    } else {
+                        result = 3;
+                        if (time < otherTime) {
+                            result = 2;
+                        }
+                        break;
                     }
+                    result = 3;
                 } else {
                     result = 1;
                 }
@@ -14331,7 +14336,7 @@ extern "C" int fn_80109248(Object_80039F5C *p) {
                 fn_801076F0(p, pOther, &res, (Input_801076F0 *)&info);
                 fn_801077D8(p, pOther, (Block_800F4A74_801077D8 *)pBlock, (Info_800F3A6C *)&res, &info);
             }
-            fn_80106C24(p, (Block_800F4A74_80104C9C *)pBlock);
+            AssignBlockUpdatePassCoverage(p, (Block_800F4A74_80104C9C *)pBlock);
             switch (pBlock->mUnknown49) {
             case 0:
                 active = 1;

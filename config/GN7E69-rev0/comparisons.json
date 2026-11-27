@@ -3681,7 +3681,7 @@
           "end": "0x800F1858"
         },
         {
-          "symbol": "fn_800F1858",
+          "symbol": "AssignBlockEngageBegin",
           "start": "0x800F1858",
           "end": "0x800F1C68"
         },
@@ -4791,7 +4791,7 @@
           "end": "0x80106C24"
         },
         {
-          "symbol": "fn_80106C24",
+          "symbol": "AssignBlockUpdatePassCoverage",
           "start": "0x80106C24",
           "end": "0x801074B4"
         },

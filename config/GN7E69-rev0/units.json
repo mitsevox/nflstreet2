@@ -14458,12 +14458,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800EFC68",
-          "end": "0x800F1858"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800F1C68",
           "end": "0x800F30AC"
         },
         {
@@ -14596,12 +14590,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801050DC",
-          "end": "0x80106C24"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801074B4",
           "end": "0x80109E48"
         },
         {
@@ -14734,10 +14722,6 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_800F1858",
-            "evidence": "evidence.tsv source-form 0x800F1858-0x800F1C68"
-          },
-          {
             "function": "fn_800F30AC",
             "evidence": "evidence.tsv source-form 0x800F30AC-0x800F3284"
           },
@@ -14838,10 +14822,6 @@
             "evidence": "evidence.tsv source-form 0x80104D98-0x801050DC"
           },
           {
-            "function": "fn_80106C24",
-            "evidence": "evidence.tsv source-form 0x80106C24-0x801074B4"
-          },
-          {
             "function": "fn_80109E48",
             "evidence": "evidence.tsv source-form 0x80109E48-0x80109F34"
           },
@@ -14910,7 +14890,7 @@
             "evidence": "evidence.tsv source-form 0x8012510C-0x801251FC"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 44 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/Assign.cpp: the 42 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
