@@ -101,7 +101,7 @@ void MatRotY(int a);
 void MatRotZ(int a);
 void MatTranslate(Vec3_801DE1E0 *pPos);
 void MatStore(float (*m)[4]);
-void fn_801D2130(ParticleHeapDef_t *pType);
+void MemInitHeap(ParticleHeapDef_t *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
@@ -503,7 +503,7 @@ void ParticleLibInit(ParticleLibParms_t *pDesc)
         gPoolHeapDef.mUnknown08 = partLibState.mHeap;
         partLibState.mUnknown68 = (pDesc->mUnknown14 + 15) & ~15;
         gPoolHeapDef.mUnknown10 = partLibState.mUnknown68;
-        fn_801D2130(&gPoolHeapDef);
+        MemInitHeap(&gPoolHeapDef);
     } else {
         partLibState.mUnknown68 = 0;
         partLibState.mHeap = 0;
