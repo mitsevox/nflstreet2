@@ -190,6 +190,21 @@ static void _DbOccpUpdateTeamHandler(TDbCol_801F9718 *pCols, int mode, unsigned 
     *pDone = 1;
 }
 
+static inline void _DbOccpSetSubFloatP(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub, float value)
+{
+    DbOccpFloatBits v;
+    unsigned int *pValue;
+
+    v.f = value;
+    pExpr->mOp = op;
+    pExpr->mLeft.mType = TDB_TYPE_EXPR_FLOAT;
+    pExpr->mLeft.mValue.p = pSub;
+    pExpr->mRight.mType = TDB_TYPE_FLOAT;
+    /* FAKEMATCH: the float bits stored through a pointer to the value field, for the target's frame-based store address; the same field is set. */
+    pValue = &pExpr->mRight.mValue.u;
+    *pValue = v.u;
+}
+
 int DbOccpQueryPassing(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     TDbCol_801F9718 aCols[11];
@@ -251,7 +266,7 @@ int DbOccpQueryRushing(const char *pWhere, int b, unsigned long long orderKey, i
     if (_DbOccpAccepted(err)) {
         aKeys[0] = DBOCCP_KEY(table, 0x63736370);
         _DbOccpSetTrunc(&aTerms[0], &scale);
-        _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
+        _DbOccpSetSubFloatP(&scale, 0x40010, &ratio, 10.0f);
         _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x61797567), _DbOccpKey(table, 0x74617567));
         aKeys[1] = -1;
         _DbOccpSetTable(&aTables[0], table, 2, 0);
@@ -356,7 +371,7 @@ int DbOccpQueryDefense(const char *pWhere, int b, unsigned long long orderKey, i
     if (_DbOccpAccepted(err)) {
         aKeys[0] = DBOCCP_KEY(table, 0x61696370);
         _DbOccpSetTrunc(&aTerms[0], &scale);
-        _DbOccpSetSubFloat(&scale, 0x40010, &ratio, 10.0f);
+        _DbOccpSetSubFloatP(&scale, 0x40010, &ratio, 10.0f);
         _DbOccpSetColCol(&ratio, 0x100018, _DbOccpKey(table, 0x79697367), _DbOccpKey(table, 0x6E697367));
         aKeys[1] = DBOCCP_KEY(table, 0x74646370);
         _DbOccpSetColCol(&aTerms[1], 0x4000D, _DbOccpKey(table, 0x74697367), _DbOccpKey(table, 0x74666C67));
