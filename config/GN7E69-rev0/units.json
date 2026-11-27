@@ -1146,10 +1146,6 @@
       "address": "0x801D5840",
       "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
     },
-    "MemCardMgrGetSlotInfo": {
-      "address": "0x801D6B74",
-      "evidence": "evidence.tsv function and name rows for 0x801D6B74 (MemCardMgrGetSlotInfo, exact in the registered comparison src/engine/memcardmgr.c, original bytes linked); called by name from src/game/MemCardUI.cpp, MemCardFiles.cpp, MemCardCallbacks.cpp and MsgMemCardLoad.cpp (wave e2 lane e2b)."
-    },
     "SNDPLATFORM_packetplay": {
       "address": "0x80274464",
       "evidence": "evidence.tsv function and name rows for 0x80274464 (SNDPLATFORM_packetplay, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/spktplay.c (n1e naming wave)."
@@ -16028,6 +16024,94 @@
           }
         ],
         "evidence": "e2b merge notes (PR body holdout table, wave e2 lane e2b): src/engine/yuvconv.c holds out YUV_convert, YUV_convert_noscale, yuvtoRGB32_C, yuvtoA32_C and yuvtoRGBA32_C."
+      }
+    },
+    {
+      "source": "src/engine/memcardmgr.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618 keep the original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D5D30",
+          "end": "0x801D654C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D65B4",
+          "end": "0x801D6F58"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D83F0",
+          "end": "0x801D84DC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D85A8",
+          "end": "0x801D8618"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801D8658",
+          "end": "0x801D86B4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AFEC8",
+          "end": "0x802AFF40"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F7B64",
+          "end": "0x802F7BA0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD00",
+          "end": "0x803EBD44"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80398DE0",
+          "end": "0x80399100"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF10",
+          "end": "0x803ECF1C"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_801D654C",
+            "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
+          },
+          {
+            "function": "MemCardMgrUpdate",
+            "evidence": "evidence.tsv source-form 0x801D6F58-0x801D83F0"
+          },
+          {
+            "function": "MemCardMgrFormatDate",
+            "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
+          },
+          {
+            "function": "fn_801D8618",
+            "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
+          }
+        ],
+        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618."
       }
     },
     {

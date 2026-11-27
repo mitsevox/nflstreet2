@@ -106,7 +106,7 @@ int ConGetChannelInfo(int a, int b);
 void FileDebugProcess(void);
 void GlibSwapBuffers(void);
 void GlibSyncFrame(void);
-void fn_801D6F58(void);
+void MemCardMgrUpdate(void);
 int PerPollSingleDevice(int a);
 int PerGetDeviceData(int a, char *p);
 void PerCheckConnectSingle(unsigned char a);
@@ -327,7 +327,7 @@ unsigned char InGame::Update()
     _InGameUpdateHook1();
     _InGameUpdateHook2();
     _InGameUpdateHook3();
-    fn_801D6F58();
+    MemCardMgrUpdate();
     if (_InGame_uIdleFrames > 10800) {
         if (GameOptionsGet(9)) {
             _InGame_bIdle = 1;
