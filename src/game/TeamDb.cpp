@@ -295,19 +295,24 @@ void TeamDbOpenByTmur(DbCursor *pObject, void *pColumns, int tag, unsigned char 
     DbFilter right;
     DbFilter leftLeft;
     DbFilter leftRight;
+    int value;
 
     root.Set(11, &left, &right);
     left.Set(11, &leftLeft, &leftRight);
     right.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    right.mUnknown16.mValue.mInt = 17;
-    if (flag) {
-        leftLeft.mUnknown16.mValue.mInt = 0;
+    value = 17;
+    right.mUnknown16.mValue.mInt = value;
+    if (!flag) {
+        value = 1;
+        leftLeft.mUnknown16.mValue.mInt = value;
     } else {
-        leftLeft.mUnknown16.mValue.mInt = 1;
+        value = 0;
+        leftLeft.mUnknown16.mValue.mInt = value;
     }
     leftLeft.SetUnknown32(6, 0x4D41455452554D54LL, 3, 0x10006);
     leftRight.SetUnknown32(6, 0x4D41455450595454LL, 3, 0x10006);
-    leftRight.mUnknown16.mValue.mInt = 2;
+    value = 2;
+    leftRight.mUnknown16.mValue.mInt = value;
     DbCursorOpen(pObject, 0x4D414554, 0x44494754, pColumns, &root, tag);
 }
 
