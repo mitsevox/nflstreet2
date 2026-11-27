@@ -373,26 +373,59 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
     PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
     PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
     int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
-    PlayArtVertex_t starts[12], ends[13], controls[3], strip[20];
+    PlayArtVertex_t starts[13], ends[13], controls[3], strip[20], axis[2];
     memset(controls, 0, 24);
     int drawn = 0;
-    int count = 0;
     memset(strip, 0, 160);
-    for (int i = 0; i <= 11; ++i) {
+    int count = 0;
+    int stop = 0;
+    for (int i = 0; i <= 11 && !stop; ++i) {
         PlayArtStep_t *step = &record->mUnknown1C[i];
-        int arrowKind = step->mUnknown14;
-        kinds[i] = arrowKind;
+        int hasArrow = 1;
+        if (!step->mUnknown14) hasArrow = 0;
+        kinds[i] = step->mUnknown14;
         colors[i] = step->mUnknown20;
         int width = lbl_802E9964[step->mUnknown1C];
         if (record->mUnknown4Word) {
             int link = step->mUnknown18 == 15 ? i : step->mUnknown18;
-            if (!i) {starts[0].mX = record->mUnknown8; starts[0].mY = record->mUnknownC;}
-            else if (link == i) starts[i] = ends[i];
-            else starts[i] = ends[link+1];
+            if (!i) starts[0] = *(PlayArtVertex_t *)&record->mUnknown8;
+            else if (link == i) starts[i] = ends[i-1];
+            else starts[i] = ends[link];
         }
-        int stop = 0;
         PlayArtVertex_t zero = {0.0f, 0.0f};
-        if (step->mUnknown10 == 1) {
+        int moved;
+        switch (step->mUnknown10) {
+        case -1:
+            stop = 1;
+            break;
+        case 0:
+            controls[0] = starts[i];
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+            ends[i] = controls[1];
+            PlayAlignBuildSegmentStrip(controls, strip, width);
+            count = PlayArtAddQuad(vertices, count, capacity, strip);
+            moved = 0;
+            if (fabsf(controls[0].mX - controls[1].mX) != 0.0f || fabsf(controls[0].mY - controls[1].mY) != 0.0f) moved = 1;
+            if (moved == 1) drawn = 1;
+            break;
+        case 2:
+            for (int j = 0; j < 2; ++j) {
+                controls[0] = starts[i];
+                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
+                else Vec2Add(&controls[1], &step->mUnknown8, starts);
+                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
+                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+                ends[i] = controls[1];
+                PlayAlignBuildSegmentStrip(controls, strip, width);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
+                moved = 0;
+                if (fabsf(controls[0].mX - controls[1].mX) != 0.0f || fabsf(controls[0].mY - controls[1].mY) != 0.0f) moved = 1;
+                if (moved == 1) drawn = 1;
+            }
+            break;
+        case 1: {
             controls[0] = starts[i];
             Vec2Add(&controls[1], &step->mUnknown0, starts);
             Vec2Add(&controls[2], &step->mUnknown8, starts);
@@ -400,7 +433,7 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
             if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
             if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
             if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
-            ends[i+1] = controls[2];
+            ends[i] = controls[2];
             int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
             PlayAlignBuildCurveStrip(controls, strip, samples, width);
@@ -410,63 +443,42 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
                 count += 2;
             }
             drawn = 1;
-        } else if (step->mUnknown10 == 0) {
-            controls[0] = starts[i];
-            Vec2Add(&controls[1], &step->mUnknown0, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-            ends[i+1] = controls[1];
-            PlayAlignBuildSegmentStrip(controls, strip, width);
-            count = PlayArtAddQuad(vertices, count, capacity, strip);
-            if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
-        } else if (step->mUnknown10 == 2) {
-            for (int j = 0; j < 2; ++j) {
-                controls[0] = starts[i];
-                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
-                else Vec2Add(&controls[1], &step->mUnknown8, starts);
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-                ends[i+1] = controls[1];
-                PlayAlignBuildSegmentStrip(controls, strip, width);
-                count = PlayArtAddQuad(vertices, count, capacity, strip);
-                if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
-            }
-        } else if (step->mUnknown10 == -1) stop = 1;
-        if (arrowKind) {
+            break;
+        }
+        }
+        if (hasArrow) {
             if (!drawn && extend) {
                 controls[1] = starts[i];
                 starts[i].mY -= 8.0f;
                 controls[0] = starts[i];
                 if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
                 if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-                ends[i+1] = controls[1];
+                ends[i] = controls[1];
                 PlayAlignBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
             }
-            PlayArtVertex_t axis[2];
             if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}
-            else {axis[0] = ends[i+1]; axis[1] = starts[i];}
+            else {axis[0] = ends[i]; axis[1] = starts[i];}
             if (fabsf(axis[0].mX - axis[1].mX) == 0.0f && fabsf(axis[0].mY - axis[1].mY) == 0.0f) {
                 axis[1].mX += 1.0f;
                 axis[1].mY += 1.0f;
             }
             if ((unsigned int)(step->mUnknown14 - 3) < 3) {
-                float x = lbl_802E98FC[kinds[i]].mX * 0.5f;
-                float y = lbl_802E98FC[kinds[i]].mY * 0.5f;
-                arrows[i][0].mX = axis[0].mX - x;
-                arrows[i][2].mX = axis[0].mX - x;
-                arrows[i][3].mY = axis[0].mY - y;
-                arrows[i][1].mY = axis[0].mY + y;
-                arrows[i][3].mX = axis[0].mX + x;
-                arrows[i][0].mY = axis[0].mY + y;
-                arrows[i][1].mX = axis[0].mX + x;
-                arrows[i][2].mY = axis[0].mY - y;
+                strip[0].mX = lbl_802E98FC[kinds[i]].mX * 0.5f;
+                strip[0].mY = lbl_802E98FC[kinds[i]].mY * 0.5f;
+                arrows[i][0].mX = axis[0].mX - strip[0].mX;
+                arrows[i][2].mX = axis[0].mX - strip[0].mX;
+                arrows[i][3].mY = axis[0].mY - strip[0].mY;
+                arrows[i][1].mY = axis[0].mY + strip[0].mY;
+                arrows[i][3].mX = axis[0].mX + strip[0].mX;
+                arrows[i][0].mY = axis[0].mY + strip[0].mY;
+                arrows[i][1].mX = axis[0].mX + strip[0].mX;
+                arrows[i][2].mY = axis[0].mY - strip[0].mY;
             } else {
                 PlayArtBuildArrowQuad(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
                 for (int j = 0; j < 4; ++j) arrows[i][j] = strip[j];
             }
         }
-        if (stop) break;
     }
     return count;
 }
