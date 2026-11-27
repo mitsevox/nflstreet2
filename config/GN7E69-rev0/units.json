@@ -27505,25 +27505,13 @@
     },
     {
       "source": "src/engine/pathtrack.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and data row 0x802AEA60-0x802AEB90. Twenty-six exact routines and complete native read-only data link; the track initializer and track-state dispatcher retain original bytes.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and data row 0x802AEA60-0x802AEB90. All twenty-eight routines are exact and link with the complete native read-only data.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B3AD0",
-          "end": "0x801B3FE0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B4174",
-          "end": "0x801B43CC"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B44BC",
           "end": "0x801B45D0"
         },
         {
@@ -27532,20 +27520,7 @@
           "start": "0x802AEA60",
           "end": "0x802AEB90"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_inittrack",
-            "evidence": "evidence.tsv source-form 0x801B3FE0-0x801B4174"
-          },
-          {
-            "function": "PATHI_dispatchtrackstate",
-            "evidence": "evidence.tsv source-form 0x801B43CC-0x801B44BC"
-          }
-        ],
-        "evidence": "merge notes of the pull request linking the exact pathtrack.c functions"
-      }
+      ]
     },
     {
       "source": "src/engine/pathrand.c",

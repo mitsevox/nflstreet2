@@ -27257,37 +27257,6 @@
       ]
     },
     {
-      "source": "src/engine/pathtrack.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B3AD0-0x801B45D0 and two HOLDOUT source-form rows. Twenty-six exact bodies, including the base constructor, and the complete native read-only section link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B3AD0",
-          "end": "0x801B45D0"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEA60",
-          "end": "0x802AEB90"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATHI_inittrack",
-          "start": "0x801B3FE0",
-          "end": "0x801B4174"
-        },
-        {
-          "symbol": "PATHI_dispatchtrackstate",
-          "start": "0x801B43CC",
-          "end": "0x801B44BC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathvol.c",
       "profile": "path_cxx",
       "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
