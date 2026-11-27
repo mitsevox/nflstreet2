@@ -583,10 +583,6 @@
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
     },
-    "sprintf": {
-      "address": "0x801C2E18",
-      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
     "__main": {
       "address": "0x8025E1D8",
       "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
@@ -30400,6 +30396,52 @@
           }
         ],
         "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISActionProcess.c holds out UISAddThreadActionAt."
+      }
+    },
+    {
+      "source": "src/engine/sprintf.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteInt, _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2728",
+          "end": "0x801C289C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2D88",
+          "end": "0x801C2EB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF018",
+          "end": "0x802AF058"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_WriteInt",
+            "evidence": "evidence.tsv source-form 0x801C20F0-0x801C21D0"
+          },
+          {
+            "function": "_WriteFloat",
+            "evidence": "evidence.tsv source-form 0x801C21D0-0x801C2428"
+          },
+          {
+            "function": "_WriteSci",
+            "evidence": "evidence.tsv source-form 0x801C2428-0x801C2728"
+          },
+          {
+            "function": "vsnprintf",
+            "evidence": "evidence.tsv source-form 0x801C289C-0x801C2D88"
+          }
+        ],
+        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteInt, _WriteFloat, _WriteSci and vsnprintf."
       }
     }
   ]

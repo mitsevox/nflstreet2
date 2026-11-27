@@ -8,7 +8,7 @@
 #include "game/TDbCompilePerformOp.h"
 
 extern "C" {
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 extern int lbl_803EB4C8;
 }
 
@@ -170,13 +170,13 @@ int PlayerDbTextFitText(char *pText)
         _PlayerDbText_szFitted[i] = ' ';
     }
     _PlayerDbText_szFitted[i] = 0;
-    fn_801C2E18(pText, "%s", _PlayerDbText_szFitted);
+    sprintf(pText, "%s", _PlayerDbText_szFitted);
     return count;
 }
 
 void PositionAbbrevFormat(int slot, char *pText)
 {
-    fn_801C2E18(pText, _PlayerDbText_apSlotAbbrevs[slot]);
+    sprintf(pText, _PlayerDbText_apSlotAbbrevs[slot]);
 }
 
 /* Discarded by the GameCube linker: the default play-style text that the Xbox counterpart
@@ -199,16 +199,16 @@ void PlayerDbTextFormatPlayStyle(char *pText, int position, int rating)
     }
     switch (rating / 10) {
     case 0:
-        fn_801C2E18(pText, _PlayerDbText_aapPlayStyles[position][0]);
+        sprintf(pText, _PlayerDbText_aapPlayStyles[position][0]);
         break;
     case 1:
-        fn_801C2E18(pText, "Balanced");
+        sprintf(pText, "Balanced");
         break;
     case 2:
-        fn_801C2E18(pText, _PlayerDbText_aapPlayStyles[position][1]);
+        sprintf(pText, _PlayerDbText_aapPlayStyles[position][1]);
         break;
     default:
-        fn_801C2E18(pText, "INVALID!");
+        sprintf(pText, "INVALID!");
         break;
     }
 }
@@ -263,30 +263,30 @@ int PlayerDbTextReadField(char *pText, int field, int player)
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x1529D0. */
 void PlayerDbTextFormatField(char *pText, int field, int value)
 {
-    fn_801C2E18(pText, "%d", value);
+    sprintf(pText, "%d", value);
     if (_PlayerDbText_asFieldKinds[field] != 0) {
         return;
     }
     switch (field) {
     case 10:
         if (value == 0) {
-            fn_801C2E18(pText, "Rookie");
+            sprintf(pText, "Rookie");
         }
         break;
     case 8:
-        fn_801C2E18(pText, "%d", value + 160);
+        sprintf(pText, "%d", value + 160);
         break;
     case 0:
-        fn_801C2E18(pText, _PlayerDbText_apPositionNames[value]);
+        sprintf(pText, _PlayerDbText_apPositionNames[value]);
         break;
     case 6:
-        fn_801C2E18(pText, "%d", value);
+        sprintf(pText, "%d", value);
         break;
     case 11:
         if (value != 0) {
-            fn_801C2E18(pText, "Left");
+            sprintf(pText, "Left");
         } else {
-            fn_801C2E18(pText, "Right");
+            sprintf(pText, "Right");
         }
         break;
     }
@@ -312,9 +312,9 @@ int PlayerDbTextGetPlayStyle(int player, char *pText)
     PlayerDbTextGetDefaultPlayStyle(szStyle);
     TDbCompilePerformOp(0, "select \x8c into \x82 from 'YALP' where 'DIGP' = \x82\n",
                         _PlayerDbText_aFieldColumns[0], &position, player);
-    fn_801C2E18(szPosition, "%d", position);
+    sprintf(szPosition, "%d", position);
     if (_PlayerDbText_asFieldKinds[0] == 0) {
-        fn_801C2E18(szPosition, _PlayerDbText_apPositionNames[position]);
+        sprintf(szPosition, _PlayerDbText_apPositionNames[position]);
     }
     tendency = PlayerDbTextReadField(szStyle, 12, player);
     PlayerDbTextFormatPlayStyle(pText, position, tendency);
@@ -354,8 +354,8 @@ short PlayerDbTextFindFreeJersey(int team, int bUp, short jersey, short low, sho
 /* Discarded by the GameCube linker; body from the Xbox counterpart 0x152B50. */
 void PlayerDbTextSetTexts(const char *pText0, const char *pText1, const char *pText2)
 {
-    fn_801C2E18(_PlayerDbText_szText0, "%s", pText0);
-    fn_801C2E18(_PlayerDbText_szText1, "%s", pText1);
-    fn_801C2E18(_PlayerDbText_szText2, "%s", pText2);
+    sprintf(_PlayerDbText_szText0, "%s", pText0);
+    sprintf(_PlayerDbText_szText1, "%s", pText1);
+    sprintf(_PlayerDbText_szText2, "%s", pText2);
 }
 }

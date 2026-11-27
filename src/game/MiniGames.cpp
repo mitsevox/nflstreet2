@@ -801,7 +801,7 @@ void PlyrAttachModel(Object_80039F5C *p);
 int fn_800C8704(int *pFirst, int *pSecond);
 int fn_800C8744(int team);
 int fn_8022B7A4(int handle, unsigned int tag, int *pValue);
-int fn_801C2D88(char *pText, int capacity, const char *pFormat, ...);
+int snprintf(char *pText, int capacity, const char *pFormat, ...);
 void ScrmSetDown(int value);
 int fn_800A2178(void);
 void ScrmPlaceBallForDrive(int value);
@@ -889,7 +889,7 @@ MiniGameCrushCarrierData *fn_8014F104(MiniGameC *p);
 void MiniGameCrushCarrierSortScoreUp(unsigned short index);
 void fn_8014F4D8(MiniGameC *p, Object_80039F5C *pPlayer, int kind, int value);
 void HudShowPlayerPopup(Object_80039F5C *p, int team, const char *pText, int value, int d);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 void HudSetScoreTableRow(int slot, const char *pText0, const char *pText1, const char *pText2, int key);
 void fn_800EFE60(int a, State_80039F5C *pQueue, Object_80039F5C *pPlayer);
 void PlyrClearPendingMsg(Object_80039F5C *pPlayer, int value);
@@ -1530,7 +1530,7 @@ void MiniGameC::GetPlayerAwardsText(int team, unsigned char index, char *text, u
 
 void MiniGameC::vfn_19(int team, int column, char *text, int capacity)
 {
-    fn_801C2D88(text,capacity,vfn_29(lbl_8031BE04[team][column]));
+    snprintf(text,capacity,vfn_29(lbl_8031BE04[team][column]));
 }
 
 unsigned char MiniGameC::vfn_25(int team, int index)
@@ -2731,7 +2731,7 @@ void MiniGame4On4PreGameC::ShowIntroScreen()
 
     if (fn_800C1E40() == 0) {
         int value = GameOptionsGet(1);
-        fn_801C2D88(text, sizeof(text), lbl_803EB2B8, value);
+        snprintf(text, sizeof(text), lbl_803EB2B8, value);
         MsgBoxShow("4 on 4", text, "|^Done");
     }
 }
@@ -3207,7 +3207,7 @@ void RefreshSixPlayerScoreRows(void *p)
         char name[24];
         char score[16];
         strcpy(name, PlyrFindById(fn_8014F104(MiniGameGetCurrent())->mpUnknown34[i].mUnknown0)->mUnknown2927 + 21);
-        fn_801C2E18(score, "%d", fn_8014F104(MiniGameGetCurrent())->mpUnknown34[i].mUnknown4);
+        sprintf(score, "%d", fn_8014F104(MiniGameGetCurrent())->mpUnknown34[i].mUnknown4);
         if (fn_8014F104(MiniGameGetCurrent())->mpUnknown34[i].mUnknown8 != 255) {
             fn_8014F104(MiniGameGetCurrent());
         }
@@ -3513,7 +3513,7 @@ void MiniGameCrushCarrierDuringPlayC::OnEnter(float dt)
         }
     }
     char text[64];
-    fn_801C2D88(text, 64, "Catch %s %s", pPlayer->mUnknown2927, pPlayer->mUnknown2927 + 21);
+    snprintf(text, 64, "Catch %s %s", pPlayer->mUnknown2927, pPlayer->mUnknown2927 + 21);
     HudShowCallout(text);
     ParticleTrailStartAfterimage(pPlayer->mpUnknown4);
     for (unsigned char i = 0; i <= 4; i++) {
@@ -4620,7 +4620,7 @@ void RefreshFourPlayerScoreRows(MiniGameJumpBallDuringPlayC *p)
             char name[20];
             strncpy(name, PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown2927 + 21, sizeof(name));
             Entry_8015005C *pEntries = fn_801530FC()->mEntries;
-            fn_801C2D88(score, sizeof(score), "%d",
+            snprintf(score, sizeof(score), "%d",
                         pEntries[i].mUnknown10 + pEntries[i].mUnknown8 * 2);
             HudSetScoreTableRow(i + 1, name, score, "", fn_801530FC()->mEntries[i].mUnknown12);
         } else {
@@ -4894,7 +4894,7 @@ void fn_80151D9C(MiniGameJumpBallC *p)
     for (i = 3; i != 0; i--) {
         if (p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown13 == 0) {
             pPlayer = PlyrFindById(p->mpUnknown1C->mpUnknown36->mEntries[i].mUnknown0);
-            fn_801C2D88(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
+            snprintf(line, sizeof(line), "Eliminated %s %s.\n", pPlayer->mUnknown2927,
                         pPlayer->mUnknown2927 + 21);
             strncat(text, line, sizeof(text) - strlen(text));
             pEntries = p->mpUnknown1C->mpUnknown36->mEntries;
@@ -6002,7 +6002,7 @@ void MiniGameOpenFieldC::vfn_35(int team, int showColors)
     int color = 255;
     int second = ScrmGetGoalTotal(team);
 
-    fn_801C2E18(text, "%d / %d", first, second);
+    sprintf(text, "%d / %d", first, second);
     if (mUnknown24 == 1) {
         int slot = team == 1 ? 1 : 2;
         Object_80039F5C *pPlayer = PlyrGet(team, 0);
@@ -6172,13 +6172,13 @@ void MiniGameOpenFieldC::GetPlayerStatText(int team, unsigned char index, int ki
     Object_80039F5C *pPlayer = PlyrGet(team, index);
     switch (kind) {
     case 0:
-        fn_801C2D88(pFirst, firstLength, "TDs");
-        fn_801C2D88(pSecond, secondLength, "%d",
+        snprintf(pFirst, firstLength, "TDs");
+        snprintf(pSecond, secondLength, "%d",
                     vfn_30(2, team, index, pPlayer));
         break;
     case 1:
-        fn_801C2D88(pFirst, firstLength, "Tackles");
-        fn_801C2D88(pSecond, secondLength, "%d",
+        snprintf(pFirst, firstLength, "Tackles");
+        snprintf(pSecond, secondLength, "%d",
                     vfn_30(1, team, index, pPlayer));
         break;
     }

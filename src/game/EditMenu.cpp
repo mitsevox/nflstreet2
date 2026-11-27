@@ -124,7 +124,7 @@ void StorySetIndexedFlag(int a, int b, int c);
 void SstlRebuildForTeam(int teamId);
 int GauntletGetCurrentTeam(int a);
 void GauntletReset(int a);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 void *UIGLibraryGetGlobal(int index);
 unsigned int UIGFontGetStringWidth(void *a, int b, int c, const char *pText);
 int DbUserFindIndex(int a);
@@ -628,9 +628,9 @@ void EditMenuGetPlayerInfo(int a, int *pValues, int *pResult, MenuArg_t text0, M
         }
         if ((unsigned int)_EditMenu_State.mUnknown64 < 14) {
             PositionAbbrevFormat(_EditMenu_State.mUnknown64, p0->mpText);
-            fn_801C2D88(p1->mpText, p1->mLength + 1, "%d ft %d in", _EditMenu_State.mUnknown68 / 12,
+            snprintf(p1->mpText, p1->mLength + 1, "%d ft %d in", _EditMenu_State.mUnknown68 / 12,
                         _EditMenu_State.mUnknown68 % 12);
-            fn_801C2D88(p2->mpText, p2->mLength + 1, "%d lbs", _EditMenu_State.mUnknown72);
+            snprintf(p2->mpText, p2->mLength + 1, "%d lbs", _EditMenu_State.mUnknown72);
         } else {
             strnzcpy(p0->mpText, "", p0->mLength + 1);
             strnzcpy(p1->mpText, "", p1->mLength + 1);

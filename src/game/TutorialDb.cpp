@@ -11,7 +11,7 @@ extern "C" {
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 int DbUserGetDb(int a);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int TutorialIsComplete(int id);
 void TutorialMarkComplete(int id);
 }
@@ -198,7 +198,7 @@ unsigned int TutorialGetPlayIndex(int a, int b, int flag)
     TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
     count = PlayBookDbCountPlays(tag, handle);
-    fn_801C2E18(key, "%02d", id);
+    sprintf(key, "%02d", id);
     for (i = 0; i < count; i++) {
         PlayBookDbLoadPlay(tag, handle, i, &record);
         if (strncmp(record.mUnknown1F0, key, 2) == 0) {
@@ -232,7 +232,7 @@ unsigned int TutorialGetOtherPlayIndex(int a, int b, int flag)
     TDbCompilePerformOp(0, "use \x8c select 'TSBP' into \x85 from 'TSBP' where '_dro' = \x85 and 'MFBP' = \x85\n", tag,
                 &handle, 1, table.mUnknown0);
     count = PlayBookDbCountPlays(tag, handle);
-    fn_801C2E18(key, "%02d", id);
+    sprintf(key, "%02d", id);
     for (i = 0; i < count; i++) {
         PlayBookDbLoadPlay(tag, handle, i, &record);
         if (strncmp(record.mUnknown1F0, key, 2) == 0) {

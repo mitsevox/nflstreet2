@@ -81,7 +81,7 @@ void EditMenuHidePlayers(void);
 int EditMenuGetMode(void);
 int EditMenuIsStoryTeam(void);
 int EditMenuIsCreateTeam(void);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int DbUserFindIndex(int a);
 int DbUserGetCurrent(void);
 }
@@ -1351,7 +1351,7 @@ void GearItemList::GetItem(int index, MenuEntry_t *pOut)
     pOut->mUnknown40 = _Gear_aItems[item].mUnknown12;
     GearDbGetName(&_Gear_sItemCursor, name, 32);
     if (side != -1) {
-        fn_801C2D88(pOut->mName, 22, "%s-%s", _Gear_aSideNames[side], name);
+        snprintf(pOut->mName, 22, "%s-%s", _Gear_aSideNames[side], name);
     } else {
         strnzcpy(pOut->mName, name, 22);
     }

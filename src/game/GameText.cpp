@@ -95,7 +95,7 @@ void GameTextShowBusyDialog(int show, const char *pText, int a, int b);
 void SysResetSystem(int a);
 int GameModeTypeIsSpecial(void);
 void MsgNameEntryGetName(char *pDest, int length);
-int fn_801C2D88(char *pDest, int length, const char *pFormat, ...);
+int snprintf(char *pDest, int length, const char *pFormat, ...);
 int ScrmGetDown(void);
 float ScrmGetLineToGain(void);
 FieldPoint_t ScrmGetBallSpot(void);
@@ -594,10 +594,10 @@ int GameTextFormatControllerPort(char *pText, int length, unsigned int port)
     }
     sprintf(text, "%d", port + 1);
     if (text[0] == 'M') {
-        fn_801C2D88(pText, length, "multitap (for PlayStation\xb1" "2) in controller port %s", text + 1);
+        snprintf(pText, length, "multitap (for PlayStation\xb1" "2) in controller port %s", text + 1);
         return 2;
     }
-    fn_801C2D88(pText, length, "controller in controller port %s", text);
+    snprintf(pText, length, "controller in controller port %s", text);
     return 1;
 }
 
@@ -870,9 +870,9 @@ void GameTextFormatInitialAndName(Object_80039F5C *p, char *pText, int length)
 {
     signed char initial = p->mUnknown2927[0];
     if (initial == 0 || initial == ' ') {
-        fn_801C2D88(pText, length, "%s", p->mUnknown2927 + 21);
+        snprintf(pText, length, "%s", p->mUnknown2927 + 21);
     } else {
-        fn_801C2D88(pText, length, "%c. %s", initial, p->mUnknown2927 + 21);
+        snprintf(pText, length, "%c. %s", initial, p->mUnknown2927 + 21);
     }
 }
 }

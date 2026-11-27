@@ -30,7 +30,7 @@ int GearDbGetSlotType(int index);
 int GearDbIsNumberItem(GearRow_t *pRow);
 int PlaDynClutFind(char *pName);
 int PlaTexCacheFindTexture(char *pName);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 
 void PlaTexRemapColors(unsigned char *pColors)
 {
@@ -78,7 +78,7 @@ void PlaTexBuildPartIds(GearRow_t *pRow, PlayerLook_t *pRecord, int *pIds, int *
         if (pRow->mUnknown52[10]) {
             int id;
 
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%02d_%s", pRow->mName, pRecord->mUnknown72, _PlaTex_aaBodyPartNames[10]);
+            snprintf(name, sizeof(name), "PLATEX_%s_%02d_%s", pRow->mName, pRecord->mUnknown72, _PlaTex_aaBodyPartNames[10]);
             i = 17;
             id = PlaTexCacheFindTexture(name);
             if (slot == 6) {
@@ -94,7 +94,7 @@ void PlaTexBuildPartIds(GearRow_t *pRow, PlayerLook_t *pRecord, int *pIds, int *
             if (part == 34 || !pRow->mUnknown52[part]) {
                 continue;
             }
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s", pRow->mName);
+            snprintf(name, sizeof(name), "PLATEX_%s", pRow->mName);
             if (pRow->mUnknown74 && !pRecord->mUnknown93) {
                 strncat(name, "_AWAY", sizeof(name) - 1 - strlen(name));
             }
@@ -103,7 +103,7 @@ void PlaTexBuildPartIds(GearRow_t *pRow, PlayerLook_t *pRecord, int *pIds, int *
                 strncat(name, _PlaTex_apBodyTypeNames[pRecord->mUnknown78], sizeof(name) - 1 - strlen(name));
             }
             if (pRow->mUnknown73) {
-                fn_801C2D88(number, sizeof(number), "_%02d", pRecord->mUnknown72);
+                snprintf(number, sizeof(number), "_%02d", pRecord->mUnknown72);
                 strncat(name, number, sizeof(name) - 1 - strlen(name));
             }
             strncat(name, "_", sizeof(name) - 1 - strlen(name));
@@ -160,9 +160,9 @@ void PlaTexBuildDefaultIds(int *pIds, PlayerLook_t *pRecord)
             continue;
         }
         if (PlaTexIsAwayPart(i) && !pRecord->mUnknown93) {
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_AWAY_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
+            snprintf(name, sizeof(name), "PLATEX_%s_AWAY_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
         } else {
-            fn_801C2D88(name, sizeof(name), "PLATEX_%s_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
+            snprintf(name, sizeof(name), "PLATEX_%s_%s%02d", _PlaTex_aaDefaultPartNames[i], _PlaTex_apBodyTypeNames[pRecord->mUnknown78], pRecord->mUnknown72);
         }
         pIds[i] = PlaTexCacheFindTexture(name);
         PlaTexSetArmArtIds(pIds, i, pRecord);
@@ -175,7 +175,7 @@ int PlaTexFindDynClut(GearRow_t *pRow)
     int palette = -1;
 
     if (pRow->mUnknown68 && stricmp(pRow->mName, "NONE")) {
-        fn_801C2D88(name, sizeof(name), "PLADYNCLUT_%s", pRow->mName);
+        snprintf(name, sizeof(name), "PLADYNCLUT_%s", pRow->mName);
         palette = PlaDynClutFind(name);
     }
     return palette;

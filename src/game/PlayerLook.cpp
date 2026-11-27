@@ -169,7 +169,7 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer);
 void PlyrRenderFreePlayer(Object_8003DEC4 *pPlayer);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 int fn_801486A0(void);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int ObjNewType_(int a, int b, int c, void (*pA)(Object_8003DEC4 *, PlayerObjInit_t *), void (*pB)(Object_8003DEC4 *));
 int ObjDelType(int a);
 void ObjSetListObjFunc(int handle, int a, int b, int (*pCallback)(Object_8003DEC4 *, int));
@@ -388,7 +388,7 @@ extern "C" void PlayerLookSetJerseyDecal(GearRow_t *pRow, int offset, unsigned c
     char name[82];
     int id;
 
-    fn_801C2D88(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
+    snprintf(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
     id = PlaTexCacheFindTexture(name);
     if (id >= 0) {
         id += offset;
@@ -415,7 +415,7 @@ extern "C" void PlayerLookSetHeadDecal(GearRow_t *pRow, int offset, int player, 
     char name[82];
     int id;
 
-    fn_801C2D88(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
+    snprintf(name, sizeof(name), "PLATEX_DECAL_%s_CHICAGO", pRow->mName);
     id = PlaTexCacheFindTexture(name);
     if (id >= 0) {
         if (strncmp(pRow->mName, "REEBOK_T045Z", 33) == 0 || strncmp(pRow->mName, "REEBOK_BO04A381", 33) == 0) {

@@ -134,7 +134,7 @@ void EditMenuShowPlayers(void);
 void EditMenuHidePlayers(void);
 int EditMenuGetMode(void);
 int EditMenuIsStoryTeam(void);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int DbFileTblLoad(int a, int tag);
 int DbFileTblDestroy(int a, int tag);
 
@@ -1292,7 +1292,7 @@ void CreatePlayerInfoOptionList::GetItem(int index, MenuEntry_t *pOut)
         strnzcpy(pOut->mName, _CreatePlayer_aPositionNames[index], 22);
         break;
     case 3:
-        fn_801C2D88(pOut->mName, 22, "%02d", index);
+        snprintf(pOut->mName, 22, "%02d", index);
         break;
     case 5:
         strnzcpy(pOut->mName, _CreatePlayer_aCelebrationNames[index], 22);
@@ -1496,7 +1496,7 @@ void CreatePlayerHairOptionList::GetItem(int index, MenuEntry_t *pOut)
         strnzcpy(pOut->mName, name, 22);
         break;
     case 4:
-        fn_801C2D88(pOut->mName, 22, "EyeBrow %d", index + 1);
+        snprintf(pOut->mName, 22, "EyeBrow %d", index + 1);
         break;
     }
 }
@@ -1665,7 +1665,7 @@ void CreatePlayerSkinOptionList::GetItem(int index, MenuEntry_t *pOut)
     int type = _CreatePlayer_aSkinParts[mUnknown8];
 
     if (type == 3) {
-        fn_801C2D88(pOut->mName, 22, "Skin Tone %d", index + 1);
+        snprintf(pOut->mName, 22, "Skin Tone %d", index + 1);
     } else {
         DbCursor cursor;
 
@@ -1717,7 +1717,7 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
     int *pMax = (int *)c;
 
     _CreatePlayer_iPendingCost = 0;
-    fn_801C2D88(pValue->mpText, pValue->mLength, "");
+    snprintf(pValue->mpText, pValue->mLength, "");
     EditMenuMovePlayers(0);
     _CreatePlayer_bSliderOpen = 1;
     switch (a) {
@@ -1727,9 +1727,9 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
         *pE = PlayerDbGetHeight(EditMenuGetPlayerCursor());
         _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 10, *pE);
         *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 10);
-        fn_801C2D88(pLeft->mpText, pLeft->mLength, "Shorter");
-        fn_801C2D88(pRight->mpText, pRight->mLength, "Taller");
-        fn_801C2D88(pValue->mpText, pValue->mLength, "%d ft %d in", *pE / 12, *pE % 12);
+        snprintf(pLeft->mpText, pLeft->mLength, "Shorter");
+        snprintf(pRight->mpText, pRight->mLength, "Taller");
+        snprintf(pValue->mpText, pValue->mLength, "%d ft %d in", *pE / 12, *pE % 12);
         if (*pE < 84) {
             _CreatePlayer_iNextCost = _CreatePlayerHeightCost(*pE, *pE + 1);
         } else {
@@ -1743,9 +1743,9 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
         _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 11, *pE);
         *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), 11);
         _CreatePlayer_iBodyType = PlayerDbGetPybt(EditMenuGetPlayerCursor());
-        fn_801C2D88(pLeft->mpText, pLeft->mLength, "Lighter");
-        fn_801C2D88(pRight->mpText, pRight->mLength, "Heavier");
-        fn_801C2D88(pValue->mpText, pValue->mLength, "%d lbs", *pE);
+        snprintf(pLeft->mpText, pLeft->mLength, "Lighter");
+        snprintf(pRight->mpText, pRight->mLength, "Heavier");
+        snprintf(pValue->mpText, pValue->mLength, "%d lbs", *pE);
         if (*pE < 380) {
             _CreatePlayer_iNextCost = _CreatePlayerWeightCost(*pE, *pE + 1);
         } else {
@@ -1770,9 +1770,9 @@ void CreatePlayerAttributeSlider::BeginSlider(int a, int b, int c, int *pD, int 
         }
         _CreatePlayerSaveOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), a, *pE);
         *pD = _CreatePlayerGetOriginal(PlayerDbGetId(EditMenuGetPlayerCursor()), a);
-        fn_801C2D88(pLeft->mpText, pLeft->mLength, "Worse");
-        fn_801C2D88(pRight->mpText, pRight->mLength, "Better");
-        fn_801C2D88(pValue->mpText, pValue->mLength, "Level %d", *pE);
+        snprintf(pLeft->mpText, pLeft->mLength, "Worse");
+        snprintf(pRight->mpText, pRight->mLength, "Better");
+        snprintf(pValue->mpText, pValue->mLength, "Level %d", *pE);
         EditMenuSetRatingFlag(EditMenuGetSlotRating(a), 1);
         break;
     }
@@ -1785,7 +1785,7 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
     int result = 0;
     int cost;
 
-    fn_801C2D88(pParams->mpText, pParams->mLength, "");
+    snprintf(pParams->mpText, pParams->mLength, "");
     switch (a) {
     case 10:
         if (b >= 65 && b <= 84 && b >= EditMenuGetSliderMin()) {
@@ -1813,7 +1813,7 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
         if (!result) {
             b = EditMenuGetSliderValue();
         }
-        fn_801C2D88(pParams->mpText, pParams->mLength, "%d ft %d in", b / 12, b % 12);
+        snprintf(pParams->mpText, pParams->mLength, "%d ft %d in", b / 12, b % 12);
         EditMenuSetHeight(b);
         break;
     case 11:
@@ -1836,7 +1836,7 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
         if (!result) {
             b = EditMenuGetSliderValue();
         }
-        fn_801C2D88(pParams->mpText, pParams->mLength, "%d lbs", b);
+        snprintf(pParams->mpText, pParams->mLength, "%d lbs", b);
         EditMenuSetWeight(b);
         break;
     default: {
@@ -1874,7 +1874,7 @@ int CreatePlayerAttributeSlider::MoveSlider(int a, int b, MenuArg_t text)
         if (!result) {
             b = EditMenuGetSliderValue();
         }
-        fn_801C2D88(pParams->mpText, pParams->mLength, "Level %d", b);
+        snprintf(pParams->mpText, pParams->mLength, "Level %d", b);
         break;
     }
     }

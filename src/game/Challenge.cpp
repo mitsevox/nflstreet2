@@ -183,7 +183,7 @@ int ScrmGetOffenseTeam(void);
 int ScrmGetTeamScore(int team);
 int UserProfileFindIndex(int a);
 void UserProfileAddRecordRow(int index);
-int fn_801C2D88(char *pBuffer, int size, const char *pFormat, ...);
+int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 int fn_8022B7A4(int handle, int tag, void *pValue);
 int DbUserGetId(int index);
 int DbUserGetDb(int handle);
@@ -406,11 +406,11 @@ void ChalFormatDevPoints(char *pBuffer, int size, unsigned int value)
     unsigned short thousands = (unsigned short)(value / 1000) % 1000;
 
     if (value > 999) {
-        fn_801C2D88(text, 16, "%d,%03d", thousands, ones);
+        snprintf(text, 16, "%d,%03d", thousands, ones);
     } else {
-        fn_801C2D88(text, 16, "%d", value);
+        snprintf(text, 16, "%d", value);
     }
-    fn_801C2D88(pBuffer, size, "%s Development Points", text);
+    snprintf(pBuffer, size, "%s Development Points", text);
 }
 
 void ChalFormatPlayerChoice(char *pBuffer, int size, int value)
@@ -550,7 +550,7 @@ void ChalReadRecord(DbCursor *pObject, Challenge_t *pRecord, int level)
             if (*p == '%' && (lbl_802AEF10 + 1)[(unsigned char)p[1]] & 4 && (unsigned int)(p[1] - '1') <= 3) {
                 char *q;
 
-                fn_801C2D88(number, 12, "%d", pRecord->mUnknown1C4[p[1] - '1'].mValue);
+                snprintf(number, 12, "%d", pRecord->mUnknown1C4[p[1] - '1'].mValue);
                 for (q = number; *q != 0 && length < 200; q++) {
                     pRecord->mUnknownCB[length++] = *q;
                 }
@@ -850,12 +850,12 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
                 a++;
             }
         }
-        fn_801C2D88(text, 128, pFormat, a);
+        snprintf(text, 128, pFormat, a);
         strncpy(pText, text, size);
     } else {
         switch (type) {
         case 3:
-            fn_801C2D88(text, 128, pFormat, StyleTrackerGetTotal(1));
+            snprintf(text, 128, pFormat, StyleTrackerGetTotal(1));
             strncpy(pText, text, size);
             break;
         case 6:
@@ -863,55 +863,55 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             fn_8022B7A4(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
             case 5:
-                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                snprintf(text, 128, pFormat, a + b + 1);
                 break;
             case 4:
                 if ((unsigned char)fn_800B9A90(lbl_803EAB84)) {
-                    fn_801C2D88(text, 128, pFormat, a + b);
+                    snprintf(text, 128, pFormat, a + b);
                     break;
                 }
             case 2:
             case 3:
-                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                snprintf(text, 128, pFormat, a + b + 1);
                 break;
             default:
-                fn_801C2D88(text, 128, pFormat, a + b);
+                snprintf(text, 128, pFormat, a + b);
                 break;
             }
             strncpy(pText, text, size);
             break;
         case 0x1F:
-            fn_801C2D88(text, 128, pFormat, fn_800A7E40(1));
+            snprintf(text, 128, pFormat, fn_800A7E40(1));
             strncpy(pText, text, size);
             break;
         case 0x29:
             fn_8022B7A4(1, 0x74727374, &a);
             fn_8022B7A4(1, 0x74507374, &b);
             fn_8022B7A4(1, 0x64647374, &c);
-            fn_801C2D88(text, 128, pFormat, a + b + c);
+            snprintf(text, 128, pFormat, a + b + c);
             strncpy(pText, text, size);
             break;
         case 0x2A:
-            fn_801C2D88(text, 128, pFormat, ScrmGetTeamScore(1));
+            snprintf(text, 128, pFormat, ScrmGetTeamScore(1));
             strncpy(pText, text, size);
             break;
         case 0x2D:
             fn_8022B7A4(0, 0x74727374, &a);
             fn_8022B7A4(0, 0x74507374, &b);
             fn_8022B7A4(0, 0x64647374, &c);
-            fn_801C2D88(text, 128, pFormat, a + b + c);
+            snprintf(text, 128, pFormat, a + b + c);
             strncpy(pText, text, size);
             break;
         case 0x2E:
-            fn_801C2D88(text, 128, pFormat, ScrmGetTeamScore(0));
+            snprintf(text, 128, pFormat, ScrmGetTeamScore(0));
             strncpy(pText, text, size);
             break;
         case 0x31:
             fn_8022B7A4(1, 0x43637374, &a);
             if (a >= value) {
-                fn_801C2D88(text, 128, "Best Completion Streak: %d", a);
+                snprintf(text, 128, "Best Completion Streak: %d", a);
             } else {
-                fn_801C2D88(text, 128, "Current Completion Streak: %d", StyleTrackerGetCatchStreak(1));
+                snprintf(text, 128, "Current Completion Streak: %d", StyleTrackerGetCatchStreak(1));
             }
             strncpy(pText, text, size);
             break;
@@ -920,19 +920,19 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
             fn_8022B7A4(0, 0x6E737374, &b);
             switch (fn_800AD9B4()) {
             case 5:
-                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                snprintf(text, 128, pFormat, a + b + 1);
                 break;
             case 4:
                 if ((unsigned char)fn_800B9A90(lbl_803EAB84)) {
-                    fn_801C2D88(text, 128, pFormat, a + b);
+                    snprintf(text, 128, pFormat, a + b);
                     break;
                 }
             case 2:
             case 3:
-                fn_801C2D88(text, 128, pFormat, a + b + 1);
+                snprintf(text, 128, pFormat, a + b + 1);
                 break;
             default:
-                fn_801C2D88(text, 128, pFormat, a + b);
+                snprintf(text, 128, pFormat, a + b);
                 break;
             }
             strncpy(pText, text, size);
@@ -940,31 +940,31 @@ void ChalFormatGoalProgress(int type, unsigned int value, char *pText, int size)
         case 0x3A:
             fn_8022B7A4(1, 0x61707374, &a);
             fn_8022B7A4(1, 0x6E737374, &b);
-            fn_801C2D88(text, 128, pFormat, b != 0 ? (unsigned int)((float)a / (float)b * 100.0f) : 0);
+            snprintf(text, 128, pFormat, b != 0 ? (unsigned int)((float)a / (float)b * 100.0f) : 0);
             strncpy(pText, text, size);
             break;
         case 0x3E:
             fn_8022B7A4(1, 0x43737374, &a);
             if (a >= value) {
-                fn_801C2D88(text, 128, "Best Stylin' Completion Streak: %d", a);
+                snprintf(text, 128, "Best Stylin' Completion Streak: %d", a);
             } else {
-                fn_801C2D88(text, 128, "Current Stylin' Completion Streak: %d", StyleTrackerGetStyleCatchStreak(1));
+                snprintf(text, 128, "Current Stylin' Completion Streak: %d", StyleTrackerGetStyleCatchStreak(1));
             }
             strncpy(pText, text, size);
             break;
         case 0x42:
             fn_8022B7A4(1, 0x50637374, &a);
             if (a >= value) {
-                fn_801C2D88(text, 128, "Consecutive Pitches One Play Best: %d", a);
+                snprintf(text, 128, "Consecutive Pitches One Play Best: %d", a);
             } else {
-                fn_801C2D88(text, 128, "Consecutive Pitches Last Play: %d", a);
+                snprintf(text, 128, "Consecutive Pitches Last Play: %d", a);
             }
             strncpy(pText, text, size);
             break;
         case 0x4A:
             fn_8022B7A4(1, 0x61707374, &a);
             fn_8022B7A4(1, 0x63707374, &b);
-            fn_801C2D88(text, 128, "Incomplete Passes: %d", a - b);
+            snprintf(text, 128, "Incomplete Passes: %d", a - b);
             strncpy(pText, text, size);
             break;
         }
@@ -1004,9 +1004,9 @@ void ChalFormatGearReward(char *pBuffer, int size, int id)
                             separate = 1;
                         }
                         if (modifiers[i] < 0) {
-                            fn_801C2D88(number, 8, "%d ", (short)(modifiers[i] / 5));
+                            snprintf(number, 8, "%d ", (short)(modifiers[i] / 5));
                         } else {
-                            fn_801C2D88(number, 8, "+%d ", (short)(modifiers[i] / 5));
+                            snprintf(number, 8, "+%d ", (short)(modifiers[i] / 5));
                         }
                         strncat(pBuffer, number, size);
                         fn_800B4A18(i, stat, 32);
@@ -1063,14 +1063,14 @@ void ChalFormatRewards(Challenge_t *pRecord, char *pBuffer, unsigned short size)
 
         for (i = 0; i <= 2; i++) {
             ChalFormatReward(pInfo->mUnknown1C, pInfo->mUnknown20[i], value, 200);
-            fn_801C2D88(p, left, "%s - %s\n", _Chal_aszMedalNames[i], value);
+            snprintf(p, left, "%s - %s\n", _Chal_aszMedalNames[i], value);
             p += strlen(p);
             left -= strlen(p);
         }
     } else {
         for (i = 0; i <= 1 && pRecord->mUnknown1F4[i].mId != 0; i++) {
             ChalFormatReward(pRecord->mUnknown1F4[i].mId, pRecord->mUnknown1F4[i].mUnknown4, value, 200);
-            fn_801C2D88(p, left, "%s\n", value);
+            snprintf(p, left, "%s\n", value);
             p += strlen(p);
             left -= strlen(p);
         }
