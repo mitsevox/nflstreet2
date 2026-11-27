@@ -26805,67 +26805,6 @@
       ]
     },
     {
-      "source": "src/engine/pathvol.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B45D0",
-          "end": "0x801B51AC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEB90",
-          "end": "0x802AEC08"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATH_volume",
-          "start": "0x801B45D0",
-          "end": "0x801B4728"
-        },
-        {
-          "symbol": "PATH_fade",
-          "start": "0x801B4728",
-          "end": "0x801B4824"
-        },
-        {
-          "symbol": "PATHI_fade",
-          "start": "0x801B4898",
-          "end": "0x801B4960"
-        },
-        {
-          "symbol": "PATHI_customsfxfade",
-          "start": "0x801B4960",
-          "end": "0x801B49C4"
-        },
-        {
-          "symbol": "PATHI_customdrylevelfade",
-          "start": "0x801B49C4",
-          "end": "0x801B4A24"
-        },
-        {
-          "symbol": "PATHI_setfadevolume",
-          "start": "0x801B4A24",
-          "end": "0x801B4CE4"
-        },
-        {
-          "symbol": "PATHI_setsfxfadevolume",
-          "start": "0x801B4CE4",
-          "end": "0x801B4F50"
-        },
-        {
-          "symbol": "PATHI_setdrylevelfadevolume",
-          "start": "0x801B4F50",
-          "end": "0x801B51AC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
       "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
@@ -26894,11 +26833,6 @@
           "symbol": "PATHI_serviceaction",
           "start": "0x801B7880",
           "end": "0x801B845C"
-        },
-        {
-          "symbol": "PATHI_getvalue",
-          "start": "0x801B864C",
-          "end": "0x801B89B0"
         }
       ]
     },
