@@ -478,7 +478,7 @@ extern float gFrameTimeScale;
 }
 
 extern "C" {
-int fn_800A7F58(int team);
+int GamebreakerGetShedFlag(int team);
 }
 
 extern "C" {
@@ -1428,10 +1428,10 @@ extern "C" {
 int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800E5EA4 *pA, Record_800E5EA4 *pB,
                 unsigned int kind)
 {
-    if (fn_800A7F58(p->mIdBytes[2]) == 2) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 2) {
         return 1;
     }
-    if (fn_800A7F58(p->mIdBytes[2]) == 0) {
+    if (GamebreakerGetShedFlag(p->mIdBytes[2]) == 0) {
         return 0;
     }
     short *pOtherRatings = pOther->mRatings;

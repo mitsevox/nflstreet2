@@ -226,7 +226,7 @@ void fn_800C7794(Object_80039F5C *p);
 void PlyrContactHitWall(Object_80039F5C *p);
 void fn_800C89BC(Object_80039F5C *p);
 void fn_800EFFA0(int a, State_80039F5C *pQueue, Object_80039F5C *p, int flag);
-void fn_800A5E68(Object_80039F5C *p);
+void DefReactValidate(Object_80039F5C *p);
 void PlyrUpdateControlFlag(Object_80039F5C *p, int flag);
 void fn_800C7D44(Object_80039F5C *p);
 void fn_8011E13C(void);
@@ -723,7 +723,7 @@ extern "C" void PlyrMgrUpdate(void)
         }
         fn_800C89BC(p);
         fn_800EFFA0(0, &p->mQueue[0], p, active);
-        fn_800A5E68(p);
+        DefReactValidate(p);
         PlyrUpdatePendingMsg(p);
         PlyrUpdateControlFlag(p, active);
     }

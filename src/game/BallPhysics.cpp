@@ -30,8 +30,8 @@ extern float gFrameTimeScale;
 extern "C" {
 BigObjInst *BallModelGetLinkedObj(Block_80170E64 *pBlock);
 BigObj_t *BigObjGet(int index);
-float fn_800A33D0(void);
-int fn_800A33DC(void);
+float StadiumGetPrecipFactor(void);
+int StadiumGetTempLevel(void);
 void fn_800B1508(void);
 unsigned char fn_800B65A0(int team);
 void fn_800B6714(Object_80039F5C *p, int port);
@@ -745,8 +745,8 @@ float BallGetHeightAtTime(Ball_t *pBall, float t)
 
 void BallResetPhysics(Ball_t *pBall)
 {
-    fn_800A33DC();
-    fn_800A33D0();
+    StadiumGetTempLevel();
+    StadiumGetPrecipFactor();
     // FAKEMATCH: The overwritten zero store recovers the register allocation for both scales.
     pBall->mState.mUnknownE8 = 0.0f;
     pBall->mState.mUnknownE8 = 1.2f;

@@ -72,7 +72,7 @@ struct CoinTossCamEntry_t {
 extern "C" {
 void fn_800CC560(int a);
 void fn_800FF6D8(Object_80039F5C *p);
-void fn_800A3B5C(Object_80039F5C *p);
+void PlyrOverlayAnimStopAll(Object_80039F5C *p);
 void InGameSetInputPaused(int unknown);
 int FELoopIsMainFEActive(void);
 void PlyrRefSet(int *pRef, int a, int b, int c);
@@ -332,7 +332,7 @@ void CoinTossLockPlayer(Object_80039F5C *p)
 void CoinTossUnlockPlayer(Object_80039F5C *p)
 {
     if (p != 0) {
-        fn_800A3B5C(p);
+        PlyrOverlayAnimStopAll(p);
     }
 }
 

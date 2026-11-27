@@ -94,7 +94,7 @@ int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 float MathCos(int angle);
 int ScrmIsNotReplay(void);
-int fn_800A7F30(int team);
+int GamebreakerGetPursueFlag(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 int ScrmTestPlayFlag(int bit);
 float ScrmGetGoalLineY(void);
@@ -239,7 +239,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
     Vec2Sub(delta, &position, &motion->mPos);
     int heading = MathArcTan2(delta[1], delta[0]);
     PursueState_t *state = (PursueState_t *)&p->mUnknown336;
-    if (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
+    if (!GamebreakerGetPursueFlag((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))
         state->mUnknown13 = 0;
     else state->mUnknown13--;
     state->mUnknown14--;
@@ -287,7 +287,7 @@ extern "C" void PursueTryMoves(Object_80039F5C *p, Object_80039F5C *other, Vecto
                 }
             } else if (!(distance >= 10.0f) && PursueGetTarget() == BallGetCurrentHolder()) odds = 80;
             if (SyncRandGetRange(0, 100) < (unsigned int)odds ||
-                (!fn_800A7F30((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
+                (!GamebreakerGetPursueFlag((unsigned char)(1 - p->mIdBytes[2])) && fn_800A851C(p->mIdBytes[2], p))) {
                 reference = fn_8009BCE8(&block->mUnknown4);
                 int mode;
                 if (reference->mUnknown1052 == 1) mode = 8;

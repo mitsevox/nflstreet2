@@ -103,7 +103,7 @@ static CamShotCamera_t *_CamShot_pCamera = 0;
 static CamShotState_t *_CamShot_pState = 0;
 static unsigned char _CamShot_bActive = 0;
 int InGameIsStopped(void);
-void fn_800A3B5C(void);
+void PlyrOverlayAnimStopAll(void);
 int fn_800AD9B4(void);
 void CamGameSelectCamera(int);
 GameCamera_t *CamGameGetCamera(int);
@@ -199,7 +199,7 @@ extern "C" void CamShotEndFollow(CamShotCamera_t *p)
     if (b->mRef) {
         Object_80039F5C *o = fn_8009BCE8(&b->mRef);
         o->mpUnknown4->mUnknown20 &= ~0x400;
-        fn_800A3B5C();
+        PlyrOverlayAnimStopAll();
         if (b->mFlags & 0x20) {
             CamShotSetTeamBlockFlag(o->mIdBytes[2], 1);
             CamShotSetTeamPlayerFlag(o->mIdBytes[2], 1);

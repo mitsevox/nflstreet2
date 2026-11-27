@@ -100,7 +100,7 @@
 #include "game/EnvFogSettings.h"
 #include "game/Block_800BFAD0.h"
 #include "game/DbCursor.h"
-#include "game/fn_800A3530.h"
+#include "game/PlyrOverlayAnim.h"
 #include "game/PlyrSlot.h"
 #include "engine/viewport.h"
 #include "game/Record_800CE608.h"
@@ -826,7 +826,7 @@ extern "C" float ScrmGetGoalLineY(void);
 
 extern "C" int lbl_803EA924[2];
 
-/* Halfword pair of the array returned by fn_8011F50C; fn_800A554C passes one
+/* Halfword pair of the array returned by fn_8011F50C; DefReactCanReact passes one
    to the callbacks of the .data table 0x802D7E4C. */
 struct Pair_800A554C {
     unsigned short mUnknown0;
@@ -6170,67 +6170,67 @@ extern "C" void PlayResultBuild(ScrmPlayResult_t *pResult, ScrmPlayResult_t *pSa
 
 extern "C" int PlayResultStepPoll(void);
 
-extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input);
+extern "C" void PlayResultCommit(ScrmPlayResult_t *result,ScrmPlayResult_t *input);
 
-extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value);
+extern "C" void PlayResultBeginPostPlay(ScrmPlayResult_t *result,ScrmPlayResult_t *value);
 
-extern "C" void fn_800A20D0(int team, int delta);
+extern "C" void PlayResultAddScore(int team, int delta);
 
-extern "C" int fn_800A2160(void);
+extern "C" int PlayResultIsDone(void);
 
 extern "C" void fn_800A216C(int value);
 
 extern "C" int fn_800A2178(void);
 
-extern "C" void fn_800A2184(void);
+extern "C" void PlayResultClearEventBits(void);
 
 extern "C" void fn_800A2190(int bit);
 
-extern "C" unsigned char fn_800A21A8(int bit);
+extern "C" unsigned char PlayResultTestEventBit(int bit);
 
-extern "C" void fn_800A21BC(void);
+extern "C" void StadiumSetupVenue4(void);
 
-extern "C" void fn_800A2228(void);
+extern "C" void StadiumSetupVenue0(void);
 
-extern "C" void fn_800A227C(void);
+extern "C" void StadiumSetupVenue3(void);
 
-extern "C" void fn_800A22E4(void);
+extern "C" void StadiumSetupVenue1(void);
 
-extern "C" void fn_800A233C(void);
+extern "C" void StadiumSetupVenue9(void);
 
-extern "C" void fn_800A238C(void);
+extern "C" void StadiumSetupVenue7(void);
 
-extern "C" void fn_800A23F0(void);
+extern "C" void StadiumSetupVenue2(void);
 
-extern "C" void fn_800A244C(void);
+extern "C" void StadiumSetupVenue5(void);
 
-extern "C" void fn_800A24A0(void);
+extern "C" void StadiumSetupVenue6(void);
 
-extern "C" void fn_800A2500(void);
+extern "C" void StadiumSetupVenue10(void);
 
-extern "C" void fn_800A2560(void);
+extern "C" void StadiumSetupVenue11(void);
 
-extern "C" void fn_800A25BC(void);
+extern "C" void StadiumSetupVenue8(void);
 
-extern "C" int fn_800A2624(void);
+extern "C" int StadiumIsCamPastEndLine(void);
 
-extern "C" int fn_800A262C(void);
+extern "C" int StadiumCheckCamPastNearEnd(void);
 
-extern "C" int fn_800A26C4(void);
+extern "C" int StadiumCheckCamPastFarEnd(void);
 
-extern "C" int fn_800A2760(void);
+extern "C" int StadiumGetResBase(void);
 
-extern "C" void fn_800A2848(void);
+extern "C" void StadiumLoadConditions(void);
 
-extern "C" void fn_800A29AC(void);
+extern "C" void StadiumPollMiniGame(void);
 
-extern "C" void fn_800A29D8(int mode);
+extern "C" void StadiumSelectSetup(int mode);
 
-extern "C" void fn_800A2B40(void);
+extern "C" void StadiumUpdateWind(void);
 
-extern "C" void fn_800A2D2C(void);
+extern "C" void StadiumInitEffects(void);
 
-extern "C" void fn_800A2E80(int index, int count);
+extern "C" void StadiumApplyScreenTint(int index, int count);
 
 extern "C" void fn_800A2F3C(int value);
 
@@ -6240,7 +6240,7 @@ extern "C" void fn_800A30B8(void);
 
 extern "C" void fn_800A3120(float value);
 
-extern "C" void fn_800A3170(void);
+extern "C" void StadiumSpawnEmitters(void);
 
 extern "C" float fn_800A32B4(void);
 
@@ -6252,145 +6252,145 @@ extern "C" float fn_800A32D8(void);
 
 extern "C" float fn_800A32E4(void);
 
-extern "C" void *fn_800A3360(void);
+extern "C" void *StadiumGetGamebreakerTint(void);
 
-extern "C" void *fn_800A336C(void);
+extern "C" void *StadiumGetResDevice(void);
 
-extern "C" int fn_800A3374(void);
+extern "C" int StadiumGetEnvObjResIndex(void);
 
-extern "C" int fn_800A3380(void);
+extern "C" int StadiumGetLevelResIndex(void);
 
-extern "C" int fn_800A338C(void);
+extern "C" int StadiumGetSkyResIndex(void);
 
-extern "C" int fn_800A3398(void);
+extern "C" int StadiumGetFldObjResIndex(void);
 
-extern "C" int fn_800A33A4(void);
+extern "C" int StadiumGetDivotResIndex(void);
 
-extern "C" int fn_800A33B0(void);
+extern "C" int StadiumIsWindEnabled(void);
 
-extern "C" int fn_800A33B8(void);
+extern "C" int StadiumGetWeatherMode(void);
 
-extern "C" float fn_800A33C4(void);
+extern "C" float StadiumGetPrecipLevel(void);
 
-extern "C" float fn_800A33D0(void);
+extern "C" float StadiumGetPrecipFactor(void);
 
-extern "C" int fn_800A33DC(void);
+extern "C" int StadiumGetTempLevel(void);
 
-extern "C" int fn_800A33E8(void);
+extern "C" int StadiumGetWindDir(void);
 
-extern "C" float fn_800A33F4(void);
+extern "C" float StadiumGetWindLevel(void);
 
-extern "C" float fn_800A3400(void);
+extern "C" float StadiumGetFogDensity(void);
 
-extern "C" int fn_800A3410(void);
+extern "C" int StadiumGetFogColor(void);
 
-extern "C" int fn_800A3420(void);
+extern "C" int StadiumGetSkyState(void);
 
-extern "C" void *fn_800A342C(void);
+extern "C" void *StadiumGetLightDir(void);
 
-extern "C" Vector_80039F5C *fn_800A3438(void);
+extern "C" Vector_80039F5C *StadiumGetSunPos(void);
 
 extern "C" int fn_800A3444(void);
 
-extern "C" void fn_800A3450(void);
+extern "C" void StadiumReleaseEmitters(void);
 
-extern "C" int fn_800A34B0(void);
+extern "C" int StadiumShowsMarkerBeams(void);
 
-extern "C" int fn_800A34BC(void);
+extern "C" int StadiumShowsMarkerArrows(void);
 
-extern "C" int fn_800A34C8(int index);
+extern "C" int StadiumGetEffectCount(int index);
 
-extern "C" int fn_800A34E0(void);
+extern "C" int StadiumGetCameraPreset(void);
 
-extern "C" EnvFogSettings *fn_800A34EC(void);
+extern "C" EnvFogSettings *StadiumGetFogSettings(void);
 
-extern "C" int fn_800A34F8(int index);
+extern "C" int StadiumIsAnimTexGroupOn(int index);
 
-extern "C" int fn_800A350C(void);
+extern "C" int StadiumHasCrowd(void);
 
-extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
+extern "C" int PlyrOverlayAnimTableCallback(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
 
-extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
+extern "C" int PlyrOverlayAnimPoseCallback(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
 
-extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
+extern "C" int PlyrOverlayAnimIndexCallback(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
 
-extern "C" int fn_800A3B10(Object_80039F5C *p);
+extern "C" int PlyrOverlayAnimCountActive(Object_80039F5C *p);
 
 extern "C" void fn_800A3B58(Object_80039F5C *p, int a, int b);
 
-extern "C" void fn_800A3B5C(Object_80039F5C *p);
+extern "C" void PlyrOverlayAnimStopAll(Object_80039F5C *p);
 
-extern "C" void fn_800A3C14(void);
+extern "C" void PlyrOverlayAnimLoad(void);
 
-extern "C" void fn_800A3D68(int value);
+extern "C" void PlyrOverlayAnimSetActive(int value);
 
-extern "C" void fn_800A3D70(void);
+extern "C" void PlyrOverlayAnimRegisterCallbacks(void);
 
-extern "C" int fn_800A3DC4(int value);
+extern "C" int DefReactIsTurnKind(int value);
 
-extern "C" int fn_800A3E00(Object_80039F5C *p);
+extern "C" int DefReactIsStateAllowed(Object_80039F5C *p);
 
-extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused);
+extern "C" int DefReactTryTurn(Object_80039F5C *p, int angle, int unused);
 
-extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *block);
+extern "C" unsigned short PlyrTurnAnimSelectReact(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *block);
 
-extern "C" void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock);
+extern "C" void PlyrTurnAnimResetBlock(Object_80039F5C *p, Block_801BE60C *pBlock);
 
-extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock);
+extern "C" void PlyrTurnAnimSetRateFromSpeed(Object_80039F5C *p, Block_801BE60C *pBlock);
 
-extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB);
+extern "C" int PlyrTurnAnimKeyMatches(Key_80110630 *pA, Key_80110630 *pB);
 
-extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock);
+extern "C" unsigned short PlyrTurnAnimSelectByAngle(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock);
 
-extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
+extern "C" int PlyrTurnAnimCallback(Table_80089904 *table, unsigned short key, void *record, AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase);
 
 extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int reverse);
 
-extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget);
+extern "C" int DefReactGetFlankAngle(Object_80039F5C *p, Object_80039F5C *pTarget);
 
-extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
+extern "C" void DefReactParamsBoost(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
-extern "C" void fn_800A4950(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
+extern "C" void DefReactParamsByState(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
-extern "C" void fn_800A4980(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
+extern "C" void DefReactParamsByDistance(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
-extern "C" void fn_800A4E64(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
+extern "C" void DefReactParamsAlways(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams);
 
 extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind, int level);
 
-extern "C" int fn_800A506C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestFirstInView(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestDecayChance(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestBothInView(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestByRole(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestNearFacing(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestEngaged(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactTestInRange(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, int index);
+extern "C" int DefReactCanReact(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, int index);
 
-extern "C" int fn_800A55C0(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
+extern "C" int DefReactSteerStop(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther, Pair_800A554C *pPair);
 
-extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerToTarget(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A563C(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerIntercept(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerFlank(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A5718(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerInterceptOnce(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerFixedHeading(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerLead(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerMatchHeading(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
-extern "C" int fn_800A5A60(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
+extern "C" int DefReactSteerNone(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState);
 
 extern "C" void fn_800A5A68(Pair_800A554C *pPairs);
 
@@ -6400,73 +6400,73 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
 
 extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b);
 
-extern "C" void fn_800A5D94(void);
+extern "C" void DefReactResetCounts(void);
 
 extern "C" int fn_800A5DD0(Object_80039F5C *p);
 
-extern "C" void fn_800A5DD8(Object_80039F5C *p);
+extern "C" void DefReactSelectInput(Object_80039F5C *p);
 
-extern "C" void fn_800A5E20(Object_80039F5C *p);
+extern "C" void DefReactSelectPursueInput(Object_80039F5C *p);
 
-extern "C" void fn_800A5E68(Object_80039F5C *p);
+extern "C" void DefReactValidate(Object_80039F5C *p);
 
-extern "C" int fn_800A5EB8(Object_80039F5C *a, Object_80039F5C *b);
+extern "C" int HandoffCamIsExchange(Object_80039F5C *a, Object_80039F5C *b);
 
-extern "C" unsigned char fn_800A5F20(Object_80039F5C *p);
+extern "C" unsigned char HandoffCamGetDuration(Object_80039F5C *p);
 
-extern "C" int fn_800A5F80(void);
+extern "C" int HandoffCamShouldEnd(void);
 
-extern "C" void fn_800A6044(void);
+extern "C" void HandoffCamEnd(void);
 
 extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b);
 
-extern "C" void fn_800A615C(void);
+extern "C" void HandoffCamUpdate(void);
 
-extern "C" void fn_800A61A8(void);
+extern "C" void HandoffCamReset(void);
 
 extern "C" int fn_800A61E0(void);
 
-extern "C" void fn_800A61E8(int value);
+extern "C" void GamebreakerSetTutorialHud(int value);
 
-extern "C" Object_80039F5C *fn_800A624C(int team);
+extern "C" Object_80039F5C *GamebreakerPickCinemaPlayer(int team);
 
-extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut);
+extern "C" void GamebreakerGetPlayers(int team, Object_80039F5C **ppOut);
 
-extern "C" int fn_800A6590(int value);
+extern "C" int GamebreakerTypeToEffectMask(int value);
 
-extern "C" void fn_800A65BC(void);
+extern "C" void GamebreakerRefreshRatings(void);
 
-extern "C" unsigned char fn_800A6658(int team);
+extern "C" unsigned char GamebreakerRollStrength(int team);
 
-extern "C" void fn_800A6750(int team);
+extern "C" void GamebreakerApplyOffense(int team);
 
-extern "C" void fn_800A67B8(int team);
+extern "C" void GamebreakerApplyDefense(int team);
 
-extern "C" void fn_800A680C(int team);
+extern "C" void GamebreakerUpdateOffense(int team);
 
-extern "C" void fn_800A69BC(int team);
+extern "C" void GamebreakerUpdateDefense(int team);
 
-extern "C" void fn_800A6B6C(int team);
+extern "C" void GamebreakerRemoveOffense(int team);
 
-extern "C" void fn_800A6C10(int team);
+extern "C" void GamebreakerRemoveDefense(int team);
 
-extern "C" void fn_800A6CB0(int team);
+extern "C" void GamebreakerStartCinematic(int team);
 
-extern "C" void fn_800A6D5C(int team);
+extern "C" void GamebreakerBeginActivation(int team);
 
-extern "C" void fn_800A6DA4(void);
+extern "C" void GamebreakerPickCinemaSide(void);
 
-extern "C" int fn_800A6DD0(int team);
+extern "C" int GamebreakerSelectCinemaType(int team);
 
-extern "C" void fn_800A6F04(int team);
+extern "C" void GamebreakerBoostRatings(int team);
 
 extern "C" void fn_800A70F4(void);
 
 extern "C" void fn_800A7274(void);
 
-extern "C" void fn_800A72B4(void);
+extern "C" void GamebreakerUpdateActive(void);
 
-extern "C" void fn_800A7514(int team);
+extern "C" void GamebreakerActivate(int team);
 
 extern "C" void fn_800A7A0C(int team);
 
@@ -6476,27 +6476,27 @@ extern "C" int fn_800A7E40(int team);
 
 extern "C" int fn_800A7E54(int team);
 
-extern "C" void fn_800A7E68(void);
+extern "C" void GamebreakerResetCounts(void);
 
-extern "C" int fn_800A7EA4(int team);
+extern "C" int GamebreakerGetTimerFlag(int team);
 
-extern "C" int fn_800A7EB8(int team);
+extern "C" int GamebreakerGetFumbleFlag(int team);
 
-extern "C" int fn_800A7ECC(int team);
+extern "C" int GamebreakerGetReactFlag(int team);
 
-extern "C" int fn_800A7EE0(int team);
+extern "C" int GamebreakerGetCatchFlag(int team);
 
-extern "C" int fn_800A7EF4(int team);
+extern "C" int GamebreakerGetSpeedFlag(int team);
 
 extern "C" int fn_800A7F08(int team);
 
 extern "C" int fn_800A7F1C(int team);
 
-extern "C" int fn_800A7F30(int team);
+extern "C" int GamebreakerGetPursueFlag(int team);
 
-extern "C" int fn_800A7F44(int team);
+extern "C" int GamebreakerGetPickFlag(int team);
 
-extern "C" int fn_800A7F58(int team);
+extern "C" int GamebreakerGetShedFlag(int team);
 
 extern "C" void fn_800A7F6C(void);
 
@@ -9935,7 +9935,7 @@ extern "C" void fn_80093410(int handle)
                 int id = AnimFileGetSlotFromFileNum(pFrame->mUnknown42 | 0x4000, pFrame->mUnknown14);
 
                 if (id != 0xFFFFFF && AnimFileGetSiblingSlot(id, 0x400) != 0xFFFFFF) {
-                    fn_800A3B5C(p);
+                    PlyrOverlayAnimStopAll(p);
                     fn_800A3B58(p, 2, 0);
                 }
             }
@@ -10338,7 +10338,7 @@ extern "C" void fn_800940F0(int handle)
 
             if (p->mIdBytes[3] == 1 || p->mIdBytes[3] == 3) {
                 AnimChanStopByStateIndex((AnimHeader_t *)p->mUnknown1244, (AnimChannel_t *)(p->mUnknown1244 + 12), 10);
-                fn_800A3B5C(p);
+                PlyrOverlayAnimStopAll(p);
             }
         }
     }
@@ -15107,7 +15107,7 @@ extern "C" void DefCoverStartPlay(void)
     p->mUnknown1A2 = 0;
     p->mUnknown1A8 = fn_8009DBB4(p);
     DefCoverBuildZones();
-    fn_800A5D94();
+    DefReactResetCounts();
 }
 
 extern "C" void DefCoverUpdate(void)
@@ -16127,7 +16127,7 @@ extern "C" void DefPredRefreshRatings(void)
                          (const Record_800B49EC *)p->mUnknown3020);
             fn_800B4798(p->mRatings, (unsigned char)team, (unsigned char)i, &p->mUnknown2900);
         }
-        fn_800A6F04((unsigned char)team);
+        GamebreakerBoostRatings((unsigned char)team);
     }
 }
 
@@ -16179,7 +16179,7 @@ void LivePlayPhase::OnEnter(float dt)
     SpchIGSetStruggleCarrier(0);
     SpchIGSetStruggleTackler(0);
     SpchIGSetDownedCarrier(0);
-    fn_800A2184();
+    PlayResultClearEventBits();
 }
 
 void LivePlayPhase::OnUpdate(float dt)
@@ -16194,7 +16194,7 @@ void LivePlayPhase::OnUpdate(float dt)
         fn_800FB314();
         fn_800FB768();
         DefCoverUpdate();
-        fn_800A615C();
+        HandoffCamUpdate();
         SndgEventUpdateDelayed();
         BallGetCurrentHolder();
         ScrmUpdateBallCarrier();
@@ -16208,7 +16208,7 @@ void LivePlayPhase::OnExit()
     PassIconsHide();
     PadInputRestoreHandlers(lbl_803EA9E8);
     PadInputResetSlot(-1);
-    fn_800A61A8();
+    HandoffCamReset();
 }
 
 extern "C" void PlayResultSetRef(int a, int *p, int value)
@@ -16459,7 +16459,7 @@ extern "C" int PlayResultStepIsBusy(void *unused)
 extern "C" void PlayResultStepFinish(void *context)
 {
     Pair_800A14A8 *p=(Pair_800A14A8 *)context;
-    fn_800A1C74(p->mpFirst, p->mpSecond);
+    PlayResultCommit(p->mpFirst, p->mpSecond);
     RumbleEnable(0);
     AudmonEventPost(124, 0);
 }
@@ -16493,7 +16493,7 @@ extern "C" void PlayResultAwardScore(ScrmPlayResult_t *pResult, unsigned char up
     } else {
         team = ScrmGetSnapOffense();
     }
-    fn_800A20D0(team, delta);
+    PlayResultAddScore(team, delta);
     if (!update && pResult->mUnknown1D == -2) {
         if (pResult->mUnknown00 == 0) {
             ScoringLogAddScore(9, 0, (ScrmGetDefenseTeam() & 0xFF) << 8 | 1, 0);
@@ -16646,7 +16646,7 @@ extern "C" int PlayResultStepPoll(void)
     return 1;
 }
 
-extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
+extern "C" void PlayResultCommit(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
 {
     unsigned char update=1;
     ScrmPlayResult_t *value=result;
@@ -16710,7 +16710,7 @@ extern "C" void fn_800A1C74(ScrmPlayResult_t *result,ScrmPlayResult_t *input)
     }
 }
 
-extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
+extern "C" void PlayResultBeginPostPlay(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
 {
     Step_800C4460 *step;
     PlayResultBuild(result,value);
@@ -16730,7 +16730,7 @@ extern "C" void fn_800A1FEC(ScrmPlayResult_t *result,ScrmPlayResult_t *value)
     fn_800B9A6C(lbl_803EAB84,step);
 }
 
-extern "C" void fn_800A20D0(int team, int delta)
+extern "C" void PlayResultAddScore(int team, int delta)
 {
     int value = fn_800C8774(team);
 
@@ -16745,7 +16745,7 @@ extern "C" void fn_800A20D0(int team, int delta)
     }
 }
 
-extern "C" int fn_800A2160(void)
+extern "C" int PlayResultIsDone(void)
 {
     return lbl_802D7C64[0].mUnknown4;
 }
@@ -16760,7 +16760,7 @@ extern "C" int fn_800A2178(void)
     return lbl_802D7C64[0].mUnknown0;
 }
 
-extern "C" void fn_800A2184(void)
+extern "C" void PlayResultClearEventBits(void)
 {
     lbl_803EA9EC = 0;
 }
@@ -16770,12 +16770,12 @@ extern "C" void fn_800A2190(int bit)
     lbl_803EA9EC |= 1 << bit;
 }
 
-extern "C" unsigned char fn_800A21A8(int bit)
+extern "C" unsigned char PlayResultTestEventBit(int bit)
 {
     return lbl_803EA9EC & (1 << bit);
 }
 
-extern "C" void fn_800A21BC(void)
+extern "C" void StadiumSetupVenue4(void)
 {
     lbl_8030E6E8.mUnknown28=17.5f;
     lbl_8030E6E8.mUnknown2C=30.0f;
@@ -16789,7 +16789,7 @@ extern "C" void fn_800A21BC(void)
     lbl_8030E6E8.mUnknown8C4=4;
 }
 
-extern "C" void fn_800A2228(void)
+extern "C" void StadiumSetupVenue0(void)
 {
     lbl_8030E6E8.mUnknown28=20.0f;
     lbl_8030E6E8.mUnknown2C=40.0f;
@@ -16801,7 +16801,7 @@ extern "C" void fn_800A2228(void)
     lbl_8030E6E8.mUnknown8C4=0;
 }
 
-extern "C" void fn_800A227C(void)
+extern "C" void StadiumSetupVenue3(void)
 {
     lbl_8030E6E8.mUnknown28=17.5f;
     lbl_8030E6E8.mUnknown2C=30.0f;
@@ -16814,7 +16814,7 @@ extern "C" void fn_800A227C(void)
     lbl_8030E6E8.mUnknown8C4=3;
 }
 
-extern "C" void fn_800A22E4(void)
+extern "C" void StadiumSetupVenue1(void)
 {
     lbl_8030E6E8.mUnknown28=17.5f;
     lbl_8030E6E8.mUnknown2C=30.0f;
@@ -16825,7 +16825,7 @@ extern "C" void fn_800A22E4(void)
     lbl_8030E6E8.mUnknown8C4=1;
 }
 
-extern "C" void fn_800A233C(void)
+extern "C" void StadiumSetupVenue9(void)
 {
     lbl_8030E6E8.mUnknown28 = 20.0f;
     lbl_8030E6E8.mUnknown2C = 40.0f;
@@ -16836,7 +16836,7 @@ extern "C" void fn_800A233C(void)
     lbl_8030E6E8.mUnknown8C4 = 9;
 }
 
-extern "C" void fn_800A238C(void)
+extern "C" void StadiumSetupVenue7(void)
 {
     lbl_8030E6E8.mUnknown28 = 15.0f;
     lbl_8030E6E8.mUnknown2C = 40.0f;
@@ -16849,7 +16849,7 @@ extern "C" void fn_800A238C(void)
     lbl_8030E6E8.mUnknown8C4 = 7;
 }
 
-extern "C" void fn_800A23F0(void)
+extern "C" void StadiumSetupVenue2(void)
 {
     lbl_8030E6E8.mUnknown28 = 15.0f;
     lbl_8030E6E8.mUnknown2C = 30.045f;
@@ -16861,7 +16861,7 @@ extern "C" void fn_800A23F0(void)
     lbl_8030E6E8.mUnknown8C4 = 2;
 }
 
-extern "C" void fn_800A244C(void)
+extern "C" void StadiumSetupVenue5(void)
 {
     lbl_8030E6E8.mUnknown28 = 20.0f;
     lbl_8030E6E8.mUnknown2C = 40.0f;
@@ -16873,7 +16873,7 @@ extern "C" void fn_800A244C(void)
     lbl_8030E6E8.mUnknown8C4 = 5;
 }
 
-extern "C" void fn_800A24A0(void)
+extern "C" void StadiumSetupVenue6(void)
 {
     lbl_8030E6E8.mUnknown28 = 20.0f;
     lbl_8030E6E8.mUnknown2C = 40.0f;
@@ -16886,7 +16886,7 @@ extern "C" void fn_800A24A0(void)
     lbl_8030E6E8.mUnknown8C4 = 6;
 }
 
-extern "C" void fn_800A2500(void)
+extern "C" void StadiumSetupVenue10(void)
 {
     lbl_8030E6E8.mUnknown28 = 20.0f;
     lbl_8030E6E8.mUnknown2C = 40.0f;
@@ -16899,7 +16899,7 @@ extern "C" void fn_800A2500(void)
     lbl_8030E6E8.mUnknown8C4 = 10;
 }
 
-extern "C" void fn_800A2560(void)
+extern "C" void StadiumSetupVenue11(void)
 {
     lbl_8030E6E8.mUnknown28 = 17.5f;
     lbl_8030E6E8.mUnknown2C = 30.0f;
@@ -16911,7 +16911,7 @@ extern "C" void fn_800A2560(void)
     lbl_8030E6E8.mUnknown8C4 = 11;
 }
 
-extern "C" void fn_800A25BC(void)
+extern "C" void StadiumSetupVenue8(void)
 {
     lbl_8030E6E8.mUnknown28 = 17.5f;
     lbl_8030E6E8.mUnknown2C = 30.0f;
@@ -16924,12 +16924,12 @@ extern "C" void fn_800A25BC(void)
     lbl_8030E6E8.mUnknown8C4 = 8;
 }
 
-extern "C" int fn_800A2624(void)
+extern "C" int StadiumIsCamPastEndLine(void)
 {
     return lbl_803EA9F8;
 }
 
-extern "C" int fn_800A262C(void)
+extern "C" int StadiumCheckCamPastNearEnd(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] <= 0.5f - lbl_8030E6E8.mUnknown2C && CamGameGetCurrentSlot() == 0
         && ReplayCamIsActive() == 0 && ScrmIsFieldFlipped() == 0 && (ScrmIsFieldFlipped() != 0 || CamPlayWasOrbitToggled() == 0)) {
@@ -16940,7 +16940,7 @@ extern "C" int fn_800A262C(void)
     return 0;
 }
 
-extern "C" int fn_800A26C4(void)
+extern "C" int StadiumCheckCamPastFarEnd(void)
 {
     if (CamGameGetCamera(5)->mHeader.mUnknown04[1] > lbl_8030E6E8.mUnknown2C - 0.5f && CamGameGetCurrentSlot() == 0
         && ReplayCamIsActive() == 0 && ScrmIsFieldFlipped() != 0 && (ScrmIsFieldFlipped() == 0 || CamPlayWasOrbitToggled() == 0)) {
@@ -16951,7 +16951,7 @@ extern "C" int fn_800A26C4(void)
     return 0;
 }
 
-extern "C" int fn_800A2760(void)
+extern "C" int StadiumGetResBase(void)
 {
     switch (lbl_8030E6E8.mUnknown0) {
     case 0:
@@ -16982,9 +16982,9 @@ extern "C" int fn_800A2760(void)
     return 54;
 }
 
-extern "C" void fn_800A2848(void)
+extern "C" void StadiumLoadConditions(void)
 {
-    int first = fn_800A2760();
+    int first = StadiumGetResBase();
 
     lbl_8030E6E8.mUnknown4 = first;
     lbl_8030E6E8.mUnknown6 = first + 1;
@@ -17027,58 +17027,58 @@ extern "C" void fn_800A2848(void)
     lbl_8030E6E8.mUnknown8BD = 0;
 }
 
-extern "C" void fn_800A29AC(void)
+extern "C" void StadiumPollMiniGame(void)
 {
     if (fn_801485D4() != 0) {
         fn_801486A0();
     }
 }
 
-extern "C" void fn_800A29D8(int mode)
+extern "C" void StadiumSelectSetup(int mode)
 {
     switch (mode) {
     case 0:
-        lbl_8030E6DC.mpCallback0 = fn_800A2228;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue0;
         break;
     case 1:
-        lbl_8030E6DC.mpCallback0 = fn_800A22E4;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue1;
         break;
     case 3:
-        lbl_8030E6DC.mpCallback0 = fn_800A227C;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue3;
         break;
     case 2:
-        lbl_8030E6DC.mpCallback0 = fn_800A23F0;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue2;
         break;
     case 4:
-        lbl_8030E6DC.mpCallback0 = fn_800A21BC;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue4;
         break;
     case 5:
-        lbl_8030E6DC.mpCallback0 = fn_800A244C;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue5;
         break;
     case 9:
-        lbl_8030E6DC.mpCallback0 = fn_800A233C;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue9;
         break;
     case 6:
-        lbl_8030E6DC.mpCallback0 = fn_800A24A0;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue6;
         break;
     case 7:
-        lbl_8030E6DC.mpCallback0 = fn_800A238C;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue7;
         break;
     case 8:
-        lbl_8030E6DC.mpCallback0 = fn_800A25BC;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue8;
         break;
     case 10:
-        lbl_8030E6DC.mpCallback0 = fn_800A2500;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue10;
         break;
     case 11:
-        lbl_8030E6DC.mpCallback0 = fn_800A2560;
+        lbl_8030E6DC.mpCallback0 = StadiumSetupVenue11;
         break;
     }
 }
 
-extern "C" void fn_800A2B40(void)
+extern "C" void StadiumUpdateWind(void)
 {
-    if (fn_800A33B0()) {
+    if (StadiumIsWindEnabled()) {
         float drift = SyncRandGetFloat(1) * 0.033333335f;
         drift += SyncRandGetFloat(1) * 0.033333335f;
         int turn = (int)(SyncRandGetFloat(1) * 38.0f);
@@ -17116,7 +17116,7 @@ extern "C" void fn_800A2B40(void)
     }
 }
 
-extern "C" void fn_800A2D2C(void)
+extern "C" void StadiumInitEffects(void)
 {
     unsigned int j;
     unsigned char i;
@@ -17144,7 +17144,7 @@ extern "C" void fn_800A2D2C(void)
     }
 }
 
-extern "C" void fn_800A2E80(int index, int count)
+extern "C" void StadiumApplyScreenTint(int index, int count)
 {
     ScreenTintSetActive(0, 1);
     ScreenTintFadeTo(0, (lbl_802D7D90[index][2] << 16) + (lbl_802D7D90[index][1] << 8) | lbl_802D7D90[index][0],
@@ -17160,8 +17160,8 @@ extern "C" void fn_800A2F3C(int value)
 extern "C" void fn_800A2F48(void)
 {
     EnvSelect(lbl_8030E6E8.mUnknown0);
-    fn_800A2848();
-    fn_800A29AC();
+    StadiumLoadConditions();
+    StadiumPollMiniGame();
     lbl_8030E6E8.mpUnknown8C0 = EnvGetFogSettings(lbl_8030E6E8.mUnknown0);
     lbl_8030E6DC.mpCallback0 = 0;
     lbl_8030E6DC.mpCallback4 = 0;
@@ -17172,8 +17172,8 @@ extern "C" void fn_800A2F48(void)
     LevelLoad();
     GlowInit(fn_800C47C4());
     GlowSetScale(1.0f - lbl_8030E6E8.mpUnknown8C0->mUnknownC);
-    fn_800A2D2C();
-    fn_800A29D8(lbl_8030E6E8.mUnknown0);
+    StadiumInitEffects();
+    StadiumSelectSetup(lbl_8030E6E8.mUnknown0);
     lbl_8030E6E8.mUnknown28 = 10.0f;
     lbl_8030E6E8.mUnknown2C = 30.0f;
     lbl_8030E6E8.mUnknown30 = 40.0f;
@@ -17183,7 +17183,7 @@ extern "C" void fn_800A2F48(void)
         lbl_8030E6DC.mpCallback0();
     }
     lbl_8030E6E8.mpUnknown8C8 = lbl_802D7DF0[lbl_8030E6E8.mUnknown0];
-    fn_800A2E80(lbl_8030E6E8.mUnknown0, 1);
+    StadiumApplyScreenTint(lbl_8030E6E8.mUnknown0, 1);
     EnvRelease();
     lbl_803EA9F0 = 1;
 }
@@ -17207,13 +17207,13 @@ extern "C" void fn_800A3120(float value)
 {
     GlowUpdateFlickers();
     LevelUpdate();
-    fn_800A2B40();
+    StadiumUpdateWind();
     if (lbl_8030E6DC.mpCallback8 != 0) {
         lbl_8030E6DC.mpCallback8(value);
     }
 }
 
-extern "C" void fn_800A3170(void)
+extern "C" void StadiumSpawnEmitters(void)
 {
     float m[4][4];
     ParticleSpawnArgs_t args;
@@ -17273,97 +17273,97 @@ extern "C" float fn_800A32E4(void)
     return lbl_8030E6E8.mFloat38;
 }
 
-extern "C" void *fn_800A3360(void)
+extern "C" void *StadiumGetGamebreakerTint(void)
 {
     return lbl_8030E6E8.mpUnknown8C8;
 }
 
-extern "C" void *fn_800A336C(void)
+extern "C" void *StadiumGetResDevice(void)
 {
     return lbl_803EA9F4;
 }
 
-extern "C" int fn_800A3374(void)
+extern "C" int StadiumGetEnvObjResIndex(void)
 {
     return lbl_8030E6E8.mUnknown4;
 }
 
-extern "C" int fn_800A3380(void)
+extern "C" int StadiumGetLevelResIndex(void)
 {
     return lbl_8030E6E8.mUnknown6;
 }
 
-extern "C" int fn_800A338C(void)
+extern "C" int StadiumGetSkyResIndex(void)
 {
     return lbl_8030E6E8.mUnknown8;
 }
 
-extern "C" int fn_800A3398(void)
+extern "C" int StadiumGetFldObjResIndex(void)
 {
     return lbl_8030E6E8.mUnknownA;
 }
 
-extern "C" int fn_800A33A4(void)
+extern "C" int StadiumGetDivotResIndex(void)
 {
     return lbl_8030E6E8.mUnknownC;
 }
 
-extern "C" int fn_800A33B0(void)
+extern "C" int StadiumIsWindEnabled(void)
 {
     return 1;
 }
 
-extern "C" int fn_800A33B8(void)
+extern "C" int StadiumGetWeatherMode(void)
 {
     return lbl_8030E6E8.mUnknown48;
 }
 
-extern "C" float fn_800A33C4(void)
+extern "C" float StadiumGetPrecipLevel(void)
 {
     return lbl_8030E6E8.mUnknown4C;
 }
 
-extern "C" float fn_800A33D0(void)
+extern "C" float StadiumGetPrecipFactor(void)
 {
     return lbl_8030E6E8.mUnknown50;
 }
 
-extern "C" int fn_800A33DC(void)
+extern "C" int StadiumGetTempLevel(void)
 {
     return lbl_8030E6E8.mUnknown40;
 }
 
-extern "C" int fn_800A33E8(void)
+extern "C" int StadiumGetWindDir(void)
 {
     return lbl_8030E6E8.mUnknown5C;
 }
 
-extern "C" float fn_800A33F4(void)
+extern "C" float StadiumGetWindLevel(void)
 {
     return lbl_8030E6E8.mUnknown60;
 }
 
-extern "C" float fn_800A3400(void)
+extern "C" float StadiumGetFogDensity(void)
 {
     return lbl_8030E6E8.mpUnknown8C0->mUnknownC;
 }
 
-extern "C" int fn_800A3410(void)
+extern "C" int StadiumGetFogColor(void)
 {
     return lbl_8030E6E8.mpUnknown8C0->mUnknown10;
 }
 
-extern "C" int fn_800A3420(void)
+extern "C" int StadiumGetSkyState(void)
 {
     return lbl_8030E6E8.mUnknown64;
 }
 
-extern "C" void *fn_800A342C(void)
+extern "C" void *StadiumGetLightDir(void)
 {
     return lbl_8030E6E8.mUnknown10;
 }
 
-extern "C" Vector_80039F5C *fn_800A3438(void)
+extern "C" Vector_80039F5C *StadiumGetSunPos(void)
 {
     return &lbl_8030E6E8.mUnknown1C;
 }
@@ -17373,7 +17373,7 @@ extern "C" int fn_800A3444(void)
     return lbl_8030E6E8.mUnknown0;
 }
 
-extern "C" void fn_800A3450(void)
+extern "C" void StadiumReleaseEmitters(void)
 {
     unsigned int j;
     unsigned char i;
@@ -17386,37 +17386,37 @@ extern "C" void fn_800A3450(void)
     }
 }
 
-extern "C" int fn_800A34B0(void)
+extern "C" int StadiumShowsMarkerBeams(void)
 {
     return lbl_8030E6E8.mUnknown8BC;
 }
 
-extern "C" int fn_800A34BC(void)
+extern "C" int StadiumShowsMarkerArrows(void)
 {
     return lbl_8030E6E8.mUnknown8BD;
 }
 
-extern "C" int fn_800A34C8(int index)
+extern "C" int StadiumGetEffectCount(int index)
 {
     return lbl_8030E6E8.mUnknown6C[index];
 }
 
-extern "C" int fn_800A34E0(void)
+extern "C" int StadiumGetCameraPreset(void)
 {
     return lbl_8030E6E8.mUnknown8C4;
 }
 
-extern "C" EnvFogSettings *fn_800A34EC(void)
+extern "C" EnvFogSettings *StadiumGetFogSettings(void)
 {
     return lbl_8030E6E8.mpUnknown8C0;
 }
 
-extern "C" int fn_800A34F8(int index)
+extern "C" int StadiumIsAnimTexGroupOn(int index)
 {
     return lbl_8030E6E8.mUnknown8B4[index];
 }
 
-extern "C" int fn_800A350C(void)
+extern "C" int StadiumHasCrowd(void)
 {
     int result = 1;
 
@@ -17438,7 +17438,7 @@ static float _StrippedScaleClampZero(float x)
 }
 }
 
-extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *record,
+extern "C" int PlyrOverlayAnimTableCallback(Table_80089904 *table, unsigned short key, void *record,
                            AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown804, key);
@@ -17477,8 +17477,8 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
         break;
     case 3:
         if (block->mUnknown8Byte == 1) {
-            fn_800A3D68(0);
-            if (!fn_800A3B10(p))
+            PlyrOverlayAnimSetActive(0);
+            if (!PlyrOverlayAnimCountActive(p))
                 PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         }
         break;
@@ -17486,7 +17486,7 @@ extern "C" int fn_800A3530(Table_80089904 *table, unsigned short key, void *reco
     return 0;
 }
 
-extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *record,
+extern "C" int PlyrOverlayAnimPoseCallback(Table_80089904 *table, unsigned short key, void *record,
                            AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     switch (phase) {
@@ -17495,20 +17495,20 @@ extern "C" int fn_800A37D8(Table_80089904 *table, unsigned short key, void *reco
         p->mpUnknown4->mUnknown20 |= 0x10;
         break;
     case 1:
-        if (!fn_800A3B10(p))
+        if (!PlyrOverlayAnimCountActive(p))
             PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     case 2:
         break;
     case 3:
-        if (!fn_800A3B10(p))
+        if (!PlyrOverlayAnimCountActive(p))
             PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     }
     return 0;
 }
 
-extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *record,
+extern "C" int PlyrOverlayAnimIndexCallback(Table_80089904 *table, unsigned short key, void *record,
                            AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown804, key);
@@ -17548,14 +17548,14 @@ extern "C" int fn_800A3898(Table_80089904 *table, unsigned short key, void *reco
         }
         break;
     case 3:
-        if (fn_801BE648(p->mpUnknown804) == key && !fn_800A3B10(p))
+        if (fn_801BE648(p->mpUnknown804) == key && !PlyrOverlayAnimCountActive(p))
             PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
         break;
     }
     return 0;
 }
 
-extern "C" int fn_800A3B10(Object_80039F5C *p)
+extern "C" int PlyrOverlayAnimCountActive(Object_80039F5C *p)
 {
     int count = 0;
     int i;
@@ -17584,7 +17584,7 @@ static void _StrippedSetPhaseIndex(Object_80039F5C *p, unsigned char index, unsi
 }
 }
 
-extern "C" void fn_800A3B5C(Object_80039F5C *p)
+extern "C" void PlyrOverlayAnimStopAll(Object_80039F5C *p)
 {
     if (p->mpUnknown808 != 0) {
         for (int i = 0; i < p->mpUnknown808->mUnknown4; i++) {
@@ -17597,7 +17597,7 @@ extern "C" void fn_800A3B5C(Object_80039F5C *p)
     PlyrPoseClearBlend((Object_8003DEC4 *)p->mpUnknown4);
 }
 
-extern "C" void fn_800A3C14(void)
+extern "C" void PlyrOverlayAnimLoad(void)
 {
     Listing_800ADE6C listing;
     unsigned int i;
@@ -17630,27 +17630,27 @@ extern "C" void fn_800A3C14(void)
     }
 }
 
-extern "C" void fn_800A3D68(int value)
+extern "C" void PlyrOverlayAnimSetActive(int value)
 {
     lbl_803EC948 = value;
 }
 
-extern "C" void fn_800A3D70(void)
+extern "C" void PlyrOverlayAnimRegisterCallbacks(void)
 {
     Callback_800A3530 *ppCallback = lbl_8030EFB4;
     int i;
 
     for (i = 0; i < 11; i++) {
-        *ppCallback++ = fn_800A3530;
+        *ppCallback++ = PlyrOverlayAnimTableCallback;
     }
-    lbl_8030EFB4[2] = fn_800A37D8;
-    lbl_8030EFB4[3] = fn_800A3898;
-    lbl_8030EFB4[4] = fn_800A3898;
-    lbl_8030EFB4[1] = fn_800A3898;
-    lbl_8030EFB4[5] = fn_800A3898;
+    lbl_8030EFB4[2] = PlyrOverlayAnimPoseCallback;
+    lbl_8030EFB4[3] = PlyrOverlayAnimIndexCallback;
+    lbl_8030EFB4[4] = PlyrOverlayAnimIndexCallback;
+    lbl_8030EFB4[1] = PlyrOverlayAnimIndexCallback;
+    lbl_8030EFB4[5] = PlyrOverlayAnimIndexCallback;
 }
 
-extern "C" int fn_800A3DC4(int value)
+extern "C" int DefReactIsTurnKind(int value)
 {
     switch (value) {
     case 1:
@@ -17663,7 +17663,7 @@ extern "C" int fn_800A3DC4(int value)
     return 0;
 }
 
-extern "C" int fn_800A3E00(Object_80039F5C *p)
+extern "C" int DefReactIsStateAllowed(Object_80039F5C *p)
 {
     int result = 0;
 
@@ -17698,7 +17698,7 @@ static Record_80296754 *_StrippedInitKeyRecord(Record_80296754 *pRecord, const u
 }
 }
 
-extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
+extern "C" int DefReactTryTurn(Object_80039F5C *p, int angle, int unused)
 {
     float distance = 0.0f;
     int result = 0;
@@ -17746,7 +17746,7 @@ extern "C" int fn_800A3E84(Object_80039F5C *p, int angle, int unused)
     return result;
 }
 
-extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *block)
+extern "C" unsigned short PlyrTurnAnimSelectReact(Table_80089904 *table, Object_80039F5C *p, Block_801BE60C *block)
 {
     Target_800A3E84 *pTarget = &p->mTarget;
     Object_80039F5C *pOther = fn_8009BCE8(&pTarget->mRef);
@@ -17778,7 +17778,7 @@ extern "C" unsigned short fn_800A414C(Table_80089904 *table, Object_80039F5C *p,
     return fn_8009C4B0(table, (const unsigned char *)&p->mUnknown1008);
 }
 
-extern "C" void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" void PlyrTurnAnimResetBlock(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     pBlock->mUnknown0Word = -1;
     pBlock->mUnknown4 = 1.0f;
@@ -17787,7 +17787,7 @@ extern "C" void fn_800A4294(Object_80039F5C *p, Block_801BE60C *pBlock)
     pBlock->mUnknown10Word = 0;
 }
 
-extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" void PlyrTurnAnimSetRateFromSpeed(Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     float scale = 0.4f;
 
@@ -17797,7 +17797,7 @@ extern "C" void fn_800A42BC(Object_80039F5C *p, Block_801BE60C *pBlock)
     }
 }
 
-extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
+extern "C" int PlyrTurnAnimKeyMatches(Key_80110630 *pA, Key_80110630 *pB)
 {
     int result = pA->mUnknown0 == pB->mUnknown0;
 
@@ -17807,7 +17807,7 @@ extern "C" int fn_800A432C(Key_80110630 *pA, Key_80110630 *pB)
     return result;
 }
 
-extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
+extern "C" unsigned short PlyrTurnAnimSelectByAngle(Table_80089904 *pTable, Object_80039F5C *p, Block_801BE60C *pBlock)
 {
     unsigned int index = 0;
     Info_80089904 *pBest = 0;
@@ -17817,7 +17817,7 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
     for (i = 0; i < pTable->mCount; i++) {
         Info_80089904 *pEntry = pTable->mEntries[i].mpInfo;
 
-        if (fn_800A432C(&pEntry->mKey, &p->mUnknown1008) && angle >= pEntry->mUnknown16
+        if (PlyrTurnAnimKeyMatches(&pEntry->mKey, &p->mUnknown1008) && angle >= pEntry->mUnknown16
             && angle <= pEntry->mUnknown20) {
             if (pBest == 0 || SyncRandGetRange(0, 100) <= 49) {
                 pBest = pEntry;
@@ -17846,20 +17846,20 @@ extern "C" unsigned short fn_800A4358(Table_80089904 *pTable, Object_80039F5C *p
     return index;
 }
 
-extern "C" int fn_800A44C0(Table_80089904 *table, unsigned short key, void *record,
+extern "C" int PlyrTurnAnimCallback(Table_80089904 *table, unsigned short key, void *record,
                            AnimChannel_t *entries, Object_80039F5C *p, unsigned int phase)
 {
     Block_801BE60C *block = fn_801BE60C(p->mpUnknown792, key);
     switch (phase) {
     case 0: {
         fn_801BE760(p->mpUnknown792, key, 1);
-        fn_800A4294(p, block);
-        fn_800A42BC(p, block);
+        PlyrTurnAnimResetBlock(p, block);
+        PlyrTurnAnimSetRateFromSpeed(p, block);
         unsigned short index;
         if (fn_801BE648(p->mpUnknown792) == 185)
-            index = fn_800A414C(table, p, block);
+            index = PlyrTurnAnimSelectReact(table, p, block);
         else
-            index = fn_800A4358(table, p, block);
+            index = PlyrTurnAnimSelectByAngle(table, p, block);
         int entry = AnimChanStartAnim(record, entries, table->mEntries[index].mUnknown0,
                                 table->mEntries[index].mUnknown2, key, p, 1.0f);
         block->mUnknown0Word = entry;
@@ -17906,7 +17906,7 @@ extern "C" int fn_800A46D8(Object_80039F5C *p, Object_80039F5C *pTarget, int rev
                        MathArcTan2(velocity[1], velocity[0]), Vec2Distance(&p->mMotion, &pTarget->mMotion));
 }
 
-extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
+extern "C" int DefReactGetFlankAngle(Object_80039F5C *p, Object_80039F5C *pTarget)
 {
     Vec2_t offset;
     int angle = (pTarget->mMotion.mFacing + 0x400000) & 0xFFFFFF;
@@ -17920,7 +17920,7 @@ extern "C" int fn_800A4790(Object_80039F5C *p, Object_80039F5C *pTarget)
     return MathArcTan2(offset.mY, offset.mX);
 }
 
-extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int index,
+extern "C" void DefReactParamsBoost(Object_80039F5C *p, Object_80039F5C *pOther, int index,
                             Params_800A4E8C *pParams)
 {
     pParams->mUnknown4 += pParams->mUnknown4 / 2;
@@ -17940,7 +17940,7 @@ extern "C" void fn_800A481C(Object_80039F5C *p, Object_80039F5C *pOther, int ind
     pParams->mUnknown8 = (unsigned int)((float)pParams->mUnknown8 * (1.0f - PlayTrackGetFlag10Rate()));
 }
 
-extern "C" void fn_800A4950(Object_80039F5C *p, Object_80039F5C *pOther, int index,
+extern "C" void DefReactParamsByState(Object_80039F5C *p, Object_80039F5C *pOther, int index,
                             Params_800A4E8C *pParams)
 {
     if (p->mpState->mId == 2 || p->mpState->mId == 30) {
@@ -17952,7 +17952,7 @@ extern "C" void fn_800A4950(Object_80039F5C *p, Object_80039F5C *pOther, int ind
 
 #define MIN(a, b) ((a) > (b) ? (b) : (a))
 
-extern "C" void fn_800A4980(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams)
+extern "C" void DefReactParamsByDistance(Object_80039F5C *p, Object_80039F5C *pOther, int index, Params_800A4E8C *pParams)
 {
     FieldPoint_t delta;
     float distance;
@@ -17990,7 +17990,7 @@ extern "C" void fn_800A4980(Object_80039F5C *p, Object_80039F5C *pOther, int ind
     }
 }
 
-extern "C" void fn_800A4E64(Object_80039F5C *p, Object_80039F5C *pOther, int index,
+extern "C" void DefReactParamsAlways(Object_80039F5C *p, Object_80039F5C *pOther, int index,
                             Params_800A4E8C *pParams)
 {
     pParams->mUnknown8 = 100000;
@@ -18015,7 +18015,7 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
         }
         params.mUnknown8 = fn_800AC87C(p, params.mUnknown8);
         params.mUnknown8 = CatchUpAdjustTargetRoll(p->mIdBytes[2], params.mUnknown8);
-        if (fn_800A7ECC(p->mIdBytes[2]) != 2) {
+        if (GamebreakerGetReactFlag(p->mIdBytes[2]) != 2) {
             int skill;
             int rating8 = p->mRatings[8];
             int rating5 = p->mRatings[5];
@@ -18025,10 +18025,10 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
             } else {
                 skill = rating8;
             }
-            if (SyncRandGetRange(0, params.mUnknown8) >= skill || fn_800A7ECC(p->mIdBytes[2]) == 0) {
+            if (SyncRandGetRange(0, params.mUnknown8) >= skill || GamebreakerGetReactFlag(p->mIdBytes[2]) == 0) {
                 p->mTarget.mRef = pOther->mId;
                 p->mTarget.mMode = kind;
-                if (fn_800A7ECC(p->mIdBytes[2]) == 0 && (kind == 4 || kind == 5)) {
+                if (GamebreakerGetReactFlag(p->mIdBytes[2]) == 0 && (kind == 4 || kind == 5)) {
                     p->mTarget.mUnknownC = params.mUnknown0;
                 } else {
                     int spread;
@@ -18055,7 +18055,7 @@ extern "C" int fn_800A4E8C(Object_80039F5C *p, Object_80039F5C *pOther, int kind
     return result;
 }
 
-extern "C" int fn_800A506C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestFirstInView(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     int result = 0;
@@ -18066,7 +18066,7 @@ extern "C" int fn_800A506C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestDecayChance(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     int limit = 256 / (pPair->mUnknown0 + 1);
@@ -18074,7 +18074,7 @@ extern "C" int fn_800A50B8(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return SyncRandGetRange(0, 256) < limit;
 }
 
-extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestBothInView(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     int result = 0;
@@ -18085,7 +18085,7 @@ extern "C" int fn_800A5104(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestByRole(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     FieldPoint_t delta;
@@ -18157,13 +18157,13 @@ extern "C" int fn_800A517C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestNearFacing(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     int result = 0;
 
-    if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
-        result = fn_800A54F4(p, pTarget, pOther, pPair);
+    if (GamebreakerGetReactFlag(p->mIdBytes[2]) == 0) {
+        result = DefReactTestInRange(p, pTarget, pOther, pPair);
     } else if (DefCoverIsFacingPlayer(p, pTarget, 0x400000) != 0 && DefCoverIsFacingPlayer(pTarget, p, 0x400000) != 0
                && Vec2Distance(&p->mMotion.mPos, &pTarget->mMotion.mPos) < 7.0f) {
         int limit = 256 / (pPair->mUnknown0 + 1);
@@ -18175,13 +18175,13 @@ extern "C" int fn_800A535C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestEngaged(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     int result = 0;
 
-    if (fn_800A7ECC(p->mIdBytes[2]) == 0) {
-        result = fn_800A54F4(p, pTarget, pOther, pPair);
+    if (GamebreakerGetReactFlag(p->mIdBytes[2]) == 0) {
+        result = DefReactTestInRange(p, pTarget, pOther, pPair);
     } else if (p->mpState->mId == 22 && p->mUnknown336 == pTarget->mId) {
         unsigned char chance = Interpolate(p->mRatings[8], 10, 90, 10);
 
@@ -18192,13 +18192,13 @@ extern "C" int fn_800A543C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A54F4(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactTestInRange(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     return Vec2DistanceSqr(&p->mMotion.mPos, &pTarget->mMotion.mPos) < (float)lbl_803EAA14;
 }
 
-extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactCanReact(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            int index)
 {
     int result = 1;
@@ -18210,14 +18210,14 @@ extern "C" int fn_800A554C(Object_80039F5C *p, Object_80039F5C *pTarget, Object_
     return result;
 }
 
-extern "C" int fn_800A55C0(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
+extern "C" int DefReactSteerStop(Object_80039F5C *p, Object_80039F5C *pTarget, Object_80039F5C *pOther,
                            Pair_800A554C *pPair)
 {
     p->mUnknown512.mUnknown14 = 0;
     return 1;
 }
 
-extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerToTarget(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     FieldPoint_t delta;
     int angle;
@@ -18231,7 +18231,7 @@ extern "C" int fn_800A55D0(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return 1;
 }
 
-extern "C" int fn_800A563C(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerIntercept(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int angle = fn_800A46D8(p, pTarget, 0);
 
@@ -18242,7 +18242,7 @@ extern "C" int fn_800A563C(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return 1;
 }
 
-extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerFlank(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int result = 1;
 
@@ -18250,7 +18250,7 @@ extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
         if (pTarget->mpState->mId != 34) {
             result = 0;
         } else {
-            *pState = fn_800A4790(p, pTarget);
+            *pState = DefReactGetFlankAngle(p, pTarget);
         }
     }
     p->mUnknown512.mUnknown14 = 1;
@@ -18260,7 +18260,7 @@ extern "C" int fn_800A5690(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return result;
 }
 
-extern "C" int fn_800A5718(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerInterceptOnce(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int result = 1;
 
@@ -18278,7 +18278,7 @@ extern "C" int fn_800A5718(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return result;
 }
 
-extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerFixedHeading(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int result = 1;
 
@@ -18300,7 +18300,7 @@ extern "C" int fn_800A57A4(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return result;
 }
 
-extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerLead(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int angle;
     FieldPoint_t delta;
@@ -18340,7 +18340,7 @@ extern "C" int fn_800A5844(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return 1;
 }
 
-extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerMatchHeading(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     int result = 1;
 
@@ -18358,7 +18358,7 @@ extern "C" int fn_800A5A04(Object_80039F5C *p, Object_80039F5C *pTarget, int *pS
     return result;
 }
 
-extern "C" int fn_800A5A60(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
+extern "C" int DefReactSteerNone(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState)
 {
     return 0;
 }
@@ -18390,7 +18390,7 @@ extern "C" void fn_800A5A8C(int kind, Object_80039F5C *pTarget, Object_80039F5C 
     for (; i < count; i++) {
         Object_80039F5C *p = PlyrGet(team, i);
 
-        if ((p->mFlags & 0x4000) == 0 && fn_800A554C(p, pTarget, pOther, kind)
+        if ((p->mFlags & 0x4000) == 0 && DefReactCanReact(p, pTarget, pOther, kind)
             && fn_800A4E8C(p, pOther, kind, level)) {
             AudmonEventPostId(41, &p->mMotion.mPos, p->mId, 0, 0, 0);
             if (kind == 4) {
@@ -18423,9 +18423,9 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
             if (lbl_802D7E78[p->mTarget.mMode] != 0) {
                 result = lbl_802D7E78[p->mTarget.mMode](p, pTarget, &p->mTarget.mUnknown4);
             } else {
-                result = fn_800A5A60(p, pTarget, 0);
+                result = DefReactSteerNone(p, pTarget, 0);
             }
-            if (fn_800A3DC4((unsigned char)p->mTarget.mMode) && fn_800A3E84(p, a, b)) {
+            if (DefReactIsTurnKind((unsigned char)p->mTarget.mMode) && DefReactTryTurn(p, a, b)) {
                 p->mUnknown512.mUnknown14 = 0;
                 result = 1;
                 p->mTarget.mUnknownC = 0;
@@ -18443,7 +18443,7 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
                     p->mUnknown512.mUnknown14 = 0;
                     result = 1;
                 }
-            } else if (fn_800A3E84(p, a, b)) {
+            } else if (DefReactTryTurn(p, a, b)) {
                 result = 1;
             }
         }
@@ -18457,7 +18457,7 @@ extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b)
     return result;
 }
 
-extern "C" void fn_800A5D94(void)
+extern "C" void DefReactResetCounts(void)
 {
     Pair_800A554C *pPairs = fn_8011F50C();
     int i;
@@ -18472,7 +18472,7 @@ extern "C" int fn_800A5DD0(Object_80039F5C *p)
     return p->mTarget.mUnknown10;
 }
 
-extern "C" void fn_800A5DD8(Object_80039F5C *p)
+extern "C" void DefReactSelectInput(Object_80039F5C *p)
 {
     if (fn_800A5DD0(p)) {
         fn_800B7F88(p);
@@ -18481,7 +18481,7 @@ extern "C" void fn_800A5DD8(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800A5E20(Object_80039F5C *p)
+extern "C" void DefReactSelectPursueInput(Object_80039F5C *p)
 {
     if (fn_800A5DD0(p)) {
         fn_800B7F34(p);
@@ -18490,15 +18490,15 @@ extern "C" void fn_800A5E20(Object_80039F5C *p)
     }
 }
 
-extern "C" void fn_800A5E68(Object_80039F5C *p)
+extern "C" void DefReactValidate(Object_80039F5C *p)
 {
-    if ((p->mFlags & 0x20000) && fn_800A3E00(p) == 0) {
+    if ((p->mFlags & 0x20000) && DefReactIsStateAllowed(p) == 0) {
         p->mTarget.mUnknown10 = 0;
         p->mFlags &= ~0x20000;
     }
 }
 
-extern "C" int fn_800A5EB8(Object_80039F5C *a, Object_80039F5C *b)
+extern "C" int HandoffCamIsExchange(Object_80039F5C *a, Object_80039F5C *b)
 {
     int result = 0;
 
@@ -18512,7 +18512,7 @@ extern "C" int fn_800A5EB8(Object_80039F5C *a, Object_80039F5C *b)
     return result;
 }
 
-extern "C" unsigned char fn_800A5F20(Object_80039F5C *p)
+extern "C" unsigned char HandoffCamGetDuration(Object_80039F5C *p)
 {
     short average;
 
@@ -18521,7 +18521,7 @@ extern "C" unsigned char fn_800A5F20(Object_80039F5C *p)
     return Interpolate(average + 168, 510, 20, 40);
 }
 
-extern "C" int fn_800A5F80(void)
+extern "C" int HandoffCamShouldEnd(void)
 {
     Object_80039F5C *p = BallGetCurrentHolder();
     Input_800B6D34 input;
@@ -18548,12 +18548,12 @@ extern "C" int fn_800A5F80(void)
     return 0;
 }
 
-extern "C" void fn_800A6044(void)
+extern "C" void HandoffCamEnd(void)
 {
     Object_80039F5C *p;
     int team;
 
-    fn_800A61A8();
+    HandoffCamReset();
     CamMainFollowBall(CamGameGetCamera(5));
     p = BallGetCurrentHolder();
     team = ScrmGetOffenseTeam();
@@ -18567,28 +18567,28 @@ extern "C" void fn_800A6044(void)
 
 extern "C" void fn_800A60D8(Object_80039F5C *a, Object_80039F5C *b)
 {
-    fn_800A61A8();
-    if (fn_800A5EB8(a, b)) {
+    HandoffCamReset();
+    if (HandoffCamIsExchange(a, b)) {
         lbl_803EC94C.mpUnknown0 = b;
         lbl_803EC94C.mUnknown5 = 1;
-        lbl_803EC94C.mUnknown4 = fn_800A5F20(b);
+        lbl_803EC94C.mUnknown4 = HandoffCamGetDuration(b);
         PlyrStarLinkPlayer(fn_800B65A0(b->mIdBytes[2]), b->mId);
         CamMainFollow(CamGameGetCamera(5), 2, b->mId, 0);
     }
 }
 
-extern "C" void fn_800A615C(void)
+extern "C" void HandoffCamUpdate(void)
 {
     if (fn_800A61E0()) {
-        if (fn_800A5F80()) {
-            fn_800A6044();
+        if (HandoffCamShouldEnd()) {
+            HandoffCamEnd();
         } else {
             lbl_803EC94C.mUnknown4--;
         }
     }
 }
 
-extern "C" void fn_800A61A8(void)
+extern "C" void HandoffCamReset(void)
 {
     lbl_803EC94C.mpUnknown0 = 0;
     lbl_803EC94C.mUnknown4 = 0;
@@ -18601,14 +18601,14 @@ extern "C" int fn_800A61E0(void)
     return lbl_803EC94C.mUnknown5;
 }
 
-extern "C" void fn_800A61E8(int value)
+extern "C" void GamebreakerSetTutorialHud(int value)
 {
     if (TutorialIsActive() && (value == 0 || lbl_803EC954[0]->mUnknown68 != 2 || lbl_803EC954[1]->mUnknown68 != 2)) {
         TutorialSetHudVisible(value);
     }
 }
 
-extern "C" Object_80039F5C *fn_800A624C(int team)
+extern "C" Object_80039F5C *GamebreakerPickCinemaPlayer(int team)
 {
     Object_80039F5C *p = 0;
     unsigned int count = ScrmGetActivePlayerCount(team);
@@ -18644,7 +18644,7 @@ extern "C" Object_80039F5C *fn_800A624C(int team)
     return p;
 }
 
-extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
+extern "C" void GamebreakerGetPlayers(int team, Object_80039F5C **ppOut)
 {
     int mode = fn_800AD9B4();
     Object_80039F5C *pFirst;
@@ -18716,7 +18716,7 @@ extern "C" void fn_800A636C(int team, Object_80039F5C **ppOut)
     }
 }
 
-extern "C" int fn_800A6590(int value)
+extern "C" int GamebreakerTypeToEffectMask(int value)
 {
     switch (value) {
     case 0:
@@ -18729,7 +18729,7 @@ extern "C" int fn_800A6590(int value)
     }
 }
 
-extern "C" void fn_800A65BC(void)
+extern "C" void GamebreakerRefreshRatings(void)
 {
     unsigned char team;
 
@@ -18743,11 +18743,11 @@ extern "C" void fn_800A65BC(void)
             fn_800B49EC((Record_800B49EC *)p->mRatings, (Record_800B49EC *)p->mUnknown3020);
             fn_800B4798(p->mRatings, team, i, &p->mUnknown2900);
         }
-        fn_800A6F04(team);
+        GamebreakerBoostRatings(team);
     }
 }
 
-extern "C" unsigned char fn_800A6658(int team)
+extern "C" unsigned char GamebreakerRollStrength(int team)
 {
     int other = team == 0;
     int lead = ScrmGetTeamScore(team) - ScrmGetTeamScore(other);
@@ -18769,7 +18769,7 @@ extern "C" unsigned char fn_800A6658(int team)
     return count;
 }
 
-extern "C" void fn_800A6750(int team)
+extern "C" void GamebreakerApplyOffense(int team)
 {
     lbl_803EC954[team]->mUnknown74[2] = 2;
     lbl_803EC954[team]->mUnknown74[0] = 2;
@@ -18780,7 +18780,7 @@ extern "C" void fn_800A6750(int team)
     lbl_8030F404[team][1] = 0;
 }
 
-extern "C" void fn_800A67B8(int team)
+extern "C" void GamebreakerApplyDefense(int team)
 {
     int other = (team + 1) & 1;
 
@@ -18792,13 +18792,13 @@ extern "C" void fn_800A67B8(int team)
     lbl_8030F404[team][1] = 0;
 }
 
-extern "C" void fn_800A680C(int team)
+extern "C" void GamebreakerUpdateOffense(int team)
 {
     Object_80039F5C *pair[2];
     unsigned char i;
     Object_8003DEC4 *pObject;
 
-    fn_800A636C(team, pair);
+    GamebreakerGetPlayers(team, pair);
     if (pair[0] == lbl_8030F404[team][1] || pair[1] == lbl_8030F404[team][0]) {
         Object_80039F5C *pSwap = pair[1];
 
@@ -18824,7 +18824,7 @@ extern "C" void fn_800A680C(int team)
 
         DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
         if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
-            fn_800A6B6C(team);
+            GamebreakerRemoveOffense(team);
             GamebreakerRead(&cursor, lbl_803EC954[team]);
             lbl_803EC954[team]->mUnknown10 = 10000;
             lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
@@ -18833,16 +18833,16 @@ extern "C" void fn_800A680C(int team)
         }
         DbCursorClose(&cursor);
     }
-    fn_800A65BC();
+    GamebreakerRefreshRatings();
 }
 
-extern "C" void fn_800A69BC(int team)
+extern "C" void GamebreakerUpdateDefense(int team)
 {
     Object_80039F5C *pair[2];
     unsigned char i;
     Object_8003DEC4 *pObject;
 
-    fn_800A636C(team, pair);
+    GamebreakerGetPlayers(team, pair);
     if (pair[0] == lbl_8030F404[team][1] || pair[1] == lbl_8030F404[team][0]) {
         Object_80039F5C *pSwap = pair[1];
 
@@ -18868,7 +18868,7 @@ extern "C" void fn_800A69BC(int team)
 
         DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
         if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
-            fn_800A6C10(team);
+            GamebreakerRemoveDefense(team);
             GamebreakerRead(&cursor, lbl_803EC954[team]);
             lbl_803EC954[team]->mUnknown10 = 10000;
             lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
@@ -18877,10 +18877,10 @@ extern "C" void fn_800A69BC(int team)
         }
         DbCursorClose(&cursor);
     }
-    fn_800A65BC();
+    GamebreakerRefreshRatings();
 }
 
-extern "C" void fn_800A6B6C(int team)
+extern "C" void GamebreakerRemoveOffense(int team)
 {
     unsigned int count;
     unsigned char i;
@@ -18899,7 +18899,7 @@ extern "C" void fn_800A6B6C(int team)
     }
 }
 
-extern "C" void fn_800A6C10(int team)
+extern "C" void GamebreakerRemoveDefense(int team)
 {
     int other = (team + 1) & 1;
     unsigned int count;
@@ -18918,7 +18918,7 @@ extern "C" void fn_800A6C10(int team)
     }
 }
 
-extern "C" void fn_800A6CB0(int team)
+extern "C" void GamebreakerStartCinematic(int team)
 {
     Params_80092E54 request;
     int none = 0;
@@ -18931,8 +18931,8 @@ extern "C" void fn_800A6CB0(int team)
         request.mUnknownE0.mUnknown4.mWord = 1;
         request.mUnknownE0.mUnknown8.mWord = none;
         request.mUnknown4 = none;
-        fn_8009604C(0, (int)fn_800A624C(ScrmGetOffenseTeam()));
-        fn_8009604C(1, (int)fn_800A624C(ScrmGetDefenseTeam()));
+        fn_8009604C(0, (int)GamebreakerPickCinemaPlayer(ScrmGetOffenseTeam()));
+        fn_8009604C(1, (int)GamebreakerPickCinemaPlayer(ScrmGetDefenseTeam()));
         int handle = fn_8009313C(&request);
 
         lbl_803EC95C = handle;
@@ -18942,22 +18942,22 @@ extern "C" void fn_800A6CB0(int team)
     }
 }
 
-extern "C" void fn_800A6D5C(int team)
+extern "C" void GamebreakerBeginActivation(int team)
 {
     lbl_803EAA4C = team;
     lbl_803EAA4D = 1;
     lbl_803EAA4F = 0;
     fn_800C0330(lbl_803EABA4);
-    fn_800A61E8(0);
+    GamebreakerSetTutorialHud(0);
     PlyrNameTagEnable(0);
 }
 
-extern "C" void fn_800A6DA4(void)
+extern "C" void GamebreakerPickCinemaSide(void)
 {
     lbl_803EAA50 = SyncRandGetRange(0, 2);
 }
 
-extern "C" int fn_800A6DD0(int team)
+extern "C" int GamebreakerSelectCinemaType(int team)
 {
     int result = 8;
     int allowed = 1;
@@ -18989,13 +18989,13 @@ extern "C" int fn_800A6DD0(int team)
     return result;
 }
 
-extern "C" void fn_800A6F04(int team)
+extern "C" void GamebreakerBoostRatings(int team)
 {
     if (fn_800A8444(team)) {
         Object_80039F5C *pair[2];
         unsigned char i;
 
-        fn_800A636C(team, pair);
+        GamebreakerGetPlayers(team, pair);
         for (i = 0; i <= 1; i++) {
             if (pair[i] != 0) {
                 switch (fn_800A8408(team)) {
@@ -19077,13 +19077,13 @@ extern "C" void fn_800A7274(void)
     fn_800A9330();
 }
 
-extern "C" void fn_800A72B4(void)
+extern "C" void GamebreakerUpdateActive(void)
 {
     DbCursor cursor;
     unsigned char team;
 
     if (lbl_803EAA4D != 0) {
-        fn_800A61E8(1);
+        GamebreakerSetTutorialHud(1);
     }
     lbl_803EAA4D = 0;
     lbl_803EAA4F = 0;
@@ -19108,7 +19108,7 @@ extern "C" void fn_800A72B4(void)
             && lbl_803EC954[team]->mUnknown1C != 0) {
             DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
             if (GamebreakerFind(&cursor, lbl_803EC954[team]->mUnknown4, 0)) {
-                fn_800AE798(fn_800A6590(fn_800A8408(team)), team);
+                fn_800AE798(GamebreakerTypeToEffectMask(fn_800A8408(team)), team);
                 if (lbl_803EC954[team]->mUnknown68 != 0) {
                     lbl_803EAA2C[lbl_803EC954[team]->mUnknown8](team);
                 }
@@ -19117,24 +19117,24 @@ extern "C" void fn_800A72B4(void)
                 lbl_803EC954[team]->mUnknown58 = 1.0f;
                 lbl_803EC954[team]->mUnknown64 = 0;
                 if (lbl_803EC954[team]->mUnknown68 != 0) {
-                    fn_800A7514(team);
+                    GamebreakerActivate(team);
                 }
             } else {
                 fn_800A7A0C(team);
             }
             DbCursorClose(&cursor);
             HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
-            fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
+            fn_800AE7F0(GamebreakerTypeToEffectMask(fn_800A8408(team)), team, 0);
         }
     }
 }
 
-extern "C" void fn_800A7514(int team)
+extern "C" void GamebreakerActivate(int team)
 {
     int other = team == 0;
 
     if (lbl_803EC954[team]->mUnknown6C == 1 || lbl_803EC954[team]->mUnknown6C == 2) {
-        fn_800AE750(fn_800A6590(fn_800A8408(team)), team);
+        fn_800AE750(GamebreakerTypeToEffectMask(fn_800A8408(team)), team);
         HudHidePressPrompt(team);
         if (lbl_803EC954[team]->mUnknown68 == 0 && lbl_803EC954[other]->mUnknown68 != 2) {
             float mine = StyleTrackerGetMeterFraction(team);
@@ -19142,7 +19142,7 @@ extern "C" void fn_800A7514(int team)
 
             TutorialSetMoveDone(34, 1);
             if (lbl_803EC954[team]->mUnknown6C == 2) {
-                fn_800A9384(fn_800A6DD0(team));
+                fn_800A9384(GamebreakerSelectCinemaType(team));
                 TutorialSetMoveDone(35, 1);
                 if (lbl_803EC954[other]->mUnknown68 != 0) {
                     AudmonEventPostArgs(11, 0, 0, 0, 0);
@@ -19175,13 +19175,13 @@ extern "C" void fn_800A7514(int team)
                     HudHidePressPrompt(other);
                 }
             }
-            fn_800A6D5C(team);
+            GamebreakerBeginActivation(team);
         }
         if (lbl_803EC954[team]->mUnknown68 != 0) {
             int args[2];
 
             lbl_803EAA1C[lbl_803EC954[team]->mUnknown8](team);
-            fn_800A65BC();
+            GamebreakerRefreshRatings();
             args[0] = team;
             args[1] = 1;
             UISProcessHint(gUISMainInfo, 0x80000016, 2, args);
@@ -19215,7 +19215,7 @@ extern "C" void fn_800A7514(int team)
                         fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
                         fn_800B4798(pPlayer->mRatings, side, i, &pPlayer->mUnknown2900);
                     }
-                    fn_800A6F04(side);
+                    GamebreakerBoostRatings(side);
                 }
             }
         }
@@ -19244,9 +19244,9 @@ extern "C" void fn_800A7A0C(int team)
     args[1] = 0;
     UISProcessHint(gUISMainInfo, 0x80000016, 2, args);
     StyleTrackerSetMeter(team, 0, 0);
-    fn_800A65BC();
+    GamebreakerRefreshRatings();
     if (lbl_803EAA4D != 0) {
-        fn_800A61E8(1);
+        GamebreakerSetTutorialHud(1);
     }
     fn_800A861C();
 }
@@ -19272,7 +19272,7 @@ extern "C" void fn_800A7B5C(void)
                 ScrmGetOffenseTeam();
             }
             DbCursorOpenTable(&cursor, 'KRBG', 'DIBG');
-            fn_800A6658(team);
+            GamebreakerRollStrength(team);
             if (team == ScrmGetOffenseTeam()) {
                 GamebreakerFind(&cursor, 0, &row);
             } else {
@@ -19282,8 +19282,8 @@ extern "C" void fn_800A7B5C(void)
             DbCursorClose(&cursor);
             lbl_803EC954[team]->mUnknown10 = 10000;
             if (lbl_803EC95C == -1) {
-                fn_800A6DA4();
-                fn_800A6CB0(lbl_802D7EFC[lbl_803EAA50][0]);
+                GamebreakerPickCinemaSide();
+                GamebreakerStartCinematic(lbl_802D7EFC[lbl_803EAA50][0]);
             }
             if (StyleTrackerGetMeterFraction(team) >= 1.0f) {
                 lbl_803EC954[team]->mUnknown6C = 2;
@@ -19298,7 +19298,7 @@ extern "C" void fn_800A7B5C(void)
             lbl_803EC954[team]->mUnknown58 = 1.0f;
             lbl_803EC954[team]->mUnknown64 = 0;
             HudSetGameBreakerMeter(team, StyleTrackerGetMeterFraction(team), 0, 0);
-            fn_800AE7F0(fn_800A6590(fn_800A8408(team)), team, 0);
+            fn_800AE7F0(GamebreakerTypeToEffectMask(fn_800A8408(team)), team, 0);
             if (ChallengeIsActive() != 0 &&
                 ((team == 0 && ChalGetCurrent()->mUnknown1C3 != 0) ||
                  (team == 1 && ChalGetCurrent()->mUnknown1C2 != 0))) {
@@ -19325,7 +19325,7 @@ extern "C" int fn_800A7E54(int team)
     return lbl_803EC954[team]->mUnknown60;
 }
 
-extern "C" void fn_800A7E68(void)
+extern "C" void GamebreakerResetCounts(void)
 {
     unsigned char team;
 
@@ -19336,27 +19336,27 @@ extern "C" void fn_800A7E68(void)
     }
 }
 
-extern "C" int fn_800A7EA4(int team)
+extern "C" int GamebreakerGetTimerFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[7];
 }
 
-extern "C" int fn_800A7EB8(int team)
+extern "C" int GamebreakerGetFumbleFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[0];
 }
 
-extern "C" int fn_800A7ECC(int team)
+extern "C" int GamebreakerGetReactFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[3];
 }
 
-extern "C" int fn_800A7EE0(int team)
+extern "C" int GamebreakerGetCatchFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[5];
 }
 
-extern "C" int fn_800A7EF4(int team)
+extern "C" int GamebreakerGetSpeedFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[6];
 }
@@ -19371,17 +19371,17 @@ extern "C" int fn_800A7F1C(int team)
     return lbl_803EC954[team]->mUnknown74[1];
 }
 
-extern "C" int fn_800A7F30(int team)
+extern "C" int GamebreakerGetPursueFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[2];
 }
 
-extern "C" int fn_800A7F44(int team)
+extern "C" int GamebreakerGetPickFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[8];
 }
 
-extern "C" int fn_800A7F58(int team)
+extern "C" int GamebreakerGetShedFlag(int team)
 {
     return lbl_803EC954[team]->mUnknown74[9];
 }
@@ -19409,7 +19409,7 @@ extern "C" int fn_800A7FE0(void)
 
     if (lbl_803EC95C == -1) {
         if (lbl_803EAA4D != 0) {
-            fn_800A61E8(1);
+            GamebreakerSetTutorialHud(1);
         }
         lbl_803EAA4D = 0;
         PlyrObjsSetDrawFlag(1);
@@ -19418,8 +19418,8 @@ extern "C" int fn_800A7FE0(void)
         PlyrObjsSetDrawFlag(0);
         pCharacter = fn_80093BCC(lbl_803EC95C);
         if (lbl_803EAA50 <= 1) {
-            pCharacter->mUnknown14[0] = fn_800A624C(ScrmGetOffenseTeam());
-            pCharacter->mUnknown14[1] = fn_800A624C(ScrmGetDefenseTeam());
+            pCharacter->mUnknown14[0] = GamebreakerPickCinemaPlayer(ScrmGetOffenseTeam());
+            pCharacter->mUnknown14[1] = GamebreakerPickCinemaPlayer(ScrmGetDefenseTeam());
         } else if (fn_800B65A0(lbl_803EAA4C) != 0xFF) {
             pCharacter->mUnknown14[0] = fn_800B6544(fn_800B65A0(lbl_803EAA4C));
             pCharacter->mUnknown14[1] = fn_800B6544(fn_800B65D0(lbl_803EAA4C));
@@ -19577,7 +19577,7 @@ extern "C" int fn_800A851C(int team, Object_80039F5C *p)
     Object_80039F5C *pair[2];
     int result;
 
-    fn_800A636C(team, pair);
+    GamebreakerGetPlayers(team, pair);
     result = 0;
     if (p == pair[0] || p == pair[1]) {
         result = 1;
@@ -19597,7 +19597,7 @@ static float _StrippedReplaceOne(unsigned int u, float x)
 
 extern "C" void fn_800A8570(void)
 {
-    unsigned char *pColor = (unsigned char *)fn_800A3360();
+    unsigned char *pColor = (unsigned char *)StadiumGetGamebreakerTint();
     unsigned int color = (pColor[2] << 16) + (pColor[1] << 8) + pColor[0];
     float alpha = (unsigned int)pColor[3] * (1.0f / 255.0f);
 
@@ -19608,18 +19608,18 @@ extern "C" void fn_800A8570(void)
 
 extern "C" void fn_800A861C(void)
 {
-    fn_800A2E80(fn_800A3444(), 60);
+    StadiumApplyScreenTint(fn_800A3444(), 60);
 }
 
 extern "C" void fn_800A8644(void)
 {
-    fn_800A2E80(fn_800A3444(), 1);
+    StadiumApplyScreenTint(fn_800A3444(), 1);
 }
 
 extern "C" void fn_800A866C(void)
 {
     if (lbl_803EC954[0]->mUnknown68 != 0 || lbl_803EC954[1]->mUnknown68 != 0) {
-        unsigned char *pColor = (unsigned char *)fn_800A3360();
+        unsigned char *pColor = (unsigned char *)StadiumGetGamebreakerTint();
         unsigned int color = (pColor[2] << 16) + (pColor[1] << 8) + pColor[0];
         float alpha = (unsigned int)pColor[3] * (1.0f / 255.0f);
 
@@ -19674,10 +19674,10 @@ extern "C" void fn_800A87E8(void)
              lbl_803EC954[0]->mUnknown68 == 0) ||
             ((lbl_803EC954[1]->mUnknown6C == 1 || lbl_803EC954[1]->mUnknown6C == 2) &&
              lbl_803EC954[1]->mUnknown68 == 0)) {
-            fn_800A6CB0(lbl_802D7EFC[lbl_803EAA50][0]);
+            GamebreakerStartCinematic(lbl_802D7EFC[lbl_803EAA50][0]);
         }
         if (lbl_803EAA4D != 0) {
-            fn_800A61E8(1);
+            GamebreakerSetTutorialHud(1);
         }
         lbl_803EAA4D = 0;
         lbl_803EAA4F = 0;
@@ -19736,7 +19736,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
 
     if (fn_800A8444(team)) {
         if (p != 0 && lbl_80297E84[event].mUnknown9 != 0) {
-            fn_800A636C(team, pair);
+            GamebreakerGetPlayers(team, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
@@ -19765,7 +19765,7 @@ extern "C" void fn_800A8954(int event, int team, Object_80039F5C *p)
     }
     if (lbl_80297E84[event].mUnknown8 != 0 && fn_800A8444(other)) {
         if (lbl_80297E84[event].mUnknown9 != 0) {
-            fn_800A636C(other, pair);
+            GamebreakerGetPlayers(other, pair);
             if (fn_800A9680() == 0 && (p == pair[0] || p == pair[1])) {
                 ParticleTrailStartAfterimage((Object_8003DEC4 *)p->mpUnknown4);
                 AudmonEventPost(14, &p->mMotion.mPos);
@@ -25649,13 +25649,13 @@ extern "C" void fn_800B4A88(void)
     lbl_8030FB60[82] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[153] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[188] = fn_80110C70;
-    lbl_8030FB60[185] = fn_800A44C0;
+    lbl_8030FB60[185] = PlyrTurnAnimCallback;
     lbl_8030FB60[189] = PlyrAlignTurnPhase;
     lbl_8030FB60[206] = fn_8010BC90;
     lbl_8030FB60[239] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[177] = PlayerActionAnimDirectionPhase;
     lbl_8030FB60[154] = fn_80110C70;
-    lbl_8030FB60[155] = fn_800A44C0;
+    lbl_8030FB60[155] = PlyrTurnAnimCallback;
     lbl_8030FB60[217] = PlayerActionAnimTurnInPlacePhase;
     lbl_8030FB60[93] = PlayerActionAnimGenericPhase;
     lbl_8030FB60[94] = PlayerActionAnimGenericPhase;
@@ -27440,7 +27440,7 @@ extern "C" void fn_800B8C9C(void)
 {
     if (lbl_803EAB7E == 0) {
         if (gpReplay->mUnknownD90 != 0) {
-            if (fn_800A2160() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || CelebrationBlockIsActive(0) != 0
+            if (PlayResultIsDone() == 0 || InGameIsDemo() != 0 || fn_800AE978() != 0 || CelebrationBlockIsActive(0) != 0
                 || ReplayPickScript(0) == 0) {
                 return;
             }
@@ -27660,7 +27660,7 @@ void PostPlayPhase::OnEnter(float dt)
     if (fn_800BA6F8()) {
         fn_800BAAC4();
     }
-    fn_800A1FEC(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
+    PlayResultBeginPostPlay(&lbl_803EAB78->mUnknown104, &lbl_803EAB78->mUnknown124);
     lbl_803EAB78->mUnknown151 = 0;
     OnSequenceStart();
     fn_800C4460(&lbl_803EAB78->mSequence);
@@ -28420,7 +28420,7 @@ extern "C" void fn_800BAAE4(void)
             fn_800B49EC((Record_800B49EC *)p->mRatings, (const Record_800B49EC *)p->mUnknown3020);
             fn_800B4798(p->mRatings, (unsigned char)team, (unsigned char)i, &p->mUnknown2900);
         }
-        fn_800A6F04((unsigned char)team);
+        GamebreakerBoostRatings((unsigned char)team);
     }
 }
 
@@ -28668,7 +28668,7 @@ extern "C" void fn_800BB458(void)
             fn_8009BD60(p);
             fn_801BE068(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, 74, 1.0f, p);
             fn_801BE67C(p->mpUnknown792, p->mpUnknown796, p->mpUnknown800, p);
-            fn_800A3B5C(p);
+            PlyrOverlayAnimStopAll(p);
         }
     }
 }
@@ -29821,7 +29821,7 @@ extern "C" void fn_800BDB14(int index, unsigned int msg, float value)
                 blocked = SpchIGIsNarratorIdle() == 0;
             }
             if (!blocked) {
-                fn_800A7514(side);
+                GamebreakerActivate(side);
                 lbl_803EABA8->mUnknownB0 = side;
                 fn_800BD35C();
                 lbl_803EABB4 = 0;
@@ -29940,7 +29940,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
             }
             if (!blocked) {
                 done = 1;
-                fn_800A7514(team);
+                GamebreakerActivate(team);
                 lbl_803EABA8->mUnknownB0 = team;
                 fn_800BD35C();
             }
@@ -30020,7 +30020,7 @@ extern "C" void fn_800BDFB4(int index, unsigned int msg, float value)
                 fn_800B49EC((Record_800B49EC *)pPlayer->mRatings, (Record_800B49EC *)pPlayer->mUnknown3020);
                 fn_800B4798(pPlayer->mRatings, t, i, &pPlayer->mUnknown2900);
             }
-            fn_800A6F04(t);
+            GamebreakerBoostRatings(t);
         }
         done = 1;
     }
@@ -30668,10 +30668,10 @@ extern "C" int fn_800BF8A8(PreSnapPhase *p)
         ScrmAlignTeam(ScrmGetDefenseTeam());
         fn_800C0330(lbl_803EABA4);
         if (fn_800B65A0(ScrmGetOffenseTeam()) == 255 && fn_800A82FC(ScrmGetOffenseTeam())) {
-            fn_800A7514(ScrmGetOffenseTeam());
+            GamebreakerActivate(ScrmGetOffenseTeam());
         }
         if (fn_800B65A0(ScrmGetDefenseTeam()) == 255 && fn_800A82FC(ScrmGetDefenseTeam())) {
-            fn_800A7514(ScrmGetDefenseTeam());
+            GamebreakerActivate(ScrmGetDefenseTeam());
         }
         if (fn_800A8488(0) && !fn_800A8444(0)) {
             HudShowPressPrompt(0);
@@ -30696,17 +30696,17 @@ extern "C" void fn_800BF9DC(PreSnapPhase *p)
 
         for (i = 0; i <= 1; i++) {
             if (fn_800B65A0(i) == 255 && fn_800A84AC((unsigned char)i) != 0) {
-                fn_800A7514((unsigned char)i);
+                GamebreakerActivate((unsigned char)i);
             }
         }
         lbl_803EABA8->mUnknownB4 = -1;
     }
     if (ChallengeIsActive() != 0) {
         if (ChalGetCurrent()->mUnknown1C3 != 0 && fn_800A8444(0) == 0) {
-            fn_800A7514(0);
+            GamebreakerActivate(0);
         }
         if (ChalGetCurrent()->mUnknown1C2 != 0 && fn_800A8444(1) == 0) {
-            fn_800A7514(1);
+            GamebreakerActivate(1);
         }
     }
 }
@@ -31067,7 +31067,7 @@ extern "C" void fn_800C0488(int a, unsigned int kind, float value)
         case 91:
             if (fn_800A8488(team)) {
                 handled = 1;
-                fn_800A7514(team);
+                GamebreakerActivate(team);
                 lbl_803EABA8->mUnknownB0 = team;
                 fn_800BD35C();
             }
@@ -31186,7 +31186,7 @@ extern "C" void fn_800C07F0(QueryCursor cursor, int team, unsigned short *pValue
             i++;
         }
     }
-    fn_800A6F04(team);
+    GamebreakerBoostRatings(team);
 }
 
 // FAKEMATCH: reconstructed unused AGLP query helpers. The target keeps their three query strings
@@ -31741,7 +31741,7 @@ extern "C" void fn_800C1CA0(void)
         fn_800A7A0C(0);
         fn_800A7A0C(1);
     }
-    fn_800A7E68();
+    GamebreakerResetCounts();
     if (fn_800AD9B4() == 7 || fn_800AD9B4() == 0) {
         fn_8009D818(0);
     } else {
@@ -33053,7 +33053,7 @@ extern "C" int fn_800C4E30(Object_80039F5C *p, Object_80039F5C *pOther)
 {
     int result = 0;
 
-    if (fn_800A851C(ScrmGetDefenseTeam(), p) && fn_800A7F30(ScrmGetOffenseTeam()) == 0) {
+    if (fn_800A851C(ScrmGetDefenseTeam(), p) && GamebreakerGetPursueFlag(ScrmGetOffenseTeam()) == 0) {
         result = SyncRandGetRange(0, 100) < 100;
     }
     if (PossTestCarrierBall(pOther)) {
@@ -33092,7 +33092,7 @@ extern "C" int fn_800C4EE8(Object_80039F5C *p, Object_80039F5C *pOther, int roll
     if (!(ratio > 0.65f)) {
         result = 0;
     }
-    if (fn_800C53D8(pOther) || (!fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p))) {
+    if (fn_800C53D8(pOther) || (!GamebreakerGetPursueFlag(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p))) {
         result = 0;
     }
     if (PlayerMoveGetKind(pOther)) {
@@ -33178,7 +33178,7 @@ extern "C" int fn_800C53D8(Object_80039F5C *p)
     int result = 0;
 
     if (p != 0) {
-        result = fn_800A7F30(p->mIdBytes[2]) == 2;
+        result = GamebreakerGetPursueFlag(p->mIdBytes[2]) == 2;
     }
     return result;
 }
@@ -33676,7 +33676,7 @@ extern "C" int fn_800C6640(Object_80039F5C *p, Object_800C6640 *pSource, Object_
         if (PlayerMoveGetKind(p) || (pOther != 0 && PlayerActionDiveIsActive(pOther))) {
             return 0;
         }
-        if (fn_800A7F30(p->mIdBytes[2]) == 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
+        if (GamebreakerGetPursueFlag(p->mIdBytes[2]) == 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
             return 0;
         }
         result = 100 - chance;
@@ -34174,7 +34174,7 @@ extern "C" void fn_800C7794(Object_80039F5C *p)
     }
     key = pOther->mUnknown2914;
     chance = fn_800C6048(pOther, 0, p, key);
-    if (chance != 0 && !fn_800A7F30(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p)) {
+    if (chance != 0 && !GamebreakerGetPursueFlag(pOther->mIdBytes[2]) && fn_800A851C(p->mIdBytes[2], p)) {
         chance = 100;
     }
     blocked = PlayerMoveGetKind(pOther);
@@ -34312,7 +34312,7 @@ extern "C" void fn_800C7D44(Object_80039F5C *p)
     key = p->mUnknown2914;
     chance = fn_800C6048(p, (Object_800C6640 *)&p->mUnknown560, 0, key);
     if (chance != 0) {
-        if (!fn_800A7F30(p->mIdBytes[2]) && pOther != 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
+        if (!GamebreakerGetPursueFlag(p->mIdBytes[2]) && pOther != 0 && fn_800A851C(pOther->mIdBytes[2], pOther)) {
             chance = 100;
         }
         if (chance != 0 && p->mpState->mId == 58
@@ -35295,7 +35295,7 @@ extern "C" void fn_800C9FC0(void)
     }
     for (team = 0; team <= 1; team++) {
         for (j = 0; j < lbl_803EAC3C->mCounts[team]; j++) {
-            if (!fn_800A7EA4(team)) {
+            if (!GamebreakerGetTimerFlag(team)) {
                 lbl_803EAC3C->mEntries[team][j].mUnknown4 = 0;
                 lbl_803EAC3C->mEntries[team][j].mUnknownC = 0;
             } else {
@@ -35485,7 +35485,7 @@ extern "C" int fn_800CA5CC(Object_80039F5C *p, int kind, int apply)
         if (lbl_803EAC3C->mEntries[team][i].mRef != ref) {
             continue;
         }
-        if (fn_800A7EA4(team) == 2
+        if (GamebreakerGetTimerFlag(team) == 2
             || (p == BallGetTarget(BallGetCurrent()) && fn_800A7F1C(team) == 2 && BallStateGet(BallGetCurrent(), 0) != 0)
             || (CheatFlagsIsSet(22) != 0 && GameModeTypeGet() == 0)) {
             cost = 0;
@@ -37835,9 +37835,9 @@ float lbl_803EAA0C = 80.0f;
 float lbl_803EAA10 = 30.0f;
 unsigned int lbl_803EAA14 = 0x40;
 unsigned char lbl_803EAA18 = 4;
-void (*lbl_803EAA1C[2])(int team) = {fn_800A6750, fn_800A67B8};
-void (*lbl_803EAA24[2])(int team) = {fn_800A680C, fn_800A69BC};
-void (*lbl_803EAA2C[2])(int team) = {fn_800A6B6C, fn_800A6C10};
+void (*lbl_803EAA1C[2])(int team) = {GamebreakerApplyOffense, GamebreakerApplyDefense};
+void (*lbl_803EAA24[2])(int team) = {GamebreakerUpdateOffense, GamebreakerUpdateDefense};
+void (*lbl_803EAA2C[2])(int team) = {GamebreakerRemoveOffense, GamebreakerRemoveDefense};
 int lbl_803EAA34[2] = {0, 0};
 int lbl_803EAA3C[2] = {8, -8};
 int lbl_803EAA44[2] = {0, 0};
@@ -38098,10 +38098,10 @@ unsigned char lbl_802D7D90[12][4] = {0xC8, 0x82, 0x50, 0x26, 0xB9, 0xE1, 0x41, 0
 int lbl_802D7DC0[12] = {1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0};
 unsigned char lbl_802D7DF0[12][4] = {{0x64, 0x64, 0x64, 0x66}, {0x64, 0x64, 0x64, 0x40}, {0x64, 0x64, 0x64, 0x15}, {0xDC, 0xDC, 0xDC, 0x5A}, {0x64, 0x64, 0x64, 0x5A}, {0xC8, 0xC8, 0xC8, 0x73}, {0xC8, 0xC8, 0xC8, 0x8C}, {0xB9, 0xB9, 0xB9, 0x8C}, {0xC8, 0xC8, 0xC8, 0x73}, {0xDC, 0xDC, 0xDC, 0x5A}, {0x64, 0x64, 0x64, 0x8C}, {0xDC, 0xDC, 0xDC, 0x73}};
 void (*lbl_802D7E20[11])(Object_80039F5C *p, Object_80039F5C *pOther, int index,
-                                 Params_800A4E8C *pParams) = {fn_800A481C, 0, fn_800A4950, 0, fn_800A4980, fn_800A4980, fn_800A481C, fn_800A481C, fn_800A481C, fn_800A481C, fn_800A4E64};
+                                 Params_800A4E8C *pParams) = {DefReactParamsBoost, 0, DefReactParamsByState, 0, DefReactParamsByDistance, DefReactParamsByDistance, DefReactParamsBoost, DefReactParamsBoost, DefReactParamsBoost, DefReactParamsBoost, DefReactParamsAlways};
 int (*lbl_802D7E4C[11])(Object_80039F5C *p, Object_80039F5C *pTarget,
-                               Object_80039F5C *pOther, Pair_800A554C *pPair) = {fn_800A506C, fn_800A50B8, fn_800A517C, fn_800A506C, fn_800A535C, fn_800A535C, fn_800A506C, fn_800A506C, fn_800A506C, fn_800A5104, fn_800A543C};
-int (*lbl_802D7E78[11])(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState) = {fn_800A563C, fn_800A55D0, fn_800A5844, (int (*)(Object_80039F5C *, Object_80039F5C *, int *))fn_800A55C0, fn_800A5690, fn_800A5718, fn_800A563C, fn_800A563C, fn_800A563C, fn_800A57A4, fn_800A5A04};
+                               Object_80039F5C *pOther, Pair_800A554C *pPair) = {DefReactTestFirstInView, DefReactTestDecayChance, DefReactTestByRole, DefReactTestFirstInView, DefReactTestNearFacing, DefReactTestNearFacing, DefReactTestFirstInView, DefReactTestFirstInView, DefReactTestFirstInView, DefReactTestBothInView, DefReactTestEngaged};
+int (*lbl_802D7E78[11])(Object_80039F5C *p, Object_80039F5C *pTarget, int *pState) = {DefReactSteerIntercept, DefReactSteerToTarget, DefReactSteerLead, (int (*)(Object_80039F5C *, Object_80039F5C *, int *))DefReactSteerStop, DefReactSteerFlank, DefReactSteerInterceptOnce, DefReactSteerIntercept, DefReactSteerIntercept, DefReactSteerIntercept, DefReactSteerFixedHeading, DefReactSteerMatchHeading};
 float lbl_802D7EA4[11] = {28.0f, 12.0f, 12.0f, 12.0f, 12.0f, 12.0f, 28.0f, 28.0f, 28.0f, 12.0f, 25.0f};
 float lbl_802D7ED0[11] = {20.0f, 4.0f, 4.0f, 4.0f, 4.0f, 4.0f, 20.0f, 20.0f, 20.0f, 4.0f, 20.0f};
 int lbl_802D7EFC[2][3] = {0, 114, 115, 1, 112, 113};

@@ -766,7 +766,7 @@ void fn_800B0DA4(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
 void fn_800B49EC(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
-void fn_800A6F04(int team);
+void GamebreakerBoostRatings(int team);
 int ScrmGetScoreGoal(int *p);
 int ScrmGetTeamScore(int team);
 int ScrmGetDown(void);
@@ -811,7 +811,7 @@ void PlayCallApplyPlay(int team, int value)
                 fn_800B49EC(p->mRatings, p->mUnknown3020);
                 fn_800B4798(p->mRatings, (unsigned char)t, i, &p->mUnknown2900);
             }
-            fn_800A6F04((unsigned char)t);
+            GamebreakerBoostRatings((unsigned char)t);
         }
     }
 }

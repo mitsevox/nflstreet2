@@ -399,8 +399,8 @@ void TurnToPlayExit(void);
 void TurnToPlayInput(void);
 void TurnToPlayNotify(void);
 void TurnToPlayUpdate(void);
-void fn_800A5DD8(void);
-void fn_800A5E20(void);
+void DefReactSelectInput(void);
+void DefReactSelectPursueInput(void);
 void fn_800B76E8(void);
 void fn_800B78DC(void);
 void fn_800B7E60(void);
@@ -585,7 +585,7 @@ void PassBlockInput(void);
 PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)CarrierRunEnter, (void *)CarrierRunExit, (void *)CarrierRunUpdate, (void *)CarrierRunInput, (void *)CarrierRunNotify, 0}},
-    {{(void *)PursueEnter, (void *)PursueExit, (void *)PursueUpdate, (void *)fn_800A5E20, (void *)PursueNotify, 0}},
+    {{(void *)PursueEnter, (void *)PursueExit, (void *)PursueUpdate, (void *)DefReactSelectPursueInput, (void *)PursueNotify, 0}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD41C, (void *)fn_800B7E60, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800FD2AC, (void *)fn_800FD3F0, (void *)fn_800FD580, (void *)fn_800B76E8, (void *)fn_800FD650, (void *)fn_800FD708}},
     {{(void *)fn_800F2AA0, (void *)fn_800F2C14, (void *)fn_800F2B8C, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
@@ -605,7 +605,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)RouteRunEnter, (void *)RouteRunExit, (void *)RouteRunUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)PlayerCutEnter, (void *)PlayerCutExit, (void *)PlayerCutUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)PlayerCutMirrorMessage}},
     {{(void *)GetOpenEnter, (void *)fn_800F0900, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FAD10}},
+    {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FAD10}},
     {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
     {{(void *)fn_80105898, (void *)fn_80106794, (void *)fn_80105AF4, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_80105DF0}},
@@ -613,7 +613,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_8010CAE8, (void *)fn_800F0900, (void *)fn_8010CB58, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_800FD708}},
+    {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)PassBlockEnter, (void *)PassBlockExit, (void *)PassBlockUpdate, (void *)PassBlockInput, (void *)fn_800F0908, 0}},
     {{(void *)PlyrEngageEnter, (void *)PlyrEngageExit, (void *)PlyrEngageUpdate, (void *)PlyrEngageInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010F43C, (void *)fn_8010FB10, (void *)PlyrTrackTargetUpdate, (void *)fn_8010FB4C, (void *)fn_800F0908, 0}},
@@ -623,7 +623,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80116B98, (void *)fn_800F0900, (void *)fn_80116C34, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_801170A0}},
+    {{(void *)fn_80116B98, (void *)fn_800F0900, (void *)fn_80116C34, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_801170A0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)PlyrAlignEnter, (void *)PlyrAlignExit, (void *)PlyrAlignUpdate, (void *)PlyrAlignInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80111104, (void *)fn_801112D8, (void *)fn_801111E8, (void *)fn_80111314, (void *)fn_800F0908, 0}},
@@ -668,17 +668,17 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_801135E4, (void *)fn_800F0900, (void *)fn_80113604, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
-    {{(void *)fn_8010BED4, (void *)fn_800F0900, (void *)fn_8010BF5C, (void *)fn_800A5DD8, (void *)fn_800F0908, 0}},
+    {{(void *)fn_8010BED4, (void *)fn_800F0900, (void *)fn_8010BF5C, (void *)DefReactSelectInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80112E10, (void *)fn_800F0900, (void *)fn_80112E8C, (void *)fn_80112F8C, (void *)fn_800F0908, 0}},
     {{(void *)fn_8010FD94, (void *)fn_800F0900, (void *)fn_8010FE40, (void *)fn_80110078, (void *)fn_800F0908, 0}},
     {{(void *)fn_80113478, (void *)fn_800F0900, (void *)fn_80113498, (void *)fn_80113510, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F08F8, (void *)PlyrStateUpdateClear, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FFDFC, (void *)fn_800FFF78, (void *)fn_800FFE30, (void *)fn_800B7E60, (void *)fn_800F0908, (void *)fn_800FFFA0}},
     {{(void *)OptionRunEnter, (void *)OptionRunExit, (void *)OptionRunUpdate, (void *)OptionRunInput, (void *)fn_800F0908, (void *)OptionRunMirror}},
-    {{(void *)fn_80118210, (void *)fn_800F0900, (void *)fn_801182C8, (void *)fn_800A5DD8, (void *)fn_800F0908, (void *)fn_80118778}},
+    {{(void *)fn_80118210, (void *)fn_800F0900, (void *)fn_801182C8, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_80118778}},
     {{(void *)fn_8010BA00, (void *)fn_8010BC48, (void *)fn_8010BA90, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},
     {{(void *)PlayerActionDiveEnter, (void *)PlayerActionDiveExit, (void *)PlayerActionDiveUpdate, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
-    {{(void *)fn_800F4A74, (void *)fn_800F0900, (void *)fn_800F4AD4, (void *)fn_800A5DD8, (void *)fn_800F0908, 0}},
+    {{(void *)fn_800F4A74, (void *)fn_800F0900, (void *)fn_800F4AD4, (void *)DefReactSelectInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80125304, (void *)fn_80125494, (void *)fn_801253A8, (void *)fn_801254C8, (void *)fn_80125508, 0}},
     {{(void *)fn_80125DF0, (void *)fn_800F0900, (void *)fn_80125E20, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
 };

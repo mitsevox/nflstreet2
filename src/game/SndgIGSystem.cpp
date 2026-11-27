@@ -25,7 +25,7 @@ void SndgEventFreeRandom(void);
 void SndgEventSetMusicHold(int value);
 void SpchIGInit(void);
 void SpchIGShutdown(void);
-int fn_800A350C(void);
+int StadiumHasCrowd(void);
 void fn_800B1670(void (*pCallback)(void *));
 int fn_800C8704(int *pA, int *pB);
 void ResTrackLabel(const char *pText);
@@ -66,7 +66,7 @@ extern "C" void SndgIGInitAudio(void)
     SndgChannelsCreateStreams(GameModeTypeGet() == 11);
     SndgAmbInit();
     SndgAmbPostCue(0);
-    if (fn_800A350C()) {
+    if (StadiumHasCrowd()) {
         SndgCrowdTriggerEvent(0, 0);
     }
     SndgEventInit();

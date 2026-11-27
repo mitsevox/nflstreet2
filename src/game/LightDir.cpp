@@ -12,7 +12,7 @@ struct LightDirRecord {
 
 extern "C" {
 
-void *fn_800A342C(void);
+void *StadiumGetLightDir(void);
 void Vec3Normalize(float *pOut, float *pIn);
 
 void LightDirUpdate(void)
@@ -21,9 +21,9 @@ void LightDirUpdate(void)
 
 void LightDirSetFromLevel(LightDirRecord *pObject)
 {
-    pObject->mDir.mX = ((Vector_80039F5C *)fn_800A342C())->mX;
-    pObject->mDir.mY = ((Vector_80039F5C *)fn_800A342C())->mY;
-    pObject->mDir.mZ = ((Vector_80039F5C *)fn_800A342C())->mZ;
+    pObject->mDir.mX = ((Vector_80039F5C *)StadiumGetLightDir())->mX;
+    pObject->mDir.mY = ((Vector_80039F5C *)StadiumGetLightDir())->mY;
+    pObject->mDir.mZ = ((Vector_80039F5C *)StadiumGetLightDir())->mZ;
 }
 
 void LightDirRefreshFromLevel(LightDirRecord *pObject)
@@ -35,9 +35,9 @@ void LightDirRefreshFromLevel(LightDirRecord *pObject)
    component before normalizing. */
 void LightDirSetOppositeLevelFlat(LightDirRecord *pObject)
 {
-    pObject->mDir.mX = -((Vector_80039F5C *)fn_800A342C())->mX;
-    pObject->mDir.mY = -((Vector_80039F5C *)fn_800A342C())->mY;
-    pObject->mDir.mZ = -((Vector_80039F5C *)fn_800A342C())->mZ;
+    pObject->mDir.mX = -((Vector_80039F5C *)StadiumGetLightDir())->mX;
+    pObject->mDir.mY = -((Vector_80039F5C *)StadiumGetLightDir())->mY;
+    pObject->mDir.mZ = -((Vector_80039F5C *)StadiumGetLightDir())->mZ;
     pObject->mDir.mZ = 0.0f;
     Vec3Normalize(&pObject->mDir.mX, &pObject->mDir.mX);
 }

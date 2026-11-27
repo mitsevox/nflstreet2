@@ -587,9 +587,9 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
             pBlock->mUnknown4Word = p->mMotion.mFacing;
         }
         AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(fn_800C495C(p, 1.0f)));
-        if (fn_800A7EF4(p->mIdBytes[2]) == 2) {
+        if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 2) {
             AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(2.0f));
-        } else if (fn_800A7EF4(p->mIdBytes[2]) == 0) {
+        } else if (GamebreakerGetSpeedFlag(p->mIdBytes[2]) == 0) {
             AnimSeqSetSpeed(&pRecords[pBlock->mUnknown0Word].mUnknown4C, MathInverse(0.5f));
         }
         break;

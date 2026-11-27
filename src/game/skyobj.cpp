@@ -6,8 +6,8 @@
 #include "game/skyobj.h"
 
 extern "C" {
-void *fn_800A336C(void);
-int fn_800A338C(void);
+void *StadiumGetResDevice(void);
+int StadiumGetSkyResIndex(void);
 int ObjNewType_(int type, int size, int count, void *pCreate, void *pDestroy);
 int ObjDelType(int type);
 void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(EnvSkyObj_t *, int));
@@ -36,7 +36,7 @@ int EnvSkyObjDraw(EnvSkyObj_t *pInstance, int a)
 
 void EnvSkyObjLoadModel(EnvSkyObj_t *pInstance)
 {
-    int handle = ResLoad(fn_800A336C(), pInstance->mUnknown1C8, 1);
+    int handle = ResLoad(StadiumGetResDevice(), pInstance->mUnknown1C8, 1);
 
     ModelObjRelocateModelRes(handle);
     pInstance->mUnknown14 = handle;
@@ -66,7 +66,7 @@ void EnvSkyObjCreate(void *pOwner)
             ObjSetPriority((int)pOwner, (int)pItem, 0);
             pItem->mUnknown1CC = 1;
             pItem->mUnknown4.mZ = pItem->mUnknown4.mY = pItem->mUnknown4.mX = 0.0f;
-            pItem->mUnknown1C8 = fn_800A338C();
+            pItem->mUnknown1C8 = StadiumGetSkyResIndex();
             EnvSkyObjLoadModel(pItem);
             EnvSkyInit(pItem);
         }

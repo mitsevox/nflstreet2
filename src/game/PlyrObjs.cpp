@@ -82,8 +82,8 @@ void fn_80190F18(BitStream_t *, int);
 void fn_800B4D7C();
 void fn_800B4A88();
 void fn_801BE030(int, void **);
-void fn_800A3D70();
-void fn_800A3C14();
+void PlyrOverlayAnimRegisterCallbacks();
+void PlyrOverlayAnimLoad();
 void fn_800AE10C();
 void fn_800ADE6C();
 AnimSkeleton_t *ResLoad(void *, int, int);
@@ -147,7 +147,7 @@ void PlaTexCacheSetCapFace(int, int, int, int, int);
 void PlyrObjsSetHeadSkeletons();
 
 void PlaTexCacheLoadAllNow();
-int fn_800A3420();
+int StadiumGetSkyState();
 void PlayerLookHideSwitch28();
 void PlaTexCacheDiscardRequests();
 int FELoopIsMainFEActive();
@@ -645,9 +645,9 @@ void PlyrObjsInitStateTables(int mode) {
   else
     fn_800B4A88();
   fn_801BE030(1, &lbl_803EAB3C);
-  fn_800A3D70();
+  PlyrOverlayAnimRegisterCallbacks();
   fn_801BE030(3, &lbl_803EA9FC);
-  fn_800A3C14();
+  PlyrOverlayAnimLoad();
   fn_800AE10C();
   fn_801BE030(4, &lbl_803EAAE0);
   fn_800ADE6C();
@@ -887,7 +887,7 @@ int PlyrObjsCreate(int count, int owner, int mode) {
   int result = PlyrObjsCreatePlayers(owner, mode);
   if (!mode) {
     PlaTexCacheLoadAllNow();
-    if (fn_800A3420() == 3)
+    if (StadiumGetSkyState() == 3)
       PlayerLookHideSwitch28();
   } else
     PlaTexCacheDiscardRequests();

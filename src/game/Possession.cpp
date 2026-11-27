@@ -87,9 +87,9 @@ void PlyrGetJointBallTransform(Object_80039F5C *p, Vector_80039F5C *pA, Vector_8
 int fn_8009D86C(void);
 void DefCoverResetDefenders(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
-int fn_800A7EB8(int team);
-int fn_800A7EE0(int team);
-int fn_800A7F44(int team);
+int GamebreakerGetFumbleFlag(int team);
+int GamebreakerGetCatchFlag(int team);
+int GamebreakerGetPickFlag(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 unsigned int fn_800ABDA4(int team);
@@ -420,10 +420,10 @@ int PossIsCatchInBounds(Object_80039F5C *p)
     float zoneInfo;
     Point2_t point;
 
-    if (!fn_800A7F44(p->mId >> 8 & 0xFF)) {
+    if (!GamebreakerGetPickFlag(p->mId >> 8 & 0xFF)) {
         return 0;
     }
-    if (fn_800A7F44(p->mId >> 8 & 0xFF) == 2) {
+    if (GamebreakerGetPickFlag(p->mId >> 8 & 0xFF) == 2) {
         return 1;
     }
     if (ScrmClassifyPosition(&p->mMotion.mPos, &zoneInfo, 0) > 2) {
@@ -454,7 +454,7 @@ int PossCanFumble(Object_80039F5C *p)
             allowed = 0;
         }
     }
-    if (fn_800A7EB8(p->mId >> 8 & 0xFF) == 2) {
+    if (GamebreakerGetFumbleFlag(p->mId >> 8 & 0xFF) == 2) {
         allowed = 0;
     }
     if (fn_801BE648(p->mpUnknown792) == 0xEA) {
@@ -702,8 +702,8 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
     }
     PossApplyCoverage(p, &chance);
     chance -= PossCalcHitFactor(p) * 0.3f;
-    if (offense ? fn_800A7EE0(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)
-                : fn_800A7F44(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)) {
+    if (offense ? GamebreakerGetCatchFlag(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)
+                : GamebreakerGetPickFlag(p->mId >> 8 & 0xFF) == 2 && fn_800A851C(p->mId >> 8 & 0xFF, p)) {
         chance = chance < 1.0f ? 1.0f : chance;
     }
     if (fn_801486A0() == 1) {
@@ -957,8 +957,8 @@ void PossTryJarBall(Object_80039F5C *p)
             }
         }
     }
-    if ((fn_800A7EE0(p->mId >> 8 & 0xFF) != 2 && chance != 0.0f && SyncRandGetFloat(0) < chance)
-        || (pHitter && !fn_800A7EB8(p->mId >> 8 & 0xFF) && fn_800A851C(pHitter->mId >> 8 & 0xFF, pHitter))) {
+    if ((GamebreakerGetCatchFlag(p->mId >> 8 & 0xFF) != 2 && chance != 0.0f && SyncRandGetFloat(0) < chance)
+        || (pHitter && !GamebreakerGetFumbleFlag(p->mId >> 8 & 0xFF) && fn_800A851C(pHitter->mId >> 8 & 0xFF, pHitter))) {
         int unknown;
         int state = BallStateGetPrev(pBall, &unknown);
 
@@ -1016,7 +1016,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
     if (CheatFlagsIsSet(0x17) && !GameModeTypeGet()) {
         forced = 1;
     }
-    if (!fn_800A7EB8(p->mId >> 8 & 0xFF) && pTackler && fn_800A851C(pTackler->mId >> 8 & 0xFF, pTackler)) {
+    if (!GamebreakerGetFumbleFlag(p->mId >> 8 & 0xFF) && pTackler && fn_800A851C(pTackler->mId >> 8 & 0xFF, pTackler)) {
         forced = 1;
     }
     if (!PossCheckDownedBall(p) && !ScrmIsNotReplay() && PossCanFumble(p)) {
@@ -1692,7 +1692,7 @@ int PossCheckDownedBall(Object_80039F5C *p)
     if (PlayerMoveGetKind(p)) {
         down = 1;
     }
-    if (down && fn_800A7EB8(p->mIdBytes[2]) != 2 && !ScrmIsNotReplay() && BallGetCurrentHolder() == p && handoff == 0) {
+    if (down && GamebreakerGetFumbleFlag(p->mIdBytes[2]) != 2 && !ScrmIsNotReplay() && BallGetCurrentHolder() == p && handoff == 0) {
         result = BallIsClearOfHands(BallGetCurrent());
     }
     if (result) {

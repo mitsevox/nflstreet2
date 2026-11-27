@@ -176,7 +176,7 @@ int PlayerLookShowsHair(int index);
 unsigned char PlayerLookHidesHead(int index);
 unsigned char PlayerObjIsDrawReady(void);
 unsigned char CheatFlagsIsSet(int index);
-int fn_800A2624(void);
+int StadiumIsCamPastEndLine(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int fn_800ADDD8(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
@@ -1208,7 +1208,7 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
     } else if (pPlayer->mUnknown20 & 0x400) {
         lod = 0;
     }
-    if (!(pPlayer->mUnknown20 & 8) && fn_800A2624()) {
+    if (!(pPlayer->mUnknown20 & 8) && StadiumIsCamPastEndLine()) {
         lod = 1;
     }
     if (pPlayer->mUnknown4216.mUnknown12 > _PlyrRender_fFarDistance) {

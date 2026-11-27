@@ -86,7 +86,7 @@ extern "C" {
 extern float gPlyrMoveFwdSpeed;
 
 void fn_8009BD60(Object_80039F5C *p);
-int fn_800A7EF4(unsigned char a);
+int GamebreakerGetSpeedFlag(unsigned char a);
 void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);

@@ -205,9 +205,9 @@ int ChallengeIsActive(void);
 struct Challenge_t;
 Challenge_t *ChalGetCurrent(void);
 int ChallengeHasGoalType(Challenge_t *, int, int *);
-void fn_800A20D0(int, signed char);
+void PlayResultAddScore(int, signed char);
 float fn_800A32B4(void);
-void fn_800A72B4(void);
+void GamebreakerUpdateActive(void);
 void fn_800A7B5C(void);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 Object_80039F5C *fn_801245DC(Object_80039F5C *, int, unsigned char, unsigned char, int, float *, int);
@@ -711,7 +711,7 @@ extern "C" void StyleTrackerApplyAward(int side, int id, int scaled, int subtrac
                     StyleTrackerShowAward(side, message, value, arg);
                     StyleTrackerShowTotal(side, StyleTrackerGetTotal(side));
                 }
-                if (fn_801486A0() == 3 && text != 0) fn_800A20D0(ScrmGetSnapOffense(), (signed char)text);
+                if (fn_801486A0() == 3 && text != 0) PlayResultAddScore(ScrmGetSnapOffense(), (signed char)text);
             } else StyleTrackerTraceEvent(76);
         } else StyleTrackerTraceEvent(77);
     }
@@ -890,7 +890,7 @@ extern "C" void StyleTrackerProcessEvent(int id, int team, int count) {
         Challenge_t *object = ChalGetCurrent();
         if (ChallengeHasGoalType(object, 20, 0) || ChallengeHasGoalType(object, 31, 0)) flag = 1;
     }
-    if ((_StyleTracker_pState->mMatchSettled == 0 || flag) && fn_800A8740() == 0) { fn_800A72B4(); fn_800A7B5C(); }
+    if ((_StyleTracker_pState->mMatchSettled == 0 || flag) && fn_800A8740() == 0) { GamebreakerUpdateActive(); fn_800A7B5C(); }
     StyleTrackerShowMeter(0, _StyleTracker_pState->mTeamZeroMeter, 0, 1); StyleTrackerShowMeter(1, _StyleTracker_pState->mTeamOneMeter, 0, 1);
     StyleTrackerShowMeter(0, _StyleTracker_pState->mTeamZeroMeter, 0, 0); StyleTrackerShowMeter(1, _StyleTracker_pState->mTeamOneMeter, 0, 0);
     if (ScrmGetSnapOffense() != ScrmGetOffenseTeam() || ScrmGetPlayTurnovers() != 0) _StyleTracker_pState->unk_0x1ECE = 1;
