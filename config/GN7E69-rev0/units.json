@@ -29164,7 +29164,7 @@
     {
       "source": "src/engine/uigarc.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes. Its two COMMON vertex tables UIGArcVertexCoords 0x803A0400-0x803A1400 and UIGArcVertexColors 0x803A1400-0x803A1C00 are placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -29209,7 +29209,19 @@
           }
         ],
         "evidence": "e2e merge notes (swarm e2 tracking, PR #1471): src/engine/uigarc.c holds out fn_80223FF4 and fn_8022482C."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "UIGArcVertexCoords",
+          "start": "0x803A0400",
+          "end": "0x803A1400"
+        },
+        {
+          "symbol": "UIGArcVertexColors",
+          "start": "0x803A1400",
+          "end": "0x803A1C00"
+        }
+      ]
     },
     {
       "source": "src/engine/dbuslp.c",
@@ -29468,7 +29480,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes. Its .bss (_AnimSt_pStatAnimList 0x8037EC7C-0x8037F860) and .sbss (_AnimSt_NumObjTypes 0x803ECEBC-0x803ECEC0) are linked from the compiled object (their data rows).",
       "sections": [
         {
           "section": ".text",
@@ -29493,6 +29505,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "holdouts": {
@@ -29717,7 +29741,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes. The COMMON GX light LLUIGTexLightObj 0x803E9880-0x803E98C0, shared with uigcurverender.c and uigarc.c, is placed by its storage map (data row; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -29766,7 +29790,14 @@
           }
         ],
         "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "LLUIGTexLightObj",
+          "start": "0x803E9880",
+          "end": "0x803E98C0"
+        }
+      ]
     },
     {
       "source": "src/engine/UIGColorStyle.c",

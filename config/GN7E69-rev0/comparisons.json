@@ -24077,7 +24077,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801BDA30-0x801BE82C (src/engine/animst.c, was src/engine/cu_801BDA30.c), function rows, data row 0x802AEE38-0x802AEE68 and compiler row engine_c_fastmath; Linked with holdouts: fn_801BE068 and fn_801BE420 keep the original bytes. Data rows 0x8037EC7C-0x8037F860 (.bss) and 0x803ECEBC-0x803ECEC0 (.sbss).",
       "sections": [
         {
           "section": ".text",
@@ -24090,6 +24090,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "functions": [
