@@ -13650,12 +13650,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800BC83C",
-          "end": "0x800BCF7C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800BD184",
           "end": "0x800BE808"
         },
         {
@@ -13924,10 +13918,6 @@
             "evidence": "evidence.tsv source-form 0x800BC5DC-0x800BC83C"
           },
           {
-            "function": "fn_800BCF7C",
-            "evidence": "evidence.tsv source-form 0x800BCF7C-0x800BD184"
-          },
-          {
             "function": "PreSnapEnterLookMode",
             "evidence": "evidence.tsv source-form 0x800BE808-0x800BE8E4"
           },
@@ -13980,7 +13970,7 @@
             "evidence": "evidence.tsv source-form 0x800CDE50-0x800CE158"
           }
         ],
-        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 51 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
+        "evidence": "comparisons.json partials of src/game/cu_8008E978.cpp: the 50 functions whose compiled bytes differ from the target keep the original bytes; each names its HOLDOUT: source-form row (owner rulings of 2026-11-19 and 2026-11-20)."
       },
       "link_roots": {
         "discarded": [
