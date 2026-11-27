@@ -20,7 +20,7 @@
 extern "C" {
 unsigned char *PlyrGetPendingMsg(Object_80039F5C *p);
 int fn_800B76E8(Object_80039F5C *p);
-void fn_800B7CA4(Object_80039F5C *p);
+void PlyrCtrlOffenseInput(Object_80039F5C *p);
 void fn_800B8344(Object_80039F5C *p);
 void PlayerMoveUpdateRun(Object_80039F5C *p);
 void PlayerMoveGetRunMode(Object_80039F5C *p, unsigned char *pOut);
@@ -529,7 +529,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
 
     if (pControl->mUnknown80 == 0) {
         if (*PlyrGetPendingMsg(p) == 57) {
-            fn_800B7CA4(p);
+            PlyrCtrlOffenseInput(p);
         } else {
             fn_800B76E8(p);
         }
@@ -556,7 +556,7 @@ extern "C" int OptionRunInput(Object_80039F5C *p)
                     StyleTrackerBeginPumpInteraction();
                 }
             } else if (*PlyrGetPendingMsg(p) == 57) {
-                fn_800B7CA4(p);
+                PlyrCtrlOffenseInput(p);
             } else {
                 fn_800B76E8(p);
             }

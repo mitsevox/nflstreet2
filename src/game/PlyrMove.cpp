@@ -8,10 +8,10 @@
 extern "C" {
 extern float gFrameTimeScale;
 
-void fn_800B26B0(Object_800B26B0 *pObject);
-void fn_800B26E0(Object_800B26B0 *pObject);
-void fn_800B2A14(Object_800B26B0 *pObject, unsigned char *a);
-void fn_800B2D9C(Object_800B26B0 *pObject);
+void MotionResetDecay(Object_800B26B0 *pObject);
+void MotionIntegrate(Object_800B26B0 *pObject);
+void MotionApplyInput(Object_800B26B0 *pObject, unsigned char *a);
+void MotionAlignToFacing(Object_800B26B0 *pObject);
 float fn_800C4914(Object_80039F5C *p, float value);
 float fn_800C495C(Object_80039F5C *p, float value);
 void fn_800CA8F4(Object_80039F5C *p);
@@ -329,7 +329,7 @@ void PlyrMoveUpdate(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
-    fn_800B26B0(pMotion);
+    MotionResetDecay(pMotion);
     PlyrMoveLatchRequest(p);
     if (_PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14] != PlyrMoveModeStop) {
         PlyrMoveCalcSpeed(p);
@@ -337,13 +337,13 @@ void PlyrMoveUpdate(Object_80039F5C *p)
     _PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14](p);
     if (p->mUnknown545 == 0) {
         PlyrMoveApplyGroundScale(p);
-        fn_800B26E0(pMotion);
+        MotionIntegrate(pMotion);
     } else {
-        fn_800B2A14(pMotion, &p->mUnknown544);
+        MotionApplyInput(pMotion, &p->mUnknown544);
     }
     if (p->mFlags & 0x100) {
         p->mFlags &= ~0x100;
-        fn_800B2D9C(&p->mMotion);
+        MotionAlignToFacing(&p->mMotion);
     }
     p->mUnknown528.mUnknown14 = 0;
     p->mUnknown512.mUnknown14 = 0;

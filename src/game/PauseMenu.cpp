@@ -77,9 +77,9 @@ int fn_800A8444(int a);
 int fn_800A8488(int a);
 void fn_800ABD80(void);
 void fn_800AD910(int a, float b);
-void fn_800B22E0(void);
-void fn_800B43C8(void);
-void fn_800B4408(void);
+void PenaltyCallInitOdds(void);
+void PlayCallStopHuddleScene(void);
+void PlayCallRestartHuddleScene(void);
 int fn_800B81A4(void);
 void fn_800BA5B0(void);
 void fn_800BF658(int a);
@@ -194,7 +194,7 @@ void PauseCameraStart(void)
         return;
     }
     CamGameResumeAll();
-    fn_800B43C8();
+    PlayCallStopHuddleScene();
     _Pause_State.mUnknown136 = -1;
     _Pause_State.mUnknown140 = CamGameGetCurrentSlot();
     _Pause_State.mUnknown144 = CamMainGetMode(CamGameGetCamera(5));
@@ -281,7 +281,7 @@ int PauseCameraRestore(void)
             CamMainWarpToDest(CamGameGetCamera(_Pause_State.mUnknown140));
         }
         if (fn_800AD9B4() == 5 && !InGamePauseIsRestart() && !InGamePauseIsForfeit()) {
-            fn_800B4408();
+            PlayCallRestartHuddleScene();
         }
     }
     return 0;
@@ -497,7 +497,7 @@ void PauseClose(void)
     RumbleEnable(_Pause_bSavedRumble);
     CoinTossOnShotStart();
     fn_800ABD80();
-    fn_800B22E0();
+    PenaltyCallInitOdds();
     GameTextSetPauseState(0);
     if (PauseIsAudioPaused()) {
         PauseExitAudio();

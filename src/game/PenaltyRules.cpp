@@ -75,8 +75,8 @@ float ScrmGetSidelineX(void);
 int ScrmGetDown(void);
 int ScrmHasFieldFlippedInPlay(void);
 void PenaltyResolveOutcome(PenaltySituation_t *, PenaltyOutcome_t *, float, int);
-void fn_800B2640(int, int);
-int fn_800B2600(void);
+void PenaltyCallSetFlags(int, int);
+int PenaltyCallGetChance(void);
 void fn_800B260C(short);
 float fn_800B2618(int);
 int MathArcTan2(float, float);
@@ -527,7 +527,7 @@ void PenaltyEnforceKind13(PenaltySituation_t *in, PenaltyOutcome_t *out) {
     out->mUnknown10 = 1;
   out->mUnknown15 = ScrmGetSnapOffense();
   if (ScrmGetDown() == 6)
-    fn_800B2640(4, 1);
+    PenaltyCallSetFlags(4, 1);
 }
 void PenaltyEnforceKind14(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   if (in->mUnknown14 == 6 && in->mUnknown24 > 0) {
@@ -545,7 +545,7 @@ void PenaltyEnforceKind14(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   }
   out->mUnknown15 = ScrmGetSnapOffense();
   if (ScrmGetDown() == 6)
-    fn_800B2640(4, 1);
+    PenaltyCallSetFlags(4, 1);
 }
 void PenaltyEnforceKind17(PenaltySituation_t *in, PenaltyOutcome_t *out) {
   if (ScrmHasFieldFlippedInPlay())
@@ -589,7 +589,7 @@ int PenaltyCanFoulInState(Object_80039F5C *player) {
   case 24:
     if ((unsigned char)player->mUnknown361[24] == 3)
       result = 1;
-    else if (SyncRandGetRange(0, 15) < (unsigned int)fn_800B2600())
+    else if (SyncRandGetRange(0, 15) < (unsigned int)PenaltyCallGetChance())
       result = 1;
     break;
   case 2:
@@ -687,7 +687,7 @@ float PenaltyGetBaseRate(unsigned char type) {
   return value;
 }
 float PenaltyApplyCallCount(float value) {
-  int count = fn_800B2600();
+  int count = PenaltyCallGetChance();
   if (count > 0) {
     float decrease = value * 0.1f;
     value -= decrease * (float)count;
@@ -772,7 +772,7 @@ int PenaltyHasInterferenceContact(Object_80039F5C *a, Object_80039F5C *b) {
     if (block && block->mUnknown0 && block->mUnknown35) {
       value = PenaltyApplyCallCount(PenaltyApplyAngleFactor(PenaltyGetBaseRate(block->mUnknown36), a, b));
       value = !(value < 0.00001f) ? (value <= 1.0f ? value : 1.0f) : 0.00001f;
-      fn_800B260C((short)(fn_800B2600() + 1));
+      fn_800B260C((short)(PenaltyCallGetChance() + 1));
       float limit = value * 100621.12f;
       if (!(block->mUnknown20 <= gPlyrMoveFwdSpeed * limit))
         result = 1;
@@ -868,9 +868,9 @@ void PenaltyEnforce(int type, PenaltySituation_t *in, PenaltyOutcome_t *out) {
     ClockRuleSetFlags(256);
   }
   if (_Penalty_aKindInfo[type].mUnknown4 & 16)
-    fn_800B2640(4, 1);
+    PenaltyCallSetFlags(4, 1);
   if ((_Penalty_aKindInfo[type].mUnknown4 & 32) && ScrmGetOffenseTeam() == ScrmGetSnapOffense())
-    fn_800B2640(4, 1);
+    PenaltyCallSetFlags(4, 1);
 }
 unsigned int PenaltyGetKindFlags(int type) { return _Penalty_aKindInfo[type].mUnknown4; }
 void PenaltyCheckDefenderContact(Object_80039F5C *player);

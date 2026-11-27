@@ -26,7 +26,7 @@ void Vec3CrossProduct(void *pOut, void *pA, void *pB);
 void Vec3Mat33Mul(void *pOut, void *pIn);
 float SyncRandGetFloat(int stream);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
-int fn_800B2C48(Object_800B26B0 *pA, Object_800B26B0 *pB, int angle, unsigned char *pHitA, unsigned char *pHitB);
+int MotionTestApproach(Object_800B26B0 *pA, Object_800B26B0 *pB, int angle, unsigned char *pHitA, unsigned char *pHitB);
 }
 
 extern "C" {
@@ -266,7 +266,7 @@ void PlyrCollideMotion(Object_80039F5C *pA, Object_80039F5C *pB)
     unsigned char hitA;
     unsigned char hitB;
 
-    if (fn_800B2C48(&pA->mMotion, &pB->mMotion, 0x800000, &hitA, &hitB)) {
+    if (MotionTestApproach(&pA->mMotion, &pB->mMotion, 0x800000, &hitA, &hitB)) {
         if (hitA && !(pA->mFlags & 8) && !PlyrCollideIsExempt(pA, pB)) {
             pA->mMotion.mPos = pA->mMotion.mUnknown12;
         }

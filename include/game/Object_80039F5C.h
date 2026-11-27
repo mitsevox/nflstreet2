@@ -85,8 +85,8 @@ struct Block_80170E64 {
     float mUnknown936;
 };
 
-/* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
-   fn_800B2A14 and fn_800B2D9C. Angles are 24-bit words. */
+/* Motion block at +424, passed to MotionResetDecay, MotionSetTurn, MotionIntegrate,
+   MotionApplyInput and MotionAlignToFacing. Angles are 24-bit words. */
 struct Object_800B26B0 {
     Vector_80039F5C mPos;
     Vector_80039F5C mUnknown12;

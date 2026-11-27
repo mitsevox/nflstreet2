@@ -125,7 +125,7 @@ void PlyrClampBehindLine(Object_80039F5C *p);
 void PlyrKeepInBounds(Object_80039F5C *p);
 void PlyrPoseBlendEntries(void *pBlock, int a);
 void PlyrPoseBlendRootAngles(void *pBlock, void *a, unsigned short b, void *c);
-void fn_800B2B90(Object_800B26B0 *pMotion);
+void MotionClampToGround(Object_800B26B0 *pMotion);
 void fn_800C3404(Object_80039F5C *p);
 void fn_800C8270(Object_80039F5C *p);
 void fn_800C82C0(Object_80039F5C *p);
@@ -144,7 +144,7 @@ void PlyrPoseBlendRawEntries(void *pBlock, int a, unsigned int index);
 void PlyrPoseSetBlend(void *pBlock, int a);
 int fn_800ADD7C(void *pElements, unsigned int index);
 int fn_800ADEFC(void *pElements, unsigned int index);
-void fn_800B2BC0(Object_800B26B0 *pMotion);
+void MotionMirror(Object_800B26B0 *pMotion);
 void fn_8009BEA8(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
 void PlyrMoveCmdReverse(PlyrMoveCmd_t *pObject);
@@ -781,7 +781,7 @@ extern "C" void PlyrMgrUpdateMotion(float dt)
         PlyrMoveUpdate(p, dt);
         PlyrClampBehindLine(p);
         PlyrKeepInBounds(p);
-        fn_800B2B90(&p->mMotion);
+        MotionClampToGround(&p->mMotion);
         fn_800C3404(p);
         PlyrBallHandUpdate(p);
     }
@@ -941,7 +941,7 @@ extern "C" void PlyrMgrReverseAll(void)
     for (i = 0; i < _PlyrMgr_pManager->mCount; i++) {
         PlyrSlot_t *pPlayer = &_PlyrMgr_pManager->mpPlayers[i];
         Object_80039F5C *p = &pPlayer->mObject;
-        fn_800B2BC0(&p->mMotion);
+        MotionMirror(&p->mMotion);
         AnimMotRotateHalfTurn(p->mUnknown1244, p->mUnknown1244 + 12);
         fn_800F0770(0, p->mQueue, 4, 1, p);
         PlyrMoveCmdReverse(&p->mUnknown528);

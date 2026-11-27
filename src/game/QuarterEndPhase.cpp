@@ -67,7 +67,7 @@ void fn_800AD910(int a, float b);
 void CallbackListAdd(void (*pCallback)(int, unsigned int));
 void CallbackListRemove(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
-void fn_800B43C8(void);
+void PlayCallStopHuddleScene(void);
 void fn_800CC560(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
@@ -289,7 +289,7 @@ void QuarterEndStartVenueEffect(void)
 {
     Params_80096A58 params;
 
-    fn_800B43C8();
+    PlayCallStopHuddleScene();
     memset(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;

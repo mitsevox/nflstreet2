@@ -283,7 +283,7 @@ void HuddleGetSpot(FieldPoint_t *pOut, int *pFacing, Object_80039F5C *p, int val
 }
 
 extern "C" {
-int fn_800B5FEC(Object_80039F5C *p);
+int PlyrCtrlIsStateFree(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -295,7 +295,7 @@ int fn_800B7F34(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800B7F88(Object_80039F5C *p);
+int PlyrCtrlDefenseSwitchInput(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -470,7 +470,7 @@ void PlayerActionRollAlignChange(Object_80039F5C *p);
 }
 
 extern "C" {
-int fn_800B146C(void);
+int PlayMotionIsActive(void);
 }
 
 extern "C" {
@@ -1812,7 +1812,7 @@ int PlyrWaitEnter(Object_80039F5C *p)
     unsigned int frames = (unsigned int)(60.0f / gFrameTimeScale);
     float fraction = (value & 31) / 31.0f;
     *pTimer = seconds * frames + (int)(fraction * 60.0f);
-    if (!fn_800B146C()) {
+    if (!PlayMotionIsActive()) {
         p->mUnknown512.mUnknown0 = 0.0f;
         p->mUnknown512.mUnknown8 = p->mMotion.mUnknown32;
         p->mUnknown512.mUnknown4 = p->mMotion.mUnknown32;
@@ -1882,7 +1882,7 @@ int PlyrWaitUpdate(Object_80039F5C *p)
 extern "C" int PlyrWaitInput(Object_80039F5C *p) {
     if (fn_800AD9B4() != 2) {
         if (ScrmGetDown() != 0) {
-            if (fn_800B5FEC(p) != 0 && fn_800C05F4() == 0 && fn_801486A0() != 0) {
+            if (PlyrCtrlIsStateFree(p) != 0 && fn_800C05F4() == 0 && fn_801486A0() != 0) {
                 fn_800B76E8(p);
             }
         } else if (p->mUnknown2914 != 19 && p->mUnknown2914 != 20 && p->mUnknown2914 != 23) {
@@ -2446,7 +2446,7 @@ extern "C" int PlyrTackleInput(Object_80039F5C *p) {
             PlyrTackleStartAnim(p, pBlock);
         }
     }
-    fn_800B7F88(p);
+    PlyrCtrlDefenseSwitchInput(p);
     return 0;
 }
 

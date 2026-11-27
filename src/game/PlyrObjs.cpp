@@ -79,8 +79,8 @@ void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
 void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
 void fn_80190F18(BitStream_t *, int);
-void fn_800B4D7C();
-void fn_800B4A88();
+void PlyrAnimInstallFrontEndHandlers();
+void PlyrAnimInstallGameHandlers();
 void fn_801BE030(int, void **);
 void fn_800A3D70();
 void fn_800A3C14();
@@ -641,9 +641,9 @@ void PlyrObjsReadState(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream
 }
 void PlyrObjsInitStateTables(int mode) {
   if (mode)
-    fn_800B4D7C();
+    PlyrAnimInstallFrontEndHandlers();
   else
-    fn_800B4A88();
+    PlyrAnimInstallGameHandlers();
   fn_801BE030(1, &lbl_803EAB3C);
   fn_800A3D70();
   fn_801BE030(3, &lbl_803EA9FC);

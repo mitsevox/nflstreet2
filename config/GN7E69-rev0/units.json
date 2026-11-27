@@ -13880,7 +13880,7 @@
             "evidence": "evidence.tsv source-form 0x800A9D84-0x800A9F4C"
           },
           {
-            "function": "fn_800B1AAC",
+            "function": "_PenaltyCallPromptUpdate",
             "evidence": "evidence.tsv source-form 0x800B1AAC-0x800B1BF8"
           },
           {
@@ -13888,23 +13888,23 @@
             "evidence": "evidence.tsv source-form 0x800B4798-0x800B4900"
           },
           {
-            "function": "fn_800B4A88",
+            "function": "PlyrAnimInstallGameHandlers",
             "evidence": "evidence.tsv source-form 0x800B4A88-0x800B4D7C"
           },
           {
-            "function": "fn_800B6868",
+            "function": "PlyrCtrlCycle",
             "evidence": "evidence.tsv source-form 0x800B6868-0x800B6988"
           },
           {
-            "function": "fn_800B7378",
+            "function": "PlyrCtrlIsInPursuitWindow",
             "evidence": "evidence.tsv source-form 0x800B7378-0x800B76E8"
           },
           {
-            "function": "fn_800B78DC",
+            "function": "PlyrCtrlDefenseInput",
             "evidence": "evidence.tsv source-form 0x800B78DC-0x800B7CA4"
           },
           {
-            "function": "fn_800B7CA4",
+            "function": "PlyrCtrlOffenseInput",
             "evidence": "evidence.tsv source-form 0x800B7CA4-0x800B7E60"
           },
           {

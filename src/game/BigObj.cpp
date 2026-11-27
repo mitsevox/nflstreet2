@@ -51,7 +51,7 @@ void PhysLoadObject(int model, BigObj_t *pObject, int index);
 void PhysInit(void);
 void PhysShutdown(void);
 void HotspotReset(void);
-void fn_800B2A14(float *pPos, unsigned char *pAngles);
+void MotionApplyInput(float *pPos, unsigned char *pAngles);
 int FileSetMemAllocFlags(int value);
 int ObjNewType_(int type, int size, int count, void (*pInit)(BigObj_t *, BigObjDesc_t *),
                 void (*pRelease)(BigObj_t *));
@@ -349,7 +349,7 @@ void BigObjSyncFromInst(BigObjInst *pLinked, int index)
     BigObj_t *pObject = _BigObj_apObjects[index];
 
     if (pLinked->mUnknown428 != 0 && (pLinked->mUnknown428->mSpin.mUnknown0 != 0 || pLinked->mUnknown428->mSpin.mUnknown1 != 0)) {
-        fn_800B2A14(&pLinked->mState.mUnknown0, &pLinked->mUnknown428->mSpin.mUnknown0);
+        MotionApplyInput(&pLinked->mState.mUnknown0, &pLinked->mUnknown428->mSpin.mUnknown0);
         QuatEulerAngles_t angles;
         QuatToEuler(&angles, &pLinked->mState.mUnknown88);
         angles.mUnknown8 = pLinked->mState.mUnknown24 + 0x400000;
