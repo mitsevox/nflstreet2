@@ -116,11 +116,11 @@ static inline void _DbOccpSetSubFloat(TDbExpr_t *pExpr, int op, TDbExpr_t *pSub,
     DbOccpFloatBits v;
 
     v.f = value;
-    pExpr->mOp = op;
+    pExpr->mRight.mValue.u = v.u;
     pExpr->mLeft.mType = TDB_TYPE_EXPR_FLOAT;
     pExpr->mLeft.mValue.p = pSub;
     pExpr->mRight.mType = TDB_TYPE_FLOAT;
-    pExpr->mRight.mValue.u = v.u;
+    pExpr->mOp = op;
 }
 
 int DbOccpModuleInit(int db)
