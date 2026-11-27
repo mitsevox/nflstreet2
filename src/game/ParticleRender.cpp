@@ -53,7 +53,7 @@ void MatPushUnit(void);
 void MatPop(void);
 void MatRotZ(int a);
 void PSysRenderCalcParticleColor(float *pColor, PsysEmitter_t *pEmitter, Particle_t *pParticle);
-float fn_801DF184(PsysEmitter_t *pEmitter, Particle_t *pParticle);
+float PSysRenderCalcParticleScale(PsysEmitter_t *pEmitter, Particle_t *pParticle);
 void TMRenderBindShader(int a);
 void TMRenderSetBlendMode(int a);
 void TMShaderLibAlloc(ShaderTable_t *pTable, int count);
@@ -193,7 +193,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 color[1] = CLAMP(color[1] * scale, 0.0f, 1.0f);
                 color[2] = CLAMP(color[2] * scale, 0.0f, 1.0f);
                 AnimTexGetCoords(pTexture, pParticle->mUnknown40, pParticle->mUnknown3A, pEmitter->mUnknown48, coords[0]);
-                size = fn_801DF184(pEmitter, pParticle);
+                size = PSysRenderCalcParticleScale(pEmitter, pParticle);
                 MatPushUnit();
                 MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));
                 for (j = 0; j < 4; j++) {
@@ -224,7 +224,7 @@ int ParticleRenderEmitter(PsysEmitter_t *pEmitter, int mode)
                 int j;
 
                 PSysRenderCalcParticleColor(color, pEmitter, pParticle);
-                size = fn_801DF184(pEmitter, pParticle);
+                size = PSysRenderCalcParticleScale(pEmitter, pParticle);
                 Vec3Mat34Mul(&position, &pParticle->mPosition);
                 MatPushUnit();
                 MatRotZ((int)(pParticle->mUnknown50 * 46603.38f));

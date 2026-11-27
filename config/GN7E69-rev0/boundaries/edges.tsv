@@ -75,7 +75,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .text	0x801DB900	0x801DB900	0x801DB900	data	0	2	render.c	yuvconv.c
 .text	-	0x801DC9C8	0x801DCA10	open	-	-	yuvconv.c	object.c
 .text	-	0x801DD474	0x801DD498	open	-	-	object.c	particleLib.c
-.text	0x801DFE0C	0x801DFE0C	0x801DFE0C	alignment	0	3	particleLib.c	psysEmitter.c
+.text	0x801DFE0C	0x801DFE0C	0x801DFE0C	alignment	0	6	particleLib.c	psysEmitter.c
 .text	0x801E01FC	0x801E01FC	0x801E01FC	alignment	0	0	psysEmitter.c	psysCollision.c
 .text	0x801E052C	0x801E052C	0x801E052C	alignment	0	0	psysCollision.c	colorRamp.c
 .text	-	0x801E0A1C	0x801E11D0	open	-	-	colorRamp.c	periph.c
@@ -240,7 +240,7 @@ section	address	low	high	class	crossing_data	crossing_calls	left	right
 .rodata	-	0x802AF628	0x802AF628	data	0	11/4	llmatrix.c	Memory.c
 .rodata	-	0x802AFFA8	0x802AFFA8	data	0	2/6	rcmpbase.cpp	rcmp_mad_codec.cpp
 .rodata	-	0x802B0F50	0x802B0F50	thin	0	3/1	maddec.cpp	maddeca.cpp
-.rodata	-	0x802B1118	0x802B1118	data	0	19/5	particleLib.c	psysEmitter.c
+.rodata	-	0x802B1118	0x802B1118	data	0	23/5	particleLib.c	psysEmitter.c
 .rodata	-	0x802B1138	0x802B1138	data	0	5/2	psysEmitter.c	psysCollision.c
 .rodata	-	0x802B1140	0x802B1140	data	0	2/3	psysCollision.c	colorRamp.c
 .rodata	-	0x802B1B90	0x802B1B90	thin	0	21/1	t3db_expr.c	t3db_query.c

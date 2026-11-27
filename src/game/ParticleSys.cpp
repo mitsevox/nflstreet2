@@ -33,7 +33,7 @@ struct ParticleSysEffectFile_t {
     int mUnknown8;
 };
 
-/* Descriptor passed to fn_801DE1E0. */
+/* Descriptor passed to ParticleLibInit. */
 struct PsysEmitterDesc_t {
     int mUnknown00;
     unsigned short mUnknown04;
@@ -48,7 +48,7 @@ struct PsysEmitterDesc_t {
     unsigned char mUnknown24;
 };
 
-/* Pool owner returned by fn_801DFD34. */
+/* Pool owner returned by ParticleLibGetSysList. */
 struct PsysManager_t {
     void *mpPool;
 };
@@ -96,15 +96,15 @@ void ObjSetListObjFunc(int handle, int type, int a, int (*pCallback)(void *));
 int ObjNewInList(int handle, int type, int a, void *pInit);
 void ObjRemoveFromList(int handle, int item);
 void ObjSetPriority(int handle, int item, int a);
-void fn_801DE1E0(PsysEmitterDesc_t *pDesc);
-void fn_801DE410(void);
-void fn_801DE4F8(unsigned short a);
-void fn_801DEA90(PsysEmitter_t *pObject, int a);
-unsigned short fn_801DECFC(unsigned short id, void *pDesc);
-PsysEmitter_t *fn_801DEEF8(unsigned short handle);
-void fn_801DEF18(PsysEmitter_t *pObject);
-void fn_801DF620(void *pDesc, void *pData, int a);
-PsysManager_t *fn_801DFD34(void);
+void ParticleLibInit(PsysEmitterDesc_t *pDesc);
+void ParticleLibShutdown(void);
+void ParticleLibSetUpdatesPerSec(unsigned int a);
+int ParticleObjUpdate(PsysEmitter_t *pObject, int a);
+unsigned short ParticlePoolCreate(unsigned short id, void *pDesc);
+PsysEmitter_t *ParticlePoolBorrow(unsigned short handle);
+void ParticlePoolReturn(PsysEmitter_t *pObject);
+void ParticleParmLoad(void *pDesc, void *pData, int a);
+PsysManager_t *ParticleLibGetSysList(void);
 void PsysColExtClearAll(PsysEmitter_t *pObject);
 void *ResLoadToBuffer(void *pArchive, int file, void *pBuffer);
 int ResUnLoad(void *pArchive, int file);
@@ -157,7 +157,7 @@ static ParticleSpawnRecord_t _ParticleSys_aReplayRecords[6];
 
 void ParticleSysAllocDrawList(void)
 {
-    PsysManager_t *pManager = fn_801DFD34();
+    PsysManager_t *pManager = ParticleLibGetSysList();
     ParticleSysDrawList_t *pList = &_ParticleSys_DrawList;
     int count = 0;
     void *pItem;
@@ -193,8 +193,8 @@ void ParticleSysLoadEffect(int index, int id)
     void *pData = ResLoadToBuffer(pArchive, _ParticleSys_aEffectFiles[index].mFile, pBuffer);
 
     ResUnLoad(pArchive, _ParticleSys_aEffectFiles[index].mFile);
-    fn_801DF620(desc, pData, 0);
-    _ParticleSys_aEffectHandles[index] = fn_801DECFC(id, desc);
+    ParticleParmLoad(desc, pData, 0);
+    _ParticleSys_aEffectHandles[index] = ParticlePoolCreate(id, desc);
     fn_801D2BD0(pBuffer);
 }
 
@@ -329,7 +329,7 @@ void ParticleSysInit(int handle)
     _ParticleSys_AnimTexConfig.unk_0x4 = gParticleAnimTexFlag;
     AnimTexLibInit(&_ParticleSys_AnimTexConfig);
     FxAnimTexLoadAll(_ParticleSys_aAnimTexFiles, _ParticleSys_apAnimTex, fn_800C47C4());
-    fn_801DE1E0(&_ParticleSys_EmitterDesc);
+    ParticleLibInit(&_ParticleSys_EmitterDesc);
     ParticleSysLoadEffects();
     ParticleSysAllocDrawList();
     ParticleRenderInit(1200);
@@ -349,7 +349,7 @@ void ParticleSysShutdown(int handle)
     fn_800A3450();
     WeatherShutdown();
     FxAnimTexFreeAll(_ParticleSys_apAnimTex);
-    fn_801DE410();
+    ParticleLibShutdown();
     AnimTexLibShutdown();
     ParticleSysFreeDrawList();
     ParticleRenderShutdown();
@@ -366,7 +366,7 @@ PsysEmitter_t *ParticleSysSpawnEmitter(ParticleSpawnArgs_t *pArgs, int b, Partic
     Mtx44 *pTarget;
 
     if (_ParticleSys_bInit != 0 && pArgs->mUnknown00 != 21 && _ParticleSys_aEffectHandles[pArgs->mUnknown00] != 20
-        && (pObject = fn_801DEEF8(_ParticleSys_aEffectHandles[pArgs->mUnknown00])) != 0) {
+        && (pObject = ParticlePoolBorrow(_ParticleSys_aEffectHandles[pArgs->mUnknown00])) != 0) {
         if (pSource != 0) {
             pObject->mUnknown35B = (unsigned char)((pSource->mUnknown0C + pSource->mUnknown10 + pSource->mUnknown14) * 33.333336f);
         } else {
@@ -403,7 +403,7 @@ PsysEmitter_t *ParticleSysSpawnEmitter(ParticleSpawnArgs_t *pArgs, int b, Partic
 void ParticleSysReleaseEmitter(PsysEmitter_t *pObject)
 {
     if (pObject->mUnknown2B4 != 0) {
-        fn_801DEF18(pObject);
+        ParticlePoolReturn(pObject);
     }
 }
 
@@ -441,19 +441,19 @@ void ParticleSysUpdate(float rate)
     PsysManager_t *pManager;
     PsysPoolItem_t *pItem;
 
-    fn_801DE4F8((unsigned int)fabsf(1.0f / rate * 60.0f));
+    ParticleLibSetUpdatesPerSec((unsigned short)(unsigned int)fabsf(1.0f / rate * 60.0f));
     pList = &_ParticleSys_DrawList;
-    pManager = fn_801DFD34();
+    pManager = ParticleLibGetSysList();
     for (pItem = (PsysPoolItem_t *)DSGetListNode(pManager->mpPool, 0); pItem != 0;
          pItem = (PsysPoolItem_t *)DSNextListNode(pManager->mpPool, pItem)) {
         if (pItem->mpObject->mUnknown2B4 != 0) {
-            fn_801DEA90(pItem->mpObject, 1);
+            ParticleObjUpdate(pItem->mpObject, 1);
             pList->mppList[count++] = pItem->mpObject;
         }
     }
     pList->mCount = count;
     WeatherUpdate(rate);
-    fn_801DE4F8(60);
+    ParticleLibSetUpdatesPerSec(60);
 }
 
 extern "C" const Vector_80039F5C gParticleSys_vUp = { 0.0f, 0.0f, 1.0f };

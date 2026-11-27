@@ -9,7 +9,7 @@ float MathSin(int angle);
 float MathCos(int angle);
 int MathArcCos(float value);
 
-void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
+void EmitterInitParms(ParticleSysObj_t *pDst, ParticleSysObj_t *pSrc)
 {
     switch (pDst->mEmitterType) {
     case 0:
@@ -27,7 +27,7 @@ void EmitterInitParms(PartObj_801DE1E0 *pDst, PartObj_801DE1E0 *pSrc)
     }
 }
 
-void EmitterPrecalcDependantVals(PartObj_801DE1E0 *pObj)
+void EmitterPrecalcDependantVals(ParticleSysObj_t *pObj)
 {
     Vec3_801DE1E0 side;
     Vec3_801DE1E0 dir;
@@ -45,7 +45,7 @@ void EmitterPrecalcDependantVals(PartObj_801DE1E0 *pObj)
 }
 
 /* Fixed-origin modes use their first vector; mode 3 samples its two endpoints. */
-void EmitterGetNewPos(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
+void EmitterGetNewPos(Vec3_801DE1E0 *pOut, ParticleSysObj_t *pObj)
 {
     switch (pObj->mEmitterType) {
     case 0: {
@@ -70,13 +70,13 @@ void EmitterGetNewPos(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         break;
     }
     case 3:
-        Vec3Lerp(pOut, &pObj->mEmitter.mCase3.mUnknown0C, &pObj->mEmitter.mCase3.mUnknown00, fn_801DE1B8());
+        Vec3Lerp(pOut, &pObj->mEmitter.mCase3.mUnknown0C, &pObj->mEmitter.mCase3.mUnknown00, ParticleGetRandom());
         break;
     }
 }
 
 /* Mode 2 scales the polar angle without scaling the azimuth draw. */
-void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
+void EmitterGetNewDir(Vec3_801DE1E0 *pOut, ParticleSysObj_t *pObj)
 {
     EmitterDirected_t *pCase1;
     EmitterCone_t *pCase2;
@@ -88,8 +88,8 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         int theta;
         Vec3_801DE1E0 dir;
 
-        phi = MathArcCos(1.0f - 2.0f * fn_801DE1B8());
-        theta = (int)(fn_801DE1B8() * 16777216.0f);
+        phi = MathArcCos(1.0f - 2.0f * ParticleGetRandom());
+        theta = (int)(ParticleGetRandom() * 16777216.0f);
         dir.x = MathCos(theta) * MathSin(phi);
         dir.y = MathSin(theta) * MathSin(phi);
         dir.z = MathCos(phi);
@@ -110,8 +110,8 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
         Vec3_801DE1E0 dir;
 
         pCase2 = &pObj->mEmitter.mCase2;
-        phi = (int)(pCase2->mUnknown0C * 3.7450704e-07f * (float)MathArcCos(1.0f - fn_801DE1B8()) * 2670176.8f);
-        theta = (int)(fn_801DE1B8() * 16777216.0f);
+        phi = (int)(pCase2->mUnknown0C * 3.7450704e-07f * (float)MathArcCos(1.0f - ParticleGetRandom()) * 2670176.8f);
+        theta = (int)(ParticleGetRandom() * 16777216.0f);
         dir.x = MathCos(theta) * MathSin(phi);
         dir.y = MathSin(theta) * MathSin(phi);
         dir.z = MathCos(phi);
@@ -123,7 +123,7 @@ void EmitterGetNewDir(Vec3_801DE1E0 *pOut, PartObj_801DE1E0 *pObj)
     case 3:
         MatPushUnit();
         pCase3 = &pObj->mEmitter.mCase3;
-        MatRotAxis(&pCase3->mUnknown2C.x, (int)((fn_801DE1B8() * pCase3->mUnknown44 + pCase3->mUnknown24) * 16777216.0f));
+        MatRotAxis(&pCase3->mUnknown2C.x, (int)((ParticleGetRandom() * pCase3->mUnknown44 + pCase3->mUnknown24) * 16777216.0f));
         Vec3Mat33Mul(pOut, &pCase3->mUnknown38);
         MatPop();
         break;

@@ -25237,7 +25237,7 @@
     {
       "source": "src/engine/particleLib.c",
       "profile": "engine_c",
-      "evidence": "particleLib.c over 0x801DD498-0x801DFE0C (NASCAR 2005 symbol-table size/order match: _ParticlePoolInit .. ParticleGetRandom and the ParticleLibInit .. ParticleParmLoad runs; see the function and name rows); evidence.tsv compiler row 0x801DD498-0x801DFE0C, its function rows and the exact .rodata data row 0x802B1080-0x802B10E8. Draft comparisons only; original assembly remains linked. 0x801DD730 (1428 bytes, pool 0x802B1060-0x802B1080 not placed), 0x801DF620 has no draft. The file-static PSysRenderCalcParticleFrame is compiled but discarded (evidence.tsv linker row 0x802B10E8-0x802B10EC). The library state at 0x8039AD10 and the pool table at 0x8039ADAC stay extern (lbl_).",
+      "evidence": "evidence.tsv provisional particleLib.c unit0x801DD498-0x801DFE0C, function/name/type/data rows and five HOLDOUT source-form rows. Complete45-function file; units.json links every other function and all data. These five full partial bodies retain the original providers. engine_c is the accepted engine_c_holdouts profile without only -ffunction-sections.",
       "sections": [
         {
           "section": ".text",
@@ -25248,225 +25248,59 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802B1080",
+          "start": "0x802B1058",
           "end": "0x802B10F0"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802F94AC",
+          "end": "0x802F94D0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBD58",
+          "end": "0x803EBD60"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039AD10",
+          "end": "0x8039ADB8"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECF4C",
+          "end": "0x803ECF50"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_801DD498",
-          "start": "0x801DD498",
-          "end": "0x801DD534"
-        },
-        {
-          "symbol": "fn_801DD534",
-          "start": "0x801DD534",
-          "end": "0x801DD57C"
-        },
-        {
-          "symbol": "fn_801DD57C",
-          "start": "0x801DD57C",
-          "end": "0x801DD6B8"
-        },
-        {
-          "symbol": "fn_801DD6B8",
-          "start": "0x801DD6B8",
-          "end": "0x801DD730"
-        },
-        {
-          "symbol": "fn_801DDCC4",
-          "start": "0x801DDCC4",
-          "end": "0x801DDD00"
-        },
-        {
-          "symbol": "fn_801DDD00",
-          "start": "0x801DDD00",
-          "end": "0x801DDE08"
-        },
-        {
-          "symbol": "fn_801DDE08",
-          "start": "0x801DDE08",
-          "end": "0x801DDFB0"
-        },
-        {
-          "symbol": "fn_801DDFB0",
+          "symbol": "_particleIntegrateTimestep",
           "start": "0x801DDFB0",
           "end": "0x801DE010"
         },
         {
-          "symbol": "fn_801DE010",
-          "start": "0x801DE010",
-          "end": "0x801DE04C"
-        },
-        {
-          "symbol": "fn_801DE04C",
+          "symbol": "_sumGasMotionForces",
           "start": "0x801DE04C",
           "end": "0x801DE114"
         },
         {
-          "symbol": "fn_801DE114",
-          "start": "0x801DE114",
-          "end": "0x801DE1B8"
-        },
-        {
-          "symbol": "fn_801DE1B8",
-          "start": "0x801DE1B8",
-          "end": "0x801DE1E0"
-        },
-        {
-          "symbol": "fn_801DE1E0",
+          "symbol": "ParticleLibInit",
           "start": "0x801DE1E0",
           "end": "0x801DE410"
         },
         {
-          "symbol": "fn_801DE410",
+          "symbol": "ParticleLibShutdown",
           "start": "0x801DE410",
           "end": "0x801DE4F8"
         },
         {
-          "symbol": "fn_801DE4F8",
-          "start": "0x801DE4F8",
-          "end": "0x801DE540"
-        },
-        {
-          "symbol": "fn_801DE540",
-          "start": "0x801DE540",
-          "end": "0x801DE564"
-        },
-        {
-          "symbol": "fn_801DE564",
-          "start": "0x801DE564",
-          "end": "0x801DE794"
-        },
-        {
-          "symbol": "fn_801DE794",
+          "symbol": "ParticleObjInitState",
           "start": "0x801DE794",
           "end": "0x801DE7F4"
-        },
-        {
-          "symbol": "fn_801DE7F4",
-          "start": "0x801DE7F4",
-          "end": "0x801DE918"
-        },
-        {
-          "symbol": "fn_801DE918",
-          "start": "0x801DE918",
-          "end": "0x801DE968"
-        },
-        {
-          "symbol": "fn_801DE968",
-          "start": "0x801DE968",
-          "end": "0x801DE9A0"
-        },
-        {
-          "symbol": "fn_801DE9A0",
-          "start": "0x801DE9A0",
-          "end": "0x801DEA50"
-        },
-        {
-          "symbol": "fn_801DEA50",
-          "start": "0x801DEA50",
-          "end": "0x801DEA90"
-        },
-        {
-          "symbol": "fn_801DEA90",
-          "start": "0x801DEA90",
-          "end": "0x801DECFC"
-        },
-        {
-          "symbol": "fn_801DECFC",
-          "start": "0x801DECFC",
-          "end": "0x801DEEF8"
-        },
-        {
-          "symbol": "fn_801DEEF8",
-          "start": "0x801DEEF8",
-          "end": "0x801DEF18"
-        },
-        {
-          "symbol": "fn_801DEF18",
-          "start": "0x801DEF18",
-          "end": "0x801DF064"
-        },
-        {
-          "symbol": "PSysRenderCalcParticleColor",
-          "start": "0x801DF064",
-          "end": "0x801DF184"
-        },
-        {
-          "symbol": "fn_801DF184",
-          "start": "0x801DF184",
-          "end": "0x801DF1A0"
-        },
-        {
-          "symbol": "fn_801DF1A0",
-          "start": "0x801DF1A0",
-          "end": "0x801DF1E4"
-        },
-        {
-          "symbol": "fn_801DF1E4",
-          "start": "0x801DF1E4",
-          "end": "0x801DF228"
-        },
-        {
-          "symbol": "fn_801DF228",
-          "start": "0x801DF228",
-          "end": "0x801DF26C"
-        },
-        {
-          "symbol": "fn_801DF26C",
-          "start": "0x801DF26C",
-          "end": "0x801DF2AC"
-        },
-        {
-          "symbol": "fn_801DF2AC",
-          "start": "0x801DF2AC",
-          "end": "0x801DF338"
-        },
-        {
-          "symbol": "fn_801DF338",
-          "start": "0x801DF338",
-          "end": "0x801DF3E4"
-        },
-        {
-          "symbol": "fn_801DF3E4",
-          "start": "0x801DF3E4",
-          "end": "0x801DF428"
-        },
-        {
-          "symbol": "fn_801DF428",
-          "start": "0x801DF428",
-          "end": "0x801DF578"
-        },
-        {
-          "symbol": "fn_801DF578",
-          "start": "0x801DF578",
-          "end": "0x801DF620"
-        },
-        {
-          "symbol": "fn_801DFD34",
-          "start": "0x801DFD34",
-          "end": "0x801DFD40"
-        },
-        {
-          "symbol": "fn_801DFD40",
-          "start": "0x801DFD40",
-          "end": "0x801DFD4C"
-        },
-        {
-          "symbol": "fn_801DFD4C",
-          "start": "0x801DFD4C",
-          "end": "0x801DFDB8"
-        },
-        {
-          "symbol": "fn_801DFDB8",
-          "start": "0x801DFDB8",
-          "end": "0x801DFDE0"
-        },
-        {
-          "symbol": "fn_801DFDE0",
-          "start": "0x801DFDE0",
-          "end": "0x801DFE0C"
         }
       ],
       "discarded": [

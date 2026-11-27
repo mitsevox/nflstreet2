@@ -1,3 +1,6 @@
+/* Particle effects: pooled systems, particle generation and lifetime updates,
+   effect parameter loading, and render colour evaluation. */
+
 #include <string.h>
 #include "engine/particleLib.h"
 #include "engine/animTexLib.h"
@@ -6,16 +9,16 @@
 #include "game/Vec3Magnitude.h"
 
 /* Pool of particle systems created from one template (0x6E4 bytes). */
-typedef struct Pool_801DE1E0 {
+typedef struct ParticlePool_t {
     unsigned short mUnknown000;
-    PartObj_801DE1E0 *mpObjs[32];
+    ParticleSysObj_t *mpObjs[32];
     unsigned short mFree;
     unsigned short mUsed;
-    Template_801DE1E0 mTemplate;
-} Pool_801DE1E0;
+    ParticleTemplate_t mTemplate;
+} ParticlePool_t;
 
-/* Descriptor passed to fn_801DE1E0 (_ParticleSys_EmitterDesc in the game). */
-typedef struct Desc_801DE1E0 {
+/* Descriptor passed to ParticleLibInit (_ParticleSys_EmitterDesc in the game). */
+typedef struct ParticleLibParms_t {
     int mUnknown00;
     unsigned short mUnknown04;
     unsigned short mUnknown06;
@@ -27,19 +30,19 @@ typedef struct Desc_801DE1E0 {
     int mUnknown1C;
     void *mpUnknown20;
     unsigned char mUnknown24;
-} Desc_801DE1E0;
+} ParticleLibParms_t;
 
 /* Custom behaviour tables of the library state. */
-typedef struct Custom_801DE1E0 {
+typedef struct ParticleCustomBehavior_t {
     void **mppUnknown0;
     void **mppUnknown4;
     void **mppUnknown8;
     unsigned short mUnknownC;
     unsigned char mUnknownE;
-} Custom_801DE1E0;
+} ParticleCustomBehavior_t;
 
-/* Library state at lbl_8039AD10. */
-typedef struct State_801DE1E0 {
+/* Library state at partLibState. */
+typedef struct ParticleLibState_t {
     int mUnknown00;
     void *mpUnknown04;
     void *mpUnknown08;
@@ -61,30 +64,33 @@ typedef struct State_801DE1E0 {
     Vec3_801DE1E0 mUnknown78;
     int mUnknown84;
     void *mpRandom;
-    Custom_801DE1E0 mUnknown8C;
-} State_801DE1E0;
+    ParticleCustomBehavior_t mUnknown8C;
+} ParticleLibState_t;
 
-/* Template pool table at lbl_8039ADAC. */
-typedef struct PoolTable_801DD498 {
-    Pool_801DE1E0 *mpPools;
+/* Template pool table at worldPoolMan. */
+typedef struct ParticlePoolManager_t {
+    ParticlePool_t *mpPools;
     unsigned char *mpUsed;
     int mUnknown8;
-} PoolTable_801DD498;
+} ParticlePoolManager_t;
 
-/* Object-type record registered through fn_801D2130 ("PSYSLIB"). */
-typedef struct ObjType_801DE1E0 {
+/* Heap descriptor for the library's optional particle-storage heap. */
+typedef struct ParticleHeapDef_t {
     char mUnknown00[8];
     int mUnknown08;
     int mUnknown0C;
     int mUnknown10;
-} ObjType_801DE1E0;
+    unsigned short mAlign;
+    unsigned short unk_0x16;
+} ParticleHeapDef_t;
 
-extern State_801DE1E0 lbl_8039AD10;
-extern PoolTable_801DD498 lbl_8039ADAC;
-extern ObjType_801DE1E0 lbl_802F94AC;
-extern Vec3_801DE1E0 lbl_802F94C4;
-extern unsigned char lbl_803EBD58;
-extern float lbl_803ECF4C;
+static ParticleLibState_t partLibState;
+static ParticlePoolManager_t worldPoolMan;
+ParticleHeapDef_t gPoolHeapDef = {"PSYSLIB", 0, 1, 0, 0x10, 0xA00};
+Vec3_801DE1E0 gGravNorm = {0.0f, -1.0f, 0.0f};
+unsigned char gPartLibIsInit = 0;
+char *gPartLibVersion = "1.0b";
+static float gSysSpeedCompVal;
 
 void MatPush(void);
 void MatPushUnit(void);
@@ -95,7 +101,7 @@ void MatRotY(int a);
 void MatRotZ(int a);
 void MatTranslate(Vec3_801DE1E0 *pPos);
 void MatStore(float (*m)[4]);
-void fn_801D2130(ObjType_801DE1E0 *pType);
+void fn_801D2130(ParticleHeapDef_t *pType);
 int fn_801D2570(int a);
 int fn_801D2730(void);
 unsigned int fn_801D27F4(int heap);
@@ -105,46 +111,54 @@ int ObjDelType(unsigned char heap);
 void *ObjNewList(int a, int b, int c, int d, int e, int f, int g, int h);
 void ObjSetListObjFunc(void *pList, unsigned char heap, int slot, void *pFunc);
 void ObjDelList(void *pList);
-PartObj_801DE1E0 *ObjNew(unsigned char heap, int a, Template_801DE1E0 *pTemplate);
+ParticleSysObj_t *ObjNew(unsigned char heap, int a, ParticleTemplate_t *pTemplate);
 int ObjAddToList(void *pList, void *pObj);
-void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
+void _partReadWrite(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap);
 unsigned int ColorRampEval(ColorRamp_t *pRamp, float t, Vec3_801DE1E0 *pColor, unsigned int start);
 
-void fn_801DD730(PartObj_801DE1E0 *pObj, unsigned short count, int step, int steps, float dt);
-static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt);
-static void fn_801DE04C(PartObj_801DE1E0 *pObj);
-static void fn_801DE114(PartObj_801DE1E0 *pObj);
-void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc);
-void fn_801DE794(PartObj_801DE1E0 *pObj);
-void fn_801DE968(PartObj_801DE1E0 *pObj, AnimTex_t *pTex);
-void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
-int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps);
-static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate);
-static void fn_801DEA50(PartObj_801DE1E0 *pObj);
-void fn_801DEF18(PartObj_801DE1E0 *pObj);
-void fn_801DFD4C(void);
+static void _genNewParticles(ParticleSysObj_t *pObj, unsigned short count, int step, int steps, float dt);
+static void _particleIntegrateTimestep(ParticleSysObj_t *pObj, PsysParticle_t *pParticle, float dt);
+static void _sumGasMotionForces(ParticleSysObj_t *pObj);
+static void _sumSolidMotionForces(ParticleSysObj_t *pObj);
+void ParticleObjInitParms(ParticleSysObj_t *pDst, ParticleTemplate_t *pSrc);
+void ParticleObjInitState(ParticleSysObj_t *pObj);
+void ParticleObjAttachTex(ParticleSysObj_t *pObj, AnimTex_t *pTex);
+void ParticleObjSetLocalMat(ParticleSysObj_t *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot);
+int ParticleObjUpdate(ParticleSysObj_t *pObj, int steps);
+static void _particleObjAdd(ParticleSysObj_t *pObj, ParticleTemplate_t *pTemplate);
+static void _particleObjDel(ParticleSysObj_t *pObj);
+void ParticlePoolReturn(ParticleSysObj_t *pObj);
+void ParticleLibShutdownCustomBehavior(void);
+static float _partGetRandom(void);
+static int _partGetRandomRange(int range);
+void MatLoad(float *pMatrix);
+void MatCat(float *pMatrix);
+void EmitterPrecalcDependantVals(ParticleSysObj_t *pObj);
+void EmitterGetNewPos(Vec3_801DE1E0 *pOut, ParticleSysObj_t *pObj);
+void EmitterGetNewDir(Vec3_801DE1E0 *pOut, ParticleSysObj_t *pObj);
+void ColorRampInitParms(ColorRamp_t *pRamp, ColorRampParms_t *pParms);
 
-static void fn_801DD498(void)
+static void _ParticlePoolInit(void)
 {
-    MemFill(&lbl_8039ADAC, sizeof(lbl_8039ADAC), 0, 1);
-    lbl_8039ADAC.mpUsed = fn_801D2B7C(lbl_8039AD10.mPoolCount, 0, 0);
-    MemFill(lbl_8039ADAC.mpUsed, lbl_8039AD10.mPoolCount, 0, 1);
-    lbl_8039ADAC.mpPools = fn_801D2B7C(lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 0);
-    MemFill(lbl_8039ADAC.mpPools, lbl_8039AD10.mPoolCount * sizeof(Pool_801DE1E0), 0, 1);
+    MemFill(&worldPoolMan, sizeof(worldPoolMan), 0, 1);
+    worldPoolMan.mpUsed = fn_801D2B7C(partLibState.mPoolCount, 0, 0);
+    MemFill(worldPoolMan.mpUsed, partLibState.mPoolCount, 0, 1);
+    worldPoolMan.mpPools = fn_801D2B7C(partLibState.mPoolCount * sizeof(ParticlePool_t), 0, 0);
+    MemFill(worldPoolMan.mpPools, partLibState.mPoolCount * sizeof(ParticlePool_t), 0, 1);
 }
 
-static void fn_801DD534(void)
+static void _ParticlePoolShutdown(void)
 {
-    fn_801D2BD0(lbl_8039ADAC.mpUsed);
-    lbl_8039ADAC.mpUsed = 0;
-    fn_801D2BD0(lbl_8039ADAC.mpPools);
-    lbl_8039ADAC.mpPools = 0;
+    fn_801D2BD0(worldPoolMan.mpUsed);
+    worldPoolMan.mpUsed = 0;
+    fn_801D2BD0(worldPoolMan.mpPools);
+    worldPoolMan.mpPools = 0;
 }
 
-static PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
+static ParticleSysObj_t *_ParticlePoolBorrow(unsigned short handle)
 {
-    Pool_801DE1E0 *pPool = &lbl_8039ADAC.mpPools[handle];
-    PartObj_801DE1E0 *pObj;
+    ParticlePool_t *pPool = &worldPoolMan.mpPools[handle];
+    ParticleSysObj_t *pObj;
     unsigned int size;
     unsigned short i;
 
@@ -152,16 +166,16 @@ static PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
         goto fail;
     }
     pObj = pPool->mpObjs[pPool->mUsed];
-    if (lbl_8039AD10.mUnknown64 != 0) {
+    if (partLibState.mUnknown64 != 0) {
         size = 0;
         if (pObj->mMax != 0) {
-            size = pObj->mMax * sizeof(Particle_801DE1E0);
+            size = pObj->mMax * sizeof(PsysParticle_t);
             size = (size + 15) & ~15;
         }
-        if (fn_801D27F4(lbl_8039AD10.mHeap) < size) {
+        if (fn_801D27F4(partLibState.mHeap) < size) {
             goto fail;
         }
-        pObj->mpParticles = fn_801D2BB0(lbl_8039AD10.mHeap, size, 0, 0);
+        pObj->mpParticles = fn_801D2BB0(partLibState.mHeap, size, 0, 0);
         if (pObj->mpParticles == 0) {
             goto fail;
         }
@@ -170,8 +184,8 @@ static PartObj_801DE1E0 *fn_801DD57C(unsigned short handle)
             pObj->mppParticles[i]->mActive = 0;
         }
     }
-    fn_801DE564(pObj, &pPool->mTemplate);
-    fn_801DE794(pObj);
+    ParticleObjInitParms(pObj, &pPool->mTemplate);
+    ParticleObjInitState(pObj);
     pObj->mUnknown2B4 = 1;
     pPool->mUsed++;
     pPool->mFree--;
@@ -180,20 +194,20 @@ fail:
     return 0;
 }
 
-static void fn_801DD6B8(PartObj_801DE1E0 *pObj)
+static void _checkParticleLives(ParticleSysObj_t *pObj)
 {
     int i;
     int last = pObj->mCount - 1;
 
     for (i = last; i >= 0; i--) {
-        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+        PsysParticle_t *pParticle = pObj->mppParticles[i];
 
         if (pParticle->mAge < pParticle->mLife) {
             continue;
         }
         pParticle->mActive = 0;
         if (i != last) {
-            Particle_801DE1E0 *pLast = pObj->mppParticles[last];
+            PsysParticle_t *pLast = pObj->mppParticles[last];
             pObj->mppParticles[last] = pParticle;
             pObj->mppParticles[i] = pLast;
         }
@@ -202,7 +216,122 @@ static void fn_801DD6B8(PartObj_801DE1E0 *pObj)
     }
 }
 
-static void fn_801DDCC4(PartObj_801DE1E0 *pObj)
+static void _genNewParticles(ParticleSysObj_t *pObj, unsigned short count,
+                             int step, int steps, float dt)
+{
+    Vec3_801DE1E0 randomVelocity;
+    Vec3_801DE1E0 position;
+    Vec3_801DE1E0 direction;
+    Vec3_801DE1E0 offset;
+    Vec3_801DE1E0 velocityRange;
+    Vec3_801DE1E0 lastPosition;
+    float fraction = 0.0f;
+    float start = (float)step / (float)steps;
+    float end = ((float)step + 1.0f) / (float)steps;
+    float fractionStep;
+    int transform = pObj->mUnknown2B6 | pObj->mUnknown03C | partLibState.mUnknown18;
+    int lifeRange;
+    unsigned short i;
+
+    MatPushUnit();
+    if (pObj->mUnknown2B6) {
+        MatLoad((float *)pObj->mUnknown3B4);
+    }
+    if (partLibState.mUnknown18) {
+        MatCat(&partLibState.mUnknown20[0][0]);
+    }
+    if (pObj->mUnknown03C) {
+        MatCat(&pObj->mUnknown35C[0][0]);
+    }
+    lifeRange = pObj->mUnknown0E0 - pObj->mUnknown0DC;
+    EmitterPrecalcDependantVals(pObj);
+    if (pObj->mUnknown043 == 1) {
+        if (transform) {
+            Vec3Mat33Mul(&velocityRange, &pObj->mUnknown1F4);
+        } else {
+            velocityRange = *(Vec3_801DE1E0 *)&pObj->mUnknown1F4;
+        }
+    }
+    if ((unsigned int)count > 1) {
+        dt /= (unsigned int)count;
+    } else {
+        dt = 0.0f;
+    }
+    fractionStep = 1.0f / (int)count;
+    for (i = 0; i < (unsigned int)count && pObj->mCount < pObj->mMax
+         && (!pObj->mUnknown03F || pObj->mCount < (unsigned int)pObj->mUnknown0B4); i++) {
+        PsysParticle_t *pParticle = pObj->mppParticles[pObj->mCount];
+
+        EmitterGetNewPos(&position, pObj);
+        EmitterGetNewDir(&direction, pObj);
+        if (transform) {
+            Vec3Mat34Mul(&position, &position);
+            Vec3Mat33Mul(&direction, &direction);
+        }
+        if (pObj->mUnknown35A && pObj->mEmitterType != 3) {
+            Vec3Sub(&offset, &position, &pObj->mUnknown3C8);
+            Vec3Scale(&offset, &offset, fraction * (end - start) + start);
+            fraction += fractionStep;
+            Vec3Add(&offset, &offset, &pObj->mUnknown3C8);
+            position = offset;
+        }
+        pParticle->mUnknown30 = (_partGetRandom() * 2.0f * pObj->mUnknown0AC - pObj->mUnknown0AC)
+                             + pObj->mUnknown0A8;
+        if (!(pParticle->mUnknown30 >= 0.0f)) {
+            pParticle->mUnknown30 = 0.0f;
+        }
+        if (pObj->mUnknown05C == 1) {
+            if (pObj->mUnknown03E) {
+                pParticle->mUnknown34 = (_partGetRandom() * 2.0f * pObj->mUnknown0A4 - pObj->mUnknown0A4)
+                                     + pObj->mUnknown0A0;
+                pParticle->mUnknown50 = _partGetRandom() * 2.0f * pObj->mUnknown09C - pObj->mUnknown09C;
+            } else {
+                pParticle->mUnknown50 = pParticle->mUnknown34 = 0.0f;
+            }
+        }
+        pParticle->mActive = 1;
+        pParticle->mUnknown39 = 0;
+        pParticle->mAge = 0.0f;
+        pParticle->mAgeRatio = 0.0f;
+        pParticle->mUnknown4C = 0.0f;
+        if (pObj->mUnknown045) {
+            pParticle->mUnknown3A = _partGetRandomRange(((AnimTex_t *)pObj->mpUnknown2AC)->mFrameCount);
+        } else {
+            pParticle->mUnknown3A = 0;
+        }
+        pParticle->mLife = (unsigned int)(_partGetRandomRange(lifeRange) + pObj->mUnknown0DC);
+        if (pObj->mUnknown044) {
+            pParticle->mLife /= gSysSpeedCompVal;
+        }
+        pParticle->mLife *= partLibState.mUnknown10;
+        Vec3Scale(&pParticle->mVel, &direction,
+                  (_partGetRandom() * 2.0f * pObj->mUnknown0BC - pObj->mUnknown0BC) + pObj->mUnknown0B8);
+        Vec3Add(&pParticle->mVel, &pParticle->mVel, &pObj->mUnknown39C);
+        if (pObj->mUnknown043 == 1) {
+            randomVelocity.x = _partGetRandom() * 2.0f * velocityRange.x - velocityRange.x;
+            randomVelocity.y = _partGetRandom() * 2.0f * velocityRange.y - velocityRange.y;
+            randomVelocity.z = _partGetRandom() * 2.0f * velocityRange.z - velocityRange.z;
+            Vec3Add(&pParticle->mVel, &pParticle->mVel, &randomVelocity);
+        }
+        pParticle->mPos.x = position.x;
+        pParticle->mPos.y = position.y;
+        pParticle->mPos.z = position.z;
+        pParticle->mForce.x = pParticle->mForce.y = pParticle->mForce.z = 0.0f;
+        pParticle->mPrevPos = pParticle->mPos;
+        if (i) {
+            _particleIntegrateTimestep(pObj, pParticle, dt * (int)(i - 1));
+        }
+        pObj->mCount++;
+    }
+    if (pObj->mUnknown35A && step + 1 == steps && pObj->mEmitterType != 3) {
+        EmitterGetNewPos(&lastPosition, pObj);
+        Vec3Mat34Mul(&lastPosition, &lastPosition);
+        *(Vec3_801DE1E0 *)&pObj->mUnknown3C8 = lastPosition;
+    }
+    MatPop();
+}
+
+static void _deactivateAllParticles(ParticleSysObj_t *pObj)
 {
     unsigned int i;
 
@@ -211,7 +340,7 @@ static void fn_801DDCC4(PartObj_801DE1E0 *pObj)
     }
 }
 
-static void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
+static void _updateSelfControlSys(ParticleSysObj_t *pObj, float dt)
 {
     if (pObj->mUnknown0C8 != 0.0f) {
         float value = pObj->mUnknown0C8 * dt + pObj->mUnknown0B0;
@@ -227,12 +356,12 @@ static void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
     case 0:
         break;
     case 1:
-        if (!(pObj->mUnknown3B0 <= pObj->mUnknown054 * lbl_8039AD10.mUnknown10)) {
+        if (!(pObj->mUnknown3B0 <= pObj->mUnknown054 * partLibState.mUnknown10)) {
             pObj->mUnknown0B0 = 0.0f;
             if (pObj->mCount == 0) {
                 pObj->mUnknown2B4 = 0;
                 if (pObj->mUnknown2B5 == 1) {
-                    fn_801DEF18(pObj);
+                    ParticlePoolReturn(pObj);
                 }
             }
         }
@@ -241,26 +370,26 @@ static void fn_801DDD00(PartObj_801DE1E0 *pObj, float dt)
         if (!(pObj->mUnknown0B0 > pObj->mUnknown054) && pObj->mCount == 0) {
             pObj->mUnknown2B4 = 0;
             if (pObj->mUnknown2B5 == 1) {
-                fn_801DEF18(pObj);
+                ParticlePoolReturn(pObj);
             }
         }
         break;
     }
 }
 
-static void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
+static void _updateParticles(ParticleSysObj_t *pObj, float dt)
 {
     unsigned short i;
 
     PsysColPrecalcDependantVals(pObj);
     for (i = 0; i < pObj->mCount; i++) {
-        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+        PsysParticle_t *pParticle = pObj->mppParticles[i];
 
         if (pObj->mCollisionType != 0 || pObj->mColExtCount != 0) {
             PsysColCalcCollision(pObj, pParticle);
         }
         pParticle->mPrevPos = pParticle->mPos;
-        fn_801DDFB0(pObj, pParticle, dt);
+        _particleIntegrateTimestep(pObj, pParticle, dt);
         pParticle->mForce.x = pParticle->mForce.y = pParticle->mForce.z = 0.0f;
         if (pObj->mUnknown041 != 0) {
             pParticle->mUnknown4C = (pParticle->mAge * pObj->mUnknown0E4 + 1.0f) * pParticle->mUnknown30;
@@ -268,11 +397,11 @@ static void fn_801DDE08(PartObj_801DE1E0 *pObj, float dt)
         pParticle->mAgeRatio = pParticle->mAge / pParticle->mLife;
         pParticle->mAge += dt;
         pParticle->mUnknown50 += dt * pParticle->mUnknown34;
-        pParticle->mUnknown40 = pParticle->mAge * lbl_8039AD10.mUnknown14;
+        pParticle->mUnknown40 = pParticle->mAge * partLibState.mUnknown14;
     }
 }
 
-static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, float dt)
+static void _particleIntegrateTimestep(ParticleSysObj_t *pObj, PsysParticle_t *pParticle, float dt)
 {
     float scale = pObj->mUnknown2B0 * dt;
 
@@ -284,19 +413,19 @@ static void fn_801DDFB0(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle, fl
     pParticle->mPos.z = pParticle->mVel.z * dt + pParticle->mPrevPos.z;
 }
 
-static void fn_801DE010(PartObj_801DE1E0 *pObj)
+static void _sumParticleForces(ParticleSysObj_t *pObj)
 {
     switch (pObj->mForceType) {
     case 1:
-        fn_801DE04C(pObj);
+        _sumGasMotionForces(pObj);
         break;
     case 0:
-        fn_801DE114(pObj);
+        _sumSolidMotionForces(pObj);
         break;
     }
 }
 
-static void fn_801DE04C(PartObj_801DE1E0 *pObj)
+static void _sumGasMotionForces(ParticleSysObj_t *pObj)
 {
     Vec3_801DE1E0 force;
     unsigned int i;
@@ -305,20 +434,23 @@ static void fn_801DE04C(PartObj_801DE1E0 *pObj)
     float y;
     float z;
 
-    Vec3Scale(&force, &lbl_8039AD10.mUnknown78, -(pObj->mUnknown090 * pObj->mUnknown094));
+    Vec3Scale(&force, &partLibState.mUnknown78, -(pObj->mUnknown090 * pObj->mUnknown094));
     x = force.x;
     y = force.y;
     z = force.z;
     for (i = 0; i < pObj->mCount; i++) {
-        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+        PsysParticle_t *pParticle = pObj->mppParticles[i];
 
-        pParticle->mForce.x = pParticle->mVel.x * -0.45f + (pParticle->mForce.x + x);
-        pParticle->mForce.y = pParticle->mVel.y * -0.45f + (pParticle->mForce.y + y);
-        pParticle->mForce.z = pParticle->mVel.z * -0.45f + (pParticle->mForce.z + z);
+        pParticle->mForce.x += x;
+        pParticle->mForce.y += y;
+        pParticle->mForce.z += z;
+        pParticle->mForce.x += pParticle->mVel.x * -0.45f;
+        pParticle->mForce.y += pParticle->mVel.y * -0.45f;
+        pParticle->mForce.z += pParticle->mVel.z * -0.45f;
     }
 }
 
-static void fn_801DE114(PartObj_801DE1E0 *pObj)
+static void _sumSolidMotionForces(ParticleSysObj_t *pObj)
 {
     Vec3_801DE1E0 force;
     unsigned short i;
@@ -327,12 +459,12 @@ static void fn_801DE114(PartObj_801DE1E0 *pObj)
     float y;
     float z;
 
-    Vec3Scale(&force, &lbl_8039AD10.mUnknown78, pObj->mUnknown098 * pObj->mUnknown090);
+    Vec3Scale(&force, &partLibState.mUnknown78, pObj->mUnknown098 * pObj->mUnknown090);
     x = force.x;
     y = force.y;
     z = force.z;
     for (i = 0; i < pObj->mCount; i++) {
-        Particle_801DE1E0 *pParticle = pObj->mppParticles[i];
+        PsysParticle_t *pParticle = pObj->mppParticles[i];
 
         pParticle->mForce.x += x;
         pParticle->mForce.y += y;
@@ -340,73 +472,73 @@ static void fn_801DE114(PartObj_801DE1E0 *pObj)
     }
 }
 
-float fn_801DE1B8(void)
+float ParticleGetRandom(void)
 {
-    return MathGetRandom(lbl_8039AD10.mpRandom);
+    return MathGetRandom(partLibState.mpRandom);
 }
 
-void fn_801DE1E0(Desc_801DE1E0 *pDesc)
+void ParticleLibInit(ParticleLibParms_t *pDesc)
 {
 
-    lbl_8039AD10.mUnknown00 = pDesc->mUnknown00;
-    lbl_8039AD10.mUnknown60 = pDesc->mUnknown04;
-    lbl_8039AD10.mUnknown62 = pDesc->mUnknown06;
-    lbl_8039AD10.mpUnknown0C = pDesc->mpUnknown20;
-    lbl_8039AD10.mpUnknown08 = fn_801DEA90;
-    lbl_8039AD10.mUnknown17 = 0;
-    lbl_8039AD10.mUnknown16 = pDesc->mUnknown24;
-    lbl_8039AD10.mUnknown14 = pDesc->mUnknown08;
-    lbl_8039AD10.mUnknown10 = 1.0f / (unsigned int)lbl_8039AD10.mUnknown14;
-    lbl_8039AD10.mUnknown84 = MathGetRandomSeed();
-    lbl_8039AD10.mpRandom = MathNewRandomStream(0, lbl_8039AD10.mUnknown84);
-    lbl_8039AD10.mPoolCount = pDesc->mUnknown18;
-    ObjNewType_(lbl_8039AD10.mUnknown00, sizeof(PartObj_801DE1E0), pDesc->mUnknown04,
-                (void (*)())fn_801DE7F4, (void (*)())fn_801DEA50);
-    lbl_8039AD10.mpUnknown04 = ObjNewList(1, lbl_8039AD10.mUnknown60, 0, 0, 0, 2, 1, -1);
-    ObjSetListObjFunc(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 0, lbl_8039AD10.mpUnknown08);
-    ObjSetListObjFunc(lbl_8039AD10.mpUnknown04, lbl_8039AD10.mUnknown00, 1, lbl_8039AD10.mpUnknown0C);
-    lbl_8039AD10.mUnknown64 = pDesc->mUnknown10;
-    if (lbl_8039AD10.mUnknown64) {
-        lbl_8039AD10.mHeap = fn_801D2730();
-        lbl_802F94AC.mUnknown08 = lbl_8039AD10.mHeap;
-        lbl_8039AD10.mUnknown68 = (pDesc->mUnknown14 + 15) & ~15;
-        lbl_802F94AC.mUnknown10 = lbl_8039AD10.mUnknown68;
-        fn_801D2130(&lbl_802F94AC);
+    partLibState.mUnknown00 = pDesc->mUnknown00;
+    partLibState.mUnknown60 = pDesc->mUnknown04;
+    partLibState.mUnknown62 = pDesc->mUnknown06;
+    partLibState.mpUnknown0C = pDesc->mpUnknown20;
+    partLibState.mUnknown16 = pDesc->mUnknown24;
+    partLibState.mpUnknown08 = ParticleObjUpdate;
+    partLibState.mUnknown17 = 0;
+    partLibState.mUnknown14 = pDesc->mUnknown08;
+    partLibState.mUnknown10 = 1.0f / (unsigned int)partLibState.mUnknown14;
+    partLibState.mUnknown84 = MathGetRandomSeed();
+    partLibState.mpRandom = MathNewRandomStream(0, partLibState.mUnknown84);
+    partLibState.mPoolCount = pDesc->mUnknown18;
+    ObjNewType_(partLibState.mUnknown00, sizeof(ParticleSysObj_t), pDesc->mUnknown04,
+                (void (*)())_particleObjAdd, (void (*)())_particleObjDel);
+    partLibState.mpUnknown04 = ObjNewList(1, partLibState.mUnknown60, 0, 0, 0, 2, 1, -1);
+    ObjSetListObjFunc(partLibState.mpUnknown04, partLibState.mUnknown00, 0, partLibState.mpUnknown08);
+    ObjSetListObjFunc(partLibState.mpUnknown04, partLibState.mUnknown00, 1, partLibState.mpUnknown0C);
+    partLibState.mUnknown64 = pDesc->mUnknown10;
+    if (partLibState.mUnknown64) {
+        partLibState.mHeap = fn_801D2730();
+        gPoolHeapDef.mUnknown08 = partLibState.mHeap;
+        partLibState.mUnknown68 = (pDesc->mUnknown14 + 15) & ~15;
+        gPoolHeapDef.mUnknown10 = partLibState.mUnknown68;
+        fn_801D2130(&gPoolHeapDef);
     } else {
-        lbl_8039AD10.mUnknown68 = 0;
-        lbl_8039AD10.mHeap = 0;
+        partLibState.mUnknown68 = 0;
+        partLibState.mHeap = 0;
     }
-    fn_801DD498();
-    lbl_8039AD10.mUnknown74 = pDesc->mUnknown0C;
-    Vec3Scale(&lbl_8039AD10.mUnknown78, &lbl_802F94C4, pDesc->mUnknown0C);
-    lbl_8039AD10.mUnknown1C = pDesc->mUnknown1C;
-    lbl_8039AD10.mUnknown18 = 0;
+    _ParticlePoolInit();
+    partLibState.mUnknown74 = pDesc->mUnknown0C;
+    Vec3Scale(&partLibState.mUnknown78, &gGravNorm, pDesc->mUnknown0C);
+    partLibState.mUnknown1C = pDesc->mUnknown1C;
+    partLibState.mUnknown18 = 0;
     MatPush();
     MatMakeUnit();
-    switch (lbl_8039AD10.mUnknown1C) {
+    switch (partLibState.mUnknown1C) {
     case 0:
         break;
     case 1:
-        lbl_8039AD10.mUnknown18 = 1;
+        partLibState.mUnknown18 = 1;
         MatRotX(0x400000);
         break;
     }
-    Vec3Mat33Mul(&lbl_8039AD10.mUnknown78, &lbl_8039AD10.mUnknown78);
-    MatStore(lbl_8039AD10.mUnknown20);
+    Vec3Mat33Mul(&partLibState.mUnknown78, &partLibState.mUnknown78);
+    MatStore(partLibState.mUnknown20);
     MatPop();
-    lbl_8039AD10.mUnknown8C.mppUnknown0 = 0;
-    lbl_8039AD10.mUnknown8C.mppUnknown4 = 0;
-    lbl_8039AD10.mUnknown8C.mppUnknown8 = 0;
-    lbl_8039AD10.mUnknown8C.mUnknownE = 0;
-    lbl_803EBD58 = 1;
+    partLibState.mUnknown8C.mppUnknown0 = 0;
+    partLibState.mUnknown8C.mppUnknown4 = 0;
+    partLibState.mUnknown8C.mppUnknown8 = 0;
+    partLibState.mUnknown8C.mUnknownE = 0;
+    gPartLibIsInit = 1;
 }
 
-void fn_801DE410(void)
+void ParticleLibShutdown(void)
 {
-    State_801DE1E0 *pState = &lbl_8039AD10;
+    ParticleLibState_t *pState = &partLibState;
 
-    fn_801DD534();
-    fn_801DFD4C();
+    _ParticlePoolShutdown();
+    ParticleLibShutdownCustomBehavior();
     ObjDelList(pState->mpUnknown04);
     ObjDelType(pState->mUnknown00);
     MathDelRandomStream(pState->mpRandom);
@@ -417,9 +549,9 @@ void fn_801DE410(void)
     pState->mUnknown00 = 0;
     pState->mUnknown74 = 0.0f;
     pState->mUnknown1C = 0;
-    pState->mUnknown78.x = lbl_802F94C4.x;
-    pState->mUnknown78.y = lbl_802F94C4.y;
-    pState->mUnknown78.z = lbl_802F94C4.z;
+    pState->mUnknown78.x = gGravNorm.x;
+    pState->mUnknown78.y = gGravNorm.y;
+    pState->mUnknown78.z = gGravNorm.z;
     pState->mHeap = 0;
     pState->mUnknown68 = 0;
     pState->mpUnknown04 = 0;
@@ -434,16 +566,16 @@ void fn_801DE410(void)
     MatMakeUnit();
     MatStore(pState->mUnknown20);
     MatPop();
-    lbl_803EBD58 = 0;
+    gPartLibIsInit = 0;
 }
 
-void fn_801DE4F8(unsigned int rate)
+void ParticleLibSetUpdatesPerSec(unsigned int rate)
 {
-    lbl_8039AD10.mUnknown14 = rate;
-    lbl_8039AD10.mUnknown10 = 1.0f / rate;
+    partLibState.mUnknown14 = rate;
+    partLibState.mUnknown10 = 1.0f / rate;
 }
 
-static void fn_801DE540(Vec4_801DE1E0 *pDst, Vec4_801DE1E0 *pSrc)
+static void _Vec4Copy(Vec4_801DE1E0 *pDst, Vec4_801DE1E0 *pSrc)
 {
     pDst->x = pSrc->x;
     pDst->y = pSrc->y;
@@ -451,7 +583,7 @@ static void fn_801DE540(Vec4_801DE1E0 *pDst, Vec4_801DE1E0 *pSrc)
     pDst->w = pSrc->w;
 }
 
-void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
+void ParticleObjInitParms(ParticleSysObj_t *pDst, ParticleTemplate_t *pSrc)
 {
     strcpy(pDst->mUnknown014, pSrc->mObj.mUnknown014);
     strcpy(pDst->mUnknown01C, pSrc->mObj.mUnknown01C);
@@ -468,8 +600,8 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown070.x = pSrc->mObj.mUnknown070.x;
     pDst->mUnknown070.y = pSrc->mObj.mUnknown070.y;
     pDst->mUnknown070.z = pSrc->mObj.mUnknown070.z;
-    fn_801DE9A0(pDst, &pSrc->mObj.mUnknown064, &pSrc->mObj.mUnknown070);
-    fn_801DE540(&pDst->mUnknown07C, &pSrc->mObj.mUnknown07C);
+    ParticleObjSetLocalMat(pDst, &pSrc->mObj.mUnknown064, &pSrc->mObj.mUnknown070);
+    _Vec4Copy(&pDst->mUnknown07C, &pSrc->mObj.mUnknown07C);
     pDst->mUnknown03D = pSrc->mObj.mUnknown03D;
     pDst->mpUnknown08C = &pSrc->mRamp;
     pDst->mUnknown090 = pSrc->mObj.mUnknown090;
@@ -516,7 +648,7 @@ void fn_801DE564(PartObj_801DE1E0 *pDst, Template_801DE1E0 *pSrc)
     pDst->mUnknown048 = pSrc->mObj.mUnknown048;
 }
 
-void fn_801DE794(PartObj_801DE1E0 *pObj)
+void ParticleObjInitState(ParticleSysObj_t *pObj)
 {
     pObj->mUnknown35B = 0;
     pObj->mUnknown3D0 = 0.0f;
@@ -536,7 +668,7 @@ void fn_801DE794(PartObj_801DE1E0 *pObj)
     pObj->mUnknown2B0 = 1.0f / pObj->mUnknown090;
 }
 
-static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
+static void _particleObjAdd(ParticleSysObj_t *pObj, ParticleTemplate_t *pTemplate)
 {
     unsigned short i;
     AnimTex_t *pTex;
@@ -544,42 +676,42 @@ static void fn_801DE7F4(PartObj_801DE1E0 *pObj, Template_801DE1E0 *pTemplate)
     if (pTemplate->mObj.mUnknown03F) {
         pObj->mMax = pTemplate->mObj.mUnknown0B4;
     } else {
-        pObj->mMax = lbl_8039AD10.mUnknown62;
+        pObj->mMax = partLibState.mUnknown62;
     }
-    pObj->mppParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 0);
-    MemFill(pObj->mppParticles, pObj->mMax * sizeof(Particle_801DE1E0 *), 0, 1);
-    pObj->mpParticles = fn_801D2B7C(pObj->mMax * sizeof(Particle_801DE1E0), 0, 0);
-    MemFill(pObj->mpParticles, pObj->mMax * sizeof(Particle_801DE1E0), 0, 1);
+    pObj->mppParticles = fn_801D2B7C(pObj->mMax * sizeof(PsysParticle_t *), 0, 0);
+    MemFill(pObj->mppParticles, pObj->mMax * sizeof(PsysParticle_t *), 0, 1);
+    pObj->mpParticles = fn_801D2B7C(pObj->mMax * sizeof(PsysParticle_t), 0, 0);
+    MemFill(pObj->mpParticles, pObj->mMax * sizeof(PsysParticle_t), 0, 1);
     for (i = 0; i < pObj->mMax; i++) {
         pObj->mppParticles[i] = &pObj->mpParticles[i];
     }
-    fn_801DE564(pObj, pTemplate);
-    fn_801DE794(pObj);
+    ParticleObjInitParms(pObj, pTemplate);
+    ParticleObjInitState(pObj);
     pTex = AnimTexFind(pTemplate->mObj.mUnknown28C);
     if (pTex) {
-        fn_801DE968(pObj, pTex);
+        ParticleObjAttachTex(pObj, pTex);
     }
     pObj->mUnknown2B4 = 1;
 }
 
-PartObj_801DE1E0 *fn_801DE918(Template_801DE1E0 *pTemplate)
+ParticleSysObj_t *ParticleObjAddSys(ParticleTemplate_t *pTemplate)
 {
-    State_801DE1E0 *pState = &lbl_8039AD10;
-    PartObj_801DE1E0 *pObj;
+    ParticleLibState_t *pState = &partLibState;
+    ParticleSysObj_t *pObj;
 
     pObj = ObjNew(pState->mUnknown00, 0, pTemplate);
     ObjAddToList(pState->mpUnknown04, pObj);
     return pObj;
 }
 
-void fn_801DE968(PartObj_801DE1E0 *pObj, AnimTex_t *pTex)
+void ParticleObjAttachTex(ParticleSysObj_t *pObj, AnimTex_t *pTex)
 {
     pObj->mUnknown045 = 1;
     pObj->mpUnknown2AC = pTex;
     strcpy(pObj->mUnknown28C, pTex->mName);
 }
 
-void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot)
+void ParticleObjSetLocalMat(ParticleSysObj_t *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRot)
 {
     MatPushUnit();
     if (pPos) {
@@ -594,7 +726,7 @@ void fn_801DE9A0(PartObj_801DE1E0 *pObj, Vec3_801DE1E0 *pPos, Vec3_801DE1E0 *pRo
     MatPop();
 }
 
-static void fn_801DEA50(PartObj_801DE1E0 *pObj)
+static void _particleObjDel(ParticleSysObj_t *pObj)
 {
     fn_801D2BD0(pObj->mppParticles);
     if (pObj->mpParticles) {
@@ -602,15 +734,15 @@ static void fn_801DEA50(PartObj_801DE1E0 *pObj)
     }
 }
 
-int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
+int ParticleObjUpdate(ParticleSysObj_t *pObj, int steps)
 {
-    void (*pfnEmit)(PartObj_801DE1E0 *, float);
-    void (*pfnUpdate)(PartObj_801DE1E0 *, float);
-    void (*pfnPre)(PartObj_801DE1E0 *);
+    void (*pfnEmit)(ParticleSysObj_t *, float);
+    void (*pfnUpdate)(ParticleSysObj_t *, float);
+    void (*pfnPre)(ParticleSysObj_t *);
     float dt;
     float rate;
     unsigned short count;
-    Custom_801DE1E0 *pCustom;
+    ParticleCustomBehavior_t *pCustom;
     int i;
 
     if (!pObj->mUnknown2B4) {
@@ -619,24 +751,24 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
     pfnEmit = 0;
     pfnUpdate = 0;
     pfnPre = 0;
-    pCustom = &lbl_8039AD10.mUnknown8C;
+    pCustom = &partLibState.mUnknown8C;
     if (pCustom->mUnknownE) {
-        pfnEmit = (void (*)(PartObj_801DE1E0 *, float))pCustom->mppUnknown0[pObj->mUnknown358];
-        pfnUpdate = (void (*)(PartObj_801DE1E0 *, float))pCustom->mppUnknown4[pObj->mUnknown358];
-        pfnPre = (void (*)(PartObj_801DE1E0 *))pCustom->mppUnknown8[pObj->mUnknown358];
+        pfnEmit = (void (*)(ParticleSysObj_t *, float))pCustom->mppUnknown0[pObj->mUnknown358];
+        pfnUpdate = (void (*)(ParticleSysObj_t *, float))pCustom->mppUnknown4[pObj->mUnknown358];
+        pfnPre = (void (*)(ParticleSysObj_t *))pCustom->mppUnknown8[pObj->mUnknown358];
     }
-    dt = lbl_8039AD10.mUnknown10;
-    if (!lbl_8039AD10.mUnknown17) {
+    dt = partLibState.mUnknown10;
+    if (!partLibState.mUnknown17) {
         dt *= (float)steps;
         steps = 1;
     }
     if (pObj->mUnknown044) {
         pObj->mUnknown3A8 = Vec3Magnitude(&pObj->mUnknown39C);
-        lbl_803ECF4C = pObj->mUnknown3A8 * pObj->mUnknown200 + 1.0f;
+        gSysSpeedCompVal = pObj->mUnknown3A8 * pObj->mUnknown200 + 1.0f;
     }
     for (i = 0; i < steps; i++) {
         if (!pObj->mUnknown04C) {
-            fn_801DDD00(pObj, dt);
+            _updateSelfControlSys(pObj, dt);
         }
         if (!pObj->mUnknown2B4) {
             break;
@@ -645,28 +777,28 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
             if (pfnPre) {
                 pfnPre(pObj);
             } else {
-                fn_801DD6B8(pObj);
+                _checkParticleLives(pObj);
             }
         }
-        fn_801DE010(pObj);
+        _sumParticleForces(pObj);
         if (pfnUpdate) {
             pfnUpdate(pObj, dt);
         } else {
-            fn_801DDE08(pObj, dt);
+            _updateParticles(pObj, dt);
         }
         if (!(pObj->mUnknown0B0 <= 0.0f) && pObj->mCount < pObj->mMax) {
             if (pfnEmit) {
                 pfnEmit(pObj, dt);
             } else {
                 if (pObj->mUnknown044) {
-                    rate = pObj->mUnknown0B0 * lbl_803ECF4C;
+                    rate = pObj->mUnknown0B0 * gSysSpeedCompVal;
                 } else {
                     rate = pObj->mUnknown0B0;
                 }
                 rate = rate * dt + pObj->mUnknown3AC;
                 count = rate;
                 if (count) {
-                    fn_801DD730(pObj, count, i, steps, dt);
+                    _genNewParticles(pObj, count, i, steps, dt);
                 }
                 pObj->mUnknown3AC = rate - (unsigned int)count;
             }
@@ -676,23 +808,23 @@ int fn_801DEA90(PartObj_801DE1E0 *pObj, int steps)
     return 0;
 }
 
-unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
+unsigned short ParticlePoolCreate(unsigned short count, ParticleTemplate_t *pTemplate)
 {
     unsigned short index;
     unsigned short i;
     unsigned short j;
-    PartObj_801DE1E0 *pObj;
+    ParticleSysObj_t *pObj;
 
     index = 0;
-    for (i = 0; i < lbl_8039AD10.mPoolCount; i++) {
-        if (lbl_8039ADAC.mpUsed[i] == 0) {
+    for (i = 0; i < partLibState.mPoolCount; i++) {
+        if (worldPoolMan.mpUsed[i] == 0) {
             index = i;
             break;
         }
     }
     for (i = 0; i < count; i++) {
-        pObj = fn_801DE918(pTemplate);
-        if (lbl_8039AD10.mUnknown64) {
+        pObj = ParticleObjAddSys(pTemplate);
+        if (partLibState.mUnknown64) {
             fn_801D2BD0(pObj->mpParticles);
             for (j = 0; j < pObj->mMax; j++) {
                 pObj->mppParticles[j] = 0;
@@ -702,30 +834,30 @@ unsigned short fn_801DECFC(unsigned short count, Template_801DE1E0 *pTemplate)
         pObj->mUnknown2B4 = 0;
         pObj->mUnknown2B5 = 1;
         pObj->mUnknown358 = index;
-        lbl_8039ADAC.mpPools[index].mpObjs[i] = pObj;
+        worldPoolMan.mpPools[index].mpObjs[i] = pObj;
     }
-    lbl_8039ADAC.mpPools[index].mUnknown000 = count;
-    lbl_8039ADAC.mpPools[index].mFree = count;
-    lbl_8039ADAC.mpPools[index].mUsed = 0;
-    lbl_8039ADAC.mpUsed[index] = 1;
-    lbl_8039ADAC.mpPools[index].mTemplate = *pTemplate;
-    ColorRampCopy(&pTemplate->mRamp, &lbl_8039ADAC.mpPools[index].mTemplate.mRamp);
+    worldPoolMan.mpPools[index].mUnknown000 = count;
+    worldPoolMan.mpPools[index].mFree = count;
+    worldPoolMan.mpPools[index].mUsed = 0;
+    worldPoolMan.mpUsed[index] = 1;
+    worldPoolMan.mpPools[index].mTemplate = *pTemplate;
+    ColorRampCopy(&pTemplate->mRamp, &worldPoolMan.mpPools[index].mTemplate.mRamp);
     return index;
 }
 
-PartObj_801DE1E0 *fn_801DEEF8(unsigned short handle)
+ParticleSysObj_t *ParticlePoolBorrow(unsigned short handle)
 {
-    return fn_801DD57C(handle);
+    return _ParticlePoolBorrow(handle);
 }
 
-void fn_801DEF18(PartObj_801DE1E0 *pObj)
+void ParticlePoolReturn(ParticleSysObj_t *pObj)
 {
     unsigned short index = pObj->mUnknown358;
-    Pool_801DE1E0 *pPool = &lbl_8039ADAC.mpPools[index];
+    ParticlePool_t *pPool = &worldPoolMan.mpPools[index];
     unsigned short i;
     unsigned short last;
     unsigned short j;
-    PartObj_801DE1E0 *pSwap;
+    ParticleSysObj_t *pSwap;
 
     last = pPool->mUsed - 1;
     for (i = 0; i < pPool->mUsed; i++) {
@@ -734,8 +866,8 @@ void fn_801DEF18(PartObj_801DE1E0 *pObj)
         }
     }
     pObj->mUnknown2B4 = 0;
-    fn_801DDCC4(pObj);
-    if (lbl_8039AD10.mUnknown64) {
+    _deactivateAllParticles(pObj);
+    if (partLibState.mUnknown64) {
         fn_801D2BD0(pObj->mpParticles);
         pObj->mpParticles = 0;
         for (j = 0; j < pObj->mMax; j++) {
@@ -747,15 +879,15 @@ void fn_801DEF18(PartObj_801DE1E0 *pObj)
         pPool->mpObjs[last] = pObj;
         pPool->mpObjs[i] = pSwap;
     }
-    lbl_8039ADAC.mpPools[index].mUsed--;
-    lbl_8039ADAC.mpPools[index].mFree++;
+    worldPoolMan.mpPools[index].mUsed--;
+    worldPoolMan.mpPools[index].mFree++;
 }
 
 /* Frame of a particle's texture: 0 for a single frame, else the particle's start frame plus (for
    an animated texture) its age in 60ths of a second divided by the object's frame divisor,
    modulo the frame count. */
-static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, PartObj_801DE1E0 *pObj,
-                                                Particle_801DE1E0 *pParticle)
+static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, ParticleSysObj_t *pObj,
+                                                PsysParticle_t *pParticle)
 {
     unsigned int frame = 0;
 
@@ -769,7 +901,7 @@ static unsigned int PSysRenderCalcParticleFrame(AnimTex_t *pTex, PartObj_801DE1E
     return frame;
 }
 
-void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
+void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, ParticleSysObj_t *pObj, PsysParticle_t *pParticle)
 {
     float fadeOut;
 
@@ -801,7 +933,7 @@ void PSysRenderCalcParticleColor(Vec4_801DE1E0 *pColor, PartObj_801DE1E0 *pObj, 
     }
 }
 
-float fn_801DF184(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
+float PSysRenderCalcParticleScale(ParticleSysObj_t *pObj, PsysParticle_t *pParticle)
 {
     if (pObj->mUnknown041) {
         return pParticle->mUnknown4C;
@@ -809,53 +941,53 @@ float fn_801DF184(PartObj_801DE1E0 *pObj, Particle_801DE1E0 *pParticle)
     return pParticle->mUnknown30;
 }
 
-void fn_801DF1A0(unsigned char **ppData, void *pDst, int noSwap)
+void PartRead8(unsigned char **ppData, void *pDst, int noSwap)
 {
-    fn_801DF3E4(*ppData, pDst, 1, noSwap);
+    _partReadWrite(*ppData, pDst, 1, noSwap);
     *ppData += 1;
 }
 
-void fn_801DF1E4(unsigned char **ppData, void *pDst, int noSwap)
+void PartRead16(unsigned char **ppData, void *pDst, int noSwap)
 {
-    fn_801DF3E4(*ppData, pDst, 2, noSwap);
+    _partReadWrite(*ppData, pDst, 2, noSwap);
     *ppData += 2;
 }
 
-void fn_801DF228(unsigned char **ppData, void *pDst, int noSwap)
+void PartRead32(unsigned char **ppData, void *pDst, int noSwap)
 {
-    fn_801DF3E4(*ppData, pDst, 4, noSwap);
+    _partReadWrite(*ppData, pDst, 4, noSwap);
     *ppData += 4;
 }
 
-void fn_801DF26C(unsigned char **ppData, void *pDst, unsigned int size, int noSwap)
+void PartRead(unsigned char **ppData, void *pDst, unsigned int size, int noSwap)
 {
-    fn_801DF3E4(*ppData, pDst, size, noSwap);
+    _partReadWrite(*ppData, pDst, size, noSwap);
     *ppData += size;
 }
 
-void fn_801DF2AC(unsigned char **ppData, Vec3_801DE1E0 *pDst, int noSwap)
+void PartReadVec3(unsigned char **ppData, Vec3_801DE1E0 *pDst, int noSwap)
 {
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->x, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->x, 4, noSwap);
     *ppData += 4;
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->y, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->y, 4, noSwap);
     *ppData += 4;
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->z, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->z, 4, noSwap);
     *ppData += 4;
 }
 
-static void fn_801DF338(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
+static void PartReadVec4(unsigned char **ppData, Vec4_801DE1E0 *pDst, int noSwap)
 {
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->x, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->x, 4, noSwap);
     *ppData += 4;
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->y, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->y, 4, noSwap);
     *ppData += 4;
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->z, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->z, 4, noSwap);
     *ppData += 4;
-    fn_801DF3E4(*ppData, (unsigned char *)&pDst->w, 4, noSwap);
+    _partReadWrite(*ppData, (unsigned char *)&pDst->w, 4, noSwap);
     *ppData += 4;
 }
 
-void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap)
+void _partReadWrite(unsigned char *pSrc, unsigned char *pDst, unsigned int size, int noSwap)
 {
     unsigned int i = 0;
     unsigned int j;
@@ -866,45 +998,46 @@ void fn_801DF3E4(unsigned char *pSrc, unsigned char *pDst, unsigned int size, in
             j = i;
             next = i + 1;
         } else {
-            next = i + 1;
-            j = size - next;
+            unsigned int distance = i + 1;
+            j = size - distance;
+            next = distance;
         }
         pDst[j] = pSrc[i];
         i = next;
     }
 }
 
-static void fn_801DF428(unsigned char **ppData, EmitterParms_t *pDst, unsigned int type, int noSwap)
+static void PartReadEmitter(unsigned char **ppData, EmitterParms_t *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
     switch (type) {
     case 0:
-        fn_801DF2AC(&pData, &pDst->mPoint, noSwap);
+        PartReadVec3(&pData, &pDst->mPoint, noSwap);
         break;
     case 1:
-        fn_801DF2AC(&pData, &pDst->mCase1.mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mCase1.mUnknown0C, noSwap);
+        PartReadVec3(&pData, &pDst->mCase1.mUnknown00, noSwap);
+        PartReadVec3(&pData, &pDst->mCase1.mUnknown0C, noSwap);
         break;
     case 2:
-        fn_801DF2AC(&pData, &pDst->mCase2.mUnknown00, noSwap);
-        fn_801DF228(&pData, &pDst->mCase2.mUnknown0C, noSwap);
+        PartReadVec3(&pData, &pDst->mCase2.mUnknown00, noSwap);
+        PartRead32(&pData, &pDst->mCase2.mUnknown0C, noSwap);
         break;
     case 3:
-        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown00, noSwap);
-        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown0C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown18, noSwap);
-        fn_801DF228(&pData, &pDst->mCase3.mUnknown24, noSwap);
-        fn_801DF228(&pData, &pDst->mCase3.mUnknown28, noSwap);
-        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown2C, noSwap);
-        fn_801DF2AC(&pData, &pDst->mCase3.mUnknown38, noSwap);
-        fn_801DF228(&pData, &pDst->mCase3.mUnknown44, noSwap);
+        PartReadVec3(&pData, &pDst->mCase3.mUnknown00, noSwap);
+        PartReadVec3(&pData, &pDst->mCase3.mUnknown0C, noSwap);
+        PartReadVec3(&pData, &pDst->mCase3.mUnknown18, noSwap);
+        PartRead32(&pData, &pDst->mCase3.mUnknown24, noSwap);
+        PartRead32(&pData, &pDst->mCase3.mUnknown28, noSwap);
+        PartReadVec3(&pData, &pDst->mCase3.mUnknown2C, noSwap);
+        PartReadVec3(&pData, &pDst->mCase3.mUnknown38, noSwap);
+        PartRead32(&pData, &pDst->mCase3.mUnknown44, noSwap);
         break;
     }
     *ppData += 0x100;
 }
 
-static void fn_801DF578(unsigned char **ppData, PsysColParms_t *pDst, unsigned int type, int noSwap)
+static void PartReadCollision(unsigned char **ppData, PsysColParms_t *pDst, unsigned int type, int noSwap)
 {
     unsigned char *pData = *ppData;
 
@@ -912,30 +1045,110 @@ static void fn_801DF578(unsigned char **ppData, PsysColParms_t *pDst, unsigned i
     case 0:
         break;
     case 1:
-        fn_801DF228(&pData, &pDst->mGround.mHeight, noSwap);
+        PartRead32(&pData, &pDst->mGround.mHeight, noSwap);
         break;
     case 2:
-        fn_801DF2AC(&pData, &pDst->mParm[0], noSwap);
-        fn_801DF2AC(&pData, &pDst->mParm[1], noSwap);
-        fn_801DF2AC(&pData, &pDst->mParm[2], noSwap);
+        PartReadVec3(&pData, &pDst->mParm[0], noSwap);
+        PartReadVec3(&pData, &pDst->mParm[1], noSwap);
+        PartReadVec3(&pData, &pDst->mParm[2], noSwap);
         break;
     }
     *ppData += 0x80;
 }
 
-void *fn_801DFD34(void)
+void ParticleParmLoad(ParticleTemplate_t *pTemplate, unsigned char *data, int noSwap)
 {
-    return lbl_8039AD10.mpUnknown04;
+    ColorRampParms_t ramp;
+    unsigned char oldPointers[128];
+    unsigned short i;
+    ParticleSysObj_t *pObj = &pTemplate->mObj;
+
+    MemFill(pTemplate, sizeof(*pTemplate), 0, 1);
+    PartRead(&data, pObj->mUnknown014, 8, 1);
+    PartRead(&data, pObj->mUnknown01C, 32, 1);
+    PartRead32(&data, &pObj->mUnknown04C, noSwap);
+    PartRead32(&data, &pObj->mUnknown050, noSwap);
+    PartRead32(&data, &pObj->mUnknown054, noSwap);
+    PartRead32(&data, &pObj->mForceType, noSwap);
+    PartRead32(&data, &pObj->mUnknown05C, noSwap);
+    PartRead32(&data, &pObj->mUnknown060, noSwap);
+    PartRead8(&data, &pObj->mUnknown03C, 1);
+    PartReadVec3(&data, &pObj->mUnknown064, noSwap);
+    PartReadVec3(&data, &pObj->mUnknown070, noSwap);
+    PartReadVec4(&data, &pObj->mUnknown07C, noSwap);
+    PartRead8(&data, &pObj->mUnknown03D, 1);
+    PartRead32(&data, &ramp.mInterp, noSwap);
+    PartRead16(&data, &ramp.mCount, noSwap);
+    if (strcmp(pObj->mUnknown014, "1.0b") < 0) {
+        PartRead16(&data, (unsigned char *)&ramp + 2, noSwap);
+        PartRead(&data, oldPointers, sizeof(oldPointers), noSwap);
+        for (i = 0; i < 32; i++) {
+            PartRead32(&data, &ramp.mNodes[i].mT, noSwap);
+            PartReadVec3(&data, &ramp.mNodes[i].mColor, noSwap);
+        }
+    } else {
+        for (i = 0; i < ramp.mCount; i++) {
+            PartRead32(&data, &ramp.mNodes[i].mT, noSwap);
+            PartReadVec3(&data, &ramp.mNodes[i].mColor, noSwap);
+        }
+    }
+    ColorRampInitParms(&pTemplate->mRamp, &ramp);
+    PartRead32(&data, &pObj->mUnknown090, noSwap);
+    PartRead32(&data, &pObj->mUnknown094, noSwap);
+    PartRead32(&data, &pObj->mUnknown098, noSwap);
+    PartRead8(&data, &pObj->mUnknown03E, 1);
+    PartRead32(&data, &pObj->mUnknown09C, noSwap);
+    PartRead32(&data, &pObj->mUnknown0A0, noSwap);
+    PartRead32(&data, &pObj->mUnknown0A4, noSwap);
+    PartRead32(&data, &pObj->mUnknown0A8, noSwap);
+    PartRead32(&data, &pObj->mUnknown0AC, noSwap);
+    PartRead32(&data, &pObj->mUnknown0B0, noSwap);
+    PartRead8(&data, &pObj->mUnknown03F, 1);
+    PartRead32(&data, &pObj->mUnknown0B4, noSwap);
+    PartRead32(&data, &pObj->mUnknown0B8, noSwap);
+    PartRead32(&data, &pObj->mUnknown0BC, noSwap);
+    PartRead8(&data, &pObj->mUnknown040, 1);
+    PartRead32(&data, &pObj->mUnknown0C0, noSwap);
+    PartRead16(&data, &pObj->mUnknown046, noSwap);
+    PartRead32(&data, &pObj->mUnknown0C4, noSwap);
+    PartRead32(&data, &pObj->mUnknown0C8, noSwap);
+    PartRead32(&data, &pObj->mUnknown0CC, noSwap);
+    PartRead32(&data, &pObj->mUnknown0D0, noSwap);
+    PartRead32(&data, &pObj->mUnknown0D4, noSwap);
+    PartRead32(&data, &pObj->mUnknown0D8, noSwap);
+    PartRead32(&data, &pObj->mUnknown0DC, noSwap);
+    PartRead32(&data, &pObj->mUnknown0E0, noSwap);
+    PartRead8(&data, &pObj->mUnknown041, 1);
+    PartRead32(&data, &pObj->mUnknown0E4, noSwap);
+    PartRead8(&data, &pObj->mUnknown042, 1);
+    PartRead32(&data, &pObj->mUnknown0E8, noSwap);
+    PartRead32(&data, &pObj->mUnknown0EC, noSwap);
+    PartRead32(&data, &pObj->mEmitterType, noSwap);
+    PartReadEmitter(&data, &pObj->mEmitter, pObj->mEmitterType, noSwap);
+    PartRead8(&data, &pObj->mUnknown043, 1);
+    PartReadVec3(&data, (Vec3_801DE1E0 *)&pObj->mUnknown1F4, noSwap);
+    PartRead8(&data, &pObj->mUnknown044, 1);
+    PartRead32(&data, &pObj->mUnknown200, noSwap);
+    PartRead32(&data, &pObj->mCollisionType, noSwap);
+    PartReadCollision(&data, &pObj->mCollision, pObj->mCollisionType, noSwap);
+    PartRead32(&data, &pObj->mUnknown288, noSwap);
+    PartRead(&data, pObj->mUnknown28C, 32, 1);
+    PartRead16(&data, &pObj->mUnknown048, noSwap);
 }
 
-int fn_801DFD40(void)
+void *ParticleLibGetSysList(void)
 {
-    return lbl_8039AD10.mUnknown1C;
+    return partLibState.mpUnknown04;
 }
 
-void fn_801DFD4C(void)
+int ParticleLibGetOrientation(void)
 {
-    Custom_801DE1E0 *pCustom = &lbl_8039AD10.mUnknown8C;
+    return partLibState.mUnknown1C;
+}
+
+void ParticleLibShutdownCustomBehavior(void)
+{
+    ParticleCustomBehavior_t *pCustom = &partLibState.mUnknown8C;
 
     if (pCustom->mUnknownE) {
         fn_801D2BD0(pCustom->mppUnknown0);
@@ -949,12 +1162,12 @@ void fn_801DFD4C(void)
     }
 }
 
-static float fn_801DFDB8(void)
+static float _partGetRandom(void)
 {
-    return MathGetRandom(lbl_8039AD10.mpRandom);
+    return MathGetRandom(partLibState.mpRandom);
 }
 
-static int fn_801DFDE0(int range)
+static int _partGetRandomRange(int range)
 {
-    return MathGetRandomRange(lbl_8039AD10.mpRandom, range);
+    return MathGetRandomRange(partLibState.mpRandom, range);
 }
