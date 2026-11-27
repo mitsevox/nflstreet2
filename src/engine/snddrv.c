@@ -6,18 +6,20 @@
 /* The audio-callback count: the driver thread runs the 100 Hz server on every other callback. */
 static int everyother = 0;
 
+State_803A8D60 snddrv __attribute__((aligned(32)));
+
 void SNDDRV_freenextframe(void)
 {
     int i;
 
-    if (lbl_803A8D60.mC049 != 0) {
+    if (snddrv.mC049 != 0) {
         for (i = 0; i < 48; i++) {
-            if (lbl_803A8D60.m0[i].m1F != 0) {
-                AXFreeVoice(lbl_803A8D60.m0[i].m3C);
-                lbl_803A8D60.m0[i].m1F = 0;
-                lbl_803A8D60.mC049--;
-                lbl_803A8D60.m0[i].m3C = 0;
-                if (lbl_803A8D60.mC049 == 0) {
+            if (snddrv.m0[i].m1F != 0) {
+                AXFreeVoice(snddrv.m0[i].m3C);
+                snddrv.m0[i].m1F = 0;
+                snddrv.mC049--;
+                snddrv.m0[i].m3C = 0;
+                if (snddrv.mC049 == 0) {
                     break;
                 }
             }
@@ -46,13 +48,13 @@ void SNDDRV_callbackdropvoice(AXVPB *vpb)
     for (i = 0; i < record->m23; i++) {
         int channel = record->m4[i];
 
-        if (lbl_803A8D60.m0[channel].m3C != 0) {
+        if (snddrv.m0[channel].m3C != 0) {
             if (channel == vpb->userContext) {
                 SNDDRV_freeaxvoice(channel, 1);
             } else {
                 SNDDRV_freeaxvoice(channel, 2);
             }
-            lbl_803A8D60.m0[record->m4[i]].m24 = 0;
+            snddrv.m0[record->m4[i]].m24 = 0;
         }
     }
 }
@@ -80,28 +82,28 @@ int SNDDRV_allocateaxvoice(int index)
             priority = 30;
         }
         vpb = AXAcquireVoice(priority, (void (*)(void *))SNDDRV_callbackdropvoice, record->m4[i]);
-        lbl_803A8D60.m0[record->m4[i]].m3C = vpb;
+        snddrv.m0[record->m4[i]].m3C = vpb;
         if (vpb != 0) {
             int rear;
 
-            lbl_803A8D60.m0[record->m4[i]].m25 = 0;
+            snddrv.m0[record->m4[i]].m25 = 0;
             if (i > 4) {
                 rear = 1;
                 volume = 0;
             } else {
                 rear = 0;
             }
-            SNDI_aztospkrvol(record->m1C, lbl_803A8D60.m0[record->m4[i]].m0);
-            SNDDRV_DSPMixerInitChannel(lbl_803A8D60.m0[record->m4[i]].m3C, 0, (int)(pitch * 258.0f), volume, 0,
-                                       lbl_803A8D60.m0[record->m4[i]].m0, record->m1C, rear);
+            SNDI_aztospkrvol(record->m1C, snddrv.m0[record->m4[i]].m0);
+            SNDDRV_DSPMixerInitChannel(snddrv.m0[record->m4[i]].m3C, 0, (int)(pitch * 258.0f), volume, 0,
+                                       snddrv.m0[record->m4[i]].m0, record->m1C, rear);
         } else {
-            lbl_803A8D60.m0[record->m4[i]].m25 = 1;
+            snddrv.m0[record->m4[i]].m25 = 1;
             if (i > 0) {
                 for (j = i; j >= 0; j--) {
-                    if (lbl_803A8D60.m0[record->m4[j]].m3C != 0) {
-                        AXFreeVoice(lbl_803A8D60.m0[record->m4[j]].m3C);
-                        lbl_803A8D60.m0[record->m4[j]].m25 = 1;
-                        lbl_803A8D60.m0[record->m4[j]].m3C = 0;
+                    if (snddrv.m0[record->m4[j]].m3C != 0) {
+                        AXFreeVoice(snddrv.m0[record->m4[j]].m3C);
+                        snddrv.m0[record->m4[j]].m25 = 1;
+                        snddrv.m0[record->m4[j]].m3C = 0;
                     }
                     if (lbl_803A6C24.m1CC[record->m4[j]].m6D != 0) {
                         SNDVOICEI_free(record->m4[j]);
@@ -116,7 +118,7 @@ int SNDDRV_allocateaxvoice(int index)
 
 void SNDDRV_freeaxvoice(int channel, int mode)
 {
-    Channel_803A8D60 *state = &lbl_803A8D60.m0[channel];
+    Channel_803A8D60 *state = &snddrv.m0[channel];
     AXVPB *vpb = state->m3C;
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[channel];
 
@@ -133,12 +135,12 @@ void SNDDRV_freeaxvoice(int channel, int mode)
     } else if (mode == 2) {
         if (state->m25 == 0 && vpb != 0) {
             state->m1F = 1;
-            lbl_803A8D60.mC049++;
+            snddrv.mC049++;
         }
     } else if (mode == 1) {
         if (state->m1F == 1) {
             state->m1F = 0;
-            lbl_803A8D60.mC049--;
+            snddrv.mC049--;
         }
         state->m3C = 0;
     }
@@ -153,11 +155,11 @@ int SNDDRV_dmaslotenter(int key)
     BOOL enabled = OSDisableInterrupts();
 
     for (i = 0; i < 64; i++) {
-        if (lbl_803A8D60.m9E30[i].m0 == -1) {
+        if (snddrv.m9E30[i].m0 == -1) {
             break;
         }
     }
-    lbl_803A8D60.m9E30[i].m0 = key;
+    snddrv.m9E30[i].m0 = key;
     OSRestoreInterrupts(enabled);
     return i;
 }
@@ -166,10 +168,10 @@ void SNDDRV_dmcallback(u32 request)
 {
     int i;
 
-    lbl_803A8D60.m9DE8 = ((ARQRequest *)request)->owner;
+    snddrv.m9DE8 = ((ARQRequest *)request)->owner;
     for (i = 0; i < 64; i++) {
-        if (lbl_803A8D60.m9E30[i].m0 == ((ARQRequest *)request)->owner) {
-            lbl_803A8D60.m9E30[i].m0 = -1;
+        if (snddrv.m9E30[i].m0 == ((ARQRequest *)request)->owner) {
+            snddrv.m9E30[i].m0 = -1;
             return;
         }
     }
@@ -182,21 +184,21 @@ int SNDDRV_dmapost(u32 priority, u32 source, u32 dest, u32 length, int slot)
     u32 owner;
 
     if (slot == -1) {
-        index = SNDDRV_dmaslotenter(lbl_803A8D60.m9DEC);
-        owner = lbl_803A8D60.m9DEC;
-        lbl_803A8D60.m9E30[index].m24 = priority;
-        lbl_803A8D60.m9E30[index].m28 = source;
-        lbl_803A8D60.m9E30[index].m2C = dest;
-        lbl_803A8D60.m9E30[index].m30 = OSRoundUp32B(length);
-        lbl_803A8D60.m9E30[index].m34 = lbl_803A6C24.m170;
+        index = SNDDRV_dmaslotenter(snddrv.m9DEC);
+        owner = snddrv.m9DEC;
+        snddrv.m9E30[index].m24 = priority;
+        snddrv.m9E30[index].m28 = source;
+        snddrv.m9E30[index].m2C = dest;
+        snddrv.m9E30[index].m30 = OSRoundUp32B(length);
+        snddrv.m9E30[index].m34 = lbl_803A6C24.m170;
     } else {
         index = slot;
-        owner = lbl_803A8D60.m9E30[index].m0;
+        owner = snddrv.m9E30[index].m0;
     }
-    ARQPostRequest(&lbl_803A8D60.m9E30[index].m4, owner, ARQ_TYPE_MRAM_TO_ARAM, priority, source, dest,
+    ARQPostRequest(&snddrv.m9E30[index].m4, owner, ARQ_TYPE_MRAM_TO_ARAM, priority, source, dest,
                    OSRoundUp32B(length), SNDDRV_dmcallback);
     OSRestoreInterrupts(enabled);
-    return lbl_803A8D60.m9DEC++;
+    return snddrv.m9DEC++;
 }
 
 void SNDDRV_restoredma(int key)
@@ -205,10 +207,10 @@ void SNDDRV_restoredma(int key)
     BOOL enabled = OSDisableInterrupts();
 
     for (i = 0; i < 64; i++) {
-        if (lbl_803A8D60.m9E30[i].m0 == key) {
-            ARQRemoveRequest(&lbl_803A8D60.m9E30[i].m4);
-            SNDDRV_dmapost(lbl_803A8D60.m9E30[i].m24, lbl_803A8D60.m9E30[i].m28, lbl_803A8D60.m9E30[i].m2C,
-                        lbl_803A8D60.m9E30[i].m30, i);
+        if (snddrv.m9E30[i].m0 == key) {
+            ARQRemoveRequest(&snddrv.m9E30[i].m4);
+            SNDDRV_dmapost(snddrv.m9E30[i].m24, snddrv.m9E30[i].m28, snddrv.m9E30[i].m2C,
+                        snddrv.m9E30[i].m30, i);
         }
     }
     OSRestoreInterrupts(enabled);
@@ -221,7 +223,7 @@ void SNDDRV_audiocallback(void **buffers, void *unused)
     int i;
     int j;
 
-    if (lbl_803A8D60.mC048 != 0) {
+    if (snddrv.mC048 != 0) {
         for (i = 0; i < lbl_8030002C; i++) {
             if (sndmix.m14[i] != 0) {
                 float *dst = MIX_getwetbuffer(i);
@@ -234,16 +236,16 @@ void SNDDRV_audiocallback(void **buffers, void *unused)
             }
         }
         if (lbl_803A6C24.m1C.m23 <= 3) {
-            SNDI_memcpy(buffers[1], lbl_803A8D60.mC068[0], 640);
-            SNDI_memcpy(buffers[0], lbl_803A8D60.mC068[1], 640);
+            SNDI_memcpy(buffers[1], snddrv.mC068[0], 640);
+            SNDI_memcpy(buffers[0], snddrv.mC068[1], 640);
         } else {
-            SNDI_memcpy(buffers[1], lbl_803A8D60.mC068[0], 640);
-            SNDI_memcpy(buffers[2], lbl_803A8D60.mC068[2], 640);
-            SNDI_memcpy(buffers[0], lbl_803A8D60.mC068[3], 640);
-            SNDI_memcpy(buffers[3], lbl_803A8D60.mC068[1], 640);
+            SNDI_memcpy(buffers[1], snddrv.mC068[0], 640);
+            SNDI_memcpy(buffers[2], snddrv.mC068[2], 640);
+            SNDI_memcpy(buffers[0], snddrv.mC068[3], 640);
+            SNDI_memcpy(buffers[3], snddrv.mC068[1], 640);
         }
     }
-    OSWakeupThread(&lbl_803A8D60.m1DE0);
+    OSWakeupThread(&snddrv.m1DE0);
     everyother++;
     OSRestoreInterrupts(enabled);
 }
@@ -268,21 +270,21 @@ void SNDDRV_initmixer(void)
     for (i = 0; i < setup.m9; i++) {
         void *buffer = SNDMEMI_allocz(672);
 
-        lbl_803A8D60.mC050[i] = buffer;
-        lbl_803A8D60.mC068[i] = (void *)OSRoundUp32B(buffer);
+        snddrv.mC050[i] = buffer;
+        snddrv.mC068[i] = (void *)OSRoundUp32B(buffer);
     }
     SNDSYS_leavecritical();
-    lbl_803A8D60.mC048 = 1;
+    snddrv.mC048 = 1;
 }
 
 void SNDDRV_restoremixer(void)
 {
     int i;
 
-    lbl_803A8D60.mC048 = 0;
+    snddrv.mC048 = 0;
     SNDSYS_entercritical();
     for (i = 0; i < lbl_803A6C24.m1C.m23; i++) {
-        SNDMEMI_free(lbl_803A8D60.mC050[i]);
+        SNDMEMI_free(snddrv.mC050[i]);
     }
     SNDSYS_leavecritical();
     MIXrestorefn();
@@ -326,7 +328,7 @@ void SNDDRV_fillbufwithpackets(int index, Stream_802743A0 *stream, Record_803A6D
         } else {
             rest = 0;
             for (i = 0; i < record->m23; i++) {
-                source[i] = lbl_803A8D60.m1AC0;
+                source[i] = snddrv.m1AC0;
             }
         }
         for (i = 0; i < record->m23; i++) {
@@ -349,13 +351,13 @@ void *SNDDRV_thread(void *arg)
         if (lbl_803A6C24.m220 != 0) {
             lbl_803A6C24.m220();
         }
-        if (lbl_803A8D60.mC048 != 0) {
-            MIXaudioslicefn(lbl_803A8D60.mC068, 160);
+        if (snddrv.mC048 != 0) {
+            MIXaudioslicefn(snddrv.mC068, 160);
             SNDPKTPLAYI_flushcallbackdata();
         }
         if (everyother & 1) {
             SNDSYSI_100hzserver();
-            curTick += lbl_803A8D60.m1400;
+            curTick += snddrv.m1400;
             // FAKEMATCH: negated float tests give the target's branch senses (blt to the subtraction,
             // cror un/eq/lt around the wrap); the plain x < 0 and x > 30 forms reverse both branches.
             Snd::gVariableTimerTick = (int)(!(curTick < 0.0f) ? curTick + 0.5f : curTick - 0.5f);
@@ -368,7 +370,7 @@ void *SNDDRV_thread(void *arg)
             lbl_803A6C24.m224();
         }
         Snd::gMutexUnlockFn();
-        OSSleepThread(&lbl_803A8D60.m1DE0);
+        OSSleepThread(&snddrv.m1DE0);
     }
 }
 
@@ -450,31 +452,34 @@ int SNDPLATFORM_init(int mode)
     }
     rate = _SndClampF(Snd::gVariableTimerPeriod, 10.0f, 100.0f);
     Snd::gVariableTimerPeriod = rate;
-    lbl_803A8D60.m1400 = 10.0f / rate;
+    snddrv.m1400 = 10.0f / rate;
     if (lbl_803A6C24.m1C.m21 != 0 && araminited == 0) {
         ARInit(0, 0);
         ARQInit();
         araminited = 1;
     }
     for (i = 0; i < 64; i++) {
-        lbl_803A8D60.m9E30[i].m0 = -1;
+        snddrv.m9E30[i].m0 = -1;
     }
     if (mode == 0) {
         if (lbl_803A6C24.mB8 == 0 || lbl_803A6C24.mBC == 0) {
-            unsigned int count = lbl_803A6C24.m1C.m22;
+            unsigned int count;
 
-            if (count > lbl_803A6C24.m1C.m12) {
+            if (lbl_803A6C24.m1C.m22 > lbl_803A6C24.m1C.m12) {
                 count = lbl_803A6C24.m1C.m12;
+            } else {
+                count = lbl_803A6C24.m1C.m22;
             }
-            SNDARAM_init(lbl_803A6C24.m1C.m8 + (count + 2));
+            count += 2;
+            SNDARAM_init(lbl_803A6C24.m1C.m8 + count);
             SNDARAM_setpool(lbl_803A6C24.m1C.m38, lbl_803A6C24.m1C.m3C);
         }
-        lbl_803A8D60.m1404 = SNDPLATFORM_memalloc(0, 1280);
-        lbl_803A8D60.m1408 = (u32)lbl_803A8D60.m1404 >> 1;
-        lbl_803A8D60.m140C = (u32)lbl_803A8D60.m1404 << 1;
-        lbl_803A8D60.m1AC0 = (unsigned char *)OSRoundUp32B(lbl_803A8D60.m14A0);
-        SNDDRV_dmapost(1, (u32)lbl_803A8D60.m1AC0, (u32)lbl_803A8D60.m1404, 1280, -1);
-        SNDDRV_dmapost(1, (u32)lbl_803A8D60.m1AC0, ARGetBaseAddress(), 256, -1);
+        snddrv.m1404 = SNDPLATFORM_memalloc(0, 1280);
+        snddrv.m1408 = (u32)snddrv.m1404 >> 1;
+        snddrv.m140C = (u32)snddrv.m1404 << 1;
+        snddrv.m1AC0 = (unsigned char *)OSRoundUp32B(snddrv.m14A0);
+        SNDDRV_dmapost(1, (u32)snddrv.m1AC0, (u32)snddrv.m1404, 1280, -1);
+        SNDDRV_dmapost(1, (u32)snddrv.m1AC0, ARGetBaseAddress(), 256, -1);
     }
     AIInit(0);
     AXInit();
@@ -486,26 +491,26 @@ int SNDPLATFORM_init(int mode)
         AXSetMode(0);
     }
     for (i = 0; i < 48; i++) {
-        Channel_803A8D60 *channel = &lbl_803A8D60.m0[i];
+        Channel_803A8D60 *channel = &snddrv.m0[i];
 
-        channel->m18 = -1;
         channel->m24 = 0;
+        channel->m25 = 1;
         channel->m1F = 0;
+        channel->m18 = -1;
         channel->m1C = -1;
         channel->m3C = 0;
-        channel->m25 = 1;
     }
     for (i = 0; i < lbl_803A6C24.m1C.m28; i++) {
-        if ((lbl_803A6C24.m1C.m2A[i] & 4) && lbl_803A8D60.mC048 == 0) {
+        if ((lbl_803A6C24.m1C.m2A[i] & 4) && snddrv.mC048 == 0) {
             SNDDRV_initmixer();
             break;
         }
     }
-    lbl_803A8D60.mC049 = 0;
-    OSCreateThread(&lbl_803A8D60.m1AC8, SNDDRV_thread, 0, lbl_803A8D60.m1DE8 + sizeof(lbl_803A8D60.m1DE8),
-                   sizeof(lbl_803A8D60.m1DE8), 1, 1);
-    OSInitThreadQueue(&lbl_803A8D60.m1DE0);
-    OSResumeThread(&lbl_803A8D60.m1AC8);
+    snddrv.mC049 = 0;
+    OSCreateThread(&snddrv.m1AC8, SNDDRV_thread, 0, snddrv.m1DE8 + sizeof(snddrv.m1DE8),
+                   sizeof(snddrv.m1DE8), 1, 1);
+    OSInitThreadQueue(&snddrv.m1DE0);
+    OSResumeThread(&snddrv.m1AC8);
     AXRegisterAuxACallback(SNDDRV_audiocallback, 0);
     lbl_803A6C24.m168 = 1;
     return 0;
@@ -514,7 +519,7 @@ int SNDPLATFORM_init(int mode)
 int SNDPLATFORM_restore(int flag)
 {
     AXRegisterAuxACallback(0, 0);
-    if (lbl_803A8D60.mC048 != 0) {
+    if (snddrv.mC048 != 0) {
         SNDDRV_restoremixer();
     }
     if (flag == 0) {
@@ -523,7 +528,7 @@ int SNDPLATFORM_restore(int flag)
     while (lbl_803A6C24.m169 != 0) {
         SNDSYS_leavecritical();
     }
-    OSCancelThread(&lbl_803A8D60.m1AC8);
+    OSCancelThread(&snddrv.m1AC8);
     AXQuit();
     return 0;
 }
@@ -537,7 +542,7 @@ void iSNDserve(void)
     int j;
 
     for (i = 0; i < lbl_803A6C24.m1C.m22; i++) {
-        Stream_802743A0 *stream = lbl_803A8D60.m1410[i];
+        Stream_802743A0 *stream = snddrv.m1410[i];
         Channel_803A8D60 *channel;
         Record_803A6DF0 *record;
         AXVPB *vpb;
@@ -547,7 +552,7 @@ void iSNDserve(void)
         if (stream == 0 || stream->m2598 < 0) {
             continue;
         }
-        channel = &lbl_803A8D60.m0[stream->m2598];
+        channel = &snddrv.m0[stream->m2598];
         record = &lbl_803A6C24.m1CC[stream->m2598];
         if (!(stream->m259A & 0x80)) {
             stream->m259A--;
@@ -567,17 +572,17 @@ void iSNDserve(void)
                     address = (u32)stream->m259C[j];
                     loopAddress = address >> 1;
                     endAddress = (address + 3070) >> 1;
-                    AXSetVoiceAdpcm(lbl_803A8D60.m0[record->m4[j]].m3C, &adpcm);
-                    AXSetVoiceAdpcmLoop(lbl_803A8D60.m0[record->m4[j]].m3C, &loop);
+                    AXSetVoiceAdpcm(snddrv.m0[record->m4[j]].m3C, &adpcm);
+                    AXSetVoiceAdpcmLoop(snddrv.m0[record->m4[j]].m3C, &loop);
                     addr.endAddressHi = endAddress >> 16;
                     addr.endAddressLo = endAddress;
                     addr.loopAddressHi = loopAddress >> 16;
                     addr.loopAddressLo = loopAddress;
                     addr.currentAddressHi = loopAddress >> 16;
                     addr.currentAddressLo = loopAddress;
-                    AXSetVoiceAddr(lbl_803A8D60.m0[record->m4[j]].m3C, &addr);
-                    AXSetVoiceState(lbl_803A8D60.m0[record->m4[j]].m3C, 1);
-                    lbl_803A8D60.m0[record->m4[j]].m24 = 1;
+                    AXSetVoiceAddr(snddrv.m0[record->m4[j]].m3C, &addr);
+                    AXSetVoiceState(snddrv.m0[record->m4[j]].m3C, 1);
+                    snddrv.m0[record->m4[j]].m24 = 1;
                 }
             }
         }
@@ -600,15 +605,15 @@ void iSNDserve(void)
     }
     SNDPKTPLAYI_flushcallbackdata();
     for (i = 0; i < lbl_803A6C24.m1C.m12; i++) {
-        Channel_803A8D60 *channel = &lbl_803A8D60.m0[i];
+        Channel_803A8D60 *channel = &snddrv.m0[i];
         Record_803A6DF0 *record = &lbl_803A6C24.m1CC[i];
         AXVPB *vpb = channel->m3C;
 
         if (vpb != 0 && channel->m24 != 0 && vpb->pb.state == 0 && channel->m18 >= 0 && channel->m24 == 1) {
             for (j = 0; j < lbl_803A6C24.m1CC[i].m23; j++) {
-                if (lbl_803A8D60.m0[record->m4[j]].m24 != 0) {
+                if (snddrv.m0[record->m4[j]].m24 != 0) {
                     SNDDRV_freeaxvoice(record->m4[j], 0);
-                    lbl_803A8D60.m0[record->m4[j]].m24 = 0;
+                    snddrv.m0[record->m4[j]].m24 = 0;
                 }
             }
         }
@@ -640,7 +645,7 @@ int SNDPLATFORM_asyncresolvetimbre(Struct_80270E04 *p, int value, int *base)
 int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, int b, int c)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
-    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     AXPBADDR addr;
     AXPBADPCM adpcm;
     AXPBADPCMLOOP loop;
@@ -662,9 +667,9 @@ int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, 
         } else {
             addr.loopFlag = 0;
             if (record->m22 == 18) {
-                loopStart = lbl_803A8D60.m140C;
+                loopStart = snddrv.m140C;
             } else {
-                loopStart = lbl_803A8D60.m1408;
+                loopStart = snddrv.m1408;
             }
             loopEnd = header->m58 - 1;
         }
@@ -727,18 +732,18 @@ int SNDPLATFORM_playtimbre(Header_80273DF8 *header, int base, int index, int a, 
                     endAddress += 1;
                 }
             }
-            AXSetVoiceSrcType(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
-            AXSetVoiceAdpcm(lbl_803A8D60.m0[record->m4[i]].m3C, &adpcm);
-            AXSetVoiceAdpcmLoop(lbl_803A8D60.m0[record->m4[i]].m3C, &loop);
+            AXSetVoiceSrcType(snddrv.m0[record->m4[i]].m3C, 1);
+            AXSetVoiceAdpcm(snddrv.m0[record->m4[i]].m3C, &adpcm);
+            AXSetVoiceAdpcmLoop(snddrv.m0[record->m4[i]].m3C, &loop);
             addr.currentAddressHi = start >> 16;
             addr.loopAddressHi = loopAddress >> 16;
             addr.endAddressHi = endAddress >> 16;
             addr.endAddressLo = endAddress;
             addr.currentAddressLo = start;
             addr.loopAddressLo = loopAddress;
-            AXSetVoiceAddr(lbl_803A8D60.m0[record->m4[i]].m3C, &addr);
-            AXSetVoiceState(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
-            lbl_803A8D60.m0[record->m4[i]].m24 = 1;
+            AXSetVoiceAddr(snddrv.m0[record->m4[i]].m3C, &addr);
+            AXSetVoiceState(snddrv.m0[record->m4[i]].m3C, 1);
+            snddrv.m0[record->m4[i]].m24 = 1;
         }
     } else {
         for (i = 0; i < record->m23; i++) {
@@ -812,7 +817,7 @@ int SNDPLATFORM_packetplaycreate(int index, Stream_802743A0 *stream)
         stream->m2580[i] = (unsigned char *)OSRoundUp32B(stream->m0[i]);
     }
     stream->m2598 = -1;
-    lbl_803A8D60.m1410[index] = stream;
+    snddrv.m1410[index] = stream;
     return 0;
 }
 
@@ -821,9 +826,9 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
     int i;
 
-    record->m14 = 0;
     record->m20 = info->m0;
-    lbl_803A8D60.m0[index].m1C = stream;
+    record->m14 = 0;
+    snddrv.m0[index].m1C = stream;
     record->m23 = info->m2;
     if (record->m24 & 4) {
         for (i = 0; i < record->m23; i++) {
@@ -842,7 +847,7 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
             MIXplayfn(record->m4[i] - lbl_803A6C24.m1C.m12);
         }
     } else {
-        Stream_802743A0 *block = lbl_803A8D60.m1410[stream];
+        Stream_802743A0 *block = snddrv.m1410[stream];
 
         for (i = 0; i < 6; i++) {
             block->m25B8[i] = 0;
@@ -863,8 +868,8 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
             memset(block->m2580[i], 0, 1536);
             DCFlushRange(block->m2580[i], 1536);
             SNDDRV_dmapost(1, (u32)block->m2580[i], (u32)block->m259C[i], 1536, -1);
-            AXSetVoiceSrcType(lbl_803A8D60.m0[record->m4[i]].m3C, 1);
-            lbl_803A8D60.m0[record->m4[i]].m24 = 1;
+            AXSetVoiceSrcType(snddrv.m0[record->m4[i]].m3C, 1);
+            snddrv.m0[record->m4[i]].m24 = 1;
         }
     }
     return 0;
@@ -872,14 +877,14 @@ int SNDPLATFORM_packetplay(int stream, int index, int a, int b, int c, Info_8027
 
 int SNDPLATFORM_packetplaydestroy(int index)
 {
-    Stream_802743A0 *stream = lbl_803A8D60.m1410[index];
+    Stream_802743A0 *stream = snddrv.m1410[index];
     int i;
 
     SNDPLATFORM_memfree(0, stream->m259C[0]);
     for (i = 0; i < 6; i++) {
         stream->m259C[i] = 0;
     }
-    lbl_803A8D60.m1410[index] = 0;
+    snddrv.m1410[index] = 0;
     return 0;
 }
 
@@ -891,19 +896,20 @@ int SNDPLATFORM_outputlatency(void)
 void SndHalSetVol(int index)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
-    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     float volume;
     int count;
     int i;
 
     if (record->m24 & 0x200) {
         volume = record->m48 * (float)record->m5F;
-        SNDDRV_DSPMixerSetVol(lbl_803A8D60.m0[index].m3C, (int)(volume * 258.0f));
+        SNDDRV_DSPMixerSetVol(snddrv.m0[index].m3C, (int)(volume * 258.0f));
     } else {
         volume = record->m48 * (float)record->m5F * (1.0f / 127.0f);
-        count = lbl_803A6C24.m1C.m23;
-        if (count == 1) {
+        if (lbl_803A6C24.m1C.m23 == 1) {
             count = 2;
+        } else {
+            count = lbl_803A6C24.m1C.m23;
         }
         for (i = 0; i < count; i++) {
             SNDMIX_setdrygain(index - lbl_803A6C24.m1C.m12, i, volume * channel->m0[i]);
@@ -923,7 +929,7 @@ void SndHalSetDry(int index)
 void SndHalSetPan(int index)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
-    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     int i;
 
     if (record->m4E != 0) {
@@ -969,7 +975,7 @@ int SNDPLATFORM_setpitch(int index)
         pitch = pitch * record->m8E >> 12;
         ratio = pitch * (1.0f / 4096.0f);
         for (i = 0; i < record->m23; i++) {
-            AXVPB *vpb = lbl_803A8D60.m0[record->m4[i]].m3C;
+            AXVPB *vpb = snddrv.m0[record->m4[i]].m3C;
 
             if (vpb == 0) {
                 return -8;
@@ -1028,7 +1034,7 @@ void SNDPLATFORM_highpass(int index, int value)
 int SNDPLATFORM_getcurframe(int index)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
-    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     AXVPB *vpb;
     u32 position;
 
@@ -1049,22 +1055,22 @@ int SNDPLATFORM_getcurframe(int index)
 int SNDPLATFORM_stop(int index)
 {
     Record_803A6DF0 *record = &lbl_803A6C24.m1CC[index];
-    Channel_803A8D60 *channel = &lbl_803A8D60.m0[index];
+    Channel_803A8D60 *channel = &snddrv.m0[index];
     int i;
 
     if (record->m24 & 0x200) {
         if (channel->m1C >= 0) {
-            lbl_803A8D60.m1410[channel->m1C]->m2598 = -1;
+            snddrv.m1410[channel->m1C]->m2598 = -1;
             channel->m1C = -1;
         }
         for (i = 0; i < record->m23; i++) {
-            if (lbl_803A8D60.m0[record->m4[i]].m3C == 0) {
+            if (snddrv.m0[record->m4[i]].m3C == 0) {
                 return -8;
             }
-            AXSetVoiceState(lbl_803A8D60.m0[record->m4[i]].m3C, 0);
-            if (lbl_803A8D60.m0[record->m4[i]].m24 != 0) {
+            AXSetVoiceState(snddrv.m0[record->m4[i]].m3C, 0);
+            if (snddrv.m0[record->m4[i]].m24 != 0) {
                 SNDDRV_freeaxvoice(record->m4[i], 0);
-                lbl_803A8D60.m0[record->m4[i]].m24 = 0;
+                snddrv.m0[record->m4[i]].m24 = 0;
             }
         }
     } else {
@@ -1133,8 +1139,8 @@ int SNDPLATFORM_downloadcomplete(int key)
     int i;
 
     for (i = 0; i < 64; i++) {
-        if (lbl_803A8D60.m9E30[i].m0 != -1 && lbl_803A8D60.m9E30[i].m0 == key) {
-            if (lbl_803A6C24.m170 - lbl_803A8D60.m9E30[i].m34 > 200) {
+        if (snddrv.m9E30[i].m0 != -1 && snddrv.m9E30[i].m0 == key) {
+            if (lbl_803A6C24.m170 - snddrv.m9E30[i].m34 > 200) {
                 OSRestoreInterrupts(enabled);
                 SNDDRV_restoredma(key);
             } else {
@@ -1149,7 +1155,7 @@ int SNDPLATFORM_downloadcomplete(int key)
 
 void SNDI_mutexalloc(void)
 {
-    OSInitMutex(&lbl_803B4B90);
+    OSInitMutex(&snddrv.mBE30);
 }
 
 void SNDI_mutexfree(void)
@@ -1158,12 +1164,12 @@ void SNDI_mutexfree(void)
 
 void SNDI_mutexlock(void)
 {
-    OSLockMutex(&lbl_803B4B90);
+    OSLockMutex(&snddrv.mBE30);
 }
 
 void SNDI_mutexunlock(void)
 {
-    OSUnlockMutex(&lbl_803B4B90);
+    OSUnlockMutex(&snddrv.mBE30);
 }
 
 int SNDPLATFORM_ModeSetUp(Struct_802753AC *p, int mode)
