@@ -2936,16 +2936,6 @@
       ],
       "functions": [
         {
-          "symbol": "StevQueryRowCount",
-          "start": "0x8018EA3C",
-          "end": "0x8018EAAC"
-        },
-        {
-          "symbol": "StevQueryDiveCount",
-          "start": "0x8018EAAC",
-          "end": "0x8018EB20"
-        },
-        {
           "symbol": "SstlFetchEntry",
           "start": "0x8018EB20",
           "end": "0x8018EC68"

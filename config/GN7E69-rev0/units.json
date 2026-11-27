@@ -947,21 +947,9 @@
       "address": "0x8025F58C",
       "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
     },
-    "StevQueryRowCount": {
-      "address": "0x8018EA3C",
-      "evidence": "evidence.tsv function/name rows for 0x8018EA3C (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "StevQueryDiveCount": {
-      "address": "0x8018EAAC",
-      "evidence": "evidence.tsv function/name rows for 0x8018EAAC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
     "CollideSegmentClosestPoints": {
       "address": "0x80088FFC",
       "evidence": "evidence.tsv function/name rows for 0x80088FFC (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
-    },
-    "SstlFetchEntry": {
-      "address": "0x8018EB20",
-      "evidence": "evidence.tsv function/name rows for 0x8018EB20 (target extent, inferred name); the function keeps its original bytes until its draft in comparisons.json is linked."
     },
     "SstlRebuildForTeam": {
       "address": "0x8018EF6C",
@@ -19329,24 +19317,21 @@
     },
     {
       "source": "src/game/StevTable.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8018EC68-0x8018EF6C (src/game/StevTable.cpp) and its data rows.",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv unit row 0x8018EA3C-0x8018EF6C (src/game/StevTable.cpp) and its data rows; linked with holdouts (owner ruling of 2026-11-20): every function exact except the holdout, whose range keeps the original bytes.",
       "link_roots": {
-        "symbols": [
-          "StevReadRow",
-          "StevFindNets",
-          "StevGetRow",
-          "StevCountDiveRows",
-          "StevCountRows",
-          "StevClose",
-          "StevOpen"
-        ],
         "discarded": [
           "SelectTopVetsNets"
         ],
-        "evidence": "evidence.tsv linker row 0x802AB1B0-0x802AB210: the target keeps every listed function, all reached from outside the unit or from each other; one cursor query function has no code in the target, while its strings remain in the unit's rodata."
+        "evidence": "evidence.tsv linker row 0x802AB1B0-0x802AB210: one cursor query function has no code in the target, while its strings remain in the unit's rodata."
       },
       "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8018EA3C",
+          "end": "0x8018EB20"
+        },
         {
           "section": ".text",
           "placement": ".text",
@@ -19356,7 +19341,7 @@
         {
           "section": ".rodata",
           "placement": ".data3",
-          "start": "0x802AB08C",
+          "start": "0x802AAF9C",
           "end": "0x802AB254"
         },
         {
@@ -19365,7 +19350,16 @@
           "start": "0x803EB6D0",
           "end": "0x803EB6D4"
         }
-      ]
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SstlFetchEntry",
+            "evidence": "evidence.tsv source-form 0x8018EB20-0x8018EC68"
+          }
+        ],
+        "evidence": "k1f merge notes (PR #1503): src/game/StevTable.cpp holds out SstlFetchEntry 0x8018EB20."
+      }
     },
     {
       "source": "src/game/Cheat.cpp",
