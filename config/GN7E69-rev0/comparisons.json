@@ -19560,43 +19560,105 @@
       ]
     },
     {
-      "source": "src/engine/cu_802311C8.c",
+      "source": "src/engine/dboccp.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/cu_802311C8.c), its function and name rows and the compiler and source-form rows of the range it was split from (src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x802311C8-0x802328A8 (src/engine/dboccp.c), its function and name rows and the compiler and source-form rows of the ranges it was split from (src/engine/cu_80229270.c and src/engine/cu_8022F428.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802311C8",
           "end": "0x802328A8"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B6038",
+          "end": "0x802B6E10"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FB368",
+          "end": "0x802FB38C"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EC0E4",
+          "end": "0x803EC0EC"
         }
       ],
       "functions": [
         {
-          "symbol": "fn_802311C8",
+          "symbol": "DbOccpModuleInit",
           "start": "0x802311C8",
           "end": "0x80231208"
         },
         {
-          "symbol": "fn_80231208",
+          "symbol": "DbOccpModuleShutdown",
           "start": "0x80231208",
           "end": "0x8023123C"
         },
         {
-          "symbol": "fn_8023133C",
+          "symbol": "DbOccpUpdateHandler",
+          "start": "0x8023123C",
+          "end": "0x8023133C"
+        },
+        {
+          "symbol": "DbOccpQueryPassing",
           "start": "0x8023133C",
           "end": "0x80231570"
         },
         {
-          "symbol": "fn_80231A84",
+          "symbol": "DbOccpQueryRushing",
+          "start": "0x80231570",
+          "end": "0x80231798"
+        },
+        {
+          "symbol": "DbOccpQueryReceiving",
+          "start": "0x80231798",
+          "end": "0x80231A84"
+        },
+        {
+          "symbol": "DbOccpQueryNone",
           "start": "0x80231A84",
           "end": "0x80231A8C"
         },
         {
-          "symbol": "fn_80231A8C",
+          "symbol": "DbOccpQueryBlocking",
           "start": "0x80231A8C",
           "end": "0x80231B04"
+        },
+        {
+          "symbol": "DbOccpQueryDefense",
+          "start": "0x80231B04",
+          "end": "0x80231DAC"
+        },
+        {
+          "symbol": "DbOccpQueryKicking",
+          "start": "0x80231DAC",
+          "end": "0x80232054"
+        },
+        {
+          "symbol": "DbOccpQueryPunting",
+          "start": "0x80232054",
+          "end": "0x80232340"
+        },
+        {
+          "symbol": "DbOccpQueryReturns",
+          "start": "0x80232340",
+          "end": "0x80232628"
+        },
+        {
+          "symbol": "DbOccpPasserRating",
+          "start": "0x80232628",
+          "end": "0x802328A8"
         }
+      ],
+      "discarded": [
+        "_DbOccpUpdateTeamHandler",
+        "_DbOccpUpdatePasserRatings"
       ]
     },
     {

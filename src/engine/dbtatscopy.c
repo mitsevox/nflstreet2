@@ -48,7 +48,7 @@ extern int DbThcdSetLineup(int a, int *p, int c);
 int DbResetGameInfo(void);
 extern int DbUserFindIdByDb(int key);
 extern int DbUserGetCurrent(void);
-extern void fn_80231208(void);
+extern void DbOccpModuleShutdown(void);
 int DbUserGetDb(int key);
 extern const int _DbUser_aDbIds[2];
 extern char lbl_802B5D64[];
@@ -197,7 +197,7 @@ extern TDbCol_801F9718 **lbl_803EC018[1];
 extern unsigned char *lbl_803EC01C[1];
 extern TDbCol_801F9718 *lbl_803EC024[1];
 extern unsigned char lbl_803ED01C[1];
-extern int fn_802311C8(int a);
+extern int DbOccpModuleInit(int a);
 extern int (*lbl_803EC028)(int a, int b, int c, int d);
 extern int (*lbl_803EC02C)(int a);
 
