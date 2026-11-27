@@ -1387,17 +1387,17 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
     int sum = 0;
     int minGap = -3600;
     int maxGap = 7200;
-    unsigned char ordered = 0;
     int minDy = -150;
     int maxDy = 150;
+    unsigned char ordered = 0;
     int ok = 1;
     int needMatch = 0;
     int matched = 0;
     int hasCall = 0;
+    unsigned char value374 = 0;
     int flag = 0;
     int callA = 0;
     int callB = 0;
-    unsigned char value374 = 0;
 
     for (; pCond->mOp != -1; pCond++) {
         if (!ok) {
@@ -1468,7 +1468,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[0] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1479,7 +1481,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[0] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1490,7 +1494,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[1] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1501,7 +1507,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[1] > pCond->mArg) {
                     ok = 0;
                 }
             }
