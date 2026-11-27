@@ -19150,11 +19150,6 @@
           "symbol": "DbYalpLoadWeightTable",
           "start": "0x802297D8",
           "end": "0x802299FC"
-        },
-        {
-          "symbol": "DbFindUnusedPlayerIds",
-          "start": "0x80229AA4",
-          "end": "0x80229C98"
         }
       ]
     },
@@ -19327,11 +19322,6 @@
           "symbol": "DbSrptDeleteUnflaggedTypedTeams",
           "start": "0x8022C518",
           "end": "0x8022C628"
-        },
-        {
-          "symbol": "DbFindUnusedTeamIds",
-          "start": "0x8022C628",
-          "end": "0x8022C81C"
         },
         {
           "symbol": "DbSrptBeginGame",
