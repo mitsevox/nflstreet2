@@ -27934,19 +27934,13 @@
     },
     {
       "source": "src/engine/flowman.cpp",
-      "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CC350, native FlowManagerC vtable row and StopModuleList HOLDOUT source-form row. Sixteen functions and all native data link; the 116-byte holdout retains original instructions.",
+      "profile": "game_cpp",
+      "evidence": "evidence.tsv provisional unit row 0x801CBC50-0x801CC350, native FlowManagerC vtable row and StopModuleList FAKEMATCH source-form row. All seventeen functions and all native data link.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801CBC50",
-          "end": "0x801CC168"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CC1DC",
           "end": "0x801CC350"
         },
         {
@@ -27955,16 +27949,7 @@
           "start": "0x802AF388",
           "end": "0x802AF3B8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "StopModuleList__12FlowManagerCP16ModuleDependency",
-            "evidence": "evidence.tsv source-form 0x801CC168-0x801CC1DC"
-          }
-        ],
-        "evidence": "The original StopModuleList range stays linked and its full source remains a registered partial."
-      }
+      ]
     },
     {
       "source": "src/engine/saramman.c",

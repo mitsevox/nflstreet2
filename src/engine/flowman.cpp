@@ -179,7 +179,12 @@ int FlowManagerC::StopModuleList(ModuleDependency *pDeps)
 
     for (i = 0; pDeps[i].mpTarget != 0; i++) {
         pNext = ((FlowModuleC *)pDeps[i].mpTarget)->GetDependencyList();
-        StopModule((FlowModuleC *)pDeps[i].mpTarget);
+        // FAKEMATCH: the dead status increment adds a block boundary that keeps
+        // the index update after the recursive call, as in the target.
+        {
+            int status = StopModule((FlowModuleC *)pDeps[i].mpTarget);
+            if (status != 0) status++;
+        }
         result = StopModuleList(pNext);
     }
     return result;
