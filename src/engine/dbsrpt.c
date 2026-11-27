@@ -22,7 +22,7 @@ typedef struct DbSrptCallbacks_t {
 
 extern int TDbQryGetCount(int ref, unsigned short *pCount);
 extern int TDbTblExists(int db, int tbl);
-extern int fn_80230D8C(int id, int a, int b);
+extern int DbCacheDeleteRows(int id, int a, int b);
 int DbTatsCopyTblDestroy(int db, int tbl);
 
 extern char lbl_802B3610[];
@@ -65,7 +65,7 @@ int DbSrptDeleteCursorTeams(struct QueryCursor cursor, int a)
         }
         if (status == 0) {
             for (i = 0; i < count; i++) {
-                status = fn_80230D8C(pIds[i], 0, a);
+                status = DbCacheDeleteRows(pIds[i], 0, a);
                 if (status != 0) {
                     break;
                 }
