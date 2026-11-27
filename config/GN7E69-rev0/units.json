@@ -26267,12 +26267,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DD2E8",
-          "end": "0x800DD994"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DDCE4",
           "end": "0x800DDF34"
         },
         {
@@ -26307,10 +26301,6 @@
           {
             "function": "PlayerActionAnimScoreReaction",
             "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
-          },
-          {
-            "function": "PlayerActionAnimStartVariant",
-            "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
           },
           {
             "function": "PlayerActionAnimFindTurnEntry",
