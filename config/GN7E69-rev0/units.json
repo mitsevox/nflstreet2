@@ -29773,24 +29773,12 @@
     },
     {
       "source": "src/engine/pathnode.c",
-      "profile": "path_cxx_holdouts",
+      "profile": "path_cxx",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B6780",
-          "end": "0x801B6A18"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B6CB4",
-          "end": "0x801B6ED0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B7178",
           "end": "0x801B7778"
         },
         {
@@ -29800,20 +29788,7 @@
           "end": "0x802AED50"
         }
       ],
-      "evidence": "evidence.tsv provisional unit row 0x801B6780-0x801B7778; full file reconstructed and named, exact functions and whole native data linked around documented holdouts.",
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_choosesynchtime",
-            "evidence": "evidence.tsv source-form 0x801B6A18-0x801B6CB4"
-          },
-          {
-            "function": "PATHI_enternode",
-            "evidence": "evidence.tsv source-form 0x801B6ED0-0x801B7178"
-          }
-        ],
-        "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."
-      }
+      "evidence": "evidence.tsv provisional unit row 0x801B6780-0x801B7778; full file reconstructed and named; every function exact (the last two, PATHI_choosesynchtime and PATHI_enternode, in round 5) and linked with the whole native read-only data."
     },
     {
       "source": "src/engine/pathaction.c",
@@ -29822,8 +29797,8 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801B84E4",
-          "end": "0x801B8580"
+          "start": "0x801B845C",
+          "end": "0x801B864C"
         },
         {
           "section": ".text",
@@ -29850,14 +29825,6 @@
           {
             "function": "PATHI_serviceaction",
             "evidence": "evidence.tsv source-form 0x801B7880-0x801B845C"
-          },
-          {
-            "function": "PATHI_conditiondone",
-            "evidence": "evidence.tsv source-form 0x801B845C-0x801B84E4"
-          },
-          {
-            "function": "PATHI_trackstatus",
-            "evidence": "evidence.tsv source-form 0x801B8580-0x801B864C"
           },
           {
             "function": "PATHI_getvalue",
