@@ -5,10 +5,7 @@
 
 #include "engine/rigidbody.h"
 #include "engine/TibNew.h"
-
-extern "C" {
-float fn_801E8DBC(void *pEnd, void *pStart);
-}
+#include "engine/phystime.h"
 
 /* Steps a system's state vector through time. */
 class Integrator {
@@ -149,7 +146,7 @@ EulerIntegrator::~EulerIntegrator()
 
 int EulerIntegrator::Step(void *pStart, void *pStep)
 {
-    float dt = fn_801E8DBC(pStep, pStart);
+    float dt = PhysTimeElapsed((PhysicsTime *)pStep, (PhysicsTime *)pStart);
     int result = mpSystem->GetState(mpState);
     unsigned int count;
     unsigned int i;

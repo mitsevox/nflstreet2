@@ -148,8 +148,6 @@ int PhysicsWorld::RemoveConstraint(Constraint *pConstraint)
     return 0;
 }
 
-extern "C" float fn_801E8DBC(void *pEnd, void *pStart);
-
 void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
 {
     PhysicsTime end;
@@ -165,7 +163,7 @@ void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
 
     start = *pStart;
     end = *pEnd;
-    dt = fn_801E8DBC(&end, &start);
+    dt = PhysTimeElapsed(&end, &start);
     do {
         for (pNode = (PhysicsWorldNode *)DSGetListNode(mpGroups, 0); pNode;
              pNode = (PhysicsWorldNode *)DSNextListNode(mpGroups, pNode)) {
@@ -173,7 +171,7 @@ void PhysicsWorld::Step(PhysicsTime *pStart, PhysicsTime *pEnd)
                 moved = 1;
             }
         }
-        stepDt = fn_801E8DBC(&end, &start);
+        stepDt = PhysTimeElapsed(&end, &start);
         if (moved && mpCollision) {
             mpCollision->Update(stepDt);
         }
