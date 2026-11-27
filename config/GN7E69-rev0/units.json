@@ -9131,12 +9131,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801488D4",
-          "end": "0x80149154"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801492C4",
           "end": "0x8014CCE8"
         },
         {
@@ -9286,10 +9280,6 @@
           {
             "function": "MiniGameBenchPlayer",
             "evidence": "evidence.tsv source-form 0x80148814-0x801488D4"
-          },
-          {
-            "function": "vfn_16__9MiniGameCPCi",
-            "evidence": "evidence.tsv source-form 0x80149154-0x801492C4"
           },
           {
             "function": "fn_8014CCE8",

@@ -1474,18 +1474,18 @@ unsigned char lbl_803EB2B5 = 0;
 
 } /* extern "C" */
 
-void MiniGameC::vfn_16(const int *pKinds)
+void MiniGameC::AssignPlayerAwards(const int *pKinds)
 {
     memset(lbl_8031BE04,0,168);
     memset(lbl_8031BEAC,0,54);
     fn_800C8704(&lbl_803ECA24[0],&lbl_803ECA24[1]);
     for(unsigned char k=0;pKinds[k]!=0;k++) {
         for(unsigned char i=0;i<14;i++) {
-            unsigned char team=i/7,index=i%7;
-            Object_80039F5C *player=PlyrGet(team,index);
+            unsigned char team=i/7;
+            Object_80039F5C *player=PlyrGet(team,i%7);
             if(player->mUnknown9[2]) {
-                unsigned int count=vfn_25(team,index);
-                if(count<=2 && CheckAward(team,index,player,pKinds[k])) {
+                unsigned int count=vfn_25(team,i%7);
+                if(count<=2 && CheckAward(team,i%7,player,pKinds[k])) {
                     lbl_8031BE04[i][count]=pKinds[k];
                     lbl_8031BEAC[k]++;
                 }
@@ -3255,7 +3255,7 @@ void MiniGameCrushCarrierGameEndC::vfn_03(float dt)
     fn_8009D8CC(1);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     MiniGameGetCurrent()->vfn_12();
-    MiniGameGetCurrent()->vfn_16(lbl_802DE9CC);
+    MiniGameGetCurrent()->AssignPlayerAwards(lbl_802DE9CC);
     Class_80297B90::vfn_03(dt);
 }
 
@@ -4690,7 +4690,7 @@ void MiniGameJumpBallGameEndC::vfn_03(float dt)
         PlyrFindById(fn_801530FC()->mEntries[i].mUnknown0)->mUnknown9[2] = 1;
     }
     MiniGameGetCurrent()->vfn_12();
-    MiniGameGetCurrent()->vfn_16(lbl_802DEA78);
+    MiniGameGetCurrent()->AssignPlayerAwards(lbl_802DEA78);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     if (StoryEventsGetCurrentEvent()) {
         StoryEventsSetRewardPenalty(fn_801529C0(&lbl_8031BDD4));
@@ -5793,7 +5793,7 @@ void MiniGameOpenFieldGameEndC::vfn_03(float dt)
     ClockRuleClearFlags(2048);
     fn_8009D8CC(1);
     MiniGameGetCurrent()->vfn_12();
-    MiniGameGetCurrent()->vfn_16(lbl_802DEB78);
+    MiniGameGetCurrent()->AssignPlayerAwards(lbl_802DEB78);
     UISProcessHint(gUISMainInfo, 0x8000003A, 0, 0);
     Class_80297B90::vfn_03(dt);
 }
