@@ -28216,32 +28216,6 @@
       ]
     },
     {
-      "source": "src/engine/flowman.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional flowman.cpp unit row and StopModuleList HOLDOUT source-form row. The other sixteen functions and complete native vtable link from the same source file.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CBC50",
-          "end": "0x801CC350"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF388",
-          "end": "0x802AF3B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StopModuleList__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC168",
-          "end": "0x801CC1DC"
-        }
-      ]
-    },
-    {
       "source": "src/game/InGameGroup.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x800325E8-0x80032EE8, data rows and HOLDOUT source-form row 0x80032790-0x80032E70. Only the static initializer remains a comparison; the two code runs, native data and ctor/dtor entries link.",
