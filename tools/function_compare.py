@@ -46,7 +46,15 @@ def data_slices(source, placement, linked):
 
 
 def linked_ranges(units, address=lambda value: value):
-    return [(u['source'], address(s['start']), address(s['end'])) for u in units for s in u['sections']]
+    """The (source, start, end) ranges of accepted units, with each holdout pool (source_build.holdout_pool):
+    a pool keeps the target's words, like the holdout's code, so a comparison of the same file neither
+    measures it nor needs its compiled tail (which differs, that being why it is held out)."""
+    def pools(unit):
+        held = unit.get('holdouts') or []
+        rows = held.get('functions', []) if isinstance(held, dict) else held
+        return [row['pool'] for row in rows if 'pool' in row]
+    return [(u['source'], address(s['start']), address(s['end'])) for u in units for s in u['sections']] \
+        + [(u['source'], address(p['start']), address(p['end'])) for u in units for p in pools(u)]
 
 
 STT_NOTYPE, STT_OBJECT = 0, 1

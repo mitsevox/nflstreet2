@@ -316,6 +316,9 @@ def load_manifest(manifest, sections, compiler_version, comparisons=None, eviden
             holdouts = holdout_functions(unit, placed, comparisons, evidence, by_name)
             for row in holdouts:
                 ranges.append((row["start"], row["end"], f"{unit['source']} holdout {row['symbol']}"))
+                if "pool" in row:
+                    ranges.append((row["pool"]["start"], row["pool"]["end"],
+                                   f"{unit['source']} holdout {row['symbol']} pool"))
         kept = kept_symbols(unit.get("kept_locals"), placed, unit["source"], holdouts)
         if folded and kept and set(folded) & set(kept):
             raise ValueError(f"{unit['source']}: a symbol cannot be both folded and kept")
@@ -815,7 +818,8 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
     declare holdouts (owner ruling of 2026-11-20). The unit's code entries are the linked runs
     between them: runs and holdouts tile one contiguous code range, with a holdout between any
     two runs. Each run is given the derived object's section that links it (`input`). build()
-    checks that none of the holdouts is exact. Read-only data may follow the code (`follows`
+    checks that none of the holdouts is exact. An item may add its constant `pool` at the end of
+    a data section (holdout_pool), which keeps the original bytes too. Read-only data may follow the code (`follows`
     .text), linked whole after the last run, when the code ends with that run.
 
     The unit may also list, as `link_roots: {"discarded": [...], "evidence": locator}`, functions
@@ -849,9 +853,9 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
         raise ValueError(f"{source}: a folded symbol cannot be a registered function or a discarded function")
     result = []
     for entry in spec["functions"]:
-        if not isinstance(entry, dict) or set(entry) != {"function", "evidence"}:
+        if not isinstance(entry, dict) or not {"function", "evidence"} <= set(entry) <= {"function", "evidence", "pool"}:
             raise ValueError(f"{source}: a holdout is {{\"function\": symbol or 0xXXXXXXXX start, \"evidence\": "
-                             f"'evidence.tsv source-form 0xSTART-0xEND'}}, not {entry!r}")
+                             f"'evidence.tsv source-form 0xSTART-0xEND'}} and optionally its \"pool\", not {entry!r}")
         item = entry["function"]
         if not isinstance(item, str) or not item:
             raise ValueError(f"{source}: a holdout is a function symbol or its 0xXXXXXXXX start")
@@ -863,9 +867,14 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
             raise ValueError(f"{source}: holdout {item} is not one function comparisons.json registers for this file")
         symbol, start, end = found[0]["symbol"], address(found[0]["start"]), address(found[0]["end"])
         holdout_record(source, symbol, start, end, entry["evidence"], evidence)
-        result.append({"symbol": symbol, "start": start, "end": end, "evidence": entry["evidence"]})
+        row = {"symbol": symbol, "start": start, "end": end, "evidence": entry["evidence"]}
+        if "pool" in entry:
+            row["pool"] = holdout_pool(source, symbol, entry["pool"], placed, by_name)
+        result.append(row)
     if len({row["symbol"] for row in result}) != len(result):
         raise ValueError(f"{source}: duplicate holdout")
+    if len({row["pool"]["section"] for row in result if "pool" in row}) != sum("pool" in row for row in result):
+        raise ValueError(f"{source}: two holdouts keep a pool at the end of the same data section")
     for name in (roots or {}).get("discarded", []):
         # A discarded function has no target code: it is neither a holdout nor any registered function.
         if name in {row["symbol"] for row in rows} or NEUTRAL.fullmatch(name):
@@ -901,6 +910,29 @@ def holdout_functions(unit, placed, comparisons, evidence, by_name):
     for entry in code:
         entry["input"] = holdout_run(entry["start"])[0]
     return result
+
+
+def holdout_pool(source, symbol, spec, placed, by_name):
+    """Validate a holdout's `pool`: {"section", "start", "end"}; return it with its compiled offset.
+
+    GCC 2.95 emits a function's address-constant pool words (lwz from a `.LC` word) into the
+    file's .rodata right after the data it has emitted so far, so a function compiled last
+    leaves its pool at the end of the section. When a holdout's pool differs from the target's
+    (other words, or another count), the holdout's code is not the only part of the file that
+    cannot link: the whole section would not compile byte-exact. A pool lets the unit's
+    configured range of that data section end where the pool starts and keep the target's pool
+    words (`start`-`end`, directly after that range in the same placement) as original bytes,
+    like the holdout's code. holdout_object cuts the compiled section at the same offset and
+    checks that only the holdout's own code reaches the cut tail."""
+    if not isinstance(spec, dict) or set(spec) != {"section", "start", "end"} or not isinstance(spec["section"], str):
+        raise ValueError(f"{source}: holdout {symbol}'s pool is {{\"section\", \"start\", \"end\"}}")
+    start, end = address(spec["start"]), address(spec["end"])
+    entry = next((entry for entry in placed if entry["section"] == spec["section"]), None)
+    if entry is None or entry["kind"] != "data" or entry["follows"] is not None or start != entry["end"] \
+            or not start < end <= by_name[entry["placement"]]["end"]:
+        raise ValueError(f"{source}: holdout {symbol}'s pool must start where the unit's configured "
+                         f"{spec['section']} range ends, inside the same initialized-data placement")
+    return {"section": spec["section"], "start": start, "end": end, "offset": entry["end"] - entry["start"]}
 
 
 def holdout_object(native, unit, output):
@@ -969,6 +1001,20 @@ def holdout_object(native, unit, output):
         if names.count(name) != 1 or name in held or name in discarded:
             raise ValueError(f"{source}: folded function {name} is not one compiled function of the unit")
     discarded |= folded
+    # A holdout's pool (holdout_pool): its data section is cut where the configured range ends;
+    # the tail is the holdout's constant pool, which only that holdout's code may reach.
+    cut = {}
+    for row in held.values():
+        if "pool" not in row:
+            continue
+        pool = row["pool"]
+        found = [section for section in sections if section["name"] == pool["section"]
+                 and section["flags"] & SHF_ALLOC and not section["flags"] & SHF_EXECINSTR
+                 and section["type"] == SHT_PROGBITS]
+        if len(found) != 1 or found[0]["size"] <= pool["offset"]:
+            raise ValueError(f"{source}: holdout {row['symbol']}'s pool: {pool['section']} does not compile "
+                             f"past offset {pool['offset']:#x}")
+        cut[found[0]["index"]] = (pool["offset"], row)
     runs = sorted((entry for entry in unit["sections"] if entry.get("input")), key=lambda entry: entry["start"])
     starts = [entry["start"] for entry in runs] + [row["start"] for row in held.values()]
     cursor, end = min(starts), max([entry["end"] for entry in runs] + [row["end"] for row in held.values()])
@@ -1002,6 +1048,30 @@ def holdout_object(native, unit, output):
     if cursor != end or len(dropped) != len(held):
         raise ValueError(f"{source}: the compiled functions end at 0x{cursor:08X}, not at the configured "
                          f"end 0x{end:08X} of the code runs and holdouts")
+    # Only the pool's own holdout may reach a cut tail, through the section symbol plus addend or a
+    # label in the tail (the tail's own words may name each other). No object may straddle the cut,
+    # and no global symbol may lie in the tail.
+    for index, (offset, row) in cut.items():
+        for symbol in symbols:
+            if symbol["shndx"] == index and symbol["type"] != STT_SECTION and (
+                    symbol["value"] < offset < symbol["value"] + symbol["size"]
+                    or (symbol["value"] >= offset and symbol["bind"] != STB_LOCAL)):
+                raise ValueError(f"{source}: {symbol['name']} lies in or across holdout {row['symbol']}'s pool")
+    for section in sections:
+        if section["type"] != 4 or not cut:
+            continue
+        kind = place.get(section["info"], ("",))
+        for at in range(section["offset"], section["offset"] + section["size"], 12):
+            site, info, addend = struct.unpack_from(">IIi", data, at)
+            symbol = symbols[(info >> 8) - 1] if info >> 8 else None
+            if symbol is None or symbol["shndx"] not in cut:
+                continue
+            offset, row = cut[symbol["shndx"]]
+            if symbol["value"] + addend < offset or (kind[0] == "holdout" and kind[1] == row["start"]) \
+                    or (section["info"] in cut and site >= cut[section["info"]][0]):
+                continue
+            raise ValueError(f"{source}: {sections[section['info']]['name']} reaches holdout {row['symbol']}'s "
+                             f"pool ({symbol['name'] or 'section'} + {addend:#x})")
     # New section table: unchanged sections keep their order; each run's merged section takes the
     # place of its first function; relocation sections follow the section table's other entries.
     new_sections, index_map, run_index = [None], {}, {}
@@ -1030,6 +1100,10 @@ def holdout_object(native, unit, output):
             continue
         index_map[section["index"]] = len(new_sections)
         content = None if section["type"] == SHT_NOBITS else data[section["offset"]:section["offset"] + section["size"]]
+        if section["index"] in cut:
+            content = content[:cut[section["index"]][0]]
+            new_sections.append(dict(section, data=content, size=len(content)))
+            continue
         new_sections.append(dict(section, data=content))
     for start, index in run_index.items():
         for member in members[start]:
@@ -1077,6 +1151,10 @@ def holdout_object(native, unit, output):
                 # file-static function whose only callers are holdouts has lost its references; as an
                 # untyped label it stays with its run, as the target's linker kept it.
                 info = STB_LOCAL << 4
+        elif shndx in cut and symbol["type"] != STT_SECTION and value >= cut[shndx][0]:
+            # A pool label goes with the cut tail; only the holdout, whose relocations go too, names it.
+            mapping[index] = ("pool", cut[shndx][1]["symbol"], value)
+            continue
         elif 0 < shndx < 0xFF00:
             if shndx not in index_map:
                 raise ValueError(f"{source}: symbol {symbol['name']} is defined in a section holdouts cannot keep")
@@ -1117,11 +1195,16 @@ def holdout_object(native, unit, output):
         records = relocations.setdefault(key, bytearray())
         for at in range(section["offset"], section["offset"] + section["size"], 12):
             site, info, addend = struct.unpack_from(">IIi", data, at)
+            if section["info"] in cut and site >= cut[section["info"]][0]:
+                continue  # a pool word's own relocation goes with the cut tail
             index = info >> 8
             if index:
                 if index not in mapping:
                     raise ValueError(f"{source}: relocation names an unknown symbol")
                 kind, new, delta = mapping[index]
+                if kind == "pool":
+                    raise ValueError(f"{source}: {sections[section['info']]['name']} names a label of holdout "
+                                     f"{new}'s pool")
                 if kind == "discarded":
                     raise ValueError(f"{source}: discarded function {new} is referenced from "
                                      f"{sections[section['info']]['name']}")
@@ -1145,7 +1228,10 @@ def holdout_object(native, unit, output):
     new_sections.append({"name": ".strtab", "type": SHT_STRTAB, "flags": 0, "data": bytes(strings),
                          "size": len(strings), "link": 0, "info": 0, "align": 1, "entsize": 0})
     write_elf(data, new_sections, output)
-    return {"dropped": dropped, "discarded": gone,
+    pools = {"pools": [{"symbol": row["symbol"], "section": row["pool"]["section"], "start": row["pool"]["start"],
+                        "end": row["pool"]["end"], "compiled": sections[index]["size"] - offset}
+                       for index, (offset, row) in sorted(cut.items())]} if cut else {}
+    return {**pools, "dropped": dropped, "discarded": gone,
             "discarded_globals": sorted(owner[index]["name"] for index, kind in place.items()
                                         if kind[0] == "discarded" and owner[index]["bind"] != STB_LOCAL),
             "folded": sorted(folded),
@@ -2306,7 +2392,15 @@ def measure(target, sections, units, manifest_bytes, result, identical, resolved
                          # original bytes, and its compiled size and HOLDOUT: row are recorded.
                          "holdouts": [{"symbol": row["symbol"], "start": f"0x{row['start']:08X}",
                                        "end": f"0x{row['end']:08X}", "compiled": row["compiled"],
-                                       "evidence": row["evidence"]}
+                                       "evidence": row["evidence"],
+                                       # A holdout pool (holdout_pool): the kept target words and the
+                                       # compiled tail size the derived object cut.
+                                       **({"pool": {"section": row["pool"]["section"],
+                                                    "start": f"0x{row['pool']['start']:08X}",
+                                                    "end": f"0x{row['pool']['end']:08X}",
+                                                    "compiled": next(p["compiled"] for p in unit["held"]["pools"]
+                                                                     if p["symbol"] == row["symbol"])}}
+                                          if "pool" in row else {})}
                                       for row in unit["held"]["dropped"]] if unit.get("holdouts") else None,
                          "native_object_sha256": unit.get("native_object_sha256"),
                          "link_object_sha256": unit.get("link_object_sha256"),

@@ -182,7 +182,7 @@ typedef struct TMGeomNode_t {
     unsigned short mDisplayListSize;
     short mMaterial;
     int mUnknown8;
-    short mUnknownC;
+    unsigned short mNumVerts;
     unsigned short mFirstAttr;
     unsigned char mNumAttrs;
     unsigned char mFlags;

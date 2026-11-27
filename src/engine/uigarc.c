@@ -34,9 +34,9 @@ Float32 _UIGArc_aTexMtx[4][4] = {
 };
 GXColor _UIGArc_cMaterialColor = {0x12, 0x34, 0x56, 0x78};
 GXColor _UIGArc_cLightColor = {0x12, 0x34, 0x56, 0x78};
-extern GXLightObj lbl_803E9880;
-extern Float32 lbl_803A0400[][2];
-extern GXColor lbl_803A1400[];
+extern GXLightObj LLUIGTexLightObj;
+Float32 UIGArcVertexCoords[512][2];
+GXColor UIGArcVertexColors[512];
 
 void TMRenderReset(void);
 void GXLoadLightObjImm(GXLightObj *pLight, GXLightID Light);
@@ -490,7 +490,7 @@ void _UIGArcRender(UIGNode_t *pNode, Int32 Item)
             Count = pNode->u.t.unk_10 * 4;
             GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, Count);
         }
-        _UIGArcBuildStrip(pNode, lbl_803A0400, lbl_803A1400, &Size, Count, LLUIGVertexSend, LLUIGVertexEnd);
+        _UIGArcBuildStrip(pNode, UIGArcVertexCoords, UIGArcVertexColors, &Size, Count, LLUIGVertexSend, LLUIGVertexEnd);
     }
     GXSetCullMode(GX_CULL_NONE);
     if (bTex) {
@@ -519,8 +519,8 @@ void _UIGArcSetMaterialColors(void)
     GXColor LightColor = pColor->mLightColor;
 
     GXSetChanMatColor(GX_COLOR0A0, MatColor);
-    GXInitLightColor(&lbl_803E9880, LightColor);
-    GXLoadLightObjImm(&lbl_803E9880, GX_LIGHT7);
+    GXInitLightColor(&LLUIGTexLightObj, LightColor);
+    GXLoadLightObjImm(&LLUIGTexLightObj, GX_LIGHT7);
     _UIGArc_cMaterialColor = MatColor;
     _UIGArc_cLightColor = LightColor;
 }

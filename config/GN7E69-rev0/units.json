@@ -565,79 +565,11 @@
     },
     "gModelObjEyePos": {
       "address": "0x802FB458",
-      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
-    },
-    "gPlayerLooks": {
-      "address": "0x803078E8",
-      "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
-    "gPlayerLookBonuses": {
-      "address": "0x80308368",
-      "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
-    "__pure_virtual": {
-      "address": "0x8025F088",
-      "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
-    },
-    "sprintf": {
-      "address": "0x801C2E18",
-      "evidence": "evidence.tsv external row sprintf: target call sites in src/game/MemCardFiles.cpp and inspected callee behavior."
-    },
-    "__main": {
-      "address": "0x8025E1D8",
-      "evidence": "evidence.tsv external row for 0x8025E1D8 (__main)."
-    },
-    "__ashldi3": {
-      "address": "0x8025E210",
-      "evidence": "evidence.tsv external row for 0x8025E210 (__ashldi3)."
-    },
-    "__ashrdi3": {
-      "address": "0x8025E250",
-      "evidence": "evidence.tsv external row for 0x8025E250 (__ashrdi3)."
-    },
-    "__divdi3": {
-      "address": "0x8025E290",
-      "evidence": "evidence.tsv external row for 0x8025E290 (__divdi3)."
-    },
-    "__fixsfdi": {
-      "address": "0x8025E80C",
-      "evidence": "evidence.tsv external row for 0x8025E80C (__fixsfdi)."
-    },
-    "__moddi3": {
-      "address": "0x8025EB54",
-      "evidence": "evidence.tsv external row for 0x8025EB54 (__moddi3)."
+      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_80235010.c reads; unlinked .data whose owner is open, original bytes."
     },
     "__OSBusClock": {
       "address": "0x800000F8",
       "evidence": "evidence.tsv external row for 0x800000F8 (__OSBusClock)."
-    },
-    "__lshrdi3": {
-      "address": "0x8025EB14",
-      "evidence": "evidence.tsv external row for 0x8025EB14 (__lshrdi3)."
-    },
-    "gTurbo": {
-      "address": "0x80307410",
-      "evidence": "evidence.tsv external row for 0x80307410 (gTurbo)."
-    },
-    "gPlayBook": {
-      "address": "0x803071E8",
-      "evidence": "evidence.tsv external row for 0x803071E8 (gPlayBook)."
-    },
-    "fn_80035EE0__5Turbo": {
-      "address": "0x80035EE0",
-      "evidence": "evidence.tsv external row for 0x80035EE0 (fn_80035EE0__5Turbo)."
-    },
-    "fn_800355FC__8PlayBook": {
-      "address": "0x800355FC",
-      "evidence": "evidence.tsv external row for 0x800355FC (fn_800355FC__8PlayBook)."
-    },
-    "__fixunssfdi": {
-      "address": "0x8025E850",
-      "evidence": "evidence.tsv external row for 0x8025E850 (__fixunssfdi)."
-    },
-    "__floatdisf": {
-      "address": "0x8025EA64",
-      "evidence": "evidence.tsv external row for 0x8025EA64 (__floatdisf)."
     },
     "ReadBitStream__FP11BitStream_tUi": {
       "address": "0x80190F18",
@@ -691,238 +623,6 @@
       "address": "0x80190EF0",
       "evidence": "evidence.tsv external row 0x80190EF0 (CloseBitStream__FP11BitStream_t), name row 0x80190EF0 and type row BitStream_t."
     },
-    "gAnimintf": {
-      "address": "0x80306DEC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAnimintf. InGame dependency pointer written at 0x80032890."
-    },
-    "gAnimScriptMan": {
-      "address": "0x80306DFC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAnimScriptMan. InGame dependency pointer written at 0x800328A0."
-    },
-    "gArrow": {
-      "address": "0x80306E1C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gArrow. InGame dependency pointer written at 0x800328B0."
-    },
-    "gAss": {
-      "address": "0x80306E3C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAss. InGame dependency pointer written at 0x800328C0."
-    },
-    "gAssJoy": {
-      "address": "0x80306E58",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gAssJoy. InGame dependency pointer written at 0x800328D0."
-    },
-    "gBall": {
-      "address": "0x80306E94",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBall. InGame dependency pointer written at 0x800328E0."
-    },
-    "gBanner": {
-      "address": "0x80306EA4",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBanner. InGame dependency pointer written at 0x800328F0."
-    },
-    "gBigObj": {
-      "address": "0x80306EC8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBigObj. InGame dependency pointer written at 0x80032900."
-    },
-    "gBlock": {
-      "address": "0x80306ED8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gBlock. InGame dependency pointer written at 0x80032910."
-    },
-    "gCamGame": {
-      "address": "0x80306EF8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCamGame. InGame dependency pointer written at 0x80032920."
-    },
-    "gCamScript": {
-      "address": "0x80306F08",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCamScript. InGame dependency pointer written at 0x80032930."
-    },
-    "gCatch": {
-      "address": "0x80306F24",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCatch. InGame dependency pointer written at 0x80032940."
-    },
-    "gCatchUp": {
-      "address": "0x80306F34",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCatchUp. InGame dependency pointer written at 0x80032950."
-    },
-    "gCld": {
-      "address": "0x80306F44",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCld. InGame dependency pointer written at 0x80032960."
-    },
-    "gClock": {
-      "address": "0x80306F68",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gClock. InGame dependency pointer written at 0x80032970."
-    },
-    "gCoinToss": {
-      "address": "0x80306F78",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gCoinToss. InGame dependency pointer written at 0x80032980."
-    },
-    "gEffects": {
-      "address": "0x80306F88",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gEffects. InGame dependency pointer written at 0x80032990."
-    },
-    "gEnv": {
-      "address": "0x80306FB4",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gEnv. InGame dependency pointer written at 0x800329A0."
-    },
-    "gGameBrk": {
-      "address": "0x80306FD0",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameBrk. InGame dependency pointer written at 0x800329B0."
-    },
-    "gGameIntf": {
-      "address": "0x80306FE0",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameIntf. InGame dependency pointer written at 0x800329C0."
-    },
-    "gGamePlay": {
-      "address": "0x80307050",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGamePlay. InGame dependency pointer written at 0x800329D0."
-    },
-    "gGameSkill": {
-      "address": "0x8030706C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gGameSkill. InGame dependency pointer written at 0x800329E0."
-    },
-    "gHotRt": {
-      "address": "0x8030707C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gHotRt. InGame dependency pointer written at 0x800329F0."
-    },
-    "gID3Read": {
-      "address": "0x8030708C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gID3Read. InGame dependency pointer written at 0x80032A00."
-    },
-    "gIGNetEvent": {
-      "address": "0x803070AC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gIGNetEvent. InGame dependency pointer written at 0x80032A10."
-    },
-    "gIGOnline": {
-      "address": "0x803070BC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gIGOnline. InGame dependency pointer written at 0x80032A20."
-    },
-    "gJoyMsg": {
-      "address": "0x803070CC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gJoyMsg. InGame dependency pointer written at 0x80032A30."
-    },
-    "gLight": {
-      "address": "0x803070EC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gLight. InGame dependency pointer written at 0x80032A40."
-    },
-    "gMiM": {
-      "address": "0x803070FC",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMiM. InGame dependency pointer written at 0x80032A50."
-    },
-    "gMonitor": {
-      "address": "0x8030710C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMonitor. InGame dependency pointer written at 0x80032A60."
-    },
-    "gParticles": {
-      "address": "0x80307138",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gParticles. InGame dependency pointer written at 0x80032A70."
-    },
-    "gPause": {
-      "address": "0x8030716C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPause. InGame dependency pointer written at 0x80032B9C."
-    },
-    "gPenalty": {
-      "address": "0x8030717C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPenalty. InGame dependency pointer written at 0x80032A80."
-    },
-    "gPlayArtMem": {
-      "address": "0x8030719C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayArtMem. InGame dependency pointer written at 0x80032A90."
-    },
-    "gPlayInfo": {
-      "address": "0x803071B8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayInfo. InGame dependency pointer written at 0x80032AA0."
-    },
-    "gPlayTrack": {
-      "address": "0x803071C8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlayTrack. InGame dependency pointer written at 0x80032AB0."
-    },
-    "gPlyr": {
-      "address": "0x80307240",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyr. InGame dependency pointer written at 0x80032AD0."
-    },
-    "gPlyrCtrl": {
-      "address": "0x80307250",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyrCtrl. InGame dependency pointer written at 0x80032AE0."
-    },
-    "gPlyrMsg": {
-      "address": "0x80307260",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPlyrMsg. InGame dependency pointer written at 0x80032AF0."
-    },
-    "gPractice": {
-      "address": "0x8030727C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPractice. InGame dependency pointer written at 0x80032B00."
-    },
-    "gPursuit": {
-      "address": "0x8030728C",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gPursuit. InGame dependency pointer written at 0x80032B10."
-    },
-    "gRenderBin": {
-      "address": "0x803072A8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gRenderBin. InGame dependency pointer written at 0x80032B20."
-    },
-    "gReplay": {
-      "address": "0x803072C4",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gReplay. InGame dependency pointer written at 0x80032BAC."
-    },
-    "gReplayFrame": {
-      "address": "0x803072D4",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gReplayFrame. InGame dependency pointer written at 0x80032BBC."
-    },
-    "gScreenTint": {
-      "address": "0x803072F8",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gScreenTint. InGame dependency pointer written at 0x80032B28."
-    },
-    "gShadows": {
-      "address": "0x80307318",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gShadows. InGame dependency pointer written at 0x80032B2C."
-    },
-    "gSideAvoid": {
-      "address": "0x80307328",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSideAvoid. InGame dependency pointer written at 0x80032B30."
-    },
-    "gSimpShadow": {
-      "address": "0x80307348",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSimpShadow. InGame dependency pointer written at 0x80032B34."
-    },
-    "gSndgIG": {
-      "address": "0x80307374",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSndgIG. InGame dependency pointer written at 0x80032B38."
-    },
-    "gSndgReplay": {
-      "address": "0x80307384",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSndgReplay. InGame dependency pointer written at 0x80032B40."
-    },
-    "gStatcoll": {
-      "address": "0x80307394",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gStatcoll. InGame dependency pointer written at 0x80032B44."
-    },
-    "gStatics": {
-      "address": "0x803073D0",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gStatics. InGame dependency pointer written at 0x80032B48."
-    },
-    "gSub": {
-      "address": "0x803073E0",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gSub. InGame dependency pointer written at 0x80032B4C."
-    },
-    "gTrk": {
-      "address": "0x80307400",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTrk. InGame dependency pointer written at 0x80032B50."
-    },
-    "gColorStyle": {
-      "address": "0x80307420",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gColorStyle. InGame dependency pointer written at 0x80032B58."
-    },
-    "gVptMgr": {
-      "address": "0x80307430",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gVptMgr. InGame dependency pointer written at 0x80032B5C."
-    },
-    "gMiniGame": {
-      "address": "0x80307450",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gMiniGame. InGame dependency pointer written at 0x80032B60."
-    },
-    "gTutorialGame": {
-      "address": "0x80307470",
-      "evidence": "Existing InGameModules.h declaration and original group initializer 0x800360F8; evidence.tsv external row for gTutorialGame. InGame dependency pointer written at 0x80032B7C."
-    },
     "_ctors": {
       "address": "0x802CC668",
       "evidence": "evidence.tsv external row 0x802CC668: constructor table formed by lis/addi at 0x8023E848/0x8023E84C in __init_cpp; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
@@ -930,14 +630,6 @@
     "_dtors": {
       "address": "0x802CC670",
       "evidence": "evidence.tsv external row 0x802CC670: destructor table formed by lis/addi at 0x8023E8BC/0x8023E8C0 in exit; needed to relocate the src/dolphin/os/__ppc_eabi_init.c comparison bodies."
-    },
-    "__udivdi3": {
-      "address": "0x8025F0A8",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long /10 in integer formatter resolves __udivdi3; corresponding target call at0x80265404 reaches0x8025F0A8 with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
-    },
-    "__umoddi3": {
-      "address": "0x8025F58C",
-      "evidence": "Compiler-emitted unsigned64 arithmetic helper: native unsigned long long %10 in integer formatter resolves __umoddi3; corresponding target call at0x802653E4 reaches0x8025F58C with unsigned64 pair numerator r3/r4 and denominator r5/r6. Original provider remains linked; no signature/source recovery asserted."
     },
     "StevQueryRowCount": {
       "address": "0x8018EA3C",
@@ -990,22 +682,6 @@
     "FormationLineupSwapAllUser": {
       "address": "0x8008593C",
       "evidence": "evidence.tsv function and name rows for 0x8008593C, the documented holdout of src/game/FormationLineupEdit.cpp keeping its original bytes."
-    },
-    "_savegpr_23": {
-      "address": "0x8025FA48",
-      "evidence": "evidence.tsv external row for 0x8025FA48 (_savegpr_23)."
-    },
-    "_restgpr_23": {
-      "address": "0x8025FA94",
-      "evidence": "evidence.tsv external row for 0x8025FA94 (_restgpr_23)."
-    },
-    "_savegpr_24": {
-      "address": "0x8025FA4C",
-      "evidence": "evidence.tsv external row for 0x8025FA4C (_savegpr_24)."
-    },
-    "_restgpr_24": {
-      "address": "0x8025FA98",
-      "evidence": "evidence.tsv external row for 0x8025FA98 (_restgpr_24)."
     },
     "SFILTER_remove": {
       "address": "0x80279DF8",
@@ -1071,18 +747,6 @@
       "address": "0x8022ED50",
       "evidence": "evidence.tsv function and name rows for 0x8022ED50 (DbTatsCopyAllTables, a registered holdout of src/engine/dbtatscopy.c, original bytes linked); called by name from src/engine/cu_802297D8.c, src/engine/cu_8022C9A8.c, src/engine/cu_802336C4.c, src/engine/dbcache.c, src/engine/dbevas.c, src/engine/dbmanager.c, src/engine/dbniom.c, src/engine/dbocmt.c, src/engine/dboptions.c, src/engine/dbuser.c (n1e naming wave)."
     },
-    "ModelLodBalance": {
-      "address": "0x80234424",
-      "evidence": "evidence.tsv function/name rows for 0x80234424 (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "FloatArrayAlloc": {
-      "address": "0x8023491C",
-      "evidence": "evidence.tsv function/name rows for 0x8023491C (target extent, inferred name); called from other files while its own file is unlinked."
-    },
-    "ScaleBlockReset": {
-      "address": "0x802349CC",
-      "evidence": "evidence.tsv function/name rows for 0x802349CC (target extent, inferred name); called from other files while its own file is unlinked."
-    },
     "FEPlyrPoseTransitionCallback": {
       "address": "0x80089E70",
       "evidence": "evidence.tsv function and name rows for the registered FEPlyrPoseTransitions.cpp holdout; event slot 214 in src/game/cu_8008E978.cpp points to the original code."
@@ -1118,6 +782,26 @@
     "DbMttsResumeGame": {
       "address": "0x8022C098",
       "evidence": "evidence.tsv function and name rows at 0x8022C098. src/engine/dbfnig.c calls the original-byte DbMttsResumeGame provider (src/engine/dbmtts.c is a registered comparison)."
+    },
+    "DbMttsGetPlayerColumn": {
+      "address": "0x8022B414",
+      "evidence": "evidence.tsv function and name rows at 0x8022B414. src/game/MiniGames.cpp and src/game/ScrmRules.cpp call the original-byte DbMttsGetPlayerColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsUpdatePlayerColumn": {
+      "address": "0x8022B580",
+      "evidence": "evidence.tsv function and name rows at 0x8022B580. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdatePlayerColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsGetTeamColumn": {
+      "address": "0x8022B7A4",
+      "evidence": "evidence.tsv function and name rows at 0x8022B7A4. src/game/Challenge.cpp, src/game/ChallengeGoals.cpp, src/game/InGameScreens.cpp, src/game/MiniGames.cpp and src/game/ScrmRules.cpp call the original-byte DbMttsGetTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "DbMttsUpdateTeamColumn": {
+      "address": "0x8022B8C8",
+      "evidence": "evidence.tsv function and name rows at 0x8022B8C8. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdateTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
+    },
+    "__CTOR_LIST__": {
+      "address": "0x80289A20",
+      "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
     }
   },
   "units": [
@@ -1277,7 +961,7 @@
     {
       "source": "src/game/SndgEvents.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/game/SndgEvents.cpp (0x8006F810-0x80071C3C) and the data row 0x80290B58-0x80290BC8 of its whole .rodata (pools and the two constant tables); linked with holdouts (owner ruling of 2026-11-20): 36 of 37 functions exact, the holdout keeps the original bytes. Its .bss _SndgEvent_DelayedPos 0x8030AA7C-0x8030AA88 and .sbss (nine pool handles 0x803EC820-0x803EC844) are linked from the compiled object (data rows).",
       "sections": [
         {
           "section": ".text",
@@ -1296,6 +980,18 @@
           "placement": ".data3",
           "start": "0x80290B58",
           "end": "0x80290BC8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8030AA7C",
+          "end": "0x8030AA88"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC820",
+          "end": "0x803EC844"
         }
       ],
       "holdouts": {
@@ -1647,7 +1343,7 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 34 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail, fn_801D2130 and MemCustomHeap keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses.",
+      "evidence": "evidence.tsv unit row 0x801D134C-0x801D34C4 (src/engine/Memory.c), its compiler, type, source-form and function rows; linked with holdouts (owner ruling of 2026-11-20): 35 of 39 functions exact, the holdouts _ShortenBlock, _SplitBlock, _SplitBlockTail and fn_801D2130 keep the original bytes. The file compiles no data of its own: the heap list, default heap, address table, state words, lock and strings stay external at their original addresses. Its .bss _Mem_pAddrToHeap 0x80384BC0-0x80384CC0 is linked from the compiled object and its COMMON lock _Mem_Crit 0x803E92AC-0x803E92CC is placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -1670,8 +1366,14 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x801D2570",
+          "start": "0x801D2478",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80384BC0",
+          "end": "0x80384CC0"
         }
       ],
       "holdouts": {
@@ -1691,14 +1393,17 @@
           {
             "function": "fn_801D2130",
             "evidence": "evidence.tsv source-form 0x801D2130-0x801D2478"
-          },
-          {
-            "function": "MemCustomHeap",
-            "evidence": "evidence.tsv source-form 0x801D2478-0x801D2570"
           }
         ],
-        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478."
-      }
+        "evidence": "round-3 lane-6 merge notes (PR #1452 holdouts table): src/engine/Memory.c holds out fn_801D177C, fn_801D18A0, fn_801D1C14, fn_801D2130 and fn_801D2478 (fn_801D2478, MemCustomHeap, exact since #1492)."
+      },
+      "storage": [
+        {
+          "symbol": "_Mem_Crit",
+          "start": "0x803E92AC",
+          "end": "0x803E92CC"
+        }
+      ]
     },
     {
       "source": "src/engine/TibNew.cpp",
@@ -4134,7 +3839,7 @@
     {
       "source": "src/game/PlyrAnimTurn.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes.",
+      "evidence": "evidence.tsv unit row 0x800D760C-0x800D8140 (src/game/PlyrAnimTurn.cpp), its function, name and data rows and the linker rows of its four discarded file-static functions; linked with holdouts (owner ruling of 2026-11-20), the holdout fn_800D7E9C keeping its original bytes. Its .bss gPlyrAnimReplayStates/gPlyrAnimReplayAnims 0x803192BC-0x803192F4 is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -4147,6 +3852,12 @@
           "placement": ".data3",
           "start": "0x8029D678",
           "end": "0x8029D7B8"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803192BC",
+          "end": "0x803192F4"
         }
       ],
       "holdouts": {
@@ -4889,6 +4600,69 @@
         ],
         "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbmanager.c holds out fn_802331BC only."
       }
+    },
+    {
+      "source": "src/engine/cu_802336C4.c",
+      "profile": "engine_c_fastmath_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x802336C4-0x80235010 (src/engine/cu_802336C4.c), its function, name and source-form rows and the data row of its compiled .rodata 0x802B7120-0x802B7128; linked with holdouts (owner ruling of 2026-11-20): every function exact except the two holdouts, whose ranges keep the original bytes. Its other literals, strings, statics and tables are referenced through neutral external labels and keep their original bytes.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802336C4",
+          "end": "0x80233760"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x802337D4",
+          "end": "0x802338D4"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80233BB8",
+          "end": "0x80235010"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7120",
+          "end": "0x802B7128"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "fn_80233760",
+            "evidence": "evidence.tsv source-form 0x80233760-0x802337D4"
+          },
+          {
+            "function": "fn_802338D4",
+            "evidence": "evidence.tsv source-form 0x802338D4-0x80233BB8"
+          }
+        ],
+        "evidence": "r1a merge notes (PR #1496 holdouts table): src/engine/cu_802336C4.c holds out fn_80233760 and fn_802338D4."
+      }
+    },
+    {
+      "source": "src/engine/cu_80235010.c",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv provisional unit row 0x80235010-0x802355E4 (src/engine/cu_80235010.c, split from cu_802336C4.c in r1a), its function, name and source-form rows and the data row of its whole .rodata 0x802B7188-0x802B7198; every function exact.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80235010",
+          "end": "0x802355E4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7188",
+          "end": "0x802B7198"
+        }
+      ]
     },
     {
       "source": "src/engine/modelobj.c",
@@ -10578,7 +10352,7 @@
     {
       "source": "src/game/PlayerLook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. The record arrays gPlayerLooks 0x803078E8 and gPlayerLookBonuses 0x80308368 stay original bytes: they lie outside the file's linked .bss 0x80307720-0x80307778.",
+      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. Its four .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the two cursors 0x80307720-0x80307778 lie before the .bss of src/game/Divot.cpp and src/game/FieldLines.cpp (0x80307778-0x803078E8) and the record arrays 0x803078E8-0x803084B8 after it; exact data rows of all four extents.",
       "sections": [
         {
           "section": ".text",
@@ -10591,12 +10365,6 @@
           "placement": ".data3",
           "start": "0x8028D73C",
           "end": "0x8028D79C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80307720",
-          "end": "0x80307778"
         },
         {
           "section": ".ctors",
@@ -10615,6 +10383,28 @@
           "placement": ".data4",
           "start": "0x802CF370",
           "end": "0x802CFBCC"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerLook_sPlayerCursor",
+          "start": "0x80307720",
+          "end": "0x8030774C"
+        },
+        {
+          "symbol": "_PlayerLook_sGearCursor",
+          "start": "0x8030774C",
+          "end": "0x80307778"
+        },
+        {
+          "symbol": "_PlayerLook_aLooks",
+          "start": "0x803078E8",
+          "end": "0x80308368"
+        },
+        {
+          "symbol": "_PlayerLook_aBonuses",
+          "start": "0x80308368",
+          "end": "0x803084B8"
         }
       ]
     },
@@ -21878,6 +21668,119 @@
       ]
     },
     {
+      "source": "src/engine/libgcc2_main.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E148-0x8025E80C (src/engine/libgcc2_main.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .sdata2 __clz_tab copy 0x803ED9C4-0x803EDAC4 and the __main flag .bss 0x803A6A08-0x803A6A0C, and its .data _exit_dummy_ref and _exit_dummy_decl 0x802FF4A0-0x802FF4A8 (data rows; the word before them, __do_global_dtors' p, keeps its original bytes under rule 8, data row 0x802FF49C).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E148",
+          "end": "0x8025E80C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A0",
+          "end": "0x802FF4A8"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803ED9C4",
+          "end": "0x803EDAC4"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A08",
+          "end": "0x803A6A0C"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixsfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E80C-0x8025E850 (src/engine/libgcc2_fixsfdi.c), its compiler, function, name and data rows; the one function exact, linked with its .rodata float 0.0 at 0x802B7264-0x802B7268.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E80C",
+          "end": "0x8025E850"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7264",
+          "end": "0x802B7268"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_fixunssfdi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025E850-0x8025FA24 (src/engine/libgcc2_fixunssfdi.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .rodata 0x802B7268-0x802B72B0 and its three .sdata2 __clz_tab copies 0x803EDAC4-0x803EDDC4.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025E850",
+          "end": "0x8025FA24"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7268",
+          "end": "0x802B72B0"
+        },
+        {
+          "section": ".sdata2",
+          "placement": ".data6",
+          "start": "0x803EDAC4",
+          "end": "0x803EDDC4"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/eabi.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FA24-0x8025FABC (src/engine/eabi.c), its compiler, function, name and data rows; the assembly register save and restore sequences, byte-identical.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FA24",
+          "end": "0x8025FABC"
+        }
+      ]
+    },
+    {
+      "source": "src/engine/libgcc2_cmpdi2.c",
+      "profile": "engine_cpp_nosda",
+      "evidence": "evidence.tsv unit row 0x8025FABC-0x8025FBD4 (src/engine/libgcc2_cmpdi2.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .data handler pointers 0x802FF4A8-0x802FF4B0 and the exception-context .bss 0x803A6A0C-0x803A6A28.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025FABC",
+          "end": "0x8025FBD4"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A8",
+          "end": "0x802FF4B0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x803A6A0C",
+          "end": "0x803A6A28"
+        }
+      ]
+    },
+    {
       "source": "src/dolphin/pad/Pad.c",
       "profile": "dolphin_release",
       "evidence": "evidence.tsv unit row 0x802466D0-0x802481A0 (src/dolphin/pad/Pad.c) and its function, name, data and source-form rows; CREDITS.md for the source; all 19 functions exact, promoted from comparison-only.",
@@ -26017,7 +25920,7 @@
     {
       "source": "src/engine/smidi.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 10 of 13 functions exact, the holdouts SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 11 of 13 functions exact, the holdouts SNDI_midiparsenoteon and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
@@ -26029,12 +25932,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8026BBF0",
-          "end": "0x8026BC9C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026BE48",
           "end": "0x8026BF04"
         },
         {
@@ -26063,15 +25960,11 @@
             "evidence": "evidence.tsv source-form 0x8026BA60-0x8026BBF0"
           },
           {
-            "function": "SNDI_midiparsecontrol__FiP13SndMidiChan_tii",
-            "evidence": "evidence.tsv source-form 0x8026BC9C-0x8026BE48"
-          },
-          {
             "function": "SNDI_midiprocesstick__Fi",
             "evidence": "evidence.tsv source-form 0x8026BF04-0x8026C0C0"
           }
         ],
-        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick; their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
+        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick (SNDI_midiparsecontrol exact since #1492); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
       }
     },
     {
@@ -27920,7 +27813,7 @@
     {
       "source": "src/game/PlayerCreateDb.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change).",
+      "evidence": "evidence.tsv bounded unit row for src/game/PlayerCreateDb.cpp, the function rows 0x80081CDC-0x800834CC, the exact data rows 0x80292E38-0x80293968, 0x803EA7D8-0x803EA7E4 and 0x8030BC2C-0x8030BC58, the .ctors/.dtors words 0x80289AB0 and 0x80289BF0 and the lifecycle name rows; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes, and keeping its FchrCursor destructor and vtable for src/game/CreatePlayerMenu.cpp's folded references (kept_locals with holdouts, t1 tool change). Its three .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the constructed gear-colour cursor 0x8030BC2C-0x8030BC58 lies before src/game/PlayerQuery.cpp's cursors 0x8030BC58-0x8030BC88 and the two name cursors 0x8030BC88-0x8030BCA8 after them; exact data rows of all three extents.",
       "sections": [
         {
           "section": ".text",
@@ -27951,12 +27844,6 @@
           "placement": ".data5",
           "start": "0x803EA7D8",
           "end": "0x803EA7E4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8030BC2C",
-          "end": "0x8030BC58"
         },
         {
           "section": ".ctors",
@@ -27990,7 +27877,24 @@
           }
         ],
         "evidence": "merge notes of the pull request that links the file (t1 holdout table)"
-      }
+      },
+      "storage": [
+        {
+          "symbol": "_PlayerCreateDb_sGearColorCursor",
+          "start": "0x8030BC2C",
+          "end": "0x8030BC58"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sFirstNameCursor",
+          "start": "0x8030BC88",
+          "end": "0x8030BC98"
+        },
+        {
+          "symbol": "_PlayerCreateDb_sLastNameCursor",
+          "start": "0x8030BC98",
+          "end": "0x8030BCA8"
+        }
+      ]
     },
     {
       "source": "src/engine/ef_pow.c",
@@ -28195,13 +28099,19 @@
     {
       "source": "src/engine/saramman.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv saramman.c unit, compiler, state and HOLDOUT source-form rows. Four exact functions (324 bytes) and the native 16-byte state link; alloc/free keep original instructions.",
+      "evidence": "evidence.tsv saramman.c unit, compiler, state and HOLDOUT source-form rows. Five exact functions (480 bytes) and the native 16-byte state link; SNDARAM_alloc keeps original instructions.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8027981C",
           "end": "0x80279960"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80279B24",
+          "end": "0x80279BC0"
         },
         {
           "section": ".bss",
@@ -28215,13 +28125,9 @@
           {
             "function": "SNDARAM_alloc",
             "evidence": "evidence.tsv source-form 0x80279960-0x80279B24"
-          },
-          {
-            "function": "SNDARAM_free",
-            "evidence": "evidence.tsv source-form 0x80279B24-0x80279BC0"
           }
         ],
-        "evidence": "Both gap-search/insertion and remove/compaction bodies remain measured partials after source-form and RTL investigation; the four prefix functions and complete native state link."
+        "evidence": "The gap-search/insertion body remains a measured partial after source-form and RTL investigation; the other five functions and the complete native state link."
       }
     },
     {
@@ -28929,7 +28835,7 @@
     {
       "source": "src/engine/uigarc.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes.",
+      "evidence": "evidence.tsv provisional unit row 0x80223FF4-0x80225CBC (src/engine/uigarc.c), its compiler, function, name and data rows (.rodata 0x802B2008-0x802B2050, .data 0x802F9FE0-0x802FA020, .sdata 0x803EBF70-0x803EBF78); linked with holdouts (owner ruling of 2026-11-20): 10 of 12 functions exact, the two vertex builders keep the original bytes. Its two COMMON vertex tables UIGArcVertexCoords 0x803A0400-0x803A1400 and UIGArcVertexColors 0x803A1400-0x803A1C00 are placed by the storage map (their data rows; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -28974,7 +28880,19 @@
           }
         ],
         "evidence": "e2e merge notes (swarm e2 tracking, PR #1471): src/engine/uigarc.c holds out fn_80223FF4 and fn_8022482C."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "UIGArcVertexCoords",
+          "start": "0x803A0400",
+          "end": "0x803A1400"
+        },
+        {
+          "symbol": "UIGArcVertexColors",
+          "start": "0x803A1400",
+          "end": "0x803A1C00"
+        }
+      ]
     },
     {
       "source": "src/engine/dbuslp.c",
@@ -29233,7 +29151,7 @@
     {
       "source": "src/engine/animst.c",
       "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/animst.c (0x801BDA30-0x801BE82C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 19 of 21 functions exact, the 2 holdouts keep the original bytes. Its .bss (_AnimSt_pStatAnimList 0x8037EC7C-0x8037F860) and .sbss (_AnimSt_NumObjTypes 0x803ECEBC-0x803ECEC0) are linked from the compiled object (their data rows).",
       "sections": [
         {
           "section": ".text",
@@ -29258,6 +29176,18 @@
           "placement": ".data3",
           "start": "0x802AEE38",
           "end": "0x802AEE68"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8037EC7C",
+          "end": "0x8037F860"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803ECEBC",
+          "end": "0x803ECEC0"
         }
       ],
       "holdouts": {
@@ -29472,7 +29402,7 @@
     {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/uigimagenode.c (0x8021EFD8-0x80220B4C) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 11 of 14 functions exact, the 3 holdouts keep the original bytes. The COMMON GX light LLUIGTexLightObj 0x803E9880-0x803E98C0, shared with uigcurverender.c and uigarc.c, is placed by its storage map (data row; COMMON ruling (a) of #1329).",
       "sections": [
         {
           "section": ".text",
@@ -29521,7 +29451,14 @@
           }
         ],
         "evidence": "lane e1b merge notes (PR #1455 holdouts table): src/engine/uigimagenode.c holds out UIGImageNodeRender, UIGImageNodeSendTextured, UIGImageNodeSendColored."
-      }
+      },
+      "storage": [
+        {
+          "symbol": "LLUIGTexLightObj",
+          "start": "0x803E9880",
+          "end": "0x803E98C0"
+        }
+      ]
     },
     {
       "source": "src/engine/UIGColorStyle.c",
@@ -29940,7 +29877,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c), its compiler, function and data rows; linked with holdouts (owner ruling of 2026-11-20): 21 of 24 functions exact, the holdouts _WriteFloat, _WriteString, UISSprintf keep the original bytes. Its .bss (the two colour vectors 0x8039F858-0x8039F878) is linked from the compiled object (data row).",
       "sections": [
         {
           "section": ".text",
@@ -29965,6 +29902,12 @@
           "placement": ".data3",
           "start": "0x802B1E88",
           "end": "0x802B1EB0"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x8039F858",
+          "end": "0x8039F878"
         }
       ],
       "holdouts": {
@@ -30036,6 +29979,121 @@
           }
         ],
         "evidence": "wave w2 lane w2a merge notes (PR #1484 holdouts table): src/Common/UIStudio/UISActionProcess.c holds out UISAddThreadActionAt."
+      }
+    },
+    {
+      "source": "src/engine/sprintf.c",
+      "profile": "engine_c_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x801C20F0-0x801C2EB4 (src/engine/sprintf.c), its engine_c compiler row, function and name rows and the exact data row for its .rodata 0x802AF018-0x802AF058; linked with holdouts (owner ruling of 2026-11-20): _WriteHex, _WriteString, snprintf and sprintf exact and linked with the whole .rodata, the holdouts _WriteInt, _WriteFloat, _WriteSci and vsnprintf keep the original bytes. Callers name snprintf and sprintf (wave r1 lane r1b caller rename).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2728",
+          "end": "0x801C289C"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x801C2D88",
+          "end": "0x801C2EB4"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802AF018",
+          "end": "0x802AF058"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "_WriteInt",
+            "evidence": "evidence.tsv source-form 0x801C20F0-0x801C21D0"
+          },
+          {
+            "function": "_WriteFloat",
+            "evidence": "evidence.tsv source-form 0x801C21D0-0x801C2428"
+          },
+          {
+            "function": "_WriteSci",
+            "evidence": "evidence.tsv source-form 0x801C2428-0x801C2728"
+          },
+          {
+            "function": "vsnprintf",
+            "evidence": "evidence.tsv source-form 0x801C289C-0x801C2D88"
+          }
+        ],
+        "evidence": "e2b HOLDOUT rows (wave e2 lane e2b, PR #1465) and r1b merge notes: src/engine/sprintf.c holds out _WriteInt, _WriteFloat, _WriteSci and vsnprintf."
+      }
+    },
+    {
+      "source": "src/game/InGameModules.cpp",
+      "profile": "game_cpp_holdouts",
+      "evidence": "evidence.tsv provisional unit row 0x8003450C-0x80038194 (src/game/InGameModules.cpp), its game_cpp compiler rows, the name rows of its 367 functions and the exact data rows of its .rodata, .sdata, .ctors and .dtors words; linked with holdouts (owner ruling of 2026-11-20): every function but the static initializer exact and linked with the whole .sdata, .bss, .sbss, .ctors and .dtors and the .rodata up to the static initializer's constant pool. The holdout __static_initialization_and_destruction_0 keeps the original bytes of its code and of its pool words 0x8028CEE0-0x8028CF24 (holdout pool, config README Holdouts).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8003450C",
+          "end": "0x800360F8"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x800375FC",
+          "end": "0x80038194"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x8028B3F0",
+          "end": "0x8028CEE0"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EA3D0",
+          "end": "0x803EA3EC"
+        },
+        {
+          "section": ".bss",
+          "placement": ".bss",
+          "start": "0x80306DE0",
+          "end": "0x80307480"
+        },
+        {
+          "section": ".sbss",
+          "placement": ".sbss",
+          "start": "0x803EC6D0",
+          "end": "0x803EC780"
+        },
+        {
+          "section": ".ctors",
+          "placement": ".data2",
+          "start": "0x80289A74",
+          "end": "0x80289A78"
+        },
+        {
+          "section": ".dtors",
+          "placement": ".data2",
+          "start": "0x80289BB4",
+          "end": "0x80289BB8"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "__static_initialization_and_destruction_0",
+            "evidence": "evidence.tsv source-form 0x800360F8-0x800375FC",
+            "pool": {
+              "section": ".rodata",
+              "start": "0x8028CEE0",
+              "end": "0x8028CF24"
+            }
+          }
+        ],
+        "evidence": "r1b merge notes (wave r1 lane r1b, PR #1494): src/game/InGameModules.cpp holds out its static initializer and that function's .rodata constant pool."
       }
     }
   ]

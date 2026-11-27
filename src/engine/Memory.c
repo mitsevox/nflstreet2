@@ -48,11 +48,11 @@ extern int lbl_803EBCE8;
 extern MemHeap_t *lbl_803EBCC8;
 extern MemHeap_t *lbl_803EBCCC;
 extern int lbl_803EBCD0;
-extern MemHeapRange_t lbl_80384BC0[16];
+static MemHeapRange_t _Mem_pAddrToHeap[16];
 extern void (*lbl_803EBCEC)(void);
 extern int (*lbl_803EBCF0)(int a, void *pAddr);
 extern int (*lbl_803EBCF4)(int ident, int flags, const char *pMessage, int d);
-extern SysCriticalSection_t lbl_803E92AC;
+SysCriticalSection_t _Mem_Crit;
 extern const char lbl_802AF9BC[];
 extern const char lbl_802AF628[];
 extern const char lbl_802AF9A4[];
@@ -93,12 +93,12 @@ static MemHeap_t *_FindHeapByAddr(char *pAddr)
 
     while (lo <= hi) {
         mid = (lo + hi) / 2;
-        if (pAddr < lbl_80384BC0[mid].mpStart) {
+        if (pAddr < _Mem_pAddrToHeap[mid].mpStart) {
             hi = mid - 1;
-        } else if (pAddr >= lbl_80384BC0[mid].mpEnd) {
+        } else if (pAddr >= _Mem_pAddrToHeap[mid].mpEnd) {
             lo = mid + 1;
         } else {
-            pHeap = lbl_80384BC0[mid].mpHeap;
+            pHeap = _Mem_pAddrToHeap[mid].mpHeap;
             for (pSub = pHeap->mpSub; pSub; pSub = pSub->mpSub) {
                 if (pAddr >= pSub->mpStart && pAddr < pSub->mpEnd) {
                     pHeap = pSub;
@@ -122,17 +122,17 @@ static void _BuildHeapAddrTable(void)
     i = 0;
     for (pHeap = lbl_803EBCC8; pHeap; pHeap = pHeap->mpNext) {
         if (!pHeap->mpParent && i < 16) {
-            lbl_80384BC0[i].mpStart = pHeap->mpStart;
-            lbl_80384BC0[i].mpEnd = pHeap->mpEnd;
-            lbl_80384BC0[i].mId = pHeap->mId;
-            lbl_80384BC0[i].mpHeap = pHeap;
+            _Mem_pAddrToHeap[i].mpStart = pHeap->mpStart;
+            _Mem_pAddrToHeap[i].mpEnd = pHeap->mpEnd;
+            _Mem_pAddrToHeap[i].mId = pHeap->mId;
+            _Mem_pAddrToHeap[i].mpHeap = pHeap;
             i++;
         }
     }
     lbl_803EBCD0 = i;
     for (i = 1; i < lbl_803EBCD0; i++) {
-        pRange = &lbl_80384BC0[i];
-        pPrev = &lbl_80384BC0[i - 1];
+        pRange = &_Mem_pAddrToHeap[i];
+        pPrev = &_Mem_pAddrToHeap[i - 1];
         if (pPrev->mpStart > pRange->mpStart) {
             tmp = *pPrev;
             *pPrev = *pRange;
@@ -595,7 +595,7 @@ int MemInit(MemInitParams_t *pParams)
 {
     int result = 0;
 
-    SysInitCriticalSectionFunc(&lbl_803E92AC);
+    SysInitCriticalSectionFunc(&_Mem_Crit);
     lbl_803EBCC8 = 0;
     lbl_803EBCCC = 0;
     lbl_803EBCD4 = _PrintDefault;
@@ -619,7 +619,7 @@ int MemShutdown(void)
     lbl_803EBCC8 = 0;
     lbl_803EBCCC = 0;
     lbl_803EBCDC = 0;
-    SysShutdownCriticalSectionFunc(&lbl_803E92AC);
+    SysShutdownCriticalSectionFunc(&_Mem_Crit);
     return 0;
 }
 
@@ -759,13 +759,13 @@ void *MemCustomHeap(int ident, int parentIdent, char *pStart, unsigned int size,
     }
     memset(pHeap, 0, total);
     pHeap->mId = ident;
+    pHeap->mpSelf = pHeap;
+    pHeap->mpStart = pStart;
     pHeap->mSize = size;
     pHeap->mpEnd = pStart + size;
     pHeap->mDebugSize = lbl_803EBCD8;
-    pHeap->mpFuncs = pFuncs;
-    pHeap->mpStart = pStart;
     pHeap->mDebug = lbl_803EBCDA;
-    pHeap->mpSelf = pHeap;
+    pHeap->mpFuncs = pFuncs;
     pHeap->mpNext = lbl_803EBCC8;
     lbl_803EBCC8 = pHeap;
     _BuildHeapAddrTable();
@@ -939,7 +939,7 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
     if (pHeap->mDebug) {
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     align = 16;
     if (flags & 0x20) {
         align = 32;
@@ -967,7 +967,7 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
         if (lbl_803EBCF4 != 0) {
             lbl_803EBCF4(pHeap->mId, 18, 0, size);
         }
-        SysExitCriticalSectionFunc(&lbl_803E92AC);
+        SysExitCriticalSectionFunc(&_Mem_Crit);
     fail:
         if (pHeap->mpFailHook != 0) {
             pHeap->mpFailHook(pHeap->mId, size);
@@ -1001,7 +1001,7 @@ static void *_MemAllocInternal(int ident, unsigned int size, int flags, int offs
             pHeap->mMaxDebugBytes = pHeap->mDebugBytes;
         }
     }
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return pBlock + 1;
 }
 
@@ -1042,7 +1042,7 @@ int fn_801D2BD0(void *pAddr)
         MemCheckSentinel(pHeap->mId, pAddr);
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pHeap->mUsedBytes -= ((char *)pBlock->mpTail - (char *)*pBlock->mpTail) + pBlock->mOffset;
     pHeap->mNumUsed--;
     pHeap->mFreeCount++;
@@ -1094,7 +1094,7 @@ int fn_801D2BD0(void *pAddr)
     pBlock->mState = 0;
     ((MemNode_t *)(pBlock + 1))->mSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
     _FreeListInsert(pHeap, (MemNode_t *)(pBlock + 1));
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return 0;
 }
 
@@ -1123,7 +1123,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
         MemCheckSentinel(ident, pAddr);
         MemCheckSentinelAll(pHeap->mId);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pNext = (MemBlock_t *)((char *)pBlock->mpTail + 4 + *(short *)((char *)pBlock->mpTail + 4)) - 1;
     oldSize = (char *)pBlock->mpTail - (char *)*pBlock->mpTail - 4;
     if (pNext->mState == 0) {
@@ -1148,7 +1148,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
         pNew = _MemAllocInternal(ident, size, flags, offset);
         if (pNew == 0) {
             fn_801D2BD0(pAddr);
-            SysExitCriticalSectionFunc(&lbl_803E92AC);
+            SysExitCriticalSectionFunc(&_Mem_Crit);
             return 0;
         }
         memcpy(pNew, pAddr, oldSize);
@@ -1169,7 +1169,7 @@ void *MemHReallocMem(int ident, void *pAddr, int size, int flags, int offset)
             pHeap->mDebugBytes += pInfo->mSize;
         }
     }
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return pAddr;
 }
 
@@ -1193,10 +1193,10 @@ int MemGetSizeByAddr(int a, void *pAddr)
     if (pHeap->mDebug) {
         MemCheckSentinel(a, pAddr);
     }
-    SysEnterCriticalSectionFunc(&lbl_803E92AC);
+    SysEnterCriticalSectionFunc(&_Mem_Crit);
     pTail = ((void ***)pAddr)[-1];
     size = (char *)pTail - (char *)*pTail - 4;
-    SysExitCriticalSectionFunc(&lbl_803E92AC);
+    SysExitCriticalSectionFunc(&_Mem_Crit);
     return size;
 }
 

@@ -108,7 +108,8 @@ unsigned int SNDARAM_free(void *address)
 {
     unsigned int start = (unsigned int)address >> 5;
     for (int index = 0; index < _SndAram_sState.mCount; index++) {
-        if (_SndAram_sState.mpAllocations[index].mStart == start) {
+        SndAramAllocation_t *pAlloc = _SndAram_sState.mpAllocations + index;
+        if (pAlloc->mStart == start) {
             _SndAram_sState.mCount--;
             for (; index < _SndAram_sState.mCount; index++) {
                 _SndAram_sState.mpAllocations[index] = _SndAram_sState.mpAllocations[index + 1];

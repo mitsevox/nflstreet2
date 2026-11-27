@@ -152,7 +152,7 @@ int StoryGetLkss(int index);
 int StoryIsNew(int index);
 void StorySetLkss(int index, int value);
 int SstlGetEntryTag(unsigned int index, char *pEtnr, int size);
-int fn_801C2E18(char *pBuffer, const char *pFormat, ...);
+int sprintf(char *pBuffer, const char *pFormat, ...);
 int MemFill(void *pDest, int size, int value, int width);
 int TDbTblDestroy(int handle, int table);
 int TDbTblFindUnusedId(int handle, int *pTable);
@@ -915,7 +915,7 @@ void StoryEventsBuildRewardText(void)
     switch (_StoryEvents_State.mUnknown20) {
     case 1:
     case 2:
-        fn_801C2E18(pText, "You have completed %s!", pName);
+        sprintf(pText, "You have completed %s!", pName);
         completed = 1;
         break;
     // FAKEMATCH: empty case for a result value nothing stores; it sets the target's range-test order
@@ -924,14 +924,14 @@ void StoryEventsBuildRewardText(void)
     }
     length = strlen(pText);
     if (completed && (_StoryEvents_State.mUnknown14 || _StoryEvents_State.mUnknown18)) {
-        fn_801C2E18(pText + length, "\nYou are rewarded");
+        sprintf(pText + length, "\nYou are rewarded");
         length = strlen(pText);
         if (_StoryEvents_State.mUnknown14) {
-            fn_801C2E18(pText + length, "\n%d Dev Points", _StoryEvents_State.mUnknown14);
+            sprintf(pText + length, "\n%d Dev Points", _StoryEvents_State.mUnknown14);
             length = strlen(pText);
         }
         if (_StoryEvents_State.mUnknown18) {
-            fn_801C2E18(pText + length, "\n%d Credits", _StoryEvents_State.mUnknown18);
+            sprintf(pText + length, "\n%d Credits", _StoryEvents_State.mUnknown18);
             length = strlen(pText);
         }
     }

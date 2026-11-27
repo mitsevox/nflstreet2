@@ -2638,7 +2638,7 @@ address	size	sibling_name	how	sibling_file	unit
 0x8025DD28	220	DBGRead	name	DebuggerDriver.c	-
 0x8025DE04	172	DBGReadMailbox	name	DebuggerDriver.c	-
 0x8025DEB0	664	DBGEXIImm	name	DebuggerDriver.c	-
-0x8025E148	144	__do_global_ctors	size	DebuggerDriver.c	-
+0x8025E148	144	__do_global_ctors	name	DebuggerDriver.c	-
 0x8025E1D8	56	__main	name	DebuggerDriver.c	-
 0x8025E210	64	__ashldi3	name	libgcc2.c	libgcc2.c
 0x8025E250	64	__ashrdi3	name	libgcc2.c	libgcc2.c
@@ -2652,11 +2652,13 @@ address	size	sibling_name	how	sibling_file	unit
 0x8025F088	32	__pure_virtual	name	libgcc2.c	libgcc2.c
 0x8025F0A8	1252	__udivdi3	name	libgcc2.c	libgcc2.c
 0x8025F58C	1176	__umoddi3	name	libgcc2.c	-
+0x8025FA24	76	_savegpr_14	name	libgcc2.c	-
+0x8025FA70	76	_restgpr_14	name	libgcc2.c	-
 0x8025FABC	60	__cmpdi2	name	libgcc2.c	libgcc2.c
-0x8025FAF8	16	__default_terminate	size	libgcc2.c	libgcc2.c
-0x8025FB08	44	__terminate	size	libgcc2.c	libgcc2.c
-0x8025FB34	52	eh_context_initialize	size	libgcc2.c	libgcc2.c
-0x8025FB68	108	eh_context_static	size	libgcc2.c	libgcc2.c
+0x8025FAF8	16	__default_terminate	name	libgcc2.c	libgcc2.c
+0x8025FB08	44	__terminate	name	libgcc2.c	libgcc2.c
+0x8025FB34	52	eh_context_initialize	name	libgcc2.c	libgcc2.c
+0x8025FB68	108	eh_context_static	name	libgcc2.c	libgcc2.c
 0x8025FBD4	532	sqrt	name	e_sqrt.c	e_sqrt.c
 0x8025FDE8	588	acosf	name	ef_acos.c	ef_acos.c
 0x80260034	556	asinf	name	ef_asin.c	ef_asin.c

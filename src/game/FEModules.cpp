@@ -3,10 +3,9 @@
 #include "game/SysModules.h"
 #include "game/GameState.h"
 #include "game/GameModules.h"
+#include "game/InGameModules.h"
 
 extern "C" {
-extern char lbl_803071E8[];
-
 void FEPlyrInit(int);
 void FEPlyrShutdown(void);
 void FESndInit(void);
@@ -32,7 +31,7 @@ void ResTrackLabel(const char *);
 }
 
 static ModuleDependency sFEPlyBkDependencies[] = { &gGameState, 0 };
-static ModuleDependency sFEPlyBkLinks[] = { lbl_803071E8, 0 };
+static ModuleDependency sFEPlyBkLinks[] = { &gPlayBook, 0 };
 FEPlyBk gFEPlyBk;
 
 ModuleDependency *FEPlyBk::GetDependencies() { return sFEPlyBkDependencies; }

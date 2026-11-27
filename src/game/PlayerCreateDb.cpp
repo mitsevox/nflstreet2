@@ -42,10 +42,9 @@ extern int lbl_802D6850[18];
 extern int lbl_802D69F0[];
 extern int lbl_802D6AD8[];
 extern const int lbl_80293968[];
-extern QueryCursor lbl_8030BC88;
-extern QueryCursor lbl_8030BC98;
-
 static DbCursor _PlayerCreateDb_sGearColorCursor;
+static QueryCursor _PlayerCreateDb_sFirstNameCursor;
+static QueryCursor _PlayerCreateDb_sLastNameCursor;
 
 static unsigned char _PlayerCreateDb_bNamesOpen = 0;
 static int _PlayerCreateDb_iFirstNameCount = 0;
@@ -380,28 +379,28 @@ void PlayerNamesOpen(void)
     SndgMusicPumpFrame(0);
     DbFileTblLoad(0, 0x4D4E4C53);
     SndgMusicPumpFrame(0);
-    lbl_8030BC88.mUnknown0 = 0;
-    lbl_8030BC88.mUnknown4 = 0;
-    lbl_8030BC88.mUnknown8 = -1;
-    lbl_8030BC88.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &lbl_8030BC88);
+    _PlayerCreateDb_sFirstNameCursor.mUnknown0 = 0;
+    _PlayerCreateDb_sFirstNameCursor.mUnknown4 = 0;
+    _PlayerCreateDb_sFirstNameCursor.mUnknown8 = -1;
+    _PlayerCreateDb_sFirstNameCursor.mUnknown12 = 0;
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANFP' from 'MNFS'\n", &_PlayerCreateDb_sFirstNameCursor);
     _PlayerCreateDb_iFirstNameCount = result.mUnknown0;
-    lbl_8030BC98.mUnknown0 = 0;
-    lbl_8030BC98.mUnknown4 = 0;
-    lbl_8030BC98.mUnknown8 = -1;
-    lbl_8030BC98.mUnknown12 = 0;
-    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &lbl_8030BC98);
+    _PlayerCreateDb_sLastNameCursor.mUnknown0 = 0;
+    _PlayerCreateDb_sLastNameCursor.mUnknown4 = 0;
+    _PlayerCreateDb_sLastNameCursor.mUnknown8 = -1;
+    _PlayerCreateDb_sLastNameCursor.mUnknown12 = 0;
+    TDbCompilePerformOp(&result, "declare \x8a cursor for select 'ANLP' from 'MNLS'\n", &_PlayerCreateDb_sLastNameCursor);
     _PlayerCreateDb_iLastNameCount = result.mUnknown0;
     _PlayerCreateDb_bNamesOpen = 1;
 }
 
 void PlayerNamesClose(void)
 {
-    if (lbl_8030BC98.mUnknown0) {
-        TDbSQLDestroyCursor(&lbl_8030BC98);
+    if (_PlayerCreateDb_sLastNameCursor.mUnknown0) {
+        TDbSQLDestroyCursor(&_PlayerCreateDb_sLastNameCursor);
     }
-    if (lbl_8030BC88.mUnknown0) {
-        TDbSQLDestroyCursor(&lbl_8030BC88);
+    if (_PlayerCreateDb_sFirstNameCursor.mUnknown0) {
+        TDbSQLDestroyCursor(&_PlayerCreateDb_sFirstNameCursor);
     }
     SndgMusicPumpFrame(0);
     DbFileTblDestroy(0, 0x4D4E4653);
@@ -511,10 +510,10 @@ void PlayerRecordRandomName(PlayerCreateRecord_t *pRecord)
     char *pUpper = pRecord->mUnknown0C;
     unsigned int i;
 
-    lbl_8030BC88.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iFirstNameCount);
-    TDbCompilePerformOp(0, "fetch from \x8a 'ANFP' into \x88\n", &lbl_8030BC88, pFirst);
-    lbl_8030BC98.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iLastNameCount);
-    TDbCompilePerformOp(0, "fetch from \x8a 'ANLP' into \x88\n", &lbl_8030BC98, pLast);
+    _PlayerCreateDb_sFirstNameCursor.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iFirstNameCount);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANFP' into \x88\n", &_PlayerCreateDb_sFirstNameCursor, pFirst);
+    _PlayerCreateDb_sLastNameCursor.mUnknown4 = SyncRandGetRange(0, _PlayerCreateDb_iLastNameCount);
+    TDbCompilePerformOp(0, "fetch from \x8a 'ANLP' into \x88\n", &_PlayerCreateDb_sLastNameCursor, pLast);
     for (i = 0; i < 15; i++) {
         if (pLast) {
             pUpper[i] = toupper(pLast[i]);

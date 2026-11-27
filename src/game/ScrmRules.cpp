@@ -162,10 +162,10 @@ void ScoringLogAddScore(int type, short a, int b, int c);
 void ScoringLogSetConversion(int a, int b, int c, int d);
 int GameModeTypeIsSpecial(void);
 void fn_8022B2CC(int handle, int tag, int value);
-int fn_8022B414(int handle, int tag, int *pValue);
-int fn_8022B580(int handle, int tag, int value);
-int fn_8022B7A4(int handle, int tag, int *pValue);
-int fn_8022B8C8(int handle, int tag, int value);
+int DbMttsGetPlayerColumn(int handle, int tag, int *pValue);
+int DbMttsUpdatePlayerColumn(int handle, int tag, int value);
+int DbMttsGetTeamColumn(int handle, int tag, int *pValue);
+int DbMttsUpdateTeamColumn(int handle, int tag, int value);
 void fn_8022BAB4(int handle, int a, int b, int c);
 void fn_8022BD30(int handle, int a, int b);
 void *SyncStateGetData(void *pHandle);
@@ -1499,15 +1499,15 @@ extern "C" void ScrmStatAddPlayer(int id, int tag, int value)
     unsigned int mode = GameModeTypeGet();
     int handle = ScrmStatGetPlayerHandle(id);
     int old;
-    int result = fn_8022B414(handle, tag, &old);
+    int result = DbMttsGetPlayerColumn(handle, tag, &old);
 
     if (result == 0 || result == 0x84) {
         if (mode != 1) {
             ScrmStatSaveOriginal(handle, tag, old, 1);
         }
-        if (fn_8022B580(handle, tag, value) == 0) {
+        if (DbMttsUpdatePlayerColumn(handle, tag, value) == 0) {
             int check;
-            if (fn_8022B414(handle, tag, &check) == 0) {
+            if (DbMttsGetPlayerColumn(handle, tag, &check) == 0) {
                 ScrmStatGetPlayerTeamHandle(id);
             }
         }
@@ -1517,13 +1517,13 @@ extern "C" void ScrmStatAddPlayer(int id, int tag, int value)
 extern "C" void ScrmStatAddHandle(int handle, int tag, int value)
 {
     int old;
-    int result = fn_8022B7A4(handle, tag, &old);
+    int result = DbMttsGetTeamColumn(handle, tag, &old);
 
     if (result == 0 || result == 0x84) {
         ScrmStatSaveOriginal(handle, tag, old, 0);
-        if (fn_8022B8C8(handle, tag, value) == 0) {
+        if (DbMttsUpdateTeamColumn(handle, tag, value) == 0) {
             int check;
-            fn_8022B7A4(handle, tag, &check);
+            DbMttsGetTeamColumn(handle, tag, &check);
         }
     }
 }
@@ -1556,7 +1556,7 @@ extern "C" void ScrmStatAddPassing(int id, float from, float to)
     if (to > ScrmGetGoalLineY()) {
         to = ScrmGetGoalLineY();
     }
-    fn_8022B414(ScrmStatGetPlayerHandle(id), 0x61796167, &total);
+    DbMttsGetPlayerColumn(ScrmStatGetPlayerHandle(id), 0x61796167, &total);
     yards = (int)(to - from);
     if (yards + total > 0x7FF) {
         yards = 0x7FF - total;
@@ -1578,7 +1578,7 @@ extern "C" void ScrmStatAddReceiving(int id, float from, float catchY, float to,
         to = ScrmGetGoalLineY();
     }
     ScrmStatAddPlayer(id, 0x61636367, 1);
-    fn_8022B414(ScrmStatGetPlayerHandle(id), 0x61796367, &total);
+    DbMttsGetPlayerColumn(ScrmStatGetPlayerHandle(id), 0x61796367, &total);
     yards = (int)(to - from);
     if (yards + total > 0x3FF) {
         yards = 0x3FF - total;
@@ -1604,7 +1604,7 @@ extern "C" void ScrmStatAddRushing(int id, float from, float to, float time)
     int gain;
     int yards;
 
-    fn_8022B414(ScrmStatGetPlayerHandle(id), 0x61797567, &total);
+    DbMttsGetPlayerColumn(ScrmStatGetPlayerHandle(id), 0x61797567, &total);
     if (to < -ScrmGetGoalLineY()) {
         to = -ScrmGetGoalLineY();
     }
@@ -2736,12 +2736,12 @@ extern "C" void ScrmStatBeginTally(void)
         _ScrmStat_aTeamBaseline[1].mTp = 0;
         _ScrmStat_aTeamBaseline[1].mSp = 0;
         _ScrmStat_aTeamBaseline[1].mFs = 0;
-        fn_8022B7A4(home, 0x74707374, &_ScrmStat_aTeamBaseline[0].mTp);
-        fn_8022B7A4(home, 0x73707374, &_ScrmStat_aTeamBaseline[0].mSp);
-        fn_8022B7A4(home, 0x66737374, &_ScrmStat_aTeamBaseline[0].mFs);
-        fn_8022B7A4(away, 0x74707374, &_ScrmStat_aTeamBaseline[1].mTp);
-        fn_8022B7A4(away, 0x73707374, &_ScrmStat_aTeamBaseline[1].mSp);
-        fn_8022B7A4(away, 0x66737374, &_ScrmStat_aTeamBaseline[1].mFs);
+        DbMttsGetTeamColumn(home, 0x74707374, &_ScrmStat_aTeamBaseline[0].mTp);
+        DbMttsGetTeamColumn(home, 0x73707374, &_ScrmStat_aTeamBaseline[0].mSp);
+        DbMttsGetTeamColumn(home, 0x66737374, &_ScrmStat_aTeamBaseline[0].mFs);
+        DbMttsGetTeamColumn(away, 0x74707374, &_ScrmStat_aTeamBaseline[1].mTp);
+        DbMttsGetTeamColumn(away, 0x73707374, &_ScrmStat_aTeamBaseline[1].mSp);
+        DbMttsGetTeamColumn(away, 0x66737374, &_ScrmStat_aTeamBaseline[1].mFs);
     }
 }
 
