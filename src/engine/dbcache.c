@@ -269,7 +269,7 @@ extern char lbl_802B7130[];
 extern char lbl_802B7154[];
 extern char lbl_802B715C[];
 extern DbUserEntry_t _DbUser_aEntries[];
-int fn_80229AA4(int handle, int table, int *pIds, unsigned short *pCount);
+int DbFindUnusedPlayerIds(int handle, int table, int *pIds, unsigned short *pCount);
 
 static Entry_802FB310 _DbCache_aTables[3] = {
     { 0x54484344, 0x54484344, 0x44494754, 0x31494454 },
@@ -278,7 +278,7 @@ static Entry_802FB310 _DbCache_aTables[3] = {
 };
 static CacheCol_802FB340 _DbCache_aCachedCols[2] = {
     { 0x44494754, 0x4D414554, 0x3FF, 0x3F1, 0 },
-    { 0x44494750, 0x59414C50, 0x7FFF, 0x7F15, fn_80229AA4 },
+    { 0x44494750, 0x59414C50, 0x7FFF, 0x7F15, DbFindUnusedPlayerIds },
 };
 extern int lbl_802FB3F8[];
 extern void *lbl_803A2648[];
