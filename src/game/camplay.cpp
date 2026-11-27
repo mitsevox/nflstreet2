@@ -465,12 +465,18 @@ void CamPlayProcess(GameCamera_t *camera)
             int side = ScrmGetDefenseTeam();
             Object_80039F5C *player = PlyrGet(side,*fn_8012078C()->mpUnknown4);
             if (player) {
-                float adjustment = player->mMotion.mPos.mY;
+                float height = player->mMotion.mPos.mY;
                 float ballY = velocity.mY;
-                if (ballY > adjustment) {
-                    adjustment = (ballY - adjustment) * 0.5f;
+                if (ballY > height) {
+                    ballY -= height;
+                    ballY *= 0.5f;
                     float cameraY = point.mY;
-                    point.mY = cameraY - (adjustment < 0.0f ? 0.0f : (adjustment > 10.0f ? 10.0f : adjustment));
+                    if (!(ballY < 0.0f)) {
+                        if (ballY > 10.0f)
+                            ballY = 10.0f;
+                        cameraY -= ballY;
+                    }
+                    point.mY = cameraY;
                 }
             }
         }
