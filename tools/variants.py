@@ -11,19 +11,29 @@ below). The variants are every combination of the regions' options, the unchange
 with more than --limit of them, a seeded random sample of --limit is run, the unchanged file
 always among it.
 
-Each worker owns a private copy of this checkout (the .git directory, build/trial and
-build/variants left out, every symlink into the checkout repointed into the copy). It writes a
-variant into its copy's SOURCE, runs its copy's trial.py on FUNCTION with --diff, records the
-verdict, the score and the first differing instruction, and restores the file before the next
-variant. The checkout this command runs from is only read, apart from the results folder
-(--out, by default build/variants/<source>_<function>_<spec name>/): results.tsv (one row per variant,
-written as each finishes, so a rerun with the same spec skips the variants already done),
-summary.txt (the ranked table and the elapsed time) and best.diff (the best variant against the
-original file). Credit still comes only from `python3 build.py`.
+Each worker owns a private copy of this checkout (left out: .git, build/trial, build/variants,
+build/matching, build/analysis and build/GN7E69-rev0; every symlink into the checkout repointed
+into the copy). It writes a variant into its copy's SOURCE, runs its copy's trial.py on FUNCTION
+with --diff, records the verdict, the score and the first differing instruction, and restores
+the file before the next variant. The checkout this command runs from is only read, apart from
+the results folder (--out, by default build/variants/<source>_<function>_<spec name>/):
+results.tsv (one row per variant, written as each finishes), summary.txt (the ranked table of
+this run's selection and the elapsed time) and best.diff (the best variant against the original
+file). Credit still comes only from `python3 build.py`.
 
-A variant changes source text only. It may not add a `#pragma`, `_Pragma`, `__attribute__` or
-`asm`: a variant whose file has more of any of them than the original file is refused before it
-runs. Compiler flags and profiles live in config/ and are never touched.
+Results and reused --work copies are stamped with a hash of what trial.py reads besides the
+variant: src/, include/, tools/ (but this file), config/ and build/source/report.json. A rerun with the same
+spec, function, source text and stamp resumes, skipping the variants already done (TIMEOUT rows
+are retried, ERROR rows only with --retry-errors); a changed stamp refuses the results (pass
+--fresh) and recopies a reused copy. One run at a time holds a results folder.
+
+A variant changes source text only. Before any trial, the command is refused when an option of
+the spec adds a `#pragma`, `_Pragma`, `__attribute__`, `asm` or `##` token paste that the
+original file does not have (compared as normalized occurrences, after line splices, comments,
+strings and digraphs are taken out), and each variant is checked the same way again just before
+its trial. This guards against plain and accidental forms; it is not a C preprocessor, so a
+macro that builds such a form from innocent pieces defined elsewhere is the reviewer's to catch.
+Compiler flags and profiles live in config/ and are never touched.
 
 Spec format. Lines starting with `%%` are directives; the lines between them are source text,
 copied exactly. Text outside a region is ignored (use it for notes).
@@ -44,14 +54,16 @@ copied exactly. Text outside a region is ignored (use it for notes).
     %% end
 
 A region's original text (for a permute region, its items joined in the listed order) must
-occur in SOURCE exactly once, or exactly once after its ANCHOR; regions may not overlap. A JSON
+occur in SOURCE exactly once, or exactly once after its ANCHOR; regions may not overlap. Names
+of regions, alternatives and items use letters, digits and `_ . + -`. A JSON
 spec (a file ending in .json) holds the same thing:
 {"regions": [{"replace": NAME, "after": ANCHOR, "old": TEXT, "with": {ALT: TEXT}},
              {"permute": NAME, "items": [[ID, TEXT], ...]}]}.
 """
 import argparse
 import hashlib
-import itertools
+import collections
+import fcntl
 import json
 import math
 import os
@@ -60,6 +72,7 @@ import queue
 import random
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -70,9 +83,16 @@ ROOT = Path(__file__).resolve().parents[1]
 # Left out of a worker's copy: history, other runs' outputs, and build outputs trial.py does not
 # read (the comparison pairs, the inventory and the linked DOL), which are most of build/.
 SKIPPED = {'.git', 'build/trial', 'build/variants', 'build/matching', 'build/analysis', 'build/GN7E69-rev0'}
-# Source forms a variant may not add: per-function pragmas and attributes, and inline assembly.
-FORBIDDEN = {'#pragma': re.compile(r'#\s*pragma\b'), '_Pragma': re.compile(r'\b_Pragma\b'),
-             '__attribute__': re.compile(r'\b__attribute__\b'), 'asm': re.compile(r'\b(?:__asm__|__asm|asm)\b')}
+# Source forms a variant may not add: per-function pragmas and attributes, inline assembly, and
+# token pasting (which could build them). Each is matched in normalized text (normalize) and
+# compared as a multiset of the lines it occurs on, so swapping one pragma for another is caught.
+FORBIDDEN = {'#pragma': re.compile(r'^[ \t]*#[ \t]*pragma\b.*$', re.M), '_Pragma': re.compile(r'^.*\b_Pragma\b.*$', re.M),
+             '__attribute__': re.compile(r'^.*\b__attribute__\b.*$', re.M),
+             'asm': re.compile(r'^.*\b(?:__asm__|__asm|asm)\b.*$', re.M), '##': re.compile(r'^.*##.*$', re.M)}
+LEXEMES = re.compile(r'"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'|/\*.*?\*/|//[^\n]*', re.S)
+NAME = re.compile(r'[A-Za-z0-9_.+-]+')
+# What trial.py reads besides the variant, for the stamp.
+STAMPED = ('src', 'include', 'tools', 'config')
 VERDICT = re.compile(r'^(\S+?)(?: 0x([0-9A-F]{8}))?: (IDENTICAL|DIFFERS|WRONG CONSTANT|MISSING)\b(.*)$')
 SCORE = re.compile(r'\(([\d.]+)%')
 DIFF_ROW = re.compile(r'^  ! +([0-9A-F]+)  (.*)$')
@@ -180,8 +200,16 @@ def load_spec(path):
                 raise SpecError(f'region {r["name"]} needs two or more items')
             r['old'] = '\n'.join(text for _, text in r['items'])
             r['options'] = None  # every order, by index
-        if '%%' in r['old']:
-            raise SpecError(f'region {r["name"]}: %% inside source text')
+        texts = [r['old']] + list(r.get('with', {}).values()) + [t for _, t in r.get('items', [])]
+        if any(line.startswith('%%') for t in texts for line in t.split('\n')):
+            raise SpecError(f'region {r["name"]}: a source line starts with %%')
+        labels = [r['name']] + list(r.get('with', {})) + [i for i, _ in r.get('items', [])]
+        if not all(isinstance(n, str) and NAME.fullmatch(n) for n in labels):
+            raise SpecError(f'region {r["name"]}: names use letters, digits and _ . + - only')
+        if r['kind'] == 'replace' and 'orig' in r['with']:
+            raise SpecError(f'region {r["name"]}: orig is the original text, not an alternative')
+        if r['kind'] == 'permute' and len({i for i, _ in r['items']}) != len(r['items']):
+            raise SpecError(f'region {r["name"]}: two items share a name')
     return regions, hashlib.sha1(text.encode()).hexdigest()
 
 
@@ -250,8 +278,32 @@ def render(regions, picks, source_text):
     return ''.join(out)
 
 
+def normalize(text):
+    """Text as the preprocessor's later phases see it, roughly: digraphs and trigraphs for # mapped,
+    line splices joined, comments blanked, string and character literals emptied."""
+    text = text.replace('??=', '#').replace('%:', '#').replace('\\\n', '')
+    return LEXEMES.sub(lambda m: ' ' if m.group(0).startswith('/') else m.group(0)[0] * 2, text)
+
+
 def forbidden_added(original, variant):
-    return [name for name, pattern in FORBIDDEN.items() if len(pattern.findall(variant)) > len(pattern.findall(original))]
+    """The forbidden forms variant has that original does not, by normalized occurrence."""
+    before, after = normalize(original), normalize(variant)
+    found = []
+    for name, pattern in FORBIDDEN.items():
+        def lines(text):
+            return collections.Counter(re.sub(r'#\s*', '#', ' '.join(m.split())) for m in pattern.findall(text))
+        if lines(after) - lines(before):
+            found.append(name)
+    return found
+
+
+def option_variants(regions):
+    """One pick list per option: each region's every alternative (a permute region reversed), the
+    others original, for the fast check before a run."""
+    base = [('orig' if r['kind'] == 'replace' else r['items']) for r in regions]
+    for n, r in enumerate(regions):
+        for option in (r['options'][1:] if r['kind'] == 'replace' else [list(reversed(r['items']))]):
+            yield base[:n] + [option] + base[n + 1:]
 
 
 def selection(total, limit, seed):
@@ -263,6 +315,22 @@ def selection(total, limit, seed):
 
 
 # The worker copies.
+
+def stamp(root):
+    """A hash of what trial.py reads besides the variant (STAMPED and build/source/report.json)."""
+    root, digest = Path(root), hashlib.sha1()
+    paths = [root / 'build/source/report.json']
+    for top in STAMPED:
+        for directory, dirnames, filenames in os.walk(root / top):
+            dirnames[:] = sorted(d for d in dirnames if d != '__pycache__')
+            paths += [Path(directory) / f for f in sorted(filenames)
+                      if (Path(directory) / f) != root / 'tools/variants.py']  # this tool is not trial.py's input
+    for path in paths:
+        digest.update(path.relative_to(root).as_posix().encode() + b'\0')
+        if path.is_file():
+            digest.update(hashlib.sha1(path.read_bytes()).digest())
+    return digest.hexdigest()
+
 
 def make_copy(root, destination):
     """Copy the checkout to destination without SKIPPED, then repoint symlinks that reach into root."""
@@ -316,12 +384,14 @@ def parse_trial(output, returncode):
         if match and status is None:
             status = match.group(3)
             if status == 'IDENTICAL':
-                score = '100.00'
+                score, first = '100.00', match.group(4).strip()  # a note on constants not checked
             elif status == 'DIFFERS':
                 found = SCORE.search(match.group(4))
                 score = found.group(1) if found else ''
             elif status == 'WRONG CONSTANT':
-                first = match.group(4).strip(' ()')
+                first = match.group(4).strip()
+                if first.startswith('(') and first.endswith(')'):
+                    first = first[1:-1]
             continue
         row = DIFF_ROW.match(line)
         if row and status == 'DIFFERS' and not first:
@@ -333,16 +403,42 @@ def parse_trial(output, returncode):
     return status, score, first
 
 
+LIVE = set()  # running trial processes, killed with their children on an interrupt
+LIVE_LOCK = threading.Lock()
+
+
+def kill_group(process):
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except (ProcessLookupError, PermissionError):
+        pass
+
+
 def run_trial(copy, source, function, text, original, timeout):
+    """(status, score, first difference, seconds); status None when trial.py was killed by a signal."""
     path = copy / source
     write_file(path, text)
     started = time.monotonic()
     try:
-        done = subprocess.run([sys.executable, 'tools/trial.py', source, function, '--diff'], cwd=copy,
-                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, timeout=timeout)
-        status, score, first = parse_trial(done.stdout, done.returncode)
-    except subprocess.TimeoutExpired:
-        status, score, first = 'TIMEOUT', '', f'over {timeout} s'
+        # Its own session, so a timeout or an interrupt ends the compiler and objdiff with it.
+        process = subprocess.Popen([sys.executable, 'tools/trial.py', source, function, '--diff'], cwd=copy,
+                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, start_new_session=True)
+        with LIVE_LOCK:
+            LIVE.add(process)
+        try:
+            output, _ = process.communicate(timeout=timeout)
+            if process.returncode < 0:
+                status, score, first = None, '', f'killed by signal {-process.returncode}'
+            else:
+                status, score, first = parse_trial(output, process.returncode)
+        except subprocess.TimeoutExpired:
+            kill_group(process)
+            process.communicate()
+            status, score, first = 'TIMEOUT', '', f'over {timeout} s'
+        finally:
+            kill_group(process)
+            with LIVE_LOCK:
+                LIVE.discard(process)
     finally:
         write_file(path, original)
     return status, score, first, time.monotonic() - started
@@ -350,10 +446,11 @@ def run_trial(copy, source, function, text, original, timeout):
 
 # Results.
 
-def header(spec_hash, source, source_text, function):
-    """The results file's first line: a rerun resumes only for the same spec, function and source text."""
+def header(spec_hash, source, source_text, function, checkout):
+    """The results file's first line: a rerun resumes only for the same spec, function, source text
+    and checkout stamp."""
     source_hash = hashlib.sha1(source_text.encode()).hexdigest()
-    return f'# variants spec {spec_hash} source {source} {source_hash} function {function}'
+    return f'# variants spec {spec_hash} source {source} {source_hash} function {function} checkout {checkout}'
 
 
 def read_results(path, expected_header):
@@ -361,7 +458,8 @@ def read_results(path, expected_header):
         return {}
     lines = path.read_text().splitlines()
     if not lines or lines[0] != expected_header:
-        raise SpecError(f'{path} is from another spec, function or version of the source; pass --fresh to start over')
+        raise SpecError(f'{path} is from another spec, function, version of the source or state of the checkout; '
+                        'pass --fresh to start over')
     rows = {}
     for line in lines[2:]:
         values = line.split('\t')
@@ -405,10 +503,18 @@ def main(argv=None):
     parser.add_argument('--work', type=Path, help='folder for the worker copies (default: a new temporary one, '
                         'removed at the end); outside this checkout')
     parser.add_argument('--keep-work', action='store_true', help='leave the worker copies in place')
+    parser.add_argument('--retry-errors', action='store_true', help='rerun variants recorded as ERROR')
     parser.add_argument('--list', action='store_true', help='print the variants and exit without running')
     args = parser.parse_args(argv)
 
-    source = Path(args.source).as_posix()
+    given = Path(args.source)
+    if '..' in given.parts:
+        raise SpecError(f'{args.source}: give SOURCE without ..')
+    if given.is_absolute():  # e.g. a tab-completed path: use it relative to this checkout
+        if not given.is_relative_to(ROOT):
+            raise SpecError(f'{args.source} is not in this checkout')
+        given = given.relative_to(ROOT)
+    source = given.as_posix()
     source_path = ROOT / source
     if not source_path.is_file() or not source_path.resolve().is_relative_to((ROOT / 'src').resolve()):
         raise SpecError(f'{source} is not a file under src/')
@@ -426,106 +532,129 @@ def main(argv=None):
         print(f'{len(indices)} of {total} variants')
         return 0
 
-    # Refuse forbidden forms before any trial runs.
-    for index in indices:
-        added = forbidden_added(original, render(regions, choice(regions, index), original))
+    # Refuse forbidden forms before any trial runs: each option against the original file.
+    for picks in option_variants(regions):
+        added = forbidden_added(original, render(regions, picks, original))
         if added:
-            raise SpecError(f"variant {describe(regions, choice(regions, index))} adds {', '.join(added)}; "
+            raise SpecError(f"variant {describe(regions, picks)} adds {', '.join(added)}; "
                             'variants change source forms only')
     report = ROOT / 'build/source/report.json'
     if not report.is_file() or json.loads(report.read_text()).get('complete') != 'identical':
         raise SpecError('run `python3 build.py` once first; trial.py resolves against its build')
 
     out = args.out or ROOT / 'build/variants' / re.sub(r'[^A-Za-z0-9]+', '_', f'{source}_{args.function}_{args.spec.stem}').strip('_')
-    out.mkdir(parents=True, exist_ok=True)
-    results = out / 'results.tsv'
-    if args.fresh and results.exists():
-        results.unlink()
-    expected = header(spec_hash, source, original, args.function)
-    rows = read_results(results, expected)
-    if not results.exists():
-        results.write_text(expected + '\n' + '\t'.join(COLUMNS) + '\n')
-    pending = [i for i in indices if i not in rows]
-    if args.first and any(r['status'] == 'IDENTICAL' for r in rows.values()):
-        pending = []
-
-    started = time.monotonic()
-    work = args.work.resolve() if args.work else Path(tempfile.mkdtemp(prefix='variants-'))
+    work = args.work.resolve() if args.work else Path(tempfile.gettempdir()).resolve()
     if work.is_relative_to(ROOT.resolve()):
-        raise SpecError('--work must be outside this checkout')
-    jobs = max(1, min(args.jobs, len(pending)))
-    lock, stop, interrupted = threading.Lock(), threading.Event(), threading.Event()
-    tasks = queue.Queue()
-    for index in pending:
-        tasks.put(index)
-    failures = []
-
-    def worker(number):
+        raise SpecError('--work (or the temporary folder, TMPDIR) must be outside this checkout')
+    out.mkdir(parents=True, exist_ok=True)
+    with (out / '.lock').open('w') as holder:  # held until the run ends
         try:
-            copy = work / f'copy{number}'
-            if not copy.exists():
-                make_copy(ROOT, copy)
-            if escapes(copy, ROOT):
-                raise RuntimeError(f'{copy} has symlinks into the checkout')
-            write_file(copy / source, original)  # a reused copy starts from this checkout's file
-            while not stop.is_set():
-                try:
-                    index = tasks.get_nowait()
-                except queue.Empty:
-                    return
-                picks = choice(regions, index)
-                status, score, first, seconds = run_trial(copy, source, args.function,
-                                                          render(regions, picks, original), original, args.timeout)
-                if interrupted.is_set():
-                    return  # the trial was cut short with the run: not a result
-                row = {'index': str(index), 'variant': describe(regions, picks), 'status': status, 'score': score,
-                       'first_diff': first.replace('\t', ' '), 'seconds': f'{seconds:.1f}'}
+            fcntl.flock(holder, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise SpecError(f'another run is using {out}')
+        results = out / 'results.tsv'
+        if args.fresh and results.exists():
+            results.unlink()
+        checkout = stamp(ROOT)
+        expected = header(spec_hash, source, original, args.function, checkout)
+        rows = read_results(results, expected)
+        if not results.exists():
+            results.write_text(expected + '\n' + '\t'.join(COLUMNS) + '\n')
+        retried = {'TIMEOUT', 'ERROR'} if args.retry_errors else {'TIMEOUT'}
+        pending = [i for i in indices if i not in rows or rows[i]['status'] in retried]
+        if args.first and any(rows[i]['status'] == 'IDENTICAL' for i in indices if i in rows):
+            pending = []
+
+        started = time.monotonic()
+        if not args.work:
+            work = Path(tempfile.mkdtemp(prefix='variants-'))
+        jobs = max(1, min(args.jobs, len(pending)))
+        lock, stop, interrupted = threading.Lock(), threading.Event(), threading.Event()
+        tasks = queue.Queue()
+        for index in pending:
+            tasks.put(index)
+        failures = []
+
+        def worker(number):
+            try:
+                copy = work / f'copy{number}'
+                marker = copy.parent / f'copy{number}.stamp'
+                if copy.exists() and (not marker.is_file() or marker.read_text() != checkout):
+                    shutil.rmtree(copy)  # made from another state of the checkout
+                if not copy.exists():
+                    marker.unlink(missing_ok=True)
+                    make_copy(ROOT, copy)
+                    marker.write_text(checkout)
+                if escapes(copy, ROOT):
+                    raise RuntimeError(f'{copy} has symlinks into the checkout')
+                write_file(copy / source, original)  # a reused copy starts from this checkout's file
+                while not stop.is_set():
+                    try:
+                        index = tasks.get_nowait()
+                    except queue.Empty:
+                        return
+                    picks = choice(regions, index)
+                    text = render(regions, picks, original)
+                    added = forbidden_added(original, text)
+                    if added:  # a combination the option check could not see
+                        raise RuntimeError(f"variant {describe(regions, picks)} adds {', '.join(added)}; not run")
+                    status, score, first, seconds = run_trial(copy, source, args.function, text, original, args.timeout)
+                    if interrupted.is_set():
+                        return  # the trial was cut short with the run: not a result
+                    if status is None:
+                        raise RuntimeError(f'trial.py for variant {index} was {first}')
+                    row = {'index': str(index), 'variant': describe(regions, picks), 'status': status, 'score': score,
+                           'first_diff': first.replace('\t', ' '), 'seconds': f'{seconds:.1f}'}
+                    with lock:
+                        rows[index] = row
+                        with results.open('a') as handle:
+                            handle.write('\t'.join(row[c] for c in COLUMNS) + '\n')
+                        done = sum(1 for i in pending if i in rows)
+                        print(f"[{done}/{len(pending)}] {status} {score} {row['variant']}", flush=True)
+                        if args.first and status == 'IDENTICAL':
+                            stop.set()
+            except Exception as error:  # reported after the other workers finish
                 with lock:
-                    rows[index] = row
-                    with results.open('a') as handle:
-                        handle.write('\t'.join(row[c] for c in COLUMNS) + '\n')
-                    done = sum(1 for i in pending if i in rows)
-                    print(f"[{done}/{len(pending)}] {status} {score} {row['variant']}", flush=True)
-                    if args.first and status == 'IDENTICAL':
-                        stop.set()
-        except Exception as error:  # reported after the other workers finish
-            with lock:
-                failures.append(f'worker {number}: {error}')
-            stop.set()
+                    failures.append(f'worker {number}: {error}')
+                stop.set()
 
-    try:
-        threads = [threading.Thread(target=worker, args=(n,)) for n in range(jobs)] if pending else []
-        for t in threads:
-            t.start()
         try:
+            threads = [threading.Thread(target=worker, args=(n,)) for n in range(jobs)] if pending else []
             for t in threads:
-                t.join()
-        except KeyboardInterrupt:
-            interrupted.set()
-            stop.set()
-            for t in threads:
-                t.join()
-            raise
-    finally:
-        if not args.keep_work and not args.work:
-            shutil.rmtree(work, ignore_errors=True)
-    if source_path.read_text() != original:
-        raise RuntimeError(f'{source} changed in this checkout while the variants ran')
-    elapsed = time.monotonic() - started
+                t.start()
+            try:
+                for t in threads:
+                    t.join()
+            except KeyboardInterrupt:
+                interrupted.set()
+                stop.set()
+                with LIVE_LOCK:
+                    for process in LIVE:
+                        kill_group(process)
+                for t in threads:
+                    t.join()
+                raise
+        finally:
+            if not args.keep_work and not args.work:
+                shutil.rmtree(work, ignore_errors=True)
+        if source_path.read_text() != original:
+            raise RuntimeError(f'{source} changed in this checkout while the variants ran')
+        elapsed = time.monotonic() - started
 
-    text = summary(rows, len(indices), elapsed, source, args.function)
-    (out / 'summary.txt').write_text(text)
-    best = ranked(rows)[0] if rows else None
-    if best:
-        import difflib
-        variant = render(regions, choice(regions, int(best['index'])), original)
-        diff = difflib.unified_diff(original.splitlines(True), variant.splitlines(True), f'a/{source}', f'b/{source}')
-        (out / 'best.diff').write_text(''.join(diff))
-    print(text, end='')
-    print(f'results in {out}')
-    for failure in failures:
-        print(failure, file=sys.stderr)
-    return 2 if failures else 0
+        selected = {i: rows[i] for i in indices if i in rows}  # earlier rows outside this selection stay in the TSV
+        text = summary(selected, len(indices), elapsed, source, args.function)
+        (out / 'summary.txt').write_text(text)
+        best = ranked(selected)[0] if selected else None
+        if best:
+            import difflib
+            variant = render(regions, choice(regions, int(best['index'])), original)
+            diff = difflib.unified_diff(original.splitlines(True), variant.splitlines(True), f'a/{source}', f'b/{source}')
+            (out / 'best.diff').write_text(''.join(diff))
+        print(text, end='')
+        print(f'results in {out}')
+        for failure in failures:
+            print(failure, file=sys.stderr)
+        return 2 if failures else 0
 
 
 if __name__ == '__main__':
@@ -533,3 +662,5 @@ if __name__ == '__main__':
         sys.exit(main())
     except (SpecError, RuntimeError, OSError, KeyError, json.JSONDecodeError) as error:
         sys.exit(f'variants: {error}')
+    except KeyboardInterrupt:
+        sys.exit('variants: interrupted; rerun the same command to resume')

@@ -82,6 +82,19 @@ class SpecTest(unittest.TestCase):
         self.assertEqual(regions[1]['options'], ['orig', 'swapped', 'gone'])
         self.assertEqual(regions[1]['with']['gone'], '')
 
+    def test_json_checks_names(self):
+        for regions in [[{'replace': 'r', 'old': 'x', 'with': {'orig': 'y'}}],
+                        [{'permute': 'p', 'items': [['a', 'x'], ['a', 'y']]}],
+                        [{'replace': 'r;x', 'old': 'x', 'with': {'b': 'y'}}],
+                        [{'replace': 'r', 'old': 'x', 'with': {'b\tc': 'y'}}],
+                        [{'replace': 'r', 'old': 'x', 'with': {'b': '%% end'}}]]:
+            with self.subTest(regions=regions), self.assertRaises(v.SpecError):
+                v.load_spec(write(self.folder / 'bad.json', json.dumps({'regions': regions})))
+
+    def test_percent_signs_in_source(self):
+        spec = write(self.folder / 'p.txt', '%% replace fmt\n    printf("%d%%", n);\n%% with b\n    printf("%d%% ", n);\n%% end\n')
+        self.assertEqual(v.load_spec(spec)[0][0]['old'], '    printf("%d%%", n);')
+
     def test_json_spec_is_the_same(self):
         path = write(self.folder / 'spec.json', json.dumps({'regions': [
             {'permute': 'loads', 'items': [['a', '    a = p[0];'], ['b', '    b = p[1];']]},
@@ -151,11 +164,31 @@ class SpecTest(unittest.TestCase):
         # Forms the file already has may stay or move.
         self.assertEqual(v.forbidden_added('# pragma once\nx;', 'x;\n#pragma once'), [])
         self.assertEqual(v.forbidden_added('x;', 'int casm; /* asmx */'), [])
+        # A swap keeps the count but changes the form.
+        self.assertEqual(v.forbidden_added('#pragma implementation "x.h"\nx;', '#pragma optimize off\nx;'), ['#pragma'])
+        # A comment or string that names a form is no form; turning it into one is.
+        self.assertEqual(v.forbidden_added('/* asm */ x;', '"asm" x;'), [])
+        self.assertEqual(v.forbidden_added('// asm\nx;', 'asm { nop }\nx;'), ['asm'])
+        # Splices, comments in the directive, digraphs and trigraphs.
+        self.assertEqual(v.forbidden_added('x;', '#pr\\\nagma optimize off\nx;'), ['#pragma'])
+        self.assertEqual(v.forbidden_added('x;', '# /**/ pragma optimize off\nx;'), ['#pragma'])
+        self.assertEqual(v.forbidden_added('x;', '%:pragma optimize off\nx;'), ['#pragma'])
+        self.assertEqual(v.forbidden_added('x;', '??=pragma optimize off\nx;'), ['#pragma'])
+        self.assertEqual(v.forbidden_added('x;', 'int y __attri\\\nbute__((x));'), ['__attribute__'])
+        self.assertEqual(v.forbidden_added('x;', '#define C(a, b) a##b\nx;'), ['##'])
 
 
 class TrialOutputTest(unittest.TestCase):
     def test_identical(self):
         self.assertEqual(v.parse_trial('f 0x80001000: IDENTICAL\n1 of 1 identical\n', 0), ('IDENTICAL', '100.00', ''))
+        note = 'f 0x80001000: IDENTICAL (constants in .sdata2 not checked: x)\n'
+        self.assertEqual(v.parse_trial(note, 0)[2], '(constants in .sdata2 not checked: x)')
+
+    def test_padded_rows(self):  # trial.py pads the offset to 5 columns
+        out = ('f 0x80001000: DIFFERS (50.00%)\n'
+               '       0  li r3, 0x0                           li r3, 0x0\n'
+               '  !    1C  lwz r4, 0x4(r3)                      lwz r5, 0x4(r3)\n')
+        self.assertEqual(v.parse_trial(out, 1)[2], '1C: lwz r4, 0x4(r3) | lwz r5, 0x4(r3)')
 
     def test_differs(self):
         out = ('f 0x80001000: DIFFERS (97.25%, 8 bytes where the target has 4)\n'
@@ -165,7 +198,8 @@ class TrialOutputTest(unittest.TestCase):
         self.assertEqual(v.parse_trial(out, 1), ('DIFFERS', '97.25', '1C: lwz r4, 0x4(r3) | lwz r5, 0x4(r3)'))
 
     def test_wrong_constant_and_missing(self):
-        self.assertEqual(v.parse_trial('f 0x80001000: WRONG CONSTANT (lfs reads 1.0)\n', 1)[:2], ('WRONG CONSTANT', ''))
+        self.assertEqual(v.parse_trial('f 0x80001000: WRONG CONSTANT (lfs reads (1.0))\n', 1),
+                         ('WRONG CONSTANT', '', 'lfs reads (1.0)'))
         self.assertEqual(v.parse_trial('f: MISSING (the compiler did not emit it)\n', 1)[0], 'MISSING')
         self.assertEqual(v.parse_trial('trial: x.c:3: parse error\n', 1), ('ERROR', '', 'trial: x.c:3: parse error'))
 
@@ -214,7 +248,7 @@ class RunTest(unittest.TestCase):
         self.assertIn('1\t3\tIDENTICAL\t100.00\tloads=b,a;ret=orig', summary)
         self.assertIn('+    b = p[1];', (folder / 'best.diff').read_text())
         # The copies: no history, no comparison pairs, the stage link into the copy, file restored.
-        for copy in (self.work / 'w').iterdir():
+        for copy in (self.work / 'w').glob('copy?'):
             self.assertFalse((copy / '.git').exists())
             self.assertFalse((copy / 'build/matching').exists())
             link = copy / 'build/source/stage/p/Source'
@@ -233,15 +267,46 @@ class RunTest(unittest.TestCase):
         with self.assertRaises(v.SpecError):
             self.run_tool()
 
+    def test_absolute_source_is_made_relative(self):
+        before = (self.root / 'src/x.c').stat().st_mtime_ns
+        out = io.StringIO()
+        with patch.object(v, 'ROOT', self.root), redirect_stdout(out):
+            code = v.main([str(self.root / 'src/x.c'), 'f', str(self.spec), '--jobs', '2', '--work', str(self.work / 'w')])
+        self.assertEqual(code, 0)
+        self.assertEqual((self.root / 'src/x.c').stat().st_mtime_ns, before)  # never written
+        _, rows = self.results()
+        self.assertEqual(rows[3][2], 'IDENTICAL')
+
+    def test_stamp_recopies_and_refuses_resume(self):
+        self.run_tool()
+        copy = self.work / 'w/copy0'
+        write(self.root / 'include/h.h', 'int y;')  # what trial.py reads has changed
+        with self.assertRaises(v.SpecError):  # the earlier results are refused
+            self.run_tool()
+        self.run_tool('--fresh')
+        self.assertEqual((copy / 'include/h.h').read_text(), 'int y;')  # the copy was made again
+
+    def test_one_run_per_folder(self):
+        self.run_tool('--list')
+        folder = self.root / 'build/variants/src_x_c_f_spec'
+        folder.mkdir(parents=True)
+        import fcntl
+        with (folder / '.lock').open('w') as holder:
+            fcntl.flock(holder, fcntl.LOCK_EX)
+            with self.assertRaises(v.SpecError):
+                self.run_tool()
+
     def test_limit_first_and_list(self):
         code, output = self.run_tool('--list')
         self.assertEqual(code, 0)
         self.assertIn('6 of 6 variants', output)
         self.assertFalse((self.root / 'build/variants').exists())
         code, _ = self.run_tool('--limit', '3', '--seed', '1', '--fresh')
-        _, rows = self.results()
+        folder, rows = self.results()
         self.assertEqual(len(rows), 3)
         self.assertIn(0, rows)
+        code, _ = self.run_tool('--limit', '2', '--seed', '1')  # a smaller selection reports only itself
+        self.assertIn('2 of 2 variants run', (folder / 'summary.txt').read_text())
         code, _ = self.run_tool('--fresh', '--first', '--jobs', '1')
         _, rows = self.results()
         self.assertEqual(max(rows), 3)
@@ -252,8 +317,11 @@ class RunTest(unittest.TestCase):
             self.run_tool()
         self.assertFalse((self.work / 'w').exists())
         self.spec.write_text(SPEC)
-        with patch.object(v, 'ROOT', self.root), self.assertRaises(v.SpecError):
-            v.main(['config/units.json', 'f', str(self.spec)])
+        write(self.root / 'config/units.json', '{}')  # it exists, so only the src/ rule refuses it
+        (self.root / 'src/out.c').symlink_to(self.root / 'config/units.json')  # leaves src/
+        for source in ('config/units.json', 'src/out.c', 'src/../src/x.c', '/elsewhere/src/x.c'):
+            with self.subTest(source=source), patch.object(v, 'ROOT', self.root), self.assertRaises(v.SpecError):
+                v.main([source, 'f', str(self.spec), '--work', str(self.work / 'w')])
         with self.assertRaises(v.SpecError):
             self.run_tool('--work', str(self.root / 'inside'))
         (self.root / 'build/source/report.json').write_text('{"complete": "stale"}')
