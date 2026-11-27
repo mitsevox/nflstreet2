@@ -143,6 +143,7 @@ extern "C" int PATHI_inittrack(int flags, PathfinderTrackData_t *data)
     p->mUnknown8.bits.flag20 = 0;
     p->mUnknown2 = volscale;
     p->mUnknown3 = 127;
+    // FAKEMATCH: the default stores below are in a measured order (sched1 tie-breaks), not one recovered from the original
     p->mUnknown4 = -1;
     p->mUnknown1A = -1;
     p->mUnknown18 = -1;
