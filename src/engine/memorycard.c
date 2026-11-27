@@ -1091,11 +1091,11 @@ int MemCAsyncPoll(int *pResult)
             break;
         }
         if (result < 0) {
-            // FAKEMATCH: pending-clear order length, state, write, read chosen by testing all 24 orders
-            _MemCOp.mPendingLength = 0;
+            // FAKEMATCH: pending-clear order read, state, write, length chosen by testing (sched1 tie order)
+            _MemCOp.mPendingRead = 0;
             _MemCOp.mPendingState = -1;
             _MemCOp.mPendingWrite = 0;
-            _MemCOp.mPendingRead = 0;
+            _MemCOp.mPendingLength = 0;
             switch (result) {
             case CARD_RESULT_BUSY:
                 break;
@@ -1183,13 +1183,14 @@ pending:
         char *pWrite = _MemCOp.mPendingWrite;
         int length = _MemCOp.mPendingLength;
 
+        // FAKEMATCH: pending-tail order busy, result, state, read, write, pending state, length chosen by testing (sched1 tie order)
         _MemCOp.mBusy = 0;
         _MemCOp.mResult = -99;
-        _MemCOp.mPendingState = -1;
-        _MemCOp.mPendingLength = 0;
         _MemCOp.mState = -1;
         _MemCOp.mPendingRead = 0;
         _MemCOp.mPendingWrite = 0;
+        _MemCOp.mPendingState = -1;
+        _MemCOp.mPendingLength = 0;
         if (pendingState != -1) {
             switch (pendingState) {
             case 20:
