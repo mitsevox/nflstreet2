@@ -33,7 +33,7 @@ int SNDSTRM_setazimuth(int stream, int speaker, float azimuth)
     int on;
     int i;
 
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

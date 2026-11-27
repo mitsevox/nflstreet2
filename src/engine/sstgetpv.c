@@ -11,7 +11,7 @@ int SNDSTRM_getprogvol(int stream)
     int vol;
     float level;
 
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

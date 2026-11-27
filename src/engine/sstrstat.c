@@ -30,7 +30,7 @@ int SNDSTRM_requeststatus(int id, SndStreamRequestStatus_t *status)
     if (id < 0) {
         return -8;
     }
-    channel = fn_8026D610(id & 0xFF);
+    channel = SNDSTRMI_getstreamptr(id & 0xFF);
     if (channel == 0) {
         return -8;
     }

@@ -12,7 +12,7 @@ int SNDSTRM_fxlevel(int stream, int bus, int level)
     int i;
     Record_803A6DF0 *dst;
 
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

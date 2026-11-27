@@ -707,17 +707,9 @@
       "address": "0x802739F8",
       "evidence": "evidence.tsv function and name rows for 0x802739F8 (iSNDserve, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/sserver.c (n1e naming wave)."
     },
-    "SNDPLATFORM_playtimbre": {
-      "address": "0x80273DF8",
-      "evidence": "evidence.tsv function and name rows for 0x80273DF8 (SNDPLATFORM_playtimbre, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/stagpat.c (n1e naming wave)."
-    },
     "MemCAsyncPoll": {
       "address": "0x801D5840",
       "evidence": "evidence.tsv function and name rows for 0x801D5840 (MemCAsyncPoll, a registered holdout of src/engine/memorycard.c, original bytes linked); called by name from src/engine/memcardmgr.c (n1e naming wave)."
-    },
-    "SNDPLATFORM_packetplay": {
-      "address": "0x80274464",
-      "evidence": "evidence.tsv function and name rows for 0x80274464 (SNDPLATFORM_packetplay, a registered holdout of src/engine/snddrv.c, original bytes linked); called by name from src/engine/spktplay.c (n1e naming wave)."
     },
     "STREAM_kill": {
       "address": "0x801F7208",
@@ -842,6 +834,10 @@
     "SNDI_parsetimbre": {
       "address": "0x80270E04",
       "evidence": "evidence.tsv function and related name rows at 0x80270E04 (SNDI_parsetimbre, the registered holdout of src/engine/stpparse.c, original bytes linked). sbremove.c, sresopat.c and stagpat.c call it by name through the sndbank.h prototype."
+    },
+    "SNDSTRMI_create": {
+      "address": "0x8026DE00",
+      "evidence": "evidence.tsv function and name rows for 0x8026DE00 (SNDSTRMI_create, a registered holdout of src/engine/sst.c, original bytes linked); called by name from src/engine/sstcrtap.c."
     }
   },
   "units": [
@@ -1176,20 +1172,14 @@
       }
     },
     {
-      "source": "src/game/cu_8015D3EC.cpp",
+      "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the five holdouts keeping their original bytes; every data section linked whole.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its function rows and the data rows 0x802A3F10-0x802A4010, 0x802DF180-0x802E32B0, 0x803EB330-0x803EB364; linked with holdouts (owner ruling of 2026-11-20), the two holdouts keeping their original bytes; every data section linked whole.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x8015D4E0",
-          "end": "0x8015D550"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015D68C",
+          "start": "0x8015D3EC",
           "end": "0x8015DA80"
         },
         {
@@ -1202,12 +1192,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8015E1F0",
-          "end": "0x8015F484"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8015F5BC",
           "end": "0x8015FFA8"
         },
         {
@@ -1244,24 +1228,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_8015D3EC",
-            "evidence": "evidence.tsv source-form 0x8015D3EC-0x8015D4E0"
-          },
-          {
-            "function": "fn_8015D550",
-            "evidence": "evidence.tsv source-form 0x8015D550-0x8015D68C"
-          },
-          {
-            "function": "fn_8015DA80",
+            "function": "PlaModelLoadHair",
             "evidence": "evidence.tsv source-form 0x8015DA80-0x8015DD3C"
           },
           {
-            "function": "fn_8015E0B8",
+            "function": "PlaModelQueuePart",
             "evidence": "evidence.tsv source-form 0x8015E0B8-0x8015E1F0"
-          },
-          {
-            "function": "fn_8015F484",
-            "evidence": "evidence.tsv source-form 0x8015F484-0x8015F5BC"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (close files round 2, lane 5, holdouts table)"
@@ -1270,7 +1242,7 @@
         "discarded": [
           "_PlayerHeadFindCapModel"
         ],
-        "evidence": "evidence.tsv linker row cu_8015D3EC discarded cap head model lookup"
+        "evidence": "evidence.tsv linker row PlaModel discarded cap head model lookup"
       }
     },
     {
@@ -1606,7 +1578,7 @@
     {
       "source": "src/Common/UIStudio/UIStudio.c",
       "profile": "uistudio_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 36 of 39 functions exact, the holdouts _DetermineVisibility, _ParseVisibility, PatchScrData keep the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
+      "evidence": "evidence.tsv unit row 0x802176E8-0x8021A068 (src/Common/UIStudio/UIStudio.c), its compiler, data, function and source-form rows; linked with holdouts (owner ruling of 2026-11-20): 38 of 39 functions exact, the holdout _DetermineVisibility keeps the original bytes. Its .rodata 0x802B1D40-0x802B1DF0, .sdata 0x803EBF28-0x803EBF2C and .sbss 0x803ECFE8-0x803ECFF0 are linked whole.",
       "sections": [
         {
           "section": ".text",
@@ -1617,13 +1589,7 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80217C38",
-          "end": "0x8021861C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802188A0",
+          "start": "0x80217A7C",
           "end": "0x8021A068"
         },
         {
@@ -1650,17 +1616,9 @@
           {
             "function": "_DetermineVisibility",
             "evidence": "evidence.tsv source-form 0x802178E4-0x80217A7C"
-          },
-          {
-            "function": "_ParseVisibility",
-            "evidence": "evidence.tsv source-form 0x80217A7C-0x80217C38"
-          },
-          {
-            "function": "PatchScrData",
-            "evidence": "evidence.tsv source-form 0x8021861C-0x802188A0"
           }
         ],
-        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility, _ParseVisibility, PatchScrData (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27)."
+        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27; _ParseVisibility and PatchScrData since round 6 lane 6 of 2026-11-27)."
       }
     },
     {
@@ -18376,7 +18334,7 @@
     },
     {
       "source": "src/engine/voicequery.c",
-      "profile": "engine_c",
+      "profile": "sound_cxx",
       "evidence": "evidence.tsv provisional unit row src/engine/voicequery.c 0x802898FC-0x80289A04, separate exact function extents and inferred names/source-form rows. Complete two-function audio helper file, no owned data; trailing 28 zero bytes remain unassigned.",
       "sections": [
         {
@@ -24155,6 +24113,56 @@
       ]
     },
     {
+      "source": "src/engine/sst.c",
+      "profile": "sound_cxx_holdouts",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 18 of 20 functions exact, the holdouts SNDSTRMI_parsedata and SNDSTRMI_create keep the original bytes and stay registered partials; the whole .rodata and .data are linked.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026D200",
+          "end": "0x8026D9CC"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026DAE4",
+          "end": "0x8026DE00"
+        },
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8026E160",
+          "end": "0x8026E4C0"
+        },
+        {
+          "section": ".rodata",
+          "placement": ".data3",
+          "start": "0x802B7910",
+          "end": "0x802B7938"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FFFFC",
+          "end": "0x80300020"
+        }
+      ],
+      "holdouts": {
+        "functions": [
+          {
+            "function": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
+            "evidence": "evidence.tsv source-form 0x8026D9CC-0x8026DAE4"
+          },
+          {
+            "function": "SNDSTRMI_create",
+            "evidence": "evidence.tsv source-form 0x8026DE00-0x8026E160"
+          }
+        ],
+        "evidence": "src/engine/sst.c holds out SNDSTRMI_parsedata and SNDSTRMI_create (round 6 lane 5 link; SNDSTRMI_calcdatarate exact in the same PR); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
+      }
+    },
+    {
       "source": "src/engine/sstautov.c",
       "profile": "sound_cxx",
       "evidence": "Complete sstautov.c unit row 0x8026E774-0x8026EA80, its two function and name rows, its source-form row, and the literal-pool data row 0x802B7948-0x802B7960. Both functions and the whole native .rodata section link exactly under sound_cxx.",
@@ -25946,25 +25954,13 @@
     },
     {
       "source": "src/engine/smidi.c",
-      "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): 11 of 13 functions exact, the holdouts SNDI_midiparsenoteon and SNDI_midiprocesstick keep the original bytes and stay registered partials; the whole .data and .bss are linked.",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c, NASCAR 2005 smidi.c), its function and name rows, the data rows of its .data 0x802FFCD0-0x802FFCD4 and its .bss 0x803A6E60-0x803A7624 (sndms, da1a) and the sound_cxx compiler row 0x8026E4C0-0x80270494; all 13 functions exact and linked (the former holdouts SNDI_midiparsenoteon and SNDI_midiprocesstick exact in round 6 lane 5, their source-form rows); the whole .data and .bss are linked.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8026B898",
-          "end": "0x8026BA60"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026BBF0",
-          "end": "0x8026BF04"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026C0C0",
           "end": "0x8026C39C"
         },
         {
@@ -25979,20 +25975,7 @@
           "start": "0x803A6E60",
           "end": "0x803A7624"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
-            "evidence": "evidence.tsv source-form 0x8026BA60-0x8026BBF0"
-          },
-          {
-            "function": "SNDI_midiprocesstick__Fi",
-            "evidence": "evidence.tsv source-form 0x8026BF04-0x8026C0C0"
-          }
-        ],
-        "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/smidi.c holds out SNDI_midiparsenoteon, SNDI_midiparsecontrol and SNDI_midiprocesstick (SNDI_midiparsecontrol exact since #1492); their HOLDOUT: source-form rows in evidence.tsv list the forms tried and the RTL-dump findings."
-      }
+      ]
     },
     {
       "source": "src/engine/ssys.cpp",
@@ -26414,7 +26397,7 @@
     {
       "source": "src/engine/snddrv.c",
       "profile": "sound_cxx_holdouts",
-      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 5 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
+      "evidence": "evidence.tsv unit row 0x8027257C-0x802753F0 (src/engine/snddrv.c), its compiler rows and the data rows of its data sections (.rodata; .data 0x80300850-0x8030085C everyother, curTick, araminited and .bss 0x803A8D40-0x803B4E20 ptr and the driver state snddrv, da1a and p1a; their data rows); linked with holdouts (owner ruling of 2026-11-20, config README Holdouts): the 3 non-exact functions keep the original bytes and stay registered partials in comparisons.json.",
       "sections": [
         {
           "section": ".text",
@@ -26438,18 +26421,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x80273D7C",
-          "end": "0x80273DF8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80274304",
-          "end": "0x80274464"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8027474C",
           "end": "0x802753F0"
         },
         {
@@ -26484,14 +26455,6 @@
           {
             "function": "iSNDserve",
             "evidence": "evidence.tsv source-form 0x802739F8-0x80273D7C"
-          },
-          {
-            "function": "SNDPLATFORM_playtimbre",
-            "evidence": "evidence.tsv source-form 0x80273DF8-0x80274304"
-          },
-          {
-            "function": "SNDPLATFORM_packetplay",
-            "evidence": "evidence.tsv source-form 0x80274464-0x8027474C"
           }
         ],
         "evidence": "merge notes of the x1 wave (lane x1d) holdouts table; each HOLDOUT: row lists the forms tried and the RTL-dump finding."
@@ -29329,14 +29292,14 @@
     },
     {
       "source": "src/engine/pathvol.c",
-      "profile": "path_cxx_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 9 functions exact, the 3 holdouts keep the original bytes.",
+      "profile": "path_cxx",
+      "evidence": "evidence.tsv unit row of src/engine/pathvol.c (0x801B45D0-0x801B51AC) and the data rows of its whole data sections; every function exact (the three PATHI_set*fadevolume tick functions since lane X1, 2026-11-27) and linked as a whole file.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801B45D0",
-          "end": "0x801B4A24"
+          "end": "0x801B51AC"
         },
         {
           "section": ".rodata",
@@ -29344,24 +29307,7 @@
           "start": "0x802AEB90",
           "end": "0x802AEC08"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "PATHI_setfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4A24-0x801B4CE4"
-          },
-          {
-            "function": "PATHI_setsfxfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4CE4-0x801B4F50"
-          },
-          {
-            "function": "PATHI_setdrylevelfadevolume",
-            "evidence": "evidence.tsv source-form 0x801B4F50-0x801B51AC"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/pathvol.c holds out PATHI_setfadevolume, PATHI_setsfxfadevolume, PATHI_setdrylevelfadevolume."
-      }
+      ]
     },
     {
       "source": "src/engine/uigimagenode.c",
@@ -29515,7 +29461,7 @@
     {
       "source": "src/engine/lzh.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 28 of 37 functions exact, the 9 holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/lzh.c (0x802821E8-0x802856D8); no data sections (its data is referenced through extern labels); linked with holdouts (owner ruling of 2026-11-20): 32 of 37 functions exact, the 5 holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29526,25 +29472,13 @@
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x80282F24",
+          "start": "0x80282D70",
           "end": "0x80283660"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x802821E8",
-          "end": "0x802822E0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8028243C",
-          "end": "0x802824A8"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8028257C",
           "end": "0x8028291C"
         },
         {
@@ -29563,26 +29497,14 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802851E8",
-          "end": "0x802855EC"
+          "end": "0x802856D8"
         }
       ],
       "holdouts": {
         "functions": [
           {
-            "function": "_LZHCoStart",
-            "evidence": "evidence.tsv source-form 0x802822E0-0x8028243C"
-          },
-          {
-            "function": "_LZHDecStart",
-            "evidence": "evidence.tsv source-form 0x802824A8-0x8028257C"
-          },
-          {
             "function": "_LZHEncodeInput",
             "evidence": "evidence.tsv source-form 0x8028291C-0x80282D70"
-          },
-          {
-            "function": "_LZHEncodeCodeBufferStart",
-            "evidence": "evidence.tsv source-form 0x80282D70-0x80282F24"
           },
           {
             "function": "_LZHDecodeInputFull",
@@ -29599,13 +29521,9 @@
           {
             "function": "_LZHHuffDecodeBuildTableR",
             "evidence": "evidence.tsv source-form 0x80284FB8-0x802851E8"
-          },
-          {
-            "function": "_LZHHeapPop",
-            "evidence": "evidence.tsv source-form 0x802855EC-0x802856D8"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact; lane 8 follow-up: _LZHProcess)."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/lzh.c holds out _LZHCoStart, _LZHDecStart, _LZHEncodeInput, _LZHEncodeCodeBufferStart, _LZHDecodeInputFull, _LZHMemDecodeInput, _LZHHuffDecodeBuildTree, _LZHHuffDecodeBuildTableR, _LZHHeapPop (lane 8 merge notes, 2026-11-27: _LZHMemProcess, _LZHEncodeCodeBuffer, _LZHDecodeNewBlock, _LZHDecodeInput, _LZHReadBits and _LZHMemDecodeNewBlock made exact; lane 8 follow-up: _LZHProcess; round 6 lane 5 merge notes, 2026-11-27: _LZHHeapPop, _LZHCoStart, _LZHDecStart and _LZHEncodeCodeBufferStart made exact)."
       }
     },
     {
@@ -29723,12 +29641,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x801B845C",
-          "end": "0x801B864C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B89B0",
           "end": "0x801B8C18"
         },
         {
@@ -29750,10 +29662,6 @@
           {
             "function": "PATHI_serviceaction",
             "evidence": "evidence.tsv source-form 0x801B7880-0x801B845C"
-          },
-          {
-            "function": "PATHI_getvalue",
-            "evidence": "evidence.tsv source-form 0x801B864C-0x801B89B0"
           }
         ],
         "evidence": "PR1461 merge notes list each measured partial; existing owner holdouts ruling of 2026-11-20. All native data sections kept whole."

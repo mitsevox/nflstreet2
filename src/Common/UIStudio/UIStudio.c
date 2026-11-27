@@ -185,8 +185,8 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
                 for (Item = 0; Item < NumItems; Item++) {
                     pEntry = &pNode->pEntries[Item];
                     if (pEntry->ID == 0xFFFF) {
-                        _ParseVisibility(pInfo, pScreen, Value, 8,
-                                    &pScreen->pData->pControls[pEntry->Value], 0);
+                        pControl = &pScreen->pData->pControls[pEntry->Value];
+                        _ParseVisibility(pInfo, pScreen, Value, 8, pControl, 0);
                     } else if (pEntry->ID < pInfo->NumActionFncs &&
                                pInfo->ActionFncs[pEntry->ID].pFnc != 0) {
                         pObject = pEntry->Value != 0
@@ -517,8 +517,9 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             UISStringT **patchAddr;
 
             patchAddr = (UISStringT **)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
-            if ((Uint32)*patchAddr < pNewBase->NumStrings) {
-                *patchAddr = &pNewBase->pStrings[(Uint32)*patchAddr];
+            Map = (Uint32)*patchAddr;
+            if (Map < pNewBase->NumStrings) {
+                *patchAddr = &pNewBase->pStrings[Map];
             } else {
                 *patchAddr = 0;
             }

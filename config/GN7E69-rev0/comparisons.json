@@ -19205,6 +19205,11 @@
           "end": "0x8022A624"
         },
         {
+          "symbol": "fn_8022A624",
+          "start": "0x8022A624",
+          "end": "0x8022AB6C"
+        },
+        {
           "symbol": "DbMttsReadSlots",
           "start": "0x8022AB6C",
           "end": "0x8022AC80"
@@ -20452,9 +20457,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015D3EC.cpp",
+      "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -20495,102 +20500,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8015D3EC",
+          "symbol": "PlaModelLoadBodies",
           "start": "0x8015D3EC",
           "end": "0x8015D4E0"
         },
         {
-          "symbol": "fn_8015D4E0",
+          "symbol": "PlaModelFreeBodies",
           "start": "0x8015D4E0",
           "end": "0x8015D550"
         },
         {
-          "symbol": "fn_8015D550",
+          "symbol": "PlaModelLoadHands",
           "start": "0x8015D550",
           "end": "0x8015D68C"
         },
         {
-          "symbol": "fn_8015D68C",
+          "symbol": "PlaModelFreeHands",
           "start": "0x8015D68C",
           "end": "0x8015D718"
         },
         {
-          "symbol": "fn_8015D718",
+          "symbol": "PlaModelLoadBaseHead",
           "start": "0x8015D718",
           "end": "0x8015D7C0"
         },
         {
-          "symbol": "fn_8015D7C0",
+          "symbol": "PlaModelFreeBaseHead",
           "start": "0x8015D7C0",
           "end": "0x8015D81C"
         },
         {
-          "symbol": "fn_8015D81C",
+          "symbol": "PlaModelAllocPlayerBuffers",
           "start": "0x8015D81C",
           "end": "0x8015D998"
         },
         {
-          "symbol": "fn_8015D998",
+          "symbol": "PlaModelFreePlayerBuffers",
           "start": "0x8015D998",
           "end": "0x8015DA7C"
         },
         {
-          "symbol": "fn_8015DA7C",
+          "symbol": "PlaModelPostInit",
           "start": "0x8015DA7C",
           "end": "0x8015DA80"
         },
         {
-          "symbol": "fn_8015DA80",
+          "symbol": "PlaModelLoadHair",
           "start": "0x8015DA80",
           "end": "0x8015DD3C"
         },
         {
-          "symbol": "fn_8015DD3C",
+          "symbol": "PlaModelLoadHat",
           "start": "0x8015DD3C",
           "end": "0x8015DE3C"
         },
         {
-          "symbol": "fn_8015DE3C",
+          "symbol": "PlaModelLoadGlasses",
           "start": "0x8015DE3C",
           "end": "0x8015DF3C"
         },
         {
-          "symbol": "fn_8015DF3C",
+          "symbol": "PlaModelLoadJewel",
           "start": "0x8015DF3C",
           "end": "0x8015E0B8"
         },
         {
-          "symbol": "fn_8015E0B8",
+          "symbol": "PlaModelQueuePart",
           "start": "0x8015E0B8",
           "end": "0x8015E1F0"
         },
         {
-          "symbol": "fn_8015E1F0",
+          "symbol": "PlaModelFaceReadDone",
           "start": "0x8015E1F0",
           "end": "0x8015E200"
         },
         {
-          "symbol": "fn_8015E200",
+          "symbol": "PlaModelHairReadDone",
           "start": "0x8015E200",
           "end": "0x8015E210"
         },
         {
-          "symbol": "fn_8015E210",
+          "symbol": "PlaModelHatReadDone",
           "start": "0x8015E210",
           "end": "0x8015E220"
         },
         {
-          "symbol": "fn_8015E220",
+          "symbol": "PlaModelGlassesReadDone",
           "start": "0x8015E220",
           "end": "0x8015E230"
         },
         {
-          "symbol": "fn_8015E230",
+          "symbol": "PlaModelJewelReadDone",
           "start": "0x8015E230",
           "end": "0x8015E240"
         },
         {
-          "symbol": "fn_8015E240",
+          "symbol": "PlaModelLoadMorphHead",
           "start": "0x8015E240",
           "end": "0x8015E2FC"
         },
@@ -20605,42 +20610,42 @@
           "end": "0x8015E548"
         },
         {
-          "symbol": "fn_8015E548",
+          "symbol": "PlaModelOpenArchives",
           "start": "0x8015E548",
           "end": "0x8015E620"
         },
         {
-          "symbol": "fn_8015E620",
+          "symbol": "PlaModelInit",
           "start": "0x8015E620",
           "end": "0x8015E654"
         },
         {
-          "symbol": "fn_8015E654",
+          "symbol": "PlaModelSetLodMode",
           "start": "0x8015E654",
           "end": "0x8015E65C"
         },
         {
-          "symbol": "fn_8015E65C",
+          "symbol": "PlaModelShutdown",
           "start": "0x8015E65C",
           "end": "0x8015E684"
         },
         {
-          "symbol": "fn_8015E684",
+          "symbol": "PlaModelLoadSharedModels",
           "start": "0x8015E684",
           "end": "0x8015E6C4"
         },
         {
-          "symbol": "fn_8015E6C4",
+          "symbol": "PlaModelInitPlayerModels",
           "start": "0x8015E6C4",
           "end": "0x8015E6C8"
         },
         {
-          "symbol": "fn_8015E6C8",
+          "symbol": "PlaModelResetPlayerModels",
           "start": "0x8015E6C8",
           "end": "0x8015E714"
         },
         {
-          "symbol": "fn_8015E714",
+          "symbol": "PlaModelFreeSharedModels",
           "start": "0x8015E714",
           "end": "0x8015E73C"
         },
@@ -20655,12 +20660,12 @@
           "end": "0x8015E950"
         },
         {
-          "symbol": "fn_8015E950",
+          "symbol": "PlaModelInitMorphHead",
           "start": "0x8015E950",
           "end": "0x8015E994"
         },
         {
-          "symbol": "fn_8015E994",
+          "symbol": "PlaModelFreeMorphHead",
           "start": "0x8015E994",
           "end": "0x8015E9F4"
         },
@@ -20670,7 +20675,7 @@
           "end": "0x8015EB00"
         },
         {
-          "symbol": "fn_8015EB00",
+          "symbol": "PlaModelClearHair",
           "start": "0x8015EB00",
           "end": "0x8015EB4C"
         },
@@ -20680,7 +20685,7 @@
           "end": "0x8015EC28"
         },
         {
-          "symbol": "fn_8015EC28",
+          "symbol": "PlaModelClearHat",
           "start": "0x8015EC28",
           "end": "0x8015EC74"
         },
@@ -20690,7 +20695,7 @@
           "end": "0x8015ED50"
         },
         {
-          "symbol": "fn_8015ED50",
+          "symbol": "PlaModelClearGlasses",
           "start": "0x8015ED50",
           "end": "0x8015ED9C"
         },
@@ -20730,12 +20735,12 @@
           "end": "0x8015F35C"
         },
         {
-          "symbol": "fn_8015F35C",
+          "symbol": "PlaModelBeginFaceCache",
           "start": "0x8015F35C",
           "end": "0x8015F388"
         },
         {
-          "symbol": "fn_8015F388",
+          "symbol": "PlaModelEndFaceCache",
           "start": "0x8015F388",
           "end": "0x8015F3FC"
         },
@@ -20755,7 +20760,7 @@
           "end": "0x8015F638"
         },
         {
-          "symbol": "fn_8015F638",
+          "symbol": "PlaModelGetHairStyleModels",
           "start": "0x8015F638",
           "end": "0x8015F6E8"
         },
@@ -20770,27 +20775,27 @@
           "end": "0x8015F958"
         },
         {
-          "symbol": "fn_8015F958",
+          "symbol": "PlaModelLoadHairAsync",
           "start": "0x8015F958",
           "end": "0x8015FB38"
         },
         {
-          "symbol": "fn_8015FB38",
+          "symbol": "PlaModelLoadHatAsync",
           "start": "0x8015FB38",
           "end": "0x8015FC54"
         },
         {
-          "symbol": "fn_8015FC54",
+          "symbol": "PlaModelLoadGlassesAsync",
           "start": "0x8015FC54",
           "end": "0x8015FD70"
         },
         {
-          "symbol": "fn_8015FD70",
+          "symbol": "PlaModelLoadJewelAsync",
           "start": "0x8015FD70",
           "end": "0x8015FE4C"
         },
         {
-          "symbol": "fn_8015FE4C",
+          "symbol": "PlaModelFinishAsyncLoads",
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
@@ -26800,67 +26805,6 @@
       ]
     },
     {
-      "source": "src/engine/pathvol.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B45D0",
-          "end": "0x801B51AC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEB90",
-          "end": "0x802AEC08"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATH_volume",
-          "start": "0x801B45D0",
-          "end": "0x801B4728"
-        },
-        {
-          "symbol": "PATH_fade",
-          "start": "0x801B4728",
-          "end": "0x801B4824"
-        },
-        {
-          "symbol": "PATHI_fade",
-          "start": "0x801B4898",
-          "end": "0x801B4960"
-        },
-        {
-          "symbol": "PATHI_customsfxfade",
-          "start": "0x801B4960",
-          "end": "0x801B49C4"
-        },
-        {
-          "symbol": "PATHI_customdrylevelfade",
-          "start": "0x801B49C4",
-          "end": "0x801B4A24"
-        },
-        {
-          "symbol": "PATHI_setfadevolume",
-          "start": "0x801B4A24",
-          "end": "0x801B4CE4"
-        },
-        {
-          "symbol": "PATHI_setsfxfadevolume",
-          "start": "0x801B4CE4",
-          "end": "0x801B4F50"
-        },
-        {
-          "symbol": "PATHI_setdrylevelfadevolume",
-          "start": "0x801B4F50",
-          "end": "0x801B51AC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
       "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
@@ -26889,11 +26833,6 @@
           "symbol": "PATHI_serviceaction",
           "start": "0x801B7880",
           "end": "0x801B845C"
-        },
-        {
-          "symbol": "PATHI_getvalue",
-          "start": "0x801B864C",
-          "end": "0x801B89B0"
         }
       ]
     },
@@ -29370,7 +29309,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); all 20 functions written, 16 exact; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 18 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -29393,141 +29332,14 @@
       ],
       "functions": [
         {
-          "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
-          "start": "0x8026D200",
-          "end": "0x8026D278"
-        },
-        {
-          "symbol": "SNDSTRMI_startstream__FP18SndStreamChannel_t",
-          "start": "0x8026D278",
-          "end": "0x8026D53C"
-        },
-        {
-          "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
-          "start": "0x8026D53C",
-          "end": "0x8026D5B4"
-        },
-        {
-          "symbol": "SNDSTRMI_destroyall__Fv",
-          "start": "0x8026D5B4",
-          "end": "0x8026D610"
-        },
-        {
-          "symbol": "SNDSTRMI_getstreamptr__Fi",
-          "start": "0x8026D610",
-          "end": "0x8026D644"
-        },
-        {
-          "symbol": "SNDSTRMI_removerequest__Fi",
-          "start": "0x8026D644",
-          "end": "0x8026D6AC"
-        },
-        {
-          "symbol": "SNDSTRMI_releasecallback__FPvT0",
-          "start": "0x8026D6AC",
-          "end": "0x8026D6E8"
-        },
-        {
-          "symbol": "SNDSTRMI_framescallback__FiUiPv",
-          "start": "0x8026D6E8",
-          "end": "0x8026D790"
-        },
-        {
-          "symbol": "SNDSTRMI_parseheader__FiP16SndStreamChunk_t",
-          "start": "0x8026D790",
-          "end": "0x8026D9CC"
-        },
-        {
           "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
           "start": "0x8026D9CC",
           "end": "0x8026DAE4"
         },
         {
-          "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
-          "start": "0x8026DAE4",
-          "end": "0x8026DB5C"
-        },
-        {
-          "symbol": "SNDSTRMI_isheld__FP18SndStreamChannel_t",
-          "start": "0x8026DB5C",
-          "end": "0x8026DC38"
-        },
-        {
-          "symbol": "SNDSTRMI_service__Fv",
-          "start": "0x8026DC38",
-          "end": "0x8026DDB8"
-        },
-        {
-          "symbol": "SNDSTRMI_numcreated__Fv",
-          "start": "0x8026DDB8",
-          "end": "0x8026DE00"
-        },
-        {
-          "symbol": "fn_8026DE00",
+          "symbol": "SNDSTRMI_create",
           "start": "0x8026DE00",
           "end": "0x8026E160"
-        },
-        {
-          "symbol": "SNDSTRMI_queue__FiiPcii",
-          "start": "0x8026E160",
-          "end": "0x8026E280"
-        },
-        {
-          "symbol": "SNDSTRM_create",
-          "start": "0x8026E280",
-          "end": "0x8026E2A8"
-        },
-        {
-          "symbol": "SNDSTRM_destroy",
-          "start": "0x8026E2A8",
-          "end": "0x8026E364"
-        },
-        {
-          "symbol": "SNDSTRM_queuefile",
-          "start": "0x8026E364",
-          "end": "0x8026E388"
-        },
-        {
-          "symbol": "SNDSTRM_purge",
-          "start": "0x8026E388",
-          "end": "0x8026E4C0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/smidi.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026B898",
-          "end": "0x8026C39C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FFCD0",
-          "end": "0x802FFCD4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6E60",
-          "end": "0x803A7624"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
-          "start": "0x8026BA60",
-          "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiprocesstick__Fi",
-          "start": "0x8026BF04",
-          "end": "0x8026C0C0"
         }
       ]
     },

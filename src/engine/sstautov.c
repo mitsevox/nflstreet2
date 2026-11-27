@@ -77,7 +77,7 @@ int SNDSTRM_autovol(int stream, int time, int vol)
     int i;
     SndStreamFader_t *fader;
 
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

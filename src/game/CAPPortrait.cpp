@@ -9,7 +9,7 @@
 #include "game/FMCAPPORT.h"
 #include "game/CAPPortrait.h"
 #include "game/Object_80233EAC.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "engine/texfile.h"
 
 struct PortraitSlot_t {
