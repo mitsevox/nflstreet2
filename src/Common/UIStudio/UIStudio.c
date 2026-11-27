@@ -109,9 +109,9 @@ static Int32 _DetermineVisibility(UISScreenT *pScreen, void **ppTarget, Int32 Ty
             pControl = pContext;
             if (pControl->pState == *ppTarget) {
                 *ppTarget = pControl;
-                return pControl->pState->pOwner != 0;
+                return pControl->pState->unk_00 != 0;
             }
-            if (pControl->pState != 0 && pControl->pState->pOwner != 0) {
+            if (pControl->pState != 0 && pControl->pState->unk_00 != 0) {
                 NumItems = pControl->NumNodes;
                 for (Item = 0; Item < NumItems; Item++) {
                     Result = _DetermineVisibility(pScreen, ppTarget, 7,
@@ -164,7 +164,7 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
         switch (Type) {
         case 8:
             pControl = pChange;
-            if (pControl->pState != 0 && (bFirstPass || pControl->pState->pOwner != 0)) {
+            if (pControl->pState != 0 && (bFirstPass || pControl->pState->unk_00 != 0)) {
                 NumItems = pControl->NumNodes;
                 for (Item = 0; Item < NumItems; Item++) {
                     _ParseVisibility(pInfo, pScreen, Value, 7, ((UISControlT *)pChange)->ppNodes[Item],
@@ -248,7 +248,7 @@ static void _ParseObjects(UISInfoT *pInfo, UISScreenT *pScreen, Uint32 Control, 
                 pInfo->ActionFncs[pRef->ID].pFnc(pObject, FncID, 0, 0, 0);
             }
         }
-        if (pControl->pState->pOwner != 0) {
+        if (pControl->pState->unk_00 != 0) {
             OldMultipler = *UISGetColorMultipler();
             OldAdditive = *UISGetColorAdditive();
             pCurMultipler = &pControl->pState->MultiplerFactor;
