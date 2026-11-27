@@ -19821,7 +19821,7 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802336C4",
-          "end": "0x802355E4"
+          "end": "0x80235010"
         },
         {
           "section": ".rodata",
@@ -20150,51 +20150,6 @@
           "symbol": "fn_80234F74",
           "start": "0x80234F74",
           "end": "0x80235010"
-        },
-        {
-          "symbol": "fn_80235328",
-          "start": "0x80235328",
-          "end": "0x802353CC"
-        },
-        {
-          "symbol": "fn_802353CC",
-          "start": "0x802353CC",
-          "end": "0x802353D0"
-        },
-        {
-          "symbol": "fn_802353D0",
-          "start": "0x802353D0",
-          "end": "0x802353D4"
-        },
-        {
-          "symbol": "fn_802353D4",
-          "start": "0x802353D4",
-          "end": "0x802353D8"
-        },
-        {
-          "symbol": "fn_802353D8",
-          "start": "0x802353D8",
-          "end": "0x802353E8"
-        },
-        {
-          "symbol": "fn_802353E8",
-          "start": "0x802353E8",
-          "end": "0x802353F8"
-        },
-        {
-          "symbol": "fn_802353F8",
-          "start": "0x802353F8",
-          "end": "0x80235510"
-        },
-        {
-          "symbol": "fn_80235510",
-          "start": "0x80235510",
-          "end": "0x80235588"
-        },
-        {
-          "symbol": "fn_80235588",
-          "start": "0x80235588",
-          "end": "0x802355E4"
         },
         {
           "symbol": "fn_802338D4",

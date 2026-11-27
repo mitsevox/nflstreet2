@@ -1268,7 +1268,8 @@ void fn_802348CC(int a)
 
 void fn_80234908(void)
 {
-    lbl_803ED024 = 0;
+    /* FAKEMATCH: the volatile store keeps the address in r9 (addi r9,r13 / stw 0(r9)). */
+    *(volatile int *)&lbl_803ED024 = 0;
     lbl_803ED020 = 0;
 }
 
@@ -1511,114 +1512,4 @@ void fn_80234F74(Sprite_80234DFC *pSprite, int index, void *pData, unsigned char
     pDstImage = TexGetPaletteByIndex(pSprite->mpUnknown40, pDst->mUnknown8 + offset);
     pSrcImage = TexGetPaletteByIndex(pData, pSrc->mUnknown8 + offset);
     LLTexCopyFlush(pDstImage->mpUnknown8, pSrcImage->mpUnknown8, pDstImage->mUnknown4);
-}
-
-void fn_80235328(Owner_80235328 *pOwner, int key)
-{
-    Source_80235328 *pSource = pOwner->mpUnknown8;
-    Table_803E96E8 *pTable = &lbl_803E96E8;
-    Group_803E96E8 *pGroup = pTable->mpUnknown12;
-    Range_80216190 *pRange;
-    unsigned short *pIndex;
-    int i;
-
-    if (pGroup != 0) {
-        pRange = TMSwapGetState(pGroup, 0, key);
-        if (pRange != 0) {
-            pIndex = &pGroup->mpUnknown12[pRange->mUnknown16];
-            for (i = 0; i < pRange->mUnknown18; i++) {
-                fn_80235010(pTable, pSource->mpUnknown0 + pIndex[i] * 24);
-            }
-        }
-    }
-}
-
-void fn_802353CC(void *p)
-{
-}
-
-void fn_802353D0(void *p)
-{
-}
-
-void fn_802353D4(Object_80235588 *p, int flags)
-{
-}
-
-void fn_802353D8(Object_80235588 *p, int flags)
-{
-    p->mUnknown0 |= flags;
-}
-
-void fn_802353E8(Object_80235588 *p, int flags)
-{
-    p->mUnknown0 &= ~flags;
-}
-
-void fn_802353F8(Object_80235588 *p, int flags)
-{
-    int old = p->mUnknown4;
-
-    p->mUnknown4 = 0;
-    if (flags & 0xC000) {
-        p->mUnknown4 = 1;
-    }
-    if (flags & 1) {
-        p->mUnknown4 = 4;
-    }
-    if (flags == 0x02000000) {
-        p->mUnknown4 = 2;
-    }
-    if (flags == 0x04000000) {
-        p->mUnknown4 = 3;
-    }
-    if (flags & 0x10000000) {
-        p->mUnknown4 = 5;
-    }
-    if (flags & 0x20000000) {
-        p->mUnknown4 = 6;
-    }
-    if (flags & 0x2000) {
-        p->mUnknown4 = 17;
-    }
-    if (flags & 0x200) {
-        p->mUnknown4 = 18;
-    }
-    if (flags & 0x400) {
-        p->mUnknown4 = 19;
-    }
-    if (old != p->mUnknown4) {
-        TMClipResetExtent(p->mUnknown152);
-        if (p->mUnknown4 == -1) {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
-        } else {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
-        }
-    }
-}
-
-void fn_80235510(Object_80235588 *p, int mode)
-{
-    int old = p->mUnknown4;
-
-    p->mUnknown4 = mode;
-    if (old != mode) {
-        TMClipResetExtent(p->mUnknown152);
-        if (p->mUnknown4 == -1) {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, -1, -1);
-        } else {
-            TMModelAddExtent(&p->mUnknown100, p->mUnknown152, 0, p->mUnknown4);
-        }
-    }
-}
-
-void fn_80235588(Object_80235588 *p, int a)
-{
-    p->mUnknown0 = 0x4000;
-    p->mUnknown4 = -1;
-    p->mpUnknown88 = 0;
-    p->mpUnknown84 = 0;
-    p->mUnknown184 = 0;
-    TMModelReset(&p->mUnknown100);
-    TMMaterialListAlloc(p->mUnknown92, 0);
 }
