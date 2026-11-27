@@ -1646,7 +1646,7 @@
             "evidence": "evidence.tsv source-form 0x802178E4-0x80217A7C"
           }
         ],
-        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27; _ParseVisibility and PatchScrData since round 5 lane 4b-l of 2026-11-27)."
+        "evidence": "wave e2 lane e2d merge notes (draft PR #1467 holdouts table): src/Common/UIStudio/UIStudio.c holds out _DetermineVisibility (UISFindStaticObject exact and linked since holdouts lane 3 of 2026-11-27; _ParseVisibility and PatchScrData since round 6 lane 6 of 2026-11-27)."
       }
     },
     {
