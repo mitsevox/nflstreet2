@@ -367,6 +367,8 @@ int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
     return count;
 }
 
+#define PLAYART_CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : !((v) <= (hi)) ? (hi) : (v))
+
 int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
                 void *kindBuffer, void *colorBuffer, int extend)
 {
@@ -403,8 +405,8 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
         case 0:
             controls[0] = starts[i];
             Vec2Add(&controls[1], &step->mUnknown0, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+            controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+            controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
             ends[i] = controls[1];
             PlayAlignBuildSegmentStrip(controls, strip, width);
             count = PlayArtAddQuad(vertices, count, capacity, strip);
@@ -417,8 +419,8 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
                 controls[0] = starts[i];
                 if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
                 else Vec2Add(&controls[1], &step->mUnknown8, starts);
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+                controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+                controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
                 ends[i] = controls[1];
                 PlayAlignBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
@@ -431,10 +433,10 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
             controls[0] = starts[i];
             Vec2Add(&controls[1], &step->mUnknown0, starts);
             Vec2Add(&controls[2], &step->mUnknown8, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-            if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
-            if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
+            controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+            controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
+            controls[2].mX = PLAYART_CLAMP(controls[2].mX, 4.0f, 116.0f);
+            controls[2].mY = PLAYART_CLAMP(controls[2].mY, 4.0f, 96.0f);
             ends[i] = controls[2];
             int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
             if (samples > 8) samples = 8;
@@ -453,8 +455,8 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
                 controls[1] = starts[i];
                 starts[i].mY -= 8.0f;
                 controls[0] = starts[i];
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
+                controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+                controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
                 ends[i] = controls[1];
                 PlayAlignBuildSegmentStrip(controls, strip, width);
                 count = PlayArtAddQuad(vertices, count, capacity, strip);
