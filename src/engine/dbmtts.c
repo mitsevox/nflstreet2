@@ -198,7 +198,7 @@ extern int (*_DbSrpt_pResumeGameFunc)(int a, int b, int c, int d);
 
 int DbNiomCloseCursor(void);
 int fn_8022A59C(int a, DbMttsCursor_t **ppOut);
-int fn_8022AB6C(DbMttsCursor_t *p, int a, int b);
+int DbMttsReadSlots(DbMttsCursor_t *p, int a, int b);
 int fn_8022AC80(DbMttsCursor_t *p);
 int fn_8022BF60(void);
 int fn_8022BF68(void);
@@ -411,11 +411,11 @@ int DbMttsInsertSlot(int a);
 int fn_8022A490(unsigned int count);
 int fn_8022A508(int a, int b, int c, int d, int e);
 int fn_8022A558(int a, int b, int c, int d);
-int fn_8022ACEC(int key, int unused, int col, int value, int index);
+int DbMttsInsertTeamRow(int key, int unused, int col, int value, int index);
 int fn_8022AD64(int db, TDbCol_801F9718 **ppCols, unsigned char *pCount);
 int fn_8022AEFC(unsigned int value);
 int fn_8022AF54(int a, int b);
-int fn_8022AF5C(int key, int unused, int col, int value, int set, int index);
+int DbMttsInsertPlayerRow(int key, int unused, int col, int value, int set, int index);
 int fn_8022B02C(Callbacks_8022B02C *pCallbacks);
 void fn_8022B200(void);
 int fn_8022BF60(void);
@@ -579,7 +579,8 @@ int fn_8022A59C(int a, DbMttsCursor_t **ppOut)
     return err;
 }
 
-int fn_8022AB6C(DbMttsCursor_t *p, int a, int b)
+/* Opens a cursor over the 'MTTS' team-slot rows in slot order and reads them through p. */
+int DbMttsReadSlots(DbMttsCursor_t *p, int a, int b)
 {
     struct QueryCursor cursor;
     int err = 0;
@@ -620,7 +621,8 @@ int fn_8022AC80(DbMttsCursor_t *p)
     return err;
 }
 
-int fn_8022ACEC(int key, int unused, int col, int value, int index)
+/* Adds a team row: 'DIGT' set to key and column col set to value. */
+int DbMttsInsertTeamRow(int key, int unused, int col, int value, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
@@ -698,7 +700,8 @@ int fn_8022AF54(int a, int b)
     return 0;
 }
 
-int fn_8022AF5C(int key, int unused, int col, int value, int set, int index)
+/* Adds a player row: 'DIGP' set to key and column col set to value; retries once on status 19. */
+int DbMttsInsertPlayerRow(int key, int unused, int col, int value, int set, int index)
 {
     TDbCol_801F9718 aCols[4];
     int table;
@@ -853,7 +856,7 @@ static inline void _DbMttsSetColInt(TDbExpr_t *pExpr, int op, unsigned long long
     pExpr->mLeft.mType = TDB_TYPE_COLUMN;
     pExpr->mLeft.mValue.l = col;
     pExpr->mRight.mType = TDB_TYPE_INT;
-    /* FAKEMATCH: the integer stored through a pointer to the value field, for the target's frame-based store address in 0x8022BD30; the same field is set. */
+    /* FAKEMATCH: the integer stored through a pointer to the value field, for the target's frame-based store address in DbMttsAddTeamRushStat; the same field is set. */
     {
         int *pValue = &pExpr->mRight.mValue.i;
         *pValue = value;
@@ -871,9 +874,9 @@ static inline void _DbMttsSetSubSub(TDbExpr_t *pExpr, int op, TDbExpr_t *pLeft, 
 }
 
 /* Writes value into column col of the 'DIGP' row key of the set selected by the column's
-   third letter; when no row matched (23) the row is added through 0x8022AF5C. Returns 131
+   third letter; when no row matched (23) the row is added through DbMttsInsertPlayerRow. Returns 131
    for a column letter without a set. */
-int fn_8022B2CC(int key, unsigned int col, int value)
+int DbMttsSetPlayerColumn(int key, unsigned int col, int value)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbCol_801F9718 aCols[2];
@@ -898,7 +901,7 @@ int fn_8022B2CC(int key, unsigned int col, int value)
         _DbMttsSetTable(&aTables[1], -1, 2, 0);
         err = TDbQrySetFirstRow(0, aTables, 0, aCols, 0, 0);
         if (err == 23) {
-            err = fn_8022AF5C(key, -1, col, value, 0, index);
+            err = DbMttsInsertPlayerRow(key, -1, col, value, 0, index);
         }
     } else {
         err = 131;
@@ -957,7 +960,7 @@ int DbMttsGetPlayerColumn(int key, unsigned int col, int *pOut)
 /* Sets column col of the 'DIGP' row key of the set selected by the column's third letter, by
    the column's kind (0x8022AEFC): kind 2 stores value, kinds 0 and 3 update the column with the
    expression ops 0x4000D and 0x40013 of value; when no row matched (23) the row is added through
-   0x8022AF5C. Returns 130 for another kind, 131 for a letter without a set. */
+   DbMttsInsertPlayerRow. Returns 130 for another kind, 131 for a letter without a set. */
 int DbMttsUpdatePlayerColumn(int key, unsigned int col, int value)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
@@ -1004,7 +1007,7 @@ int DbMttsUpdatePlayerColumn(int key, unsigned int col, int value)
             break;
         }
         if (err == 23) {
-            err = fn_8022AF5C(key, -1, col, value, 0, (unsigned char)index);
+            err = DbMttsInsertPlayerRow(key, -1, col, value, 0, (unsigned char)index);
         }
     } else {
         err = 131;
@@ -1050,7 +1053,7 @@ int DbMttsGetTeamColumn(int value, int col, int *pOut)
 
 /* Sets column col of the row of the first team table whose 'DIGT' column equals key, by the
    column's kind as DbMttsUpdatePlayerColumn does; when no row matched (23) the row is added through
-   0x8022ACEC. Returns 130 for a kind without an update. */
+   DbMttsInsertTeamRow. Returns 130 for a kind without an update. */
 int DbMttsUpdateTeamColumn(int key, unsigned int col, int value)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
@@ -1088,7 +1091,7 @@ int DbMttsUpdateTeamColumn(int key, unsigned int col, int value)
         break;
     }
     if (err == 23) {
-        err = fn_8022ACEC(key, -1, col, value, 0);
+        err = DbMttsInsertTeamRow(key, -1, col, value, 0);
     }
     return err;
 }
@@ -1099,10 +1102,10 @@ static inline int _DbMarginClass(int margin)
     return margin < -9 ? 0 : (margin <= 8 ? 1 : 2);
 }
 
-/* Adds one game to the 'RPST' row of team key and the margin class of margin: 'apst' counts
-   the games, 'cpst' and 'post' add a and b; when no row matched (23) the row is inserted with
+/* Adds one pass play to the 'RPST' row of team key and the class of margin: 'apst' counts
+   the plays, 'cpst' and 'post' add a and b; when no row matched (23) the row is inserted with
    these values. */
-int fn_8022BAB4(int key, int a, int margin, int b)
+int DbMttsAddTeamPassStat(int key, int a, int margin, int b)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbExpr_t expr;
@@ -1150,9 +1153,9 @@ int fn_8022BAB4(int key, int a, int margin, int b)
     return err;
 }
 
-/* Adds one game to the 'DRST' row of team key and the margin class of margin: 'arst' counts
-   the games and 'rost' adds a; when no row matched (23) the row is inserted with these values. */
-int fn_8022BD30(int key, int margin, int a)
+/* Adds one rushing play to the 'DRST' row of team key and the class of margin: 'arst' counts
+   the plays and 'rost' adds a; when no row matched (23) the row is inserted with these values. */
+int DbMttsAddTeamRushStat(int key, int margin, int a)
 {
     TDbSQLTableRef_801FDC18 aTables[2];
     TDbExpr_t aTerms[2];

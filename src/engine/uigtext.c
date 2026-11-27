@@ -1,3 +1,9 @@
+/* UI text objects on library fonts: the text node of UI Studio screens. Lays
+   a string out into lines (newline split, word or character wrap, trimming),
+   answers cursor-position queries, handles the node's load/unload/draw and
+   property messages, and draws each line with the font renderer in the node's
+   colours. */
+
 #include <dolphin/gx/GXBump.h>
 #include <dolphin/gx/GXCull.h>
 #include <dolphin/gx/GXDispList.h>
@@ -18,12 +24,6 @@
 #include "engine/texture.h"
 #include "game/fn_801D2B7C.h"
 #include "game/ResOpenDevice.h"
-
-/* UI text objects on library fonts: the text node of UI Studio screens. Lays
-   a string out into lines (newline split, word or character wrap, trimming),
-   answers cursor-position queries, handles the node's load/unload/draw and
-   property messages, and draws each line with the font renderer in the node's
-   colours. */
 
 extern void *memcpy();
 
@@ -156,6 +156,7 @@ void UIGTextFreeLines(UIGText_t *pText)
     }
 }
 
+/* Splits a text object's string into lines, wrapping or trimming them to its width, and sets its line count and height. */
 void UIGTextLayout(UIGText_t *pText)
 {
     Font_t **ppFont;

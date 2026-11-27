@@ -799,6 +799,22 @@
       "address": "0x8022B8C8",
       "evidence": "evidence.tsv function and name rows at 0x8022B8C8. src/game/ScrmRules.cpp calls the original-byte DbMttsUpdateTeamColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; r1b naming)."
     },
+    "DbMttsReadSlots": {
+      "address": "0x8022AB6C",
+      "evidence": "evidence.tsv function and name rows at 0x8022AB6C. src/engine/dbniom.c calls the original-byte DbMttsReadSlots provider (src/engine/dbmtts.c is a registered comparison, not linked; PR #1520 naming)."
+    },
+    "DbMttsSetPlayerColumn": {
+      "address": "0x8022B2CC",
+      "evidence": "evidence.tsv function and name rows at 0x8022B2CC. src/game/ScrmRules.cpp calls the original-byte DbMttsSetPlayerColumn provider (src/engine/dbmtts.c is a registered comparison, not linked; PR #1520 naming)."
+    },
+    "DbMttsAddTeamPassStat": {
+      "address": "0x8022BAB4",
+      "evidence": "evidence.tsv function and name rows at 0x8022BAB4. src/game/ScrmRules.cpp calls the original-byte DbMttsAddTeamPassStat provider (src/engine/dbmtts.c is a registered comparison, not linked; PR #1520 naming)."
+    },
+    "DbMttsAddTeamRushStat": {
+      "address": "0x8022BD30",
+      "evidence": "evidence.tsv function and name rows at 0x8022BD30. src/game/ScrmRules.cpp calls the original-byte DbMttsAddTeamRushStat provider (src/engine/dbmtts.c is a registered comparison, not linked; PR #1520 naming)."
+    },
     "__CTOR_LIST__": {
       "address": "0x80289A20",
       "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
@@ -4361,7 +4377,7 @@
             "evidence": "evidence.tsv source-form 0x8022ED50-0x8022EF14"
           }
         ],
-        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbtatscopy.c holds out fn_8022ED50."
+        "evidence": "x1f merge notes (swarm x1 tracking table): src/engine/dbtatscopy.c holds out DbTatsCopyAllTables (0x8022ED50; fn_8022ED50 before its naming)."
       }
     },
     {

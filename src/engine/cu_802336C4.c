@@ -713,6 +713,7 @@ void fn_80233728(Block_802336C4 *pBlock)
     TMBufferDelete(pBlock);
 }
 
+/* Re-blends the block's model geometry with the given blend weights and flushes it for the GPU. */
 void fn_80233760(Block_802336C4 *pBlock, short *pValues, int count)
 {
     TMModelResetChannels(pBlock->mUnknown10);

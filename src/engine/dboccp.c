@@ -375,6 +375,7 @@ int DbOccpQueryDefense(const char *pWhere, int b, unsigned long long orderKey, i
     return err;
 }
 
+/* Kicking statistics: copies the kickers' stats into a scratch table, adds field goal and extra point percentages, and opens a sorted cursor on it. */
 int DbOccpQueryKicking(const char *pWhere, int b, unsigned long long orderKey, int orderDir, struct QueryCursor *pCursor)
 {
     unsigned long long aKeys[3];

@@ -425,6 +425,7 @@ static inline void _UIGImageNodeSendColorVertex(UIGNodeVertex_t *pV)
     GXColor4u8(pV->Color.r, pV->Color.g, pV->Color.b, pV->Color.a);
 }
 
+/* Sends a textured image node's vertices to the GPU: the quad, or a ten-vertex strip for a scaled node. */
 void UIGImageNodeSendTextured(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];
@@ -502,6 +503,7 @@ void UIGImageNodeSendTextured(UIGNode_t *pNode)
     }
 }
 
+/* Sends an untextured colour node's vertices to the GPU, as UIGImageNodeSendTextured does without texture coordinates. */
 void UIGImageNodeSendColored(UIGNode_t *pNode)
 {
     UIGNodeVertex_t aVtx[8];

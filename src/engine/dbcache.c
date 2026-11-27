@@ -1003,6 +1003,7 @@ static inline void _DbCacheSetAndExpr(TDbExpr_t *pExpr, TDbExpr_t *pA, TDbExpr_t
     pExpr->mRight.mValue.p = pB;
 }
 
+/* Creates a new table with the columns of cache table index and copies the rows of team key into it (all rows for key 1023). */
 int DbCacheCreateScratchTable(int key, unsigned short index, int db, int *pTable)
 {
     TDbColInfo_801F9AB8 aCols[254];

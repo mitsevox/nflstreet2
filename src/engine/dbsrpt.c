@@ -9,10 +9,10 @@
 #include "game/QueryStatus.h"
 
 typedef struct DbSrptRow_t {
-    unsigned short mUnknown0;
-    unsigned short mUnknown2;
-    unsigned short mUnknown4;
-    unsigned short mUnknown6;
+    unsigned short mEdrh;
+    unsigned short mEdrl;
+    unsigned short mCarh;
+    unsigned short mCarl;
 } DbSrptRow_t;
 
 typedef struct DbSrptCallbacks_t {
@@ -96,10 +96,10 @@ int DbSrptModuleInit(DbSrptCallbacks_t *pCallbacks)
     while (status == 0) {
         status = TDbCompilePerformOp(0, _DbSrpt_szFetchSrptQuery, &cursor, &index, &a, &b, &c, &d);
         if (status == 0) {
-            _DbSrpt_aRows[index].mUnknown0 = a;
-            _DbSrpt_aRows[index].mUnknown2 = b;
-            _DbSrpt_aRows[index].mUnknown4 = c;
-            _DbSrpt_aRows[index].mUnknown6 = d;
+            _DbSrpt_aRows[index].mEdrh = a;
+            _DbSrpt_aRows[index].mEdrl = b;
+            _DbSrpt_aRows[index].mCarh = c;
+            _DbSrpt_aRows[index].mCarl = d;
         }
     }
     if (QUERY_STATUS_ACCEPTED(status) == 1) {
