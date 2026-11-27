@@ -11781,6 +11781,57 @@
       ]
     },
     {
+      "source": "src/dolphin/gx/GXPerf.c",
+      "profile": "dolphin_release",
+      "evidence": "Private complete genuine bodies under ordinary approved profile, original scheduling controls preserved reference-only and explicitly omitted here; no forced matching.",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x8025295C",
+          "end": "0x8025335C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FEEA0",
+          "end": "0x802FEFE8"
+        }
+      ],
+      "functions": [
+        {
+          "symbol": "GXSetGPMetric",
+          "start": "0x8025295C",
+          "end": "0x802531A4"
+        },
+        {
+          "symbol": "GXReadGPMetric",
+          "start": "0x802531A4",
+          "end": "0x8025334C"
+        },
+        {
+          "symbol": "GXClearGPMetric",
+          "start": "0x8025334C",
+          "end": "0x8025335C"
+        }
+      ],
+      "discarded": [
+        "GXReadGP0Metric",
+        "GXReadGP1Metric",
+        "GXReadMemMetric",
+        "GXClearMemMetric",
+        "GXReadPixMetric",
+        "GXClearPixMetric",
+        "GXSetVCacheMetric",
+        "GXReadVCacheMetric",
+        "GXClearVCacheMetric",
+        "GXInitXfRasMetric",
+        "GXReadXfRasMetric",
+        "GXReadClksPerVtx",
+        "__GXSetBWDials"
+      ]
+    },
+    {
       "source": "src/game/cu_8008E978.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv unit row 0x8008E978-0x800CF84C (src/game/cu_8008E978.cpp), its function rows, the data row 0x80296038-0x80298060 and the linker and source-form rows. One translation unit (swarm s2 scout: one static initializer, data in link order, end-of-unit tables); the 101 comparison fragments are merged into it in address order. Linked with holdouts (units.json, owner ruling 2026-11-19); the registered functions that are not exact keep the original bytes and stay measured here. The discarded functions are file-static bodies whose code SN's linker removed; only their constant pools survive.",
@@ -20017,7 +20068,7 @@
           "end": "0x80234908"
         },
         {
-          "symbol": "fn_80234908",
+          "symbol": "ModelPassShadersClear",
           "start": "0x80234908",
           "end": "0x8023491C"
         },

@@ -569,7 +569,7 @@
     },
     "gModelObjEyePos": {
       "address": "0x802FB458",
-      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
+      "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_80235010.c reads; unlinked .data whose owner is open, original bytes."
     },
     "gPlayerLooks": {
       "address": "0x803078E8",
@@ -634,6 +634,14 @@
     "__ArenaHi": {
       "address": "0x81780000",
       "evidence": "Actual original OSInit instructions form fallback arena addresses and access32-bit external DVD/PAD words; no storage definition/source implementation claimed."
+    },
+    "GXSetGPMetric": {
+      "address": "0x8025295C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
+    },
+    "GXClearGPMetric": {
+      "address": "0x8025334C",
+      "evidence": "Whole original GXInit call graph independently frozen before named source; C argument setup and complete callee behavior agree; native full-body call ordinal/destination proof packet."
     },
     "__init_cpp": {
       "address": "0x8023E838",
@@ -1098,6 +1106,10 @@
     "DbFindUnusedTeamIds": {
       "address": "0x8022C628",
       "evidence": "evidence.tsv function and name rows for 0x8022C628 (DbFindUnusedTeamIds, a registered holdout of src/engine/dbsrpt.c, original bytes linked); called by name from src/game/ChalGameSetup.cpp, src/game/CreateTeamDb.cpp, src/game/MsgPlayerPickup.cpp, src/game/MsgTeamPick.cpp, src/game/StoreDb.cpp, src/game/StoryTeam.cpp, src/game/TeamDb.cpp and src/engine/dbmtts.c (w2d)."
+    },
+    "__CTOR_LIST__": {
+      "address": "0x80289A20",
+      "evidence": "evidence.tsv external and name rows at 0x80289A20: the 0xFFFFFFFF-headed .ctors list that libgcc2_main.c's __do_global_ctors walks; the linker-built section keeps its original bytes."
     }
   },
   "units": [
@@ -5654,33 +5666,6 @@
           "placement": ".data6",
           "start": "0x803ED9B0",
           "end": "0x803ED9C0"
-        }
-      ]
-    },
-    {
-      "source": "src/dolphin/gx/GXPerf.c",
-      "profile": "dolphin_release",
-      "evidence": "sdk.json unit src/dolphin/gx/GXPerf.c and its evidence.tsv function/data rows; every function exact (GXReadGPMetric under the dolsdk2004 source's scheduling off/reset pair), promoted from comparison-only.",
-      "link_roots": {
-        "symbols": [
-          "GXSetGPMetric",
-          "GXReadGPMetric",
-          "GXClearGPMetric"
-        ],
-        "evidence": "The target keeps this file's 3 exact functions at the placed range; the global ones are the roots. The file's other 13 functions (GXReadGP0Metric, GXReadGP1Metric, GXReadMemMetric, GXClearMemMetric, GXReadPixMetric, GXClearPixMetric, GXSetVCacheMetric, GXReadVCacheMetric, GXClearVCacheMetric, GXInitXfRasMetric, GXReadXfRasMetric, GXReadClksPerVtx, __GXSetBWDials) have no code anywhere in the target's .init/.text, so the linker drops them as the original link did."
-      },
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8025295C",
-          "end": "0x8025335C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FEEA0",
-          "end": "0x802FEFE8"
         }
       ]
     },
@@ -21951,13 +21936,19 @@
     {
       "source": "src/engine/libgcc2_main.c",
       "profile": "engine_cpp_nosda",
-      "evidence": "evidence.tsv unit row 0x8025E148-0x8025E80C (src/engine/libgcc2_main.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .sdata2 __clz_tab copy 0x803ED9C4-0x803EDAC4 and the __main flag .bss 0x803A6A08-0x803A6A0C.",
+      "evidence": "evidence.tsv unit row 0x8025E148-0x8025E80C (src/engine/libgcc2_main.c), its compiler, function, name and data rows; every function exact, split from the former cu_8025E148.c and linked with its .sdata2 __clz_tab copy 0x803ED9C4-0x803EDAC4 and the __main flag .bss 0x803A6A08-0x803A6A0C, and its .data _exit_dummy_ref and _exit_dummy_decl 0x802FF4A0-0x802FF4A8 (data rows; the word before them, __do_global_dtors' p, keeps its original bytes under rule 8, data row 0x802FF49C).",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x8025E148",
           "end": "0x8025E80C"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x802FF4A0",
+          "end": "0x802FF4A8"
         },
         {
           "section": ".sdata2",

@@ -1,9 +1,9 @@
 /* GCC runtime (libgcc2.c), first run of archive members 0x8025E148-0x8025E80C: the static-
    constructor walk and __main, which the game's main calls first, then the 64-bit left and
    arithmetic right shifts and the signed 64-bit division the compiler calls for long long
-   arithmetic. Each routine was its own libgcc2 object (L__main, L_ashldi3, L_ashrdi3,
-   L_divdi3); this file keeps the consecutive ones that share no .rodata. __fixsfdi
-   (libgcc2_fixsfdi.c) follows. */
+   arithmetic, and the two link-time dummy words of L__main and L_exit. Each routine was its
+   own libgcc2 object (L__main, L_ashldi3, L_ashrdi3, L_divdi3, L_exit); this file keeps the
+   consecutive ones that share no .rodata. __fixsfdi (libgcc2_fixsfdi.c) follows. */
 
 /* From GCC 2.95.3 libgcc2.c:
    Copyright (C) 1989, 92-98, 1999 Free Software Foundation, Inc.
@@ -36,19 +36,22 @@ Boston, MA 02111-1307, USA.  */
 
 typedef void (*func_ptr) (void);
 
-extern func_ptr lbl_80289A20[];
+extern func_ptr __CTOR_LIST__[];
+
+extern int _exit_dummy_decl;
+int *_exit_dummy_ref = &_exit_dummy_decl;
 
 void
 __do_global_ctors (void)
 {
-  unsigned long nptrs = (unsigned long) lbl_80289A20[0];
+  unsigned long nptrs = (unsigned long) __CTOR_LIST__[0];
   unsigned i;
 
   if (nptrs == (unsigned long) -1)
-    for (nptrs = 0; lbl_80289A20[nptrs + 1] != 0; nptrs++);
+    for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++);
 
   for (i = nptrs; i >= 1; i--)
-    lbl_80289A20[i] ();
+    __CTOR_LIST__[i] ();
 }
 
 void
@@ -147,3 +150,5 @@ __divdi3 (DItype u, DItype v)
 
   return w;
 }
+
+int _exit_dummy_decl = 0;

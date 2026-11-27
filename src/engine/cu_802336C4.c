@@ -407,7 +407,7 @@ extern int DbUserGetDb(int key);
 extern int DbCacheCreate(int key, Cache_8022F8A8 **ppCache);
 extern int DbCacheCopyRows(unsigned short id, int a, int b, int c, int d, int e, int f);
 void ScaleBlockReset(Block_802349CC *pBlock);
-extern void fn_80235010(Table_803E96E8 *pTable, void *pEntry);
+extern void ModelObjEnvMapTexCoords(Table_803E96E8 *pTable, void *pEntry);
 extern void LLCacheLockedEnable(void);
 extern void _MathSinCos16(int angle, void *pTable, float *pSin, float *pCos);
 extern float _Math_Taylor[];
@@ -657,7 +657,7 @@ void fn_80234844(Desc_802345F8 *pDesc);
 void fn_8023488C(void *p, int a);
 void fn_802348AC(void *p);
 void fn_802348CC(int a);
-void fn_80234908(void);
+void ModelPassShadersClear(void);
 void fn_80234994(Array_8023491C *pArray);
 void fn_802349B8(Array_8023491C *pArray, int value);
 void fn_80234A14(Part_80234A30 *pPart, int mask);
@@ -1266,7 +1266,7 @@ void fn_802348CC(int a)
     lbl_803ED024 = TMShaderLibGetShader(lbl_802B715C);
 }
 
-void fn_80234908(void)
+void ModelPassShadersClear(void)
 {
     /* FAKEMATCH: the volatile store keeps the address in r9 (addi r9,r13 / stw 0(r9)). */
     *(volatile int *)&lbl_803ED024 = 0;

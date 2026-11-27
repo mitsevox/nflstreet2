@@ -30,7 +30,7 @@ static inline void TMf32tos16(float f, short *pOut)
     asm volatile("psq_st %0,0(%1),1,5" : : "f"(f), "b"(pOut) : "memory");
 }
 
-void fn_80235010(TMRenderState_t *pState, TMGeomNode_t *pNode)
+void ModelObjEnvMapTexCoords(TMRenderState_t *pState, TMGeomNode_t *pNode)
 {
     TMGeomAttr_t *pAttrs;
     TMGeomAttr_t *pAttr;
@@ -135,7 +135,7 @@ void fn_80235328(TMModel_t *pModel, int key)
         if (pSwapState != 0) {
             pIndex = &pSwap->mpNodeIndices[pSwapState->mFirstNode];
             for (i = 0; i < pSwapState->mNumNodes; i++) {
-                fn_80235010(pState, &pGeom->mpNodes[pIndex[i]]);
+                ModelObjEnvMapTexCoords(pState, &pGeom->mpNodes[pIndex[i]]);
             }
         }
     }

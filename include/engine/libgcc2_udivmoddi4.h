@@ -31,8 +31,9 @@ Boston, MA 02111-1307, USA.  */
    the executable file might be covered by the GNU General Public License.  */
 
 /* FAKEMATCH: the target keeps each 256-byte table in .sdata2. ProDG 3.9.3 puts it there only from
-   -G256 and only when the array is declared with its size, but any -G of 8 or more also moves this
-   file's .data and .bss into .sdata/.sbss, so the section is named on the table. */
+   -G256 and only when the array is declared with its size, but any -G of 8 or more also moves the
+   .data and .bss of libgcc2_main.c, which includes this header, into .sdata/.sbss, so the section
+   is named on the table. */
 static const UQItype CLZ_TAB[] __attribute__ ((section (".sdata2"))) =
 {
   0,1,2,2,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
