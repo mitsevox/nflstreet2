@@ -1141,6 +1141,28 @@ class Holdouts(Fixture):
         with self.assertRaisesRegex(ValueError, "pool must start where"):
             self.held(past)
         self.held(self.held_manifest(functions=(dict(b, pool=dict(pool, end="0x80004020")),)))
+        # A pool is initialized data: one declared on a code section (where the unit's first .text
+        # run ends) or on an uninitialized section (where its .bss range ends) fails.
+        code = self.held_manifest(functions=(dict(b, pool={"section": ".text", "start": "0x80003118",
+                                                           "end": "0x80003120"}),))
+        with self.assertRaisesRegex(ValueError, "pool must start where the unit's configured .text range ends"):
+            self.held(code)
+        uninitialized = self.held_manifest(functions=(dict(b, pool={"section": ".bss", "start": "0x80005008",
+                                                                    "end": "0x8000500C"}),))
+        uninitialized["units"][0]["sections"].append({"section": ".bss", "placement": ".bss",
+                                                      "start": "0x80005000", "end": "0x80005008"})
+        with self.assertRaisesRegex(ValueError, "pool must start where the unit's configured .bss range ends"):
+            self.held(uninitialized)
+        uninitialized["units"][0]["holdouts"]["functions"] = [b]
+        self.held(uninitialized)  # the same unit loads with its pool on .rodata
+        # The pool's own words may name each other: a tail word relocated to another tail word links.
+        wide = dict(b, pool=dict(pool, end="0x80004018"))
+        units, _, _ = self.held(self.held_manifest(functions=(wide,)))
+        unit = dict(units[0], object=self.native(b_relocations=((0, 6, 10, 0),) + reaches, rodata_size=16,
+                                                 rodata_relocations=((0, 3, 1, 4), (4, 9, 1, 0), (8, 5, 1, 12))))
+        sb.link_object(unit)
+        self.assertEqual(unit["held"]["pools"], [{"symbol": "b", "section": ".rodata", "start": 0x80004010,
+                                                  "end": 0x80004018, "compiled": 8}])
 
     def test_manifest_holdouts(self):
         units, _, _ = self.held()
