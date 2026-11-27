@@ -76,11 +76,11 @@ void _UIGCurveBuildOffset(UIGCurvePoint_t *pA, UIGCurvePoint_t *pB, UIGCurvePoin
     float dx;
     float dy;
 
-    dy = pA->mY - pB->mY;
     dx = pA->mX - pB->mX;
+    dy = pA->mY - pB->mY;
     normal.mX = dy;
     normal.mY = dx;
-    len = sqrtf(dy * dy + dx * dx);
+    len = sqrtf(normal.mX * normal.mX + normal.mY * normal.mY);
     if (len != 0.0f) {
         normal.mX /= len;
         normal.mY /= len;

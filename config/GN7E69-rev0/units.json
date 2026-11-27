@@ -29594,19 +29594,13 @@
     },
     {
       "source": "src/engine/uigtext.c",
-      "profile": "engine_c_fastmath_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/uigtext.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 8 of 9 functions exact, the holdout keeps the original bytes.",
+      "profile": "engine_c_fastmath",
+      "evidence": "evidence.tsv unit row of src/engine/uigtext.c (0x80221BF0-0x80222EC4) and the data rows of its whole data sections; wholly linked, all 9 functions exact.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80221BF0",
-          "end": "0x80221DB0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80222220",
           "end": "0x80222EC4"
         },
         {
@@ -29621,16 +29615,7 @@
           "start": "0x8039F9B8",
           "end": "0x8039FDB8"
         }
-      ],
-      "holdouts": {
-        "functions": [
-          {
-            "function": "UIGTextLayout",
-            "evidence": "evidence.tsv source-form 0x80221DB0-0x80222220"
-          }
-        ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table) and lane e1b merge notes (PR #1455 holdouts table): src/engine/uigtext.c holds out UIGTextLayout."
-      }
+      ]
     },
     {
       "source": "src/engine/lzh.c",
