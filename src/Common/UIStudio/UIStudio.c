@@ -517,8 +517,9 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             UISStringT **patchAddr;
 
             patchAddr = (UISStringT **)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
-            if ((Uint32)*patchAddr < pNewBase->NumStrings) {
-                *patchAddr = &pNewBase->pStrings[(Uint32)*patchAddr];
+            Map = (Uint32)*patchAddr;
+            if (Map < pNewBase->NumStrings) {
+                *patchAddr = &pNewBase->pStrings[Map];
             } else {
                 *patchAddr = 0;
             }
