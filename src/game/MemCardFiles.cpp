@@ -57,27 +57,27 @@ extern "C" {
 extern SaveStreamOps_t gChecksumCRC32StreamType;
 extern char lbl_802EBE50[];
 
-void fn_801D646C(void);
-void fn_801D6938(SaveFileDesc *, int);
-void fn_801D6924(int (*)(char *, int, MemCardComment *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
+void MemCardMgrInit(void);
+void MemCardMgrSetFileTypes(SaveFileDesc *, int);
+void MemCardMgrSetCallbacks(int (*)(char *, int, MemCardComment *), void (*)(void), void (*)(int, unsigned char **, unsigned int *), void (*)(int));
 int MemCEnableCache(int, int);
-void fn_801D6904(int, int);
-void fn_801D64EC(void);
+void MemCardMgrSetFileOptions(int, int);
+void MemCardMgrShutdown(void);
 int ResGetSize(void *, int);
-int fn_801D8618(int, unsigned int, int);
-int fn_801D8658(int, unsigned int, int);
+int MemCardMgrGetFileSize(int, unsigned int, int);
+int MemCardMgrGetFileCapacity(int, unsigned int, int);
 void DbUserSave(SaveRequest_t *, SaveStreamOps_t *);
-int fn_801D6844(void);
-void fn_801D6B4C(char *, int);
+int MemCardMgrGetSlot(void);
+void MemCardMgrGetFileName(char *, int);
 int fn_801D673C(int);
-void fn_801D868C(int, int, char *, int);
+void MemCardMgrFormatCardType(int, int, char *, int);
 void UserProfileTouch(signed char);
 int fn_801D6850(void);
 int MemCardUpdateSaveLoad(int, int *, int *);
-int fn_801D6620(int *);
-void fn_801D6754(int);
-void fn_801D676C(SaveComment *);
-void fn_801D6760(int);
+int MemCardMgrGetResult(int *);
+void MemCardMgrSetFileType(int);
+void MemCardMgrSetFileHeader(SaveComment *);
+void MemCardMgrSetFileSize(int);
 int MemCardUIIsNameFree(int, const char *);
 void SysReleaseTimeFunc(void);
 
@@ -162,8 +162,8 @@ void MemCardFilesInit(void)
     unsigned int i;
 
     _MemCardFiles_pResDevice = ResOpenDevice(lbl_802EBE50, 0x2C);
-    fn_801D646C();
-    fn_801D654C(0);
+    MemCardMgrInit();
+    MemCardMgrEnablePolling(0);
     for (i = 0; i <= 3; i++) {
         _MemCardFiles_aFileDescs[i].mpUnknown10 = _MemCardFiles_aTypes[i].mpUnknown10;
         _MemCardFiles_aFileDescs[i].mUnknown4 = MemCardFilesGetFileSize(i);
@@ -173,18 +173,18 @@ void MemCardFilesInit(void)
             memset(_MemCardFiles_aTypes[i].mpSlots, 0, _MemCardFiles_aTypes[i].mMaxSlots * sizeof(SaveSlot));
         }
     }
-    fn_801D6938(_MemCardFiles_aFileDescs, 4);
-    fn_801D6924(MemCardGetNameFromComment, MemCardNullCallback, MemCardFilesGetIcon, MemCardFilesFreeIcon);
-    fn_801D685C("GN7E-69", 0);
+    MemCardMgrSetFileTypes(_MemCardFiles_aFileDescs, 4);
+    MemCardMgrSetCallbacks(MemCardGetNameFromComment, MemCardNullCallback, MemCardFilesGetIcon, MemCardFilesFreeIcon);
+    MemCardMgrSetGameCode("GN7E-69", 0);
     MemCEnableCache(1, 0x8000);
-    fn_801D6904(1, 1);
+    MemCardMgrSetFileOptions(1, 1);
 }
 
 void MemCardFilesShutdown(void)
 {
     int i;
 
-    fn_801D64EC();
+    MemCardMgrShutdown();
     ResClose(_MemCardFiles_pResDevice);
     for (i = 0; i < 4; i++) {
         if (_MemCardFiles_aTypes[i].mpSlots) {
@@ -196,12 +196,12 @@ void MemCardFilesShutdown(void)
 
 unsigned int MemCardFilesGetFileSize(int type)
 {
-    return fn_801D8618(type, _MemCardFiles_aTypes[type].mUnknown0, ResGetSize(_MemCardFiles_pResDevice, _MemCardFiles_aTypes[type].mUnknown4));
+    return MemCardMgrGetFileSize(type, _MemCardFiles_aTypes[type].mUnknown0, ResGetSize(_MemCardFiles_pResDevice, _MemCardFiles_aTypes[type].mUnknown4));
 }
 
 int MemCardFilesGetDataSize(int type)
 {
-    return fn_801D8658(type, _MemCardFiles_aTypes[type].mUnknown0, ResGetSize(_MemCardFiles_pResDevice, _MemCardFiles_aTypes[type].mUnknown4));
+    return MemCardMgrGetFileCapacity(type, _MemCardFiles_aTypes[type].mUnknown0, ResGetSize(_MemCardFiles_pResDevice, _MemCardFiles_aTypes[type].mUnknown4));
 }
 
 int MemCardFilesComputeChecksum(int type, int index)
@@ -233,11 +233,11 @@ void MemCardFilesUpdateSlot(int type, int index, int value)
 
     if (slot->mInUse) {
         slot->mUnknown0 = fn_801D671C();
-        slot->mUnknown4 = fn_801D6844();
+        slot->mUnknown4 = MemCardMgrGetSlot();
         slot->mUnknown8 = value;
         fn_801D6B24(slot->mUnknown10, 0x11);
-        fn_801D6B4C(slot->mUnknown21, 0x20);
-        fn_801D868C(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
+        MemCardMgrGetFileName(slot->mUnknown21, 0x20);
+        MemCardMgrFormatCardType(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
         if (_MemCardFiles_bUseSlotState) {
             slot->mUnknownF = 0;
         }
@@ -259,9 +259,9 @@ void MemCardFilesAddSlot(int type, int index, int value, const char *name)
         UserProfileTouch(index);
     }
     slot->mUnknown0 = fn_801D671C();
-    slot->mUnknown4 = fn_801D6844();
+    slot->mUnknown4 = MemCardMgrGetSlot();
     MemCardMgrGetSlotInfo((signed char)slot->mUnknown4, type, slot->mUnknown21, 0x20, 0, 0, 0);
-    fn_801D868C(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
+    MemCardMgrFormatCardType(fn_801D673C(slot->mUnknown0), slot->mUnknown0, slot->mUnknown41, 0x20);
     slot->mUnknown8 = value;
     if (_MemCardFiles_bUseSlotState) {
         slot->mUnknownF = 0;
@@ -281,7 +281,7 @@ int MemCardFilesPollOperation(int *arg)
         _MemCardFiles_iOperation = MemCardUpdateSaveLoad(_MemCardFiles_iOperation, &done, arg);
         break;
     default:
-        done = fn_801D6620(arg);
+        done = MemCardMgrGetResult(arg);
         break;
     }
     if (done) {
@@ -529,7 +529,7 @@ void MemCardFilesSetSaveTarget(int a, int b)
 {
     _MemCardFiles_iSaveType = a;
     _MemCardFiles_iSaveIndex = b;
-    fn_801D6754(a);
+    MemCardMgrSetFileType(a);
 }
 
 void MemCardFilesGetSaveTarget(int *a, int *b)
@@ -553,13 +553,13 @@ void MemCardFilesStartSave(int flag)
     memset(&comment, 0, sizeof(comment));
     strcpy(comment.mTitle, "NFL STREET 2");
     sprintf(comment.mComment, "%s-%s", name, date);
-    fn_801D676C(&comment);
-    fn_801D6760(MemCardFilesGetDataSize(_MemCardFiles_iSaveType));
+    MemCardMgrSetFileHeader(&comment);
+    MemCardMgrSetFileSize(MemCardFilesGetDataSize(_MemCardFiles_iSaveType));
     _MemCardFiles_iOperation = 1;
     if (flag) {
-        fn_801D6650(4);
+        MemCardMgrStartOperation(4);
     } else {
-        fn_801D6650(5);
+        MemCardMgrStartOperation(5);
     }
 }
 
@@ -567,7 +567,7 @@ void MemCardFilesSetLoadTarget(int a, int b)
 {
     _MemCardFiles_iLoadType = a;
     _MemCardFiles_iLoadIndex = b;
-    fn_801D6754(a);
+    MemCardMgrSetFileType(a);
 }
 
 void MemCardFilesGetLoadTarget(int *a, int *b)
@@ -583,7 +583,7 @@ void MemCardFilesGetLoadTarget(int *a, int *b)
 void MemCardFilesStartLoad(void)
 {
     _MemCardFiles_iOperation = 7;
-    fn_801D6650(3);
+    MemCardMgrStartOperation(3);
 }
 
 void MemCardFilesMakeName(int type, char *name, int unique)

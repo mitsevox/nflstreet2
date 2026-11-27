@@ -3198,18 +3198,12 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800E4120",
-          "end": "0x800E513C"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800E55B8",
           "end": "0x800E6984"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800E6F48",
+          "start": "0x800E6AC8",
           "end": "0x800E7588"
         },
         {
@@ -3274,16 +3268,8 @@
             "evidence": "evidence.tsv source-form 0x800E3DCC-0x800E4120"
           },
           {
-            "function": "PlyrAlignInput",
-            "evidence": "evidence.tsv source-form 0x800E513C-0x800E55B8"
-          },
-          {
             "function": "PlyrEngageGetInputDir",
             "evidence": "evidence.tsv source-form 0x800E6984-0x800E6AC8"
-          },
-          {
-            "function": "PlyrEngageTryShed",
-            "evidence": "evidence.tsv source-form 0x800E6AC8-0x800E6F48"
           },
           {
             "function": "PlyrTackleStartAnim",
@@ -16063,7 +16049,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618 keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c), its compiler, function and name rows and the exact data rows of its .rodata 0x802AFEC8-0x802AFF40, .data 0x802F7B64-0x802F7BA0, .sdata 0x803EBD00-0x803EBD44, .sbss 0x803ECF10-0x803ECF1C and .bss 0x80398DE0-0x80399100; linked with holdouts (owner ruling of 2026-11-20): 62 exact functions and all of the file's data linked, the holdouts MemCardMgrEnablePolling, MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -16129,7 +16115,7 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801D654C",
+            "function": "MemCardMgrEnablePolling",
             "evidence": "evidence.tsv source-form 0x801D654C-0x801D65B4"
           },
           {
@@ -16141,11 +16127,11 @@
             "evidence": "evidence.tsv source-form 0x801D84DC-0x801D85A8"
           },
           {
-            "function": "fn_801D8618",
+            "function": "MemCardMgrGetFileSize",
             "evidence": "evidence.tsv source-form 0x801D8618-0x801D8658"
           }
         ],
-        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out fn_801D654C, MemCardMgrUpdate, MemCardMgrFormatDate and fn_801D8618."
+        "evidence": "w2f merge notes (PR body holdout table, wave w2 lane w2f): src/engine/memcardmgr.c holds out MemCardMgrEnablePolling (was fn_801D654C), MemCardMgrUpdate, MemCardMgrFormatDate and MemCardMgrGetFileSize (was fn_801D8618)."
       }
     },
     {
@@ -26273,36 +26259,18 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x800DB7A4",
-          "end": "0x800DBAF0"
+          "end": "0x800DCC14"
         },
         {
           "section": ".text",
           "placement": ".text",
-          "start": "0x800DBB74",
-          "end": "0x800DC6F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DD5E4",
-          "end": "0x800DD994"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DDCE4",
+          "start": "0x800DD2E8",
           "end": "0x800DDF34"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x800DE19C",
-          "end": "0x800DF1F4"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x800DF654",
           "end": "0x800DF6EC"
         },
         {
@@ -26325,14 +26293,6 @@
             "evidence": "evidence.tsv source-form 0x800DB688-0x800DB7A4"
           },
           {
-            "function": "PlayerActionAnimIsPitchArmed",
-            "evidence": "evidence.tsv source-form 0x800DBAF0-0x800DBB74"
-          },
-          {
-            "function": "PlayerActionAnimTurnPhase",
-            "evidence": "evidence.tsv source-form 0x800DC6F4-0x800DCC14"
-          },
-          {
             "function": "PlayerActionAnimSpeedBlendPhase",
             "evidence": "evidence.tsv source-form 0x800DCC14-0x800DCE2C"
           },
@@ -26341,20 +26301,8 @@
             "evidence": "evidence.tsv source-form 0x800DCE2C-0x800DD2E8"
           },
           {
-            "function": "PlayerActionAnimReactionPhase",
-            "evidence": "evidence.tsv source-form 0x800DD2E8-0x800DD5E4"
-          },
-          {
-            "function": "PlayerActionAnimStartVariant",
-            "evidence": "evidence.tsv source-form 0x800DD994-0x800DDCE4"
-          },
-          {
             "function": "PlayerActionAnimFindTurnEntry",
             "evidence": "evidence.tsv source-form 0x800DDF34-0x800DE19C"
-          },
-          {
-            "function": "PlayerActionAnimGenericPhase",
-            "evidence": "evidence.tsv source-form 0x800DF1F4-0x800DF654"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
@@ -29459,9 +29407,9 @@
       ]
     },
     {
-      "source": "src/engine/cu_801C3EFC.c",
+      "source": "src/engine/charik.c",
       "profile": "engine_c_holdouts",
-      "evidence": "evidence.tsv unit row of src/engine/cu_801C3EFC.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
+      "evidence": "evidence.tsv unit row of src/engine/charik.c (0x801C3EFC-0x801C4960) and the data rows of its whole data sections; linked with holdouts (owner ruling of 2026-11-20): 6 of 7 functions exact, the 1 holdout keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -29485,11 +29433,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "fn_801C4010",
+            "function": "CharIKSolveCCD",
             "evidence": "evidence.tsv source-form 0x801C4010-0x801C447C"
           }
         ],
-        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/cu_801C3EFC.c holds out fn_801C4010."
+        "evidence": "lane-6 round-2 merge notes (PR #1442 holdouts table): src/engine/charik.c holds out CharIKSolveCCD."
       }
     },
     {

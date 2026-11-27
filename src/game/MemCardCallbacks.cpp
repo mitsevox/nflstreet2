@@ -21,7 +21,7 @@ struct IconResource {
 
 extern "C" {
 
-int fn_801D6AC8(int type);
+int MemCardMgrCountFiles(int type);
 unsigned int MemCardFilesGetFileSize(int type);
 
 /* Copies the text after the last '-' of the comment; returns 1 when the
@@ -68,7 +68,7 @@ void MemCardGetNewSaveSpace(int *pFiles, int *pBlocks)
     int i;
 
     for (type = 1; type <= 3; type++) {
-        for (i = 0; i < fn_801D6AC8(type); i++) {
+        for (i = 0; i < MemCardMgrCountFiles(type); i++) {
             unsigned char flag;
 
             MemCardMgrGetSlotInfo((signed char)i, type, 0, 0, 0, 0, &flag);

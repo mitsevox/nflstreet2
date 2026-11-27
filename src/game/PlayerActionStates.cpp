@@ -1179,7 +1179,6 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
     pBlock->mUnknown4.mX = target.mX;
     pBlock->mUnknown4.mY = target.mY;
     if (!PlayerPathIsLaneClear(p, &pBlock->mUnknown4)) {
-        FieldPoint_t *pGoal = &pBlock->mUnknown4;
         float values[7];
         int count = 0;
         int players = ScrmGetTeamPlayerCount(p->mIdBytes[2]);
@@ -1204,6 +1203,7 @@ extern "C" void PlayerActionPickLaneTarget(Object_80039F5C *p)
                     }
                 }
             } while (changed == 1);
+            FieldPoint_t *pGoal = &pBlock->mUnknown4;
             FieldPoint_t goal = ScrmGetTeamSetupSpot(p->mIdBytes[2]);
             float direction = !(pBlock->mUnknown4.mX <= goal.mX) ? -1.0f : 1.0f;
             int next = 0;
