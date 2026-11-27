@@ -571,14 +571,6 @@
       "address": "0x802FB458",
       "evidence": "evidence.tsv data and name rows for 0x802FB458: the eye-position vector modelobj.c writes and cu_802336C4.c reads; unlinked .data whose owner is open, original bytes."
     },
-    "gPlayerLooks": {
-      "address": "0x803078E8",
-      "evidence": "evidence.tsv data and name rows for 0x803078E8 (14 PlayerLook_t records used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
-    "gPlayerLookBonuses": {
-      "address": "0x80308368",
-      "evidence": "evidence.tsv data and name rows for 0x80308368 (14 PlayerLookBonuses_t entries used only by src/game/PlayerLook.cpp; storage not claimed by the unit)."
-    },
     "__pure_virtual": {
       "address": "0x8025F088",
       "evidence": "evidence.tsv external row for 0x8025F088 (__pure_virtual); GCC runtime name for the pure-virtual slots of vtable 0x80289C80."
@@ -10637,7 +10629,7 @@
     {
       "source": "src/game/PlayerLook.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. The record arrays gPlayerLooks 0x803078E8 and gPlayerLookBonuses 0x80308368 stay original bytes: they lie outside the file's linked .bss 0x80307720-0x80307778.",
+      "evidence": "evidence.tsv unit row 0x80047E28-0x8004A2F4 (src/game/PlayerLook.cpp) and its data rows, among them the six .data objects 0x802CF370-0x802CFBCC linked with the file's .data. Its four .bss file statics are placed one by one by the storage map (owner ruling of 2026-11-20 on #1368, questions 1 and 5: https://github.com/mitsevox/nflstreet2/pull/1368#issuecomment-7048591206), because the target separates them: the two cursors 0x80307720-0x80307778 lie before the .bss of src/game/Divot.cpp and src/game/FieldLines.cpp (0x80307778-0x803078E8) and the record arrays 0x803078E8-0x803084B8 after it; exact data rows of all four extents.",
       "sections": [
         {
           "section": ".text",
@@ -10650,12 +10642,6 @@
           "placement": ".data3",
           "start": "0x8028D73C",
           "end": "0x8028D79C"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x80307720",
-          "end": "0x80307778"
         },
         {
           "section": ".ctors",
@@ -10674,6 +10660,28 @@
           "placement": ".data4",
           "start": "0x802CF370",
           "end": "0x802CFBCC"
+        }
+      ],
+      "storage": [
+        {
+          "symbol": "_PlayerLook_sPlayerCursor",
+          "start": "0x80307720",
+          "end": "0x8030774C"
+        },
+        {
+          "symbol": "_PlayerLook_sGearCursor",
+          "start": "0x8030774C",
+          "end": "0x80307778"
+        },
+        {
+          "symbol": "_PlayerLook_aLooks",
+          "start": "0x803078E8",
+          "end": "0x80308368"
+        },
+        {
+          "symbol": "_PlayerLook_aBonuses",
+          "start": "0x80308368",
+          "end": "0x803084B8"
         }
       ]
     },
