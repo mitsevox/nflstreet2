@@ -4741,13 +4741,13 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x802311C8",
-          "end": "0x8023133C"
+          "end": "0x80231570"
         },
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80231A84",
-          "end": "0x80231A8C"
+          "end": "0x80231B04"
         },
         {
           "section": ".text",
@@ -4777,20 +4777,12 @@
       "holdouts": {
         "functions": [
           {
-            "function": "DbOccpQueryPassing",
-            "evidence": "evidence.tsv source-form 0x8023133C-0x80231570"
-          },
-          {
             "function": "DbOccpQueryRushing",
             "evidence": "evidence.tsv source-form 0x80231570-0x80231798"
           },
           {
             "function": "DbOccpQueryReceiving",
             "evidence": "evidence.tsv source-form 0x80231798-0x80231A84"
-          },
-          {
-            "function": "DbOccpQueryBlocking",
-            "evidence": "evidence.tsv source-form 0x80231A8C-0x80231B04"
           },
           {
             "function": "DbOccpQueryDefense",
@@ -4809,7 +4801,7 @@
             "evidence": "evidence.tsv source-form 0x80232340-0x80232628"
           }
         ],
-        "evidence": "w2b merge notes (PR #1488 holdouts table): src/engine/dboccp.c holds out DbOccpQueryPassing, DbOccpQueryRushing, DbOccpQueryReceiving, DbOccpQueryBlocking, DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns."
+        "evidence": "w2b merge notes (PR #1488 holdouts table): src/engine/dboccp.c holds out DbOccpQueryRushing, DbOccpQueryReceiving, DbOccpQueryDefense, DbOccpQueryKicking, DbOccpQueryPunting, DbOccpQueryReturns (lane 7, 2026-11-27: DbOccpQueryPassing and DbOccpQueryBlocking exact and linked)."
       },
       "link_roots": {
         "discarded": [
