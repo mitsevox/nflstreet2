@@ -20532,13 +20532,13 @@
     {
       "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp) and the exact .rodata data row 0x8028D568-0x8028D588; linked with holdouts (owner ruling of 2026-11-20): 7 of 13 functions exact, the six blend/scale handlers keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp) and the exact .rodata data row 0x8028D568-0x8028D588; linked with holdouts (owner ruling of 2026-11-20): 12 of 13 functions exact, the scale handler PlaDynClutScaleRange keeps the original bytes.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x80044F20",
-          "end": "0x800452F8"
+          "end": "0x80045D5C"
         },
         {
           "section": ".text",
@@ -20556,31 +20556,11 @@
       "holdouts": {
         "functions": [
           {
-            "function": "PlaDynClutBlendRange",
-            "evidence": "evidence.tsv source-form 0x800452F8-0x80045524"
-          },
-          {
-            "function": "PlaDynClutBlendPaletteToEnd",
-            "evidence": "evidence.tsv source-form 0x80045524-0x80045714"
-          },
-          {
-            "function": "PlaDynClutBlendStartToPalette",
-            "evidence": "evidence.tsv source-form 0x80045714-0x80045904"
-          },
-          {
-            "function": "PlaDynClutBlendSourceToEnd",
-            "evidence": "evidence.tsv source-form 0x80045904-0x80045B30"
-          },
-          {
-            "function": "PlaDynClutBlendStartToSource",
-            "evidence": "evidence.tsv source-form 0x80045B30-0x80045D5C"
-          },
-          {
             "function": "PlaDynClutScaleRange",
             "evidence": "evidence.tsv source-form 0x80045D5C-0x80045F64"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/PlaDynClutOps.cpp holds out PlaDynClutBlendRange, PlaDynClutBlendPaletteToEnd, PlaDynClutBlendStartToPalette, PlaDynClutBlendSourceToEnd, PlaDynClutBlendStartToSource, PlaDynClutScaleRange."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table): src/game/PlaDynClutOps.cpp held out PlaDynClutBlendRange, PlaDynClutBlendPaletteToEnd, PlaDynClutBlendStartToPalette, PlaDynClutBlendSourceToEnd, PlaDynClutBlendStartToSource and PlaDynClutScaleRange; lane1-a (2026-11-27) made the five blend handlers exact, PlaDynClutScaleRange holds out."
       }
     },
     {

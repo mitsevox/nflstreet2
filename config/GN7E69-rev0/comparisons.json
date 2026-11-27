@@ -9952,7 +9952,7 @@
     {
       "source": "src/game/PlaDynClutOps.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (6 bodies exact, 7 partial) and the exact .rodata data row 0x8028D568-0x8028D588. Draft comparisons only; original assembly remains linked.",
+      "evidence": "evidence.tsv provisional unit row 0x80044F20-0x80046004 (src/game/PlaDynClutOps.cpp), its compiler, type and source-form rows, the 13 target-exact function boundaries (12 bodies exact, 1 partial: PlaDynClutScaleRange) and the exact .rodata data row 0x8028D568-0x8028D588. The exact functions are linked through the units.json holdouts entry; PlaDynClutScaleRange keeps its original bytes.",
       "sections": [
         {
           "section": ".text",
