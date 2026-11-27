@@ -1,6 +1,6 @@
-/* Simulation time of the rigid-body physics: a count of whole ticks plus the fraction of a tick,
-   set from and advanced by float seconds, and the elapsed time between two of them. The game
-   keeps one for the world and steps it once per frame. */
+/* Simulation time of the rigid-body physics: a count of whole seconds plus the fraction of a
+   second, set from and advanced by float seconds, and the elapsed time between two of them. The
+   game keeps one for the world and steps it once per frame. */
 
 #pragma implementation
 #include "engine/phystime.h"
@@ -23,7 +23,7 @@ void PhysicsTime::SetSeconds(float time)
     mFraction = time - (float)mIntegral;
 }
 
-float PhysicsTime::GetTicks() const
+float PhysicsTime::GetWholeSeconds() const
 {
     return (float)mIntegral;
 }

@@ -17989,7 +17989,7 @@
         ],
         "discarded": [
           "__11PhysicsTimef",
-          "GetTicks__C11PhysicsTime"
+          "GetWholeSeconds__C11PhysicsTime"
         ],
         "evidence": "evidence.tsv linker row phystime.cpp discarded functions and global folds."
       },
