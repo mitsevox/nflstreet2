@@ -811,10 +811,11 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             d = **ppCode;
             (*ppCode)++;
             Value = (a << 24) | (b << 16) | (c << 8) | d;
-            Offset = **ppCode << 8;
+            a = **ppCode;
             (*ppCode)++;
-            Offset |= **ppCode;
+            b = **ppCode;
             (*ppCode)++;
+            Offset = (a << 8) | b;
             Value += (*ppTop)[(Int16)Offset];
             if (Op == 107) {
                 **ppTop = Value;
@@ -841,10 +842,11 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
             d = **ppCode;
             (*ppCode)++;
             Value = (a << 24) | (b << 16) | (c << 8) | d;
-            Offset = **ppCode << 8;
+            a = **ppCode;
             (*ppCode)++;
-            Offset |= **ppCode;
+            b = **ppCode;
             (*ppCode)++;
+            Offset = (a << 8) | b;
             *(Int32 *)(Value + (*ppTop)[(Int16)Offset]) = pTop[-1];
             (*ppTop)--;
             break;
@@ -930,10 +932,11 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                 d = **ppCode;
                 (*ppCode)++;
                 Value = (a << 24) | (b << 16) | (c << 8) | d;
-                Offset = **ppCode << 8;
+                a = **ppCode;
                 (*ppCode)++;
-                Offset |= **ppCode;
+                b = **ppCode;
                 (*ppCode)++;
+                Offset = (a << 8) | b;
                 pArray = (Int32 *)(Value + (*ppTop)[(Int16)Offset]);
                 break;
             }
@@ -1000,10 +1003,11 @@ Int32 UISStackProcess(UISInfoT *pInfo, Int32 *pFrame, UISRunStateT *pState, UISS
                 d = **ppCode;
                 (*ppCode)++;
                 Value = (a << 24) | (b << 16) | (c << 8) | d;
-                Offset = **ppCode << 8;
+                a = **ppCode;
                 (*ppCode)++;
-                Offset |= **ppCode;
+                b = **ppCode;
                 (*ppCode)++;
+                Offset = (a << 8) | b;
                 pArray = (Int32 *)(Value + (*ppTop)[(Int16)Offset]);
                 break;
             }
