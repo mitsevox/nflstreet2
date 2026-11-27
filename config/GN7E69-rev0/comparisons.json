@@ -26922,7 +26922,7 @@
     {
       "source": "src/engine/t3db_table.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (86.0%: register allocation and frame); the rest of the file is linked through units.json.",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (88.00%: register allocation); the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
