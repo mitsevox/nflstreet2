@@ -124,7 +124,7 @@ int TournamentClose(void);
 int TournamentOpen(int index);
 int MiniGameIsEnabled(void);
 int MiniGameGetType(void);
-void fn_80148AF8(MiniGameC *pObject);
+void MiniGameSetDepthCallbacks(MiniGameC *pObject);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
 int GameModeTypeIsSpecial(void);
@@ -1236,7 +1236,7 @@ int MsgTeamPickInit(int *pController, int *pCount)
     }
 
     if (MiniGameIsEnabled()) {
-        fn_80148AF8(MiniGameGetCurrent());
+        MiniGameSetDepthCallbacks(MiniGameGetCurrent());
     }
     PlayerCursorOpen(&_MsgTeamPick_PlayerCursor, 0, 0x54415453);
     TeamDbOpen(&_MsgTeamPick_TeamCursor, 0, 0x54415453);

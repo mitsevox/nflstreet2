@@ -25,7 +25,7 @@
 #include <string.h>
 #include <string.h>
 
-/* Filled by fn_80152940 for one index; mpObject points to an object whose
+/* Filled by MiniGameJumpBallGetEntryInfo for one index; mpObject points to an object whose
    halfword at 0xB5C is passed to MsgGameGetPlayerPortrait. */
 struct Object_80056584 {
     char mUnknown0[0xB5C];
@@ -223,7 +223,7 @@ void *DbUserGetCurrent(void);
 extern char gMiniGameJumpBall[];
 extern void *gUISMainInfo;
 
-void fn_80152940(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
+void MiniGameJumpBallGetEntryInfo(char *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int snprintf(char *pBuffer, int size, const char *pFormat, ...);
 void GameTextFormatInitialAndName(Object_80056584 *pObject, char *pOut, int b);
 int MsgGameGetPlayerPortrait(int id);
@@ -662,7 +662,7 @@ void InGameJumpBallGetSlot(int index, char *pOut, int b, char *pText0, int size0
 {
     MiniGameSlotInfo_t info;
 
-    fn_80152940(gMiniGameJumpBall, index, &info);
+    MiniGameJumpBallGetEntryInfo(gMiniGameJumpBall, index, &info);
     snprintf(pText0, size0, "%d", info.mUnknown4);
     snprintf(pText1, size1, "%d", info.mUnknown12);
     snprintf(pText2, size2, "%d", info.mUnknown16);
@@ -2629,12 +2629,12 @@ int ScrmGetGoalTotal(int team);
 int MiniGameOpenFieldGetPlayerColor(MiniGameC *,int,int);
 int ScrmGetActivePlayerCount(int team);
 int GameInfoGet(int team);
-void fn_8014F3E4(MiniGameC *,int,Stats_8005C4A4 *);
-void fn_8014BA20(MiniGameC *,int,Stats_8005C844 *);
-void fn_8014CCE8(MiniGameC *,int,Stats_8005CAE4 *);
-void fn_80155CF0(MiniGameC *,int,int *,int *);
-void fn_80155C44(MiniGameC *,int,int,Record_8005CE10 *);
-int fn_80155D38(MiniGameC *,int);
+void MiniGameCrushCarrierGetScoreInfo(MiniGameC *,int,Stats_8005C4A4 *);
+void MiniGame2MinuteGetTeamStats(MiniGameC *,int,Stats_8005C844 *);
+void MiniGame4On4GetTeamStats(MiniGameC *,int,Stats_8005CAE4 *);
+void MiniGameQuickStrikeGetTeamScore(MiniGameC *,int,int *,int *);
+void MiniGameQuickStrikeGetScoreRecord(MiniGameC *,int,int,Record_8005CE10 *);
+int MiniGameQuickStrikeGetScoreCount(MiniGameC *,int);
 
 void InGameRewardSetNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
 void InGameRewardSetOtherNameText(MenuArg_t *p) {strncpy(p->pParams->mpText,"Name: FIX ME",p->pParams->mLength);}
@@ -2742,7 +2742,7 @@ int InGamePlayerStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
 }
 void InGameGetTimedStats(int team,char *name,int nameSize,char *first,int firstSize,char *time,int timeSize,char *last,int lastSize,int *color,int unused,char *text,int textSize,int *result) {
     unsigned char foundTeam=0,foundIndex=0;bool found=false;
-    Stats_8005C4A4 stats;fn_8014F3E4(MiniGameGetCurrent(),team,&stats);
+    Stats_8005C4A4 stats;MiniGameCrushCarrierGetScoreInfo(MiniGameGetCurrent(),team,&stats);
     unsigned int minutes=stats.mTime/60,seconds=stats.mTime%60;
     snprintf(first,firstSize,"%d",stats.mUnknown4);
     if(seconds<10)snprintf(time,timeSize,"%d:0%d",minutes,seconds);else snprintf(time,timeSize,"%d:%d",minutes,seconds);
@@ -2769,7 +2769,7 @@ int InGameTimedStatsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     }return 1;
 }
 void InGameGetOffenseTotals(int team,int *value,char *score,char *first,char *second,char *third,int *values,unsigned char scoreSize,unsigned char textSize) {
-    Stats_8005C844 stats;fn_8014BA20(MiniGameGetCurrent(),team,&stats);
+    Stats_8005C844 stats;MiniGame2MinuteGetTeamStats(MiniGameGetCurrent(),team,&stats);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
     snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
@@ -2792,7 +2792,7 @@ int InGameOffenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) 
 void InGameGetDefenseTotals(int team,int *value,char *score,char *first,char *second,char *third,unsigned char scoreSize,unsigned char textSize,int *values) {
     Stats_8005CAE4 stats;
     DbCursor cursor;
-    fn_8014CCE8(MiniGameGetCurrent(),team,&stats);
+    MiniGame4On4GetTeamStats(MiniGameGetCurrent(),team,&stats);
     snprintf(score,scoreSize,"%d",stats.mValues[0]);if(!team)*value=GameInfoGet(0);else *value=GameInfoGet(1);
     MiniGameGetCurrent()->vfn_19(team,0,first,textSize);MiniGameGetCurrent()->vfn_19(team,1,second,textSize);MiniGameGetCurrent()->vfn_19(team,2,third,textSize);
     values[0]=stats.mValues[1];values[1]=stats.mValues[2];values[2]=stats.mValues[3];
@@ -2812,10 +2812,10 @@ int InGameDefenseTotalsMsg(unsigned int id,MenuArg_t *p,int unused,int *result) 
     return 1;
 }
 void InGameFormatPossessionCount(int team,int *other,char *text,int size) {
-    DbCursor query; int value;fn_80155CF0(MiniGameGetCurrent(),team,other,&value);snprintf(text,size,"%d",value);
+    DbCursor query; int value;MiniGameQuickStrikeGetTeamScore(MiniGameGetCurrent(),team,other,&value);snprintf(text,size,"%d",value);
 }
 void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,char *text,int size) {
-    Record_8005CE10 record;fn_80155C44(MiniGameGetCurrent(),team,index,&record);
+    Record_8005CE10 record;MiniGameQuickStrikeGetScoreRecord(MiniGameGetCurrent(),team,index,&record);
     unsigned int value=record.mOrdinal;
     Object_80039F5C *p=PlyrFindById(record.mPlayer),*other=PlyrFindById(record.mOther);
     if(record.mEvent==11) {*ordinal=0;*text=0;}
@@ -2837,7 +2837,7 @@ void InGameFormatPossession(int team,int index,char *ordinal,int ordinalSize,cha
 }
 int InGameScoringSummaryMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     switch(id) {
-    case 0x80000002:InGameFormatPossessionCount((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=fn_80155D38(MiniGameGetCurrent(),(unsigned char)p[0].i);break;
+    case 0x80000002:InGameFormatPossessionCount((unsigned char)p[0].i,p[1].pi,p[2].pParams->mpText,p[2].pParams->mLength);*result=MiniGameQuickStrikeGetScoreCount(MiniGameGetCurrent(),(unsigned char)p[0].i);break;
     case 0x80000003:InGameFormatPossession((unsigned char)p[0].i,(unsigned char)p[1].i,p[2].pParams->mpText,p[2].pParams->mLength,p[3].pParams->mpText,p[3].pParams->mLength);break;
     case 0x80000001:if(p[0].i==1)fn_800C1CA0();PauseRequestClose();break;
     default:return 0;

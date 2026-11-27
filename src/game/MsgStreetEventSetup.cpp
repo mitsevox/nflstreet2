@@ -51,7 +51,7 @@ void PortDbCloseSides(DbCursor *pObject);
 unsigned char PortDbCountSidePlayers(int a);
 int PlayerPoolGetCount(int index);
 int MiniGameGetType(void);
-void fn_8014F3DC(int ticks);
+void MiniGameCrushCarrierSetTime(int ticks);
 int MsgGameGetSetupState(void);
 void StoryTeamLoadUserTeams(int a, int b);
 void TeamTablesPurgeCreated(int handle);
@@ -59,8 +59,8 @@ void CreateTeamLoadUserTeams(void);
 char *strchr(const char *pString, int c);
 
 extern MiniGameSettings_t gMiniGameJumpBall;
-extern int lbl_802A11F4[];
-extern char *lbl_803EB2E8;
+extern int gMiniGameJumpBallLimits[];
+extern char *gMiniGameJumpBallLimitText;
 
 void MsgStreetEventSetupFreeOptions(StreetEventSetup_t *pState);
 void MsgStreetEventSetupSetOption(StreetEventOption_t *pOption, const char *pName, const char *pItems, const char *pDescription,
@@ -91,7 +91,7 @@ void MsgStreetEventSetupBuildOptions(StreetEventSetup_t *pState)
     case 1:
         MsgStreetEventSetupSetOption(&pState->mOptions[0], "Game Type", "Single Round|^Elimination",
                     "Play a single round or multiple rounds with Elimination.", 0);
-        MsgStreetEventSetupSetOption(&pState->mOptions[1], "Play To", lbl_803EB2E8,
+        MsgStreetEventSetupSetOption(&pState->mOptions[1], "Play To", gMiniGameJumpBallLimitText,
                     "Select the length of the Street Event, or play to score.", 0);
         _MsgStreetEventSetup_iMinPool = 7;
         break;
@@ -183,10 +183,10 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
         }
         index = pState->mOptions[1].mSelection;
         if (index <= 14) {
-            gMiniGameJumpBall.mUnknown32 = lbl_802A11F4[index];
+            gMiniGameJumpBall.mUnknown32 = gMiniGameJumpBallLimits[index];
             gMiniGameJumpBall.mUnknown36 = 0;
         } else {
-            gMiniGameJumpBall.mUnknown36 = lbl_802A11F4[index];
+            gMiniGameJumpBall.mUnknown36 = gMiniGameJumpBallLimits[index];
             gMiniGameJumpBall.mUnknown32 = 0;
         }
         break;
@@ -209,7 +209,7 @@ void MsgStreetEventSetupApplyOptions(StreetEventSetup_t *pState)
             minutes = 10;
             break;
         }
-        fn_8014F3DC(minutes * 60);
+        MiniGameCrushCarrierSetTime(minutes * 60);
         break;
     }
     case 2:

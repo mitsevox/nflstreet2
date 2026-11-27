@@ -121,8 +121,8 @@ void MiniGameEnable(void);
 int MiniGameIsEnabled(void);
 void MiniGameSetType(int value);
 int MiniGameGetType(void);
-void fn_80148AF8(MiniGameC *pObject);
-void fn_8014F3DC(int ticks);
+void MiniGameSetDepthCallbacks(MiniGameC *pObject);
+void MiniGameCrushCarrierSetTime(int ticks);
 void EditMenuBegin(int mode, int value);
 void UserProfileSelect(signed char a, int b);
 void TeamLogoRequestTint(int index, int a, int b, int c, const unsigned char *pColor);
@@ -583,7 +583,7 @@ void StoryEventsSetupTeams(void)
 void StoryEventsSetupMatch(void)
 {
     if (MiniGameIsEnabled()) {
-        fn_80148AF8(MiniGameGetCurrent());
+        MiniGameSetDepthCallbacks(MiniGameGetCurrent());
     }
     StoryEventsSetupTeams();
     AutoDepthSetRateCallback(0);
@@ -623,7 +623,7 @@ void StoryEventsStartEvent(void)
             break;
         case 0:
             MiniGameSetType(0);
-            fn_8014F3DC(_StoryEvents_pEvent->mPes[3] * 60);
+            MiniGameCrushCarrierSetTime(_StoryEvents_pEvent->mPes[3] * 60);
             break;
         case 5:
             MiniGameSetType(5);

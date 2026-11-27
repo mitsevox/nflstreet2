@@ -67,7 +67,7 @@ public:
     virtual int vfn_34(int kind, int team, int threshold, int mode);
 
     MiniGameC();
-    int fn_80149014();
+    int IsTutorial();
 
     int mUnknown0;
     int mUnknown4;

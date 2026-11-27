@@ -20956,7 +20956,7 @@
           "end": "0x801488D4"
         },
         {
-          "symbol": "fn_801488D4",
+          "symbol": "MiniGameSwapPlayers",
           "start": "0x801488D4",
           "end": "0x80148A58"
         },
@@ -20996,7 +20996,7 @@
           "end": "0x80148AF8"
         },
         {
-          "symbol": "fn_80148AF8",
+          "symbol": "MiniGameSetDepthCallbacks",
           "start": "0x80148AF8",
           "end": "0x80148B44"
         },
@@ -21031,17 +21031,17 @@
           "end": "0x80148D20"
         },
         {
-          "symbol": "fn_80148D20",
+          "symbol": "MiniGameDepthRatePlayer",
           "start": "0x80148D20",
           "end": "0x80148DFC"
         },
         {
-          "symbol": "fn_80148DFC",
+          "symbol": "MiniGameDepthSelectPlayer",
           "start": "0x80148DFC",
           "end": "0x80149014"
         },
         {
-          "symbol": "fn_80149014__9MiniGameC",
+          "symbol": "IsTutorial__9MiniGameC",
           "start": "0x80149014",
           "end": "0x80149040"
         },
@@ -21116,7 +21116,7 @@
           "end": "0x8014A6A0"
         },
         {
-          "symbol": "fn_8014A6A0",
+          "symbol": "MiniGameDepthEnsureOffense",
           "start": "0x8014A6A0",
           "end": "0x8014A8D8"
         },
@@ -21291,7 +21291,7 @@
           "end": "0x8014BA20"
         },
         {
-          "symbol": "fn_8014BA20",
+          "symbol": "MiniGame2MinuteGetTeamStats",
           "start": "0x8014BA20",
           "end": "0x8014BB4C"
         },
@@ -21311,17 +21311,17 @@
           "end": "0x8014BC90"
         },
         {
-          "symbol": "fn_8014BC90",
+          "symbol": "MiniGame4On4IsPassOnly",
           "start": "0x8014BC90",
           "end": "0x8014BC98"
         },
         {
-          "symbol": "fn_8014BC98",
+          "symbol": "MiniGame4On4DepthEnsureOffense",
           "start": "0x8014BC98",
           "end": "0x8014BED8"
         },
         {
-          "symbol": "fn_8014BED8",
+          "symbol": "MiniGame4On4DepthEnsureDefense",
           "start": "0x8014BED8",
           "end": "0x8014C118"
         },
@@ -21456,7 +21456,7 @@
           "end": "0x8014CCE8"
         },
         {
-          "symbol": "fn_8014CCE8",
+          "symbol": "MiniGame4On4GetTeamStats",
           "start": "0x8014CCE8",
           "end": "0x8014CF44"
         },
@@ -21486,12 +21486,12 @@
           "end": "0x8014D210"
         },
         {
-          "symbol": "fn_8014D210",
+          "symbol": "MiniGameCrushCarrierAddScore",
           "start": "0x8014D210",
           "end": "0x8014D298"
         },
         {
-          "symbol": "fn_8014D298",
+          "symbol": "MiniGameCrushCarrierStyleAward",
           "start": "0x8014D298",
           "end": "0x8014D67C"
         },
@@ -21506,12 +21506,12 @@
           "end": "0x8014DA20"
         },
         {
-          "symbol": "fn_8014DA20__28MiniGameCrushCarrierPreGameC",
+          "symbol": "ReloadAllPlayers__28MiniGameCrushCarrierPreGameC",
           "start": "0x8014DA20",
           "end": "0x8014DA90"
         },
         {
-          "symbol": "fn_8014DA90__21MiniGameCrushCarrierC",
+          "symbol": "RestorePlayerOrder__21MiniGameCrushCarrierC",
           "start": "0x8014DA90",
           "end": "0x8014DB24"
         },
@@ -21626,7 +21626,7 @@
           "end": "0x8014EDBC"
         },
         {
-          "symbol": "fn_8014EDBC",
+          "symbol": "MiniGameCrushCarrierGetTime",
           "start": "0x8014EDBC",
           "end": "0x8014EDC4"
         },
@@ -21646,7 +21646,7 @@
           "end": "0x8014F104"
         },
         {
-          "symbol": "fn_8014F104",
+          "symbol": "MiniGameCrushCarrierGetData",
           "start": "0x8014F104",
           "end": "0x8014F10C"
         },
@@ -21676,27 +21676,27 @@
           "end": "0x8014F3DC"
         },
         {
-          "symbol": "fn_8014F3DC",
+          "symbol": "MiniGameCrushCarrierSetTime",
           "start": "0x8014F3DC",
           "end": "0x8014F3E4"
         },
         {
-          "symbol": "fn_8014F3E4",
+          "symbol": "MiniGameCrushCarrierGetScoreInfo",
           "start": "0x8014F3E4",
           "end": "0x8014F448"
         },
         {
-          "symbol": "fn_8014F448",
+          "symbol": "MiniGameCrushCarrierGetLeader",
           "start": "0x8014F448",
           "end": "0x8014F474"
         },
         {
-          "symbol": "fn_8014F474",
+          "symbol": "MiniGameCrushCarrierFindScore",
           "start": "0x8014F474",
           "end": "0x8014F4D8"
         },
         {
-          "symbol": "fn_8014F4D8",
+          "symbol": "MiniGameCrushCarrierAddStat",
           "start": "0x8014F4D8",
           "end": "0x8014F57C"
         },
@@ -21721,22 +21721,22 @@
           "end": "0x8014FF34"
         },
         {
-          "symbol": "fn_8014FF34",
+          "symbol": "MiniGameCrushCarrierGetUserRank",
           "start": "0x8014FF34",
           "end": "0x8014FFC4"
         },
         {
-          "symbol": "fn_8014FFC4",
+          "symbol": "MiniGameJumpBallPickLandingSpot",
           "start": "0x8014FFC4",
           "end": "0x8015005C"
         },
         {
-          "symbol": "fn_8015005C",
+          "symbol": "MiniGameJumpBallSortScoreUp",
           "start": "0x8015005C",
           "end": "0x8015013C"
         },
         {
-          "symbol": "fn_8015013C",
+          "symbol": "MiniGameJumpBallAddCatch",
           "start": "0x8015013C",
           "end": "0x801501CC"
         },
@@ -21751,7 +21751,7 @@
           "end": "0x801502B4"
         },
         {
-          "symbol": "fn_801502B4",
+          "symbol": "MiniGameJumpBallEndRound",
           "start": "0x801502B4",
           "end": "0x8015034C"
         },
@@ -21901,37 +21901,37 @@
           "end": "0x80151B20"
         },
         {
-          "symbol": "fn_80151B20",
+          "symbol": "MiniGameJumpBallIsTied",
           "start": "0x80151B20",
           "end": "0x80151BCC"
         },
         {
-          "symbol": "fn_80151BCC",
+          "symbol": "MiniGameJumpBallClampLineup",
           "start": "0x80151BCC",
           "end": "0x80151CCC"
         },
         {
-          "symbol": "fn_80151CCC",
+          "symbol": "MiniGameJumpBallEliminate",
           "start": "0x80151CCC",
           "end": "0x80151D9C"
         },
         {
-          "symbol": "fn_80151D9C",
+          "symbol": "MiniGameJumpBallCheckRoundEnd",
           "start": "0x80151D9C",
           "end": "0x80152068"
         },
         {
-          "symbol": "fn_80152068",
+          "symbol": "MiniGameJumpBallGetLandingSpot",
           "start": "0x80152068",
           "end": "0x801520C4"
         },
         {
-          "symbol": "fn_801520C4",
+          "symbol": "MiniGameJumpBallPickBall",
           "start": "0x801520C4",
           "end": "0x8015228C"
         },
         {
-          "symbol": "fn_8015228C",
+          "symbol": "MiniGameJumpBallPickBallAhead",
           "start": "0x8015228C",
           "end": "0x80152400"
         },
@@ -21951,7 +21951,7 @@
           "end": "0x8015264C"
         },
         {
-          "symbol": "fn_8015264C",
+          "symbol": "MiniGameJumpBallGetLeader",
           "start": "0x8015264C",
           "end": "0x8015267C"
         },
@@ -21961,22 +21961,22 @@
           "end": "0x801526EC"
         },
         {
-          "symbol": "fn_801526EC",
+          "symbol": "MiniGameJumpBallResetScores",
           "start": "0x801526EC",
           "end": "0x801527B8"
         },
         {
-          "symbol": "fn_801527B8",
+          "symbol": "MiniGameJumpBallGetCameraSpot",
           "start": "0x801527B8",
           "end": "0x801527E0"
         },
         {
-          "symbol": "fn_801527E0",
+          "symbol": "MiniGameJumpBallBenchUnused",
           "start": "0x801527E0",
           "end": "0x8015286C"
         },
         {
-          "symbol": "fn_8015286C",
+          "symbol": "MiniGameJumpBallGetPlayer",
           "start": "0x8015286C",
           "end": "0x8015289C"
         },
@@ -21986,17 +21986,17 @@
           "end": "0x801528E0"
         },
         {
-          "symbol": "fn_801528E0",
+          "symbol": "MiniGameJumpBallGetPassSpot",
           "start": "0x801528E0",
           "end": "0x80152940"
         },
         {
-          "symbol": "fn_80152940",
+          "symbol": "MiniGameJumpBallGetEntryInfo",
           "start": "0x80152940",
           "end": "0x801529C0"
         },
         {
-          "symbol": "fn_801529C0",
+          "symbol": "MiniGameJumpBallGetUserRank",
           "start": "0x801529C0",
           "end": "0x80152A54"
         },
@@ -22026,17 +22026,17 @@
           "end": "0x801530FC"
         },
         {
-          "symbol": "fn_801530FC",
+          "symbol": "MiniGameJumpBallGetTable",
           "start": "0x801530FC",
           "end": "0x8015310C"
         },
         {
-          "symbol": "fn_8015310C",
+          "symbol": "MiniGameJumpBallAllBallsThrown",
           "start": "0x8015310C",
           "end": "0x80153168"
         },
         {
-          "symbol": "fn_80153168",
+          "symbol": "MiniGameJumpBallSetBallThrown",
           "start": "0x80153168",
           "end": "0x80153174"
         },
@@ -22256,7 +22256,7 @@
           "end": "0x80154FC0"
         },
         {
-          "symbol": "fn_80154FC0",
+          "symbol": "MiniGameOpenFieldGetTeammate",
           "start": "0x80154FC0",
           "end": "0x80155004"
         },
@@ -22266,7 +22266,7 @@
           "end": "0x80155128"
         },
         {
-          "symbol": "fn_80155128",
+          "symbol": "MiniGameOpenFieldGetData",
           "start": "0x80155128",
           "end": "0x80155130"
         },
@@ -22336,7 +22336,7 @@
           "end": "0x801556D0"
         },
         {
-          "symbol": "fn_801556D0",
+          "symbol": "MiniGameQuickStrikeLogScore",
           "start": "0x801556D0",
           "end": "0x8015576C"
         },
@@ -22371,32 +22371,32 @@
           "end": "0x80155A7C"
         },
         {
-          "symbol": "fn_80155A7C",
+          "symbol": "MiniGameQuickStrikeAddScore",
           "start": "0x80155A7C",
           "end": "0x80155BF4"
         },
         {
-          "symbol": "fn_80155BF4",
+          "symbol": "MiniGameQuickStrikeAddConversion",
           "start": "0x80155BF4",
           "end": "0x80155C44"
         },
         {
-          "symbol": "fn_80155C44",
+          "symbol": "MiniGameQuickStrikeGetScoreRecord",
           "start": "0x80155C44",
           "end": "0x80155CF0"
         },
         {
-          "symbol": "fn_80155CF0",
+          "symbol": "MiniGameQuickStrikeGetTeamScore",
           "start": "0x80155CF0",
           "end": "0x80155D38"
         },
         {
-          "symbol": "fn_80155D38",
+          "symbol": "MiniGameQuickStrikeGetScoreCount",
           "start": "0x80155D38",
           "end": "0x80155D7C"
         },
         {
-          "symbol": "fn_80155D7C",
+          "symbol": "MiniGameQuickStrikeClearScores",
           "start": "0x80155D7C",
           "end": "0x80155E28"
         },

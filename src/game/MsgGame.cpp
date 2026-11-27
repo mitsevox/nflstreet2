@@ -47,7 +47,7 @@ int UserRecGetCount(void);
 int UserProfileGetOldest(int a);
 void UserProfileCreate(int a, char *pText, int c);
 int MiniGameGetType(void);
-void fn_80152940(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
+void MiniGameJumpBallGetEntryInfo(MiniGameC *pObject, int index, MiniGameSlotInfo_t *pInfo);
 int ScrmGetWinner(void);
 void PerCheckConnectAll(void);
 void PortDbOpenSides(DbCursor *pObject);
@@ -192,7 +192,7 @@ int MsgGameStreetEventHasOpenSlot(void)
             break;
         case 1:
             for (unsigned int i = 0; i <= 3; i++) {
-                fn_80152940(MiniGameGetCurrent(), i, &info);
+                MiniGameJumpBallGetEntryInfo(MiniGameGetCurrent(), i, &info);
                 if (info.mUnknown20 == 0xFF) {
                     result = 1;
                     break;

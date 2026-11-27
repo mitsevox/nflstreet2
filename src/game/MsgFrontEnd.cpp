@@ -188,7 +188,7 @@ void fn_800A2F3C(int a);
 int fn_800A3444(void);
 int MiniGameIsEnabled(void);
 int MiniGameGetType(void);
-void fn_80148AF8(MiniGameC *pObject);
+void MiniGameSetDepthCallbacks(MiniGameC *pObject);
 int GameModeTypeIsSpecial(void);
 void PositionAbbrevFormat(int a, char *pText);
 int ScrmGetOffenseTeam(void);
@@ -2617,7 +2617,7 @@ int MsgTeamSelectInit(int *pCount1, int *pCount0, int *pMode, int *pFlag)
         *pFlag = 1;
     }
     if (MiniGameIsEnabled()) {
-        fn_80148AF8(MiniGameGetCurrent());
+        MiniGameSetDepthCallbacks(MiniGameGetCurrent());
     }
 
     switch (mode) {

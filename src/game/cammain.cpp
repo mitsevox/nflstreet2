@@ -41,7 +41,7 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 CamMode_t *CamPlayGetDefMode(int id);
 void CamPlayGetPosLimits(int id, int mode, float *pA, float *pB);
 int MiniGameGetType(void);
-void fn_801527B8(void *p, Vector_80039F5C *pOut);
+void MiniGameJumpBallGetCameraSpot(void *p, Vector_80039F5C *pOut);
 int ScrmIsFieldFlipped(void);
 void CamConvertHdrToMatrix(void *p, GameCamera_t *pCamera);
 void CamSetZScale(GameCamera_t *pCamera, float value);
@@ -218,7 +218,7 @@ void _CamMainGetFocusPos(int kind, int ref, Vector_80039F5C *pOut)
     case 6:
         break;
     case 7:
-        fn_801527B8(gMiniGameJumpBall, pOut);
+        MiniGameJumpBallGetCameraSpot(gMiniGameJumpBall, pOut);
         if (ScrmIsFieldFlipped()) {
             CamMainFlipPos(pOut);
         }

@@ -356,7 +356,7 @@ void MiniGameStop(void);
 int MiniGameGetType(void);
 MiniGameC * MiniGameGetCurrent(void);
 void MiniGameReloadPlayer(Object_80039F5C *pObject);
-void fn_8014F3DC(int a);
+void MiniGameCrushCarrierSetTime(int a);
 void RouteArrowSetEnabled(int a);
 void PlayBookLoadCurrentPlay(int team);
 void PlayBookLoadAudibleTable(void);
@@ -985,7 +985,7 @@ int TutorialFinishCategory(void)
                 fn_8009D8CC(1);
                 fn_8009D964(1, 0);
                 SpchIGSetCommentaryOn(0);
-                fn_8014F3DC(180);
+                MiniGameCrushCarrierSetTime(180);
                 break;
             case 4:
                 if (fn_800B65A0(ScrmGetDefenseTeam()) == 0xFF) {

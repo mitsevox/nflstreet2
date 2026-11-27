@@ -1184,7 +1184,7 @@ int BallStateGet(Ball_t *pBall, int *pOut);
 }
 
 extern "C" {
-Object_80039F5C *fn_8015286C(void *pSet, int index);
+Object_80039F5C *MiniGameJumpBallGetPlayer(void *pSet, int index);
 }
 
 extern "C" {
@@ -2164,11 +2164,11 @@ extern Table_800AA80C lbl_802D8194;
 extern "C" int ResSync(int a);
 
 extern "C" {
-int fn_8014F448(MiniGameC *p);
+int MiniGameCrushCarrierGetLeader(MiniGameC *p);
 }
 
 extern "C" {
-int fn_8015264C(void *p);
+int MiniGameJumpBallGetLeader(void *p);
 }
 
 extern "C" {
@@ -4747,7 +4747,7 @@ void PassIconsClearReplayFlag(void);
 }
 
 extern "C" {
-int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
+int MiniGameJumpBallPickBall(Object_80039F5C *p, unsigned char *pIndex);
 }
 
 extern "C" {
@@ -20485,10 +20485,10 @@ extern "C" void GameEndCastScene(Entry_800AA80C *pEntries, int index)
 
             switch (mode) {
             case 1:
-                value = fn_8015264C(gMiniGameJumpBall);
+                value = MiniGameJumpBallGetLeader(gMiniGameJumpBall);
                 break;
             case 0:
-                value = fn_8014F448(MiniGameGetCurrent());
+                value = MiniGameCrushCarrierGetLeader(MiniGameGetCurrent());
                 break;
             }
             AnmsSetPinnedPlayer(0, value);
@@ -26871,7 +26871,7 @@ extern "C" int fn_800B78DC(Object_80039F5C *p)
     Input_800B6D34 input;
     int state;
 
-    if (MiniGameGetType() == 1 && fn_801520C4(p, &index) != 0) {
+    if (MiniGameGetType() == 1 && MiniGameJumpBallPickBall(p, &index) != 0) {
         pBall = BallGet(index);
     } else {
         index = BallGetCurrentIndex();
@@ -35153,7 +35153,7 @@ extern "C" int fn_800C95DC(int team, unsigned char index, int *pRef)
             unsigned int i;
 
             for (i = 0; i <= 3; i++) {
-                p = fn_8015286C(gMiniGameJumpBall, i);
+                p = MiniGameJumpBallGetPlayer(gMiniGameJumpBall, i);
                 if (p->mUnknown8 == 255) {
                     if (index == count) {
                         fn_8009BD2C(p, pRef);

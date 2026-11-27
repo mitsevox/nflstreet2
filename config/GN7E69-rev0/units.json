@@ -9282,7 +9282,7 @@
             "evidence": "evidence.tsv source-form 0x80148814-0x801488D4"
           },
           {
-            "function": "fn_8014CCE8",
+            "function": "MiniGame4On4GetTeamStats",
             "evidence": "evidence.tsv source-form 0x8014CCE8-0x8014CF44"
           },
           {
@@ -9302,11 +9302,11 @@
             "evidence": "evidence.tsv source-form 0x8014FDD0-0x8014FF2C"
           },
           {
-            "function": "fn_8014FF34",
+            "function": "MiniGameCrushCarrierGetUserRank",
             "evidence": "evidence.tsv source-form 0x8014FF34-0x8014FFC4"
           },
           {
-            "function": "fn_801502B4",
+            "function": "MiniGameJumpBallEndRound",
             "evidence": "evidence.tsv source-form 0x801502B4-0x8015034C"
           },
           {
@@ -9322,11 +9322,11 @@
             "evidence": "evidence.tsv source-form 0x80150AC4-0x80150DFC"
           },
           {
-            "function": "fn_80151B20",
+            "function": "MiniGameJumpBallIsTied",
             "evidence": "evidence.tsv source-form 0x80151B20-0x80151BCC"
           },
           {
-            "function": "fn_8015228C",
+            "function": "MiniGameJumpBallPickBallAhead",
             "evidence": "evidence.tsv source-form 0x8015228C-0x80152400"
           },
           {

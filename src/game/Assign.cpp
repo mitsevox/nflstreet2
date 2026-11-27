@@ -670,7 +670,7 @@ int MiniGameGetType(void);
 }
 
 extern "C" {
-int fn_801520C4(Object_80039F5C *p, unsigned char *pIndex);
+int MiniGameJumpBallPickBall(Object_80039F5C *p, unsigned char *pIndex);
 }
 
 extern "C" {
@@ -962,11 +962,11 @@ int fn_801BE068(void *a, void *b, void *c, unsigned short d, float e, void *p);
 }
 
 extern "C" {
-Object_80039F5C *fn_8015286C(void *pSet, int index);
+Object_80039F5C *MiniGameJumpBallGetPlayer(void *pSet, int index);
 }
 
 extern "C" {
-int fn_8015310C(void *pSet);
+int MiniGameJumpBallAllBallsThrown(void *pSet);
 }
 
 extern "C" {
@@ -986,7 +986,7 @@ void BallSolveFallToHeight(Ball_t *pBall, float height, float *pTime, Vector_800
 }
 
 extern "C" {
-void fn_801528E0(void *pSet, FieldPoint_t *pOut);
+void MiniGameJumpBallGetPassSpot(void *pSet, FieldPoint_t *pOut);
 }
 
 extern "C" {
@@ -1681,7 +1681,7 @@ void BallLaunchToTarget(Ball_t *pBall, Vector_80039F5C *pTarget, int mode, float
 }
 
 extern "C" {
-void fn_80152068(int index, Vector_80039F5C *pOut);
+void MiniGameJumpBallGetLandingSpot(int index, Vector_80039F5C *pOut);
 }
 
 extern "C" {
@@ -5387,9 +5387,9 @@ extern "C" Object_80039F5C *fn_800F2EC8(Object_80039F5C *pExclude, Points_800F3A
     unsigned int i;
 
     for (i = 0; i < 4; i++) {
-        Object_80039F5C *p = fn_8015286C(gMiniGameJumpBall, i);
+        Object_80039F5C *p = MiniGameJumpBallGetPlayer(gMiniGameJumpBall, i);
 
-        if (p == pExclude || fn_801520C4(p, &index) == 0 || pInfo->mpUnknown0 != BallGet(index)) {
+        if (p == pExclude || MiniGameJumpBallPickBall(p, &index) == 0 || pInfo->mpUnknown0 != BallGet(index)) {
             continue;
         }
         if (pBest == 0) {
@@ -5414,8 +5414,8 @@ extern "C" int fn_800F2FB8(Object_80039F5C *p, unsigned char *pIndex) {
     int result = 0;
 
     *pIndex = 0;
-    if (fn_8015310C(gMiniGameJumpBall) != 0) {
-        result = fn_801520C4(p, pIndex);
+    if (MiniGameJumpBallAllBallsThrown(gMiniGameJumpBall) != 0) {
+        result = MiniGameJumpBallPickBall(p, pIndex);
         if (result != 0) {
             Vector_80039F5C ball;
 
@@ -5980,7 +5980,7 @@ extern "C" void fn_800F4838(Object_80039F5C *p) {
     FieldPoint_t delta;
     Block_800F4A74 *pBlock;
 
-    fn_801528E0(gMiniGameJumpBall, &target);
+    MiniGameJumpBallGetPassSpot(gMiniGameJumpBall, &target);
     Vec2Sub(&delta, &target, &p->mMotion.mPos);
     pBlock = (Block_800F4A74 *)&p->mUnknown336;
     pBlock->mUnknown36 = MathArcTan2(delta.mY, delta.mX) & 0xFFFFFF;
@@ -12166,7 +12166,7 @@ extern "C" void fn_80102D78(Object_80039F5C *p)
     case 8:
         speed = gFrameTimeScale * 0.27f;
         if (MiniGameGetType() == 1) {
-            fn_80152068(BallGetIndex(pBall), &target);
+            MiniGameJumpBallGetLandingSpot(BallGetIndex(pBall), &target);
         }
         BallLaunchToTarget(pBall, &target, 1, speed, spin, side);
         BallSetTarget(pBall, 0);
@@ -18591,7 +18591,7 @@ extern "C" int fn_80113208(Object_80039F5C *p, int a, int mode, int c)
     if (mode == 1 || mode == 3) {
         flag = 1;
     }
-    if (MiniGameGetType() == 1 && fn_801520C4(p, &index) != 0) {
+    if (MiniGameGetType() == 1 && MiniGameJumpBallPickBall(p, &index) != 0) {
         pBall = BallGet(index);
     } else {
         pBall = BallGetCurrent();
