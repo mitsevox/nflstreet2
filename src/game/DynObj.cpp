@@ -1498,16 +1498,18 @@ void BigObjHit(BigObj_t *pItem, float *pPos, float *pDir, const char *pName, int
         float scale;
 
         pObject->mUnknown376 = pHitter->mId;
-        scale = pObject->mUnknown372 * (1.0f / 70.0f);
         if (pHitter->mChannel != 0xFF) {
+            scale = pObject->mUnknown372 * (1.0f / 70.0f);
             int hi = _BigObjHit_uRumbleMax;
             int lo = _BigObjHit_uRumbleMin;
-            float volume = (hi - lo) * scale + lo;
+            float max = hi;
+            float low = lo;
+            scale = (hi - lo) * scale + low;
 
-            if (volume > hi) {
-                volume = hi;
+            if (scale > max) {
+                scale = max;
             }
-            RumbleStart(pHitter->mChannel, (unsigned char)(int)volume, _BigObjHit_uRumbleTime);
+            RumbleStart(pHitter->mChannel, (unsigned char)(int)scale, _BigObjHit_uRumbleTime);
         }
     } else {
         pObject->mUnknown376 = 0;

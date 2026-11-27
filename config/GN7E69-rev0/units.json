@@ -10383,7 +10383,7 @@
     {
       "source": "src/game/DynObj.cpp",
       "profile": "game_cpp_holdouts",
-      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .data (0x802CFBCC-0x802D4B14, the big-object name and function tables and the skeleton cache), .sdata (0x803EA4D0-0x803EA53C), .bss (0x803084B8-0x80309CB4), .sbss (0x803EC7D0-0x803EC7E8), .ctors and .dtors words, each data object with its data row; linked with holdouts (owner ruling of 2026-11-20): 110 of 121 functions exact, the holdouts keep the original bytes.",
+      "evidence": "evidence.tsv unit row 0x8004A2F4-0x80051E14 (src/game/DynObj.cpp), the exact .rodata (0x8028D7A0-0x8028DD70, its pools and the three class vtables), .data (0x802CFBCC-0x802D4B14, the big-object name and function tables and the skeleton cache), .sdata (0x803EA4D0-0x803EA53C), .bss (0x803084B8-0x80309CB4), .sbss (0x803EC7D0-0x803EC7E8), .ctors and .dtors words, each data object with its data row; linked with holdouts (owner ruling of 2026-11-20): 111 of 121 functions exact, the holdouts keep the original bytes.",
       "sections": [
         {
           "section": ".text",
@@ -10401,12 +10401,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8004C204",
-          "end": "0x8004C844"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8004CAA8",
           "end": "0x8004CBEC"
         },
         {
@@ -10493,10 +10487,6 @@
             "evidence": "evidence.tsv source-form 0x8004BD20-0x8004C204"
           },
           {
-            "function": "BigObjHit",
-            "evidence": "evidence.tsv source-form 0x8004C844-0x8004CAA8"
-          },
-          {
             "function": "BigObjEmitParticles",
             "evidence": "evidence.tsv source-form 0x8004CBEC-0x8004CE6C"
           },
@@ -10529,7 +10519,7 @@
             "evidence": "evidence.tsv source-form 0x800504EC-0x800508A0"
           }
         ],
-        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 11 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv (16 until round 3 lane 2, PR #1451, made BigObjHitStatic, DynObjChildSpawn, DynObjParseRender and PhysUpdatePlayers exact and linked them; 12 until wave p1 lane b made PhysPushPlayer exact and linked it)."
+        "evidence": "fd1a merge notes (swarm fd1 tracking table) and the fd1 fix round (PR #1394): src/game/DynObj.cpp holds out the 10 functions listed here, each with its HOLDOUT: source-form row in evidence.tsv (16 until round 3 lane 2, PR #1451, made BigObjHitStatic, DynObjChildSpawn, DynObjParseRender and PhysUpdatePlayers exact and linked them; 12 until wave p1 lane b made PhysPushPlayer exact and linked it; 11 until wave k1 lane c made BigObjHit exact and linked it)."
       }
     },
     {
