@@ -480,7 +480,14 @@ int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer,
                 arrows[i][2].mY = axis[0].mY - strip[0].mY;
             } else {
                 PlayArtBuildArrowQuad(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
-                for (int j = 0; j < 4; ++j) arrows[i][j] = strip[j];
+                arrows[i][0].mX = strip[0].mX;
+                arrows[i][0].mY = strip[0].mY;
+                arrows[i][1].mX = strip[1].mX;
+                arrows[i][1].mY = strip[1].mY;
+                arrows[i][2].mX = strip[2].mX;
+                arrows[i][2].mY = strip[2].mY;
+                arrows[i][3].mX = strip[3].mX;
+                arrows[i][3].mY = strip[3].mY;
             }
         }
     }
