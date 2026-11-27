@@ -488,7 +488,7 @@ static MemBlock_t *_SplitBlockTail(MemBlock_t *pBlock, int align, int offset, in
         return 0;
     }
     n = pHeap ? pHeap->mDebugSize : 0;
-    rem = ((unsigned int)pStart + (n + 12)) % 16u;
+    rem = (unsigned int)(pStart + n + 12) & 15;
     if (rem) {
         extra = 16 - rem;
         if (n == 0 && extra < 2) {
