@@ -15,7 +15,7 @@ extern void *gUISMainInfo;
 extern const float lbl_803ED6A4;
 extern const float lbl_803ED6A8;
 
-int fn_800A83E0(int a);
+int GamebreakerGetReadyId(int a);
 unsigned char fn_800C1E48(void);
 int PlyrStarGetColor(int a);
 int GameTextGetPadPlayer(int a);
@@ -94,7 +94,7 @@ extern "C" void HudSetGameBreakerMeter(int a, float t, int b, int direct)
         args[2].i = b;
         UISProcessHint(gUISMainInfo, 0x8000002F, 3, args);
     } else {
-        args[2].i = fn_800A83E0(a);
+        args[2].i = GamebreakerGetReadyId(a);
         UISProcessHint(gUISMainInfo, 0x80000012, 3, args);
     }
 
@@ -103,7 +103,7 @@ extern "C" void HudSetGameBreakerMeter(int a, float t, int b, int direct)
         args[2].i = b;
         UISProcessHint(gUISMainInfo, 0x80000069, 3, args);
     } else {
-        args[2].i = fn_800A83E0(a);
+        args[2].i = GamebreakerGetReadyId(a);
         UISProcessHint(gUISMainInfo, 0x80000068, 3, args);
     }
 }

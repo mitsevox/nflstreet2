@@ -65,12 +65,12 @@ void fn_8009D888(int index, int value);
 int GameClockIsTimerRunning(int index);
 void DefCoverStartPlay(void);
 void DefPredPostAudio(void);
-int fn_800A7FD8(void);
+int GamebreakerIsCutscenePlaying(void);
 void fn_800A8F08(void);
 int fn_800A937C(void);
 int fn_800A9680(void);
 void fn_800AD910(int a, float b);
-void fn_800AEEDC(int team);
+void HotRtClearTeam(int team);
 int fn_800B1200(void);
 void fn_800B14E4(void);
 void fn_800B2630(void);
@@ -119,9 +119,9 @@ void BannerClear(int index);
 void HudHidePressPrompt(int team);
 void CamFreeClearVelocity(GameCamera_t *pCamera);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
-int fn_800A8408(int team);
+int GamebreakerGetReadyType(int team);
 int fn_800A8444(int team);
-int fn_800A8F84(int team);
+int GamebreakerGetSavedState(int team);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_8011DF90(void);
@@ -444,8 +444,8 @@ extern "C" void ScrmStartPlay(void)
         }
     }
 
-    fn_800AEEDC(0);
-    fn_800AEEDC(1);
+    HotRtClearTeam(0);
+    HotRtClearTeam(1);
     fn_800B6C98();
     ClockRuleSnap();
     ScrmSnapBall();
@@ -520,7 +520,7 @@ extern "C" int ScrmCanSnap(void)
         ScrmGetTeamScore(ScrmGetOffenseTeam()) > ScrmGetTeamScore(ScrmGetDefenseTeam())) {
         result = 0;
     }
-    if (fn_800A7FD8() == 1 || fn_800A937C() != 0) {
+    if (GamebreakerIsCutscenePlaying() == 1 || fn_800A937C() != 0) {
         result = 0;
     }
     return result;
@@ -781,7 +781,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
     if (p != 0 && ScrmCarrierInEndZone(p, &ballPos) && BallGetTransferKind(pBall) == 0) {
         int conversion = 0;
 
-        if (fn_800A8F84(0) == 2 || fn_800A8F84(1) == 2) {
+        if (GamebreakerGetSavedState(0) == 2 || GamebreakerGetSavedState(1) == 2) {
             conversion = 1;
         }
         if ((fn_801486A0() == 4 || fn_801486A0() == 3) && fn_8011F1CC() != 0 && !ScrmTestPlayFlag(13) &&
@@ -814,8 +814,8 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                     ScrmStatAddTeamMoveScore(p->mIdBytes[2], 1);
                 }
             }
-            if (fn_800A8444(p->mIdBytes[2]) != 0 && fn_800A8408(p->mIdBytes[2]) == 0 &&
-                fn_800A8F84(p->mIdBytes[2]) == 1) {
+            if (fn_800A8444(p->mIdBytes[2]) != 0 && GamebreakerGetReadyType(p->mIdBytes[2]) == 0 &&
+                GamebreakerGetSavedState(p->mIdBytes[2]) == 1) {
                 ScrmStatAddTeamOg(p->mIdBytes[2], 1);
             }
         }

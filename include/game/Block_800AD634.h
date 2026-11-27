@@ -2,7 +2,7 @@
 #define GAME_BLOCK_800AD634_H
 
 /* 16-byte block allocated under the id 'gply' by fn_800AD634: the current
-   and previous game mode, then a flag and a value set by fn_800AD9C0. */
+   and previous game mode, then a flag and a value set by GamePlayStartFreeze. */
 struct Block_800AD634 {
     int mUnknown0;
     int mUnknown4;

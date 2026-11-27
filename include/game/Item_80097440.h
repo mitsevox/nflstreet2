@@ -113,7 +113,7 @@ struct Entry_8009C684 {
 };
 
 /* The 8 bytes at +16 of Entry_8009C684 that fn_8009CD00 returns for the
-   fn_80096E74 callback. */
+   PlyrReachTrackWrist callback. */
 struct Data_80096E74 {
     unsigned int mUnknown0;
     unsigned char mUnknown4;

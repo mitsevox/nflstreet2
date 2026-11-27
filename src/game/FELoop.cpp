@@ -46,7 +46,7 @@ void SndgUpdate(int a);
 void SndgApplyVolumeOptions(void);
 void SndgMusicFadeOut(int a, int b);
 void SndgMusicPumpFrame(int a);
-void fn_8009418C(void);
+void AnimSeqDynSlotsReset(void);
 void CamSetupAspect(void);
 void FEPlyrLoadUpdate(void);
 void MsgGameSetFEStarted(int a);
@@ -407,7 +407,7 @@ int FELoop::Shutdown()
     GlibSyncFrame();
     PlayBookDbClose(0x31544250, 0);
     PlayBookDbClose(0x31444250, 0);
-    fn_8009418C();
+    AnimSeqDynSlotsReset();
     ConSetChannelInfo(-1, 1, 0);
     _FELoop_uIdleFrames = 0;
     _FELoop_bIdleTimeout = 0;

@@ -44,7 +44,7 @@ int PlayerLocoGetBlendIndex(Object_80039F5C *p, Object_801BBD5C *object);
 int PlayerLocoSelectBlendSet(Object_80039F5C *p, Block_801BE60C *block, unsigned char *value);
 void PlayerLocoSetCycleDuration(float value, Block_801BE60C *block, LocoBlendSet_t *object, AnimChannel_t *entries);
 unsigned char PlyrBallHandFromAnim(Object_80039F5C *p, unsigned short key);
-void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
+void PlyrHandSetPoseByKey(Object_80039F5C *p, int a, int b, int c);
 int fn_8009C4B0(Table_80089904 *table, Key_80110630 *key);
 int AnimChanIsMirrored(AnimChannel_t *entry);
 void AnimChanSetMirrored(AnimChannel_t *entry, int value);
@@ -400,8 +400,8 @@ int PlayerLocoCyclePhase(Table_80089904 *table, unsigned short key, FEPlyrModel_
     }
     case 3:
         if (p->mIdBytes[3] == 1 && p->mpState->mId != 50 && PlayerLocoNotInState84(p)) {
-            fn_800ADBC0(p, 1, 8, 0);
-            fn_800ADBC0(p, 1, 8, 1);
+            PlyrHandSetPoseByKey(p, 1, 8, 0);
+            PlyrHandSetPoseByKey(p, 1, 8, 1);
         }
         return 0;
     default: return 0;

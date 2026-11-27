@@ -23,7 +23,7 @@ int AnimChanIsMirrored(AnimChannel_t *pEntry);
 void AnimChanSetMirrored(AnimChannel_t *pEntry, int value);
 void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
-void fn_800ADBC0(Object_80039F5C *p, int a, int b, int c);
+void PlyrHandSetPoseByKey(Object_80039F5C *p, int a, int b, int c);
 int fn_800C0464(void *p);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, AnimChannel_t *pEntries,
@@ -129,8 +129,8 @@ extern "C" void PlayerLocoSetPoseElements(Table_80089904 *pTable, Object_80039F5
         b = t;
     }
     if (p->mIdBytes[3] == 1) {
-        fn_800ADBC0(p, a, 8, 0);
-        fn_800ADBC0(p, b, 8, 1);
+        PlyrHandSetPoseByKey(p, a, 8, 0);
+        PlyrHandSetPoseByKey(p, b, 8, 1);
     }
 }
 

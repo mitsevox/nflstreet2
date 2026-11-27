@@ -110,7 +110,7 @@ static unsigned char _PlyrMgr_aCapsuleBonePairs[11][2] = {
 extern "C" {
 
 FieldPoint_t ScrmGetTeamSetupSpot(int team);
-int fn_800A7FD8(void);
+int GamebreakerIsCutscenePlaying(void);
 int fn_801486A0(void);
 int ScrmGetDefenseTeam(void);
 int ScrmIsFieldFlipped(void);
@@ -142,8 +142,8 @@ unsigned short fn_801BE648(void *p);
 
 void PlyrPoseBlendRawEntries(void *pBlock, int a, unsigned int index);
 void PlyrPoseSetBlend(void *pBlock, int a);
-int fn_800ADD7C(void *pElements, unsigned int index);
-int fn_800ADEFC(void *pElements, unsigned int index);
+int PlyrHandUpdateBlend(void *pElements, unsigned int index);
+int PlyrHandGetBlend(void *pElements, unsigned int index);
 void fn_800B2BC0(Object_800B26B0 *pMotion);
 void PlyrUpdateMatrices(Object_80039F5C *p);
 int fn_800F0770(int a, State_80039F5C *pQueue, int which, int value, Object_80039F5C *p);
@@ -172,7 +172,7 @@ CollideSet_t *StatcollGetSet(void);
 
 extern "C" {
 int CharSkelGetJointByName(void *p, const char *pName);
-void fn_800ADB90(Object_80039F5C *p, int a, int b, int c);
+void PlyrHandSetPoseFor(Object_80039F5C *p, int a, int b, int c);
 void ParticlesAddPlayerEvent(int type, int a, int b, int c);
 void PlyrInit(Object_80039F5C *p, PlyrSlot_t *pPlayer, unsigned char team, unsigned char index);
 void fn_800EFE1C(int a, State_80039F5C *pQueue);
@@ -252,8 +252,8 @@ extern "C" void PlyrFixWristBones(Object_80039F5C *p)
         pObject->mUnknown44.mUnknown48[bone * 3 + 2] = pObject->mUnknown100->mUnknown1040[bone][2] << 4;
         bone = CharSkelGetJointByName(pObject->mUnknown100, "lforearm");
         pObject->mUnknown44.mUnknown48[bone * 3 + 1] = pObject->mUnknown100->mUnknown1040[bone][1] << 4;
-        fn_800ADB90(p, 0, 8, 1);
-        fn_800ADB90(p, 0, 8, 0);
+        PlyrHandSetPoseFor(p, 0, 8, 1);
+        PlyrHandSetPoseFor(p, 0, 8, 0);
     }
 }
 
@@ -324,7 +324,7 @@ extern "C" int PlyrMgrRefreshAll(PlyrMgr_t *pManager, int flags)
                         PlyrPoseBlendRawEntries(pObject, AnimMotCreateWeightList(&pPlayer->mUnknown4008[j], pPlayer->mUnknown4032[j],
                                                          pPlayer->mUnknown4528[j]), j);
                     } else {
-                        PlyrPoseBlendRawEntries(pObject, fn_800ADEFC(pObject->mUnknown116, j), j);
+                        PlyrPoseBlendRawEntries(pObject, PlyrHandGetBlend(pObject->mUnknown116, j), j);
                     }
                 }
                 PlyrApplyPose(p);
@@ -567,8 +567,8 @@ extern "C" void PlyrAnimUpdateHands(Object_80039F5C *p, PlyrModelView_t *pBlock,
             fn_801BE420(pPlayer->mUnknown4528[i], &pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], p, f);
             AnimChanProcess(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], f, p);
             PlyrPoseBlendRawEntries(pBlock, AnimMotCreateWeightList(&pPlayer->mUnknown4008[i], pPlayer->mUnknown4032[i], pPlayer->mUnknown4528[i]), i);
-        } else if (fn_800ADD7C(pBlock->mUnknown116, i) != 0) {
-            PlyrPoseBlendRawEntries(pBlock, fn_800ADEFC(pBlock->mUnknown116, i), i);
+        } else if (PlyrHandUpdateBlend(pBlock->mUnknown116, i) != 0) {
+            PlyrPoseBlendRawEntries(pBlock, PlyrHandGetBlend(pBlock->mUnknown116, i), i);
         }
     }
 }
@@ -579,7 +579,7 @@ extern "C" void PlyrAnimPostUpdate(Object_80039F5C *p, PlyrModelView_t *pBlock)
 
 extern "C" void PlyrClampBehindLine(Object_80039F5C *p)
 {
-    if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && fn_800A7FD8() == 0) {
+    if (fn_800AD9B4() == 2 && fn_801486A0() != 0 && GamebreakerIsCutscenePlaying() == 0) {
         int team = ScrmGetDefenseTeam();
         if (team == p->mIdBytes[2]) {
             float limit = ScrmGetTeamSetupSpot(team).mY + 0.15625f + 1.1f;
@@ -595,7 +595,7 @@ extern "C" void PlyrKeepInBounds(Object_80039F5C *p)
     int mode = fn_800AD9B4();
 
     if (p->mUnknown9[2] != 0
-        && ((mode == 3 && fn_800A7FD8() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
+        && ((mode == 3 && GamebreakerIsCutscenePlaying() == 0) || fn_801486A0() == 0 || fn_801486A0() == 1)
         && ScrmClassifyPosition(&p->mMotion.mPos, 0, 0) > 2) {
         if (++p->mUnknown3090 > 299) {
             if (p->mMotion.mPos.mX >= ScrmGetSidelineX()) {

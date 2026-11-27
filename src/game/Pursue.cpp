@@ -39,7 +39,7 @@ int fn_8009F7A4(Object_80039F5C *p, Object_80039F5C **ppOut);
 int fn_8009FB60(Object_80039F5C *p);
 int fn_800A5C04(Object_80039F5C *p, int a, int b);
 int fn_800A5DD0(Object_80039F5C *p);
-int fn_800AC980(Object_80039F5C *p, int value);
+int GameSkillScalePursueDelay(Object_80039F5C *p, int value);
 void fn_800C89F0(Object_80039F5C *p, int angle, int a, int b, float scale);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
@@ -115,7 +115,7 @@ float SyncRandGetFloat(int stream);
 
 extern "C" {
 int fn_800A8444(int team);
-int fn_800A8408(int team);
+int GamebreakerGetReadyType(int team);
 float SyncRandGetFloat(int stream);
 int fn_801486A0(void);
 }
@@ -173,7 +173,7 @@ extern "C" signed char PursueGetTackleDelay(Object_80039F5C *p)
     short *pRatings = p->mRatings;
     short value;
 
-    if (fn_800A8444(p->mIdBytes[2]) && fn_800A8408(p->mIdBytes[2]) == 1) {
+    if (fn_800A8444(p->mIdBytes[2]) && GamebreakerGetReadyType(p->mIdBytes[2]) == 1) {
         value = (int)(SyncRandGetFloat(0) * 45.0f);
     } else {
         value = PursueScaleRating(126, 0, PursueClampRating(pRatings[5], 0, 255), 255);
@@ -1384,7 +1384,7 @@ extern "C" int PursueUpdate(Object_80039F5C *p)
             int facing;
 
             pState->mUnknown12 = (255 - p->mRatings[5]) >> 4;
-            pState->mUnknown12 = fn_800AC980(p, pState->mUnknown12);
+            pState->mUnknown12 = GameSkillScalePursueDelay(p, pState->mUnknown12);
             pState->mUnknown12 = fn_8009AF00(p->mIdBytes[2], pState->mUnknown12);
             if (fn_801486A0() == 2 && ScrmGetActivePlayerCount(p->mIdBytes[2]) == 1) {
                 pState->mUnknown12 = (int)(pState->mUnknown12 * 0.1f);

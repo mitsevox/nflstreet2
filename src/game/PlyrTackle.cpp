@@ -482,7 +482,7 @@ int GamebreakerGetShedFlag(int team);
 }
 
 extern "C" {
-int fn_800AC074(int team, int value);
+int GameSkillScaleEngageOffense(int team, int value);
 }
 
 extern "C" {
@@ -512,7 +512,7 @@ int fn_8011F1CC(void);
 extern "C" float Vec2Distance(void *pA, void *pB);
 
 extern "C" {
-int fn_800ACD04(Object_80039F5C *p);
+int GameSkillGetTackleTurnLimit(Object_80039F5C *p);
 }
 
 extern "C" {
@@ -1467,7 +1467,7 @@ int PlyrEngageAiWinsShed(Object_80039F5C *p, Object_80039F5C *pOther, Record_800
             defense += (int)(defense * scale);
         }
     }
-    offense = fn_800AC074(p->mIdBytes[2], offense);
+    offense = GameSkillScaleEngageOffense(p->mIdBytes[2], offense);
     if (fn_800B65A0(p->mIdBytes[2]) == 255) {
         float scale = PlayTrackGetPlayIdRate() * 0.5f;
         offense += (int)(offense * scale);
@@ -2203,7 +2203,7 @@ void PlyrTackleAimAtCarrier(Object_80039F5C *p, State_800D7A4C *state)
     FieldPoint_t delta;
     Vec2Sub(&delta, &point, &p->mMotion.mPos);
     int heading = delta.Heading() & 0xFFFFFF;
-    int limit = fn_800ACD04(p);
+    int limit = GameSkillGetTackleTurnLimit(p);
     if (!(point.mY >= ScrmGetBallSpot().mY) && !ScrmTestPlayFlag(0)) limit *= (int)_PlyrTackle_fBehindLineScale;
 
     int step;

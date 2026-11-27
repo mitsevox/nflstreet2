@@ -74,8 +74,8 @@ void SndgSpchSetPlayFlags(int a);
 void SndgEventPostBallContact(Object_80039F5C *p, void *pBall);
 void SndgEventPostBallValue(Object_80039F5C *p, void *pBall);
 void fn_80093C3C(int a, short b, Object_80039F5C *p);
-void fn_80097028(Object_80039F5C *p);
-int fn_8009704C(Object_80039F5C *p);
+void PlyrReachHoldWrists(Object_80039F5C *p);
+int PlyrReachIsActive(Object_80039F5C *p);
 int CatchAnimGetSide(int handle);
 int CatchAnimGetAngle(int handle);
 int CatchAnimGetType(int handle);
@@ -93,12 +93,12 @@ int GamebreakerGetPickFlag(int team);
 int fn_800A851C(int team, Object_80039F5C *p);
 void fn_800A8954(int event, int team, Object_80039F5C *p);
 unsigned int fn_800ABDA4(int team);
-float fn_800AC44C(Object_80039F5C *p, float value);
-float fn_800AC504(int team, float value);
-float fn_800AC6BC(int team, float value);
-float fn_800AC734(Object_80039F5C *p, float value);
-float fn_800AC7E0(int team, float value);
-void fn_800ACE90(Object_80039F5C *p, unsigned int *pValue);
+float GameSkillScaleCatchChance(Object_80039F5C *p, float value);
+float GameSkillScaleJarChance(int team, float value);
+float GameSkillBoostCatchChance(int team, float value);
+float GameSkillOffsetCatchChance(Object_80039F5C *p, float value);
+float GameSkillAdjustJarChance(int team, float value);
+void GameSkillScaleFumbleChance(Object_80039F5C *p, unsigned int *pValue);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
@@ -707,11 +707,11 @@ float PossCalcCatchChance(Object_80039F5C *p, Object_80039F5C *pReceiver, int fl
         chance = chance < 1.0f ? 1.0f : chance;
     }
     if (fn_801486A0() == 1) {
-        chance = fn_800AC734(p, chance);
+        chance = GameSkillOffsetCatchChance(p, chance);
     } else if (offense) {
-        chance = fn_800AC6BC(p->mId >> 8 & 0xFF, chance);
+        chance = GameSkillBoostCatchChance(p->mId >> 8 & 0xFF, chance);
     } else {
-        chance = fn_800AC44C(p, chance);
+        chance = GameSkillScaleCatchChance(p, chance);
     }
     if (fn_800B65A0(p->mId >> 8 & 0xFF) != 0xFF && TutorialIsActive() && !fn_801485D4()) {
         chance = 1.0f;
@@ -797,8 +797,8 @@ int PossTryCatch(void *pBall, Object_80039F5C *p, unsigned int move)
                 if (ScrmGetOffenseTeam() == (p->mId >> 8 & 0xFF)) {
                     if (PlayerActionIsCatchBlocked(p)) {
                         chance = 0.0f;
-                        if (fn_8009704C(p)) {
-                            fn_80097028(p);
+                        if (PlyrReachIsActive(p)) {
+                            PlyrReachHoldWrists(p);
                         }
                     }
                     if (SyncRandGetFloat(0) < chance) {
@@ -919,7 +919,7 @@ void PossTryJarBall(Object_80039F5C *p)
             ratingScale *= 0.75f;
             chance -= ratingScale * chance;
             if (p->mUnknown1160.mUnknown53) {
-                chance = fn_800AC504(p->mId >> 8 & 0xFF, chance);
+                chance = GameSkillScaleJarChance(p->mId >> 8 & 0xFF, chance);
             }
             if (p->mUnknown1160.mUnknown54) {
                 chance *= 1.5f;
@@ -946,7 +946,7 @@ void PossTryJarBall(Object_80039F5C *p)
                     }
                 }
             }
-            chance = fn_800AC7E0(p->mId >> 8 & 0xFF, chance);
+            chance = GameSkillAdjustJarChance(p->mId >> 8 & 0xFF, chance);
             if (BallGetStateFrames(pBall) <= 0x13) {
                 unsigned int frames = 20 - BallGetStateFrames(pBall);
                 float perFrame = chance * 0.05f;
@@ -1101,7 +1101,7 @@ void PossTryFumble(Object_80039F5C *p, Object_80039F5C *pTackler)
                 }
             }
             chance = CatchUpAdjustFumbleChance(p->mId >> 8 & 0xFF, chance);
-            fn_800ACE90(p, &chance);
+            GameSkillScaleFumbleChance(p, &chance);
             chance = chance > 95 ? 95 : chance;
         }
         if (forced || SyncRandGetRange(0, 100) < chance) {

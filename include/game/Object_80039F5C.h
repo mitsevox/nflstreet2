@@ -78,7 +78,7 @@ struct Block_80170E64 {
     char mUnknown664[12];
     BigObjInst *mpUnknown676;
     int mUnknown680;
-    /* fn_80093410 reads a spot from +920/+936; the size is not established. */
+    /* AnmsEndScene reads a spot from +920/+936; the size is not established. */
     char mUnknown684[236];
     float mUnknown920;
     char mUnknown924[12];

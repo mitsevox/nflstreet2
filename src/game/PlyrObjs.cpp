@@ -84,8 +84,8 @@ void fn_800B4A88();
 void fn_801BE030(int, void **);
 void PlyrOverlayAnimRegisterCallbacks();
 void PlyrOverlayAnimLoad();
-void fn_800AE10C();
-void fn_800ADE6C();
+void PlyrHandInitCallbacks();
+void PlyrHandLoadFrames();
 AnimSkeleton_t *ResLoad(void *, int, int);
 void CharRelocateSkeleton(AnimSkeleton_t *);
 void CharSkelMirrorRest(AnimSkeleton_t *, AnimSkeleton_t *);
@@ -648,9 +648,9 @@ void PlyrObjsInitStateTables(int mode) {
   PlyrOverlayAnimRegisterCallbacks();
   fn_801BE030(3, &lbl_803EA9FC);
   PlyrOverlayAnimLoad();
-  fn_800AE10C();
+  PlyrHandInitCallbacks();
   fn_801BE030(4, &lbl_803EAAE0);
-  fn_800ADE6C();
+  PlyrHandLoadFrames();
 }
 static inline void ZeroRoot(AnimSkeleton_t *skeleton) {
   float *root = (float *)((char *)skeleton + 16);

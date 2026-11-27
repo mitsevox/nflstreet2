@@ -260,7 +260,7 @@ extern "C" void PlayerActionAnimAiConsiderPitch(Record_800DB60C *pRecord, Object
         allow = 0;
     }
     unsigned int roll = (unsigned int)SyncRandGetRange(0, 255);
-    if (roll > (unsigned int)fn_800ACFA8(p)) {
+    if (roll > (unsigned int)GameSkillGetPitchThreshold(p)) {
         failed = 1;
     }
     if (failed && (unsigned int)SyncRandGetRange(0, 100) < (unsigned int)lbl_803EAD19) {
@@ -560,10 +560,10 @@ extern "C" int PlayerActionAnimFacingCallback(List_800DC36C *pList, unsigned sho
     case 0:
         if (p->mUnknown2913 == 0) {
             side = 1;
-            fn_800ADB90(p, 5, 8, 1);
+            PlyrHandSetPoseFor(p, 5, 8, 1);
         } else {
             side = 0;
-            fn_800ADB90(p, 5, 8, 0);
+            PlyrHandSetPoseFor(p, 5, 8, 0);
         }
         for (i = 0; i < pList->mCount; i++) {
             Object_800DC36C *pObject = pList->mEntries[i].mpUnknown4;

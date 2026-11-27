@@ -244,9 +244,9 @@ void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 void fn_800A7A0C(int team);
 int fn_800A8444(int team);
 int fn_800A8488(int team);
-int fn_800A84C8(void);
+int GamebreakerAnyFlagCleared(void);
 int fn_800A8740(void);
-int fn_800A8F84(unsigned char index);
+int GamebreakerGetSavedState(unsigned char index);
 void fn_800AE7F0(int a, int b, Object_80039F5C *p);
 void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
@@ -1104,7 +1104,7 @@ extern "C" void StyleTrackerAwardVictory(int team, unsigned int value) {
         percent = value * 100 / limit;
     }
     if (ChallengeIsActive() == 0 && fn_801486A0() != 5) {
-        if (fn_800A84C8() != 0 && fn_800A8444((unsigned char)team) != 0) {
+        if (GamebreakerAnyFlagCleared() != 0 && fn_800A8444((unsigned char)team) != 0) {
             StyleTrackerAwardEvent(team, 107, percent);
         } else {
             StyleTrackerAwardEvent(team, 106, percent);
@@ -1432,7 +1432,7 @@ extern "C" void StyleTrackerSetMeter(int side, int value, int arg) {
         if (value < 0) {
             value = 0;
         }
-        if (fn_800A8F84(side) == 0 || value < *(side == 0 ? &_StyleTracker_pState->mTeamZeroMeter : &_StyleTracker_pState->mTeamOneMeter)) {
+        if (GamebreakerGetSavedState(side) == 0 || value < *(side == 0 ? &_StyleTracker_pState->mTeamZeroMeter : &_StyleTracker_pState->mTeamOneMeter)) {
             if (value == 0 && StyleTrackerGetMeter(side) > 0) {
                 AudmonEventPostArgs(6, 0, side, 0, 0);
             }
@@ -1507,7 +1507,7 @@ extern "C" void StyleTrackerOnTouchdown(void) {
             _StyleTracker_pState->mTouchdownEvent = 91;
         }
     } else if (ScrmGetPlayTurnovers() == 0 && _StyleTracker_pState->mOffenseLostBall == 0) {
-        if (fn_800A84C8() != 0 && fn_800A8444(ScrmGetDefenseTeam()) != 0) {
+        if (GamebreakerAnyFlagCleared() != 0 && fn_800A8444(ScrmGetDefenseTeam()) != 0) {
             _StyleTracker_pState->mTouchdownPending = 1;
             _StyleTracker_pState->mTouchdownEvent = 94;
         } else if (_StyleTracker_pState->unk_0x1ECE != 0) {

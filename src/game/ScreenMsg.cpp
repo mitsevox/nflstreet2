@@ -19,7 +19,7 @@ int InGameScreensDispatch(int group, unsigned int id, MenuArg_t *pArgs, int coun
 int PopupScreenMsg(int kind, int id, void *pArgs, int c, int *pResult);
 int UISGroup2HandleMsg(int group, unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
 int UISGameMsgDispatch(unsigned int id, MenuArg_t *pArgs, int count, int *pResult);
-void fn_800AE65C(void);
+void GameTipRumblePads(void);
 void fn_800AE988(void);
 int TutorialScreen13Msg(int id, void *pArgs, int count, int *pResult);
 int TutorialScreen12Msg(int id, void *pArgs, int count, int *pResult);
@@ -127,7 +127,7 @@ extern "C" void TutorialScreen13Exit(void)
 
 extern "C" void TutorialScreen13Enter(void)
 {
-    fn_800AE65C();
+    GameTipRumblePads();
 }
 
 extern "C" int TutorialScreen13Msg(int id, void *pArgs, int count, int *pResult)
@@ -155,7 +155,7 @@ extern "C" int TutorialScreen12Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen12Exit();
@@ -176,7 +176,7 @@ extern "C" int TutorialScreen2Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen2Exit();
@@ -197,7 +197,7 @@ extern "C" int TutorialScreen1Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen1Exit();
@@ -218,7 +218,7 @@ extern "C" int TutorialScreen8Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen8Exit();
@@ -239,7 +239,7 @@ extern "C" int TutorialScreen5Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen5Exit();
@@ -278,7 +278,7 @@ extern "C" void TutorialScreen10Exit(void)
 
 extern "C" void TutorialScreen10Enter(void)
 {
-    fn_800AE65C();
+    GameTipRumblePads();
 }
 
 extern "C" int TutorialScreen10Msg(int id, void *pArgs, int count, int *pResult)
@@ -304,7 +304,7 @@ extern "C" void TutorialScreen11Exit(void)
 
 extern "C" void TutorialScreen11Enter(void)
 {
-    fn_800AE65C();
+    GameTipRumblePads();
 }
 
 extern "C" int TutorialScreen11Msg(int id, void *pArgs, int count, int *pResult)
@@ -332,7 +332,7 @@ extern "C" int TutorialScreen7Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen7Exit();
@@ -353,7 +353,7 @@ extern "C" int TutorialScreen9Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen9Exit();
@@ -374,7 +374,7 @@ extern "C" int TutorialScreen14Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen14Exit();
@@ -395,7 +395,7 @@ extern "C" int TutorialScreen6Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen6Exit();
@@ -416,7 +416,7 @@ extern "C" int TutorialScreen4Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen4Exit();
@@ -437,7 +437,7 @@ extern "C" int TutorialScreen0Msg(int id, void *pArgs, int count, int *pResult)
 {
     switch (id) {
     case 0x80000001:
-        fn_800AE65C();
+        GameTipRumblePads();
         break;
     case 0x80000002:
         TutorialScreen0Exit();
