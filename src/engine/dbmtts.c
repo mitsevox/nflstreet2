@@ -790,11 +790,16 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
         count = lbl_803EC014[i];
         for (j = 0; j < count; j++) {
             table = lbl_803EC010[i][j];
-            if (TDbTblExists(0, table) == 0) {
-                status = fn_8022AD64(table, &lbl_803EC018[i][j], &lbl_803EC01C[i][j]);
-            } else {
-                lbl_803EC018[i][j] = 0;
-                lbl_803EC01C[i][j] = 0;
+            {
+                TDbCol_801F9718 **ppCols = &lbl_803EC018[i][j];
+                unsigned char *pCount = &lbl_803EC01C[i][j];
+
+                if (TDbTblExists(0, table) == 0) {
+                    status = fn_8022AD64(table, ppCols, pCount);
+                } else {
+                    *ppCols = 0;
+                    *pCount = 0;
+                }
             }
             if (status != 0) {
                 break;
@@ -804,12 +809,19 @@ int fn_8022B02C(Callbacks_8022B02C *pCallbacks)
             break;
         }
     }
-    for (i = 0; i < 1 && status == 0; i++) {
-        table = lbl_803EC020[i];
-        if (TDbTblExists(0, table) == 0) {
-            status = fn_8022AD64(table, &lbl_803EC024[i], &lbl_803ED01C[i]);
-        } else {
-            lbl_803ED01C[i] = 0;
+    if (status == 0) {
+        for (i = 0; i < 1; i++) {
+            unsigned char *pCount = &lbl_803ED01C[i];
+
+            table = lbl_803EC020[i];
+            if (TDbTblExists(0, table) == 0) {
+                status = fn_8022AD64(table, &lbl_803EC024[i], pCount);
+            } else {
+                *pCount = 0;
+            }
+            if (status != 0) {
+                break;
+            }
         }
     }
     if (status == 0) {
