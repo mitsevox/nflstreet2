@@ -823,10 +823,6 @@
       "address": "0x802B3888",
       "evidence": "evidence.tsv data and name rows for 0x802B3888 (original .rodata query literal used by src/engine/dbsrpt.c, which references it through an extern; its bytes stay original)."
     },
-    "SNDI_parsetimbre": {
-      "address": "0x80270E04",
-      "evidence": "evidence.tsv function and related name rows at 0x80270E04 (SNDI_parsetimbre, the registered holdout of src/engine/stpparse.c, original bytes linked). sbremove.c, sresopat.c and stagpat.c call it by name through the sndbank.h prototype."
-    },
     "SNDSTRMI_create": {
       "address": "0x8026DE00",
       "evidence": "evidence.tsv function and name rows for 0x8026DE00 (SNDSTRMI_create, a registered holdout of src/engine/sst.c, original bytes linked); called by name from src/engine/sstcrtap.c."
@@ -5656,6 +5652,25 @@
         ],
         "evidence": "merge notes of #1370 (w1) holdouts table: src/engine/stagpat.c holds out SNDBANKI_playtimbre; its HOLDOUT: row evidence.tsv source-form 0x80270518-0x80270B10 lists the forms tried and the RTL-dump finding."
       }
+    },
+    {
+      "source": "src/engine/stpparse.c",
+      "profile": "sound_cxx",
+      "evidence": "evidence.tsv unit row 0x80270E04-0x802714A8 (src/engine/stpparse.c), the function and name rows of SNDI_parsetimbre, the snddefaultenvelope data row 0x8030003C-0x80300044, the source-form row (statement order from the Xbox NFLBig.xbe counterpart 0x29B470) and the sound_cxx compiler row; its one function is exact and linked (rw2b).",
+      "sections": [
+        {
+          "section": ".text",
+          "placement": ".text",
+          "start": "0x80270E04",
+          "end": "0x802714A8"
+        },
+        {
+          "section": ".data",
+          "placement": ".data4",
+          "start": "0x8030003C",
+          "end": "0x80300044"
+        }
+      ]
     },
     {
       "source": "src/engine/svol.c",

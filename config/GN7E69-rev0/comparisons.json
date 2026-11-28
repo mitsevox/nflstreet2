@@ -28118,32 +28118,6 @@
       ]
     },
     {
-      "source": "src/engine/stpparse.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x80270E04-0x802714A8, function and name rows of SNDI_parsetimbre, snddefaultenvelope data row 0x8030003C-0x80300044 and the sound_cxx compiler row.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80270E04",
-          "end": "0x802714A8"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x8030003C",
-          "end": "0x80300044"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_parsetimbre",
-          "start": "0x80270E04",
-          "end": "0x802714A8"
-        }
-      ]
-    },
-    {
       "source": "src/engine/spktplay.c",
       "profile": "sound_cxx",
       "evidence": "evidence.tsv unit row 0x80278A68-0x80279648 (src/engine/spktplay.c), its function, name and data rows and the sound_cxx compiler evidence. SNDPKTPLAY_start remains a comparison while its original bytes link; evidence.tsv source-form 0x80278BF0-0x80279048.",
