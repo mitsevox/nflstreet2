@@ -72,17 +72,14 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     patchValues[0x22] = 0;
     patchValues[0x23] = 0;
 
+    patchValues[0x24] = 0;
+    patchValues[0x25] = 1;
     sampleValues[0x80 - 0x80] = 2;
     sampleValues[0x82 - 0x80] = 1;
     sampleValues[0x84 - 0x80] = 24000;
-    sampleValues[0x87 - 0x80] = -1;
-    sampleValues[0xA7 - 0x80] = 0;
-    sampleValues[0xA0 - 0x80] = 7;
-    sampleValues[0x8C - 0x80] = 0x200;
-    patchValues[0x24] = 0;
-    patchValues[0x25] = 1;
     sampleValues[0x85 - 0x80] = 0;
     sampleValues[0x86 - 0x80] = -1;
+    sampleValues[0x87 - 0x80] = -1;
     sampleValues[0x88 - 0x80] = 0;
     sampleValues[0x9C - 0x80] = 0;
     sampleValues[0x89 - 0x80] = 0;
@@ -94,6 +91,9 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     sampleValues[0xA2 - 0x80] = 0;
     sampleValues[0xA6 - 0x80] = 0;
     sampleValues[0xA3 - 0x80] = 0;
+    sampleValues[0xA7 - 0x80] = 0;
+    sampleValues[0xA0 - 0x80] = 7;
+    sampleValues[0x8C - 0x80] = 0x200;
 
     more = 0;
     while (SNDI_gettag(&tag)) {
@@ -165,6 +165,9 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     header->m30 = (signed char *)((unsigned long)patchPayloads[0x20] + patchValues[0x20]);
     header->m1D = patchValues[0x21];
     header->m54 = patchValues[0x22];
+    header->m1E = patchValues[0x23];
+    header->m0 = patchValues[0x24];
+    header->mUnknown1F = patchValues[0x25];
     header->mUnknown2 = sampleValues[0x80 - 0x80];
     header->m13 = sampleValues[0xA0 - 0x80];
     header->m56 = sampleValues[0x84 - 0x80];
@@ -174,9 +177,6 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     header->m18 = sampleValues[0x8C - 0x80];
     header->m64 = (int *)samplePayloads[0x8A - 0x80];
     header->m68 = sampleValues[0x88 - 0x80];
-    header->m1E = patchValues[0x23];
-    header->m0 = patchValues[0x24];
-    header->mUnknown1F = patchValues[0x25];
     azimuths[0] = sampleValues[0x9C - 0x80];
     header->mOtherChannelOffsets[0] = sampleValues[0x89 - 0x80];
     azimuths[1] = sampleValues[0x9D - 0x80];
@@ -185,10 +185,10 @@ int SNDI_parsetimbre(char **cursor, SNDIPATCHHEADER *header)
     azimuths[2] = sampleValues[0x9E - 0x80];
     header->mOtherChannelOffsets[2] = sampleValues[0x95 - 0x80];
     azimuths[3] = sampleValues[0x9F - 0x80];
-    azimuths[4] = sampleValues[0xA6 - 0x80];
-    azimuths[5] = sampleValues[0xA7 - 0x80];
     header->mOtherChannelOffsets[3] = sampleValues[0xA2 - 0x80];
+    azimuths[4] = sampleValues[0xA6 - 0x80];
     header->mOtherChannelOffsets[4] = sampleValues[0xA3 - 0x80];
+    azimuths[5] = sampleValues[0xA7 - 0x80];
     header->mAdpcmCoefficients[0] = samplePayloads[0x8F - 0x80];
     header->mAdpcmCoefficients[1] = samplePayloads[0x90 - 0x80];
     header->mAdpcmLoopState[0] = (Loop_80273DF8 *)samplePayloads[0x8D - 0x80];
