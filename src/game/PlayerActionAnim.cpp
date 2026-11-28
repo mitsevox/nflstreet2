@@ -1272,14 +1272,14 @@ extern "C" unsigned short PlayerActionAnimFindTurnEntry(Table_80089904 *pTable, 
     *pTime = 1.0f;
     *pRate = 1.0f;
     int difference = MathAngleDiff(facing, desired);
-    int direction = ((desired - facing) & 0xFFFFFF) > 0x800000 ? -1 : 1;
     Info_800DDF34 *pChosen = 0;
     unsigned int chosen = 0;
+    int direction = ((desired - facing) & 0xFFFFFF) > 0x800000 ? -1 : 1;
     for (unsigned int i = 0; i < pTable->mCount; i++) {
         Info_800DDF34 *pInfo = (Info_800DDF34 *)pTable->mEntries[i].mpInfo;
         if (PlayerActionAnimKeysMatch(pInfo->mUnknown4, (unsigned char *)&p->mUnknown1008) &&
             difference >= pInfo->mUnknown16 && difference <= pInfo->mUnknown20 &&
-            ((direction > 0 && pInfo->mUnknown12 > 0) || (direction < 0 && pInfo->mUnknown12 < 0))) {
+            ((direction == 1 && pInfo->mUnknown12 > 0) || (direction < 0 && pInfo->mUnknown12 < 0))) {
             if (!pChosen || (unsigned int)SyncRandGetRange(0, 100) <= 49) {
                 pChosen = pInfo;
                 chosen = i;
