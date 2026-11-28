@@ -1402,11 +1402,16 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
     int ok = 1;
     int needMatch = 0;
     int matched = 0;
-    int hasCall = 0;
+    int hasCall;
     unsigned char value374 = 0;
-    int flag = 0;
-    int callA = 0;
-    int callB = 0;
+    int flag;
+    int callA;
+    int callB;
+
+    hasCall = 0;
+    flag = 0;
+    callA = 0;
+    callB = 0;
 
     for (; pCond->mOp != -1; pCond++) {
         if (!ok) {

@@ -8092,12 +8092,6 @@
           "section": ".text",
           "placement": ".text",
           "start": "0x8002D0AC",
-          "end": "0x8002D4A0"
-        },
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8002DC00",
           "end": "0x80030D50"
         },
         {
@@ -8140,10 +8134,6 @@
           {
             "function": "ReplayIsShowing",
             "evidence": "evidence.tsv source-form 0x8002D060-0x8002D0AC"
-          },
-          {
-            "function": "ReplayTestConditions",
-            "evidence": "evidence.tsv source-form 0x8002D4A0-0x8002DC00"
           }
         ],
         "evidence": "merge notes of the pull request that links the file (x1 wave tracking table)"
