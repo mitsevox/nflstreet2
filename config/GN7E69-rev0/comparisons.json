@@ -951,7 +951,7 @@
           "end": "0x8003549C"
         },
         {
-          "symbol": "fn_8003549C__8PlayBooki",
+          "symbol": "OpenTeamPlayBooks__8PlayBooki",
           "start": "0x8003549C",
           "end": "0x8003556C"
         },
@@ -981,7 +981,7 @@
           "end": "0x800355FC"
         },
         {
-          "symbol": "fn_800355FC__8PlayBook",
+          "symbol": "ReopenTeamPlayBooks__8PlayBook",
           "start": "0x800355FC",
           "end": "0x80035620"
         },
@@ -1436,7 +1436,7 @@
           "end": "0x80035DA0"
         },
         {
-          "symbol": "fn_80035DA0__FPUcT0",
+          "symbol": "_TurboGetTeamSizes__FPUcT0",
           "start": "0x80035DA0",
           "end": "0x80035E68"
         },
@@ -1466,7 +1466,7 @@
           "end": "0x80035EE0"
         },
         {
-          "symbol": "fn_80035EE0__5Turbo",
+          "symbol": "ResetMeters__5Turbo",
           "start": "0x80035EE0",
           "end": "0x80035F14"
         },
@@ -3372,47 +3372,6 @@
           "symbol": "_Shop_iLastStore",
           "start": "0x803ECE34",
           "end": "0x803ECE38"
-        }
-      ]
-    },
-    {
-      "source": "src/game/TeamTables.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv src/game/TeamTables.cpp bounded unit, exact function and query-pool rows, declarations, source forms and compiler profile. The source is linked with holdouts (units.json); the one non-exact function stays registered here as its partial.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8018C344",
-          "end": "0x8018C688"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AA1FC",
-          "end": "0x802AA334"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "TeamTablesCopy",
-          "start": "0x8018C344",
-          "end": "0x8018C3EC"
-        },
-        {
-          "symbol": "TeamTablesDestroy",
-          "start": "0x8018C3EC",
-          "end": "0x8018C438"
-        },
-        {
-          "symbol": "TeamTablesDeleteTeamPlayers",
-          "start": "0x8018C438",
-          "end": "0x8018C48C"
-        },
-        {
-          "symbol": "TeamTablesPurgeCreated",
-          "start": "0x8018C48C",
-          "end": "0x8018C688"
         }
       ]
     },
@@ -6718,7 +6677,7 @@
     {
       "source": "src/game/MsgFrontEnd.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row src/game/MsgFrontEnd.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Five function bodies differ (see the source-form row cu_8000F870 unmatched functions and their HOLDOUT: rows). The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row src/game/MsgFrontEnd.cpp, the function rows 0x8000F870-0x8001701C, the data rows 0x8001701C-0x800170E0 (data_8001701C), 0x802F41BC-0x802F43F4 and 0x803EB950-0x803EBA08, the .ctors/.dtors words and the data rows of its .bss and .sbss objects. Two function bodies differ (see the source-form row cu_8000F870 unmatched functions and their HOLDOUT: rows). The source is linked with holdouts (units.json); the non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -10301,7 +10260,7 @@
     {
       "source": "src/game/PlayerQuery.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds, PlayerRecordWriteById and PlayerQueryOpen stay registered here as its partials (their HOLDOUT source-form rows).",
+      "evidence": "evidence.tsv unit row 0x8007FA48-0x800808F8 (src/game/PlayerQuery.cpp), its function, name and data rows. The source is linked with holdouts (units.json, owner ruling of 2026-11-20); the non-exact PlayerRecordFindFreeIds and PlayerRecordWriteById stay registered here as its partials (their HOLDOUT source-form rows).",
       "sections": [
         {
           "section": ".text",
@@ -14618,17 +14577,17 @@
           "end": "0x800AF088"
         },
         {
-          "symbol": "fn_800AF088",
+          "symbol": "HotRouteClearOffenseCmd31",
           "start": "0x800AF088",
           "end": "0x800AF13C"
         },
         {
-          "symbol": "fn_800AF13C",
+          "symbol": "ResHoldFind",
           "start": "0x800AF13C",
           "end": "0x800AF198"
         },
         {
-          "symbol": "fn_800AF198",
+          "symbol": "_ResHoldMatchKey",
           "start": "0x800AF198",
           "end": "0x800AF1BC"
         },
@@ -14643,117 +14602,117 @@
           "end": "0x800AF264"
         },
         {
-          "symbol": "fn_800AF264",
+          "symbol": "ResHoldRelease",
           "start": "0x800AF264",
           "end": "0x800AF2AC"
         },
         {
-          "symbol": "fn_800AF2AC",
+          "symbol": "PlyrIKCopyJoints",
           "start": "0x800AF2AC",
           "end": "0x800AF304"
         },
         {
-          "symbol": "fn_800AF304",
+          "symbol": "PlyrIKBlendJoints",
           "start": "0x800AF304",
           "end": "0x800AF404"
         },
         {
-          "symbol": "fn_800AF404",
+          "symbol": "PlyrIKSolveChain",
           "start": "0x800AF404",
           "end": "0x800AF4A8"
         },
         {
-          "symbol": "fn_800AF4A8",
+          "symbol": "PlyrIKUpdateEntry",
           "start": "0x800AF4A8",
           "end": "0x800AF630"
         },
         {
-          "symbol": "fn_800AF630",
+          "symbol": "PlyrIKInit",
           "start": "0x800AF630",
           "end": "0x800AF71C"
         },
         {
-          "symbol": "fn_800AF71C",
+          "symbol": "PlyrIKShutdown",
           "start": "0x800AF71C",
           "end": "0x800AF790"
         },
         {
-          "symbol": "fn_800AF790",
+          "symbol": "PlyrIKCreateChain",
           "start": "0x800AF790",
           "end": "0x800AF804"
         },
         {
-          "symbol": "fn_800AF804",
+          "symbol": "PlyrIKClearEntries",
           "start": "0x800AF804",
           "end": "0x800AF82C"
         },
         {
-          "symbol": "fn_800AF82C",
+          "symbol": "PlyrIKSetupEntry",
           "start": "0x800AF82C",
           "end": "0x800AF87C"
         },
         {
-          "symbol": "fn_800AF87C",
+          "symbol": "PlyrIKSetTarget",
           "start": "0x800AF87C",
           "end": "0x800AF95C"
         },
         {
-          "symbol": "fn_800AF95C",
+          "symbol": "PlyrIKReleaseTarget",
           "start": "0x800AF95C",
           "end": "0x800AF9C0"
         },
         {
-          "symbol": "fn_800AF9C0",
+          "symbol": "PlyrIKSetParams",
           "start": "0x800AF9C0",
           "end": "0x800AF9E4"
         },
         {
-          "symbol": "fn_800AF9E4",
+          "symbol": "PlyrIKIsActive",
           "start": "0x800AF9E4",
           "end": "0x800AF9F4"
         },
         {
-          "symbol": "fn_800AF9F4",
+          "symbol": "PlyrIKUpdate",
           "start": "0x800AF9F4",
           "end": "0x800AFA60"
         },
         {
-          "symbol": "fn_800AFA60",
+          "symbol": "_CallbackListCreate",
           "start": "0x800AFA60",
           "end": "0x800AFAAC"
         },
         {
-          "symbol": "fn_800AFAAC",
+          "symbol": "_CallbackListDestroy",
           "start": "0x800AFAAC",
           "end": "0x800AFAD4"
         },
         {
-          "symbol": "fn_800AFAD4",
+          "symbol": "_CallbackListCompare",
           "start": "0x800AFAD4",
           "end": "0x800AFB70"
         },
         {
-          "symbol": "fn_800AFB70",
+          "symbol": "_CallbackListSave",
           "start": "0x800AFB70",
           "end": "0x800AFBD8"
         },
         {
-          "symbol": "fn_800AFBD8",
+          "symbol": "_CallbackListLoad",
           "start": "0x800AFBD8",
           "end": "0x800AFC28"
         },
         {
-          "symbol": "fn_800AFC28",
+          "symbol": "_CallbackListGetSize",
           "start": "0x800AFC28",
           "end": "0x800AFC5C"
         },
         {
-          "symbol": "fn_800AFC5C",
+          "symbol": "_CallbackListCallNode",
           "start": "0x800AFC5C",
           "end": "0x800AFC94"
         },
         {
-          "symbol": "fn_800AFC94",
+          "symbol": "_CallbackListMatchNode",
           "start": "0x800AFC94",
           "end": "0x800AFCB8"
         },
@@ -14773,82 +14732,82 @@
           "end": "0x800AFDD4"
         },
         {
-          "symbol": "fn_800AFDD4",
+          "symbol": "CallbackListAdd",
           "start": "0x800AFDD4",
           "end": "0x800AFE20"
         },
         {
-          "symbol": "fn_800AFE20",
+          "symbol": "CallbackListRemove",
           "start": "0x800AFE20",
           "end": "0x800AFE8C"
         },
         {
-          "symbol": "fn_800AFE8C",
+          "symbol": "_PlayMotionIsOffMotionSpot",
           "start": "0x800AFE8C",
           "end": "0x800AFF20"
         },
         {
-          "symbol": "fn_800AFF20",
+          "symbol": "_PlayMotionIsSlotPlayer",
           "start": "0x800AFF20",
           "end": "0x800AFF88"
         },
         {
-          "symbol": "fn_800AFF88",
+          "symbol": "_PlayMotionIsRouteFree",
           "start": "0x800AFF88",
           "end": "0x800B0004"
         },
         {
-          "symbol": "fn_800B0004",
+          "symbol": "PlayMotionPruneEntries",
           "start": "0x800B0004",
           "end": "0x800B0090"
         },
         {
-          "symbol": "fn_800B0090",
+          "symbol": "PlayMotionBuildEntries",
           "start": "0x800B0090",
           "end": "0x800B02CC"
         },
         {
-          "symbol": "fn_800B02CC",
+          "symbol": "PlayMotionSelectFirst",
           "start": "0x800B02CC",
           "end": "0x800B03A4"
         },
         {
-          "symbol": "fn_800B03A4",
+          "symbol": "PlayMotionCycleSelection",
           "start": "0x800B03A4",
           "end": "0x800B0558"
         },
         {
-          "symbol": "fn_800B0558",
+          "symbol": "PlayMotionIsAtSpot",
           "start": "0x800B0558",
           "end": "0x800B05F0"
         },
         {
-          "symbol": "fn_800B05F0",
+          "symbol": "PlayMotionStartRandom",
           "start": "0x800B05F0",
           "end": "0x800B0730"
         },
         {
-          "symbol": "fn_800B0730",
+          "symbol": "PlayMotionMovePlayers",
           "start": "0x800B0730",
           "end": "0x800B0A28"
         },
         {
-          "symbol": "fn_800B0A28",
+          "symbol": "PlayMotionUpdateNothing",
           "start": "0x800B0A28",
           "end": "0x800B0A2C"
         },
         {
-          "symbol": "fn_800B0A2C",
+          "symbol": "PlayMotionCanSend",
           "start": "0x800B0A2C",
           "end": "0x800B0BC0"
         },
         {
-          "symbol": "fn_800B0BC0",
+          "symbol": "PlayMotionUpdateActive",
           "start": "0x800B0BC0",
           "end": "0x800B0C70"
         },
         {
-          "symbol": "fn_800B0C70",
+          "symbol": "_PlayMotionCompare",
           "start": "0x800B0C70",
           "end": "0x800B0CFC"
         },
@@ -14863,27 +14822,27 @@
           "end": "0x800B0DA4"
         },
         {
-          "symbol": "fn_800B0DA4",
+          "symbol": "PlayMotionReset",
           "start": "0x800B0DA4",
           "end": "0x800B0E18"
         },
         {
-          "symbol": "fn_800B0E18",
+          "symbol": "PlayMotionUpdate",
           "start": "0x800B0E18",
           "end": "0x800B0E68"
         },
         {
-          "symbol": "fn_800B0E68",
+          "symbol": "PlayMotionBegin",
           "start": "0x800B0E68",
           "end": "0x800B0EB8"
         },
         {
-          "symbol": "fn_800B0EB8",
+          "symbol": "PlayMotionSendRight",
           "start": "0x800B0EB8",
           "end": "0x800B0F28"
         },
         {
-          "symbol": "fn_800B0F28",
+          "symbol": "PlayMotionSendLeft",
           "start": "0x800B0F28",
           "end": "0x800B0F98"
         },
@@ -14898,17 +14857,17 @@
           "end": "0x800B119C"
         },
         {
-          "symbol": "fn_800B119C",
+          "symbol": "PlayMotionPlayHasCounts",
           "start": "0x800B119C",
           "end": "0x800B1200"
         },
         {
-          "symbol": "fn_800B1200",
+          "symbol": "PlayMotionCheckSnap",
           "start": "0x800B1200",
           "end": "0x800B146C"
         },
         {
-          "symbol": "fn_800B146C",
+          "symbol": "PlayMotionIsActive",
           "start": "0x800B146C",
           "end": "0x800B1478"
         },
@@ -14953,92 +14912,92 @@
           "end": "0x800B1670"
         },
         {
-          "symbol": "fn_800B1670",
+          "symbol": "GameEventAddListener",
           "start": "0x800B1670",
           "end": "0x800B1698"
         },
         {
-          "symbol": "fn_800B1698",
+          "symbol": "GameEventPostTackle",
           "start": "0x800B1698",
           "end": "0x800B1758"
         },
         {
-          "symbol": "fn_800B1758",
+          "symbol": "GameEventPostNothing",
           "start": "0x800B1758",
           "end": "0x800B175C"
         },
         {
-          "symbol": "fn_800B175C",
+          "symbol": "OvertimeInit",
           "start": "0x800B175C",
           "end": "0x800B17B4"
         },
         {
-          "symbol": "fn_800B17B4",
+          "symbol": "OvertimeEnter",
           "start": "0x800B17B4",
           "end": "0x800B17F0"
         },
         {
-          "symbol": "fn_800B17F0",
+          "symbol": "OvertimeUpdate",
           "start": "0x800B17F0",
           "end": "0x800B18D0"
         },
         {
-          "symbol": "fn_800B18D0",
+          "symbol": "OvertimeExit",
           "start": "0x800B18D0",
           "end": "0x800B1900"
         },
         {
-          "symbol": "fn_800B1900",
+          "symbol": "PenaltyCallLoadOdds",
           "start": "0x800B1900",
           "end": "0x800B19E8"
         },
         {
-          "symbol": "fn_800B19E8",
+          "symbol": "_PenaltyCallCompare",
           "start": "0x800B19E8",
           "end": "0x800B1A30"
         },
         {
-          "symbol": "fn_800B1A30",
+          "symbol": "_PenaltyCallPromptStart",
           "start": "0x800B1A30",
           "end": "0x800B1AAC"
         },
         {
-          "symbol": "fn_800B1AAC",
+          "symbol": "_PenaltyCallPromptUpdate",
           "start": "0x800B1AAC",
           "end": "0x800B1BF8"
         },
         {
-          "symbol": "fn_800B1BF8",
+          "symbol": "_PenaltyCallPromptEnd",
           "start": "0x800B1BF8",
           "end": "0x800B1C28"
         },
         {
-          "symbol": "fn_800B1C28",
+          "symbol": "PenaltyCallEnforce",
           "start": "0x800B1C28",
           "end": "0x800B1F58"
         },
         {
-          "symbol": "fn_800B1F58",
+          "symbol": "PenaltyCallTryFlag",
           "start": "0x800B1F58",
           "end": "0x800B206C"
         },
         {
-          "symbol": "fn_800B206C",
+          "symbol": "_PenaltyCallFillFoul",
           "start": "0x800B206C",
           "end": "0x800B211C"
         },
         {
-          "symbol": "fn_800B211C",
+          "symbol": "PenaltyCallAddFoul",
           "start": "0x800B211C",
           "end": "0x800B2184"
         },
         {
-          "symbol": "fn_800B2184",
+          "symbol": "PenaltyCallAddPending",
           "start": "0x800B2184",
           "end": "0x800B21CC"
         },
         {
-          "symbol": "fn_800B21CC",
+          "symbol": "PenaltyCallNothing",
           "start": "0x800B21CC",
           "end": "0x800B21D0"
         },
@@ -15053,12 +15012,12 @@
           "end": "0x800B22E0"
         },
         {
-          "symbol": "fn_800B22E0",
+          "symbol": "PenaltyCallInitOdds",
           "start": "0x800B22E0",
           "end": "0x800B2304"
         },
         {
-          "symbol": "fn_800B2304",
+          "symbol": "PenaltyCallClearFlags",
           "start": "0x800B2304",
           "end": "0x800B2314"
         },
@@ -15068,17 +15027,17 @@
           "end": "0x800B2320"
         },
         {
-          "symbol": "fn_800B2320",
+          "symbol": "PenaltyCallGetCount",
           "start": "0x800B2320",
           "end": "0x800B232C"
         },
         {
-          "symbol": "fn_800B232C",
+          "symbol": "PenaltyCallGetKind",
           "start": "0x800B232C",
           "end": "0x800B2340"
         },
         {
-          "symbol": "fn_800B2340",
+          "symbol": "PenaltyCallGetPlayer",
           "start": "0x800B2340",
           "end": "0x800B2370"
         },
@@ -15088,17 +15047,17 @@
           "end": "0x800B24C8"
         },
         {
-          "symbol": "fn_800B24C8",
+          "symbol": "PenaltyCallCheckPending",
           "start": "0x800B24C8",
           "end": "0x800B2564"
         },
         {
-          "symbol": "fn_800B2564",
+          "symbol": "PenaltyCallQueuePrompt",
           "start": "0x800B2564",
           "end": "0x800B2600"
         },
         {
-          "symbol": "fn_800B2600",
+          "symbol": "PenaltyCallGetChance",
           "start": "0x800B2600",
           "end": "0x800B260C"
         },
@@ -15113,152 +15072,152 @@
           "end": "0x800B2624"
         },
         {
-          "symbol": "fn_800B2624",
+          "symbol": "PenaltyCallHasDefenseFoul",
           "start": "0x800B2624",
           "end": "0x800B2630"
         },
         {
-          "symbol": "fn_800B2630",
+          "symbol": "PenaltyCallClearDefenseFoul",
           "start": "0x800B2630",
           "end": "0x800B2640"
         },
         {
-          "symbol": "fn_800B2640",
+          "symbol": "PenaltyCallSetFlags",
           "start": "0x800B2640",
           "end": "0x800B2670"
         },
         {
-          "symbol": "fn_800B2670",
+          "symbol": "PenaltyCallSetAllowFlag",
           "start": "0x800B2670",
           "end": "0x800B267C"
         },
         {
-          "symbol": "fn_800B267C",
+          "symbol": "MotionClear",
           "start": "0x800B267C",
           "end": "0x800B26B0"
         },
         {
-          "symbol": "fn_800B26B0",
+          "symbol": "MotionResetDecay",
           "start": "0x800B26B0",
           "end": "0x800B26D0"
         },
         {
-          "symbol": "fn_800B26D0",
+          "symbol": "MotionSetTurn",
           "start": "0x800B26D0",
           "end": "0x800B26E0"
         },
         {
-          "symbol": "fn_800B26E0",
+          "symbol": "MotionIntegrate",
           "start": "0x800B26E0",
           "end": "0x800B2A14"
         },
         {
-          "symbol": "fn_800B2A14",
+          "symbol": "MotionApplyInput",
           "start": "0x800B2A14",
           "end": "0x800B2B90"
         },
         {
-          "symbol": "fn_800B2B90",
+          "symbol": "MotionClampToGround",
           "start": "0x800B2B90",
           "end": "0x800B2BC0"
         },
         {
-          "symbol": "fn_800B2BC0",
+          "symbol": "MotionMirror",
           "start": "0x800B2BC0",
           "end": "0x800B2C48"
         },
         {
-          "symbol": "fn_800B2C48",
+          "symbol": "MotionTestApproach",
           "start": "0x800B2C48",
           "end": "0x800B2D88"
         },
         {
-          "symbol": "fn_800B2D88",
+          "symbol": "MotionSetFriction",
           "start": "0x800B2D88",
           "end": "0x800B2D9C"
         },
         {
-          "symbol": "fn_800B2D9C",
+          "symbol": "MotionAlignToFacing",
           "start": "0x800B2D9C",
           "end": "0x800B2DF4"
         },
         {
-          "symbol": "fn_800B2DF4",
+          "symbol": "PlayCallPlaceHuddle",
           "start": "0x800B2DF4",
           "end": "0x800B2E54"
         },
         {
-          "symbol": "fn_800B2E54",
+          "symbol": "PlayCallPickCpuPlays",
           "start": "0x800B2E54",
           "end": "0x800B2F40"
         },
         {
-          "symbol": "fn_800B2F40",
+          "symbol": "PlayCallIsDone",
           "start": "0x800B2F40",
           "end": "0x800B3074"
         },
         {
-          "symbol": "fn_800B3074",
+          "symbol": "PlayCallEnterHook",
           "start": "0x800B3074",
           "end": "0x800B3078"
         },
         {
-          "symbol": "fn_800B3078",
+          "symbol": "PlayCallBegin",
           "start": "0x800B3078",
           "end": "0x800B30B8"
         },
         {
-          "symbol": "fn_800B30B8",
+          "symbol": "_PlayCallGetMenuScreen",
           "start": "0x800B30B8",
           "end": "0x800B30C0"
         },
         {
-          "symbol": "fn_800B30C0",
+          "symbol": "_PlayCallGetMenuGroup",
           "start": "0x800B30C0",
           "end": "0x800B30C8"
         },
         {
-          "symbol": "fn_800B30C8",
+          "symbol": "PlayCallOpenMenu",
           "start": "0x800B30C8",
           "end": "0x800B31B0"
         },
         {
-          "symbol": "fn_800B31B0",
+          "symbol": "PlayCallCloseMenu",
           "start": "0x800B31B0",
           "end": "0x800B32A8"
         },
         {
-          "symbol": "fn_800B32A8",
+          "symbol": "PlayCallUpdateHuddle",
           "start": "0x800B32A8",
           "end": "0x800B3420"
         },
         {
-          "symbol": "fn_800B3420",
+          "symbol": "PlayCallPickDefense",
           "start": "0x800B3420",
           "end": "0x800B3470"
         },
         {
-          "symbol": "fn_800B3470",
+          "symbol": "PlayCallCloseHook",
           "start": "0x800B3470",
           "end": "0x800B3474"
         },
         {
-          "symbol": "fn_800B3474",
+          "symbol": "PlayCallSetupOffense",
           "start": "0x800B3474",
           "end": "0x800B3498"
         },
         {
-          "symbol": "fn_800B3498",
+          "symbol": "PlayCallSetupDefense",
           "start": "0x800B3498",
           "end": "0x800B34BC"
         },
         {
-          "symbol": "fn_800B34BC",
+          "symbol": "PlayCallStartHuddleScene",
           "start": "0x800B34BC",
           "end": "0x800B35E4"
         },
         {
-          "symbol": "fn_800B35E4",
+          "symbol": "PlayCallUpdateHuddleScene",
           "start": "0x800B35E4",
           "end": "0x800B3644"
         },
@@ -15298,7 +15257,7 @@
           "end": "0x800B3EC0"
         },
         {
-          "symbol": "fn_800B3EC0",
+          "symbol": "PlayCallSetFormationTypes",
           "start": "0x800B3EC0",
           "end": "0x800B3EFC"
         },
@@ -15313,7 +15272,7 @@
           "end": "0x800B40D8"
         },
         {
-          "symbol": "fn_800B40D8",
+          "symbol": "PlayCallSetMenuByte",
           "start": "0x800B40D8",
           "end": "0x800B410C"
         },
@@ -15333,37 +15292,37 @@
           "end": "0x800B4250"
         },
         {
-          "symbol": "fn_800B4250",
+          "symbol": "PlayCallLoadPlay",
           "start": "0x800B4250",
           "end": "0x800B4300"
         },
         {
-          "symbol": "fn_800B4300",
+          "symbol": "PlayCallSetTimer",
           "start": "0x800B4300",
           "end": "0x800B43A4"
         },
         {
-          "symbol": "fn_800B43A4",
+          "symbol": "PlayCallGetDefaultByte",
           "start": "0x800B43A4",
           "end": "0x800B43AC"
         },
         {
-          "symbol": "fn_800B43AC",
+          "symbol": "PlayCallSetSelectMode",
           "start": "0x800B43AC",
           "end": "0x800B43B8"
         },
         {
-          "symbol": "fn_800B43B8",
+          "symbol": "PlayCallClearDownFlag",
           "start": "0x800B43B8",
           "end": "0x800B43C8"
         },
         {
-          "symbol": "fn_800B43C8",
+          "symbol": "PlayCallStopHuddleScene",
           "start": "0x800B43C8",
           "end": "0x800B4408"
         },
         {
-          "symbol": "fn_800B4408",
+          "symbol": "PlayCallRestartHuddleScene",
           "start": "0x800B4408",
           "end": "0x800B442C"
         },
@@ -15378,17 +15337,17 @@
           "end": "0x800B4448"
         },
         {
-          "symbol": "fn_800B4448",
+          "symbol": "CheatApplySettings",
           "start": "0x800B4448",
           "end": "0x800B44D4"
         },
         {
-          "symbol": "fn_800B44D4",
+          "symbol": "PlyrWriteRatings",
           "start": "0x800B44D4",
           "end": "0x800B4628"
         },
         {
-          "symbol": "fn_800B4628",
+          "symbol": "PlyrReadRatings",
           "start": "0x800B4628",
           "end": "0x800B4798"
         },
@@ -15403,7 +15362,7 @@
           "end": "0x800B49EC"
         },
         {
-          "symbol": "fn_800B49EC",
+          "symbol": "PlyrRestoreRatings",
           "start": "0x800B49EC",
           "end": "0x800B4A18"
         },
@@ -15418,12 +15377,12 @@
           "end": "0x800B4A88"
         },
         {
-          "symbol": "fn_800B4A88",
+          "symbol": "PlyrAnimInstallGameHandlers",
           "start": "0x800B4A88",
           "end": "0x800B4D7C"
         },
         {
-          "symbol": "fn_800B4D7C",
+          "symbol": "PlyrAnimInstallFrontEndHandlers",
           "start": "0x800B4D7C",
           "end": "0x800B4DE4"
         },
@@ -15433,7 +15392,7 @@
           "end": "0x800B508C"
         },
         {
-          "symbol": "fn_800B508C",
+          "symbol": "PlyrAttachTeamModels",
           "start": "0x800B508C",
           "end": "0x800B50E8"
         },
@@ -15448,42 +15407,42 @@
           "end": "0x800B51D0"
         },
         {
-          "symbol": "fn_800B51D0",
+          "symbol": "PlyrCtrlAllowsBallAction",
           "start": "0x800B51D0",
           "end": "0x800B51D8"
         },
         {
-          "symbol": "fn_800B51D8",
+          "symbol": "PlyrCtrlStepOrder",
           "start": "0x800B51D8",
           "end": "0x800B5224"
         },
         {
-          "symbol": "fn_800B5224",
+          "symbol": "_PlyrCtrlCreate",
           "start": "0x800B5224",
           "end": "0x800B52D0"
         },
         {
-          "symbol": "fn_800B52D0",
+          "symbol": "_PlyrCtrlDestroy",
           "start": "0x800B52D0",
           "end": "0x800B530C"
         },
         {
-          "symbol": "fn_800B530C",
+          "symbol": "_PlyrCtrlCompare",
           "start": "0x800B530C",
           "end": "0x800B53F4"
         },
         {
-          "symbol": "fn_800B53F4",
+          "symbol": "_PlyrCtrlSave",
           "start": "0x800B53F4",
           "end": "0x800B5448"
         },
         {
-          "symbol": "fn_800B5448",
+          "symbol": "_PlyrCtrlLoad",
           "start": "0x800B5448",
           "end": "0x800B54C0"
         },
         {
-          "symbol": "fn_800B54C0",
+          "symbol": "_PlyrCtrlGetSize",
           "start": "0x800B54C0",
           "end": "0x800B54D4"
         },
@@ -15493,42 +15452,42 @@
           "end": "0x800B56C4"
         },
         {
-          "symbol": "fn_800B56C4",
+          "symbol": "PlyrCtrlTryCarrierAction",
           "start": "0x800B56C4",
           "end": "0x800B5764"
         },
         {
-          "symbol": "fn_800B5764",
+          "symbol": "PlyrCtrlGetBallCatchPoint",
           "start": "0x800B5764",
           "end": "0x800B57F4"
         },
         {
-          "symbol": "fn_800B57F4",
+          "symbol": "PlyrCtrlFindSwitchTarget",
           "start": "0x800B57F4",
           "end": "0x800B5C68"
         },
         {
-          "symbol": "fn_800B5C68",
+          "symbol": "PlyrCtrlGetSideMoves",
           "start": "0x800B5C68",
           "end": "0x800B5F94"
         },
         {
-          "symbol": "fn_800B5F94",
+          "symbol": "PlyrCtrlGetSideMoveFirst",
           "start": "0x800B5F94",
           "end": "0x800B5FC0"
         },
         {
-          "symbol": "fn_800B5FC0",
+          "symbol": "PlyrCtrlGetSideMoveSecond",
           "start": "0x800B5FC0",
           "end": "0x800B5FEC"
         },
         {
-          "symbol": "fn_800B5FEC",
+          "symbol": "PlyrCtrlIsStateFree",
           "start": "0x800B5FEC",
           "end": "0x800B6098"
         },
         {
-          "symbol": "fn_800B6098",
+          "symbol": "PlyrCtrlHandleHoldButton",
           "start": "0x800B6098",
           "end": "0x800B62D8"
         },
@@ -15548,7 +15507,7 @@
           "end": "0x800B6408"
         },
         {
-          "symbol": "fn_800B6408",
+          "symbol": "PlyrCtrlClearActionFlags",
           "start": "0x800B6408",
           "end": "0x800B6474"
         },
@@ -15558,7 +15517,7 @@
           "end": "0x800B64C4"
         },
         {
-          "symbol": "fn_800B64C4",
+          "symbol": "PlyrCtrlFindTeamControllers",
           "start": "0x800B64C4",
           "end": "0x800B6544"
         },
@@ -15598,27 +15557,27 @@
           "end": "0x800B67FC"
         },
         {
-          "symbol": "fn_800B67FC",
+          "symbol": "PlyrCtrlSwapTo",
           "start": "0x800B67FC",
           "end": "0x800B6868"
         },
         {
-          "symbol": "fn_800B6868",
+          "symbol": "PlyrCtrlCycle",
           "start": "0x800B6868",
           "end": "0x800B6988"
         },
         {
-          "symbol": "fn_800B6988",
+          "symbol": "PlyrCtrlSwitchToBall",
           "start": "0x800B6988",
           "end": "0x800B6B98"
         },
         {
-          "symbol": "fn_800B6B98",
+          "symbol": "PlyrCtrlRestoreForPlay",
           "start": "0x800B6B98",
           "end": "0x800B6C98"
         },
         {
-          "symbol": "fn_800B6C98",
+          "symbol": "PlyrCtrlSaveForPlay",
           "start": "0x800B6C98",
           "end": "0x800B6D34"
         },
@@ -15633,22 +15592,22 @@
           "end": "0x800B7248"
         },
         {
-          "symbol": "fn_800B7248",
+          "symbol": "PlyrCtrlTryShedBlock",
           "start": "0x800B7248",
           "end": "0x800B7368"
         },
         {
-          "symbol": "fn_800B7368",
+          "symbol": "PlyrCtrlOffenseExtraMove",
           "start": "0x800B7368",
           "end": "0x800B7370"
         },
         {
-          "symbol": "fn_800B7370",
+          "symbol": "PlyrCtrlDefenseExtraMove",
           "start": "0x800B7370",
           "end": "0x800B7378"
         },
         {
-          "symbol": "fn_800B7378",
+          "symbol": "PlyrCtrlIsInPursuitWindow",
           "start": "0x800B7378",
           "end": "0x800B76E8"
         },
@@ -15658,12 +15617,12 @@
           "end": "0x800B78DC"
         },
         {
-          "symbol": "fn_800B78DC",
+          "symbol": "PlyrCtrlDefenseInput",
           "start": "0x800B78DC",
           "end": "0x800B7CA4"
         },
         {
-          "symbol": "fn_800B7CA4",
+          "symbol": "PlyrCtrlOffenseInput",
           "start": "0x800B7CA4",
           "end": "0x800B7E60"
         },
@@ -15678,7 +15637,7 @@
           "end": "0x800B7F88"
         },
         {
-          "symbol": "fn_800B7F88",
+          "symbol": "PlyrCtrlDefenseSwitchInput",
           "start": "0x800B7F88",
           "end": "0x800B7FE8"
         },
@@ -15703,7 +15662,7 @@
           "end": "0x800B82AC"
         },
         {
-          "symbol": "fn_800B82AC",
+          "symbol": "PlyrCtrlHoldTeamInput",
           "start": "0x800B82AC",
           "end": "0x800B8344"
         },
@@ -15728,17 +15687,17 @@
           "end": "0x800B8494"
         },
         {
-          "symbol": "fn_800B8494",
+          "symbol": "_PostPlayShotDone",
           "start": "0x800B8494",
           "end": "0x800B852C"
         },
         {
-          "symbol": "fn_800B852C",
+          "symbol": "FieldFxSetActive",
           "start": "0x800B852C",
           "end": "0x800B8538"
         },
         {
-          "symbol": "fn_800B8538",
+          "symbol": "FieldFxClearActive",
           "start": "0x800B8538",
           "end": "0x800B8544"
         },
@@ -15753,7 +15712,7 @@
           "end": "0x800B8608"
         },
         {
-          "symbol": "fn_800B8608",
+          "symbol": "TimedSlotsUpdate",
           "start": "0x800B8608",
           "end": "0x800B8694"
         },
@@ -15763,27 +15722,27 @@
           "end": "0x800B86A4"
         },
         {
-          "symbol": "fn_800B86A4",
+          "symbol": "PostPlayRequestSkip",
           "start": "0x800B86A4",
           "end": "0x800B876C"
         },
         {
-          "symbol": "fn_800B876C",
+          "symbol": "PostPlayHandleButton",
           "start": "0x800B876C",
           "end": "0x800B8940"
         },
         {
-          "symbol": "fn_800B8940",
+          "symbol": "PostPlayUpdateQueueFlag",
           "start": "0x800B8940",
           "end": "0x800B898C"
         },
         {
-          "symbol": "fn_800B898C",
+          "symbol": "_PostPlayCompare",
           "start": "0x800B898C",
           "end": "0x800B89C8"
         },
         {
-          "symbol": "fn_800B89C8",
+          "symbol": "_PostPlayDelayStepUpdate",
           "start": "0x800B89C8",
           "end": "0x800B8A40"
         },
@@ -15808,7 +15767,7 @@
           "end": "0x800B8C9C"
         },
         {
-          "symbol": "fn_800B8C9C",
+          "symbol": "PostPlayTryStartReplay",
           "start": "0x800B8C9C",
           "end": "0x800B8D28"
         },
@@ -15873,7 +15832,7 @@
           "end": "0x800B9A44"
         },
         {
-          "symbol": "fn_800B9A44",
+          "symbol": "PostPlayNewStep",
           "start": "0x800B9A44",
           "end": "0x800B9A68"
         },
@@ -15883,7 +15842,7 @@
           "end": "0x800B9A6C"
         },
         {
-          "symbol": "fn_800B9A6C",
+          "symbol": "PostPlayQueueStep",
           "start": "0x800B9A6C",
           "end": "0x800B9A90"
         },
@@ -15893,77 +15852,77 @@
           "end": "0x800B9A9C"
         },
         {
-          "symbol": "fn_800B9A9C",
+          "symbol": "PostPlayQueueDelay",
           "start": "0x800B9A9C",
           "end": "0x800B9B18"
         },
         {
-          "symbol": "fn_800B9B18",
+          "symbol": "PostPlayGetSkipState",
           "start": "0x800B9B18",
           "end": "0x800B9B64"
         },
         {
-          "symbol": "fn_800B9B64",
+          "symbol": "PostPlaySetSkipAllowed",
           "start": "0x800B9B64",
           "end": "0x800B9B9C"
         },
         {
-          "symbol": "fn_800B9B9C",
+          "symbol": "PostPlaySetShortDelay",
           "start": "0x800B9B9C",
           "end": "0x800B9BAC"
         },
         {
-          "symbol": "fn_800B9BAC",
+          "symbol": "PostPlaySetReplayAllowed",
           "start": "0x800B9BAC",
           "end": "0x800B9BBC"
         },
         {
-          "symbol": "fn_800B9BBC",
+          "symbol": "GameInfoGetModeType",
           "start": "0x800B9BBC",
           "end": "0x800B9BFC"
         },
         {
-          "symbol": "fn_800B9BFC",
+          "symbol": "GameInfoGetFlagBSPG",
           "start": "0x800B9BFC",
           "end": "0x800B9C3C"
         },
         {
-          "symbol": "fn_800B9C3C",
+          "symbol": "GameInfoClearFlagBSPG",
           "start": "0x800B9C3C",
           "end": "0x800B9C70"
         },
         {
-          "symbol": "fn_800B9C70",
+          "symbol": "GameInfoGetFlagPNPG",
           "start": "0x800B9C70",
           "end": "0x800B9CB0"
         },
         {
-          "symbol": "fn_800B9CB0",
+          "symbol": "GameInfoClearFlagPNPG",
           "start": "0x800B9CB0",
           "end": "0x800B9CE4"
         },
         {
-          "symbol": "fn_800B9CE4",
+          "symbol": "GameInfoGetFlagYTPG",
           "start": "0x800B9CE4",
           "end": "0x800B9D24"
         },
         {
-          "symbol": "fn_800B9D24",
+          "symbol": "PracticeRemoveDefense",
           "start": "0x800B9D24",
           "end": "0x800B9E44"
         },
         {
-          "symbol": "fn_800B9E44",
+          "symbol": "PracticeRestoreDefense",
           "start": "0x800B9E44",
           "end": "0x800B9F4C"
         },
         {
-          "symbol": "fn_800B9F4C",
+          "symbol": "PracticeStartHook",
           "start": "0x800B9F4C",
           "end": "0x800B9F50"
         },
         {
-          "symbol": "fn_800B9F50",
+          "symbol": "PracticeUpdateVoiceEvents",
           "start": "0x800B9F50",
           "end": "0x800BA3F0"
         },
@@ -15978,22 +15937,22 @@
           "end": "0x800BA574"
         },
         {
-          "symbol": "fn_800BA574",
+          "symbol": "PracticeApplyDefenseOff",
           "start": "0x800BA574",
           "end": "0x800BA5B0"
         },
         {
-          "symbol": "fn_800BA5B0",
+          "symbol": "PracticeApplyOptions",
           "start": "0x800BA5B0",
           "end": "0x800BA674"
         },
         {
-          "symbol": "fn_800BA674",
+          "symbol": "PracticeResetPlay",
           "start": "0x800BA674",
           "end": "0x800BA6F4"
         },
         {
-          "symbol": "fn_800BA6F4",
+          "symbol": "PracticeRefreshHook",
           "start": "0x800BA6F4",
           "end": "0x800BA6F8"
         },
@@ -16003,17 +15962,17 @@
           "end": "0x800BA71C"
         },
         {
-          "symbol": "fn_800BA71C",
+          "symbol": "PracticeGetModeType",
           "start": "0x800BA71C",
           "end": "0x800BA728"
         },
         {
-          "symbol": "fn_800BA728",
+          "symbol": "PracticeEndHook",
           "start": "0x800BA728",
           "end": "0x800BA72C"
         },
         {
-          "symbol": "fn_800BA72C",
+          "symbol": "PracticeSavePlays",
           "start": "0x800BA72C",
           "end": "0x800BA7A0"
         },
@@ -16023,47 +15982,47 @@
           "end": "0x800BA7E8"
         },
         {
-          "symbol": "fn_800BA7E8",
+          "symbol": "PracticeSetSpot",
           "start": "0x800BA7E8",
           "end": "0x800BA804"
         },
         {
-          "symbol": "fn_800BA804",
+          "symbol": "PracticeSetMenuRequest",
           "start": "0x800BA804",
           "end": "0x800BA864"
         },
         {
-          "symbol": "fn_800BA864",
+          "symbol": "PracticeGetMenuRequest",
           "start": "0x800BA864",
           "end": "0x800BA870"
         },
         {
-          "symbol": "fn_800BA870",
+          "symbol": "PracticeCanOpenMenu",
           "start": "0x800BA870",
           "end": "0x800BA8CC"
         },
         {
-          "symbol": "fn_800BA8CC",
+          "symbol": "PracticeRequestReset",
           "start": "0x800BA8CC",
           "end": "0x800BA940"
         },
         {
-          "symbol": "fn_800BA940",
+          "symbol": "PracticeIsResetPending",
           "start": "0x800BA940",
           "end": "0x800BA94C"
         },
         {
-          "symbol": "fn_800BA94C",
+          "symbol": "PracticeCanReset",
           "start": "0x800BA94C",
           "end": "0x800BA988"
         },
         {
-          "symbol": "fn_800BA988",
+          "symbol": "PracticeCountPlay",
           "start": "0x800BA988",
           "end": "0x800BA9C0"
         },
         {
-          "symbol": "fn_800BA9C0",
+          "symbol": "PracticeSetDefenseOff",
           "start": "0x800BA9C0",
           "end": "0x800BAA24"
         },
@@ -16073,7 +16032,7 @@
           "end": "0x800BAA30"
         },
         {
-          "symbol": "fn_800BAA30",
+          "symbol": "PracticeSetDown",
           "start": "0x800BAA30",
           "end": "0x800BAAB8"
         },
@@ -16083,187 +16042,187 @@
           "end": "0x800BAAC4"
         },
         {
-          "symbol": "fn_800BAAC4",
+          "symbol": "PracticeOnPlayEnd",
           "start": "0x800BAAC4",
           "end": "0x800BAAE4"
         },
         {
-          "symbol": "fn_800BAAE4",
+          "symbol": "PracticeResetField",
           "start": "0x800BAAE4",
           "end": "0x800BACF4"
         },
         {
-          "symbol": "fn_800BACF4",
+          "symbol": "PracticeShutdownHook",
           "start": "0x800BACF4",
           "end": "0x800BACF8"
         },
         {
-          "symbol": "fn_800BACF8",
+          "symbol": "PracticeIsVoiceBusy",
           "start": "0x800BACF8",
           "end": "0x800BAD1C"
         },
         {
-          "symbol": "fn_800BAD1C",
+          "symbol": "PracticeStartVoiceEvents",
           "start": "0x800BAD1C",
           "end": "0x800BAD9C"
         },
         {
-          "symbol": "fn_800BAD9C",
+          "symbol": "PracticeUpdateVoice",
           "start": "0x800BAD9C",
           "end": "0x800BADD4"
         },
         {
-          "symbol": "fn_800BADD4",
+          "symbol": "PracticeEndVoiceEvents",
           "start": "0x800BADD4",
           "end": "0x800BAE40"
         },
         {
-          "symbol": "fn_800BAE40",
+          "symbol": "PracticeIsLessonVoiceBusy",
           "start": "0x800BAE40",
           "end": "0x800BAE64"
         },
         {
-          "symbol": "fn_800BAE64",
+          "symbol": "PracticeGetLessonValue",
           "start": "0x800BAE64",
           "end": "0x800BAE7C"
         },
         {
-          "symbol": "fn_800BAE7C",
+          "symbol": "PreGameIntroStartScene",
           "start": "0x800BAE7C",
           "end": "0x800BAF30"
         },
         {
-          "symbol": "fn_800BAF30",
+          "symbol": "PreGameIntroIsScenePlaying",
           "start": "0x800BAF30",
           "end": "0x800BAF7C"
         },
         {
-          "symbol": "fn_800BAF7C",
+          "symbol": "PreGameIntroNextScene",
           "start": "0x800BAF7C",
           "end": "0x800BAFE8"
         },
         {
-          "symbol": "fn_800BAFE8",
+          "symbol": "PreGameIntroSetupTeams",
           "start": "0x800BAFE8",
           "end": "0x800BB050"
         },
         {
-          "symbol": "fn_800BB050",
+          "symbol": "PreGameIntroIsSpeechIdle",
           "start": "0x800BB050",
           "end": "0x800BB0C4"
         },
         {
-          "symbol": "fn_800BB0C4",
+          "symbol": "PreGameIntroToggleTeam",
           "start": "0x800BB0C4",
           "end": "0x800BB0EC"
         },
         {
-          "symbol": "fn_800BB0EC",
+          "symbol": "PreGameIntroPickRandomScene",
           "start": "0x800BB0EC",
           "end": "0x800BB23C"
         },
         {
-          "symbol": "fn_800BB23C",
+          "symbol": "PreGameIntroIsSoloScene",
           "start": "0x800BB23C",
           "end": "0x800BB24C"
         },
         {
-          "symbol": "fn_800BB24C",
+          "symbol": "PreGameIntroBuildScenes",
           "start": "0x800BB24C",
           "end": "0x800BB458"
         },
         {
-          "symbol": "fn_800BB458",
+          "symbol": "PreGameIntroResetPlayerAnims",
           "start": "0x800BB458",
           "end": "0x800BB504"
         },
         {
-          "symbol": "fn_800BB504",
+          "symbol": "PreGameIntroStopScenes",
           "start": "0x800BB504",
           "end": "0x800BB5DC"
         },
         {
-          "symbol": "fn_800BB5DC",
+          "symbol": "PreGameIntroShowPlayers",
           "start": "0x800BB5DC",
           "end": "0x800BB694"
         },
         {
-          "symbol": "fn_800BB694",
+          "symbol": "PreGameIntroHandleButton",
           "start": "0x800BB694",
           "end": "0x800BB828"
         },
         {
-          "symbol": "fn_800BB828",
+          "symbol": "PreGameIntroClearHandles",
           "start": "0x800BB828",
           "end": "0x800BB840"
         },
         {
-          "symbol": "fn_800BB840",
+          "symbol": "PreGameIntroLoadScene",
           "start": "0x800BB840",
           "end": "0x800BB8D4"
         },
         {
-          "symbol": "fn_800BB8D4",
+          "symbol": "PreGameIntroPlayLoaded",
           "start": "0x800BB8D4",
           "end": "0x800BB924"
         },
         {
-          "symbol": "fn_800BB924",
+          "symbol": "PreGameIntroSwapToLoaded",
           "start": "0x800BB924",
           "end": "0x800BB9A0"
         },
         {
-          "symbol": "fn_800BB9A0",
+          "symbol": "PreGameIntroUpdateHook",
           "start": "0x800BB9A0",
           "end": "0x800BB9A4"
         },
         {
-          "symbol": "fn_800BB9A4",
+          "symbol": "PlyrObjsSetTeamVisible",
           "start": "0x800BB9A4",
           "end": "0x800BBA2C"
         },
         {
-          "symbol": "fn_800BBA2C",
+          "symbol": "PreGameIntroHidePlayers",
           "start": "0x800BBA2C",
           "end": "0x800BBB4C"
         },
         {
-          "symbol": "fn_800BBB4C",
+          "symbol": "PreGameIntroFinish",
           "start": "0x800BBB4C",
           "end": "0x800BBB84"
         },
         {
-          "symbol": "fn_800BBB84",
+          "symbol": "PreGameIntroPickPlayer",
           "start": "0x800BBB84",
           "end": "0x800BBCF0"
         },
         {
-          "symbol": "fn_800BBCF0",
+          "symbol": "PreGameIntroPostSceneAudio",
           "start": "0x800BBCF0",
           "end": "0x800BBDE0"
         },
         {
-          "symbol": "fn_800BBDE0",
+          "symbol": "PreGameIntroBindActors",
           "start": "0x800BBDE0",
           "end": "0x800BBE98"
         },
         {
-          "symbol": "fn_800BBE98",
+          "symbol": "PreGameIntroEnd",
           "start": "0x800BBE98",
           "end": "0x800BBF18"
         },
         {
-          "symbol": "fn_800BBF18",
+          "symbol": "PreGameIntroUpdatePlayback",
           "start": "0x800BBF18",
           "end": "0x800BC190"
         },
         {
-          "symbol": "fn_800BC190",
+          "symbol": "PreGameIntroFillScenePlayers",
           "start": "0x800BC190",
           "end": "0x800BC3F0"
         },
         {
-          "symbol": "fn_800BC3F0",
+          "symbol": "PreGameIntroInit",
           "start": "0x800BC3F0",
           "end": "0x800BC470"
         },
@@ -16328,132 +16287,132 @@
           "end": "0x800BCF7C"
         },
         {
-          "symbol": "fn_800BCF7C",
+          "symbol": "PreGamePlaybacksStart",
           "start": "0x800BCF7C",
           "end": "0x800BD184"
         },
         {
-          "symbol": "fn_800BD184",
+          "symbol": "PreGameSetIntroDone",
           "start": "0x800BD184",
           "end": "0x800BD190"
         },
         {
-          "symbol": "fn_800BD190",
+          "symbol": "PreGameIntroGetSceneValue",
           "start": "0x800BD190",
           "end": "0x800BD1BC"
         },
         {
-          "symbol": "fn_800BD1BC",
+          "symbol": "PreGameIntroGetSide",
           "start": "0x800BD1BC",
           "end": "0x800BD1C8"
         },
         {
-          "symbol": "fn_800BD1C8",
+          "symbol": "PreGameIntroPostNextAudio",
           "start": "0x800BD1C8",
           "end": "0x800BD2F8"
         },
         {
-          "symbol": "fn_800BD2F8",
+          "symbol": "PlyrTeamClearFlag10",
           "start": "0x800BD2F8",
           "end": "0x800BD35C"
         },
         {
-          "symbol": "fn_800BD35C",
+          "symbol": "PreSnapResetHumanControls",
           "start": "0x800BD35C",
           "end": "0x800BD3C0"
         },
         {
-          "symbol": "fn_800BD3C0",
+          "symbol": "PreSnapStartPassIconView",
           "start": "0x800BD3C0",
           "end": "0x800BD460"
         },
         {
-          "symbol": "fn_800BD460",
+          "symbol": "PreSnapBeginStickView",
           "start": "0x800BD460",
           "end": "0x800BD51C"
         },
         {
-          "symbol": "fn_800BD51C",
+          "symbol": "PreSnapEndPassIconView",
           "start": "0x800BD51C",
           "end": "0x800BD568"
         },
         {
-          "symbol": "fn_800BD568",
+          "symbol": "PreSnapEndStickView",
           "start": "0x800BD568",
           "end": "0x800BD608"
         },
         {
-          "symbol": "fn_800BD608",
+          "symbol": "PreSnapHandleStick",
           "start": "0x800BD608",
           "end": "0x800BD774"
         },
         {
-          "symbol": "fn_800BD774",
+          "symbol": "PreSnapUpdateSlot",
           "start": "0x800BD774",
           "end": "0x800BD830"
         },
         {
-          "symbol": "fn_800BD830",
+          "symbol": "PreSnapUpdateCpuCamera",
           "start": "0x800BD830",
           "end": "0x800BD8F4"
         },
         {
-          "symbol": "fn_800BD8F4",
+          "symbol": "PreSnapLineUpDefense",
           "start": "0x800BD8F4",
           "end": "0x800BD958"
         },
         {
-          "symbol": "fn_800BD958",
+          "symbol": "PreSnapLineUpOnce",
           "start": "0x800BD958",
           "end": "0x800BD99C"
         },
         {
-          "symbol": "fn_800BD99C",
+          "symbol": "PreSnapRunCpuScript",
           "start": "0x800BD99C",
           "end": "0x800BDA00"
         },
         {
-          "symbol": "fn_800BDA00",
+          "symbol": "PreSnapCheckAutoMotion",
           "start": "0x800BDA00",
           "end": "0x800BDA7C"
         },
         {
-          "symbol": "fn_800BDA7C",
+          "symbol": "PreSnapUpdateCadence",
           "start": "0x800BDA7C",
           "end": "0x800BDB14"
         },
         {
-          "symbol": "fn_800BDB14",
+          "symbol": "PreSnapHandleButton",
           "start": "0x800BDB14",
           "end": "0x800BDFB4"
         },
         {
-          "symbol": "fn_800BDFB4",
+          "symbol": "PreSnapHandlePlayButton",
           "start": "0x800BDFB4",
           "end": "0x800BE3E8"
         },
         {
-          "symbol": "fn_800BE3E8",
+          "symbol": "PreSnapHandleSwitchButton",
           "start": "0x800BE3E8",
           "end": "0x800BE4C8"
         },
         {
-          "symbol": "fn_800BE4C8",
+          "symbol": "PreSnapHandleInput",
           "start": "0x800BE4C8",
           "end": "0x800BE72C"
         },
         {
-          "symbol": "fn_800BE72C",
+          "symbol": "PreSnapUpdateCpuOffense",
           "start": "0x800BE72C",
           "end": "0x800BE794"
         },
         {
-          "symbol": "fn_800BE794",
+          "symbol": "PreSnapUpdateHook",
           "start": "0x800BE794",
           "end": "0x800BE798"
         },
         {
-          "symbol": "fn_800BE798",
+          "symbol": "PreSnapUpdateCpu",
           "start": "0x800BE798",
           "end": "0x800BE7BC"
         },
@@ -16463,32 +16422,32 @@
           "end": "0x800BE808"
         },
         {
-          "symbol": "fn_800BE808",
+          "symbol": "PreSnapEnterLookMode",
           "start": "0x800BE808",
           "end": "0x800BE8E4"
         },
         {
-          "symbol": "fn_800BE8E4",
+          "symbol": "PreSnapShowTeamPassIcons",
           "start": "0x800BE8E4",
           "end": "0x800BE944"
         },
         {
-          "symbol": "fn_800BE944",
+          "symbol": "PreSnapHandleLookButton",
           "start": "0x800BE944",
           "end": "0x800BEC1C"
         },
         {
-          "symbol": "fn_800BEC1C",
+          "symbol": "PreSnapExitLookMode",
           "start": "0x800BEC1C",
           "end": "0x800BED54"
         },
         {
-          "symbol": "fn_800BED54",
+          "symbol": "PreSnapUpdateLesson",
           "start": "0x800BED54",
           "end": "0x800BEFAC"
         },
         {
-          "symbol": "fn_800BEFAC",
+          "symbol": "PreSnapUpdateLessonWait",
           "start": "0x800BEFAC",
           "end": "0x800BF07C"
         },
@@ -16498,7 +16457,7 @@
           "end": "0x800BF174"
         },
         {
-          "symbol": "fn_800BF174",
+          "symbol": "PreSnapPickSnapCount",
           "start": "0x800BF174",
           "end": "0x800BF2EC"
         },
@@ -16513,27 +16472,27 @@
           "end": "0x800BF3F4"
         },
         {
-          "symbol": "fn_800BF3F4",
+          "symbol": "PlyrTeamClearBodyFlag400",
           "start": "0x800BF3F4",
           "end": "0x800BF45C"
         },
         {
-          "symbol": "fn_800BF45C",
+          "symbol": "_PreSnapCompare",
           "start": "0x800BF45C",
           "end": "0x800BF4B8"
         },
         {
-          "symbol": "fn_800BF4B8",
+          "symbol": "PreSnapStartKickoffScene",
           "start": "0x800BF4B8",
           "end": "0x800BF56C"
         },
         {
-          "symbol": "fn_800BF56C",
+          "symbol": "PreSnapGetCameraMode",
           "start": "0x800BF56C",
           "end": "0x800BF574"
         },
         {
-          "symbol": "fn_800BF574",
+          "symbol": "PreSnapHandleSkipButton",
           "start": "0x800BF574",
           "end": "0x800BF658"
         },
@@ -16548,27 +16507,27 @@
           "end": "0x800BF718"
         },
         {
-          "symbol": "fn_800BF718",
+          "symbol": "PreSnapIsSlotLooking",
           "start": "0x800BF718",
           "end": "0x800BF72C"
         },
         {
-          "symbol": "fn_800BF72C",
+          "symbol": "PreSnapUpdateSlots",
           "start": "0x800BF72C",
           "end": "0x800BF824"
         },
         {
-          "symbol": "fn_800BF824",
+          "symbol": "PreSnapUpdateRecordTimer",
           "start": "0x800BF824",
           "end": "0x800BF8A8"
         },
         {
-          "symbol": "fn_800BF8A8",
+          "symbol": "PreSnapUpdateSpecialPlay",
           "start": "0x800BF8A8",
           "end": "0x800BF9DC"
         },
         {
-          "symbol": "fn_800BF9DC",
+          "symbol": "PreSnapTriggerCpuSpecials",
           "start": "0x800BF9DC",
           "end": "0x800BFAB4"
         },
@@ -16638,7 +16597,7 @@
           "end": "0x800C0330"
         },
         {
-          "symbol": "fn_800C0330",
+          "symbol": "PreSnapCloseMenus",
           "start": "0x800C0330",
           "end": "0x800C0414"
         },
@@ -16663,17 +16622,17 @@
           "end": "0x800C0464"
         },
         {
-          "symbol": "fn_800C0464",
+          "symbol": "PreSnapIsReady",
           "start": "0x800C0464",
           "end": "0x800C0488"
         },
         {
-          "symbol": "fn_800C0488",
+          "symbol": "PreSnapHandlePredictButton",
           "start": "0x800C0488",
           "end": "0x800C05F4"
         },
         {
-          "symbol": "fn_800C05F4",
+          "symbol": "PreSnapIsPredictCooling",
           "start": "0x800C05F4",
           "end": "0x800C0658"
         },
@@ -16683,32 +16642,32 @@
           "end": "0x800C0660"
         },
         {
-          "symbol": "fn_800C0660",
+          "symbol": "PlyrFindIdIndex",
           "start": "0x800C0660",
           "end": "0x800C0698"
         },
         {
-          "symbol": "fn_800C0698",
+          "symbol": "PlyrDbOpenTeamQuery",
           "start": "0x800C0698",
           "end": "0x800C0750"
         },
         {
-          "symbol": "fn_800C0750",
+          "symbol": "PlyrDbOpenDepthQuery",
           "start": "0x800C0750",
           "end": "0x800C07C4"
         },
         {
-          "symbol": "fn_800C07C4",
+          "symbol": "PlyrDbCloseQuery",
           "start": "0x800C07C4",
           "end": "0x800C07F0"
         },
         {
-          "symbol": "fn_800C07F0",
+          "symbol": "PlyrDbLoadTeamRecords",
           "start": "0x800C07F0",
           "end": "0x800C0910"
         },
         {
-          "symbol": "fn_800C0910",
+          "symbol": "PassLaneRateReceiver",
           "start": "0x800C0910",
           "end": "0x800C1180"
         },
@@ -16718,22 +16677,22 @@
           "end": "0x800C11B8"
         },
         {
-          "symbol": "fn_800C11B8",
+          "symbol": "PassLaneUpdateReceivers",
           "start": "0x800C11B8",
           "end": "0x800C13A0"
         },
         {
-          "symbol": "fn_800C13A0",
+          "symbol": "PassLaneGetReceiverRating",
           "start": "0x800C13A0",
           "end": "0x800C146C"
         },
         {
-          "symbol": "fn_800C146C",
+          "symbol": "PassLaneSolveTarget",
           "start": "0x800C146C",
           "end": "0x800C1C34"
         },
         {
-          "symbol": "fn_800C1C34",
+          "symbol": "PassLaneResetReceivers",
           "start": "0x800C1C34",
           "end": "0x800C1CA0"
         },
@@ -16748,7 +16707,7 @@
           "end": "0x800C1E48"
         },
         {
-          "symbol": "fn_800C1E48",
+          "symbol": "PracticeIsSpotEditActive",
           "start": "0x800C1E48",
           "end": "0x800C1E50"
         },
@@ -16758,62 +16717,62 @@
           "end": "0x800C1E5C"
         },
         {
-          "symbol": "fn_800C1E5C",
+          "symbol": "PracticeSpotHandleButton",
           "start": "0x800C1E5C",
           "end": "0x800C2090"
         },
         {
-          "symbol": "fn_800C2090",
+          "symbol": "PracticeSpotEditEnter",
           "start": "0x800C2090",
           "end": "0x800C20D8"
         },
         {
-          "symbol": "fn_800C20D8",
+          "symbol": "PracticeSpotEditUpdate",
           "start": "0x800C20D8",
           "end": "0x800C20DC"
         },
         {
-          "symbol": "fn_800C20DC",
+          "symbol": "PracticeSpotEditExit",
           "start": "0x800C20DC",
           "end": "0x800C210C"
         },
         {
-          "symbol": "fn_800C210C",
+          "symbol": "MathClampOffsetRange",
           "start": "0x800C210C",
           "end": "0x800C2150"
         },
         {
-          "symbol": "fn_800C2150",
+          "symbol": "PlyrSwing9Update",
           "start": "0x800C2150",
           "end": "0x800C2788"
         },
         {
-          "symbol": "fn_800C2788",
+          "symbol": "PlyrSwing9Init",
           "start": "0x800C2788",
           "end": "0x800C2884"
         },
         {
-          "symbol": "fn_800C2884",
+          "symbol": "PlyrSwing5Update",
           "start": "0x800C2884",
           "end": "0x800C2EC0"
         },
         {
-          "symbol": "fn_800C2EC0",
+          "symbol": "PlyrSwing5Init",
           "start": "0x800C2EC0",
           "end": "0x800C2F94"
         },
         {
-          "symbol": "fn_800C2F94",
+          "symbol": "_SortListCompare",
           "start": "0x800C2F94",
           "end": "0x800C2FB8"
         },
         {
-          "symbol": "fn_800C2FB8",
+          "symbol": "_SortListSwap",
           "start": "0x800C2FB8",
           "end": "0x800C2FDC"
         },
         {
-          "symbol": "fn_800C2FDC",
+          "symbol": "_SortListTestBody",
           "start": "0x800C2FDC",
           "end": "0x800C310C"
         },
@@ -16828,37 +16787,37 @@
           "end": "0x800C3170"
         },
         {
-          "symbol": "fn_800C3170",
+          "symbol": "SortListSortAll",
           "start": "0x800C3170",
           "end": "0x800C31E4"
         },
         {
-          "symbol": "fn_800C31E4",
+          "symbol": "SortListFindClosest",
           "start": "0x800C31E4",
           "end": "0x800C3404"
         },
         {
-          "symbol": "fn_800C3404",
+          "symbol": "PlyrCheckSidelineNeighbor",
           "start": "0x800C3404",
           "end": "0x800C34B0"
         },
         {
-          "symbol": "fn_800C34B0",
+          "symbol": "GameStartSetupClock",
           "start": "0x800C34B0",
           "end": "0x800C3610"
         },
         {
-          "symbol": "fn_800C3610",
+          "symbol": "GameBreakUpdate",
           "start": "0x800C3610",
           "end": "0x800C3678"
         },
         {
-          "symbol": "fn_800C3678",
+          "symbol": "GameBreakExit",
           "start": "0x800C3678",
           "end": "0x800C36A8"
         },
         {
-          "symbol": "fn_800C36A8",
+          "symbol": "PlyrAnimPathHitsWall",
           "start": "0x800C36A8",
           "end": "0x800C38C4"
         },
@@ -16873,7 +16832,7 @@
           "end": "0x800C3A4C"
         },
         {
-          "symbol": "fn_800C3A4C",
+          "symbol": "PlyrAnimPairAlignHandler",
           "start": "0x800C3A4C",
           "end": "0x800C3BEC"
         },
@@ -16883,57 +16842,57 @@
           "end": "0x800C4184"
         },
         {
-          "symbol": "fn_800C4184",
+          "symbol": "PlyrIsIdleForCpu",
           "start": "0x800C4184",
           "end": "0x800C432C"
         },
         {
-          "symbol": "fn_800C432C",
+          "symbol": "PlyrAnimLoadContactLists",
           "start": "0x800C432C",
           "end": "0x800C4410"
         },
         {
-          "symbol": "fn_800C4410",
+          "symbol": "FieldFxSetIndex",
           "start": "0x800C4410",
           "end": "0x800C442C"
         },
         {
-          "symbol": "fn_800C442C",
+          "symbol": "FieldFxClearIndex",
           "start": "0x800C442C",
           "end": "0x800C4438"
         },
         {
-          "symbol": "fn_800C4438",
+          "symbol": "StepSeqClear",
           "start": "0x800C4438",
           "end": "0x800C4460"
         },
         {
-          "symbol": "fn_800C4460",
+          "symbol": "StepSeqStart",
           "start": "0x800C4460",
           "end": "0x800C44E0"
         },
         {
-          "symbol": "fn_800C44E0",
+          "symbol": "StepSeqUpdateStep",
           "start": "0x800C44E0",
           "end": "0x800C4568"
         },
         {
-          "symbol": "fn_800C4568",
+          "symbol": "StepSeqEndStep",
           "start": "0x800C4568",
           "end": "0x800C45C0"
         },
         {
-          "symbol": "fn_800C45C0",
+          "symbol": "StepSeqUpdate",
           "start": "0x800C45C0",
           "end": "0x800C4658"
         },
         {
-          "symbol": "fn_800C4658",
+          "symbol": "StepSeqNewStep",
           "start": "0x800C4658",
           "end": "0x800C46A0"
         },
         {
-          "symbol": "fn_800C46A0",
+          "symbol": "StepSeqCommitStep",
           "start": "0x800C46A0",
           "end": "0x800C46B0"
         },
@@ -16948,7 +16907,7 @@
           "end": "0x800C478C"
         },
         {
-          "symbol": "fn_800C478C",
+          "symbol": "FieldUpdateEffects",
           "start": "0x800C478C",
           "end": "0x800C47C4"
         },
@@ -16963,27 +16922,27 @@
           "end": "0x800C48CC"
         },
         {
-          "symbol": "fn_800C48CC",
+          "symbol": "SurfaceScaleTurn",
           "start": "0x800C48CC",
           "end": "0x800C48E4"
         },
         {
-          "symbol": "fn_800C48E4",
+          "symbol": "SurfaceScaleSpeed",
           "start": "0x800C48E4",
           "end": "0x800C48FC"
         },
         {
-          "symbol": "fn_800C48FC",
+          "symbol": "SurfaceScaleAccel",
           "start": "0x800C48FC",
           "end": "0x800C4914"
         },
         {
-          "symbol": "fn_800C4914",
+          "symbol": "PlyrSurfaceScaleTurn",
           "start": "0x800C4914",
           "end": "0x800C495C"
         },
         {
-          "symbol": "fn_800C495C",
+          "symbol": "PlyrSurfaceScaleSpeed",
           "start": "0x800C495C",
           "end": "0x800C49A4"
         },
@@ -16998,12 +16957,12 @@
           "end": "0x800C4A2C"
         },
         {
-          "symbol": "fn_800C4A2C",
+          "symbol": "PlyrSurfaceGetMomentum",
           "start": "0x800C4A2C",
           "end": "0x800C4A70"
         },
         {
-          "symbol": "fn_800C4A70",
+          "symbol": "PlyrSurfaceGetSlipChance",
           "start": "0x800C4A70",
           "end": "0x800C4B6C"
         },
@@ -17013,37 +16972,37 @@
           "end": "0x800C4D54"
         },
         {
-          "symbol": "fn_800C4D54",
+          "symbol": "PlyrSurfaceRollSlip",
           "start": "0x800C4D54",
           "end": "0x800C4E18"
         },
         {
-          "symbol": "fn_800C4E18",
+          "symbol": "PlyrGetSurface",
           "start": "0x800C4E18",
           "end": "0x800C4E30"
         },
         {
-          "symbol": "fn_800C4E30",
+          "symbol": "PlyrContactCanSpecialHit",
           "start": "0x800C4E30",
           "end": "0x800C4EE8"
         },
         {
-          "symbol": "fn_800C4EE8",
+          "symbol": "PlyrContactTestEvenHit",
           "start": "0x800C4EE8",
           "end": "0x800C51DC"
         },
         {
-          "symbol": "fn_800C51DC",
+          "symbol": "PlyrContactSetEngaged",
           "start": "0x800C51DC",
           "end": "0x800C5234"
         },
         {
-          "symbol": "fn_800C5234",
+          "symbol": "PlyrContactQueryPutFirst",
           "start": "0x800C5234",
           "end": "0x800C52C8"
         },
         {
-          "symbol": "fn_800C52C8",
+          "symbol": "PlyrContactScaleByRating",
           "start": "0x800C52C8",
           "end": "0x800C53D8"
         },
@@ -17053,22 +17012,22 @@
           "end": "0x800C5418"
         },
         {
-          "symbol": "fn_800C5418",
+          "symbol": "PlyrContactAdjustHitPower",
           "start": "0x800C5418",
           "end": "0x800C561C"
         },
         {
-          "symbol": "fn_800C561C",
+          "symbol": "PlyrContactApplyTackle",
           "start": "0x800C561C",
           "end": "0x800C56C0"
         },
         {
-          "symbol": "fn_800C56C0",
+          "symbol": "PlyrContactApplyHit",
           "start": "0x800C56C0",
           "end": "0x800C5B20"
         },
         {
-          "symbol": "fn_800C5B20",
+          "symbol": "PlyrContactApplyKnockdown",
           "start": "0x800C5B20",
           "end": "0x800C5BF0"
         },
@@ -17078,62 +17037,62 @@
           "end": "0x800C5DE4"
         },
         {
-          "symbol": "fn_800C5DE4",
+          "symbol": "PlyrContactCanHit",
           "start": "0x800C5DE4",
           "end": "0x800C5F80"
         },
         {
-          "symbol": "fn_800C5F80",
+          "symbol": "PlyrContactGetAnimIds",
           "start": "0x800C5F80",
           "end": "0x800C6048"
         },
         {
-          "symbol": "fn_800C6048",
+          "symbol": "PlyrContactGetTackleChance",
           "start": "0x800C6048",
           "end": "0x800C6640"
         },
         {
-          "symbol": "fn_800C6640",
+          "symbol": "PlyrContactGetDodgeChance",
           "start": "0x800C6640",
           "end": "0x800C6738"
         },
         {
-          "symbol": "fn_800C6738",
+          "symbol": "PlyrContactCanTackle",
           "start": "0x800C6738",
           "end": "0x800C68B8"
         },
         {
-          "symbol": "fn_800C68B8",
+          "symbol": "PlyrContactNothing",
           "start": "0x800C68B8",
           "end": "0x800C68BC"
         },
         {
-          "symbol": "fn_800C68BC",
+          "symbol": "PlyrContactIsCompatible",
           "start": "0x800C68BC",
           "end": "0x800C6A3C"
         },
         {
-          "symbol": "fn_800C6A3C",
+          "symbol": "PlyrContactTryReaction",
           "start": "0x800C6A3C",
           "end": "0x800C6BD8"
         },
         {
-          "symbol": "fn_800C6BD8",
+          "symbol": "PlyrContactTryWallHit",
           "start": "0x800C6BD8",
           "end": "0x800C6CDC"
         },
         {
-          "symbol": "fn_800C6CDC",
+          "symbol": "PlyrContactTryWallBreak",
           "start": "0x800C6CDC",
           "end": "0x800C6DF8"
         },
         {
-          "symbol": "fn_800C6DF8",
+          "symbol": "PlyrContactTryTackleAnim",
           "start": "0x800C6DF8",
           "end": "0x800C7084"
         },
         {
-          "symbol": "fn_800C7084",
+          "symbol": "PlyrContactTryAnim",
           "start": "0x800C7084",
           "end": "0x800C7118"
         },
@@ -17143,87 +17102,87 @@
           "end": "0x800C73E0"
         },
         {
-          "symbol": "fn_800C73E0",
+          "symbol": "PlyrContactIsTargetEngaged",
           "start": "0x800C73E0",
           "end": "0x800C75C0"
         },
         {
-          "symbol": "fn_800C75C0",
+          "symbol": "PlyrContactFindNearestTarget",
           "start": "0x800C75C0",
           "end": "0x800C769C"
         },
         {
-          "symbol": "fn_800C769C",
+          "symbol": "PlyrContactHasPending",
           "start": "0x800C769C",
           "end": "0x800C76C0"
         },
         {
-          "symbol": "fn_800C76C0",
+          "symbol": "PlyrContactIsPending",
           "start": "0x800C76C0",
           "end": "0x800C76D8"
         },
         {
-          "symbol": "fn_800C76D8",
+          "symbol": "PlyrContactSetPending",
           "start": "0x800C76D8",
           "end": "0x800C7708"
         },
         {
-          "symbol": "fn_800C7708",
+          "symbol": "PlyrContactClearPending",
           "start": "0x800C7708",
           "end": "0x800C7720"
         },
         {
-          "symbol": "fn_800C7720",
+          "symbol": "PlyrContactIsFacingBack",
           "start": "0x800C7720",
           "end": "0x800C7794"
         },
         {
-          "symbol": "fn_800C7794",
+          "symbol": "PlyrContactUpdateDefender",
           "start": "0x800C7794",
           "end": "0x800C7D44"
         },
         {
-          "symbol": "fn_800C7D44",
+          "symbol": "PlyrContactUpdateCarrier",
           "start": "0x800C7D44",
           "end": "0x800C8270"
         },
         {
-          "symbol": "fn_800C8270",
+          "symbol": "PlyrContactReset",
           "start": "0x800C8270",
           "end": "0x800C82C0"
         },
         {
-          "symbol": "fn_800C82C0",
+          "symbol": "PlyrContactResetTarget",
           "start": "0x800C82C0",
           "end": "0x800C8330"
         },
         {
-          "symbol": "fn_800C8330",
+          "symbol": "PlyrContactUpdate",
           "start": "0x800C8330",
           "end": "0x800C8420"
         },
         {
-          "symbol": "fn_800C8420",
+          "symbol": "PlyrContactRaisePower",
           "start": "0x800C8420",
           "end": "0x800C845C"
         },
         {
-          "symbol": "fn_800C845C",
+          "symbol": "PlyrContactCollectTacklers",
           "start": "0x800C845C",
           "end": "0x800C854C"
         },
         {
-          "symbol": "fn_800C854C",
+          "symbol": "PlyrContactStartEngage",
           "start": "0x800C854C",
           "end": "0x800C8688"
         },
         {
-          "symbol": "fn_800C8688",
+          "symbol": "PlyrContactFinish",
           "start": "0x800C8688",
           "end": "0x800C8694"
         },
         {
-          "symbol": "fn_800C8694",
+          "symbol": "PlyrIsTackleAnim",
           "start": "0x800C8694",
           "end": "0x800C8704"
         },
@@ -17238,7 +17197,7 @@
           "end": "0x800C8774"
         },
         {
-          "symbol": "fn_800C8774",
+          "symbol": "GameInfoGetTeamScore",
           "start": "0x800C8774",
           "end": "0x800C87CC"
         },
@@ -17253,17 +17212,17 @@
           "end": "0x800C8860"
         },
         {
-          "symbol": "fn_800C8860",
+          "symbol": "PlyrModelAddTwist",
           "start": "0x800C8860",
           "end": "0x800C8954"
         },
         {
-          "symbol": "fn_800C8954",
+          "symbol": "PlyrTurnCheckReset",
           "start": "0x800C8954",
           "end": "0x800C89BC"
         },
         {
-          "symbol": "fn_800C89BC",
+          "symbol": "PlyrTurnReset",
           "start": "0x800C89BC",
           "end": "0x800C89F0"
         },
@@ -17273,12 +17232,12 @@
           "end": "0x800C8A98"
         },
         {
-          "symbol": "fn_800C8A98",
+          "symbol": "PlyrTurnApply",
           "start": "0x800C8A98",
           "end": "0x800C8AF0"
         },
         {
-          "symbol": "fn_800C8AF0",
+          "symbol": "PlyrTurnUpdateTwist",
           "start": "0x800C8AF0",
           "end": "0x800C8BAC"
         },
@@ -17288,102 +17247,102 @@
           "end": "0x800C8BBC"
         },
         {
-          "symbol": "fn_800C8BBC",
+          "symbol": "FocusSlotsTestPlayFlag",
           "start": "0x800C8BBC",
           "end": "0x800C8C1C"
         },
         {
-          "symbol": "fn_800C8C1C",
+          "symbol": "FocusSlotsIsNearSlotted",
           "start": "0x800C8C1C",
           "end": "0x800C8CE8"
         },
         {
-          "symbol": "fn_800C8CE8",
+          "symbol": "FocusSlotsFindReceiverTarget",
           "start": "0x800C8CE8",
           "end": "0x800C8DBC"
         },
         {
-          "symbol": "fn_800C8DBC",
+          "symbol": "FocusSlotsFindClosest",
           "start": "0x800C8DBC",
           "end": "0x800C9070"
         },
         {
-          "symbol": "fn_800C9070",
+          "symbol": "FocusSlotsFindClosestToPlayer",
           "start": "0x800C9070",
           "end": "0x800C9094"
         },
         {
-          "symbol": "fn_800C9094",
+          "symbol": "FocusSlotsFindClosestFlagged",
           "start": "0x800C9094",
           "end": "0x800C90BC"
         },
         {
-          "symbol": "fn_800C90BC",
+          "symbol": "FocusSlotsFindClosestToBall",
           "start": "0x800C90BC",
           "end": "0x800C9108"
         },
         {
-          "symbol": "fn_800C9108",
+          "symbol": "FocusSlotsFindIndex",
           "start": "0x800C9108",
           "end": "0x800C91B0"
         },
         {
-          "symbol": "fn_800C91B0",
+          "symbol": "FocusSlotsGetFlag",
           "start": "0x800C91B0",
           "end": "0x800C91F0"
         },
         {
-          "symbol": "fn_800C91F0",
+          "symbol": "FocusSlotsFind",
           "start": "0x800C91F0",
           "end": "0x800C92CC"
         },
         {
-          "symbol": "fn_800C92CC",
+          "symbol": "_FocusSlotsCompare",
           "start": "0x800C92CC",
           "end": "0x800C94BC"
         },
         {
-          "symbol": "fn_800C94BC",
+          "symbol": "_FocusSlotsSave",
           "start": "0x800C94BC",
           "end": "0x800C9508"
         },
         {
-          "symbol": "fn_800C9508",
+          "symbol": "_FocusSlotsLoad",
           "start": "0x800C9508",
           "end": "0x800C9554"
         },
         {
-          "symbol": "fn_800C9554",
+          "symbol": "_FocusSlotsGetSize",
           "start": "0x800C9554",
           "end": "0x800C955C"
         },
         {
-          "symbol": "fn_800C955C",
+          "symbol": "FocusSlotsGetKindValue",
           "start": "0x800C955C",
           "end": "0x800C9570"
         },
         {
-          "symbol": "fn_800C9570",
+          "symbol": "FocusSlotsFindStatePlayer",
           "start": "0x800C9570",
           "end": "0x800C95DC"
         },
         {
-          "symbol": "fn_800C95DC",
+          "symbol": "FocusSlotsPickPlayer",
           "start": "0x800C95DC",
           "end": "0x800C9A80"
         },
         {
-          "symbol": "fn_800C9A80",
+          "symbol": "FocusSlotsFillTeam",
           "start": "0x800C9A80",
           "end": "0x800C9B78"
         },
         {
-          "symbol": "fn_800C9B78",
+          "symbol": "FocusSlotsFill",
           "start": "0x800C9B78",
           "end": "0x800C9BB0"
         },
         {
-          "symbol": "fn_800C9BB0",
+          "symbol": "FocusSlotsAssignControllers",
           "start": "0x800C9BB0",
           "end": "0x800C9CF0"
         },
@@ -17413,32 +17372,32 @@
           "end": "0x800CA14C"
         },
         {
-          "symbol": "fn_800CA14C",
+          "symbol": "FocusSlotsReset",
           "start": "0x800CA14C",
           "end": "0x800CA228"
         },
         {
-          "symbol": "fn_800CA228",
+          "symbol": "FocusSlotsUpdateHook",
           "start": "0x800CA228",
           "end": "0x800CA248"
         },
         {
-          "symbol": "fn_800CA248",
+          "symbol": "FocusSlotsNextReceiver",
           "start": "0x800CA248",
           "end": "0x800CA288"
         },
         {
-          "symbol": "fn_800CA288",
+          "symbol": "FocusSlotsIsPlayerCharging",
           "start": "0x800CA288",
           "end": "0x800CA3C4"
         },
         {
-          "symbol": "fn_800CA3C4",
+          "symbol": "FocusSlotsPickReceivers",
           "start": "0x800CA3C4",
           "end": "0x800CA4A8"
         },
         {
-          "symbol": "fn_800CA4A8",
+          "symbol": "FocusSlotsUpdateMeters",
           "start": "0x800CA4A8",
           "end": "0x800CA5CC"
         },
@@ -17453,7 +17412,7 @@
           "end": "0x800CA8F4"
         },
         {
-          "symbol": "fn_800CA8F4",
+          "symbol": "FocusSlotsUpdatePlayerState",
           "start": "0x800CA8F4",
           "end": "0x800CA9B4"
         },
@@ -17463,12 +17422,12 @@
           "end": "0x800CAA6C"
         },
         {
-          "symbol": "fn_800CAA6C",
+          "symbol": "FocusSlotsIsStateSevenOrNine",
           "start": "0x800CAA6C",
           "end": "0x800CAA8C"
         },
         {
-          "symbol": "fn_800CAA8C",
+          "symbol": "FocusSlotsGetRef",
           "start": "0x800CAA8C",
           "end": "0x800CAAC4"
         },
@@ -17483,52 +17442,52 @@
           "end": "0x800CABF4"
         },
         {
-          "symbol": "fn_800CABF4",
+          "symbol": "FocusSlotsFindPlayer",
           "start": "0x800CABF4",
           "end": "0x800CAC14"
         },
         {
-          "symbol": "fn_800CAC14",
+          "symbol": "PlyrTurnAnimGetFoot",
           "start": "0x800CAC14",
           "end": "0x800CAC54"
         },
         {
-          "symbol": "fn_800CAC54",
+          "symbol": "PlyrTurnAnimGetPlantFoot",
           "start": "0x800CAC54",
           "end": "0x800CADC0"
         },
         {
-          "symbol": "fn_800CADC0",
+          "symbol": "PlyrTurnAnimCheckSide",
           "start": "0x800CADC0",
           "end": "0x800CAE28"
         },
         {
-          "symbol": "fn_800CAE28",
+          "symbol": "PlyrTurnAnimCheckFoot",
           "start": "0x800CAE28",
           "end": "0x800CAF4C"
         },
         {
-          "symbol": "fn_800CAF4C",
+          "symbol": "PlyrTurnAnimStartInPlace",
           "start": "0x800CAF4C",
           "end": "0x800CB080"
         },
         {
-          "symbol": "fn_800CB080",
+          "symbol": "PlyrTurnAnimStartToTarget",
           "start": "0x800CB080",
           "end": "0x800CB228"
         },
         {
-          "symbol": "fn_800CB228",
+          "symbol": "PlyrTurnAnimTestTarget",
           "start": "0x800CB228",
           "end": "0x800CB484"
         },
         {
-          "symbol": "fn_800CB484",
+          "symbol": "PlyrTurnAnimGetStep",
           "start": "0x800CB484",
           "end": "0x800CB504"
         },
         {
-          "symbol": "fn_800CB504",
+          "symbol": "PlyrTurnAnimInit",
           "start": "0x800CB504",
           "end": "0x800CB580"
         },
@@ -17548,32 +17507,32 @@
           "end": "0x800CBBAC"
         },
         {
-          "symbol": "fn_800CBBAC",
+          "symbol": "PlyrTurnAnimHandler",
           "start": "0x800CBBAC",
           "end": "0x800CBFA8"
         },
         {
-          "symbol": "fn_800CBFA8",
+          "symbol": "PlyrSendStandAt",
           "start": "0x800CBFA8",
           "end": "0x800CC0C0"
         },
         {
-          "symbol": "fn_800CC0C0",
+          "symbol": "PlyrLineUpTeamAtSideline",
           "start": "0x800CC0C0",
           "end": "0x800CC180"
         },
         {
-          "symbol": "fn_800CC180",
+          "symbol": "PlyrLineUpCommitTeam",
           "start": "0x800CC180",
           "end": "0x800CC244"
         },
         {
-          "symbol": "fn_800CC244",
+          "symbol": "PlyrLineUpResetPlayer",
           "start": "0x800CC244",
           "end": "0x800CC2D4"
         },
         {
-          "symbol": "fn_800CC2D4",
+          "symbol": "PlyrLineUpSendIdle",
           "start": "0x800CC2D4",
           "end": "0x800CC388"
         },
@@ -17583,102 +17542,102 @@
           "end": "0x800CC404"
         },
         {
-          "symbol": "fn_800CC404",
+          "symbol": "PlyrLineUpStart",
           "start": "0x800CC404",
           "end": "0x800CC448"
         },
         {
-          "symbol": "fn_800CC448",
+          "symbol": "PlyrLineUpClearFlag",
           "start": "0x800CC448",
           "end": "0x800CC470"
         },
         {
-          "symbol": "fn_800CC470",
+          "symbol": "PlyrLineUpCommit",
           "start": "0x800CC470",
           "end": "0x800CC4B0"
         },
         {
-          "symbol": "fn_800CC4B0",
+          "symbol": "PlyrLineUpIsKickoff",
           "start": "0x800CC4B0",
           "end": "0x800CC560"
         },
         {
-          "symbol": "fn_800CC560",
+          "symbol": "PlyrLineUpReset",
           "start": "0x800CC560",
           "end": "0x800CC618"
         },
         {
-          "symbol": "fn_800CC618",
+          "symbol": "_PlyrContactFilterKind0",
           "start": "0x800CC618",
           "end": "0x800CC6A8"
         },
         {
-          "symbol": "fn_800CC6A8",
+          "symbol": "_PlyrContactFilterKind1",
           "start": "0x800CC6A8",
           "end": "0x800CC800"
         },
         {
-          "symbol": "fn_800CC800",
+          "symbol": "_PlyrContactFilterKind2",
           "start": "0x800CC800",
           "end": "0x800CC8F0"
         },
         {
-          "symbol": "fn_800CC8F0",
+          "symbol": "_PlyrContactFilterKind3",
           "start": "0x800CC8F0",
           "end": "0x800CC98C"
         },
         {
-          "symbol": "fn_800CC98C",
+          "symbol": "PlyrContactQueryFilter",
           "start": "0x800CC98C",
           "end": "0x800CCA40"
         },
         {
-          "symbol": "fn_800CCA40",
+          "symbol": "PlyrContactPlayGetEntry",
           "start": "0x800CCA40",
           "end": "0x800CCB04"
         },
         {
-          "symbol": "fn_800CCB04",
+          "symbol": "PlyrContactPlayFindEntry",
           "start": "0x800CCB04",
           "end": "0x800CCBA0"
         },
         {
-          "symbol": "fn_800CCBA0",
+          "symbol": "PlyrContactPlayCountEntries",
           "start": "0x800CCBA0",
           "end": "0x800CCC04"
         },
         {
-          "symbol": "fn_800CCC04",
+          "symbol": "PlyrContactPlayTestAngle",
           "start": "0x800CCC04",
           "end": "0x800CCD20"
         },
         {
-          "symbol": "fn_800CCD20",
+          "symbol": "PlyrContactPlayTestDistance",
           "start": "0x800CCD20",
           "end": "0x800CCEBC"
         },
         {
-          "symbol": "fn_800CCEBC",
+          "symbol": "PlyrContactPlayTestNodes",
           "start": "0x800CCEBC",
           "end": "0x800CCF68"
         },
         {
-          "symbol": "fn_800CCF68",
+          "symbol": "PlyrContactPlayHitsWall",
           "start": "0x800CCF68",
           "end": "0x800CD0BC"
         },
         {
-          "symbol": "fn_800CD0BC",
+          "symbol": "PlyrContactPlayPlaceAtWall",
           "start": "0x800CD0BC",
           "end": "0x800CD170"
         },
         {
-          "symbol": "fn_800CD170",
+          "symbol": "PlyrContactIsOutsideSpan",
           "start": "0x800CD170",
           "end": "0x800CD21C"
         },
         {
-          "symbol": "fn_800CD21C",
+          "symbol": "PlyrContactPlayIsValid",
           "start": "0x800CD21C",
           "end": "0x800CD2B4"
         },
@@ -17693,42 +17652,42 @@
           "end": "0x800CD3C0"
         },
         {
-          "symbol": "fn_800CD3C0",
+          "symbol": "PlyrContactFindPlay",
           "start": "0x800CD3C0",
           "end": "0x800CD8BC"
         },
         {
-          "symbol": "fn_800CD8BC",
+          "symbol": "PlyrContactFindPlayInRange",
           "start": "0x800CD8BC",
           "end": "0x800CD978"
         },
         {
-          "symbol": "fn_800CD978",
+          "symbol": "PlyrContactStartAttacker",
           "start": "0x800CD978",
           "end": "0x800CDB5C"
         },
         {
-          "symbol": "fn_800CDB5C",
+          "symbol": "PlyrContactStartTargets",
           "start": "0x800CDB5C",
           "end": "0x800CDD98"
         },
         {
-          "symbol": "fn_800CDD98",
+          "symbol": "PlyrContactStartPlay",
           "start": "0x800CDD98",
           "end": "0x800CDDDC"
         },
         {
-          "symbol": "fn_800CDDDC",
+          "symbol": "PlyrContactStartPair",
           "start": "0x800CDDDC",
           "end": "0x800CDE50"
         },
         {
-          "symbol": "fn_800CDE50",
+          "symbol": "PlyrContactStartTriple",
           "start": "0x800CDE50",
           "end": "0x800CE158"
         },
         {
-          "symbol": "fn_800CE158",
+          "symbol": "PlyrContactBuildPairRecords",
           "start": "0x800CE158",
           "end": "0x800CE218"
         },
@@ -17738,12 +17697,12 @@
           "end": "0x800CE2B8"
         },
         {
-          "symbol": "fn_800CE2B8",
+          "symbol": "PlyrContactRunQuery",
           "start": "0x800CE2B8",
           "end": "0x800CE438"
         },
         {
-          "symbol": "fn_800CE438",
+          "symbol": "PlyrContactRunPairQuery",
           "start": "0x800CE438",
           "end": "0x800CE4A8"
         },
@@ -17753,7 +17712,7 @@
           "end": "0x800CE510"
         },
         {
-          "symbol": "fn_800CE510",
+          "symbol": "PlyrContactRunTripleQuery",
           "start": "0x800CE510",
           "end": "0x800CE590"
         },
@@ -17793,17 +17752,17 @@
           "end": "0x800CE804"
         },
         {
-          "symbol": "fn_800CE804",
+          "symbol": "PlyrContactCommandSetAnchor",
           "start": "0x800CE804",
           "end": "0x800CEA7C"
         },
         {
-          "symbol": "fn_800CEA7C",
+          "symbol": "PlyrContactCommandHitWall",
           "start": "0x800CEA7C",
           "end": "0x800CEDA4"
         },
         {
-          "symbol": "fn_800CEDA4",
+          "symbol": "PlyrContactNodeToWorld",
           "start": "0x800CEDA4",
           "end": "0x800CEE74"
         },
@@ -17813,12 +17772,12 @@
           "end": "0x800CEED8"
         },
         {
-          "symbol": "fn_800CEED8",
+          "symbol": "PlyrContactGetAnimEnd",
           "start": "0x800CEED8",
           "end": "0x800CF090"
         },
         {
-          "symbol": "fn_800CF090",
+          "symbol": "PlyrContactGetWallKind",
           "start": "0x800CF090",
           "end": "0x800CF100"
         },
@@ -17843,107 +17802,107 @@
           "end": "0x800CF35C"
         },
         {
-          "symbol": "fn_800CF35C",
+          "symbol": "_PreSnapPhaseEnter",
           "start": "0x800CF35C",
           "end": "0x800CF394"
         },
         {
-          "symbol": "fn_800CF394",
+          "symbol": "_PreSnapPhaseUpdate",
           "start": "0x800CF394",
           "end": "0x800CF3CC"
         },
         {
-          "symbol": "fn_800CF3CC",
+          "symbol": "_PreSnapPhaseExit",
           "start": "0x800CF3CC",
           "end": "0x800CF404"
         },
         {
-          "symbol": "fn_800CF404",
+          "symbol": "_PostPlayPhaseEnter",
           "start": "0x800CF404",
           "end": "0x800CF43C"
         },
         {
-          "symbol": "fn_800CF43C",
+          "symbol": "_PostPlayPhaseUpdate",
           "start": "0x800CF43C",
           "end": "0x800CF474"
         },
         {
-          "symbol": "fn_800CF474",
+          "symbol": "_PostPlayPhaseExit",
           "start": "0x800CF474",
           "end": "0x800CF4AC"
         },
         {
-          "symbol": "fn_800CF4AC",
+          "symbol": "_PreGamePhaseEnter",
           "start": "0x800CF4AC",
           "end": "0x800CF4E4"
         },
         {
-          "symbol": "fn_800CF4E4",
+          "symbol": "_PreGamePhaseUpdate",
           "start": "0x800CF4E4",
           "end": "0x800CF51C"
         },
         {
-          "symbol": "fn_800CF51C",
+          "symbol": "_PreGamePhaseExit",
           "start": "0x800CF51C",
           "end": "0x800CF554"
         },
         {
-          "symbol": "fn_800CF554",
+          "symbol": "_GamePhase7Enter",
           "start": "0x800CF554",
           "end": "0x800CF58C"
         },
         {
-          "symbol": "fn_800CF58C",
+          "symbol": "_GamePhase7Update",
           "start": "0x800CF58C",
           "end": "0x800CF5C4"
         },
         {
-          "symbol": "fn_800CF5C4",
+          "symbol": "_GamePhase7Exit",
           "start": "0x800CF5C4",
           "end": "0x800CF5FC"
         },
         {
-          "symbol": "fn_800CF5FC",
+          "symbol": "_PlayCallPhaseEnter",
           "start": "0x800CF5FC",
           "end": "0x800CF634"
         },
         {
-          "symbol": "fn_800CF634",
+          "symbol": "_PlayCallPhaseUpdate",
           "start": "0x800CF634",
           "end": "0x800CF66C"
         },
         {
-          "symbol": "fn_800CF66C",
+          "symbol": "_PlayCallPhaseExit",
           "start": "0x800CF66C",
           "end": "0x800CF6A4"
         },
         {
-          "symbol": "fn_800CF6A4",
+          "symbol": "_LivePlayPhaseEnter",
           "start": "0x800CF6A4",
           "end": "0x800CF6DC"
         },
         {
-          "symbol": "fn_800CF6DC",
+          "symbol": "_LivePlayPhaseUpdate",
           "start": "0x800CF6DC",
           "end": "0x800CF714"
         },
         {
-          "symbol": "fn_800CF714",
+          "symbol": "_LivePlayPhaseExit",
           "start": "0x800CF714",
           "end": "0x800CF74C"
         },
         {
-          "symbol": "fn_800CF74C",
+          "symbol": "_QuarterEndPhaseEnter",
           "start": "0x800CF74C",
           "end": "0x800CF784"
         },
         {
-          "symbol": "fn_800CF784",
+          "symbol": "_QuarterEndPhaseUpdate",
           "start": "0x800CF784",
           "end": "0x800CF7BC"
         },
         {
-          "symbol": "fn_800CF7BC",
+          "symbol": "_QuarterEndPhaseExit",
           "start": "0x800CF7BC",
           "end": "0x800CF7F4"
         },
@@ -18072,7 +18031,7 @@
           "end": "0x80219044"
         },
         {
-          "symbol": "fn_80219044",
+          "symbol": "UISLoadModalScreen",
           "start": "0x80219044",
           "end": "0x80219070"
         },
@@ -18092,7 +18051,7 @@
           "end": "0x802196B4"
         },
         {
-          "symbol": "fn_80219854",
+          "symbol": "UISInternalProcessEvent",
           "start": "0x80219854",
           "end": "0x8021992C"
         },
@@ -18204,82 +18163,6 @@
       ]
     },
     {
-      "source": "src/engine/dbyalp.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x802297D8-0x80229E88 (src/engine/dbyalp.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The drafts compile only their float pools into .rodata (the query strings are referenced through neutral external labels), placed over the file's native .rodata (data row 0x802B2430). Draft comparisons only; original assembly remains linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x802297D8",
-          "end": "0x80229E88"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B2430",
-          "end": "0x802B2CA0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "DbYalpLoadWeightTable",
-          "start": "0x802297D8",
-          "end": "0x802299FC"
-        },
-        {
-          "symbol": "DbYalpModuleInit",
-          "start": "0x802299FC",
-          "end": "0x80229A70"
-        },
-        {
-          "symbol": "DbYalpModuleShutdown",
-          "start": "0x80229A70",
-          "end": "0x80229AA4"
-        },
-        {
-          "symbol": "DbFindUnusedPlayerIds",
-          "start": "0x80229AA4",
-          "end": "0x80229C98"
-        },
-        {
-          "symbol": "DbYalpGetLowRating",
-          "start": "0x80229C98",
-          "end": "0x80229CB0"
-        },
-        {
-          "symbol": "DbYalpGetHighRating",
-          "start": "0x80229CB0",
-          "end": "0x80229CC4"
-        },
-        {
-          "symbol": "DbYalpGetRatingWeight",
-          "start": "0x80229CC4",
-          "end": "0x80229CE4"
-        },
-        {
-          "symbol": "DbYalpGetWeightSum",
-          "start": "0x80229CE4",
-          "end": "0x80229CFC"
-        },
-        {
-          "symbol": "DbYalpGetOverallRating",
-          "start": "0x80229CFC",
-          "end": "0x80229E78"
-        },
-        {
-          "symbol": "DbYalpBeginGame",
-          "start": "0x80229E78",
-          "end": "0x80229E80"
-        },
-        {
-          "symbol": "DbYalpResumeGame",
-          "start": "0x80229E80",
-          "end": "0x80229E88"
-        }
-      ]
-    },
-    {
       "source": "src/engine/dbmtts.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv provisional unit row 0x8022A428-0x8022C0E0 (src/engine/dbmtts.c), its function, name and data rows and the compiler and source-form rows of the range it was split from (src/engine/cu_802297D8.c). The draft bodies compile no data section; statics, tables and strings are referenced through neutral external labels. Draft comparisons only; original assembly remains linked.",
@@ -18318,7 +18201,12 @@
           "end": "0x8022A624"
         },
         {
-          "symbol": "fn_8022AB6C",
+          "symbol": "fn_8022A624",
+          "start": "0x8022A624",
+          "end": "0x8022AB6C"
+        },
+        {
+          "symbol": "DbMttsReadSlots",
           "start": "0x8022AB6C",
           "end": "0x8022AC80"
         },
@@ -18328,7 +18216,7 @@
           "end": "0x8022ACEC"
         },
         {
-          "symbol": "fn_8022ACEC",
+          "symbol": "DbMttsInsertTeamRow",
           "start": "0x8022ACEC",
           "end": "0x8022AD64"
         },
@@ -18348,7 +18236,7 @@
           "end": "0x8022AF5C"
         },
         {
-          "symbol": "fn_8022AF5C",
+          "symbol": "DbMttsInsertPlayerRow",
           "start": "0x8022AF5C",
           "end": "0x8022B02C"
         },
@@ -18363,7 +18251,7 @@
           "end": "0x8022B2CC"
         },
         {
-          "symbol": "fn_8022B2CC",
+          "symbol": "DbMttsSetPlayerColumn",
           "start": "0x8022B2CC",
           "end": "0x8022B414"
         },
@@ -18388,12 +18276,12 @@
           "end": "0x8022BAB4"
         },
         {
-          "symbol": "fn_8022BAB4",
+          "symbol": "DbMttsAddTeamPassStat",
           "start": "0x8022BAB4",
           "end": "0x8022BD30"
         },
         {
-          "symbol": "fn_8022BD30",
+          "symbol": "DbMttsAddTeamRushStat",
           "start": "0x8022BD30",
           "end": "0x8022BF60"
         },
@@ -19565,9 +19453,9 @@
       ]
     },
     {
-      "source": "src/game/cu_8015D3EC.cpp",
+      "source": "src/game/PlaModel.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/cu_8015D3EC.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the five non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x8015D3EC-0x8015FFA8 (src/game/PlaModel.cpp), its source-form rows, the 60 function extents, the .rodata row 0x802A3F10-0x802A4010, the .data row 0x802DF180-0x802E32B0 and the .sdata row 0x803EB330-0x803EB364. The source is linked with holdouts (units.json); the two non-exact functions stay registered here as its partials.",
       "sections": [
         {
           "section": ".text",
@@ -19608,102 +19496,102 @@
       ],
       "functions": [
         {
-          "symbol": "fn_8015D3EC",
+          "symbol": "PlaModelLoadBodies",
           "start": "0x8015D3EC",
           "end": "0x8015D4E0"
         },
         {
-          "symbol": "fn_8015D4E0",
+          "symbol": "PlaModelFreeBodies",
           "start": "0x8015D4E0",
           "end": "0x8015D550"
         },
         {
-          "symbol": "fn_8015D550",
+          "symbol": "PlaModelLoadHands",
           "start": "0x8015D550",
           "end": "0x8015D68C"
         },
         {
-          "symbol": "fn_8015D68C",
+          "symbol": "PlaModelFreeHands",
           "start": "0x8015D68C",
           "end": "0x8015D718"
         },
         {
-          "symbol": "fn_8015D718",
+          "symbol": "PlaModelLoadBaseHead",
           "start": "0x8015D718",
           "end": "0x8015D7C0"
         },
         {
-          "symbol": "fn_8015D7C0",
+          "symbol": "PlaModelFreeBaseHead",
           "start": "0x8015D7C0",
           "end": "0x8015D81C"
         },
         {
-          "symbol": "fn_8015D81C",
+          "symbol": "PlaModelAllocPlayerBuffers",
           "start": "0x8015D81C",
           "end": "0x8015D998"
         },
         {
-          "symbol": "fn_8015D998",
+          "symbol": "PlaModelFreePlayerBuffers",
           "start": "0x8015D998",
           "end": "0x8015DA7C"
         },
         {
-          "symbol": "fn_8015DA7C",
+          "symbol": "PlaModelPostInit",
           "start": "0x8015DA7C",
           "end": "0x8015DA80"
         },
         {
-          "symbol": "fn_8015DA80",
+          "symbol": "PlaModelLoadHair",
           "start": "0x8015DA80",
           "end": "0x8015DD3C"
         },
         {
-          "symbol": "fn_8015DD3C",
+          "symbol": "PlaModelLoadHat",
           "start": "0x8015DD3C",
           "end": "0x8015DE3C"
         },
         {
-          "symbol": "fn_8015DE3C",
+          "symbol": "PlaModelLoadGlasses",
           "start": "0x8015DE3C",
           "end": "0x8015DF3C"
         },
         {
-          "symbol": "fn_8015DF3C",
+          "symbol": "PlaModelLoadJewel",
           "start": "0x8015DF3C",
           "end": "0x8015E0B8"
         },
         {
-          "symbol": "fn_8015E0B8",
+          "symbol": "PlaModelQueuePart",
           "start": "0x8015E0B8",
           "end": "0x8015E1F0"
         },
         {
-          "symbol": "fn_8015E1F0",
+          "symbol": "PlaModelFaceReadDone",
           "start": "0x8015E1F0",
           "end": "0x8015E200"
         },
         {
-          "symbol": "fn_8015E200",
+          "symbol": "PlaModelHairReadDone",
           "start": "0x8015E200",
           "end": "0x8015E210"
         },
         {
-          "symbol": "fn_8015E210",
+          "symbol": "PlaModelHatReadDone",
           "start": "0x8015E210",
           "end": "0x8015E220"
         },
         {
-          "symbol": "fn_8015E220",
+          "symbol": "PlaModelGlassesReadDone",
           "start": "0x8015E220",
           "end": "0x8015E230"
         },
         {
-          "symbol": "fn_8015E230",
+          "symbol": "PlaModelJewelReadDone",
           "start": "0x8015E230",
           "end": "0x8015E240"
         },
         {
-          "symbol": "fn_8015E240",
+          "symbol": "PlaModelLoadMorphHead",
           "start": "0x8015E240",
           "end": "0x8015E2FC"
         },
@@ -19718,42 +19606,42 @@
           "end": "0x8015E548"
         },
         {
-          "symbol": "fn_8015E548",
+          "symbol": "PlaModelOpenArchives",
           "start": "0x8015E548",
           "end": "0x8015E620"
         },
         {
-          "symbol": "fn_8015E620",
+          "symbol": "PlaModelInit",
           "start": "0x8015E620",
           "end": "0x8015E654"
         },
         {
-          "symbol": "fn_8015E654",
+          "symbol": "PlaModelSetLodMode",
           "start": "0x8015E654",
           "end": "0x8015E65C"
         },
         {
-          "symbol": "fn_8015E65C",
+          "symbol": "PlaModelShutdown",
           "start": "0x8015E65C",
           "end": "0x8015E684"
         },
         {
-          "symbol": "fn_8015E684",
+          "symbol": "PlaModelLoadSharedModels",
           "start": "0x8015E684",
           "end": "0x8015E6C4"
         },
         {
-          "symbol": "fn_8015E6C4",
+          "symbol": "PlaModelInitPlayerModels",
           "start": "0x8015E6C4",
           "end": "0x8015E6C8"
         },
         {
-          "symbol": "fn_8015E6C8",
+          "symbol": "PlaModelResetPlayerModels",
           "start": "0x8015E6C8",
           "end": "0x8015E714"
         },
         {
-          "symbol": "fn_8015E714",
+          "symbol": "PlaModelFreeSharedModels",
           "start": "0x8015E714",
           "end": "0x8015E73C"
         },
@@ -19768,12 +19656,12 @@
           "end": "0x8015E950"
         },
         {
-          "symbol": "fn_8015E950",
+          "symbol": "PlaModelInitMorphHead",
           "start": "0x8015E950",
           "end": "0x8015E994"
         },
         {
-          "symbol": "fn_8015E994",
+          "symbol": "PlaModelFreeMorphHead",
           "start": "0x8015E994",
           "end": "0x8015E9F4"
         },
@@ -19783,7 +19671,7 @@
           "end": "0x8015EB00"
         },
         {
-          "symbol": "fn_8015EB00",
+          "symbol": "PlaModelClearHair",
           "start": "0x8015EB00",
           "end": "0x8015EB4C"
         },
@@ -19793,7 +19681,7 @@
           "end": "0x8015EC28"
         },
         {
-          "symbol": "fn_8015EC28",
+          "symbol": "PlaModelClearHat",
           "start": "0x8015EC28",
           "end": "0x8015EC74"
         },
@@ -19803,7 +19691,7 @@
           "end": "0x8015ED50"
         },
         {
-          "symbol": "fn_8015ED50",
+          "symbol": "PlaModelClearGlasses",
           "start": "0x8015ED50",
           "end": "0x8015ED9C"
         },
@@ -19843,12 +19731,12 @@
           "end": "0x8015F35C"
         },
         {
-          "symbol": "fn_8015F35C",
+          "symbol": "PlaModelBeginFaceCache",
           "start": "0x8015F35C",
           "end": "0x8015F388"
         },
         {
-          "symbol": "fn_8015F388",
+          "symbol": "PlaModelEndFaceCache",
           "start": "0x8015F388",
           "end": "0x8015F3FC"
         },
@@ -19868,7 +19756,7 @@
           "end": "0x8015F638"
         },
         {
-          "symbol": "fn_8015F638",
+          "symbol": "PlaModelGetHairStyleModels",
           "start": "0x8015F638",
           "end": "0x8015F6E8"
         },
@@ -19883,27 +19771,27 @@
           "end": "0x8015F958"
         },
         {
-          "symbol": "fn_8015F958",
+          "symbol": "PlaModelLoadHairAsync",
           "start": "0x8015F958",
           "end": "0x8015FB38"
         },
         {
-          "symbol": "fn_8015FB38",
+          "symbol": "PlaModelLoadHatAsync",
           "start": "0x8015FB38",
           "end": "0x8015FC54"
         },
         {
-          "symbol": "fn_8015FC54",
+          "symbol": "PlaModelLoadGlassesAsync",
           "start": "0x8015FC54",
           "end": "0x8015FD70"
         },
         {
-          "symbol": "fn_8015FD70",
+          "symbol": "PlaModelLoadJewelAsync",
           "start": "0x8015FD70",
           "end": "0x8015FE4C"
         },
         {
-          "symbol": "fn_8015FE4C",
+          "symbol": "PlaModelFinishAsyncLoads",
           "start": "0x8015FE4C",
           "end": "0x8015FFA8"
         }
@@ -22271,7 +22159,7 @@
     {
       "source": "src/game/PlayAlign.cpp",
       "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); the six non-exact functions stay registered here as its partials.",
+      "evidence": "evidence.tsv unit row 0x80164568-0x80166110 (src/game/PlayAlign.cpp), its function rows and the data rows 0x802A4610-0x802A4850, 0x803EB3B0-0x803EB3B8 and 0x8031D2B8-0x8031D370. The source is linked with holdouts (units.json); its one non-exact function, PlayAlignIssuePlayerRoute, stays registered here as its partial.",
       "sections": [
         {
           "section": ".text",
@@ -22403,53 +22291,6 @@
           "symbol": "PlayAlignBuildSegmentStrip",
           "start": "0x801660A0",
           "end": "0x80166110"
-        }
-      ]
-    },
-    {
-      "source": "src/game/PlayArt.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv unit row 0x80166110-0x80167910 (src/game/PlayArt.cpp). Draft comparisons of the unlinked functions 0x80166110-0x80167094 behind DECOMP_COMPARE; the linked tail 0x80167094-0x80167910 keeps its units.json placement and the original bytes stay linked for the drafts.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80166110",
-          "end": "0x80167910"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802A4850",
-          "end": "0x802A4908"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8031D38C",
-          "end": "0x8036167C"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PlayArtBuildArrowQuad",
-          "start": "0x80166110",
-          "end": "0x801662A8"
-        },
-        {
-          "symbol": "PlayArtAddQuad",
-          "start": "0x801662A8",
-          "end": "0x8016631C"
-        },
-        {
-          "symbol": "PlayArtBuildRoute",
-          "start": "0x8016631C",
-          "end": "0x80166BE8"
-        },
-        {
-          "symbol": "PlayArtSetPlayerColors",
-          "start": "0x80166BE8",
-          "end": "0x80167094"
         }
       ]
     },
@@ -23050,7 +22891,7 @@
     {
       "source": "src/engine/spchpick.c",
       "profile": "speech_cxx",
-      "evidence": "Complete spchpick.c reconstructed and named. Three full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
+      "evidence": "Complete spchpick.c reconstructed and named. Two full partial bodies keep their original providers in the linked file and remain measured with the existing speech_cxx profile; units.json links every exact function and whole native data through speech_cxx_holdouts. Each partial has a HOLDOUT source-form row.",
       "sections": [
         {
           "section": ".text",
@@ -23081,11 +22922,6 @@
           "symbol": "iSPCH_MakeSampleRequests",
           "start": "0x801B0EA4",
           "end": "0x801B10AC"
-        },
-        {
-          "symbol": "iSPCH_EACrandom",
-          "start": "0x801B1934",
-          "end": "0x801B1A3C"
         }
       ]
     },
@@ -23256,7 +23092,7 @@
     {
       "source": "src/Common/UIStudio/UISUtils.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, _WriteString, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
+      "evidence": "evidence.tsv unit, compiler and function rows 0x8021C5EC-0x8021D880 (src/Common/UIStudio/UISUtils.c); the file is linked with holdouts (units.json) and these comparisons register the holdouts _WriteFloat, UISSprintf as partials (HOLDOUT source-form rows) and keep the exact functions measured; its .rodata data is compiled and linked (data rows 0x802B1E88-0x802B1EB0). Data row 0x8039F858-0x8039F878 (.bss).",
       "sections": [
         {
           "section": ".text",
@@ -24037,13 +23873,19 @@
     {
       "source": "src/engine/Memory.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the four holdouts as partials and keep the exact functions measured. The heap list and default heap 0x803EBCC8/0x803EBCCC, the 16-entry address table 0x80384BC0 and its count 0x803EBCD0, the other state words 0x803EBCC4-0x803EBCF4, the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted. Data row 0x80384BC0-0x80384CC0 (.bss _Mem_pAddrToHeap).",
+      "evidence": "evidence.tsv unit, source-form, compiler and type rows 0x801D134C-0x801D34C4 (src/engine/Memory.c) and its function rows. The file is linked with holdouts (units.json); these comparisons register the two holdouts as partials and keep the exact functions measured. The file defines its .sdata state run 0x803EBCC4-0x803EBCF8 (_Mem_heapCreatedByLib through _Mem_HeapBreakdown, data rows) and the 16-entry address table 0x80384BC0 (.bss _Mem_pAddrToHeap, data row 0x80384BC0-0x80384CC0); the lock 0x803E92AC and the strings 0x802AF628/0x802AF9A4/0x802AF9B0/0x802AF9BC stay external; no .rodata or .data is emitted.",
       "sections": [
         {
           "section": ".text",
           "placement": ".text",
           "start": "0x801D134C",
           "end": "0x801D34C4"
+        },
+        {
+          "section": ".sdata",
+          "placement": ".data5",
+          "start": "0x803EBCC4",
+          "end": "0x803EBCF8"
         },
         {
           "section": ".bss",
@@ -24253,7 +24095,7 @@
     {
       "source": "src/engine/memorycard.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.65%: pending-tail store order and one cross-jumped branch in the case-2 result switch; see the store-block source-form row).",
+      "evidence": "evidence.tsv compiler row 0x801D3C68-0x801D5D30 (src/engine/memorycard.c), its function rows and the exact .rodata data row 0x802AFCC8-0x802AFCF8. Draft comparisons only; original assembly remains linked. The file's strings are literals (.rodata 0x802AFCC8-0x802AFEC8, data row 0x802AFCF8), and MemCAsyncPoll 0x801D5840 is drafted (partial, 99.67%: one cross-jumped branch in the case-2 result switch; see the store-block source-form row and its HOLDOUT row).",
       "sections": [
         {
           "section": ".text",
@@ -24481,7 +24323,7 @@
     {
       "source": "src/engine/memcardmgr.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with MemCardMgrEnablePolling, MemCardMgrFormatDate and MemCardMgrGetFileSize.",
+      "evidence": "evidence.tsv compiler row 0x801D5D30-0x801D86B4 (src/engine/memcardmgr.c) and its function rows. Comparisons of every function of the file; the file is linked with holdouts (units.json), its strings, .data, .sdata, .sbss and .bss defined in the source; MemCardMgrUpdate (the 5272-byte card state machine) is drafted and held out with MemCardMgrGetFileSize (MemCardMgrEnablePolling and MemCardMgrFormatDate exact and linked since round 6).",
       "sections": [
         {
           "section": ".text",
@@ -25641,96 +25483,6 @@
       ]
     },
     {
-      "source": "src/engine/splytree.c",
-      "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x801C7684-0x801C7F70 (src/engine/splytree.c), its compiler and type rows and exact function rows. Draft comparisons only; the list-type table 0x803D4FB8 stays external; original assembly remains linked. The predecessor/successor walks 0x801C77DC/0x801C7810 are exact and linked since round 5 lane 2 (2026-11-27; FAKEMATCH dead-branch form, see their source-form rows).",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801C7684",
-          "end": "0x801C7F70"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "_DSListTraverseSplayTreeRight",
-          "start": "0x801C7684",
-          "end": "0x801C7730"
-        },
-        {
-          "symbol": "_DSListTraverseSplayTreeLeft",
-          "start": "0x801C7730",
-          "end": "0x801C77DC"
-        },
-        {
-          "symbol": "_DSListGetSplayPrev",
-          "start": "0x801C77DC",
-          "end": "0x801C7810"
-        },
-        {
-          "symbol": "_DSListGetSplayNext",
-          "start": "0x801C7810",
-          "end": "0x801C7844"
-        },
-        {
-          "symbol": "_DSListSplay",
-          "start": "0x801C7844",
-          "end": "0x801C7A34"
-        },
-        {
-          "symbol": "_DSListInitSplayTree",
-          "start": "0x801C7A34",
-          "end": "0x801C7A60"
-        },
-        {
-          "symbol": "_DSListDelSplayTree",
-          "start": "0x801C7A60",
-          "end": "0x801C7A98"
-        },
-        {
-          "symbol": "_DSListAddSplayNode",
-          "start": "0x801C7A98",
-          "end": "0x801C7C1C"
-        },
-        {
-          "symbol": "_DSListInitSplayNode",
-          "start": "0x801C7C1C",
-          "end": "0x801C7C44"
-        },
-        {
-          "symbol": "_DSListGetSplayNode",
-          "start": "0x801C7C44",
-          "end": "0x801C7D1C"
-        },
-        {
-          "symbol": "_DSListRemoveSplayNode",
-          "start": "0x801C7D1C",
-          "end": "0x801C7E00"
-        },
-        {
-          "symbol": "_DSListTraverseSplayTree",
-          "start": "0x801C7E00",
-          "end": "0x801C7E30"
-        },
-        {
-          "symbol": "_DSListSearchSplayTree",
-          "start": "0x801C7E30",
-          "end": "0x801C7EDC"
-        },
-        {
-          "symbol": "_DSListOptimizeSplayTree",
-          "start": "0x801C7EDC",
-          "end": "0x801C7EE4"
-        },
-        {
-          "symbol": "DSListInitSplayTreeModule",
-          "start": "0x801C7EE4",
-          "end": "0x801C7F70"
-        }
-      ]
-    },
-    {
       "source": "src/engine/LLFont.c",
       "profile": "engine_c",
       "evidence": "evidence.tsv unit row 0x801CD79C-0x801CE138 and its function, name, compiler and data rows. FontLLUploadPalettes remains a measured holdout at 0x801CDE98-0x801CDFE4. The other eight functions and both data sections are linked.",
@@ -25808,7 +25560,7 @@
     {
       "source": "src/engine/t3db_table.c",
       "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (86.0%: register allocation and frame); the rest of the file is linked through units.json.",
+      "evidence": "evidence.tsv unit row 0x8020B564-0x8020CCBC (src/engine/t3db_table.c), its compiler row and the source-form rows from 0x8020B564. Documented holdout at the start of .text: _TDbTblFillColHeader 0x8020B564-0x8020B710 is compiled with DECOMP_COMPARE for comparison only and keeps its original bytes (88.00%: register allocation); the rest of the file is linked through units.json.",
       "sections": [
         {
           "section": ".text",
@@ -25913,67 +25665,6 @@
       ]
     },
     {
-      "source": "src/engine/pathvol.c",
-      "profile": "path_cxx",
-      "evidence": "evidence.tsv unit row 0x801B45D0-0x801B51AC (src/engine/pathvol.c): one of the eleven PATH library files cut from the former survey source src/engine/cu_801B2AD4.cpp at the eleven unreferenced \"%s  %s\" strings that start each PATH file's .rodata (0x802AEA18-0x802AED94) and GoldenEye: Rogue Agent's PATH file order. Partial source; original bytes remain linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B45D0",
-          "end": "0x801B51AC"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AEB90",
-          "end": "0x802AEC08"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "PATH_volume",
-          "start": "0x801B45D0",
-          "end": "0x801B4728"
-        },
-        {
-          "symbol": "PATH_fade",
-          "start": "0x801B4728",
-          "end": "0x801B4824"
-        },
-        {
-          "symbol": "PATHI_fade",
-          "start": "0x801B4898",
-          "end": "0x801B4960"
-        },
-        {
-          "symbol": "PATHI_customsfxfade",
-          "start": "0x801B4960",
-          "end": "0x801B49C4"
-        },
-        {
-          "symbol": "PATHI_customdrylevelfade",
-          "start": "0x801B49C4",
-          "end": "0x801B4A24"
-        },
-        {
-          "symbol": "PATHI_setfadevolume",
-          "start": "0x801B4A24",
-          "end": "0x801B4CE4"
-        },
-        {
-          "symbol": "PATHI_setsfxfadevolume",
-          "start": "0x801B4CE4",
-          "end": "0x801B4F50"
-        },
-        {
-          "symbol": "PATHI_setdrylevelfadevolume",
-          "start": "0x801B4F50",
-          "end": "0x801B51AC"
-        }
-      ]
-    },
-    {
       "source": "src/engine/pathaction.c",
       "profile": "path_cxx",
       "evidence": "Complete named file; documented holdouts remain measured under path_cxx. units.json links every exact function and whole native data through existing path_cxx_holdouts. Provisional file edges retained; see unit and HOLDOUT source-form rows.",
@@ -26002,11 +25693,6 @@
           "symbol": "PATHI_serviceaction",
           "start": "0x801B7880",
           "end": "0x801B845C"
-        },
-        {
-          "symbol": "PATHI_getvalue",
-          "start": "0x801B864C",
-          "end": "0x801B89B0"
         }
       ]
     },
@@ -27413,32 +27099,6 @@
       ]
     },
     {
-      "source": "src/engine/flowman.cpp",
-      "profile": "game_cpp",
-      "evidence": "evidence.tsv provisional flowman.cpp unit row and StopModuleList HOLDOUT source-form row. The other sixteen functions and complete native vtable link from the same source file.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801CBC50",
-          "end": "0x801CC350"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802AF388",
-          "end": "0x802AF3B8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "StopModuleList__12FlowManagerCP16ModuleDependency",
-          "start": "0x801CC168",
-          "end": "0x801CC1DC"
-        }
-      ]
-    },
-    {
       "source": "src/game/InGameGroup.cpp",
       "profile": "game_cpp",
       "evidence": "evidence.tsv provisional unit row 0x800325E8-0x80032EE8, data rows and HOLDOUT source-form row 0x80032790-0x80032E70. Only the static initializer remains a comparison; the two code runs, native data and ctor/dtor entries link.",
@@ -27647,29 +27307,9 @@
       ]
     },
     {
-      "source": "src/engine/spchrule.c",
-      "profile": "speech_cxx",
-      "evidence": "evidence.tsv unit row 0x801B1CFC-0x801B23A0, the speech_cxx comparison profile and evidence.tsv source-form 0x801B22E0-0x801B2368. The other fifteen native routines link through units.json.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x801B1CFC",
-          "end": "0x801B23A0"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "iSPCH_GetSampleSizeData",
-          "start": "0x801B22E0",
-          "end": "0x801B2368"
-        }
-      ]
-    },
-    {
       "source": "src/engine/uigimagenode.c",
       "profile": "engine_c",
-      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its three holdouts (HOLDOUT source-form rows) are measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
+      "evidence": "evidence.tsv provisional unit row 0x8021EFD8-0x80220B4C (src/engine/uigimagenode.c), its function and name rows, the file compiler row and the exact data rows of its whole data sections; the file is linked with holdouts and its holdout UIGImageNodeRender (HOLDOUT source-form row) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
       "sections": [
         {
           "section": ".text",
@@ -27818,78 +27458,6 @@
           "symbol": "UIGCSRestorePalette",
           "start": "0x80220CA4",
           "end": "0x80220CDC"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/uigtext.c",
-      "profile": "engine_c_fastmath",
-      "evidence": "evidence.tsv provisional unit row 0x80221BF0-0x80222EC4 (src/engine/uigtext.c), its function and name rows and the file compiler row; the file is linked with holdouts, and its one holdout UIGTextLayout 0x80221DB0 (HOLDOUT source-form row 0x80221DB0-0x80222220) is measured here; the other functions are registered for their target identities (same-file calls) and are linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x80221BF0",
-          "end": "0x80222EC4"
-        },
-        {
-          "section": ".rodata",
-          "placement": ".data3",
-          "start": "0x802B1FA0",
-          "end": "0x802B1FC0"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x8039F9B8",
-          "end": "0x8039FDB8"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "UIGTextGetCursorPos",
-          "start": "0x80221BF0",
-          "end": "0x80221D30"
-        },
-        {
-          "symbol": "UIGTextGetLine",
-          "start": "0x80221D30",
-          "end": "0x80221D5C"
-        },
-        {
-          "symbol": "UIGTextFreeLines",
-          "start": "0x80221D5C",
-          "end": "0x80221DB0"
-        },
-        {
-          "symbol": "UIGTextLayout",
-          "start": "0x80221DB0",
-          "end": "0x80222220"
-        },
-        {
-          "symbol": "UIGLibTextLoad",
-          "start": "0x80222764",
-          "end": "0x802227B0"
-        },
-        {
-          "symbol": "UIGLibTextUnLoad",
-          "start": "0x80222E0C",
-          "end": "0x80222E54"
-        },
-        {
-          "symbol": "UIGTextCopyBuffer",
-          "start": "0x80222E54",
-          "end": "0x80222EC4"
-        },
-        {
-          "symbol": "UIGLibTextObjAction",
-          "start": "0x80222220",
-          "end": "0x80222764"
-        },
-        {
-          "symbol": "UIGLibTextDraw",
-          "start": "0x802227B0",
-          "end": "0x80222E0C"
         }
       ]
     },
@@ -28479,11 +28047,6 @@
       ],
       "functions": [
         {
-          "symbol": "_WriteInt",
-          "start": "0x801C20F0",
-          "end": "0x801C21D0"
-        },
-        {
           "symbol": "_WriteFloat",
           "start": "0x801C21D0",
           "end": "0x801C2428"
@@ -28555,7 +28118,7 @@
     {
       "source": "src/engine/sst.c",
       "profile": "sound_cxx",
-      "evidence": "evidence.tsv provisional unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494 (same library); all 20 functions written, 16 exact; original bytes stay linked.",
+      "evidence": "evidence.tsv unit row 0x8026D200-0x8026E4C0 (src/engine/sst.c, NASCAR 2005 sst.c), its function, name, data and source-form rows (own .rodata 0x802B7910-0x802B7938 and .data 0x802FFFFC-0x80300020) and the sound_cxx compiler row 0x8026E4C0-0x80270494. SNDSTRMI_parsedata and SNDSTRMI_create are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 18 functions are exact and linked.",
       "sections": [
         {
           "section": ".text",
@@ -28578,141 +28141,14 @@
       ],
       "functions": [
         {
-          "symbol": "StreamRemoveFaders__3SndP18SndStreamChannel_t",
-          "start": "0x8026D200",
-          "end": "0x8026D278"
-        },
-        {
-          "symbol": "SNDSTRMI_startstream__FP18SndStreamChannel_t",
-          "start": "0x8026D278",
-          "end": "0x8026D53C"
-        },
-        {
-          "symbol": "SNDSTRMI_calcdatarate__FP17SndSampleFormat_t",
-          "start": "0x8026D53C",
-          "end": "0x8026D5B4"
-        },
-        {
-          "symbol": "SNDSTRMI_destroyall__Fv",
-          "start": "0x8026D5B4",
-          "end": "0x8026D610"
-        },
-        {
-          "symbol": "SNDSTRMI_getstreamptr__Fi",
-          "start": "0x8026D610",
-          "end": "0x8026D644"
-        },
-        {
-          "symbol": "SNDSTRMI_removerequest__Fi",
-          "start": "0x8026D644",
-          "end": "0x8026D6AC"
-        },
-        {
-          "symbol": "SNDSTRMI_releasecallback__FPvT0",
-          "start": "0x8026D6AC",
-          "end": "0x8026D6E8"
-        },
-        {
-          "symbol": "SNDSTRMI_framescallback__FiUiPv",
-          "start": "0x8026D6E8",
-          "end": "0x8026D790"
-        },
-        {
-          "symbol": "SNDSTRMI_parseheader__FiP16SndStreamChunk_t",
-          "start": "0x8026D790",
-          "end": "0x8026D9CC"
-        },
-        {
           "symbol": "SNDSTRMI_parsedata__FP18SndStreamChannel_tP16SndStreamChunk_t",
           "start": "0x8026D9CC",
           "end": "0x8026DAE4"
         },
         {
-          "symbol": "SNDSTRMI_parsechunk__FiP16SndStreamChunk_t",
-          "start": "0x8026DAE4",
-          "end": "0x8026DB5C"
-        },
-        {
-          "symbol": "SNDSTRMI_isheld__FP18SndStreamChannel_t",
-          "start": "0x8026DB5C",
-          "end": "0x8026DC38"
-        },
-        {
-          "symbol": "SNDSTRMI_service__Fv",
-          "start": "0x8026DC38",
-          "end": "0x8026DDB8"
-        },
-        {
-          "symbol": "SNDSTRMI_numcreated__Fv",
-          "start": "0x8026DDB8",
-          "end": "0x8026DE00"
-        },
-        {
-          "symbol": "fn_8026DE00",
+          "symbol": "SNDSTRMI_create",
           "start": "0x8026DE00",
           "end": "0x8026E160"
-        },
-        {
-          "symbol": "SNDSTRMI_queue__FiiPcii",
-          "start": "0x8026E160",
-          "end": "0x8026E280"
-        },
-        {
-          "symbol": "SNDSTRM_create",
-          "start": "0x8026E280",
-          "end": "0x8026E2A8"
-        },
-        {
-          "symbol": "SNDSTRM_destroy",
-          "start": "0x8026E2A8",
-          "end": "0x8026E364"
-        },
-        {
-          "symbol": "SNDSTRM_queuefile",
-          "start": "0x8026E364",
-          "end": "0x8026E388"
-        },
-        {
-          "symbol": "SNDSTRM_purge",
-          "start": "0x8026E388",
-          "end": "0x8026E4C0"
-        }
-      ]
-    },
-    {
-      "source": "src/engine/smidi.c",
-      "profile": "sound_cxx",
-      "evidence": "evidence.tsv unit row 0x8026B898-0x8026C39C (src/engine/smidi.c), its function, name and data rows and the sound_cxx compiler row. SNDI_midiparsenoteon and SNDI_midiprocesstick are the file's holdouts (units.json holdouts, HOLDOUT: rows); the other 11 functions are exact and linked.",
-      "sections": [
-        {
-          "section": ".text",
-          "placement": ".text",
-          "start": "0x8026B898",
-          "end": "0x8026C39C"
-        },
-        {
-          "section": ".data",
-          "placement": ".data4",
-          "start": "0x802FFCD0",
-          "end": "0x802FFCD4"
-        },
-        {
-          "section": ".bss",
-          "placement": ".bss",
-          "start": "0x803A6E60",
-          "end": "0x803A7624"
-        }
-      ],
-      "functions": [
-        {
-          "symbol": "SNDI_midiparsenoteon__FiP13SndMidiChan_tii",
-          "start": "0x8026BA60",
-          "end": "0x8026BBF0"
-        },
-        {
-          "symbol": "SNDI_midiprocesstick__Fi",
-          "start": "0x8026BF04",
-          "end": "0x8026C0C0"
         }
       ]
     },

@@ -73,9 +73,9 @@ void PlyrRefSet(int *pRef, int a, int b, int c);
 void PlyrTrackUpdateAll(FEPlyrModel_t *pRecord);
 int PlyrHandUpdateBlend(void *pObject, unsigned int a);
 int PlyrHandGetBlend(void *pObject, unsigned int a);
-void fn_800B267C(Object_800B267C *pObject);
-void fn_800B26E0(Object_800B267C *pObject);
-void fn_800B2A14(Object_800B267C *pObject, unsigned char *a);
+void MotionClear(Object_800B267C *pObject);
+void MotionIntegrate(Object_800B267C *pObject);
+void MotionApplyInput(Object_800B267C *pObject, unsigned char *a);
 int fn_800C47C4(void);
 void fn_800D7A0C(FEPlyrModel_t *pRecord, int a);
 void fn_800EFD70(int a);
@@ -153,7 +153,7 @@ static void _FEPlyrSetupModel(int index, Object_8003DEC4 *pObject)
     memset(pRecord, 0, sizeof(FEPlyrModel_t));
     pRecord->mUnknown4 = pObject;
     PlyrInitAnimChannels(pRecord);
-    fn_800B267C(&pRecord->mUnknown424);
+    MotionClear(&pRecord->mUnknown424);
     PlyrMoveCmdClear(pRecord->mUnknown512);
     PlyrMoveCmdClear(pRecord->mUnknown528);
     PlyrRefSet((int *)pRecord, 3, 0, (unsigned char)index);
@@ -239,9 +239,9 @@ static void _FEPlyrUpdateModel(int index, unsigned int step)
     _FEPlyrUpdateAnims(pRecord, step);
     if (pRecord->mUnknown545 == 0) {
         pRecord->mUnknown424.mUnknown36 = pRecord->mUnknown424.mUnknown28;
-        fn_800B26E0(&pRecord->mUnknown424);
+        MotionIntegrate(&pRecord->mUnknown424);
     } else {
-        fn_800B2A14(&pRecord->mUnknown424, &pRecord->mUnknown544);
+        MotionApplyInput(&pRecord->mUnknown424, &pRecord->mUnknown544);
     }
     if (pState->mUnknown29) {
         pRecord->mUnknown424.mUnknown24 = pState->mUnknown12;
@@ -610,7 +610,7 @@ float FEPlyrSpin(float turn)
 
 void FEPlyrResetPose(int index)
 {
-    fn_800B267C(&_FEPlyr_aModels[index].mUnknown424);
+    MotionClear(&_FEPlyr_aModels[index].mUnknown424);
 }
 
 unsigned char FEPlyrSetPairMode(unsigned char enable, int a, int b)

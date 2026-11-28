@@ -39,7 +39,7 @@ float PlyrMoveGetRatedSpeed(Object_80039F5C *p, float a, float b);
 void Vec2Rotate(FieldPoint_t *pOut, FieldPoint_t *pIn, int angle);
 void fn_8009BD60(Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
-int fn_800C4D54(Object_80039F5C *p);
+int PlyrSurfaceRollSlip(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
 extern float gPlyrMoveFwdSpeed;
 
@@ -212,7 +212,7 @@ extern "C" int PlayerCutUpdate(Object_80039F5C *p)
     }
     if (p->mFlags & 1) {
         p->mFlags &= ~1;
-        int value = fn_800C4D54(p);
+        int value = PlyrSurfaceRollSlip(p);
 
         if (value) {
             PlayerCutPostChainedCut(p, value);

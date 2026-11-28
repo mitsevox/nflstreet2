@@ -67,7 +67,7 @@ void fn_800B3AF4(float a);
 void fn_800B410C(void);
 void fn_800B4184(int a);
 int fn_800BA6F8(void);
-void fn_800BCF7C(void *p);
+void PreGamePlaybacksStart(void *p);
 int fn_800C1E40(void);
 void fn_800C1E50(void);
 int fn_800C8704(int *pA, int *pB);
@@ -296,7 +296,7 @@ int InGame::Init()
     if (!fn_800BA6F8()) {
         CamGameApplyUserCamera();
         if (!result && !fn_800C1E40()) {
-            fn_800BCF7C(lbl_803EAB90);
+            PreGamePlaybacksStart(lbl_803EAB90);
         }
     } else {
         CamGameApplyUserCamera();

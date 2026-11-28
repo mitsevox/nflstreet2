@@ -7,7 +7,7 @@ extern "C" {
 
 int SNDSTRM_createtap(int tapId, void *opts, int a, int b, void *data, int c)
 {
-    return fn_8026DE00(opts, a, b, data, c, tapId, 1);
+    return SNDSTRMI_create(opts, a, b, data, c, tapId, 1);
 }
 
 }

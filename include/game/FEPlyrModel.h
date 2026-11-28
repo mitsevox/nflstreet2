@@ -4,7 +4,7 @@
 #include "engine/AnimChannel.h"
 #include "game/Object_8003DEC4.h"
 
-/* Argument of fn_800B267C, fn_800B26E0 and fn_800B2A14. */
+/* Argument of MotionClear, MotionIntegrate and MotionApplyInput. */
 struct Object_800B267C {
     float mUnknown0;
     float mUnknown4;

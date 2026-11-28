@@ -339,6 +339,8 @@ extern "C" int PATHI_trackstatus(PathTrack_t *p)
 extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *event)
 {
     PathActionStatus_t status;
+    // FAKEMATCH: one untyped pointer shared by case 4 (map header) and case 15 (track backend) ties case 4's header to r5 as in the target.
+    void *ptr;
     if (kind == 2)
         id = pfstate->mUnknown2C[id].mValue;
     else if (kind == 1) {
@@ -357,7 +359,12 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *eve
             break;
         }
         case 4: {
-            PathMapEntry_t *node = PATHI_getnode(p->mUnknown4);
+            PathMapEntry_t *node;
+            int index = p->mUnknown4;
+            if (index < 0 || index > (ptr = pfstate->mUnknown18, ((PathMapHeader_t *)ptr)->mUnknown12))
+                node = 0;
+            else
+                node = (PathMapEntry_t *)((unsigned char *)ptr + pfstate->mUnknown1C[index] * 4);
             if (node)
                 id = node->mBits0.mSection;
             else
@@ -394,8 +401,9 @@ extern "C" int PATHI_getvalue(int id, int kind, PathTrack_t *p, PathEvent_t *eve
             id = p->mUnknown8.bits.flag40;
             break;
         case 15:
-            if (p->mUnknown100)
-                id = p->mUnknown100->GetPitchMult();
+            ptr = p->mUnknown100;
+            if (ptr)
+                id = ((IPathTrack *)ptr)->GetPitchMult();
             else
                 id = 1;
             break;

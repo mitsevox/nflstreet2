@@ -135,16 +135,16 @@ int _LZHCoStart(void)
     lbl_803ED458 = fn_801D2BB0(1, 0x8000, 0, 0);
     lbl_803ED464 = fn_801D2BB0(1, 0x474, 0, 0);
     _LZHHuffGenCodeConvertTables();
-    lbl_803ED45C = 0;
-    lbl_803ED47E = 0;
-    lbl_803ED498 = 1;
-    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
     lbl_803ED444 = 0;
+    lbl_803ED45C = 0;
     lbl_803ED480 = 0;
     lbl_803ED47C = 0;
     lbl_803ED486 = 0;
+    lbl_803ED47E = 0;
+    lbl_803ED498 = 1;
+    lbl_803ED428.mpProcess = _LZHEncodeNewBlock;
     return 0;
 }
 
@@ -168,7 +168,6 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
         return _LZHMemDecStart(a, b);
     }
     SysEnterCriticalSectionFunc(&lbl_803B53FC);
-    lbl_803ED47E = 0;
     lbl_803ED424 = 2;
     lbl_803ED43C = 0;
     lbl_803ED43E = 0;
@@ -177,6 +176,7 @@ int _LZHDecStart(LZHBlock_t *a, LZHBlock_t *b)
     lbl_803ED480 = 0;
     lbl_803ED47C = 0;
     lbl_803ED486 = 0;
+    lbl_803ED47E = 0;
     if (b->mUnknown18 != 0) {
         lbl_803ED422 = 1;
     } else {
@@ -335,7 +335,7 @@ int _LZHEncodeInput(void)
         head = lbl_803ED448[hash];
         best = 0;
         search = 0;
-        while (lbl_803ED44C[head] == hash) {
+        while (lbl_803ED44C[head] == hash && search <= 15) {
             length = 0;
             scan = head;
             if (lbl_803ED440[head] == lbl_803ED440[pos & 0x7FFF] &&
@@ -356,11 +356,8 @@ int _LZHEncodeInput(void)
             }
             head = lbl_803ED450[head];
             search++;
-            if (search > 15) {
-                break;
-            }
         }
-        bestPos = (pos - bestPos) & 0x7FFF;
+        bestPos = (pos - bestPos - 0x8000) & 0x7FFF;
         if (best > 3 || (best == 3 && bestPos <= 4096)) {
             lbl_803ED454[lbl_803ED45C] = best;
             lbl_803ED458[lbl_803ED45C++] = bestPos;
@@ -418,7 +415,8 @@ void _LZHEncodeCodeBufferStart(void)
         d = lbl_803ED458[j];
         n = lbl_803ED454[j];
         if (d != 0) {
-            a[lbl_803B7678[n] + 257].mUnknown00++;
+            n = lbl_803B7678[n];
+            a[n + 257].mUnknown00++;
             d--;
             if (d <= 255) {
                 d = lbl_803B775C[d];
@@ -1353,8 +1351,8 @@ void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf)
     short top;
 
     lbl_803ED470++;
-    lbl_803B795C[lbl_803ED470].mUnknown00 = node;
     lbl_803B795C[lbl_803ED470].mUnknown02 = 0;
+    lbl_803B795C[lbl_803ED470].mUnknown00 = node;
     value = lbl_803B7204[node][0];
     depth = 1;
     while (value > 0)
@@ -1367,13 +1365,12 @@ void _LZHHuffDecodeBuildTableR(short node, LZHDecodeEntry_t *pLeaf)
     }
     pLeaf->mUnknown02 = depth;
     size = 1 << depth;
-    pLeaf->mUnknown00 = lbl_803ED468;
     index = lbl_803ED468;
+    pLeaf->mUnknown00 = index;
     lbl_803ED468 += size;
     lbl_803ED46C[index].mUnknown02 = 0;
-    lbl_803ED46C[index].mUnknown00 = -value;
+    lbl_803ED46C[index++].mUnknown00 = -value;
     depth = 0;
-    index++;
     for (count = size - 1; count > 0; count--)
     {
         do
@@ -1518,14 +1515,14 @@ LZHHeapNode_t _LZHHeapPop(void)
 {
     LZHHeapNode_t top = lbl_803B795C[1];
     unsigned short weight = lbl_803B795C[lbl_803ED470].mUnknown02;
-    short count = --lbl_803ED470;
+    short half = --lbl_803ED470 / 2;
     short i = 1;
     short child;
 
-    while (i <= count / 2)
+    while (i <= half)
     {
         child = i << 1;
-        if (child < count && lbl_803B795C[child].mUnknown02 > lbl_803B795C[child + 1].mUnknown02)
+        if (child < lbl_803ED470 && lbl_803B795C[child].mUnknown02 > lbl_803B795C[child + 1].mUnknown02)
             child++;
         if (lbl_803B795C[child].mUnknown02 >= weight)
             break;

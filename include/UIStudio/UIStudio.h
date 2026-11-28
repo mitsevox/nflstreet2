@@ -289,7 +289,7 @@ void UISRemoveUnNessaryRateFncs(UISInfoT *pInfo);
 Int32 UISInternalLoadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint16 ParentGroupID,
                   Uint16 ParentScreenID, Uint8 Count, Int32 *pArgs);
 Int32 UISInternalUnloadScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Int32 Arg3);
-void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
+void UISInternalProcessEvent(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
                  Int32 *pArgs, Int32 bAll);
 void UISInternalActivateControl(UISInfoT *pInfo, Int32 bArg1, Int16 Arg2, Int32 Arg3, Int32 Arg4, Uint16 Arg5,
                  Uint16 Arg6);

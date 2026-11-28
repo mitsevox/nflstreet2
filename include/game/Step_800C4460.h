@@ -17,7 +17,7 @@ struct Step_800C4460 {
     union { unsigned char mUnknown10[16]; Pair_800A14A8 mContext; Step_800C4460 *mpUnknown10; };
 };
 
-/* 260-byte block cleared by fn_800C4438. */
+/* 260-byte block cleared by StepSeqClear. */
 struct Sequence_800C4460 {
     Step_800C4460 mSteps[8];
     unsigned char mUnknown100;

@@ -70,8 +70,8 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void fn_8003549C(int flag);
-    void fn_800355FC();
+    void OpenTeamPlayBooks(int flag);
+    void ReopenTeamPlayBooks();
 };
 
 class Turbo : public Module {
@@ -82,7 +82,7 @@ public:
     virtual ModuleDependency *GetLinks();
     virtual const char *GetName();
 
-    void fn_80035EE0();
+    void ResetMeters();
 };
 
 extern Animintf gAnimintf;

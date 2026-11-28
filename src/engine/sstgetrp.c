@@ -11,7 +11,7 @@ SndStreamRequest_t *SNDSTRMI_getrequestptr(int id)
     if (id < 0) {
         return 0;
     }
-    channel = fn_8026D610(id & 0xFF);
+    channel = SNDSTRMI_getstreamptr(id & 0xFF);
     if (channel == 0) {
         return 0;
     }

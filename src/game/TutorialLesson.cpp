@@ -1057,11 +1057,11 @@ int TutorialFinishCategory(void)
                 pPlayer->mUnknown9[2] = i < (unsigned int)ScrmGetActivePlayerCount((unsigned char)team);
             }
         }
-        gTurbo.fn_80035EE0();
+        gTurbo.ResetMeters();
         fn_8009D8CC(2);
         fn_8009D984(ScrmGetGameTime());
         StyleTrackerReset();
-        gPlayBook.fn_800355FC();
+        gPlayBook.ReopenTeamPlayBooks();
         InGamePlayCallCreate();
         fn_800AD910(1, 0.0f);
         PauseClearBlocks();

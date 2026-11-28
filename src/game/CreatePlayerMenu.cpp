@@ -106,7 +106,7 @@ int StoreGetUnlockedOrdinal(int table, DbCursor *pObject, int value, int *pIndex
 int StoreCountUnlocked(int table, DbCursor *pObject);
 int StoreTattooLocationToKind(int type);
 void FEPlyrLoadInvalidate(int index);
-void fn_8015F638(int a, int b, int c, int *pResult);
+void PlaModelGetHairStyleModels(int a, int b, int c, int *pResult);
 int PlaTexCacheGetCapFaceId(int a);
 void PlaTexCacheGetHairTexture(int a, int *pId, int *pPalette);
 void FEMiscSetHelpText(const char *pText);
@@ -703,7 +703,7 @@ static void _CreatePlayerQueuePortrait(int id)
     color19 = PlayerDbGetFacialHairColor(&object);
     PlayerDbGetFaceFeatures(&object, &block);
     FaceMorphBuildWeights(&block, &values);
-    fn_8015F638(value6E, value6C, 0, ids);
+    PlaModelGetHairStyleModels(value6E, value6C, 0, ids);
     PlaTexCacheGetHairTexture(value6E, &unknown52, &unknown56);
     unknown8 = PlaTexCacheGetCapFaceId(value72 + 1);
     unknown12 = value73 * 3 + value74 + 0x33BA;

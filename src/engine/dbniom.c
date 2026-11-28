@@ -9,7 +9,7 @@
 #include "game/TDbCompilePerformOp.h"
 
 int fn_8022A59C(int a, void **ppOut);
-int fn_8022AB6C(void *p, int a, int b);
+int DbMttsReadSlots(void *p, int a, int b);
 int fn_8022AC80(void *p);
 int DbNiomCloseCursor(void);
 
@@ -112,7 +112,7 @@ int DbNiomOpenCursor(int a)
 
 int DbNiomReadCursor(int a, int b)
 {
-    return fn_8022AB6C(_DbNiom_pCursor, a, b);
+    return DbMttsReadSlots(_DbNiom_pCursor, a, b);
 }
 
 int DbNiomCloseCursor(void)

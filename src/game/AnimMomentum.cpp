@@ -12,7 +12,7 @@
 #include "game/fn_801BE60C.h"
 
 extern "C" {
-float fn_800C4A2C(AnimMomentumActor_t *p);
+float PlyrSurfaceGetMomentum(AnimMomentumActor_t *p);
 void DivotOnMomentum(AnimMomentumActor_t *p, AnimMomentum_t *pState);
 AnimMomentumActor_t *BallGetCurrentHolder(void);
 int ScrmIsFieldFlipped(void);
@@ -30,7 +30,7 @@ extern "C" void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther,
 {
     p->mUnknown14 = 0;
     p->mUnknown16 = 0;
-    float a = fn_800C4A2C(pOther);
+    float a = PlyrSurfaceGetMomentum(pOther);
     p->mUnknown10 = a;
     if (!(a < 0.0f)) {
         p->mUnknown17 = value;
@@ -52,7 +52,7 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
             if (!p->mUnknown14) {
                 p->mUnknown0.mUnknown0 = pOther->mUnknown1D0.mUnknown0;
                 p->mUnknown0.mUnknown4 = pOther->mUnknown1D0.mUnknown4;
-                float a = fn_800C4A2C(pOther);
+                float a = PlyrSurfaceGetMomentum(pOther);
                 p->mUnknown10 = a;
                 Vec2Scale(&p->mUnknown0, &p->mUnknown0, a);
                 if (Vec2Magnitude(&p->mUnknown0) > 0.25f) {
@@ -81,7 +81,7 @@ extern "C" void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOthe
                 if (length > cap) {
                     Vec2Scale(&p->mUnknown0, &p->mUnknown0, cap / length);
                 }
-                float a = fn_800C4A2C(pOther);
+                float a = PlyrSurfaceGetMomentum(pOther);
                 if (a < p->mUnknown10) {
                     p->mUnknown10 = a;
                     Vec2Scale(&p->mUnknown0, &p->mUnknown0, a);
@@ -131,7 +131,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
         if (!p->mUnknown14) {
             p->mUnknown0.mUnknown0 = pOther->mUnknown1D0.mUnknown0;
             p->mUnknown0.mUnknown4 = pOther->mUnknown1D0.mUnknown4;
-            float a = fn_800C4A2C(pOther);
+            float a = PlyrSurfaceGetMomentum(pOther);
             p->mUnknown10 = a;
             Vec2Scale(&p->mUnknown0, &p->mUnknown0, a);
             if (Vec2Magnitude(&p->mUnknown0) > 0.25f) {
@@ -166,7 +166,7 @@ extern "C" void AnimMomentumUpdateLinked(AnimMomentum_t *p, AnimMomentumActor_t 
             if (length > cap) {
                 Vec2Scale(&p->mUnknown0, &p->mUnknown0, cap / length);
             }
-            float a = fn_800C4A2C(pOther);
+            float a = PlyrSurfaceGetMomentum(pOther);
             if (a < p->mUnknown10) {
                 p->mUnknown10 = a;
                 Vec2Scale(&p->mUnknown0, &p->mUnknown0, a);

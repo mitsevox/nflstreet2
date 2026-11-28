@@ -8,7 +8,7 @@
 #include "game/Ball.h"
 
 extern "C" {
-void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
+void MotionSetTurn(Object_800B26B0 *pMotion, int a, int b, float c);
 int MathAngleDiff(int a, int b);
 int BallStateGet(Ball_t *p, int *pArg);
 
@@ -67,7 +67,7 @@ void PlyrMoveTurnLimited(Object_80039F5C *p)
             pMotion->mUnknown52 -= (pMotion->mUnknown52 + pMotion->mUnknown52)
                                   * difference * 0.00000011920928955078125f;
         }
-        fn_800B26D0(pMotion, pControl->mUnknown4, pControl->mUnknown8, pMotion->mUnknown52);
+        MotionSetTurn(pMotion, pControl->mUnknown4, pControl->mUnknown8, pMotion->mUnknown52);
     }
     float step;
     if (p->mIdBytes[3] == 1) {
@@ -125,7 +125,7 @@ void PlyrMoveTurnWithAnim(Object_80039F5C *p)
             pMotion->mUnknown52 -= (pMotion->mUnknown52 + pMotion->mUnknown52)
                                   * difference * 0.00000011920928955078125f;
         }
-        fn_800B26D0(pMotion, pControl->mUnknown4, pControl->mUnknown8, pMotion->mUnknown52);
+        MotionSetTurn(pMotion, pControl->mUnknown4, pControl->mUnknown8, pMotion->mUnknown52);
     }
     float step;
     if (p->mIdBytes[3] == 1) {

@@ -204,11 +204,13 @@ int StoreCountItems(int index)
     DbFilter both;
     DbFilter categoryFilter;
     unsigned short count;
+    // FAKEMATCH: the price filter is set up through an alias taken before the call; it only steers the base register
+    DbFilter *pPrice = &priceFilter;
     const StoreCategory_t *pDescriptor = StoreGetCategory(index);
     int result = 0;
-    DbFilter *pFilter = &priceFilter;
-    priceFilter.SetUnknown32(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0x10004);
-    priceFilter.mUnknown16.mValue.mInt = 0;
+    pPrice->SetOperands(6, MakeColumnKey(pDescriptor->mTable, pDescriptor->mPriceColumn), 2, 0);
+    pPrice->mUnknown32 = 0x10004;
+    DbFilter *pFilter = pPrice;
     if (pDescriptor->mTable == 0x52414547) {
         pFilter = &both;
         both.Set(11, &priceFilter, &categoryFilter);

@@ -100,8 +100,7 @@ extern const signed char SNDSTRMIspeakerchannel[6][6];
 int SNDSTRM_setvol(int stream, int speaker, float vol);
 int SNDSTRM_autovol(int stream, int time, int vol);
 
-SndStreamChannel_t *fn_8026D610(int index);
-int fn_8026DE00(void *opts, int a, int b, void *data, int c, int d, int tap);
+int SNDSTRMI_create(void *opts, int numRequests, int numPackets, void *memory, int size, int tap, int shared);
 
 void SNDSYS_entercritical(void);
 void SNDSYS_leavecritical(void);
@@ -124,5 +123,7 @@ int STREAM_overhead(int numRequests, int numFilters, int numTaps);
 #endif
 
 SndStreamRequest_t *SNDSTRMI_getrequestptr(int id);
+SndStreamChannel_t *SNDSTRMI_getstreamptr(int index);
+int SNDSTRMI_queue(int stream, int hold, char *name, int offset, int type);
 
 #endif

@@ -127,7 +127,7 @@ int PauseIsOpen(void);
 void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, int c);
 void *StadiumGetResDevice(void);
 int StadiumGetDivotResIndex(void);
-int fn_800C4E18(Object_80039F5C *pPlayer);
+int PlyrGetSurface(Object_80039F5C *pPlayer);
 Object_80039F5C *BallGetCurrentHolder(void);
 int ScrmIsFieldFlipped(void);
 float ScrmGetSidelineX(void);
@@ -904,7 +904,7 @@ void DivotOnFootstep(Object_80039F5C *pPlayer, Vector_80039F5C *pPos, int foot0)
 
                 if (p) {
                     p->mpOwner = pPlayer;
-                    p->mSurface = fn_800C4E18(pPlayer);
+                    p->mSurface = PlyrGetSurface(pPlayer);
                     p->mPos.mX = pPos->mX;
                     p->mPos.mY = pPos->mY;
                     p->mPos.mZ = 0.0f;

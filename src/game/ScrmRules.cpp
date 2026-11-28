@@ -161,13 +161,13 @@ void PenaltyCheckPassInterference(void);
 void ScoringLogAddScore(int type, short a, int b, int c);
 void ScoringLogSetConversion(int a, int b, int c, int d);
 int GameModeTypeIsSpecial(void);
-void fn_8022B2CC(int handle, int tag, int value);
+void DbMttsSetPlayerColumn(int handle, int tag, int value);
 int DbMttsGetPlayerColumn(int handle, int tag, int *pValue);
 int DbMttsUpdatePlayerColumn(int handle, int tag, int value);
 int DbMttsGetTeamColumn(int handle, int tag, int *pValue);
 int DbMttsUpdateTeamColumn(int handle, int tag, int value);
-void fn_8022BAB4(int handle, int a, int b, int c);
-void fn_8022BD30(int handle, int a, int b);
+void DbMttsAddTeamPassStat(int handle, int a, int b, int c);
+void DbMttsAddTeamRushStat(int handle, int a, int b);
 void *SyncStateGetData(void *pHandle);
 }
 
@@ -1540,12 +1540,12 @@ extern "C" void ScrmStatAddTeam(int team, int tag, int value)
 
 extern "C" void ScrmStatAddTeamPass(int id, int a, float b, float c)
 {
-    fn_8022BAB4(ScrmStatGetPlayerTeamHandle(id), a, (int)b, (int)c);
+    DbMttsAddTeamPassStat(ScrmStatGetPlayerTeamHandle(id), a, (int)b, (int)c);
 }
 
 extern "C" void ScrmStatAddTeamRush(int id, float a, float b)
 {
-    fn_8022BD30(ScrmStatGetPlayerTeamHandle(id), (int)a, (int)b);
+    DbMttsAddTeamRushStat(ScrmStatGetPlayerTeamHandle(id), (int)a, (int)b);
 }
 
 extern "C" void ScrmStatAddPassing(int id, float from, float to)
@@ -2339,7 +2339,7 @@ extern "C" int ScrmStatTallyPlay(unsigned char *pOut)
         if (caught == 1) {
             ScrmStatAddPlayer(carrier, 0x63636167, 1);
         } else {
-            fn_8022B2CC(ScrmStatGetPlayerHandle(carrier), 0x63636167, 0);
+            DbMttsSetPlayerColumn(ScrmStatGetPlayerHandle(carrier), 0x63636167, 0);
         }
     }
     *pOut = caught;

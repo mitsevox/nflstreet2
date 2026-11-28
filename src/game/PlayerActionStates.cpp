@@ -1061,7 +1061,7 @@ extern "C" void PlayerActionGetAlignSpot(Object_80039F5C *p, FieldPoint_t *pOut,
                 break;
             }
             int ref = fn_800B0F98();
-            if (fn_800B146C() && fn_8009BCE8(&ref) == pBlock->mpUnknown36) pBlock->mUnknown78 = 1;
+            if (PlayMotionIsActive() && fn_8009BCE8(&ref) == pBlock->mpUnknown36) pBlock->mUnknown78 = 1;
             if (pBlock->mUnknown78) {
                 pOut->mX = pOther->mMotion.mUnknown40 * 10.0f + pOther->mMotion.mPos.mX;
                 if (!(pOut->mX <= p->mMotion.mPos.mX)) {

@@ -185,8 +185,8 @@ static void _ParseVisibility(UISInfoT *pInfo, UISScreenT *pScreen, Int32 Value, 
                 for (Item = 0; Item < NumItems; Item++) {
                     pEntry = &pNode->pEntries[Item];
                     if (pEntry->ID == 0xFFFF) {
-                        _ParseVisibility(pInfo, pScreen, Value, 8,
-                                    &pScreen->pData->pControls[pEntry->Value], 0);
+                        pControl = &pScreen->pData->pControls[pEntry->Value];
+                        _ParseVisibility(pInfo, pScreen, Value, 8, pControl, 0);
                     } else if (pEntry->ID < pInfo->NumActionFncs &&
                                pInfo->ActionFncs[pEntry->ID].pFnc != 0) {
                         pObject = pEntry->Value != 0
@@ -517,8 +517,9 @@ Int32 PatchScrData(UISScreenDataT *pNewBase)
             UISStringT **patchAddr;
 
             patchAddr = (UISStringT **)((Uint32)pNewBase + pNewBase->pStringPatchTable[Control]);
-            if ((Uint32)*patchAddr < pNewBase->NumStrings) {
-                *patchAddr = &pNewBase->pStrings[(Uint32)*patchAddr];
+            Map = (Uint32)*patchAddr;
+            if (Map < pNewBase->NumStrings) {
+                *patchAddr = &pNewBase->pStrings[Map];
             } else {
                 *patchAddr = 0;
             }
@@ -826,7 +827,7 @@ Int32 fn_80218FC4(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, 
     return _UISInternalLoad(pInfo, GroupID, ScreenID, 0, Arg3, pArg4);
 }
 
-Int32 fn_80219044(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, Int32 *pArg4)
+Int32 UISLoadModalScreen(UISInfoT *pInfo, Uint16 GroupID, Uint16 ScreenID, Uint8 Arg3, Int32 *pArg4)
 {
     return _UISInternalLoad(pInfo, GroupID, ScreenID, 1, Arg3, pArg4);
 }
@@ -1078,7 +1079,7 @@ void UISProcessEvent(UISInfoT *pInfo, Uint32 Channel, Int32 Message, Int32 nPara
     }
 }
 
-void fn_80219854(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
+void UISInternalProcessEvent(UISInfoT *pInfo, UISRunStateT *pState, Int32 Arg2, Int32 Arg3, Int32 Count,
                  Int32 *pArgs, Int32 bAll)
 {
     Uint32 Screen;
@@ -1279,7 +1280,7 @@ void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID,
 
     if (pInfo->NumScreenRefs == 0) {
         pInfo->Flags |= 2;
-        fn_80219854(pInfo, &pInfo->RunState, 0, -5, 0, 0, 0);
+        UISInternalProcessEvent(pInfo, &pInfo->RunState, 0, -5, 0, 0, 0);
         pInfo->Flags &= ~2;
     }
     if (bActivate && !UISIsShuttingDown(pInfo)) {
@@ -1293,7 +1294,7 @@ void UISInternalActivateScreen(UISInfoT *pInfo, Int32 bActivate, Uint16 GroupID,
                     pInfo->pScreenActivatedFnc(pScreen->GroupID, pScreen->ScreenID);
                 }
                 pInfo->Flags |= 2;
-                fn_80219854(pInfo, &pInfo->RunState, 0, -4, 0, 0, 0);
+                UISInternalProcessEvent(pInfo, &pInfo->RunState, 0, -4, 0, 0, 0);
                 pInfo->Flags &= ~2;
             } else {
                 sprintf(strBuffer,

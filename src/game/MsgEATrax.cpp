@@ -260,6 +260,7 @@ int MsgEATraxToggleSong(int a, int b)
                 pTable->mCount--;
                 break;
             } else if (state == 2) {
+                if (b != 0) state++; // FAKEMATCH: dead increment (state is not read again); the extra block gives the target's r10 for pTable
                 pTable->mEntries[i].mCategory = -1;
                 result = 1;
                 pTable->mEntries[i].mRow = -1;

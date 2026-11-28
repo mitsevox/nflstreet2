@@ -1285,6 +1285,7 @@ void InGamePlayCallLoadList(unsigned char team, int index, int flag)
         if (cursor.mUnknown0) {
             TDbSQLDestroyCursor(&cursor);
         }
+        if (i) i += 0; // FAKEMATCH: a no-op branch on the placed-play count; its block boundary lengthens pList's life so greg ranks the play-book tag above it (r27/r26)
     } else {
         for (i = 0; i < count; i++) {
             pList[i] = i;
@@ -2355,11 +2356,10 @@ void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues)
 {
     InGameLeaderSortCategories(team);
     unsigned int count=0;
-    int i=0;
-    do {
-        int category=_InGameScreens_aLeaderStats[team].mIndices[i++];
+    for(int i=0;count<4;i++) {
+        int category=_InGameScreens_aLeaderStats[team].mIndices[i];
         if(_InGameScreens_aLeaderCategories[category].mEnabled) {
-            MenuText_t *pText=((MenuText_t **)pNames[0].pi)[*pNames[0].pi+count+1];
+            MenuText_t *pText=((MenuText_t **)(pNames[0].pi+*pNames[0].pi))[count+1];
             strncpy(pText->mpText,_InGameScreens_aLeaderCategories[category].mName,pText->mLength);
             int value=0;
             for(unsigned int j=0;j<_InGameScreens_aLeaderCategories[category].mCount;j++) {
@@ -2368,7 +2368,7 @@ void InGameLeaderGetCategories(int team, MenuArg_t *pNames, int *pValues)
             }
             pValues[count++]=value;
         }
-    } while(count<4);
+    }
 }
 
 void InGameLeaderGetName(int team,int *pId,char *pFirst,int firstSize,char *pLast,int lastSize)
@@ -2662,10 +2662,10 @@ int InGameRewardMsg(unsigned int id,MenuArg_t *p,int unused,int *result) {
     case 0x80000002:if(_InGameScreens_bAltRewards)StoryEventsClearResult(p[0].i);else InGameRewardClose(p[0].i);break;
     case 0x80000003:if(!_InGameScreens_bAltRewards)InGameRewardGetTexts(p[0].pi,(MenuText_t **)(p[1].i+(*p[1].pi+1)*4));break;
     case 0x80000007:if(_InGameScreens_bAltRewards)StoryEventsCopyRewardText((StoryTextArgs_t *)p);break;
-    case 0x80000004:if(!_InGameScreens_bAltRewards)InGameRewardGetNamePair(p,p[1].pi,p+2);break;
+    case 0x80000004:{int *pValue=p[1].pi;if(!_InGameScreens_bAltRewards)InGameRewardGetNamePair(p,pValue,p+2);}break;
     case 0x80000008:*result=InGameRewardGetMedal();break;
-    case 0x80000005:if(!_InGameScreens_bAltRewards)InGameRewardGetNameTriple(p,p[1].pi,p[2].pi,p[3].pi);break;
-    case 0x80000006:if(!_InGameScreens_bAltRewards)InGameRewardGetNameDouble(p+1,p[1].pi,p[2].pi);break;
+    case 0x80000005:{int *a=p[1].pi;int *b=p[2].pi;int *c=p[3].pi;if(!_InGameScreens_bAltRewards)InGameRewardGetNameTriple(p,a,b,c);}break;
+    case 0x80000006:{int *a=p[1].pi;int *b=p[2].pi;if(!_InGameScreens_bAltRewards)InGameRewardGetNameDouble(p+1,a,b);}break;
     default:return 0;
     }
     return 1;

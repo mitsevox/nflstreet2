@@ -2147,10 +2147,24 @@ void MsgTeamSelectAutoPickOne(int team, int *pIndex)
 void MsgTeamSelectSwapEntries(int team, int a, int b)
 {
     if (a != b) {
-        MsgTeamSelectEntry_t slot = _MsgTeamSelect_aRoster[team].mEntries[a];
+        MsgTeamSelectEntry_t *pa = &_MsgTeamSelect_aRoster[team].mEntries[a];
+        MsgTeamSelectEntry_t *pb = &_MsgTeamSelect_aRoster[team].mEntries[b];
+        MsgTeamSelectEntry_t slot;
 
-        _MsgTeamSelect_aRoster[team].mEntries[a] = _MsgTeamSelect_aRoster[team].mEntries[b];
-        _MsgTeamSelect_aRoster[team].mEntries[b] = slot;
+        slot.mSlot = pa->mSlot;
+        slot.mKey = pa->mKey;
+        slot.mId = pa->mId;
+        slot.mIndex = pa->mIndex;
+
+        pa->mSlot = pb->mSlot;
+        pa->mKey = pb->mKey;
+        pa->mId = pb->mId;
+        pa->mIndex = pb->mIndex;
+
+        pb->mSlot = slot.mSlot;
+        pb->mKey = slot.mKey;
+        pb->mId = slot.mId;
+        pb->mIndex = slot.mIndex;
     }
 }
 
@@ -2809,6 +2823,7 @@ void MsgTeamSelectSetTeam(int team, int id)
             _MsgTeamSelect_aiDepthStyle[team] = SyncRandGetRange(0, 5);
             _MsgTeamSelect_abAutoPick[team] = 1;
             _MsgTeamSelect_abNewTeam[team] = 0;
+            *(_MsgTeamSelect_abAutoFill + team) = 1; // FAKEMATCH: repeated store in pointer form keeps the target's two stores
             _MsgTeamSelect_abAutoFill[team] = 1;
         }
         _MsgTeamSelect_abResetPicks[team] = 1;
@@ -3223,12 +3238,22 @@ int MsgStadiumHandleMessage(unsigned int id, MenuArg_t *pArgs, int count, int *p
     case 0x80000002:
         MsgStadiumExit(_MsgStadium_aiEnvId[_MsgStadium_iCurrent], pArgs[0].i);
         break;
-    case 0x80000003:
-        MsgStadiumGetInfo(pArgs[0].i, pArgs[1].pParams->mpText, pArgs[1].pParams->mLength,
-                    pArgs[2].pParams->mpText, pArgs[2].pParams->mLength, pArgs[3].pi,
-                    pArgs[4].pParams->mpText, pArgs[4].pParams->mLength, pArgs[5].pi,
-                    pArgs[6].pi, pArgs[7].pi);
+    case 0x80000003: {
+        // FAKEMATCH: argument locals in a searched order steer sched1 and local-alloc to the target's r30/r11/r0 for the stack arguments
+        int *p5 = pArgs[5].pi;
+        int a0 = pArgs[0].i;
+        int *p6 = pArgs[6].pi;
+        MenuText_t *pName = pArgs[1].pParams;
+        int *p3 = pArgs[3].pi;
+        int *p7 = pArgs[7].pi;
+        MenuText_t *pCity = pArgs[2].pParams;
+        MenuText_t *pDesc = pArgs[4].pParams;
+        MsgStadiumGetInfo(a0, pName->mpText, pName->mLength,
+                    pCity->mpText, pCity->mLength, p3,
+                    pDesc->mpText, pDesc->mLength, p5,
+                    p6, p7);
         break;
+    }
     case 0x80000004:
         MsgStadiumPickRandom(pArgs[0].pi, 0);
         break;

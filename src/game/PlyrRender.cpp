@@ -180,8 +180,8 @@ int StadiumIsCamPastEndLine(void);
 void fn_800A3B58(Object_80039F5C *p, int a, int b);
 int PlyrHandGetPartIndex(PlyrPosePart_t *pElements, int index);
 unsigned int fn_800B823C(int team);
-void fn_800C2150(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
-void fn_800C2884(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
+void PlyrSwing9Update(Object_8003DEC4 *pPlayer, Block_800C2788 *pBlock, int a);
+void PlyrSwing5Update(Object_8003DEC4 *pPlayer, Block_800C2EC0 *pBlock, int a);
 void ParticleTrailUpdateAfterimage(Object_8003DEC4 *pPlayer, float f);
 void FEPlyrLoadMarkDrawn(Object_8003DEC4 *pPlayer);
 void *fn_8015E2FC(int a, int b, int c);
@@ -702,7 +702,7 @@ void PlyrRenderPoseModel(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatri
         } else {
             MatPush();
             MatLoad(pPlayer->mUnknown908);
-            fn_800C2150(pPlayer, &pPlayer->mUnknown280, !(pPlayer->mUnknown20 & 8));
+            PlyrSwing9Update(pPlayer, &pPlayer->mUnknown280, !(pPlayer->mUnknown20 & 8));
             MatPop();
             pHead = pPlayer->mUnknown280.mUnknown256.mUnknown48;
             MatPush();
@@ -720,7 +720,7 @@ void PlyrRenderPoseModel(Object_8003DEC4 *pPlayer, float *pScale, float (*pMatri
 
         MatPush();
         MatLoad(pPlayer->mUnknown908);
-        fn_800C2884(pPlayer, &pPlayer->mUnknown596, !(pPlayer->mUnknown20 & 8));
+        PlyrSwing5Update(pPlayer, &pPlayer->mUnknown596, !(pPlayer->mUnknown20 & 8));
         MatPop();
         pHat = pPlayer->mUnknown596.mUnknown160.mUnknown48;
         MatPush();
@@ -1271,7 +1271,7 @@ void PlyrRenderDrawPlayer(Object_8003DEC4 *pPlayer)
             PlyrRenderDrawAfterimages(pPlayer, pSlot, count);
         }
     } else {
-        fn_800C2150(pPlayer, &pPlayer->mUnknown280, 0);
+        PlyrSwing9Update(pPlayer, &pPlayer->mUnknown280, 0);
     }
 }
 

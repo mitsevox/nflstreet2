@@ -15,7 +15,7 @@ int SNDSTRM_status(int stream, SndStreamStatus_t *status)
     status->mBuffered = 0;
     status->mFirstId = 0;
     status->mRequests = 0;
-    channel = fn_8026D610(stream);
+    channel = SNDSTRMI_getstreamptr(stream);
     if (channel == 0) {
         return -8;
     }

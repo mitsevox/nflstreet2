@@ -10,7 +10,7 @@ struct PlayerSideRec_t {
 extern "C" {
 void PauseBlock(void);
 void PauseUnblock(void);
-PlayerSideRec_t *fn_800B2340(unsigned char index);
+PlayerSideRec_t *PenaltyCallGetPlayer(unsigned char index);
 void UISGameLockPad(int value);
 int UISGameUnlockPad(void);
 }
@@ -31,7 +31,7 @@ void TeamPromptStart(int a, int b, int c)
     _TeamPrompt_iPlayer = a;
     PauseBlock();
     InGameSetInputPaused(1);
-    UISGameLockPad(fn_800B65A0(fn_800B2340(a)->mUnknown2 ^ 1));
+    UISGameLockPad(fn_800B65A0(PenaltyCallGetPlayer(a)->mUnknown2 ^ 1));
 }
 
 void TeamPromptSetResult(int value)
