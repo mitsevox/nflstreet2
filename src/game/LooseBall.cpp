@@ -77,7 +77,7 @@ void Vec3Add(Vector_80039F5C *pOut, Vector_80039F5C *pA, Vector_80039F5C *pB);
 int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009A8D4(void *p);
-int fn_800B78DC(Object_80039F5C *p);
+int PlyrCtrlDefenseInput(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void Vec2Rotate(void *pOut, void *pIn, int angle);
 void Vec3ScaleAcc(void *pOut, void *pV, float scale);
@@ -672,7 +672,7 @@ extern "C" int LooseBallInput(Object_80039F5C *p) {
     }
     int value;
     BallStateGet(BallGetCurrent(), &value);
-    return fn_800B78DC(p);
+    return PlyrCtrlDefenseInput(p);
 }
 
 extern "C" int LooseBallIsIdle(Object_80039F5C *p) {

@@ -8,13 +8,13 @@
 extern "C" {
 extern float gFrameTimeScale;
 
-void fn_800B26B0(Object_800B26B0 *pObject);
-void fn_800B26E0(Object_800B26B0 *pObject);
-void fn_800B2A14(Object_800B26B0 *pObject, unsigned char *a);
-void fn_800B2D9C(Object_800B26B0 *pObject);
-float fn_800C4914(Object_80039F5C *p, float value);
-float fn_800C495C(Object_80039F5C *p, float value);
-void fn_800CA8F4(Object_80039F5C *p);
+void MotionResetDecay(Object_800B26B0 *pObject);
+void MotionIntegrate(Object_800B26B0 *pObject);
+void MotionApplyInput(Object_800B26B0 *pObject, unsigned char *a);
+void MotionAlignToFacing(Object_800B26B0 *pObject);
+float PlyrSurfaceScaleTurn(Object_80039F5C *p, float value);
+float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
+void FocusSlotsUpdatePlayerState(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011E9B4(Object_80039F5C *p);
 Object_80039F5C *fn_801245DC(Object_80039F5C *p, int team, unsigned char a, unsigned char b, int angle, float *pOut, int c);
@@ -129,8 +129,8 @@ void PlyrMoveCalcSpeed(Object_80039F5C *p)
             break;
         }
     }
-    pMotion->mUnknown36 = fn_800C495C(p, pMotion->mUnknown36);
-    pMotion->mUnknown52 = fn_800C4914(p, pMotion->mUnknown52);
+    pMotion->mUnknown36 = PlyrSurfaceScaleSpeed(p, pMotion->mUnknown36);
+    pMotion->mUnknown52 = PlyrSurfaceScaleTurn(p, pMotion->mUnknown52);
     if (PlyrMoveInCappedState(p)) {
         float cap = gPlyrMoveFwdSpeed * pInput->mUnknown0;
 
@@ -182,7 +182,7 @@ void PlyrMoveLatchRequest(Object_80039F5C *p)
 
     p->mUnknown512.mUnknown0 = p->mUnknown512.mUnknown0 >= 0.0f ? p->mUnknown512.mUnknown0 : 0.0f;
     pInput->mUnknown15 = 0;
-    fn_800CA8F4(p);
+    FocusSlotsUpdatePlayerState(p);
     if (pRequest->mUnknown15 == 0 || pInput->mUnknown12 == _PlyrMove_uHoldFrames) {
         if (p->mFlags & 0x4000) {
             if (pInput->mUnknown12 != 0) {
@@ -329,7 +329,7 @@ void PlyrMoveUpdate(Object_80039F5C *p)
 {
     Object_800B26B0 *pMotion = &p->mMotion;
 
-    fn_800B26B0(pMotion);
+    MotionResetDecay(pMotion);
     PlyrMoveLatchRequest(p);
     if (_PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14] != PlyrMoveModeStop) {
         PlyrMoveCalcSpeed(p);
@@ -337,13 +337,13 @@ void PlyrMoveUpdate(Object_80039F5C *p)
     _PlyrMove_apModeHandlers[p->mUnknown528.mUnknown14](p);
     if (p->mUnknown545 == 0) {
         PlyrMoveApplyGroundScale(p);
-        fn_800B26E0(pMotion);
+        MotionIntegrate(pMotion);
     } else {
-        fn_800B2A14(pMotion, &p->mUnknown544);
+        MotionApplyInput(pMotion, &p->mUnknown544);
     }
     if (p->mFlags & 0x100) {
         p->mFlags &= ~0x100;
-        fn_800B2D9C(&p->mMotion);
+        MotionAlignToFacing(&p->mMotion);
     }
     p->mUnknown528.mUnknown14 = 0;
     p->mUnknown512.mUnknown14 = 0;

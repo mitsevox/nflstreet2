@@ -1,7 +1,7 @@
 #ifndef GAME_BLOCK_800BFAD0_H
 #define GAME_BLOCK_800BFAD0_H
 
-/* Read by fn_800BD608 through a pointer to +12 of Slot_800BFAD0. */
+/* Read by PreSnapHandleStick through a pointer to +12 of Slot_800BFAD0. */
 struct Stick_800BD608 {
     float mX;
     float mY;
@@ -61,6 +61,6 @@ struct Block_800BFAD0 {
 
 /* .sdata word that holds the allocated block. */
 extern "C" Block_800BFAD0 *lbl_803EABA8;
-extern "C" void fn_800BEC1C(int a, int index);
+extern "C" void PreSnapExitLookMode(int a, int index);
 
 #endif

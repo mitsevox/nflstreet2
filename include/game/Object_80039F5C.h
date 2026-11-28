@@ -39,7 +39,7 @@ struct BigObjInst;
 
 struct Rig_800C8860;
 
-/* Block at +44 of Block_80170E64; fn_800C8860 turns the joints at +48. */
+/* Block at +44 of Block_80170E64; PlyrModelAddTwist turns the joints at +48. */
 struct Model_800C8860 {
     char mUnknown0[48];
     Rig_800C8860 *mpRig;
@@ -85,8 +85,8 @@ struct Block_80170E64 {
     float mUnknown936;
 };
 
-/* Motion block at +424, passed to fn_800B26B0, fn_800B26D0, fn_800B26E0,
-   fn_800B2A14 and fn_800B2D9C. Angles are 24-bit words. */
+/* Motion block at +424, passed to MotionResetDecay, MotionSetTurn, MotionIntegrate,
+   MotionApplyInput and MotionAlignToFacing. Angles are 24-bit words. */
 struct Object_800B26B0 {
     Vector_80039F5C mPos;
     Vector_80039F5C mUnknown12;
@@ -191,8 +191,8 @@ struct Block_801718E8 {
     char mUnknown55[1];
 };
 
-/* The +1160 block together with the bytes after it (+1216..+1223), as fn_800C8330 and
-   fn_800C6DF8 address them from one base. */
+/* The +1160 block together with the bytes after it (+1216..+1223), as PlyrContactUpdate and
+   PlyrContactTryTackleAnim address them from one base. */
 struct Block_800C8330 {
     Block_801718E8 mBlock;
     char mUnknown56[2];
@@ -289,7 +289,7 @@ struct Block_8011E240 {
     char mUnknown106[2];
 };
 
-/* Head/body turn at +300, eased towards mTarget by fn_800C8AF0 (24-bit
+/* Head/body turn at +300, eased towards mTarget by PlyrTurnUpdateTwist (24-bit
    angles); mRate indexes the easing tables. */
 struct Turn_800C8AF0 {
     int mAngle[2];
@@ -356,10 +356,10 @@ struct Object_80039F5C {
         };
         Block_800CC180 mUnknown336Block;
         /* State 17 keeps a packed player reference at +336 and a flag at +351
-           (fn_800CDE50). */
+           (PlyrContactStartTriple). */
         Link_800CDE50 mUnknown336Link;
         /* Per-state scratch: state 26 reads +344 as a word (PlyrContactIsKnockable);
-           state 58 keeps a player reference at +352 (fn_800C7D44). */
+           state 58 keeps a player reference at +352 (PlyrContactUpdateCarrier). */
         struct {
             char mUnknown336Words[8];
             int mUnknown344Word;

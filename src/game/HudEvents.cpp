@@ -16,7 +16,7 @@ extern const float lbl_803ED6A4;
 extern const float lbl_803ED6A8;
 
 int GamebreakerGetReadyId(int a);
-unsigned char fn_800C1E48(void);
+unsigned char PracticeIsSpotEditActive(void);
 int PlyrStarGetColor(int a);
 int GameTextGetPadPlayer(int a);
 
@@ -240,7 +240,7 @@ extern "C" void HudShowPlayLeader(int a)
 {
     Arg_8021D7B8 args[1];
 
-    if (!fn_800C1E48()) {
+    if (!PracticeIsSpotEditActive()) {
         if (a == 0) {
             args[0].i = 0;
         } else {

@@ -52,11 +52,11 @@ void AudibleDbClose(DbCursor *pCursor);
 int AudibleDbSeekFormation(DbCursor *pCursor, int key);
 unsigned char AudibleDbGetPlayIndex(DbCursor *pCursor, int column);
 unsigned char PlaybookSideGetLoaded(int index);
-void fn_800B508C(unsigned char index);
+void PlyrAttachTeamModels(unsigned char index);
 int fn_800BA6F8(void);
-QueryCursor fn_800C0750(int index, unsigned short *pValues);
-void fn_800C07C4(QueryCursor cursor);
-void fn_800C07F0(QueryCursor cursor, int index, unsigned short *pValues);
+QueryCursor PlyrDbOpenDepthQuery(int index, unsigned short *pValues);
+void PlyrDbCloseQuery(QueryCursor cursor);
+void PlyrDbLoadTeamRecords(QueryCursor cursor, int index, unsigned short *pValues);
 int PlayAlignGetSlotPlayer(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 int PlayAlignSetSlotValue(PlayBookFormation_t *pObject, PlayBookPlay_t *pRecord, int index, unsigned char *pOut, unsigned char flag);
 void PlayArtSetFlip(signed char team, int a, int b);
@@ -661,10 +661,10 @@ void PlayBookSetupTeams(void)
         QueryCursor cursor;
 
         PlayBookSetupTeam(team, 1);
-        cursor = fn_800C0750((unsigned char)team, values);
-        fn_800C07F0(cursor, (unsigned char)team, values);
-        fn_800C07C4(cursor);
-        fn_800B508C(team);
+        cursor = PlyrDbOpenDepthQuery((unsigned char)team, values);
+        PlyrDbLoadTeamRecords(cursor, (unsigned char)team, values);
+        PlyrDbCloseQuery(cursor);
+        PlyrAttachTeamModels(team);
     }
 }
 
@@ -762,9 +762,9 @@ void fn_8011F3A8(void);
 void PlayRealignTeam(int team);
 int ScrmGetOffenseTeam(void);
 int ScrmGetDefenseTeam(void);
-void fn_800B0DA4(void);
+void PlayMotionReset(void);
 PlayBookFormation_t *PlayBookGetFormation(int team);
-void fn_800B49EC(short *ratings, void *p);
+void PlyrRestoreRatings(short *ratings, void *p);
 void fn_800B4798(short *ratings, int team, unsigned char index, void *p);
 void GamebreakerBoostRatings(int team);
 int ScrmGetScoreGoal(int *p);
@@ -777,8 +777,8 @@ void PlayBookPickPlay(int team, int kind);
 void PlayBookSelectPlayById(int team, int kind);
 int PlayBookIsAiPlay(int team, int kind, int value);
 
-void fn_800B4300(int value);
-void fn_800B43AC(int value);
+void PlayCallSetTimer(int value);
+void PlayCallSetSelectMode(int value);
 
 
 int PlayCallGetPlaybookId(void)
@@ -799,7 +799,7 @@ void PlayCallApplyPlay(int team, int value)
         fn_8011F3A8();
         PlayRealignTeam(team);
         if (team == ScrmGetOffenseTeam())
-            fn_800B0DA4();
+            PlayMotionReset();
         for (int t = 0; t < 2; ++t) {
             PlayBookFormation_t *pBook = PlayBookGetFormation((unsigned char)t);
             int count = ScrmGetTeamPlayerCount((unsigned char)t);
@@ -808,7 +808,7 @@ void PlayCallApplyPlay(int team, int value)
                 unsigned char a, b;
                 PlaySetGetEntryRoles(pBook, i, &a, &b);
                 p->mUnknown2914 = a;
-                fn_800B49EC(p->mRatings, p->mUnknown3020);
+                PlyrRestoreRatings(p->mRatings, p->mUnknown3020);
                 fn_800B4798(p->mRatings, (unsigned char)t, i, &p->mUnknown2900);
             }
             GamebreakerBoostRatings((unsigned char)t);
@@ -910,21 +910,21 @@ int PlayCallOffenseCommand(int id, short *p, int value)
         result = PlayBookIsAiPlay(team, value & ~0xC0, p[17]);
         break;
     case 2:
-        fn_800B4300(0);
+        PlayCallSetTimer(0);
         if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;
     case 3:
-        fn_800B4300(1);
+        PlayCallSetTimer(1);
         lbl_803EABA4->fn_800C02F8(1);
         break;
     case 5:
-        fn_800B43AC(1);
+        PlayCallSetSelectMode(1);
         if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;
     case 12:
-        fn_800B43AC(2);
+        PlayCallSetSelectMode(2);
         if (fn_800B65A0(ScrmGetOffenseTeam()) == 255)
             lbl_803EABA4->fn_800C02F8(2);
         break;

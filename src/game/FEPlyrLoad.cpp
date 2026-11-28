@@ -10,7 +10,7 @@
 #include "game/FEPlyrLoad.h"
 #include "game/Object_8003DEC4.h"
 #include "game/PlayerLook.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "game/fn_801D2B7C.h"
 #include "game/fn_80233CBC.h"
 
@@ -61,7 +61,7 @@ void PlaTexCacheWaitReads(void);
 void PlaTexCacheSetFace(int index, const char *pName, int a);
 void PlaTexCacheSetCapFace(int index, int a, int b, int c, int d);
 void PlaTexCacheDiscardRequests(void);
-void PlyrHeadSetModel(Object_8003DEC4 *pPlayer, int id, Callback_8015F958 pCallback);
+void PlyrHeadSetModel(Object_8003DEC4 *pPlayer, int id, PlaModelLoadCallback_t pCallback);
 void PlyrHeadProcessModel(void);
 void PlyrTexRequestNameplate(Object_8003DEC4 *pPlayer);
 void fn_80233C7C(void *p);
@@ -155,19 +155,19 @@ extern "C" void FEPlyrLoadStartNextPart(void)
     }
     if ((pEntry->mUnknownFA & 0x2) && !(pEntry->mUnknownFA & 0x40)) {
         pEntry->mUnknownFA |= 0x40;
-        fn_8015F958(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, FEPlyrLoadHeadDone);
+        PlaModelLoadHairAsync(pPlayer->mUnknown4970, &pEntry->mUnknown4, pPlayer, FEPlyrLoadHeadDone);
     } else if ((pEntry->mUnknownFA & 0x8) && !(pEntry->mUnknownFA & 0x100)) {
         pEntry->mUnknownFA |= 0x100;
         PlyrHeadSetModel(pPlayer, pEntry->mUnknownC, FEPlyrLoadFaceDone);
     } else if ((pEntry->mUnknownFA & 0x1) && !(pEntry->mUnknownFA & 0x20)) {
         pEntry->mUnknownFA |= 0x20;
-        fn_8015FB38(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, FEPlyrLoadHatDone);
+        PlaModelLoadHatAsync(pPlayer->mUnknown4970, pEntry->mUnknownE8, pPlayer, FEPlyrLoadHatDone);
     } else if ((pEntry->mUnknownFA & 0x4) && !(pEntry->mUnknownFA & 0x80)) {
         pEntry->mUnknownFA |= 0x80;
-        fn_8015FC54(pPlayer->mUnknown4970, pEntry->mUnknownEC, pPlayer, FEPlyrLoadSlot1Done);
+        PlaModelLoadGlassesAsync(pPlayer->mUnknown4970, pEntry->mUnknownEC, pPlayer, FEPlyrLoadSlot1Done);
     } else if ((pEntry->mUnknownFA & 0x10) && !(pEntry->mUnknownFA & 0x200)) {
         pEntry->mUnknownFA |= 0x200;
-        fn_8015FD70(pPlayer->mUnknown4970, pEntry->mUnknownF0, pPlayer, FEPlyrLoadAccessoryDone);
+        PlaModelLoadJewelAsync(pPlayer->mUnknown4970, pEntry->mUnknownF0, pPlayer, FEPlyrLoadAccessoryDone);
     }
 }
 
@@ -328,7 +328,7 @@ extern "C" void FEPlyrLoadWait(int wait)
     if (pEntry->mUnknownFA & 0x3E0) {
         count = 0;
         while (pEntry->mUnknownFA & 0x3E0) {
-            fn_8015FE4C();
+            PlaModelFinishAsyncLoads();
             count++;
             PlyrHeadProcessModel();
             if (count > 4) {
@@ -367,7 +367,7 @@ extern "C" void FEPlyrLoadShutdown(void)
         pEntry = &pState->mEntries[pState->mCurrent];
         if (pEntry->mUnknownFA & 0x3E0) {
             while (pEntry->mUnknownFA & 0x3E0) {
-                fn_8015FE4C();
+                PlaModelFinishAsyncLoads();
                 PlyrHeadProcessModel();
             }
         } else if (pEntry->mUnknownF8) {
@@ -421,7 +421,7 @@ extern "C" void FEPlyrLoadUpdate(void)
         return;
     }
     FEPlyrLoadStartNextPart();
-    fn_8015FE4C();
+    PlaModelFinishAsyncLoads();
     PlyrHeadProcessModel();
     for (i = 0; i < 2; i++) {
         pState = _FEPlyrLoad_pState;

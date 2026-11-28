@@ -71,7 +71,7 @@ void fn_8012430C(Directions_8012430C *, int, Object_80039F5C *);
 int MathAngleDiff(int, int);
 unsigned char QbPassRateReceiver(Object_80039F5C *, Object_80039F5C *, int *, int, unsigned char *, unsigned char *);
 int ScrmGetDown(void);
-void fn_800C146C(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
+void PassLaneSolveTarget(Vec2_t *, Object_80039F5C *, Object_80039F5C *, int, int, int, int, int);
 int TutorialIsActive(void);
 float ScrmGetGoalLineY(void);
 void Vec2FromAngle(Vec2_t *, int, float);
@@ -87,7 +87,7 @@ void DefPredApplyQbRunMod(void);
 void DefPredRefreshRatings(void);
 
 int fn_801486A0(void);
-int fn_800C13A0(Object_80039F5C *, unsigned char *, unsigned char *);
+int PassLaneGetReceiverRating(Object_80039F5C *, unsigned char *, unsigned char *);
 Object_80039F5C *fn_801244F0(Object_80039F5C *, int, unsigned char, unsigned char, float *, int);
 int ScrmGetOffenseTeam(void);
 void PlayBookSetReceiverOption(int, unsigned char, unsigned char);
@@ -493,7 +493,7 @@ int QbPassUpdate(Object_80039F5C *player) {
                         unsigned int bonus = 0;
                         candidate = PlyrGet(player->mIdBytes[2], indices[i]);
                         if (ScrmGetDown() != 6) {
-                            fn_800C146C(&predicted, player, candidate, 20, 0, 0, 0, 0);
+                            PassLaneSolveTarget(&predicted, player, candidate, 20, 0, 0, 0, 0);
                             if (predicted.mY > point.mY)
                                 bonus = (unsigned int)(predicted.mY - point.mY) * ScrmGetDown();
                         }
@@ -653,7 +653,7 @@ unsigned char QbPassRateReceiver(Object_80039F5C *p, Object_80039F5C *other, int
     PlyrModeState_t *s = (PlyrModeState_t *)&p->mUnknown336;
     unsigned char result = 0;
     if (*count + s->mUnknown1 + 96 > 1 || s->mUnknown19) {
-        result = fn_800C13A0(other, a, b);
+        result = PassLaneGetReceiverRating(other, a, b);
         if (!(s->mUnknown14 < 5.0f) && !s->mUnknown19) {
             int team = p->mIdBytes[2] ^ 1;
             unsigned char n = ScrmGetTeamPlayerCount(team);

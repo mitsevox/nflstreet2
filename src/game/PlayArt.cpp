@@ -31,7 +31,6 @@ int PlayAlignLoadPlayRoutes(void *, int, int, PlayArtPlayer_t *);
 int PlayAlignLoadRouteSteps(void *, PlayArtPlayer_t *, int, unsigned char);
 void PlayAlignSwapOuterSlots(PlayArtPlay_t *, int);
 void PlayArtSetPlayerColors(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *, int, int, unsigned char);
-int PlayArtBuildRoute(PlayArtPlayer_t *, int, void *, void *, void *, void *, int);
 int PlayAlignBuildSlotRects(PlayArtPlay_t *, PlayArtState_t *, PlayArtPlayer_t *);
 PlayBookTeam_t *PlayBookGetTeam(int);
 void UISGameSetDrawMode(int);
@@ -50,6 +49,173 @@ extern unsigned char lbl_802E98F0[][3];
 extern int lbl_803EB3B8, lbl_803EB3BC, lbl_803EB3C0, lbl_803EB3C4, lbl_803EB3C8, lbl_803EB3CC, lbl_803EB3D0, lbl_803EB3D4, lbl_803EB3D8, lbl_803EB3DC, lbl_803EB3E0, lbl_803EB3E4, lbl_803EB3E8, lbl_803EB3EC, lbl_803EB3F0, lbl_803EB3F4, lbl_803EB3F8, lbl_803EB3FC, lbl_803EB400, lbl_803EB404, lbl_803EB408;
 int ScrmGetDown(void);
 int PauseIsOpen(void);
+void PlayAlignBuildCurveStrip(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
+void PlayAlignBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
+void Vec2Add(void *, void *, void *);
+float Vec2Distance(void *, void *);
+extern int lbl_802E9964[];
+extern PlayArtVertex_t lbl_802E98FC[];
+
+void PlayArtBuildArrowQuad(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
+{
+    PlayArtVertex_t direction;
+    direction.mY = points[0].mY - points[1].mY;
+    direction.mX = points[0].mX - points[1].mX;
+    float magnitude = sqrtf(direction.mX * direction.mX + direction.mY * direction.mY);
+    if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
+    PlayArtVertex_t side;
+    side.mX = -direction.mY;
+    side.mY = -direction.mX;
+    side.mX *= 0.5f * width;
+    side.mY *= 0.5f * width;
+    direction.mX *= 0.5f * length;
+    direction.mY *= 0.5f * length;
+    out[0].mX = points[0].mX + side.mX;
+    out[0].mY = points[0].mY - side.mY;
+    out[1].mX = points[0].mX - side.mX;
+    out[1].mY = points[0].mY + side.mY;
+    out[2].mX = out[0].mX + direction.mX;
+    out[2].mY = out[0].mY + direction.mY;
+    out[3].mX = out[1].mX + direction.mX;
+    out[3].mY = out[1].mY + direction.mY;
+}
+
+int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
+{
+    out[count++] = quad[0];
+    out[count++] = quad[1];
+    out[count++] = quad[3];
+    out[count++] = quad[2];
+    return count;
+}
+
+#define PLAYART_CLAMP(v, lo, hi) ((v) < (lo) ? (lo) : !((v) <= (hi)) ? (hi) : (v))
+
+int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
+                void *kindBuffer, void *colorBuffer, int extend)
+{
+    PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
+    PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
+    int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
+    PlayArtVertex_t starts[13], ends[13], controls[3] = {0};
+    int count = 0;
+    PlayArtVertex_t strip[20] = {0};
+    PlayArtVertex_t axis[2];
+    int drawn = 0;
+    int stop = 0;
+    for (int i = 0; i <= 11 && !stop; ++i) {
+        PlayArtStep_t *step = &record->mUnknown1C[i];
+        int hasArrow = 1;
+        if (!step->mUnknown14) hasArrow = 0;
+        kinds[i] = step->mUnknown14;
+        colors[i] = step->mUnknown20;
+        int width = lbl_802E9964[step->mUnknown1C];
+        if (record->mUnknown4Word) {
+            int link = step->mUnknown18 == 15 ? i : step->mUnknown18;
+            // FAKEMATCH: the start floats +8/+0xC are read as one vertex through a cast, for the target's word copy
+            if (!i) starts[0] = *(PlayArtVertex_t *)&record->mUnknown8;
+            else if (link == i) starts[i] = ends[i-1];
+            else starts[i] = ends[link];
+        }
+        PlayArtVertex_t zero;
+        zero.mX = zero.mY = 0.0f;
+        // FAKEMATCH: the unused zero pair is kept in memory (the target stores both words every step and never reads them)
+        (void)&zero;
+        int moved;
+        switch ((unsigned int)step->mUnknown10) {
+        default:
+            if (step->mUnknown10 == -1) stop = 1;
+            break;
+        case 0:
+            controls[0] = starts[i];
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+            controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
+            ends[i] = controls[1];
+            PlayAlignBuildSegmentStrip(controls, strip, width);
+            count = PlayArtAddQuad(vertices, count, capacity, strip);
+            moved = 0;
+            if (fabsf(controls[0].mX - controls[1].mX) != 0.0f || fabsf(controls[0].mY - controls[1].mY) != 0.0f) moved = 1;
+            if (moved == 1) drawn = 1;
+            break;
+        case 2:
+            for (int j = 0; j < 2; ++j) {
+                controls[0] = starts[i];
+                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
+                else Vec2Add(&controls[1], &step->mUnknown8, starts);
+                controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+                controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
+                ends[i] = controls[1];
+                PlayAlignBuildSegmentStrip(controls, strip, width);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
+                moved = 0;
+                if (fabsf(controls[0].mX - controls[1].mX) != 0.0f || fabsf(controls[0].mY - controls[1].mY) != 0.0f) moved = 1;
+                if (moved == 1) drawn = 1;
+            }
+            break;
+        case 1: {
+            controls[0] = starts[i];
+            Vec2Add(&controls[1], &step->mUnknown0, starts);
+            Vec2Add(&controls[2], &step->mUnknown8, starts);
+            controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+            controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
+            controls[2].mX = PLAYART_CLAMP(controls[2].mX, 4.0f, 116.0f);
+            controls[2].mY = PLAYART_CLAMP(controls[2].mY, 4.0f, 96.0f);
+            ends[i] = controls[2];
+            int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
+            if (samples > 8) samples = 8;
+            PlayAlignBuildCurveStrip(controls, strip, samples, width);
+            for (int j = 0; j < samples; ++j) {
+                vertices[count++] = strip[j*2];
+                vertices[count++] = strip[j*2+1];
+            }
+            drawn = 1;
+            break;
+        }
+        }
+        if (hasArrow) {
+            if (!drawn && extend) {
+                controls[1] = starts[i];
+                starts[i].mY -= 8.0f;
+                controls[0] = starts[i];
+                controls[1].mX = PLAYART_CLAMP(controls[1].mX, 4.0f, 116.0f);
+                controls[1].mY = PLAYART_CLAMP(controls[1].mY, 4.0f, 96.0f);
+                ends[i] = controls[1];
+                PlayAlignBuildSegmentStrip(controls, strip, width);
+                count = PlayArtAddQuad(vertices, count, capacity, strip);
+            }
+            if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}
+            else {axis[0] = ends[i]; axis[1] = starts[i];}
+            if (fabsf(axis[0].mX - axis[1].mX) == 0.0f && fabsf(axis[0].mY - axis[1].mY) == 0.0f) {
+                axis[1].mX += 1.0f;
+                axis[1].mY += 1.0f;
+            }
+            if ((unsigned int)(step->mUnknown14 - 3) < 3) {
+                strip[0].mX = lbl_802E98FC[kinds[i]].mX * 0.5f;
+                strip[0].mY = lbl_802E98FC[kinds[i]].mY * 0.5f;
+                arrows[i][0].mX = axis[0].mX - strip[0].mX;
+                arrows[i][0].mY = axis[0].mY + strip[0].mY;
+                arrows[i][1].mX = axis[0].mX + strip[0].mX;
+                arrows[i][1].mY = axis[0].mY + strip[0].mY;
+                arrows[i][2].mX = axis[0].mX - strip[0].mX;
+                arrows[i][2].mY = axis[0].mY - strip[0].mY;
+                arrows[i][3].mX = axis[0].mX + strip[0].mX;
+                arrows[i][3].mY = axis[0].mY - strip[0].mY;
+            } else {
+                PlayArtBuildArrowQuad(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
+                arrows[i][0].mX = strip[0].mX;
+                arrows[i][0].mY = strip[0].mY;
+                arrows[i][1].mX = strip[1].mX;
+                arrows[i][1].mY = strip[1].mY;
+                arrows[i][2].mX = strip[2].mX;
+                arrows[i][2].mY = strip[2].mY;
+                arrows[i][3].mX = strip[3].mX;
+                arrows[i][3].mY = strip[3].mY;
+            }
+        }
+    }
+    return count;
+}
 
 void PlayArtSetPlayerColors(PlayArtPlay_t *record, PlayArtState_t *state, PlayArtPlayer_t *entry, int team, int index, unsigned char)
 {
@@ -305,171 +471,26 @@ void PlayArtResetTeam(int group)
 {
     memset(_PlayArt_aStates[group], 0, sizeof(_PlayArt_aStates[group]));
 }
+
+int PlayArtLoadRouteId(void *db, int play, int slot)
+{
+    int route = 0;
+    TDbCompilePerformOp(0, "use \x8c select 'LTRA' into \x85 from 'SYLP' where 'LYLP' = \x85 and 'osop' = \x85\n",
+                db, &route, play, slot);
+    return route;
 }
 
-#if defined(DECOMP_COMPARE)
-extern "C" PlayArtVertex_t _PlayAlign_aCurveWork[], _PlayAlign_aCurveSamples[];
-
-extern "C" {
-void Vec2Normalize(void *, void *);
-void PlayAlignBuildCurveStrip(PlayArtVertex_t *, PlayArtVertex_t *, int, int);
-void PlayAlignBuildSegmentStrip(PlayArtVertex_t *, PlayArtVertex_t *, int);
-
-extern int lbl_802E9964[];
-extern PlayArtVertex_t lbl_802E98FC[];
-void Vec2Add(void *, void *, void *);
-float Vec2Distance(void *, void *);
-int _TDbQrySelect(int, DbQueryTable *, DbFilter *, void *, int *, QueryResult *);
-int sprintf(char *, const char *, ...);
-int DbTextToTag(const char *);
-int ScrmGetOffenseTeam(void);
-unsigned int ScrmGetTeamPlayerCount(int);
-int ScrmGetActivePlayerCount(int);
-PlayBookFormation_t *PlayBookGetFormation(int);
-Record_8011F4E0 *fn_8011F4E0(void);
-Message_800F01CC *fn_800AEE20(Object_80039F5C *);
-void fn_800AEF74(Object_80039F5C *, Message_800F01CC *);
-void fn_800F0910(int, Message_800F01CC *);
-int fn_800AD9B4(void);
-int PlayAlignHasSlots(PlayBookPlay_t *);
-void PlayAlignIssuePlayerRoute(PlayBookPlay_t *, Object_80039F5C *, int);
-
-void PlayArtBuildArrowQuad(PlayArtVertex_t *points, PlayArtVertex_t *out, int width, int length)
+void PlayArtLoadPlayRoutes(void *db, int play, PlayArtPlayer_t *players)
 {
-    PlayArtVertex_t direction;
-    direction.mY = points[0].mY - points[1].mY;
-    direction.mX = points[0].mX - points[1].mX;
-    float magnitude = sqrtf(direction.mX * direction.mX + direction.mY * direction.mY);
-    if (magnitude != 0.0f) {direction.mX /= magnitude; direction.mY /= magnitude;}
-    PlayArtVertex_t side;
-    side.mX = -direction.mY;
-    side.mY = -direction.mX;
-    side.mX = side.mX * 0.5f * (float)width;
-    side.mY = side.mY * 0.5f * (float)width;
-    out[0].mX = points[0].mX + side.mX;
-    direction.mX = direction.mX * 0.5f * (float)length;
-    out[0].mY = points[0].mY - side.mY;
-    direction.mY = direction.mY * 0.5f * (float)length;
-    out[1].mX = points[0].mX - side.mX;
-    out[2].mX = out[0].mX + direction.mX;
-    out[2].mY = out[0].mY + direction.mY;
-    out[3].mX = out[1].mX + direction.mX;
-    out[1].mY = points[0].mY + side.mY;
-    out[3].mY = out[1].mY + direction.mY;
-}
-
-int PlayArtAddQuad(PlayArtVertex_t *out, int count, int, PlayArtVertex_t *quad)
-{
-    out[count++] = quad[0];
-    out[count++] = quad[1];
-    out[count++] = quad[3];
-    out[count++] = quad[2];
-    return count;
-}
-
-int PlayArtBuildRoute(PlayArtPlayer_t *record, int capacity, void *vertexBuffer, void *arrowBuffer,
-                void *kindBuffer, void *colorBuffer, int extend)
-{
-    PlayArtVertex_t *vertices = (PlayArtVertex_t *)vertexBuffer;
-    PlayArtVertex_t (*arrows)[4] = (PlayArtVertex_t (*)[4])arrowBuffer;
-    int *kinds = (int *)kindBuffer, *colors = (int *)colorBuffer;
-    PlayArtVertex_t starts[12], ends[13], controls[3], strip[20];
-    memset(controls, 0, 24);
-    int drawn = 0;
-    int count = 0;
-    memset(strip, 0, 160);
-    for (int i = 0; i <= 11; ++i) {
-        PlayArtStep_t *step = &record->mUnknown1C[i];
-        int arrowKind = step->mUnknown14;
-        kinds[i] = arrowKind;
-        colors[i] = step->mUnknown20;
-        int width = lbl_802E9964[step->mUnknown1C];
-        if (record->mUnknown4Word) {
-            int link = step->mUnknown18 == 15 ? i : step->mUnknown18;
-            if (!i) {starts[0].mX = record->mUnknown8; starts[0].mY = record->mUnknownC;}
-            else if (link == i) starts[i] = ends[i];
-            else starts[i] = ends[link+1];
-        }
-        int stop = 0;
-        PlayArtVertex_t zero = {0.0f, 0.0f};
-        if (step->mUnknown10 == 1) {
-            controls[0] = starts[i];
-            Vec2Add(&controls[1], &step->mUnknown0, starts);
-            Vec2Add(&controls[2], &step->mUnknown8, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-            if (controls[2].mX < 4.0f) controls[2].mX = 4.0f; else if (!(controls[2].mX <= 116.0f)) controls[2].mX = 116.0f;
-            if (controls[2].mY < 4.0f) controls[2].mY = 4.0f; else if (!(controls[2].mY <= 96.0f)) controls[2].mY = 96.0f;
-            ends[i+1] = controls[2];
-            int samples = (int)(Vec2Distance(&controls[0], &controls[1]) * 0.175f + 2.0f);
-            if (samples > 8) samples = 8;
-            PlayAlignBuildCurveStrip(controls, strip, samples, width);
-            for (int j = 0; j < samples; ++j) {
-                vertices[count] = strip[j*2];
-                vertices[count+1] = strip[j*2+1];
-                count += 2;
-            }
-            drawn = 1;
-        } else if (step->mUnknown10 == 0) {
-            controls[0] = starts[i];
-            Vec2Add(&controls[1], &step->mUnknown0, starts);
-            if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-            if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-            ends[i+1] = controls[1];
-            PlayAlignBuildSegmentStrip(controls, strip, width);
-            count = PlayArtAddQuad(vertices, count, capacity, strip);
-            if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
-        } else if (step->mUnknown10 == 2) {
-            for (int j = 0; j < 2; ++j) {
-                controls[0] = starts[i];
-                if (!j) Vec2Add(&controls[1], &step->mUnknown0, starts);
-                else Vec2Add(&controls[1], &step->mUnknown8, starts);
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-                ends[i+1] = controls[1];
-                PlayAlignBuildSegmentStrip(controls, strip, width);
-                count = PlayArtAddQuad(vertices, count, capacity, strip);
-                if (fabsf(controls[0].mX - controls[1].mX) != zero.mX || fabsf(controls[0].mY - controls[1].mY) != zero.mY) drawn = 1;
-            }
-        } else if (step->mUnknown10 == -1) stop = 1;
-        if (arrowKind) {
-            if (!drawn && extend) {
-                controls[1] = starts[i];
-                starts[i].mY -= 8.0f;
-                controls[0] = starts[i];
-                if (controls[1].mX < 4.0f) controls[1].mX = 4.0f; else if (!(controls[1].mX <= 116.0f)) controls[1].mX = 116.0f;
-                if (controls[1].mY < 4.0f) controls[1].mY = 4.0f; else if (!(controls[1].mY <= 96.0f)) controls[1].mY = 96.0f;
-                ends[i+1] = controls[1];
-                PlayAlignBuildSegmentStrip(controls, strip, width);
-                count = PlayArtAddQuad(vertices, count, capacity, strip);
-            }
-            PlayArtVertex_t axis[2];
-            if (step->mUnknown10 == 1) {axis[0] = controls[2]; axis[1] = controls[1];}
-            else {axis[0] = ends[i+1]; axis[1] = starts[i];}
-            if (fabsf(axis[0].mX - axis[1].mX) == 0.0f && fabsf(axis[0].mY - axis[1].mY) == 0.0f) {
-                axis[1].mX += 1.0f;
-                axis[1].mY += 1.0f;
-            }
-            if ((unsigned int)(step->mUnknown14 - 3) < 3) {
-                float x = lbl_802E98FC[kinds[i]].mX * 0.5f;
-                float y = lbl_802E98FC[kinds[i]].mY * 0.5f;
-                arrows[i][0].mX = axis[0].mX - x;
-                arrows[i][2].mX = axis[0].mX - x;
-                arrows[i][3].mY = axis[0].mY - y;
-                arrows[i][1].mY = axis[0].mY + y;
-                arrows[i][3].mX = axis[0].mX + x;
-                arrows[i][0].mY = axis[0].mY + y;
-                arrows[i][1].mX = axis[0].mX + x;
-                arrows[i][2].mY = axis[0].mY - y;
-            } else {
-                PlayArtBuildArrowQuad(axis, strip, (int)lbl_802E98FC[kinds[i]].mX, (int)lbl_802E98FC[kinds[i]].mY);
-                for (int j = 0; j < 4; ++j) arrows[i][j] = strip[j];
-            }
-        }
-        if (stop) break;
+    for (int i = 0; i < 7; ++i) {
+        int route = 0;
+        TDbCompilePerformOp(0, "use \x8c select 'LTRA' into \x85 from 'SYLP' where 'LYLP' = \x85 and 'osop' = \x85\n",
+                    db, &route, play, i);
+        players[i].mUnknown0Word = route;
+        int action;
+        TDbCompilePerformOp(0, "use \x8c select 'tcna' into \x85 from 'LTRA' where 'LTRA' = \x85\n", db, &action, route);
+        players[i].mUnknown4Word = action;
     }
-    return count;
+    PlayAlignLoadRouteSteps(db, players, 0, 7);
 }
-
 }
-#endif

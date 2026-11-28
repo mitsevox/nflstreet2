@@ -88,9 +88,9 @@ extern float gPlyrMoveFwdSpeed;
 void fn_8009BD60(Object_80039F5C *p);
 int GamebreakerGetSpeedFlag(unsigned char a);
 void PlyrHandSetPoseFor(Object_80039F5C *p, int a, int b, int c);
-float fn_800C495C(Object_80039F5C *p, float value);
+float PlyrSurfaceScaleSpeed(Object_80039F5C *p, float value);
 void fn_800C89F0(Object_80039F5C *p, int a, int b, int c, float value);
-void fn_800CABF4(Object_80039F5C *p, unsigned char *pOut, int a);
+void FocusSlotsFindPlayer(Object_80039F5C *p, unsigned char *pOut, int a);
 int PlayerMoveGetKind(Object_80039F5C *p);
 int PlayerActionAnimIsPassReady(Object_80039F5C *p);
 int fn_8011F1CC(void);
@@ -434,7 +434,7 @@ float ScrmGetSidelineX(void);
 float ScrmGetEndLineY(void);
 int fn_8009FE24(Object_80039F5C *p);
 int fn_800B0F98(void);
-int fn_800B146C(void);
+int PlayMotionIsActive(void);
 void fn_800FE03C(Object_80039F5C *p, FieldPoint_t *pOut);
 int DefCoverIsAlignHeld(void);
 int ScrmOffenseAnyPlaced(void);
@@ -476,12 +476,12 @@ extern float gFrameTimeScale;
 struct Table_800DE51C { char mUnknown0[4]; unsigned short mCount; char mUnknown6[2]; Entry_800DE51C mEntries[1]; };
 extern "C" {
 Table_80089904 *fn_801BE72C(unsigned short, unsigned short);
-void fn_800CEDA4(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
+void PlyrContactNodeToWorld(Entry_800DE51C *, Pair_802270A4 *, int *, Object_80039F5C *, int);
 void AnimMomentumInit(AnimMomentum_t *, Object_80039F5C *, int);
 void AnimMomentumUpdate(AnimMomentum_t *, Object_80039F5C *);
 void AnimMomentumUpdateLinked(AnimMomentum_t *, Object_80039F5C *);
 float fn_80114EE4(Object_80039F5C *, Object_80039F5C *);
-int fn_800C854C(Object_80039F5C *, unsigned short, unsigned char);
+int PlyrContactStartEngage(Object_80039F5C *, unsigned short, unsigned char);
 void PlayerActionAnimUpdatePairAlign(Object_80039F5C *, Block_800DE3B0 *);
 }
 

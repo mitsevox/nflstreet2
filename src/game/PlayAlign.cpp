@@ -454,10 +454,13 @@ int PlayAlignLoadPlayRoutes(void *handle, int, int id, PlayArtPlayer_t *records)
     int opened = 0;
     int status;
 
-    routes[0].mFilter = &route;
-    route.mUnknown32 = 0x10003;
-    route.SetOperands(6, 0x4C5452414C545241LL, 3, id);
     plays[0].mFilter = &play;
+    routes[0].mFilter = &route;
+    // FAKEMATCH: the route's value operand is set through a pointer to the field, here and in the loop, so cse keeps the operand address in a register (target r31) instead of folding it into a frame offset; the stores are the same.
+    DbFilterOperand *operand = &route.mUnknown16;
+    route.mUnknown32 = 0x10003;
+    route.mUnknown0.Set(6, 0x4C5452414C545241LL);
+    operand->Set(3, id);
     play.mUnknown32 = 0x10003;
     play.SetOperands(6, 0x53594C504C594C50LL, 3, id);
     status = _TDbQrySelect((int)handle, plays, 0, 0, &cursor, 0);
@@ -467,9 +470,11 @@ int PlayAlignLoadPlayRoutes(void *handle, int, int id, PlayArtPlayer_t *records)
     if (status == 0) {
         status = TDbQryRetrieve(cursor, 1, 0, ids);
         while (status == 0) {
-            route.mUnknown16.Set(3, ids[0].mValue);
+            int routeId = ids[0].mValue;
             PlayArtPlayer_t *record = &records[ids[1].mValue];
-            record->mUnknown0Word = ids[0].mValue;
+            DbFilterOperand *value = &route.mUnknown16;
+            value->Set(3, routeId);
+            record->mUnknown0Word = routeId;
             TDbQryGetSingleRow((int)handle, routes, 0, counts);
             record->mUnknown4Word = counts[0].mValue;
             status = TDbQryRetrieve(cursor, 0, 1, ids);

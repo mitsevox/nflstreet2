@@ -933,12 +933,8 @@ int SndgEventGetSurfaceSfx(int value)
 {
     int result = 42;
     switch (value) {
-    // FAKEMATCH: the empty case labels 5 and 7 (surface ids the target sends to the default 44)
-    // leave no compare in the target; they only move the compare tree root to 4 and change no result
     case 0:
     case 1:
-    case 5:
-    case 7:
     case 8:
         result = 44;
         break;
@@ -949,6 +945,10 @@ int SndgEventGetSurfaceSfx(int value)
     case 6:
         result = 43;
         break;
+    // FAKEMATCH: the empty case labels 9 and 10 (surface ids that already reach the default 44)
+    // leave no compare in the target; they only move the compare tree root to 4 and change no result
+    case 9:
+    case 10:
     default:
         result = 44;
         break;

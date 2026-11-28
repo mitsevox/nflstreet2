@@ -221,7 +221,7 @@ extern "C" int PlayArtRenderPlayerIcons(int a,PlayArtState_t *s,int mirror)
 extern "C" void PlayArtRenderPlayerLetters(int a,PlayArtState_t *s,int mirror)
 {
     for (int i=0;i<s->mUnknown2160;++i) {
-        int flag=s->mUnknown21C8[i]; int kind=s->mUnknown2164[i];
+        int flag=s->mUnknown21C8[i]; unsigned int kind=s->mUnknown2164[i];
         if (!(flag&0x80)) {
             PlayArtQuadPoint_t p[4];float r[4];
             if (mirror) {r[0]=120.0f-s->mUnknown2178[i][2];r[2]=120.0f-s->mUnknown2178[i][0];}

@@ -39,13 +39,13 @@ QueryCursor _PlayerQuery_sPrtyCursor;
 
 extern "C" int PlayerRecordFindFreeIds(int db, int table, int *out, unsigned short *count, int start)
 {
+    int result = 0;
     QueryCursor cursor;
-    cursor.mUnknown8 = -1;
-    cursor.mUnknown12 = 0;
     cursor.mUnknown0 = 0;
     cursor.mUnknown4 = 0;
+    cursor.mUnknown8 = -1;
+    cursor.mUnknown12 = 0;
     int row;
-    int result;
     if (start < 0)
         result = TDbCompilePerformOp(0, "use \x8c declare \x8a fastcursor for select 'DIGP' into \x82 from \x8c order by 'DIGP' asc\n", db, &cursor, &row, table);
     else
@@ -302,9 +302,9 @@ extern "C" int PlayerQueryOpen(int *id, int *pos, int *value, int a, int b, int 
     switch (mode) {
     case 0:
         _PlayerQuery_sTeamsCursor.mUnknown0 = 0;
+        _PlayerQuery_sTeamsCursor.mUnknown4 = 0;
         _PlayerQuery_sTeamsCursor.mUnknown8 = -1;
         _PlayerQuery_sTeamsCursor.mUnknown12 = 0;
-        _PlayerQuery_sTeamsCursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
             TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' >= 1 && 'DIGT' <= 32) order by 'DIGP' asc\n", &_PlayerQuery_sTeamsCursor, id, pos, value, a, b, c);
         else
@@ -312,21 +312,33 @@ extern "C" int PlayerQueryOpen(int *id, int *pos, int *value, int a, int b, int 
         break;
     case 1:
         _PlayerQuery_sTeam34Cursor.mUnknown0 = 0;
+        _PlayerQuery_sTeam34Cursor.mUnknown4 = 0;
         _PlayerQuery_sTeam34Cursor.mUnknown8 = -1;
         _PlayerQuery_sTeam34Cursor.mUnknown12 = 0;
-        _PlayerQuery_sTeam34Cursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, a, b, c, 34);
+        {
+            // FAKEMATCH: dead self-increment of a dead status keeps the target's dead cmpwi r3,0 after this call
+            int status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, a, b, c, 34);
+            if (status != 0) status++;
+        }
         else
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, 34);
+        {
+            // FAKEMATCH: dead self-increment of a dead status keeps the target's dead cmpwi r3,0 after this call
+            int status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('DIGT' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sTeam34Cursor, id, pos, value, 34);
+            if (status != 0) status++;
+        }
         break;
     case 2:
         _PlayerQuery_sPrtyCursor.mUnknown0 = 0;
+        _PlayerQuery_sPrtyCursor.mUnknown4 = 0;
         _PlayerQuery_sPrtyCursor.mUnknown8 = -1;
         _PlayerQuery_sPrtyCursor.mUnknown12 = 0;
-        _PlayerQuery_sPrtyCursor.mUnknown4 = 0;
         if (a != 255 && a != -1)
-            TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sPrtyCursor, id, pos, value, a, b, c, 1);
+        {
+            // FAKEMATCH: dead self-increment of a dead status keeps the target's dead cmpwi r3,0 after this call
+            int status = TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where (('OPBP' = \x82) or ('OPBP' = \x82) or ('OPBP' = \x82)) and ('YTRP' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sPrtyCursor, id, pos, value, a, b, c, 1);
+            if (status != 0) status++;
+        }
         else
             TDbCompilePerformOp(&result, "use 'TATS' declare \x8a fastcursor for select 'DIGP' into \x85 and 'OPBP' into \x82 and 'PXSP' into \x82 from 'YALP' where ('YTRP' = \x82) order by 'DIGP' asc\n", &_PlayerQuery_sPrtyCursor, id, pos, value, 1);
         break;

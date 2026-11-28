@@ -104,7 +104,7 @@ int PlyrTackleStart(Object_80039F5C *, int, int);
 int fn_800F0490(int, State_80039F5C *, int);
 void fn_800F05E4(int, State_80039F5C *, Message_800F01CC *, Object_80039F5C *);
 int MathArcTan2(float, float);
-int fn_800B7248(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
+int PlyrCtrlTryShedBlock(Input_800B6D34 *, Ball_t *, Object_80039F5C *, Object_80039F5C *);
 int fn_800B7F34(Object_80039F5C *);
 void PlyrClearPendingMsg(Object_80039F5C *, int);
 void PlyrEngageReleaseControl(Object_80039F5C *);
@@ -331,7 +331,7 @@ int PlyrEngageInput(Object_80039F5C *p)
         if (dir.mX != 0.0f || dir.mY != 0.0f)
             p->mUnknown512.mUnknown4 = MathArcTan2(dir.mY, dir.mX);
         if (s->mUnknown8Bytes[3]) {
-            int result = fn_800B7248(&input, BallGetCurrent(), p, p);
+            int result = PlyrCtrlTryShedBlock(&input, BallGetCurrent(), p, p);
             if (result == 1)
                 return 0;
         }
@@ -402,9 +402,9 @@ void TurnToPlayUpdate(void);
 void DefReactSelectInput(void);
 void DefReactSelectPursueInput(void);
 void fn_800B76E8(void);
-void fn_800B78DC(void);
+void PlyrCtrlDefenseInput(void);
 void fn_800B7E60(void);
-void fn_800B7F88(void);
+void PlyrCtrlDefenseSwitchInput(void);
 void PlayerActionCharAnimEnter(void);
 void PlayerActionCharAnimExit(void);
 void PlayerActionCharAnimUpdate(void);
@@ -607,11 +607,11 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)GetOpenEnter, (void *)fn_800F0900, (void *)GetOpenUpdate, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)fn_800FA0DC, (void *)fn_800F0900, (void *)fn_800FA300, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FAD10}},
     {{(void *)fn_80111F80, (void *)fn_800F0900, (void *)fn_80111FBC, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
-    {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
+    {{(void *)fn_80109150, (void *)fn_800F0900, (void *)fn_80109248, (void *)PlyrCtrlDefenseInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80105898, (void *)fn_80106794, (void *)fn_80105AF4, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_80105DF0}},
     {{(void *)HandoffEnter, (void *)HandoffExit, (void *)HandoffUpdate, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)HandoffMirrorMessage}},
     {{(void *)fn_8010CAE8, (void *)fn_800F0900, (void *)fn_8010CB58, (void *)fn_800F08F8, (void *)fn_800F0908, (void *)fn_800FD708}},
-    {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)fn_800B7F88, (void *)fn_800F0908, 0}},
+    {{(void *)PlayerActionCatchEnter, (void *)PlayerActionCatchExit, (void *)PlayerActionCatchUpdate, (void *)PlyrCtrlDefenseSwitchInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)PlyrStateUpdateDefault, (void *)fn_800B7E60, (void *)fn_800F0908, 0}},
     {{(void *)DirectedRunEnter, (void *)fn_800F0900, (void *)DirectedRunUpdate, (void *)DefReactSelectInput, (void *)fn_800F0908, (void *)fn_800FD708}},
     {{(void *)PassBlockEnter, (void *)PassBlockExit, (void *)PassBlockUpdate, (void *)PassBlockInput, (void *)fn_800F0908, 0}},
@@ -680,7 +680,7 @@ PlyrStateHandlers_t _PlyrStates_aHandlers[98] = {
     {{(void *)PlayerActionDiveEnter, (void *)PlayerActionDiveExit, (void *)PlayerActionDiveUpdate, (void *)fn_800B7F34, (void *)fn_800F0908, 0}},
     {{(void *)fn_800F4A74, (void *)fn_800F0900, (void *)fn_800F4AD4, (void *)DefReactSelectInput, (void *)fn_800F0908, 0}},
     {{(void *)fn_80125304, (void *)fn_80125494, (void *)fn_801253A8, (void *)fn_801254C8, (void *)fn_80125508, 0}},
-    {{(void *)fn_80125DF0, (void *)fn_800F0900, (void *)fn_80125E20, (void *)fn_800B78DC, (void *)fn_800F0908, 0}},
+    {{(void *)fn_80125DF0, (void *)fn_800F0900, (void *)fn_80125E20, (void *)PlyrCtrlDefenseInput, (void *)fn_800F0908, 0}},
 };
 PlyrStateHandlers_t _PlyrStates_aAltHandlers[2] = {
     {{(void *)fn_800F08F8, (void *)fn_800F0900, (void *)fn_800F08F8, (void *)fn_800F08F8, (void *)fn_800F0908, 0}},

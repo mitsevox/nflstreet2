@@ -24,7 +24,7 @@ void AnimChanSetMirrored(AnimChannel_t *pEntry, int value);
 void AnimMomentumInit(AnimMomentum_t *p, AnimMomentumActor_t *pOther, int entry);
 void AnimMomentumUpdate(AnimMomentum_t *p, AnimMomentumActor_t *pOther);
 void PlyrHandSetPoseByKey(Object_80039F5C *p, int a, int b, int c);
-int fn_800C0464(void *p);
+int PreSnapIsReady(void *p);
 int PlayerLocoFindSampleIndex(Object_801BBD5C *pObject, float value);
 float PlayerLocoUpdateBlendWeights(int index, Block_801BE60C *pBlock, LocoBlendSet_t *pObject, AnimChannel_t *pEntries,
                   float value);
@@ -267,7 +267,7 @@ extern "C" int PlayerLocoUseAltCategory(Object_80039F5C *, Object_80039F5C *, in
 {
     int mode = fn_800AD9B4();
 
-    if (mode == 3 || (mode == 2 && (unsigned char)fn_800C0464(lbl_803EABA4))) {
+    if (mode == 3 || (mode == 2 && (unsigned char)PreSnapIsReady(lbl_803EABA4))) {
         return 1;
     }
     return 0;

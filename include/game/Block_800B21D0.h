@@ -4,7 +4,7 @@
 #include "game/Entry_800B206C.h"
 
 /* The 96 bytes after the first word of Block_800B21D0, compared by
-   fn_800B19E8. */
+   _PenaltyCallCompare. */
 struct State_800B19E8 {
     Entry_800B206C mUnknown0[1];
     Entry_800B206C mUnknown24[1];

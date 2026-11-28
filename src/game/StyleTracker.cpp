@@ -248,7 +248,7 @@ int GamebreakerAnyFlagCleared(void);
 int fn_800A8740(void);
 int GamebreakerGetSavedState(unsigned char index);
 void fn_800AE7F0(int a, int b, Object_80039F5C *p);
-void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
+void GameEventPostTackle(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_801486A0(void);
 void TutorialSetMoveDone(int a, int b);
 int PlayAlignHasSlots(PlayBookPlay_t *pRecord);
@@ -1537,7 +1537,7 @@ extern "C" void StyleTrackerOnTouchdown(void) {
 extern "C" void StyleTrackerOnCarrierStopped(float a) {
     StyleTrackerTraceEvent(40);
     if (ScrmGetTackler() != 0) {
-        fn_800B1698(BallGetHolder(BallGetCurrent()), ScrmGetTackler());
+        GameEventPostTackle(BallGetHolder(BallGetCurrent()), ScrmGetTackler());
     }
     if (ScrmGetPlayTurnovers() == 0) {
         if (a < ScrmGetBallSpot().mY && ScrmGetDown() != 6) {

@@ -25,8 +25,8 @@ void ReplayWritePacked3(void *pStream, float *pValues, int bits, float scale);
 void PlyrHandInitPose(Object_8003DEC4 *pObject, PlyrPosePart_t *pElement, int a);
 int PlyrHandUpdateBlend(PlyrPosePart_t *pElements, unsigned int index);
 int PlyrHandGetBlend(PlyrPosePart_t *pElements, unsigned int index);
-void fn_800C2788(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
-void fn_800C2EC0(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
+void PlyrSwing9Init(Object_8003DEC4 *pObject, Block_800C2788 *pBlock, int a);
+void PlyrSwing5Init(Object_8003DEC4 *pObject, Block_800C2EC0 *pBlock, int a);
 void ParticleTrailStopAfterimage(Object_8003DEC4 *pObject);
 int ScrmIsFieldFlipped(void);
 void AnimBlendPose(AnimPose_t *pOut, AnimPose_t *pA, AnimPose_t *pB, AnimPose_t *pC, float t,
@@ -483,9 +483,9 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
         pObject->mUnknown280.mUnknown256.mUnknown48 = AnimAllocPoseChannels(pSkeleton280->mUnknown6);
         pObject->mUnknown280.mUnknown256.mUnknown52 = 0;
         PlyrPoseInitFromSkeleton(&pObject->mUnknown280.mUnknown256, pObject->mUnknown280.mUnknown312);
-        fn_800C2788(pObject, &pObject->mUnknown280, 1);
+        PlyrSwing9Init(pObject, &pObject->mUnknown280, 1);
     } else {
-        fn_800C2788(pObject, &pObject->mUnknown280, 0);
+        PlyrSwing9Init(pObject, &pObject->mUnknown280, 0);
     }
     pObject->mUnknown108 = pSkeleton596;
     if (pSkeleton596) {
@@ -498,9 +498,9 @@ void PlyrPoseInit(Object_8003DEC4 *pObject, AnimSkeleton_t *pSkeleton, AnimSkele
         pObject->mUnknown596.mUnknown160.mUnknown48 = AnimAllocPoseChannels(pSkeleton596->mUnknown6);
         pObject->mUnknown596.mUnknown160.mUnknown52 = 0;
         PlyrPoseInitFromSkeleton(&pObject->mUnknown596.mUnknown160, pObject->mUnknown596.mUnknown216);
-        fn_800C2EC0(pObject, &pObject->mUnknown596, 1);
+        PlyrSwing5Init(pObject, &pObject->mUnknown596, 1);
     } else {
-        fn_800C2EC0(pObject, &pObject->mUnknown596, 0);
+        PlyrSwing5Init(pObject, &pObject->mUnknown596, 0);
     }
     pObject->mUnknown972 = 0;
 }

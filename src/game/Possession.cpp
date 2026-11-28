@@ -99,7 +99,7 @@ float GameSkillBoostCatchChance(int team, float value);
 float GameSkillOffsetCatchChance(Object_80039F5C *p, float value);
 float GameSkillAdjustJarChance(int team, float value);
 void GameSkillScaleFumbleChance(Object_80039F5C *p, unsigned int *pValue);
-void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
+void GameEventPostTackle(Object_80039F5C *p, Object_80039F5C *pOther);
 void fn_800B6714(Object_80039F5C *p, int port);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void PlyrBallHandUpdate(Object_80039F5C *p);
@@ -201,10 +201,10 @@ void fn_8009D964(int index, int value);
 int fn_8009D9A8(int index);
 int GameClockIsTimerRunning(int index);
 void fn_800AD910(int a, float b);
-int fn_800B232C(int a);
-int fn_800B2624(void);
+int PenaltyCallGetKind(int a);
+int PenaltyCallHasDefenseFoul(void);
 int fn_800B9A90(void *pHandle);
-void fn_800B9B9C(void *pHandle);
+void PostPlaySetShortDelay(void *pHandle);
 int fn_800BA6F8(void);
 void ScrmStartPlay(void);
 int ScrmCanSnap(void);
@@ -994,7 +994,7 @@ void PossFumble(Object_80039F5C *p)
             ScrmSetTackler(fn_8009BCE8(&p->mUnknown560.mUnknown48));
         }
         cleared = 1;
-        fn_800B1698(p, ScrmGetTackler());
+        GameEventPostTackle(p, ScrmGetTackler());
         p->mFlags &= ~0x10000;
     }
     PossStartFumble();
@@ -1746,7 +1746,7 @@ void ClockRuleUpdate(unsigned int a)
             ScrmEndPlay();
             ClockRuleSetFlags(0x10);
             ClockRuleClearFlags(0x100);
-            fn_800B9B9C(lbl_803EAB84);
+            PostPlaySetShortDelay(lbl_803EAB84);
             if (ChallengeIsActive()) {
                 ChallengePostOutcome();
             }
@@ -1928,7 +1928,7 @@ void ClockRuleApplyPlayEvents(void)
                     ClockRuleSetFlags(2);
                     break;
                 }
-                if (fn_800B232C(0) == 2) {
+                if (PenaltyCallGetKind(0) == 2) {
                     check = 1;
                 }
             } else {
@@ -1939,7 +1939,7 @@ void ClockRuleApplyPlayEvents(void)
                 case 2:
                 case 4:
                 case 5:
-                    if (GameClockIsTimerRunning(1) && fn_8009D990(1) <= 44 && fn_800B2624()) {
+                    if (GameClockIsTimerRunning(1) && fn_8009D990(1) <= 44 && PenaltyCallHasDefenseFoul()) {
                         Object_80039F5C *p = fn_8009BCE8(&pRecord->mUnknown0);
                         int score = ScrmGetTeamScore(p->mId >> 8 & 0xFF);
 
@@ -2016,7 +2016,7 @@ int ClockRuleCanEndPeriod(void)
         allow = 0;
     }
     if (state == 2 || state == 4 || state == 5) {
-        if (fn_800B2624() && !ClockRuleTestFlags(0x100)) {
+        if (PenaltyCallHasDefenseFoul() && !ClockRuleTestFlags(0x100)) {
             ClockRuleSetFlags(0x20);
             allow = 0;
         } else {

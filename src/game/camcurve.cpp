@@ -49,7 +49,7 @@ int ScrmIsFieldFlipped(void);
 GameCamera_t *CamGameGetCamera(int);
 void CamFreeSetPos(GameCamera_t *,float,float,float);
 void CamFreeSetAngle(GameCamera_t *,int,int,int);
-float fn_800BD190(void *); float GameEndGetNearClip(void *);
+float PreGameIntroGetSceneValue(void *); float GameEndGetNearClip(void *);
 void CamCurveSetProjection(GameCamera_t *);
 }
 
@@ -322,7 +322,7 @@ extern "C" void CamCurveSetProjection(GameCamera_t *camera)
 {
     float value=0.08f;
     if (camera->mUnknownA0!=11) {
-        if (fn_800AD9B4()==1) value=fn_800BD190(lbl_803EAB90);
+        if (fn_800AD9B4()==1) value=PreGameIntroGetSceneValue(lbl_803EAB90);
         else if (fn_800AD9B4()==7) value=GameEndGetNearClip(lbl_803EAA8C);
     }
     if (camera->mUnknown28)

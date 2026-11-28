@@ -10,8 +10,8 @@
 extern "C" {
 extern float gFrameTimeScale;
 
-void fn_800B26D0(Object_800B26B0 *pMotion, int a, int b, float c);
-void fn_800B2D88(Object_800B26B0 *pMotion, float scale);
+void MotionSetTurn(Object_800B26B0 *pMotion, int a, int b, float c);
+void MotionSetFriction(Object_800B26B0 *pMotion, float scale);
 void PlyrMoveSteerByHeading(Object_80039F5C *pObject);
 void PlyrMoveTurnLimited(Object_80039F5C *pObject);
 float MathSin(int angle);
@@ -62,7 +62,7 @@ void PlyrMoveApplyGroundScale(Object_80039F5C *pObject)
     if (PlyrMoveIsFlaggedGrounded(pObject)) {
         float scale = PlyrMoveGetGroundScale(pObject);
 
-        fn_800B2D88(&pObject->mMotion, scale);
+        MotionSetFriction(&pObject->mMotion, scale);
     }
 }
 
@@ -104,7 +104,7 @@ void PlyrMoveModeEngage(Object_80039F5C *pObject)
         if (MathAngleDiff(pMotion->mUnknown32, pControl->mUnknown4) > 0) {
             pMotion->mUnknown52 *= 10.0f;
         }
-        fn_800B26D0(pMotion, pControl->mUnknown4, pMotion->mFacing, pMotion->mUnknown52);
+        MotionSetTurn(pMotion, pControl->mUnknown4, pMotion->mFacing, pMotion->mUnknown52);
         if (distance < 2.95f) {
             int apart = MathAngleDiff(pTarget->mMotion.mFacing, pMotion->mFacing);
             float limit;
@@ -222,7 +222,7 @@ void PlyrMoveSteerByHeading(Object_80039F5C *pObject)
         }
         factor = _PlyrMoveModes_fSpeedScale - factor;
         pMotion->mUnknown52 *= factor;
-        fn_800B26D0(pMotion, pControl->mUnknown4,
+        MotionSetTurn(pMotion, pControl->mUnknown4,
                     PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }
@@ -264,7 +264,7 @@ void PlyrMoveSteerByFacing(Object_80039F5C *pObject)
         }
         factor = _PlyrMoveModes_fSpeedScale - factor;
         pMotion->mUnknown52 *= factor;
-        fn_800B26D0(pMotion, pControl->mUnknown4,
+        MotionSetTurn(pMotion, pControl->mUnknown4,
                     PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }
@@ -304,7 +304,7 @@ void PlyrMoveSteerScaled(Object_80039F5C *pObject)
         if (fn_800AD9B4() == 4) {
             pMotion->mUnknown52 *= _PlyrMoveModes_fMode4Scale * pControl->mUnknown0;
         }
-        fn_800B26D0(pMotion, pControl->mUnknown4,
+        MotionSetTurn(pMotion, pControl->mUnknown4,
                     PlyrMoveStepFacing(pObject, pMotion, pControl->mUnknown8, _PlyrMoveModes_iTurnStep), pMotion->mUnknown52);
     }
 }

@@ -37,7 +37,7 @@ static BallMarkerTable_t _BallMarker_Table = {0};
 
 extern "C" {
 int fn_800BA6F8(void);
-int fn_800BA864(void);
+int PracticeGetMenuRequest(void);
 int fn_800C47C4(void);
 int BallStateGet(Ball_t *pBall, int *pOut);
 int fn_801486A0(void);
@@ -82,7 +82,7 @@ void BallMarkerUpdateEntry(int index)
     pEntry->mEnabled = 0;
     pBall = BallGet(index);
     BallStateGet(pBall, 0);
-    if (fn_800BA6F8() != 0 && fn_800BA864() != 0) {
+    if (fn_800BA6F8() != 0 && PracticeGetMenuRequest() != 0) {
         BallGetPosition(pBall, &pEntry->mPosition);
         pEntry->mEnabled = 1;
     } else if ((fn_801486A0() == 1 || fn_800B65A0(0) != 0xFF || fn_800B65A0(1) != 0xFF)

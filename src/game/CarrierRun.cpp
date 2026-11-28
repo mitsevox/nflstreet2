@@ -94,7 +94,7 @@ void fn_8009BD60(Object_80039F5C *p);
 int fn_800B83F4(Object_80039F5C *p);
 int CarrierMoveStart(Object_80039F5C *p, int a);
 int CarrierMovePickKind(Object_80039F5C *p, Object_80039F5C *pOther);
-int fn_800C4D54(Object_80039F5C *p);
+int PlyrSurfaceRollSlip(Object_80039F5C *p);
 int fn_80112928(Object_80039F5C *p);
 int fn_8011F1CC(void);
 int fn_8011F1A4(void);
@@ -149,7 +149,7 @@ extern "C" int fn_80110EB0(Object_80039F5C *p, Object_80039F5C *pOther);
 
 extern "C" void fn_8009A8D4(void *p);
 extern "C" int fn_80103D6C(Object_80039F5C *p);
-extern "C" unsigned char fn_800C13A0(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
+extern "C" unsigned char PassLaneGetReceiverRating(Object_80039F5C *p, unsigned char *pA, unsigned char *pB);
 
 extern "C" int fn_8009FB60(Object_80039F5C *p);
 extern "C" int fn_800A5C04(Object_80039F5C *p, int a, int b);

@@ -13,7 +13,7 @@
 #include "game/SndgPathfinder.h"
 #include "game/MemPoolDesc.h"
 #include "game/PadInput.h"
-#include "game/cu_8015D3EC.h"
+#include "game/PlaModel.h"
 #include "engine/periph.h"
 #include "engine/remap.h"
 
@@ -42,10 +42,10 @@ void SndgMusicShutdown(void);
 void PortraitSystemInit(void);
 void PortraitSystemShutdown(void);
 void PlayerAnimPreloadAlloc(void);
-void fn_8015E548(void);
-void fn_8015E65C(void);
-void fn_8015E684(void);
-void fn_8015E714(void);
+void PlaModelOpenArchives(void);
+void PlaModelShutdown(void);
+void PlaModelLoadSharedModels(void);
+void PlaModelFreeSharedModels(void);
 void PlaTexCacheOpenArchive(int a);
 void DbgPrintEnable(void);
 void DbgPrintDisable(void);
@@ -450,17 +450,17 @@ int SysPreLoad::Shutdown()
 {
     PlaDynClutUnload();
     PortraitSystemShutdown();
-    fn_8015E714();
-    fn_8015E65C();
+    PlaModelFreeSharedModels();
+    PlaModelShutdown();
     return 1;
 }
 
 void SysPreLoad::LoadSystems()
 {
     PlaDynClutOpen();
-    fn_8015E548();
-    fn_8015E620(14, 1);
-    fn_8015E684();
+    PlaModelOpenArchives();
+    PlaModelInit(14, 1);
+    PlaModelLoadSharedModels();
     PortraitSystemInit();
     PlaTexCacheOpenArchive(4);
 }

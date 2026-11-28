@@ -70,7 +70,7 @@ struct CoinTossCamEntry_t {
 };
 
 extern "C" {
-void fn_800CC560(int a);
+void PlyrLineUpReset(int a);
 void fn_800FF6D8(Object_80039F5C *p);
 void PlyrOverlayAnimStopAll(Object_80039F5C *p);
 void InGameSetInputPaused(int unknown);
@@ -222,7 +222,7 @@ void CoinTossOnChoiceTimeout(void)
 
 void CoinTossPlacePlayers(void)
 {
-    fn_800CC560(0);
+    PlyrLineUpReset(0);
     CoinTossSendPlayersToSpots(_CoinToss_aPlaceArg, _CoinToss_aStartSpotsSide0, _CoinToss_aStartSpotsSide1);
     CoinTossSnapPlayers();
     CoinTossSendPlayersToSpots(_CoinToss_aPlaceArg, _CoinToss_aMeetSpotsSide0, _CoinToss_aMeetSpotsSide1);
@@ -442,7 +442,7 @@ int CoinTossUpdate(void)
         break;
     case 9:
     finish:
-        fn_800CC560(0);
+        PlyrLineUpReset(0);
         _CoinToss_pState->mState = 10;
     case 0:
     case 10:

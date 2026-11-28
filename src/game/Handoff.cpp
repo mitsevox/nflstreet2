@@ -74,7 +74,7 @@ int MathArcTan2(float y, float x);
 int MathAngleDiff(int a, int b);
 void fn_8009BD2C(Object_80039F5C *p, int *pRef);
 Object_80039F5C *fn_800B6544(int index);
-void fn_800B67FC(Object_80039F5C *p, Object_80039F5C *pOther);
+void PlyrCtrlSwapTo(Object_80039F5C *p, Object_80039F5C *pOther);
 int fn_800B7FE8(Object_80039F5C *p);
 void fn_800F00D4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
 void fn_800F05E4(int a, State_80039F5C *pState, Message_800F01CC *pMessage, Object_80039F5C *p);
@@ -796,7 +796,7 @@ extern "C" void HandoffGiveBall(Object_80039F5C *p, Object_80039F5C *pOther, Bal
                 break;
             }
             }
-            fn_800B67FC(p, pOther);
+            PlyrCtrlSwapTo(p, pOther);
         }
     }
 }

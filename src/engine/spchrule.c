@@ -217,9 +217,13 @@ int iSPCH_GetSampleSizeData(VoxBankHdr_t *bank, int sample, int *pStart, int *pS
         int end;
         if (sample + 1 >= count) end = bank->mUnknown8;
         else end = (next[0] << 8) + next[1];
-        end = end * scale - start;
-        *pSize = end;
+        end *= scale;
+        // FAKEMATCH: dead increment of scale (unused afterwards) leaves a block
+        // boundary that keeps the result in r0 and the stores after the subtraction.
+        if (scale != 0) scale++;
+        end -= start;
         *pStart = start;
+        *pSize = end;
         result = 1;
     }
     return result;

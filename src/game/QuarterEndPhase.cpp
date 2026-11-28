@@ -64,11 +64,11 @@ void AnmsStopCastAnims(int handle);
 int fn_8009D86C(void);
 int fn_800A3444(void);
 void fn_800AD910(int a, float b);
-void fn_800AFDD4(void (*pCallback)(int, unsigned int));
-void fn_800AFE20(void (*pCallback)(int, unsigned int));
+void CallbackListAdd(void (*pCallback)(int, unsigned int));
+void CallbackListRemove(void (*pCallback)(int, unsigned int));
 void fn_800B14E4(void);
-void fn_800B43C8(void);
-void fn_800CC560(int a);
+void PlayCallStopHuddleScene(void);
+void PlyrLineUpReset(int a);
 void BallsSetVisible(int a);
 void BallResetToSpot(void);
 void PlyrStarSetShown(int a, int b);
@@ -215,7 +215,7 @@ void QuarterEndOnEvent(int a, unsigned int b);
 
 void QuarterEndFinish(void)
 {
-    fn_800AFE20(QuarterEndOnEvent);
+    CallbackListRemove(QuarterEndOnEvent);
     if (_QuarterEnd_pState->mUnknown11) {
         if (fn_8009D86C() != 6) {
             PauseOpenScreen(3, 1, -1);
@@ -289,7 +289,7 @@ void QuarterEndStartVenueEffect(void)
 {
     Params_80096A58 params;
 
-    fn_800B43C8();
+    PlayCallStopHuddleScene();
     memset(&params, 0, sizeof(params));
     params.mUnknown40 = 0xFFFF;
     params.mUnknown42 = 0xFFFF;
@@ -402,14 +402,14 @@ void QuarterEndPhase::OnUpdate(float f)
         }
         _QuarterEnd_pState->mUnknown8 = 0;
         _QuarterEnd_pState->mUnknown10 = 1;
-        fn_800AFDD4(QuarterEndOnEvent);
+        CallbackListAdd(QuarterEndOnEvent);
         PlyrStarSetShown(1, 1);
         if (fn_8009D86C() == 6) {
             HudStop();
         } else if (fn_8009D86C() == 5) {
             if (ClockRuleIsOvertime()) {
                 PlayBookSetupTeams();
-                fn_800CC560(1);
+                PlyrLineUpReset(1);
             }
         } else {
             ScrmTeamToHuddle(1);
@@ -490,7 +490,7 @@ void QuarterEndPhase::OnExit()
     fn_800B14E4();
     if (_QuarterEnd_pState->mUnknown10) {
         _QuarterEnd_pState->mUnknown10 = 0;
-        fn_800AFE20(QuarterEndOnEvent);
+        CallbackListRemove(QuarterEndOnEvent);
     }
     ScrmQuarterEnd();
     _QuarterEnd_pState->mUnknown35 = 0;

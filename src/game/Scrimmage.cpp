@@ -71,14 +71,14 @@ int fn_800A937C(void);
 int fn_800A9680(void);
 void fn_800AD910(int a, float b);
 void HotRtClearTeam(int team);
-int fn_800B1200(void);
+int PlayMotionCheckSnap(void);
 void fn_800B14E4(void);
-void fn_800B2630(void);
-void fn_800B6C98(void);
-void fn_800B82AC(int team);
+void PenaltyCallClearDefenseFoul(void);
+void PlyrCtrlSaveForPlay(void);
+void PlyrCtrlHoldTeamInput(int team);
 int fn_800BA6F8(void);
 void fn_800C9FC0(void);
-void fn_800CA3C4(void);
+void FocusSlotsPickReceivers(void);
 void PlayerMoveResetAll(void);
 void PlayerActionAnimResetSteerFrames(void);
 void HuddleGetSpot(FieldPoint_t *pOut, int *pFacing, Object_80039F5C *p, int value);
@@ -122,7 +122,7 @@ void AudmonEventPostId(int type, Vector_80039F5C *pPos, int id, int a, int b, in
 int GamebreakerGetReadyType(int team);
 int fn_800A8444(int team);
 int GamebreakerGetSavedState(int team);
-void fn_800B1698(Object_80039F5C *p, Object_80039F5C *pOther);
+void GameEventPostTackle(Object_80039F5C *p, Object_80039F5C *pOther);
 int PlayerMoveGetKind(Object_80039F5C *p);
 void fn_8011DF90(void);
 int fn_8011F1CC(void);
@@ -446,7 +446,7 @@ extern "C" void ScrmStartPlay(void)
 
     HotRtClearTeam(0);
     HotRtClearTeam(1);
-    fn_800B6C98();
+    PlyrCtrlSaveForPlay();
     ClockRuleSnap();
     ScrmSnapBall();
     fn_8011E068();
@@ -459,11 +459,11 @@ extern "C" void ScrmStartPlay(void)
     ScrmLogSnap();
     fn_80120618();
     fn_800C9FC0();
-    fn_800CA3C4();
+    FocusSlotsPickReceivers();
     if (ChallengeIsActive() != 0 && ChalGetCurrent()->mUnknown1A4 != 0 && GameClockIsTimerRunning(4) == 0) {
         fn_8009D888(4, 0);
     }
-    fn_800B2630();
+    PenaltyCallClearDefenseFoul();
     PenaltyCheckOffside();
     DriveLogUpdateTeam();
 
@@ -480,7 +480,7 @@ extern "C" void ScrmStartPlay(void)
             CamFreeClearVelocity(pCamera);
         }
     }
-    fn_800B82AC(ScrmGetDefenseTeam());
+    PlyrCtrlHoldTeamInput(ScrmGetDefenseTeam());
     fn_800A8F08();
     DefPredPostAudio();
 }
@@ -511,7 +511,7 @@ extern "C" int ScrmCanSnap(void)
             ScrmGetTeamScore(0) < ScrmGetTeamScore(1)) {
             result = 1;
         }
-        if (result == 0 && (short)fn_8009D990(0) <= (short)lbl_803EABA4->fn_800C02E0() && fn_800B1200() != 0 &&
+        if (result == 0 && (short)fn_8009D990(0) <= (short)lbl_803EABA4->fn_800C02E0() && PlayMotionCheckSnap() != 0 &&
             ScrmOffenseIsSet() != 0) {
             result = 1;
         }
@@ -930,7 +930,7 @@ extern "C" void ScrmUpdateBallCarrier(Object_80039F5C *p)
                 ReplayEventAdd(gpReplay, 11, p, &p->mMotion.mPos, &p->mMotion.mFacing);
             }
             pOther = ScrmGetTackler();
-            fn_800B1698(p, pOther);
+            GameEventPostTackle(p, pOther);
             if (pOther != 0) {
                 ReplayEventAdd(gpReplay, 7, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);
                 ReplayEventAdd(gpReplay, 25, pOther, &pOther->mMotion.mPos, &pOther->mMotion.mFacing);

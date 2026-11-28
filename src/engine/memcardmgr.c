@@ -369,6 +369,9 @@ void MemCardMgrEnablePolling(int enable)
             _MemCardMgr_cPollDelay = 1;
         }
     } else {
+        // FAKEMATCH: dead test and increment of the flag; the join it leaves
+        // ends cse's jump equivalence enable == 0, so the zero is stored with li.
+        if (_MemCardMgr_iIdleState) enable++;
         result = 0;
         while (MemCAsyncPoll(&result) == 0) {
         }
@@ -1499,13 +1502,14 @@ int MemCardMgrCompareGameCode(const char *pA, const char *pB)
 void MemCardMgrFormatDate(char *pBuffer, int unused, MemCDirEntry_t *pEntry)
 {
     Str3_t suffix;
-    unsigned short hour = pEntry->mHour;
-    int minute = pEntry->mMinute;
-    int month = pEntry->mMonth;
-    int day = pEntry->mDay;
-    int year;
+    unsigned short hour;
+    int minute, month, day, year;
 
+    minute = pEntry->mMinute;
+    month = pEntry->mMonth;
+    day = pEntry->mDay;
     year = pEntry->mYear;
+    hour = pEntry->mHour;
 
     if (hour == 0) {
         hour = 12;

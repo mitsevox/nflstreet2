@@ -113,7 +113,7 @@ struct Item_800AF82C {
     unsigned char mUnknown0[24];
 };
 
-/* 64-byte entries; fn_800AF804 clears three of them. */
+/* 64-byte entries; PlyrIKClearEntries clears three of them. */
 struct AnimPose_t;
 
 struct Entry_800AF82C {
@@ -173,7 +173,7 @@ Playback_80096DA8 *AnimPlaybackGet(unsigned int);
 Actor_801C009C *AnimPlaybackGetScript(unsigned int,int);
 }
 
-/* Partial view of the object whose word +40 fn_800C6640 decodes as a
+/* Partial view of the object whose word +40 PlyrContactGetDodgeChance decodes as a
    player reference. The size is unknown. */
 struct Object_800C6640 {
     unsigned char mUnknown0;
@@ -188,7 +188,7 @@ struct Object_800C6640 {
 };
 
 /* Header that Entry_800AF82C +8 points to; byte +8 is the number of
-   records the solver wrote, which fn_800AF2AC and fn_800AF304 copy. */
+   records the solver wrote, which PlyrIKCopyJoints and PlyrIKBlendJoints copy. */
 struct Chain_800AF404 {
     void *mpUnknown0;
     unsigned char mType;
@@ -198,7 +198,7 @@ struct Chain_800AF404 {
     unsigned char mUnknown8;
 };
 
-/* 8-byte source records read by fn_800AF2AC; +6 indexes the destination. */
+/* 8-byte source records read by PlyrIKCopyJoints; +6 indexes the destination. */
 struct Source_800AF2AC {
     short mUnknown0;
     short mUnknown2;

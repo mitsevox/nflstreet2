@@ -79,8 +79,8 @@ void PlyrPoseWriteState(Object_8003DEC4 *, BitStream_t *);
 void PlyrPoseReadState(Object_8003DEC4 *, BitStream_t *, BitStream_t *, BitStream_t *,
                  BitStream_t *, float);
 void fn_80190F18(BitStream_t *, int);
-void fn_800B4D7C();
-void fn_800B4A88();
+void PlyrAnimInstallFrontEndHandlers();
+void PlyrAnimInstallGameHandlers();
 void fn_801BE030(int, void **);
 void PlyrOverlayAnimRegisterCallbacks();
 void PlyrOverlayAnimLoad();
@@ -89,8 +89,8 @@ void PlyrHandLoadFrames();
 AnimSkeleton_t *ResLoad(void *, int, int);
 void CharRelocateSkeleton(AnimSkeleton_t *);
 void CharSkelMirrorRest(AnimSkeleton_t *, AnimSkeleton_t *);
-void fn_800AF630(void *, int, int, int);
-void fn_800AF790(int, AnimSkeleton_t *, const char *, const char *, int);
+void PlyrIKInit(void *, int, int, int);
+void PlyrIKCreateChain(int, AnimSkeleton_t *, const char *, const char *, int);
 void fn_8015F484(AnimSkeleton_t *, AnimSkeleton_t **, AnimSkeleton_t *,
                  AnimSkeleton_t *);
 int PlayerDbSeekOriginalId(Object_8008044C *, int, int *);
@@ -157,7 +157,7 @@ void VptFlushObjectTrash();
 void PlyrNameTagDelete(PlyrNameTag_t *);
 void fn_801D2BD0(void *);
 void PlayerObjRenderShutdown();
-void fn_800AF71C();
+void PlyrIKShutdown();
 void ResUnLoad(void *, int);
 void PlayerObjRemoveObjType(int);
 int ObjDelType(int);
@@ -641,9 +641,9 @@ void PlyrObjsReadState(BitStream_t *a, BitStream_t *b, BitStream_t *c, BitStream
 }
 void PlyrObjsInitStateTables(int mode) {
   if (mode)
-    fn_800B4D7C();
+    PlyrAnimInstallFrontEndHandlers();
   else
-    fn_800B4A88();
+    PlyrAnimInstallGameHandlers();
   fn_801BE030(1, &lbl_803EAB3C);
   PlyrOverlayAnimRegisterCallbacks();
   fn_801BE030(3, &lbl_803EA9FC);
@@ -685,10 +685,10 @@ void PlyrObjsLoadSkeletons() {
   ZeroRoot(_PlyrObjs_pSkel5);
 }
 void PlyrObjsInitLimbChains() {
-  fn_800AF630(gAnimData.GetArchive(), 60, 1, 32);
-  fn_800AF790(0, _PlyrObjs_pBodySkel, "low_torso", "neckhi", 0);
-  fn_800AF790(1, _PlyrObjs_pBodySkel, "lshoulder", "lwrist", 1);
-  fn_800AF790(2, _PlyrObjs_pBodySkel, "rshoulder", "rwrist", 1);
+  PlyrIKInit(gAnimData.GetArchive(), 60, 1, 32);
+  PlyrIKCreateChain(0, _PlyrObjs_pBodySkel, "low_torso", "neckhi", 0);
+  PlyrIKCreateChain(1, _PlyrObjs_pBodySkel, "lshoulder", "lwrist", 1);
+  PlyrIKCreateChain(2, _PlyrObjs_pBodySkel, "rshoulder", "rwrist", 1);
 }
 int PlyrObjsCreatePlayers(int owner, int mode) {
   // FAKEMATCH: dead initializer; result is set from SysGetLastError before any read
@@ -929,7 +929,7 @@ int PlyrObjsDestroy(int owner) {
     _PlyrObjs_ppPlayers = 0;
   }
   PlayerObjRenderShutdown();
-  fn_800AF71C();
+  PlyrIKShutdown();
   // FAKEMATCH: local that only aliases the global gAnimData
   AnimData *anim = &gAnimData;
   ResUnLoad(anim->GetArchive(), 57);
