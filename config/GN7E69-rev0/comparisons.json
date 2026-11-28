@@ -7811,11 +7811,6 @@
           "end": "0x8002F74C"
         },
         {
-          "symbol": "ReplayCamProcess",
-          "start": "0x8002F74C",
-          "end": "0x8002F9D8"
-        },
-        {
           "symbol": "ReplayCamProcessAuto",
           "start": "0x8002F9D8",
           "end": "0x8002FA04"
