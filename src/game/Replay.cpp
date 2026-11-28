@@ -82,6 +82,15 @@ struct ReplayFocus_t {
     int mUnknown10;
 };
 
+/* Two-float field point of ReplayCamProcess (the focus clamped to the field). */
+struct ReplayPoint_t {
+    float mX;
+    float mY;
+
+    // FAKEMATCH: the empty destructor makes g++ keep the point in the frame (BLKmode), as the target does
+    ~ReplayPoint_t() {}
+};
+
 /* 16-byte bit stream opened on a frame buffer by fn_80190ED4 (buffer, mode,
    bit position, 0x3F) and closed by fn_80190EF0. */
 struct Type_80190ED4 {
@@ -1387,17 +1396,22 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
     int sum = 0;
     int minGap = -3600;
     int maxGap = 7200;
-    unsigned char ordered = 0;
     int minDy = -150;
     int maxDy = 150;
+    unsigned char ordered = 0;
     int ok = 1;
     int needMatch = 0;
     int matched = 0;
-    int hasCall = 0;
-    int flag = 0;
-    int callA = 0;
-    int callB = 0;
+    int hasCall;
     unsigned char value374 = 0;
+    int flag;
+    int callA;
+    int callB;
+
+    hasCall = 0;
+    flag = 0;
+    callA = 0;
+    callB = 0;
 
     for (; pCond->mOp != -1; pCond++) {
         if (!ok) {
@@ -1468,7 +1482,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[0] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1479,7 +1495,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[0] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[0] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1490,7 +1508,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] < pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[1] < pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -1501,7 +1521,9 @@ extern "C" int ReplayTestConditions(ReplayCond_t *pCond)
             } else {
                 float pos[3] = { 0.0f };
 
-                if (ReplayEventGetPos(gpReplay, last, pos) == -1 || pos[1] > pCond->mArg) {
+                if (ReplayEventGetPos(gpReplay, last, pos) == -1) {
+                    ok = 0;
+                } else if (pos[1] > pCond->mArg) {
                     ok = 0;
                 }
             }
@@ -2367,13 +2389,12 @@ extern "C" void ReplayCamProcess(GameCamera_t *pCamera)
 {
     ReplayCamProcessStub();
     if (!_Replay_bFreeCam) {
-        FieldPoint_t clamped;
-        float y;
+        ReplayPoint_t clamped;
         clamped.mX = CLAMP(_Replay_Focus.mPos.mX, -ScrmGetSidelineX(), ScrmGetSidelineX());
-        clamped.mY = y = CLAMP(_Replay_Focus.mPos.mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
-        if (clamped.mX != _Replay_Focus.mPos.mX || y != _Replay_Focus.mPos.mY) {
+        clamped.mY = CLAMP(_Replay_Focus.mPos.mY, -ScrmGetEndLineY(), ScrmGetEndLineY());
+        if (clamped.mX != _Replay_Focus.mPos.mX || clamped.mY != _Replay_Focus.mPos.mY) {
             _Replay_Focus.mPos.mX = clamped.mX;
-            _Replay_Focus.mPos.mY = y;
+            _Replay_Focus.mPos.mY = clamped.mY;
             _Replay_pTarget = 0;
             _Replay_bTargetIsBall = 0;
             ReplayCursorSetVisible(1);
